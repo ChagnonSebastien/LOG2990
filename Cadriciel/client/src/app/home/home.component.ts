@@ -8,9 +8,12 @@ import {BasicService} from '../basic.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor () {}
+  constructor (private basicService: BasicService) {}
+
+  public message: string;
 
   public ngOnInit(): void {
+    this.basicService.basicGet().then(message => this.message = message.title + ' ' + message.body);
   }
 
 }
