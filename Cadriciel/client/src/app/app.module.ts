@@ -8,8 +8,8 @@ import { CubeComponent } from './home/cube/cube.component';
 import {RenderService} from './home/cube/render.service';
 import {BasicService} from './basic.service';
 import { HomeComponent } from './home/home.component';
-import { AppRacingGameComponent } from './app-racing-game/app-racing-game.component';
-import { AppCrosswordGameComponent } from './app-crossword-game/app-crossword-game.component';
+import { RacingGameComponent } from './racing-game/racing-game.component';
+import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
 
 
 @NgModule({
@@ -17,8 +17,8 @@ import { AppCrosswordGameComponent } from './app-crossword-game/app-crossword-ga
     AppComponent,
     CubeComponent,
     HomeComponent,
-    AppRacingGameComponent,
-    AppCrosswordGameComponent
+    RacingGameComponent,
+    CrosswordGameComponent
   ],
   imports: [
     BrowserModule,

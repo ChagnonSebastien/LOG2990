@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppCrosswordGameComponent } from './app-crossword-game.component';
+import { AppCrosswordGameComponent } from './crossword-game.component';
 
 describe('AppCrosswordGameComponent', () => {
   let component: AppCrosswordGameComponent;
