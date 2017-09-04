@@ -8,13 +8,15 @@ import { CubeComponent } from './home/cube/cube.component';
 import {RenderService} from './home/cube/render.service';
 import {BasicService} from './basic.service';
 import { HomeComponent } from './home/home.component';
+import { AppRacingGameComponent } from './app-racing-game/app-racing-game.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CubeComponent,
-    HomeComponent
+    HomeComponent,
+    AppRacingGameComponent
   ],
   imports: [
     BrowserModule,
