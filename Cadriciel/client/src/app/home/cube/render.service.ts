@@ -87,6 +87,7 @@ export class RenderService {
   private initStats() {
     this.stats = new Stats();
     this.stats.dom.style.position = 'absolute';
+    this.stats.dom.style.top = '64px';
 
     this.container.appendChild(this.stats.dom);
   }
