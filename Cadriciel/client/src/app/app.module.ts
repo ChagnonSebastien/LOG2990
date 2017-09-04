@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {RenderService} from './cube/render.service';
 import {BasicService} from './basic.service';
 
+import { APP_BASE_HREF } from '@angular/common'; 
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {BasicService} from './basic.service';
   ],
   providers: [
     RenderService,
-    BasicService
+    BasicService,
+    { provide: APP_BASE_HREF, useValue: '/' }
   ],
   bootstrap: [AppComponent]
 })
