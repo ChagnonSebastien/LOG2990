@@ -9,6 +9,7 @@ import {RenderService} from './home/cube/render.service';
 import {BasicService} from './basic.service';
 import { HomeComponent } from './home/home.component';
 import { AppRacingGameComponent } from './app-racing-game/app-racing-game.component';
+import { AppCrosswordGameComponent } from './app-crossword-game/app-crossword-game.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AppRacingGameComponent } from './app-racing-game/app-racing-game.compon
     AppComponent,
     CubeComponent,
     HomeComponent,
-    AppRacingGameComponent
+    AppRacingGameComponent,
+    AppCrosswordGameComponent
   ],
   imports: [
     BrowserModule,
