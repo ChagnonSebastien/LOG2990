@@ -10,6 +10,7 @@ import {BasicService} from './basic.service';
 import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
 import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
+import {AppRoutingModule} from './app-routing.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { CrosswordGameComponent } from './crossword-game/crossword-game.componen
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    AppRoutingModule
   ],
   providers: [
     RenderService,
