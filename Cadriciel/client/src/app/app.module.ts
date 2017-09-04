@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { CubeComponent } from './cube/cube.component';
+import { CubeComponent } from './home/cube/cube.component';
 
-import {RenderService} from './cube/render.service';
+import {RenderService} from './home/cube/render.service';
 import {BasicService} from './basic.service';
 import { HomeComponent } from './home/home.component';
 
