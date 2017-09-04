@@ -2,16 +2,18 @@
 <div>
     <h2>Choose game option</h2>
     <button (click)="setOption(0)">Solo</button>
-    <button (click)="setOption(1)">Multiplayer</button>
+    <button (click)="setOption(1)" >Multiplayer</button>
 </div>
-<div>
-    <h2>Choose game mode</h2>
-    <button (click)="setMode(0)">Classic</button>
-    <button (click)="setMode(1)">Dynamic</button>
-</div>
-<div>
-    <h2>Choose game level</h2>
-    <button (click)="setLevel(0)">Easy</button>
-    <button (click)="setLevel(1)">Normal</button>
-    <button (click)="setLevel(2)">Hard</button>
+<div *ngIf="checkSolo()">
+    <div>
+        <h2>Choose game mode</h2>
+        <button (click)="setMode(0)">Classic</button>
+        <button (click)="setMode(1)">Dynamic</button>
+    </div>
+    <div>
+        <h2>Choose game level</h2>
+        <button (click)="setLevel(0)">Easy</button>
+        <button (click)="setLevel(1)">Normal</button>
+        <button (click)="setLevel(2)">Hard</button>
+    </div>
 </div>

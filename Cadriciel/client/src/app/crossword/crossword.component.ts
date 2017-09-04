@@ -29,7 +29,6 @@ export class CrosswordComponent {
 
     setOption(option: number):void {
         this.option = OPTION[option];
-        console.log(this.option);
     }
 
     setMode(mode: number): void {
@@ -38,5 +37,13 @@ export class CrosswordComponent {
 
     setLevel(level: number): void {
         this.level = LEVEL[level];
+    }
+
+    checkSolo(): boolean {
+        if (this.option === "SOLO") {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -1,0 +1,20 @@
+import { Component, OnInit } from '@angular/core';
+
+import {BasicService} from './../basic.service';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  constructor (private basicService: BasicService) {}
+
+  public title = 'LOG2990';
+  public message: string;
+
+  public ngOnInit(): void {
+    this.basicService.basicGet().then(message => this.message = message.title + ' ' + message.body);
+  }
+}

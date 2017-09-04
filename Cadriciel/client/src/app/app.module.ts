@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CubeComponent } from './cube/cube.component';
 import { CrosswordComponent } from './crossword/crossword.component';
+import { HomeComponent } from './home/home.component';
+
+import { AppRoutingModule } from './app-routing.module';
 
 import {RenderService} from './cube/render.service';
 import {BasicService} from './basic.service';
@@ -15,17 +18,13 @@ import {BasicService} from './basic.service';
   declarations: [
     AppComponent,
     CubeComponent,
-    CrosswordComponent
+    CrosswordComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    RouterModule.forRoot([
-      {
-        path: 'crossword',
-        component: CrosswordComponent
-      }
-    ])
+    AppRoutingModule
   ],
   providers: [
     RenderService,
