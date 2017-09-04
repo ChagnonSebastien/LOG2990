@@ -7,12 +7,14 @@ import { CubeComponent } from './cube/cube.component';
 
 import {RenderService} from './cube/render.service';
 import {BasicService} from './basic.service';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    CubeComponent
+    CubeComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
