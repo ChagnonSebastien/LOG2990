@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppCrosswordGameComponent } from './crossword-game.component';
+import { CrosswordGameComponent } from './crossword-game.component';
 
-describe('AppCrosswordGameComponent', () => {
-  let component: AppCrosswordGameComponent;
-  let fixture: ComponentFixture<AppCrosswordGameComponent>;
+describe('CrosswordGameComponent', () => {
+  let component: CrosswordGameComponent;
+  let fixture: ComponentFixture<CrosswordGameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppCrosswordGameComponent ]
+      declarations: [ CrosswordGameComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppCrosswordGameComponent);
+    fixture = TestBed.createComponent(CrosswordGameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
