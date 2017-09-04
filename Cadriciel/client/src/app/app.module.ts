@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
 import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
 import {AppRoutingModule} from './app-routing.module';
+import {APP_BASE_HREF} from '@angular/common';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {AppRoutingModule} from './app-routing.module';
     AppRoutingModule
   ],
   providers: [
+    {provide: APP_BASE_HREF, useValue : '/' },
     RenderService,
     BasicService
   ],
