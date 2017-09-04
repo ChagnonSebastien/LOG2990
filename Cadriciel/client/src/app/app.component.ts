@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   constructor (private basicService: BasicService) {}
 
-  public title = 'LOG2990';
+  public title = 'LOG2990-03';
   public message: string;
 
   public ngOnInit(): void {
