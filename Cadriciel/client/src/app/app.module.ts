@@ -19,6 +19,7 @@ import { AdministrationComponent } from './racing-game/racing-header/administrat
 import { TracksComponent } from './racing-game/racing-header/tracks/tracks.component';
 import { TrackAdminComponent } from './racing-game/racing-header/tracks/track-admin/track-admin.component';
 import { TrackInfoComponent } from './racing-game/racing-header/tracks/track-info/track-info.component';
+import { TrackComponent } from './racing-game/track/track.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { TrackInfoComponent } from './racing-game/racing-header/tracks/track-inf
     AdministrationComponent,
     TracksComponent,
     TrackAdminComponent,
-    TrackInfoComponent
+    TrackInfoComponent,
+    TrackComponent
   ],
   imports: [
     BrowserModule,
