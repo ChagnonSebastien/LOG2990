@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RacingGameComponent } from './racing-game.component';
-import {RacingHeaderComponent} from "./racing-header/racing-header.component";
-import {TracksComponent} from "./racing-header/tracks/tracks.component";
+import {RacingHeaderComponent} from './racing-header/racing-header.component';
+import {TracksComponent} from './racing-header/tracks/tracks.component';
+import {TrackComponent} from './track/track.component';
 
 describe('RacingGameComponent', () => {
   let component: RacingGameComponent;
@@ -10,7 +11,7 @@ describe('RacingGameComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RacingGameComponent, RacingHeaderComponent, TracksComponent ]
+      declarations: [ RacingGameComponent, RacingHeaderComponent, TracksComponent, TrackComponent ]
     })
     .compileComponents();
   }));
