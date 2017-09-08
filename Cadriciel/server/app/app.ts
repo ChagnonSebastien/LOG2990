@@ -81,7 +81,7 @@ export class Application {
         router.get('/basic', index.index.bind(index.index));
 
         // use router middleware
-        this.app.use(router);
+        this.app.use('/api', router);
 
         // Gestion des erreurs
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
