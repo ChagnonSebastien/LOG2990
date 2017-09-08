@@ -23,31 +23,31 @@ import { TrackComponent } from './racing-game/track/track.component';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CubeComponent,
-    HomeComponent,
-    RacingGameComponent,
-    CrosswordGameComponent,
-    InGameComponent,
-    RacingHeaderComponent,
-    TrackEditorComponent,
-    AdministrationComponent,
-    TracksComponent,
-    TrackAdminComponent,
-    TrackInfoComponent,
-    TrackComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpModule,
-    AppRoutingModule
-  ],
-  providers: [
-    {provide: APP_BASE_HREF, useValue : '/' },
-    RenderService,
-    BasicService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        CubeComponent,
+        HomeComponent,
+        RacingGameComponent,
+        CrosswordGameComponent,
+        InGameComponent,
+        RacingHeaderComponent,
+        TrackEditorComponent,
+        AdministrationComponent,
+        TracksComponent,
+        TrackAdminComponent,
+        TrackInfoComponent,
+        TrackComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpModule,
+        AppRoutingModule
+    ],
+    providers: [
+        { provide: APP_BASE_HREF, useValue: '/' },
+        RenderService,
+        BasicService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
