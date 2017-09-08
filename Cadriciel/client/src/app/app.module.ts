@@ -14,11 +14,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { APP_BASE_HREF } from '@angular/common';
 import { InGameComponent } from './racing-game/in-game/in-game.component';
 import { RacingHeaderComponent } from './racing-game/racing-header/racing-header.component';
-import { TrackEditorComponent } from './racing-game/racing-header/track-editor/track-editor.component';
-import { AdministrationComponent } from './racing-game/racing-header/administration/administration.component';
-import { TracksComponent } from './racing-game/racing-header/tracks/tracks.component';
-import { TrackAdminComponent } from './racing-game/racing-header/tracks/track-admin/track-admin.component';
-import { TrackInfoComponent } from './racing-game/racing-header/tracks/track-info/track-info.component';
+import { TrackEditorComponent } from './racing-game/track-editor/track-editor.component';
+import { AdministrationComponent } from './racing-game/administration/administration.component';
+import { TracksComponent } from './racing-game/tracks/tracks.component';
+import { TrackAdminComponent } from './racing-game/track-admin/track-admin.component';
+import { TrackInfoComponent } from './racing-game/track-info/track-info.component';
 import { TrackComponent } from './racing-game/track/track.component';
 
 
