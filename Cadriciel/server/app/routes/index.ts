@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
 import { LexiconApi } from './lexicon-api';
-<<<<<<< HEAD
 import { Request } from 'express';
 import { FileReader } from '../file-reader';
 
@@ -24,7 +23,6 @@ module Route {
             message.title = 'Hello';
             message.body = word;
             res.send(JSON.stringify(message));
-
         }
 
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
