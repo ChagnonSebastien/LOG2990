@@ -1,26 +1,22 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<nav>
-  <div class="nav-wrapper green lighten-2">
-    <a href="#" class="brand-logo">{{title}}</a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li
-        role="presentation"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}">
-        <a routerLink="/">Home</a>
-      </li>
-      <li
-        role="presentation"
-        routerLinkActive="active">
-        <a routerLink="racing-game">Race Game</a>
-      </li>
-      <li
-        role="presentation"
-        routerLinkActive="active">
-        <a routerLink="crossword-game">Crossword Game</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: true}"
+    routerLink="/">
+      Home
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLinkActive="active" routerLink="racing-game">
+      Race Game
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLinkActive="active" routerLink="crossword-game">
+      Crossword Game
+    </a>
+  </li>
+</ul>
 <router-outlet></router-outlet>
 

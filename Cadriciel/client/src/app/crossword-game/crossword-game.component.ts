@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-crossword-game',
-  templateUrl: './crossword-game.component.html',
-  styleUrls: ['./crossword-game.component.css']
+    selector: 'app-crossword-game',
+    templateUrl: './crossword-game.component.html',
+    styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
     option: string = null;
     mode: string = null;
     level: string = null;
 
-  constructor() { }
+    constructor() { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
   setOption(chosenOption: string): void {
       this.option = chosenOption;
