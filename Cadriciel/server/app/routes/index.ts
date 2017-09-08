@@ -11,6 +11,14 @@ module Route {
             message.body = 'World';
             res.send(JSON.stringify(message));
         }
+
+        public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
+            const message = new Message();
+            let word = req.params.word;
+            message.title = 'Hello';
+            message.body = word;
+            res.send(JSON.stringify(message));
+        }
     }
 }
 
