@@ -4,6 +4,7 @@ import { LexiconApi } from './lexicon-api';
 import { Request } from 'express';
 import { FileReader } from '../file-reader';
 
+
 module Route {
     //let lexicon = new LexiconApi;
 
@@ -23,6 +24,7 @@ module Route {
             message.title = 'Hello';
             message.body = word;
             res.send(JSON.stringify(message));
+
         }
 
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
