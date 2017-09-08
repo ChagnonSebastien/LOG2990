@@ -80,7 +80,10 @@ export class Application {
         // home page
         router.get('/basic', index.index.bind(index.index));
         router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
+<<<<<<< HEAD
         router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
+=======
+>>>>>>> Word definition api gets the parameters from the url complete
 
         // use router middleware
         this.app.use('/api', router);

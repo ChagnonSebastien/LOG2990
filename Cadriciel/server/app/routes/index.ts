@@ -17,11 +17,11 @@ module Route {
 
         public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
             const message = new Message();
-            
+
             let word = req.params.word;
             message.title = 'Hello';
             message.body = word;
-            res.send(JSON.stringify({"title":"hello"}));
+            res.send(JSON.stringify(message));
 
         }
 
@@ -31,6 +31,7 @@ module Route {
 
             lexicon = fileReader.readfile(fileReader.filepath);
             res.send(lexicon);
+
         }
     }
 }
