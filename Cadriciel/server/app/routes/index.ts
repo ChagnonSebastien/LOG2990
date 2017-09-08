@@ -19,6 +19,8 @@ module Route {
             message.title = 'Hello';
             message.body = word;
             res.send(JSON.stringify(message));
+            
+            
         }
     }
 }
