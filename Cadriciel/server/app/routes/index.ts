@@ -1,6 +1,5 @@
 import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
-import { LexiconList } from '../../../commun/communication/lexicon-list';
 import { LexiconApi } from './lexicon-api';
 import { Request } from 'express';
 import { FileReader } from '../file-reader';
