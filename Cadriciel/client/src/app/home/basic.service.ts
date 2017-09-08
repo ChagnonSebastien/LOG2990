@@ -10,7 +10,7 @@ export class BasicService {
 
     constructor(private http: Http) { }
 
-    private url = 'http://localhost:3000/basic';
+    private url = 'http://localhost:3000/api/basic';
 
     public basicGet(): Promise<Message> {
         return this.http.get(this.url)
