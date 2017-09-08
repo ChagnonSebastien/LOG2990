@@ -5,13 +5,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { CubeComponent } from './home/cube/cube.component';
 
-import {RenderService} from './home/cube/render.service';
-import {BasicService} from './basic.service';
+import { RenderService } from './home/cube/render.service';
+import { BasicService } from './basic.service';
 import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
 import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
-import {AppRoutingModule} from './app-routing.module';
-import {APP_BASE_HREF} from '@angular/common';
+import { AppRoutingModule } from './app-routing.module';
+import { APP_BASE_HREF } from '@angular/common';
 import { InGameComponent } from './racing-game/in-game/in-game.component';
 import { RacingHeaderComponent } from './racing-game/racing-header/racing-header.component';
 import { TrackEditorComponent } from './racing-game/racing-header/track-editor/track-editor.component';
