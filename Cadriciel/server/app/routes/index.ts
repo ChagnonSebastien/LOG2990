@@ -1,8 +1,9 @@
 import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
+import { LexiconApi } from './lexicon-api';
 
 module Route {
-
+    let lexicon = new LexiconApi;
     export class Index {
 
         public index(req: express.Request, res: express.Response, next: express.NextFunction) {
