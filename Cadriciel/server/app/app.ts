@@ -79,9 +79,11 @@ export class Application {
 
         // home page
         router.get('/basic', index.index.bind(index.index));
+        router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
+        router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
 
         // use router middleware
-        this.app.use(router);
+        this.app.use('/api', router);
 
         // Gestion des erreurs
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
