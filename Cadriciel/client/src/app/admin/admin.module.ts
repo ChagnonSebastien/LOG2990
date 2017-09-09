@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 /* Home module */
 import { AdminComponent } from './admin.component';
 
+import { AuthenticationService } from './authentication.service';
+
 /* Feature modules */
 
 /* Routing module */
@@ -23,6 +25,7 @@ import { AdminRoutingModule } from './admin-routing.module';
         AdminComponent,
     ],
     providers: [
+        AuthenticationService
     ]
 })
 export class AdminModule { }
