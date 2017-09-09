@@ -2,16 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
+import { APP_BASE_HREF } from '@angular/common';
+
+/* App Root */
+// Component imports
 import { AppComponent } from './app.component';
 import { CubeComponent } from './home/cube/cube.component';
-
-import { RenderService } from './home/cube/render.service';
-import { BasicService } from './basic.service';
 import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
-import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
-import { AppRoutingModule } from './app-routing.module';
-import { APP_BASE_HREF } from '@angular/common';
 import { InGameComponent } from './racing-game/in-game/in-game.component';
 import { RacingHeaderComponent } from './racing-game/racing-header/racing-header.component';
 import { TrackEditorComponent } from './racing-game/track-editor/track-editor.component';
@@ -21,6 +19,13 @@ import { TrackAdminComponent } from './racing-game/track-admin/track-admin.compo
 import { TrackInfoComponent } from './racing-game/track-info/track-info.component';
 import { TrackComponent } from './racing-game/track/track.component';
 
+// Service imports
+import { RenderService } from './home/cube/render.service';
+import { BasicService } from './basic.service';
+
+/* Feature modules */
+import { AppRoutingModule } from './app-routing.module';
+import { CrosswordGameModule } from './crossword-game/crossword-game.module';
 
 @NgModule({
     declarations: [
@@ -28,7 +33,6 @@ import { TrackComponent } from './racing-game/track/track.component';
         CubeComponent,
         HomeComponent,
         RacingGameComponent,
-        CrosswordGameComponent,
         InGameComponent,
         RacingHeaderComponent,
         TrackEditorComponent,
@@ -41,7 +45,8 @@ import { TrackComponent } from './racing-game/track/track.component';
     imports: [
         BrowserModule,
         HttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        CrosswordGameModule
     ],
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
