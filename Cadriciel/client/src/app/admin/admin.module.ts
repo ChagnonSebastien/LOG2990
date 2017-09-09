@@ -7,10 +7,14 @@ import { AdminComponent } from './admin.component';
 
 /* Feature modules */
 
+/* Routing module */
+import { AdminRoutingModule } from './admin-routing.module';
+
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        AdminRoutingModule
     ],
     declarations: [
         AdminComponent,
