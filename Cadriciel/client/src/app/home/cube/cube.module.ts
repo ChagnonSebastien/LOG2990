@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { CubeComponent } from './cube.component';
 
+import { RenderService } from './render.service';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -13,6 +15,6 @@ import { CubeComponent } from './cube.component';
     exports: [
         CubeComponent
     ],
-    providers: []
+    providers: [RenderService]
 })
 export class CubeModule { }

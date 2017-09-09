@@ -2,29 +2,28 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { CubeComponent } from './cube/cube.component';
+/* Home module */
 import { HomeComponent } from './home.component';
 
 import { BasicService } from './basic.service';
-import { RenderService } from './cube/render.service';
 
+/* Feature modules */
+import { CubeModule } from './cube/cube.module';
 
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        CubeModule
     ],
     declarations: [
         HomeComponent,
-        CubeComponent,
     ],
     exports: [
         HomeComponent,
-        CubeComponent
     ],
     providers: [
         BasicService,
-        RenderService
     ]
 })
 export class HomeModule { }
