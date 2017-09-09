@@ -13,6 +13,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
 import * as indexRoute from './routes/index';
+import * as loginRoute from './routes/login';
 
 export class Application {
 
@@ -76,12 +77,16 @@ export class Application {
 
         // create routes
         const index: indexRoute.Index = new indexRoute.Index();
+        const login: loginRoute.Login = new loginRoute.Login();
 
         // home page
         router.get('/basic', index.index.bind(index.index));
 
+        // login api path
+        router.post('/login', login.authenticate.bind(login.authenticate));
+
         // use router middleware
-        this.app.use(router);
+        this.app.use('/api', router);
 
         // Gestion des erreurs
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
