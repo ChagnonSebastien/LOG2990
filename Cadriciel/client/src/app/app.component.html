@@ -1,10 +1,21 @@
-<nav>
-  <a routerLink="/home" routerLinkActive="active">Home</a>
-  <a routerLink="/cube" routerLinkActive="active">Cube</a>
-  <a routerLink="/crossword" routerLinkActive="active">Crossword</a>
-</nav>
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: true}"
+    routerLink="/">
+      Home
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLinkActive="active" routerLink="racing-game">
+      Race Game
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLinkActive="active" routerLink="crossword-game">
+      Crossword Game
+    </a>
+  </li>
+</ul>
 <router-outlet></router-outlet>
-
-
-
-

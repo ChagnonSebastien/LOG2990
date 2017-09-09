@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-
-import { AppComponent } from './app.component';
-import { CubeComponent } from './cube/cube.component';
-import { CrosswordComponent } from './crossword/crossword.component';
 import { HomeComponent } from './home/home.component';
+import { RacingGameComponent } from './racing-game/racing-game.component';
 
-const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full'},
-    { path: 'home', component: HomeComponent},
-    { path: 'crossword', component: CrosswordComponent },
-    { path: 'cube', component: CubeComponent },
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'racing-game', component: RacingGameComponent },
 ];
 
 @NgModule({
-    imports: [ RouterModule.forRoot(routes) ],
-    exports: [ RouterModule ]
+    imports: [
+        RouterModule.forRoot(appRoutes)
+    ],
+    exports: [
+        RouterModule
+    ],
+    declarations: []
 })
-
-export class AppRoutingModule {}
+export class AppRoutingModule { }

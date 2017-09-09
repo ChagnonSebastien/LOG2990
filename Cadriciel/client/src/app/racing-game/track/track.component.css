@@ -1,0 +1,19 @@
+.track-details {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: orange;
+  border-radius: 30px;
+  height: 150px;
+}
+
+.track-preview {
+  width: 180px;
+  height: 120px;
+  margin: auto;
+  margin-top: 4px;
+  background-color: white;
+  text-align: center;
+}
