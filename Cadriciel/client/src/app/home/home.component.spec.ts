@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { CubeComponent } from './cube/cube.component';
 import { RenderService } from './cube/render.service';
-import { BasicService } from '../basic.service';
+import { BasicService } from './basic.service';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
 
 describe('HomeComponent', () => {
