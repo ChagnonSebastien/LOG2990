@@ -5,6 +5,7 @@ export class FileReader {
 
     readfile(file: string): string[] {
 <<<<<<< HEAD
+<<<<<<< HEAD
         let content:string[] = [];
         content = fs.readFileSync(this.filepath, 'utf8').split('\r\n');
         
@@ -29,6 +30,14 @@ export class FileReader {
 
 
 >>>>>>> server able to read lexicon and store in list
+=======
+        let content:string[] = [];
+        content = fs.readFileSync(this.filepath, 'utf8').split('\r\n');
+        
+        return content;
+     }
+
+>>>>>>> changed fs.reafFile to fs.readFileSync
 }
 
 
