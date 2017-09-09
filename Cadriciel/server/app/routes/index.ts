@@ -18,7 +18,7 @@ module Route {
 
         public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
             const message = new Message();
-
+            
             let word = req.params.word;
             message.title = 'Hello';
             message.body = word;
