@@ -6,6 +6,8 @@ import { CubeComponent } from './cube/cube.component';
 import { HomeComponent } from './home.component';
 
 import { BasicService } from './basic.service';
+import { RenderService } from './cube/render.service';
+
 
 @NgModule({
     imports: [
@@ -20,6 +22,9 @@ import { BasicService } from './basic.service';
         HomeComponent,
         CubeComponent
     ],
-    providers: [BasicService]
+    providers: [
+        BasicService,
+        RenderService
+    ]
 })
 export class HomeModule { }

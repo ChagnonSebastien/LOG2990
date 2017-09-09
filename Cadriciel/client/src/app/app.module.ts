@@ -9,7 +9,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { AppComponent } from './app.component';
 
 // Service imports
-import { RenderService } from './home/cube/render.service';
 
 /* Feature modules */
 import { CrosswordGameModule } from './crossword-game/crossword-game.module';
@@ -33,7 +32,6 @@ import { AppRoutingModule } from './app-routing.module';
     ],
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
-        RenderService,
     ],
     bootstrap: [AppComponent]
 })
