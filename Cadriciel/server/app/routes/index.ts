@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { FileReader } from '../file-reader';
 
 module Route {
-    let lexicon = new LexiconApi;
+    //let lexicon = new LexiconApi;
     export class Index {
 
         public index(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -29,12 +29,9 @@ module Route {
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
             let fileReader = new FileReader();
             let lexicon: string[] = [];
+
             lexicon = fileReader.readfile(fileReader.filepath);
-            const listOfWords = new LexiconList()
-            listOfWords.listOfWords = lexicon;
-            
-            res.send(JSON.stringify(listOfWords));
-            console.log(JSON.stringify(listOfWords));
+            res.send(lexicon);
         }
     }
 }
