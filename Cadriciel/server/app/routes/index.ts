@@ -2,7 +2,7 @@ import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
 import { LexiconApi } from './lexicon-api';
 import { Request } from 'express';
-import { FileReader } from '../file-reader';
+import { LexiconReader } from '../lexicon-reader';
 
 module Route {
     //let lexicon = new LexiconApi;
@@ -27,10 +27,11 @@ module Route {
         }
 
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
-            let fileReader = new FileReader();
+            let lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
-
-            lexicon = fileReader.readfile(fileReader.filepath);
+            let filepath: string = '../server/englishWords.txt';
+            
+            lexicon = lexiconReader.readWords(filepath);
             res.send(lexicon);
         }
     }
