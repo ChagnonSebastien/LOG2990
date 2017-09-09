@@ -5,10 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { CubeComponent } from './cube/cube.component';
 import { HomeComponent } from './home.component';
 
-import { BasicService } from '../basic.service';
+import { BasicService } from './basic.service';
 
 @NgModule({
-    imports: [CommonModule, FormsModule],
+    imports: [
+        CommonModule,
+        FormsModule
+    ],
     declarations: [
         HomeComponent,
         CubeComponent,

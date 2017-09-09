@@ -19,7 +19,6 @@ import { TrackComponent } from './racing-game/track/track.component';
 
 // Service imports
 import { RenderService } from './home/cube/render.service';
-import { BasicService } from './basic.service';
 
 /* Feature modules */
 import { AppRoutingModule } from './app-routing.module';
@@ -49,7 +48,6 @@ import { HomeModule } from './home/home.module';
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         RenderService,
-        BasicService
     ],
     bootstrap: [AppComponent]
 })
