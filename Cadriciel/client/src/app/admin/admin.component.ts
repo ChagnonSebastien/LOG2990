@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AuthenticationService } from './authentication.service';
+
 @Component({
     selector: 'admin-component',
     templateUrl: './admin.component.html',
@@ -9,7 +11,7 @@ export class AdminComponent implements OnInit {
     public passwordInput: string;
     private passwordCorrect: boolean;
 
-    constructor() { }
+    constructor(private authenticationService: AuthenticationService) { }
 
     public ngOnInit(): void {
         this.passwordCorrect = false;

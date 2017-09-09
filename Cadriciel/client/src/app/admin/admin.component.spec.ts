@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { AdminComponent } from './admin.component';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
 
+import { AuthenticationService } from './authentication.service';
+
 describe('AdminComponent', () => {
     let component: AdminComponent;
     let fixture: ComponentFixture<AdminComponent>;
@@ -10,7 +12,7 @@ describe('AdminComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AdminComponent],
-            providers: [],
+            providers: [AuthenticationService],
             imports: [HttpModule]
         })
             .compileComponents();
