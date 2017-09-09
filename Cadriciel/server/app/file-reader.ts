@@ -10,7 +10,7 @@ export class FileReader {
             if (err) {
                 throw err;
             }
-            content = data.split('\r');
+            content = data.split('\r\n');
 
             console.log(content);
         });

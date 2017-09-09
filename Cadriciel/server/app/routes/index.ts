@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
+import { LexiconList } from '../../../commun/communication/lexicon-list';
 import { LexiconApi } from './lexicon-api';
 import { Request } from 'express';
 import { FileReader } from '../file-reader';
@@ -27,15 +28,13 @@ module Route {
 
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
             let fileReader = new FileReader();
-            let lexicon: string[] = fileReader.readfile(fileReader.filepath);
-            //let wordList = lexicon.split("\n")
-            //res.sendFile('../../server/englishWords.txt');
-
-            //res.send("Hello");
-            //res.send(JSON.stringify({"title":"hello"}));
-            //console.log(lexicon.split('\n'));
-
-            res.send(JSON.stringify({"title": "see console for lexicon"}));
+            let lexicon: string[] = [];
+            lexicon = fileReader.readfile(fileReader.filepath);
+            const listOfWords = new LexiconList()
+            listOfWords.listOfWords = lexicon;
+            
+            res.send(JSON.stringify(listOfWords));
+            console.log(JSON.stringify(listOfWords));
         }
     }
 }
