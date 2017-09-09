@@ -4,8 +4,14 @@ import { FormsModule } from '@angular/forms';
 
 import { CrosswordGameComponent } from './crossword-game.component';
 
+import { CrosswordGameRoutingModule} from './crossword-game-routing.module';
+
 @NgModule({
-    imports: [CommonModule, FormsModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        CrosswordGameRoutingModule
+    ],
     declarations: [CrosswordGameComponent],
     exports: [CrosswordGameComponent],
     providers: []

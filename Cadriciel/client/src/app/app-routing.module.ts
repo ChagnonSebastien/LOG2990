@@ -7,8 +7,7 @@ import { RacingGameComponent } from './racing-game/racing-game.component';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'racing-game', component: RacingGameComponent },
-    { path: 'crossword-game', component: CrosswordGameComponent }
+    { path: 'racing-game', component: RacingGameComponent }
 ];
 
 @NgModule({
