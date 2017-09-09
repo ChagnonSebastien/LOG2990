@@ -4,7 +4,6 @@ import { LexiconApi } from './lexicon-api';
 import { Request } from 'express';
 import { FileReader } from '../file-reader';
 
-
 module Route {
     //let lexicon = new LexiconApi;
 
@@ -33,7 +32,6 @@ module Route {
 
             lexicon = fileReader.readfile(fileReader.filepath);
             res.send(lexicon);
-
         }
     }
 }

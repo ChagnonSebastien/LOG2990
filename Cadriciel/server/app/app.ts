@@ -81,9 +81,13 @@ export class Application {
         router.get('/basic', index.index.bind(index.index));
         router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
 <<<<<<< HEAD
+<<<<<<< HEAD
         router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
 =======
 >>>>>>> Word definition api gets the parameters from the url complete
+=======
+        router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
+>>>>>>> server able to read lexicon and store in list
 
         // use router middleware
         this.app.use('/api', router);
