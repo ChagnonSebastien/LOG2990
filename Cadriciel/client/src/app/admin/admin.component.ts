@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+    public passwordInput: string;
     private passwordCorrect: boolean;
 
     constructor() { }
@@ -14,4 +15,10 @@ export class AdminComponent implements OnInit {
         this.passwordCorrect = false;
     }
 
+    public login(passwordInput: string): boolean {
+        if (passwordInput == 'walleandtomato') {
+            this.passwordCorrect = true;
+        }
+        return this.passwordCorrect;
+    }
 }
