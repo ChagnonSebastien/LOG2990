@@ -1,7 +1,11 @@
 import * as express from 'express';
 import { Message } from '../../../commun/communication/message';
+import { LexiconApi } from './lexicon-api';
+import { Request } from 'express';
+import { LexiconReader } from '../lexicon-reader';
 
 module Route {
+    //let lexicon = new LexiconApi;
 
     export class Index {
 
@@ -10,6 +14,25 @@ module Route {
             message.title = 'Hello';
             message.body = 'World';
             res.send(JSON.stringify(message));
+        }
+
+        public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
+            const message = new Message();
+            
+            let word = req.params.word;
+            message.title = 'Hello';
+            message.body = word;
+            res.send(JSON.stringify(message));
+
+        }
+
+        public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
+            let lexiconReader = new LexiconReader();
+            let lexicon: string[] = [];
+            let filepath: string = '../server/englishWords.txt';
+            
+            lexicon = lexiconReader.readWords(filepath);
+            res.send(lexicon);
         }
     }
 }

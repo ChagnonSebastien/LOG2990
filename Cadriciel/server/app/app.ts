@@ -81,6 +81,8 @@ export class Application {
 
         // home page
         router.get('/basic', index.index.bind(index.index));
+        router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
+        router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
 
         // login api path
         router.post('/login', login.authenticate.bind(login.authenticate));
