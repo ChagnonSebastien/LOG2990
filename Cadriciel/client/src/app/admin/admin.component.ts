@@ -23,4 +23,8 @@ export class AdminComponent implements OnInit {
         });
         return await this.passwordCorrect;
     }
+
+    public changePassword(oldPassword: string, newPassword: string): boolean {
+        return true;
+    }
 }
