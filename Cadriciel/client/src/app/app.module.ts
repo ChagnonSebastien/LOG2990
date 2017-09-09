@@ -7,8 +7,6 @@ import { APP_BASE_HREF } from '@angular/common';
 /* App Root */
 // Component imports
 import { AppComponent } from './app.component';
-import { CubeComponent } from './home/cube/cube.component';
-import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
 import { InGameComponent } from './racing-game/in-game/in-game.component';
 import { RacingHeaderComponent } from './racing-game/racing-header/racing-header.component';
@@ -26,12 +24,11 @@ import { BasicService } from './basic.service';
 /* Feature modules */
 import { AppRoutingModule } from './app-routing.module';
 import { CrosswordGameModule } from './crossword-game/crossword-game.module';
+import { HomeModule } from './home/home.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        CubeComponent,
-        HomeComponent,
         RacingGameComponent,
         InGameComponent,
         RacingHeaderComponent,
@@ -46,7 +43,8 @@ import { CrosswordGameModule } from './crossword-game/crossword-game.module';
         BrowserModule,
         HttpModule,
         AppRoutingModule,
-        CrosswordGameModule
+        CrosswordGameModule,
+        HomeModule
     ],
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
