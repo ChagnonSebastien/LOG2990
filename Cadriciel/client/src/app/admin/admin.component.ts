@@ -17,10 +17,10 @@ export class AdminComponent implements OnInit {
         this.passwordCorrect = false;
     }
 
-    public login(passwordInput: string): boolean {
-        if (passwordInput == 'walleandtomato') {
-            this.passwordCorrect = true;
-        }
-        return this.passwordCorrect;
+    public async login(passwordInput: string): Promise<boolean> {
+        await this.authenticationService.authenticate(passwordInput).then(res => {
+            this.passwordCorrect = (res == 'authenticated');
+        });
+        return await this.passwordCorrect;
     }
 }

@@ -29,10 +29,14 @@ describe('AdminComponent', () => {
     });
 
     it('should login when the password is walleandtomato', () => {
-        expect(component.login('walleandtomato')).toBeTruthy();
+        component.login('walleandtomato').then(res => {
+            expect(res).toBeTruthy();
+        })
     });
 
     it('should not login when the password is not walleandtomato', () => {
-        expect(component.login('blablabla')).toBeFalsy();
+        component.login('blablabla').then(res => {
+            expect(res).toBeFalsy();
+        })
     });
 });
