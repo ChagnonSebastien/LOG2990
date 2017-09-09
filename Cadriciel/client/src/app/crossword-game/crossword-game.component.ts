@@ -15,16 +15,16 @@ export class CrosswordGameComponent implements OnInit {
     ngOnInit() {
     }
 
-  setOption(chosenOption: string): void {
-      this.option = chosenOption;
-  }
+    setOption(chosenOption: string): void {
+        this.option = chosenOption;
+    }
 
-  setMode(chosenMode: string): void {
-      this.option = chosenMode;
-  }
+    setMode(chosenMode: string): void {
+        this.option = chosenMode;
+    }
 
-  setLevel(chosenLevel: string): void {
-      this.level = chosenLevel;
-  }
+    setLevel(chosenLevel: string): void {
+        this.level = chosenLevel;
+    }
 
 }
