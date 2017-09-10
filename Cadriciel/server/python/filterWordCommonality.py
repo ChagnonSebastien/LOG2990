@@ -23,6 +23,24 @@ for word in words:
     else:
         uncommonWords.append(word)
 
+# Sort them by length
+commonWords = sorted(commonWords, key=lambda x: len(x))
+uncommonWords = sorted(uncommonWords, key=lambda x: len(x))
+
+longestCommonWord = commonWords[len(commonWords) - 1]
+longestUncommonWord = uncommonWords[len(uncommonWords) - 1]
+
+commonWordsByLength = {x:[] for x in range(1,len(longestCommonWord) + 1)}
+uncommonWordsByLength = {x:[] for x in range(1,len(longestUncommonWord) + 1)}
+
+for word in commonWords:
+    commonWordsByLength[len(word)].append(word)
+
+for word in uncommonWords:
+    uncommonWordsByLength[len(word)].append(word)
+
+lexicon = {"common": commonWordsByLength, "uncommon": uncommonWordsByLength}
+
 # Dump words as JSON into commonWords.json and uncommonWords.json
 import json
 with open('../lexicon/commonWords.json', 'w') as outfile:
@@ -30,3 +48,7 @@ with open('../lexicon/commonWords.json', 'w') as outfile:
 
 with open('../lexicon/uncommonWords.json', 'w') as outfile:
     json.dump(uncommonWords, outfile)
+
+# Dump lexicon as JSON
+with open('../lexicon/lexicon.json', 'w') as outfile:
+    json.dump(lexicon, outfile, sort_keys=True, indent=4, separators=(',', ': '))
