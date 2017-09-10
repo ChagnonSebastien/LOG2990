@@ -8,13 +8,14 @@ import { AuthenticationService } from './authentication.service';
     styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-    public passwordInput: string;
     private passwordCorrect: boolean;
+    private passwordChanged: boolean;
 
     constructor(private authenticationService: AuthenticationService) { }
 
     public ngOnInit(): void {
         this.passwordCorrect = false;
+        this.passwordChanged = false;
     }
 
     public async login(passwordInput: string): Promise<boolean> {
@@ -25,10 +26,9 @@ export class AdminComponent implements OnInit {
     }
 
     public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
-        let passwordChanged: boolean;
         await this.authenticationService.changePassword(oldPassword, newPassword).then(res => {
-            passwordChanged = (res == 'success');
+            this.passwordChanged = (res == 'success');
         });
-        return await passwordChanged;
+        return await this.passwordChanged;
     }
 }

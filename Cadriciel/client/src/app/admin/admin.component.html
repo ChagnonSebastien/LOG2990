@@ -13,7 +13,7 @@
                 <h1>Change password</h1>
             </div>
             <div class="col-md-6">
-                <div>
+                <div *ngIf="!passwordChanged">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Old password</label>
                         <input type="password" class="form-control" placeholder="Old password" #oldPassword>
@@ -27,6 +27,9 @@
                     class="btn btn-primary">
                         Submit
                     </button>
+                </div>
+                <div *ngIf="passwordChanged" class="alert alert-success">
+                    You have successfully changed your password!
                 </div>
             </div>
         </div>
