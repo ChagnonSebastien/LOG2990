@@ -33,7 +33,7 @@ module Route {
         public englishWordLexicon(red: express.Request, res: express.Response, next: express.NextFunction) {
             let lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
-            let filepath: string = '../server/englishWords.txt';
+            let filepath: string = '../server/lexicon/englishWords.txt';
             
             lexicon = lexiconReader.readWords(filepath);
             res.send(lexicon);
