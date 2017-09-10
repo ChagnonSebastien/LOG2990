@@ -37,6 +37,12 @@ describe('AdminComponent', () => {
     it('should not login when the password is not walleandtomato', () => {
         component.login('blablabla').then(res => {
             expect(res).toBeFalsy();
-        })
+        });
+    });
+
+    it('should change the password when old password is walleandtomato', () => {
+        component.changePassword('walleandtomato', 'walleandtomato').then(res => {
+            expect(res).toBeTruthy();
+        });
     });
 });

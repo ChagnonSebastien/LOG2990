@@ -24,7 +24,11 @@ export class AdminComponent implements OnInit {
         return await this.passwordCorrect;
     }
 
-    public changePassword(oldPassword: string, newPassword: string): boolean {
-        return true;
+    public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
+        let passwordChanged: boolean;
+        await this.authenticationService.changePassword(oldPassword, newPassword).then(res => {
+            passwordChanged = (res == 'success');
+        });
+        return await passwordChanged;
     }
 }
