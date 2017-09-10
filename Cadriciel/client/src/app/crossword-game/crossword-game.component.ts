@@ -30,10 +30,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     isSolo(): boolean {
-        console.log(this.option);
         return this.option == "SOLO";
-
-        
     }
 
 }
