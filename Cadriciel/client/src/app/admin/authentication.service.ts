@@ -8,16 +8,28 @@ export class AuthenticationService {
 
     constructor(private http: Http) { }
 
-    private url = 'http://localhost:3000/api/login';
-
     private headers = new Headers({'Content-Type': 'application/json'});
 
     public authenticate(password: string): Promise<string> {
+        let url = 'http://localhost:3000/api/login';
         return this.http
-                .post(this.url, JSON.stringify({"password":password}), {headers: this.headers})
+                .post(url, JSON.stringify({"password":password}), {headers: this.headers})
                 .toPromise()
                 .then(response => response.json().data)
                 .catch(this.handleError);
+    }
+
+    public changePassword(oldPassword: string, newPassword: string): Promise<string> {
+        let url = 'http://localhost:3000/api/changepassword';
+        let passwords = {
+            "oldPassword": oldPassword,
+            "newPassword": newPassword
+        }
+        return this.http
+        .post(url, JSON.stringify(passwords), {headers: this.headers})
+        .toPromise()
+        .then(response => response.json().data)
+        .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {
