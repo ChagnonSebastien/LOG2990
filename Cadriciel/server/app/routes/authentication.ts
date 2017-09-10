@@ -25,23 +25,6 @@ module Route {
             });
         }
 
-        public async authenticate(password: string): Promise<string> {
-            await MongoClient.connect(url, (err, db) => {
-                if (err) {
-                    return JSON.stringify({"data": "connectionError"});
-                } else {
-                    db.collection('login').find().toArray().then((credentials) => {
-                        if (password == credentials[0].password) {
-                            return JSON.stringify({"data": "authenticated"});
-                        } else {
-                            return JSON.stringify({"data": "invalid"});
-                        }
-                    });
-                }
-            });
-            return await "";
-        }
-
         public changePassword(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
@@ -49,7 +32,11 @@ module Route {
                 } else {
                     db.collection('login').find().toArray().then((credentials) => {
                         if (req.body.oldPassword == credentials[0].password) {
-                            res.send(JSON.stringify({"data": "authenticated"}));
+                            db.collection('login').findOneAndUpdate(
+                                {_id: credentials[0]._id},
+                                {$set: {password: req.body.newPassword}}
+                            );
+                            res.send(JSON.stringify({"data": "success"}));
                         } else {
                             res.send(JSON.stringify({"data": "invalid"}));
                         }

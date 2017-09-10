@@ -87,6 +87,9 @@ export class Application {
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
 
+        // changePassword api path
+        router.post('/changepassword', authentication.changePassword.bind(authentication.changePassword));
+
         // use router middleware
         this.app.use('/api', router);
 
