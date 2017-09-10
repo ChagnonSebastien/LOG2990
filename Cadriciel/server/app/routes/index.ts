@@ -21,8 +21,12 @@ module Route {
             let options = 'definitions?limit=1&includeRelated=true&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
             let word = req.params.word;
             request(`${uri}/${word}/${options}`, (error, response, body) => {
-                body = JSON.parse(body);
-                res.send(JSON.stringify(body[0].text));
+                if (body == "[]") {
+                    res.send("Invalid word");
+                } else {
+                    body = JSON.parse(body);
+                    res.send(JSON.stringify(body[0].text));
+                }
             })
         }
 
