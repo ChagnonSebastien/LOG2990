@@ -13,6 +13,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
 import * as indexRoute from './routes/index';
+import * as authenticationRoute from './routes/authentication';
 
 export class Application {
 
@@ -76,11 +77,18 @@ export class Application {
 
         // create routes
         const index: indexRoute.Index = new indexRoute.Index();
+        const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
 
         // home page
         router.get('/basic', index.index.bind(index.index));
         router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
         router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
+
+        // login api path
+        router.post('/login', authentication.login.bind(authentication.login));
+
+        // changePassword api path
+        router.post('/changepassword', authentication.changePassword.bind(authentication.changePassword));
 
         // use router middleware
         this.app.use('/api', router);

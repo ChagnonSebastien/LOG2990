@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { CrosswordGameModule } from './crossword-game/crossword-game.module';
 import { HomeModule } from './home/home.module';
 import { RacingGameModule } from './racing-game/racing-game.module';
+import { AdminModule } from './admin/admin.module';
 
 /* Routing modules */
 import { AppRoutingModule } from './app-routing.module';
@@ -29,7 +30,8 @@ import { AppRoutingModule } from './app-routing.module';
         AppRoutingModule,
         CrosswordGameModule,
         HomeModule,
-        RacingGameModule
+        RacingGameModule,
+        AdminModule
     ],
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
