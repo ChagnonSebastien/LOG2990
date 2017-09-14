@@ -33,10 +33,20 @@ module Route {
             let commonWordsFilePath = '../server/lexicon/commonWords.json';
             let commonWords: string[]= [];
             let lexiconReader = new LexiconReader();
-            
+
             commonWords = lexiconReader.readJson(commonWordsFilePath);
             res.send(commonWords);
         }
+
+        public getUncommonWords(red: express.Request, res: express.Response, next: express.NextFunction) {
+            let uncommonWordsFilePath = '../server/lexicon/uncommonWords.json';
+            let uncommonWords: string[]= [];
+            let lexiconReader = new LexiconReader();
+
+            uncommonWords = lexiconReader.readJson(uncommonWordsFilePath);
+            res.send(uncommonWords);
+        }
+
 
     }
 }
