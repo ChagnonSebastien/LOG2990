@@ -28,6 +28,16 @@ module Route {
             lexicon = lexiconReader.readWords(filepath);
             res.send(lexicon);
         }
+
+        public getCommonWords(red: express.Request, res: express.Response, next: express.NextFunction) {
+            let commonWordsFilePath = '../server/lexicon/commonWords.json';
+            let commonWords: string[]= [];
+            let lexiconReader = new LexiconReader();
+            
+            commonWords = lexiconReader.readJson(commonWordsFilePath);
+            res.send(commonWords);
+        }
+
     }
 }
 
