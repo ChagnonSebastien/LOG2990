@@ -1,7 +1,7 @@
 div {
   overflow-y: scroll;
   height: 700px;
-  background-image: url("../../../../assets/wall_brick_scored_v2.png");
+  background-image: url("../../../assets/wall_brick_scored_v2.png");
 }
 
 div::-webkit-scrollbar-track

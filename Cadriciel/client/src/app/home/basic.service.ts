@@ -3,14 +3,14 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Message } from '../../../commun/communication/message';
+import { Message } from '../../../../commun/communication/message';
 
 @Injectable()
 export class BasicService {
 
     constructor(private http: Http) { }
 
-    private url = 'http://localhost:3000/basic';
+    private url = 'http://localhost:3000/api/basic';
 
     public basicGet(): Promise<Message> {
         return this.http.get(this.url)

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TracksComponent } from './tracks.component';
-import { TrackComponent } from '../../track/track.component';
+import { TrackComponent } from '../track/track.component';
 
 describe('TracksComponent', () => {
     let component: TracksComponent;

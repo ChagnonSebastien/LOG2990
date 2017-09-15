@@ -1,56 +1,40 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 
-import { AppComponent } from './app.component';
-import { CubeComponent } from './home/cube/cube.component';
-
-import { RenderService } from './home/cube/render.service';
-import { BasicService } from './basic.service';
-import { DrawTrackService } from './racing-game/draw-track/draw-track.service';
-import { HomeComponent } from './home/home.component';
-import { RacingGameComponent } from './racing-game/racing-game.component';
-import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
-import { AppRoutingModule } from './app-routing.module';
 import { APP_BASE_HREF } from '@angular/common';
-import { InGameComponent } from './racing-game/in-game/in-game.component';
-import { RacingHeaderComponent } from './racing-game/racing-header/racing-header.component';
-import { TrackEditorComponent } from './racing-game/racing-header/track-editor/track-editor.component';
-import { AdministrationComponent } from './racing-game/racing-header/administration/administration.component';
-import { TracksComponent } from './racing-game/racing-header/tracks/tracks.component';
-import { TrackAdminComponent } from './racing-game/racing-header/tracks/track-admin/track-admin.component';
-import { TrackInfoComponent } from './racing-game/racing-header/tracks/track-info/track-info.component';
-import { TrackComponent } from './racing-game/track/track.component';
-import { DrawTrackComponent } from './racing-game/draw-track/draw-track.component';
 
+/* App Root */
+// Component imports
+import { AppComponent } from './app.component';
+
+// Service imports
+
+/* Feature modules */
+import { CrosswordGameModule } from './crossword-game/crossword-game.module';
+import { HomeModule } from './home/home.module';
+import { RacingGameModule } from './racing-game/racing-game.module';
+import { AdminModule } from './admin/admin.module';
+
+/* Routing modules */
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        CubeComponent,
-        HomeComponent,
-        RacingGameComponent,
-        CrosswordGameComponent,
-        InGameComponent,
-        RacingHeaderComponent,
-        TrackEditorComponent,
-        AdministrationComponent,
-        TracksComponent,
-        TrackAdminComponent,
-        TrackInfoComponent,
-        TrackComponent,
-        DrawTrackComponent
+        AppComponent
     ],
     imports: [
         BrowserModule,
         HttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        CrosswordGameModule,
+        HomeModule,
+        RacingGameModule,
+        AdminModule
     ],
     providers: [
-        { provide: APP_BASE_HREF, useValue: '/' },
-        RenderService,
-        BasicService,
-        DrawTrackService
+        { provide: APP_BASE_HREF, useValue: '/' }
     ],
     bootstrap: [AppComponent]
 })

@@ -3,8 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { CubeComponent } from './cube/cube.component';
 import { RenderService } from './cube/render.service';
-import { BasicService } from '../basic.service';
+import { BasicService } from './basic.service';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
+import {DrawTrackComponent} from "../racing-game/draw-track/draw-track.component";
+import {DrawTrackService} from "../racing-game/draw-track/draw-track.service";
 
 describe('HomeComponent', () => {
     let component: HomeComponent;
@@ -12,8 +14,8 @@ describe('HomeComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [HomeComponent, CubeComponent],
-            providers: [RenderService, BasicService],
+            declarations: [HomeComponent, CubeComponent, DrawTrackComponent],
+            providers: [RenderService, BasicService, DrawTrackService],
             imports: [HttpModule]
         })
             .compileComponents();

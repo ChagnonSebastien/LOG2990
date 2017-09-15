@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RacingHeaderComponent } from './racing-header.component';
-import { TracksComponent } from './tracks/tracks.component';
+import { TracksComponent } from '../tracks/tracks.component';
 import { TrackComponent } from '../track/track.component';
 
 describe('RacingHeaderComponent', () => {
