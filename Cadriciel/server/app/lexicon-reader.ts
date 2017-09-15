@@ -16,7 +16,7 @@ export class LexiconReader {
          return jsonContent;
      }
 
-     readWordsOfLengthJson(file:string, wordLength: number) {
+     readWordsOfLengthJson(file:string, wordLength: number): string[] {
          let jsonContent: string[];
          jsonContent = JSON.parse(fs.readFileSync(file, 'utf8'));
          let wordsOfLength: string[] = [];
@@ -27,6 +27,17 @@ export class LexiconReader {
          }
 
          return wordsOfLength;
+     }
+
+     getWordsContainingLetter(listOfWords:string[], char: string, position: number): string[]{
+        let wordsContainingLetter: string[] = [];
+
+        for(let i of listOfWords) {
+            if(i.charAt(position) == char)
+                wordsContainingLetter.push(i);
+        }
+
+        return wordsContainingLetter;
      }
 
 }

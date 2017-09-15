@@ -63,6 +63,21 @@ module Route {
             res.send(wordsOfLength);
         }
 
+        public getWordsCharAt(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let char = req.params.char;
+            let position = req.params.position;
+            let lexiconReader = new LexiconReader();
+            let lexicon: string[] = [];
+            let wordsCharAt:string[] = [];
+            let filepath: string = '../server/lexicon/englishWords.txt';
+            
+            lexicon = lexiconReader.readWords(filepath);
+            wordsCharAt = lexiconReader.getWordsContainingLetter(lexicon, char, position);
+
+            res.send(wordsCharAt);
+            
+        }
+
 
     }
 }
