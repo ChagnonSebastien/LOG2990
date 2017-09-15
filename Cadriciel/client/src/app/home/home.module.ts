@@ -9,6 +9,8 @@ import { BasicService } from './basic.service';
 
 /* Feature modules */
 import { CubeModule } from './cube/cube.module';
+import {DrawTrackComponent} from "../racing-game/draw-track/draw-track.component";
+import {DrawTrackService} from "../racing-game/draw-track/draw-track.service";
 
 @NgModule({
     imports: [
@@ -18,12 +20,14 @@ import { CubeModule } from './cube/cube.module';
     ],
     declarations: [
         HomeComponent,
+        DrawTrackComponent
     ],
     exports: [
         HomeComponent,
     ],
     providers: [
         BasicService,
+        DrawTrackService
     ]
 })
 export class HomeModule { }
