@@ -23,7 +23,6 @@ export class LexiconReader {
 
          for(let i of jsonContent) {
              if(i.length == wordLength)
-                //console.log(i);
                 wordsOfLength.push(i);
          }
 
