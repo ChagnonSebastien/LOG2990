@@ -16,6 +16,20 @@ export class LexiconReader {
          return jsonContent;
      }
 
+     readWordsOfLengthJson(file:string, wordLength: number) {
+         let jsonContent: string[];
+         jsonContent = JSON.parse(fs.readFileSync(file, 'utf8'));
+         let wordsOfLength: string[] = [];
+
+         for(let i of jsonContent) {
+             if(i.length == wordLength)
+                //console.log(i);
+                wordsOfLength.push(i);
+         }
+
+         return wordsOfLength;
+     }
+
 }
 
 
