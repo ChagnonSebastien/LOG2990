@@ -5,13 +5,13 @@ import Stats = require('stats.js');
 @Injectable()
 export class RenderService {
 
-    private container: HTMLDivElement;
+    private container: HTMLElement;
 
     private camera: THREE.PerspectiveCamera;
 
     private stats: Stats;
 
-    private line: THREE.Line;//for line
+    private line: THREE.Line; // for line
 
     private cube: THREE.Mesh;
 
@@ -31,6 +31,8 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
+    private lastPoint: THREE.Vector3;
+
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
@@ -41,13 +43,11 @@ export class RenderService {
         const material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
         const positions = new Float32Array(300);
         const colors = new Float32Array( 300);
-        
         let value = 10;
         for ( let i = 0; i < 100; i ++ ) {
           const x = value;
           const y = value;
           const z = value;
-  
           value++;
           // positions
           positions[ i * 3 ] = x;
@@ -109,8 +109,7 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
-        //this.animateCube();
-
+        this.animateCube();
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
@@ -130,7 +129,7 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLDivElement, rotationX: number, rotationY: number) {
+    public initialize(container: HTMLElement, rotationX: number, rotationY: number) {
         this.container = container;
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
@@ -141,11 +140,11 @@ export class RenderService {
         this.startRenderingLoop();
     }
 
-    public init(container: HTMLDivElement) {
+    public init(container: HTMLElement) {
         this.container = container;
-     
         this.createScene();
         this.drawLine();
         this.startRenderingLoop();
-      }
+    }
+
 }

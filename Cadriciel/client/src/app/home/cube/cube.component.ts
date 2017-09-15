@@ -13,7 +13,7 @@ export class CubeComponent implements AfterViewInit {
     constructor(private renderService: RenderService) {
     }
 
-    private get container(): HTMLDivElement {
+    private get container(): HTMLElement {
         return this.containerRef.nativeElement;
     }
 
@@ -32,7 +32,7 @@ export class CubeComponent implements AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        //this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
-        this.renderService.init(this.container)
+        this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
+        // this.renderService.init(this.container);
     }
 }

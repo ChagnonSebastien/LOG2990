@@ -7,6 +7,7 @@ import { CubeComponent } from './home/cube/cube.component';
 
 import { RenderService } from './home/cube/render.service';
 import { BasicService } from './basic.service';
+import { DrawTrackService } from './racing-game/draw-track/draw-track.service';
 import { HomeComponent } from './home/home.component';
 import { RacingGameComponent } from './racing-game/racing-game.component';
 import { CrosswordGameComponent } from './crossword-game/crossword-game.component';
@@ -20,6 +21,7 @@ import { TracksComponent } from './racing-game/racing-header/tracks/tracks.compo
 import { TrackAdminComponent } from './racing-game/racing-header/tracks/track-admin/track-admin.component';
 import { TrackInfoComponent } from './racing-game/racing-header/tracks/track-info/track-info.component';
 import { TrackComponent } from './racing-game/track/track.component';
+import { DrawTrackComponent } from './racing-game/draw-track/draw-track.component';
 
 
 @NgModule({
@@ -36,7 +38,8 @@ import { TrackComponent } from './racing-game/track/track.component';
         TracksComponent,
         TrackAdminComponent,
         TrackInfoComponent,
-        TrackComponent
+        TrackComponent,
+        DrawTrackComponent
     ],
     imports: [
         BrowserModule,
@@ -46,7 +49,8 @@ import { TrackComponent } from './racing-game/track/track.component';
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         RenderService,
-        BasicService
+        BasicService,
+        DrawTrackService
     ],
     bootstrap: [AppComponent]
 })
