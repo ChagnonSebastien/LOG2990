@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
+import {Mesh} from "three";
 
 @Injectable()
 export class DrawTrackService {
@@ -12,7 +13,11 @@ export class DrawTrackService {
 
     private projector: THREE.Projector;
 
-    private camera: THREE.PerspectiveCamera;
+    private camera: THREE.OrthographicCamera;
+
+    private cameraWidth = 2000;
+
+    private cameraHeight = 1000;
 
     private line: THREE.Line; // for line
 
@@ -20,23 +25,17 @@ export class DrawTrackService {
 
     private scene: THREE.Scene;
 
-    private cameraZ = 400;
-
-    private fieldOfView = 70;
-
-    private nearClippingPane = 1;
-
-    private farClippingPane = 1000;
-
-    private lastPoint: THREE.Vector3;
+    private cameraZ = 500;
 
     private mouse: THREE.Vector3;
 
     private mouseOn = false;
 
-    public pointX;
+    public pointX: number;
 
-    public pointY;
+    public pointY: number;
+
+    private lined: THREE.Mesh;
 
     private raycaster: THREE.Raycaster;
 
@@ -57,11 +56,13 @@ export class DrawTrackService {
 
             /* Camera */
             const aspectRatio = this.getAspectRatio();
-            this.camera = new THREE.PerspectiveCamera(
-                this.fieldOfView,
-                aspectRatio,
-                this.nearClippingPane,
-                this.farClippingPane
+            this.camera = new THREE.OrthographicCamera(
+                this.cameraWidth/2,
+                this.cameraWidth/2,
+                this.cameraHeight/2,
+                this.cameraHeight/2,
+                1,
+                1000
         );
         this.camera.position.z = this.cameraZ;
     }
@@ -80,13 +81,13 @@ export class DrawTrackService {
 
     private render() {
             // this.raycaster.setFromCamera( this.mouse, this.camera );
+this.lined.position.setZ(this.pointX);
             requestAnimationFrame(() => this.render());
             // this.push();
             this.renderer.render(this.scene, this.camera);
     }
 
     public onResize() {
-            this.camera.aspect = this.getAspectRatio();
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
@@ -135,9 +136,9 @@ export class DrawTrackService {
            color: 0x0000ff
         });
 
-        const lined = new THREE.Mesh(geometry, material);
+        this.lined = new THREE.Mesh(geometry, material);
         // this.line = new THREE.Mesh(this.geometries, material);
-        this.scene.add(lined);
+        this.scene.add(this.lined);
 
        /*
        const geometry = new THREE.BufferGeometry();
