@@ -135,9 +135,9 @@ export class DrawTrackService {
            color: 0x0000ff
         });
 
-        this.line = new THREE.Mesh(geometry, material);
+        const lined = new THREE.Mesh(geometry, material);
         // this.line = new THREE.Mesh(this.geometries, material);
-        this.scene.add(this.line);
+        this.scene.add(lined);
 
        /*
        const geometry = new THREE.BufferGeometry();
@@ -165,20 +165,6 @@ export class DrawTrackService {
         const mesh = new THREE.Line( geometry, material );
         this.scene.add( mesh );
         */
-    }
-
-    private createCube() {
-        const geometry = new THREE.BoxGeometry(200, 200, 200);
-
-        for (let i = 0; i < geometry.faces.length; i += 2) {
-            const hex = Math.random() * 0xffffff;
-            geometry.faces[i].color.setHex(hex);
-            geometry.faces[i + 1].color.setHex(hex);
-        }
-
-        const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
-        this.line = new THREE.Mesh(geometry, material);
-        this.scene.add(this.line);
     }
 
         /*
