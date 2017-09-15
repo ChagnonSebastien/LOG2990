@@ -11,7 +11,6 @@ import { DrawTrackService } from './draw-track.service';
 export class DrawTrackComponent implements AfterViewInit {
     constructor(private trackService: DrawTrackService) {
     }
-
     
     private get container(): HTMLDivElement {
         return this.containerRef.nativeElement;
@@ -41,7 +40,7 @@ export class DrawTrackComponent implements AfterViewInit {
         this.clientY = event.clientY;
         this.trackService.pointX = this.clientX;
         this.trackService.pointY = this.clientY;
-        // this.trackService.getMousePosition(this.clientX, this.clientY);
+        this.trackService.push();
     }
 
     public ngAfterViewInit() {

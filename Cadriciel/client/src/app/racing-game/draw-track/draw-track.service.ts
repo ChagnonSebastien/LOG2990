@@ -6,13 +6,13 @@ import Stats = require('stats.js');
 export class DrawTrackService {
     private container: HTMLElement;
 
-    // private maetrieal: THREE.LineBasicMaterial;
-
     private geometries: THREE.Geometry;
 
     private projector: THREE.Projector;
 
     private camera: THREE.PerspectiveCamera;
+
+    private plane: THREE.Mesh;
 
     private line: THREE.Line; // for line
 
@@ -42,13 +42,22 @@ export class DrawTrackService {
 
 
 
-    private push() {
-        // this.line.position.x = ( this.pointX / this.container.clientWidth ) * 2 - 1;
-        // this.line.position.y = - (this.pointY / this.container.clientHeight ) * 2 + 1;
-
+    public push() {
+        console.log('push here');
+       
         this.mouse.x = ( this.pointX / this.container.clientWidth ) * 2 - 1;
         this.mouse.y = - (this.pointY / this.container.clientHeight ) * 2 + 1;
-        this.mouse.z = 0.5;
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObject(this.plane);
+        if (intersects.length > 0) {
+            const geometry = new THREE.CircleGeometry( 10, 32 );
+            const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+            const circle = new THREE.Mesh( geometry, material );
+            circle.position.copy(intersects[0].point);
+            this.scene.add( circle );
+            console.log('creating point at :' + circle.position.x);
+            
+        }
     }
 
     private createScene() {
@@ -107,28 +116,15 @@ export class DrawTrackService {
         this.mouseOn = true;
     }
 
+    private createPlan() {
+        const geometry = new THREE.PlaneGeometry(this.container.clientWidth, this.container.clientHeight, 3);
+        const material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        this.plane = new THREE.Mesh(geometry, material);
+
+        this.scene.add(this.plane);
+    }
+
     private draw() {
-
-         /*
-
-        if (this.lastPoint) {
-            const pos = this.getMousePosition(this.pointX, this.pointY);
-            const material = new THREE.LineBasicMaterial({
-                color: 0x0000ff
-            });
-
-            const geometry = new THREE.Geometry();
-            if ( Math.abs(this.lastPoint.x - pos.x) < 2000 &&
-                Math.abs(this.lastPoint.y - pos.y) < 2000 &&
-                Math.abs(this.lastPoint.z - pos.z) < 2000 ) {
-                geometry.vertices.push(this.lastPoint);
-                geometry.vertices.push(pos);
-
-                const line = new THREE.Line(geometry, material);
-                this.scene.add(line);
-                this.lastPoint = pos;
-        }
-        */
 
         const geometry = new THREE.CircleGeometry( 79, 32 );
         const material = new THREE.LineBasicMaterial({
@@ -138,55 +134,17 @@ export class DrawTrackService {
         const lined = new THREE.Mesh(geometry, material);
         // this.line = new THREE.Mesh(this.geometries, material);
         this.scene.add(lined);
-
-       /*
-       const geometry = new THREE.BufferGeometry();
-        const material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
-        const positions = new Float32Array(300);
-        const colors = new Float32Array( 300);
-        let value = 10;
-        for ( let i = 0; i < 100; i ++ ) {
-          const x = value;
-          const y = value;
-          const z = value;
-          value++;
-          // positions
-          positions[ i * 3 ] = x;
-          positions[ i * 3 + 1 ] = y;
-          positions[ i * 3 + 2 ] = z;
-          // colors
-          colors[ i * 3 ] = ( x / value ) + 0.5;
-          colors[ i * 3 + 1 ] = ( y / value ) + 0.5;
-          colors[ i * 3 + 2 ] = ( z / value ) + 0.5;
-        }
-        geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-        geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
-        geometry.computeBoundingSphere();
-        const mesh = new THREE.Line( geometry, material );
-        this.scene.add( mesh );
-        */
     }
-
-        /*
-        if (this.mouseOn) {
-            const geometry = new THREE.ConeGeometry( 5, 20, 32 );
-            const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-            const cone = new THREE.Mesh( geometry, material );
-            this.scene.add( cone );
-        } else {
-            const geometry = new THREE.CircleGeometry( 79, 32 );
-            const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-            const circle = new THREE.Mesh( geometry, material );
-            this.scene.add( circle );
-        }
-        */
 
     public initialise(container: HTMLElement, positionX: number, positionY: number) {
             this.container = container;
             this.pointX = positionX;
             this.pointY = positionY;
+            this.mouse = new THREE.Vector3();
+            this.raycaster = new THREE.Raycaster();
             this.createScene();
-            this.draw();
+            // this.draw();
+            this.createPlan();
             this.startRenderingLoop();
     }
 }

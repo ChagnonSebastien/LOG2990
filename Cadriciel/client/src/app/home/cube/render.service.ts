@@ -11,8 +11,6 @@ export class RenderService {
 
     private stats: Stats;
 
-    private line: THREE.Line; // for line
-
     private cube: THREE.Mesh;
 
     private renderer: THREE.WebGLRenderer;
@@ -31,38 +29,9 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
-    private lastPoint: THREE.Vector3;
-
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-    }
-
-    private drawLine() {
-        const geometry = new THREE.BufferGeometry();
-        const material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
-        const positions = new Float32Array(300);
-        const colors = new Float32Array( 300);
-        let value = 10;
-        for ( let i = 0; i < 100; i ++ ) {
-          const x = value;
-          const y = value;
-          const z = value;
-          value++;
-          // positions
-          positions[ i * 3 ] = x;
-          positions[ i * 3 + 1 ] = y;
-          positions[ i * 3 + 2 ] = z;
-          // colors
-          colors[ i * 3 ] = ( x / value ) + 0.5;
-          colors[ i * 3 + 1 ] = ( y / value ) + 0.5;
-          colors[ i * 3 + 2 ] = ( z / value ) + 0.5;
-        }
-        geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-        geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
-        geometry.computeBoundingSphere();
-        const mesh = new THREE.Line( geometry, material );
-        this.scene.add( mesh );
     }
 
     private createCube() {
@@ -139,12 +108,4 @@ export class RenderService {
         this.initStats();
         this.startRenderingLoop();
     }
-
-    public init(container: HTMLElement) {
-        this.container = container;
-        this.createScene();
-        this.drawLine();
-        this.startRenderingLoop();
-    }
-
 }

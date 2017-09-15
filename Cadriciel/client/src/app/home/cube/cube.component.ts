@@ -33,6 +33,5 @@ export class CubeComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
-        // this.renderService.init(this.container);
     }
 }
