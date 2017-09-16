@@ -5,6 +5,7 @@ import { LexiconReader } from '../lexicon-reader';
 module Route {
 
     export class Lexicon {
+        public lexiconFilePath: string = '../server/lexicon/englishWords.txt';
 
         public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
             let uri = 'http://api.wordnik.com:80/v4/word.json';
@@ -23,61 +24,24 @@ module Route {
         public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
             let lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
-            let filepath: string = '../server/lexicon/englishWords.txt';
-            
-            lexicon = lexiconReader.readWords(filepath);
+            lexicon = lexiconReader.readWords(this.lexiconFilePath);
             res.send(lexicon);
         }
 
-        public getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
-            let commonWordsFilePath = '../server/lexicon/commonWords.json';
-            let commonWords: string[]= [];
-            let lexiconReader = new LexiconReader();
-
-            commonWords = lexiconReader.readJson(commonWordsFilePath);
-            res.send(commonWords);
-        }
-
-        public getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
-            let uncommonWordsFilePath = '../server/lexicon/uncommonWords.json';
-            let uncommonWords: string[]= [];
-            let lexiconReader = new LexiconReader();
-
-            uncommonWords = lexiconReader.readJson(uncommonWordsFilePath);
-            res.send(uncommonWords);
-        }
-        
         public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction) {
             let wordLength = req.params.wordLength;
-            let commonWordsFilePath = '../server/lexicon/commonWords.json';
-            let uncommonWordsFilePath = '../server/lexicon/uncommonWords.json';
-            let commonWords: string[]= [];
-            let uncommonWords: string[]= [];
-            let wordsOfLength: string[] = [];
             let lexiconReader = new LexiconReader();
-            
-            commonWords = lexiconReader.readWordsOfLengthJson(commonWordsFilePath, wordLength);
-            uncommonWords = lexiconReader.readWordsOfLengthJson(uncommonWordsFilePath, wordLength);
-            wordsOfLength = uncommonWords.concat(uncommonWords);
-
+            let wordsOfLength:string[] = lexiconReader.readWordsOfLength(this.lexiconFilePath, wordLength);
             res.send(wordsOfLength);
         }
 
-        public getWordsCharAt(req: express.Request, res: express.Response, next: express.NextFunction) {
-            let char = req.params.char;
-            let position = req.params.position;
+        public getWordsWithCharAt(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let charWanted = req.params.char;
+            let position = Number(req.params.position);
             let lexiconReader = new LexiconReader();
-            let lexicon: string[] = [];
-            let wordsCharAt:string[] = [];
-            let filepath: string = '../server/lexicon/englishWords.txt';
-            
-            lexicon = lexiconReader.readWords(filepath);
-            wordsCharAt = lexiconReader.getWordsContainingLetter(lexicon, char, position);
-
-            res.send(wordsCharAt);
-            
+            let wordsWithChar = lexiconReader.getWordsWithChar(this.lexiconFilePath, charWanted, position);
+            res.send(wordsWithChar);
         }
-
 
     }
 }

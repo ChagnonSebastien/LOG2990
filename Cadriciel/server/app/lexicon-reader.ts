@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as request from 'request';
 
 export class LexiconReader {
 
@@ -9,19 +10,12 @@ export class LexiconReader {
         return content;
      }
 
-     readJson(file: string): string[] {
-         let jsonContent: string[];
-         jsonContent = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-         return jsonContent;
-     }
-
-     readWordsOfLengthJson(file:string, wordLength: number): string[] {
-         let jsonContent: string[];
-         jsonContent = JSON.parse(fs.readFileSync(file, 'utf8'));
+    readWordsOfLength(file:string, wordLength: number): string[] {
+         let lexicon: string[] = this.readWords(file);
          let wordsOfLength: string[] = [];
 
-         for(let i of jsonContent) {
+         for(let i of lexicon) {
              if(i.length == wordLength)
                 wordsOfLength.push(i);
          }
@@ -29,15 +23,17 @@ export class LexiconReader {
          return wordsOfLength;
      }
 
-     getWordsContainingLetter(listOfWords:string[], char: string, position: number): string[]{
-        let wordsContainingLetter: string[] = [];
+     getWordsWithChar(file: string, character: string, position: number) {
+         let lexicon: string[] = this.readWords(file);
+         let wordsWithChar: string[] = [];
 
-        for(let i of listOfWords) {
-            if(i.charAt(position) == char)
-                wordsContainingLetter.push(i);
-        }
+         for(let i of lexicon) {
+             if(i.charAt(position) == character) {
+                 wordsWithChar.push(i);
+             }
+         }
 
-        return wordsContainingLetter;
+         return wordsWithChar;
      }
 
 }

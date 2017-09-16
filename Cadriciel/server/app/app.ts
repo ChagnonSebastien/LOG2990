@@ -86,9 +86,7 @@ export class Application {
         router.get('/definition/:word', lexicon.wordDefinition.bind(lexicon.wordDefinition));
         router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
         router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
-        router.get('/lexicon/contain/:char/:position', lexicon.getWordsCharAt.bind(lexicon.getWordsCharAt));
-        router.get('/commonWords', lexicon.getCommonWords.bind(lexicon.getCommonWords));
-        router.get('/uncommonWords', lexicon.getUncommonWords.bind(lexicon.getUncommonWords));
+        router.get('/lexicon/:char/:position', lexicon.getWordsWithCharAt.bind(lexicon.getWordsWithCharAt));
 
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
