@@ -87,6 +87,7 @@ export class Application {
         router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
         router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
         router.get('/lexicon/:char/:position', lexicon.getWordsWithCharAt.bind(lexicon.getWordsWithCharAt));
+        router.get('/frequency', lexicon.getWordFrequency.bind(lexicon.getWordFrequency));
 
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
