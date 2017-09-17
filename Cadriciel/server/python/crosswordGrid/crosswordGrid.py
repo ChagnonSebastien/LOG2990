@@ -1,8 +1,14 @@
-class Grid:
+class CrosswordGrid:
     "Crossword Grid Generator"
     def __init__(self, gridSize):
         self.gridSize = gridSize
         self.grid = [[" " for x in range(gridSize)] for y in range(gridSize)]
+
+    def addLetter(self, letter, line, column):
+        self.grid[line][column] = letter
+
+    def addBlackSquare(self, line, column):
+        self.addLetter('#', line, column)
 
     def printGrid(self):
         for line in self.grid:
@@ -24,21 +30,25 @@ class Grid:
     def isValidGrid(self):
         return self.isValidHorizontal(self.grid) and self.isValidHorizontal(self.transposeGrid(self.grid))
 
-    def test(self):
+    def testAll(self):
         # Test cases for isValidGrid
         assert(self.isValidGrid())
-        self.grid[0][0] = '#'
+        self.addBlackSquare(0,0)
         assert(self.isValidGrid())
-        self.grid[0][6] = '#'
+        self.addBlackSquare(0,6)
         assert(self.isValidGrid())
-        self.grid[0][9] = '#'
+        self.addBlackSquare(0,9)
         assert(self.isValidGrid())
-        self.grid[8][0] = '#'
+        self.addBlackSquare(8,0)
         assert(self.isValidGrid())
-        self.grid[5][0] = '#'
+        self.addBlackSquare(5,0)
         assert(not self.isValidGrid())
+        # Reset grid
         self.grid = [[" " for x in range(self.gridSize)] for y in range(self.gridSize)]
+        print 'CrosswordGrid class: all tests passed'
 
 # Automatic unit tests
-prototypeGrid = Grid(10)
-prototypeGrid.test()
+prototypeGrid = CrosswordGrid(10)
+prototypeGrid.testAll()
+
+# 
