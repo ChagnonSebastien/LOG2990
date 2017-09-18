@@ -1,4 +1,5 @@
 from random import shuffle
+import pprint
 
 class CrosswordGrid:
     'Crossword Grid Generator'
@@ -21,8 +22,35 @@ class CrosswordGrid:
     def erase(self, line, column):
         self.grid[line][column] = ' '
 
+    def sections(self, line):
+        return [section for section in ''.join(line).split('#') if section != '']
+
+    def allSections(self, grid):
+        return [ self.sections(line) for line in grid ]
+
     def horizontalLines(self):
-        return [ [ section for section in ''.join(line).split('#') if section != ''] for line in self.grid ]
+        return self.allSections(self.grid)
+
+    def verticalLines(self):
+        return self.allSections(self.transposeGrid(self.grid))
+
+    def toFill(self, grid, direction):
+        data = []
+        for lineNumber, line in enumerate(grid):
+            words = self.sections(line)
+            lineStr = ''.join(line)
+            wordEnd = 0
+            for word in words:
+                wordStart = lineStr.index(word[0])
+                data.append({"length": len(word), "i": lineNumber, "j": wordStart + wordEnd, "direction": direction, "current": word})
+                wordEnd = wordStart + len(word)
+                if wordEnd < self.gridSize:
+                    lineStr = lineStr[wordEnd:]
+        return data
+
+    def wordsToFill(self):
+        data = self.toFill(self.grid, "horizontal") + self.toFill(self.transposeGrid(self.grid), "vertical")
+        return sorted(data, key=lambda x:x["length"], reverse=True)
 
     def printGrid(self):
         for line in self.grid:
@@ -85,12 +113,13 @@ prototypeGrid = CrosswordGrid(10)
 prototypeGrid.testAll()
 
 # Generate random crossword
-# import timeit
-# nTests = 100
-# start = timeit.default_timer()
-# for i in range(nTests):
-#     prototypeGrid.generateGrid()
-#     prototypeGrid.printGrid()
-#     print ''
-# end = timeit.default_timer()
-# print 'Average time:', (end - start) / nTests
+import timeit
+nTests = 1
+start = timeit.default_timer()
+for i in range(nTests):
+    prototypeGrid.generateGrid()
+    prototypeGrid.printGrid()
+    print ''
+    pprint.pprint(prototypeGrid.wordsToFill())
+end = timeit.default_timer()
+print 'Average time:', (end - start) / nTests
