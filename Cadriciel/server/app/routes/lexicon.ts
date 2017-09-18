@@ -5,7 +5,6 @@ import { LexiconReader } from '../lexicon-reader';
 module Route {
 
     export class Lexicon {
-        public lexiconFilePath: string = '../server/lexicon/englishWords.txt';
 
         public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
             let uri = 'http://api.wordnik.com:80/v4/word.json';
@@ -24,14 +23,16 @@ module Route {
         public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
             let lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
-            lexicon = lexiconReader.readWords(this.lexiconFilePath);
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            lexicon = lexiconReader.readWords(lexiconFilePath);
             res.send(lexicon);
         }
 
         public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction) {
             let wordLength = req.params.wordLength;
             let lexiconReader = new LexiconReader();
-            let wordsOfLength:string[] = lexiconReader.readWordsOfLength(this.lexiconFilePath, wordLength);
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            let wordsOfLength:string[] = lexiconReader.readWordsOfLength(lexiconFilePath, wordLength);
             res.send(wordsOfLength);
         }
 
@@ -39,9 +40,19 @@ module Route {
             let charWanted = req.params.char;
             let position = Number(req.params.position);
             let lexiconReader = new LexiconReader();
-            let wordsWithChar = lexiconReader.getWordsWithChar(this.lexiconFilePath, charWanted, position);
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            let wordsWithChar = lexiconReader.getWordsWithChar(lexiconFilePath, charWanted, position);
             res.send(wordsWithChar);
         }
+
+        public getWordsMatchingPattern(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let pattern = req.params.word;
+            let lexiconReader = new LexiconReader();
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            let wordsWithChar = lexiconReader.getWordsMatchingPattern(lexiconFilePath, pattern);
+            res.send(wordsWithChar);
+        }
+
 
         public getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             let uri = 'http://api.wordnik.com:80/v4/word.json';

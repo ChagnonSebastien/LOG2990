@@ -34,6 +34,26 @@ export class LexiconReader {
 
          return wordsWithChar;
      }
+
+     getWordsMatchingPattern(file: string, pattern:string) {
+         let lexicon: string[] = this.readWords(file);
+         let wordsWithChar: string[] = [];
+         let wordsPatternLength:string[] = this.readWordsOfLength(file, pattern.length);
+
+         for(let i = 0; i < wordsPatternLength.length; i++){
+             let match: boolean = true;
+             for(let j = 0; j < pattern.length; j++) {
+                 if(wordsPatternLength[i][j] != pattern[j] && pattern[j] != ' '){
+                     match = false;
+                 }
+             }
+             if(match){
+                 wordsWithChar.push(wordsPatternLength[i]);
+             }
+         }
+
+         return wordsWithChar;
+     }
 }
 
 
