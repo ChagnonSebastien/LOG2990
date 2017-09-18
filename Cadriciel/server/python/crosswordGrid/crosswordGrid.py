@@ -16,6 +16,14 @@ class CrosswordGrid:
     def addLetter(self, letter, line, column):
         self.grid[line][column] = letter
 
+    def addWord(self, word, line, column, direction):
+        for character in word:
+            self.addLetter(character, line, column)
+            if direction == 'horizontal':
+                column += 1
+            elif direction == 'vertical':
+                line += 1
+
     def addBlackSquare(self, line, column):
         self.addLetter('#', line, column)
 
@@ -42,7 +50,8 @@ class CrosswordGrid:
             wordEnd = 0
             for word in words:
                 wordStart = lineStr.index(word[0])
-                data.append({"length": len(word), "i": lineNumber, "j": wordStart + wordEnd, "direction": direction, "current": word})
+                if ' ' in word:
+                    data.append({"length": len(word), "i": lineNumber if direction == "horizontal" else wordStart + wordEnd, "j": wordStart + wordEnd if direction == "horizontal" else lineNumber, "direction": direction, "current": word})
                 wordEnd = wordStart + len(word)
                 if wordEnd < self.gridSize:
                     lineStr = lineStr[wordEnd:]
@@ -114,12 +123,12 @@ prototypeGrid.testAll()
 
 # Generate random crossword
 import timeit
-nTests = 1
-start = timeit.default_timer()
-for i in range(nTests):
-    prototypeGrid.generateGrid()
-    prototypeGrid.printGrid()
-    print ''
-    pprint.pprint(prototypeGrid.wordsToFill())
-end = timeit.default_timer()
-print 'Average time:', (end - start) / nTests
+# nTests = 1
+# start = timeit.default_timer()
+# for i in range(nTests):
+#     prototypeGrid.generateGrid()
+#     prototypeGrid.printGrid()
+#     print ''
+#     pprint.pprint(prototypeGrid.wordsToFill())
+# end = timeit.default_timer()
+# print 'Average time:', (end - start) / nTests

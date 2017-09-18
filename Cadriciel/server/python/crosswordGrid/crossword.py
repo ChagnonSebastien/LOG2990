@@ -3,6 +3,7 @@ import json
 import pprint
 import re
 from string import maketrans
+from random import randint
 
 class Crossword:
     'Crossword prototype'
@@ -11,6 +12,7 @@ class Crossword:
         with open(lexicon) as lexicon_file:
             self.lexicon = json.load(lexicon_file)
         self.gridGenerator = gridGenerator
+        self.generateCrossword()
 
     def printLexicon(self):
         pprint.pprint(self.lexicon)
@@ -26,10 +28,23 @@ class Crossword:
         regex = re.compile(self.patternToRegex(pattern))
         return filter(regex.search, wordsOfSameLength)
 
+    def generateCrossword(self):
+        self.gridGenerator.generateGrid()
+        wordsToFill = self.gridGenerator.wordsToFill()
+        for wordToFill in wordsToFill:
+            #self.gridGenerator.printGrid()
+            nextToFill = self.gridGenerator.wordsToFill()[0]
+            wordChoices = self.allWordsThatMatch(nextToFill["current"])
+            if len(wordChoices) > 0:
+                wordChoice = wordChoices[randint(0, len(wordChoices) - 1)]
+                print wordChoice, "at index", nextToFill["i"], nextToFill["j"], "direction: ", nextToFill["direction"]
+                self.gridGenerator.addWord(wordChoice, nextToFill["i"], nextToFill["j"], nextToFill["direction"])
+        self.gridGenerator.printGrid()
+
 gridGenerator = CrosswordGrid(10)
 crossword = Crossword(gridGenerator, 'lexicon.json')
-print len(crossword.getWordsOfLength(9))
+#print len(crossword.getWordsOfLength(9))
 
-print crossword.allWordsThatMatch(' a   e')
-crossword.gridGenerator.generateGrid()
-crossword.gridGenerator.printGrid()
+#print crossword.allWordsThatMatch(' a   e')
+#crossword.gridGenerator.generateGrid()
+#crossword.gridGenerator.printGrid()
