@@ -48,7 +48,7 @@ class CrosswordGrid:
 
     def generateGrid(self):
         score = 0
-        while score < 24:
+        while score < 20:
             self.resetGrid()
             #print 'Score is', score
             for coordinate in self.availableSquares:
@@ -56,6 +56,7 @@ class CrosswordGrid:
                 if not self.isValidGrid():
                     self.erase(coordinate[0], coordinate[1])
             score = self.score()
+        return self.grid
 
     def testAll(self):
         # Test cases for isValidGrid
@@ -81,12 +82,12 @@ prototypeGrid = CrosswordGrid(10)
 prototypeGrid.testAll()
 
 # Generate random crossword
-import timeit
-nTests = 100
-start = timeit.default_timer()
-for i in range(nTests):
-    prototypeGrid.generateGrid()
-    prototypeGrid.printGrid()
-    print ''
-end = timeit.default_timer()
-print 'Average time:', (end - start) / nTests
+# import timeit
+# nTests = 100
+# start = timeit.default_timer()
+# for i in range(nTests):
+#     prototypeGrid.generateGrid()
+#     prototypeGrid.printGrid()
+#     print ''
+# end = timeit.default_timer()
+# print 'Average time:', (end - start) / nTests
