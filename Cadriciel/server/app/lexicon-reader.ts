@@ -34,27 +34,6 @@ export class LexiconReader {
 
          return wordsWithChar;
      }
-
-   /* public async getWordFrequency(word:string): number {
-        let uri = 'http://api.wordnik.com:80/v4/word.json';
-        let options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-        var wordFrequency: number;
-
-        request(`${uri}/${word}/${options}`, (error, response, body) => {
-            if (error) {
-                throw error;
-            }
-            if (body == "[]") {
-                wordFrequency = 0;
-            } else {
-                console.log("Entered else");
-                //body = JSON.parse(body);
-                //wordFrequency = Number(body[0].totalCount);
-                wordFrequency = 666;
-                return wordFrequency;
-            }
-        });
-     }*/
 }
 
 
