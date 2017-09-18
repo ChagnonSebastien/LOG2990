@@ -43,34 +43,70 @@ module Route {
             res.send(wordsWithChar);
         }
 
-        public getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             let uri = 'http://api.wordnik.com:80/v4/word.json';
             let options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
             let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
             let lexiconReader = new LexiconReader();
             let lexicon: string[] = lexiconReader.readWords(lexiconFilePath);
-            let wordsToGet: number = 20;
+            let numberOfWords: number = lexicon.length;
+            let numberOfRequests: number = 20;
+            let uncommonWordsMaxFrequency = 2
             let uncommonWords: string[] = [];
 
-            for(let y = 0; y < 200; y++) {
-                let i:number = Math.floor(Math.random() * 46000);
+
+            for(let y = 0; y < numberOfRequests; y++) {
+                let i:number = Math.floor(Math.random() * numberOfWords);
                 request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
-                    if (body == "[]") {
-                        console.log("empty");
-                    } else {
-                        console.log(lexicon[i]);
-                        body = JSON.parse(body);
-                        if(body.totalCount <= 2 ){
-                            uncommonWords.push(lexicon[i]);
-                            wordsToGet--;
-                        }
-                        if(wordsToGet == 0) {
-                            res.send(uncommonWords);
-                        }
+                    body = JSON.parse(body);
+                    if(body.totalCount <= uncommonWordsMaxFrequency ){
+                        uncommonWords.push(lexicon[i]);
+                    }
+                    if(y == 1) {
+                        res.send(uncommonWords);
                     }
                 });
             }
-        } 
+        }
+
+        public getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let uri = 'http://api.wordnik.com:80/v4/word.json';
+            let options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            let lexiconReader = new LexiconReader();
+            let lexicon: string[] = lexiconReader.readWords(lexiconFilePath);
+            let numberOfWords: number = lexicon.length;
+            let numberOfRequests: number = 20;
+            let commonWordsMinFrequency = 1;
+            let commonWords: string[] = [];
+
+
+            for(let y = 0; y < numberOfRequests; y++) {
+                let i:number = Math.floor(Math.random() * numberOfWords);
+                request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
+                    body = JSON.parse(body);
+                    if(body.totalCount > commonWordsMinFrequency ){
+                        commonWords.push(lexicon[i]);
+                    }
+                    if(y == 1) {
+                        res.send(commonWords);
+                    }
+                });
+            }
+        }
+
+        public getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let uri = 'http://api.wordnik.com:80/v4/word.json';
+            let options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
+            let word = req.params.word;
+
+            request(`${uri}/${word}/${options}`, (error, response, body) => {
+                body = JSON.parse(body);
+                res.send(JSON.stringify(body.totalCount));
+            });
+            
+        }  
     }
 }
 
