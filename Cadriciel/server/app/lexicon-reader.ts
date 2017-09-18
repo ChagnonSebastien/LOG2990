@@ -9,7 +9,6 @@ export class LexiconReader {
         return content;
      }
 
-
     readWordsOfLength(file:string, wordLength: number): string[] {
          let lexicon: string[] = this.readWords(file);
          let wordsOfLength: string[] = [];
