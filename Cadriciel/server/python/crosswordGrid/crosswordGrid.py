@@ -21,6 +21,9 @@ class CrosswordGrid:
     def erase(self, line, column):
         self.grid[line][column] = ' '
 
+    def horizontalLines(self):
+        return [ [ section for section in ''.join(line).split('#') if section != ''] for line in self.grid ]
+
     def printGrid(self):
         for line in self.grid:
             print '|',
@@ -48,7 +51,7 @@ class CrosswordGrid:
 
     def generateGrid(self):
         score = 0
-        while score < 20:
+        while score < 25:
             self.resetGrid()
             #print 'Score is', score
             for coordinate in self.availableSquares:

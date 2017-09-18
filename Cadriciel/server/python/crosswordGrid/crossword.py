@@ -21,7 +21,7 @@ class Crossword:
     def patternToRegex(self, pattern):
         return re.sub(r'\s','[a-z]', pattern)
 
-    def allWordsThatMatchPattern(self, pattern):
+    def allWordsThatMatch(self, pattern):
         wordsOfSameLength = self.getWordsOfLength(len(pattern))
         regex = re.compile(self.patternToRegex(pattern))
         return filter(regex.search, wordsOfSameLength)
@@ -30,4 +30,6 @@ gridGenerator = CrosswordGrid(10)
 crossword = Crossword(gridGenerator, 'lexicon.json')
 print len(crossword.getWordsOfLength(9))
 
-print crossword.allWordsThatMatchPattern('h   n')
+print crossword.allWordsThatMatch(' a   e')
+crossword.gridGenerator.generateGrid()
+crossword.gridGenerator.printGrid()
