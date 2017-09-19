@@ -16,10 +16,6 @@ export class DrawTrackComponent implements AfterViewInit {
         return this.containerRef.nativeElement;
     }
 
-    private event: MouseEvent;
-    private clientX = 0;
-    private clientY = 0;
-
     @ViewChild('container')
     private containerRef: ElementRef;
 
@@ -33,12 +29,10 @@ export class DrawTrackComponent implements AfterViewInit {
     }
 
     public updateMousePosition(event: MouseEvent): void {
-        this.clientX = event.clientX; //For debug purposes
-        this.clientY = event.clientY; //For debug purposes
         this.trackService.updateMousePosition(event.clientX, event.clientY);
     }
 
     public ngAfterViewInit() {
-        this.trackService.initialise(this.container, this.clientX, this.clientY);
+        this.trackService.initialise(this.container);
     }
 }
