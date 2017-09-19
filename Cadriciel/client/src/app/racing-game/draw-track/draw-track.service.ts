@@ -5,10 +5,6 @@ import * as THREE from 'three';
 export class DrawTrackService {
     private container: HTMLElement;
 
-    private geometries: THREE.Geometry;
-
-    private projector: THREE.Projector;
-
     private camera: THREE.OrthographicCamera;
 
     private plane: THREE.Mesh;
@@ -18,12 +14,6 @@ export class DrawTrackService {
     private scene: THREE.Scene;
 
     private cameraZ = 400;
-
-    private fieldOfView = 70;
-
-    private nearClippingPane = 1;
-
-    private farClippingPane = 1000;
 
     private mousePosition: THREE.Vector3;
 
@@ -94,18 +84,6 @@ export class DrawTrackService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public getMousePosition(X, Y): void {
-        const vector = new THREE.Vector3(
-            ( X / this.container.clientWidth ) * 2 - 1,
-             - (Y / this.container.clientHeight ) * 2 + 1,
-             0);
-        this.projector.unprojectVector( vector, this.camera );
-        const dir = vector.sub( this.camera.position ).normalize();
-        const distance = - this.camera.position.z / dir.z;
-        const pos = this.camera.position.clone().add( dir.multiplyScalar( distance ) );
-        this.geometries.vertices.push(vector);
-    }
-
     private createPlan() {
         const geometry = new THREE.PlaneGeometry(this.container.clientWidth, this.container.clientHeight, 3);
         const material = new THREE.MeshBasicMaterial({color: 0xffffff});
@@ -114,26 +92,14 @@ export class DrawTrackService {
         this.scene.add(this.plane);
     }
 
-    private draw() {
-
-        const geometry = new THREE.CircleGeometry( 79, 32 );
-        const material = new THREE.LineBasicMaterial({
-           color: 0x0000ff
-        });
-
-        const lined = new THREE.Mesh(geometry, material);
-        this.scene.add(lined);
-    }
-
     public initialise(container: HTMLElement, positionX: number, positionY: number) {
-            this.container = container;
-            this.pointX = positionX;
-            this.pointY = positionY;
-            this.mousePosition = new THREE.Vector3();
-            this.raycaster = new THREE.Raycaster();
-            this.createScene();
-            // this.draw();
-            this.createPlan();
-            this.startRenderingLoop();
+        this.container = container;
+        this.pointX = positionX;
+        this.pointY = positionY;
+        this.mousePosition = new THREE.Vector3();
+        this.raycaster = new THREE.Raycaster();
+        this.createScene();
+        this.createPlan();
+        this.startRenderingLoop();
     }
 }
