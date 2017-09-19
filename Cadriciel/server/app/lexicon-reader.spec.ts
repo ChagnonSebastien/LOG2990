@@ -53,4 +53,20 @@ describe('LexiconReader', ()=>{
         assert(wordsOfLength.length != 0);
     });
 
+    // getWordsWithChar
+
+    it("Should return empty array when searching for words with a at position 100", ()=>{
+        let wordsWithChar: string[] = lexiconReader.getWordsWithChar(lexiconFilePath, 'a', 100);
+
+        assert(wordsWithChar.length == 0);
+    });
+
+    it("Should return an array of words with a at position 0", ()=>{
+        let wordsWithChar: string[] = lexiconReader.getWordsWithChar(lexiconFilePath, 'a', 0);
+
+        assert(wordsWithChar[0][0] == 'a');
+    });
+
+    // getWordsMatchingPattern
+    
 });

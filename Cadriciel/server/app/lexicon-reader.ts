@@ -26,7 +26,7 @@ export class LexiconReader {
          let wordsWithChar: string[] = [];
 
          for(let i of lexicon) {
-             if(i.charAt(position) == character) {
+             if(position < i.length && i.charAt(position) == character) {
                  wordsWithChar.push(i);
              }
          }
