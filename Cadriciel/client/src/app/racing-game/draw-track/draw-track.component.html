@@ -17,4 +17,4 @@ on-contextmenu="onEvent($event)">
 <p class="type">Type: {{event?.type}}</p>
 <p>x: {{clientX}}, y: {{clientY}}</p>
 <p>ctrl: {{event?.ctrlKey}}, shift: {{event?.shiftKey}}, meta: {{event?.metaKey}}</p>
-<div #container (click)="coordinates($event)"></div>
+<div #container (click)="addPoint($event)"></div>

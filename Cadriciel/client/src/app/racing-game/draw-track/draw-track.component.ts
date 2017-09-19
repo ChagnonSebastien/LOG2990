@@ -11,7 +11,7 @@ import { DrawTrackService } from './draw-track.service';
 export class DrawTrackComponent implements AfterViewInit {
     constructor(private trackService: DrawTrackService) {
     }
-    
+
     private get container(): HTMLDivElement {
         return this.containerRef.nativeElement;
     }
@@ -35,7 +35,7 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.click();
     }
 
-    private coordinates(event: MouseEvent): void {
+    private addPoint(event: MouseEvent): void {
         this.clientX = event.clientX;
         this.clientY = event.clientY;
         this.trackService.pointX = this.clientX;
