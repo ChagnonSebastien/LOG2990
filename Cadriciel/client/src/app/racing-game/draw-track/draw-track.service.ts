@@ -28,22 +28,12 @@ export class DrawTrackService {
         this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY;
     }
 
-    public push() {
-        console.log('push here');
-
-        this.mousePosition.x = ( this.pointX / this.container.clientWidth ) * 2 - 1;
-        this.mousePosition.y = - (this.pointY / this.container.clientHeight ) * 2 + 1;
-        this.raycaster.setFromCamera(this.mousePosition, this.camera);
-        const intersects = this.raycaster.intersectObject(this.plane);
-        if (intersects.length > 0) {
-            const geometry = new THREE.CircleGeometry( 10, 32 );
-            const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
-            const circle = new THREE.Mesh( geometry, material );
-            circle.position.copy(intersects[0].point);
-            this.scene.add( circle );
-            console.log('creating point at :' + circle.position.x);
-
-        }
+    public addPoint() {
+        let geometry = new THREE.CircleGeometry( 10, 32 );
+        let material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+        let circle = new THREE.Mesh( geometry, material );
+        circle.position.set(this.mousePosition.x, this.mousePosition.y, this.mousePosition.z);
+        this.scene.add( circle );
     }
 
     private createScene() {
