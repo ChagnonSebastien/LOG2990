@@ -26,6 +26,7 @@ export class DrawTrackService {
         this.createScene();
         this.initialiseFirstPointHighlight();
         this.initialiseActivePoint();
+        this.initialiseActiveSegment();
         this.startRenderingLoop();
     }
 
@@ -56,6 +57,11 @@ export class DrawTrackService {
         this.activePoint = new THREE.Mesh( geometry, material );
     }
 
+  private initialiseActiveSegment() {
+    this.activeSegment = this.newActiveSegment();
+    this.scene.remove(this.activeSegment);
+  }
+
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
@@ -75,7 +81,7 @@ export class DrawTrackService {
 
         this.updateActivePoint();
       if (this.points.length > 0)
-          this.updateActiveSegment(this.points[this.points.length - 1].position);
+          this.updateActiveSegment();
     }
 
     private updateActivePoint() {
@@ -86,7 +92,8 @@ export class DrawTrackService {
         }
     }
 
-    private updateActiveSegment(fromPoint: THREE.Vector3) {
+    private updateActiveSegment() {
+      let fromPoint = this.points[this.points.length - 1].position;
       this.activeSegment.geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition) ,10);
       this.activeSegment.geometry.rotateZ(Math.atan((this.mousePosition.y - fromPoint.y)/(this.mousePosition.x - fromPoint.x)));
       this.activeSegment.position.x = ((this.mousePosition.x - fromPoint.x) / 2) + fromPoint.x;
@@ -107,7 +114,8 @@ export class DrawTrackService {
         this.points.push(circle);
         if (this.points.length === 1) {
             this.addHighlight();
-            this.activeSegment = this.newActiveSegment();
+            this.scene.add(this.activeSegment);
+            this.updateActiveSegment();
         } else {
             this.pushSegment();
         }
@@ -119,7 +127,7 @@ export class DrawTrackService {
     }
 
     private pushSegment() {
-      this.activeSegment.position.z = -2;
+        this.activeSegment.position.z = -2;
         this.segments.push(this.activeSegment);
         this.activeSegment = this.newActiveSegment();
     }
@@ -137,7 +145,16 @@ export class DrawTrackService {
         this.scene.remove(this.points.pop());
         if (this.points.length === 0) {
             this.removeHighlight();
+            this.scene.remove(this.activeSegment);
         }
+        if (this.segments.length > 0) {
+            this.removeSegment();
+        }
+    }
+
+    private removeSegment() {
+        this.scene.remove(this.segments.pop());
+        this.updateActiveSegment();
     }
 
     public removeHighlight() {
