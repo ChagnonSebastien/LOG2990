@@ -14,10 +14,12 @@ export class DrawTrackService {
     private mousePosition: THREE.Vector3 = new THREE.Vector3();
 
     private points: THREE.Mesh[] = [];
+    private firstPointHighlight: THREE.Mesh;
 
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
+        this.initialiseFirstPointHighlight();
         this.startRenderingLoop();
     }
 
@@ -34,6 +36,12 @@ export class DrawTrackService {
             -10,
             10
         );
+    }
+
+    private initialiseFirstPointHighlight() {
+        let geometry = new THREE.CircleGeometry( 15, 32 );
+        let material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
+        this.firstPointHighlight = new THREE.Mesh( geometry, material );
     }
 
     private startRenderingLoop() {
@@ -62,10 +70,25 @@ export class DrawTrackService {
         this.scene.add( circle );
 
         this.points.push(circle);
+        if (this.points.length === 1) {
+            this.addHighlight();
+        }
+    }
+
+    public addHighlight() {
+        this.firstPointHighlight.position.set(this.mousePosition.x, this.mousePosition.y, -1);
+        this.scene.add(this.firstPointHighlight);
     }
 
     public removePoint() {
         this.scene.remove(this.points.pop());
+        if (this.points.length === 0) {
+            this.removeHighlight();
+        }
+    }
+
+    public removeHighlight() {
+        this.scene.remove(this.firstPointHighlight);
     }
 
     public onResize() {
