@@ -89,8 +89,8 @@ export class DrawTrackService {
     private updateActiveSegment(fromPoint: THREE.Vector3) {
       this.activeSegment.geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition) ,10);
       this.activeSegment.geometry.rotateZ(Math.atan((this.mousePosition.y - fromPoint.y)/(this.mousePosition.x - fromPoint.x)));
-      this.activeSegment.position.x = (this.mousePosition.x - fromPoint.x) / 2;
-      this.activeSegment.position.y = (this.mousePosition.y - fromPoint.y) / 2;
+      this.activeSegment.position.x = ((this.mousePosition.x - fromPoint.x) / 2) + fromPoint.x;
+      this.activeSegment.position.y = ((this.mousePosition.y - fromPoint.y) / 2) + fromPoint.y;
     }
 
     private distance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
@@ -119,6 +119,7 @@ export class DrawTrackService {
     }
 
     private pushSegment() {
+      this.activeSegment.position.z = -2;
         this.segments.push(this.activeSegment);
         this.activeSegment = this.newActiveSegment();
     }
@@ -126,7 +127,10 @@ export class DrawTrackService {
     private newActiveSegment() {
         let geometry = new THREE.PlaneGeometry( 0, 20 );
         let material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
-        return new THREE.Mesh( geometry, material );
+        let segment = new THREE.Mesh( geometry, material );
+        segment.position.z = -4;
+        this.scene.add(segment);
+        return segment;
     }
 
     public removePoint() {
