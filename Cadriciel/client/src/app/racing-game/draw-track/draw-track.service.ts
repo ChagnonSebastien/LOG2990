@@ -11,11 +11,12 @@ export class DrawTrackService {
 
     private scene: THREE.Scene;
 
-    private mousePosition: THREE.Vector3;
+    private mousePosition: THREE.Vector3 = new THREE.Vector3();
+
+    private points: THREE.Mesh[] = [];
 
     public initialise(container: HTMLElement) {
         this.container = container;
-        this.mousePosition = new THREE.Vector3();
         this.createScene();
         this.startRenderingLoop();
     }
@@ -57,8 +58,10 @@ export class DrawTrackService {
         let geometry = new THREE.CircleGeometry( 10, 32 );
         let material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
         let circle = new THREE.Mesh( geometry, material );
-        circle.position.set(this.mousePosition.x, this.mousePosition.y, this.mousePosition.z);
+        circle.position.set(this.mousePosition.x, this.mousePosition.y, 0);
         this.scene.add( circle );
+
+        this.points.push(circle);
     }
 
     public onResize() {
