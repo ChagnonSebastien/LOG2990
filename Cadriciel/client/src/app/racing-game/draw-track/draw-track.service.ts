@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import Stats = require('stats.js');
 
 @Injectable()
 export class DrawTrackService {
@@ -26,7 +25,7 @@ export class DrawTrackService {
 
     private farClippingPane = 1000;
 
-    private mouse: THREE.Vector3;
+    private mousePosition: THREE.Vector3;
 
     public pointX;
 
@@ -34,14 +33,17 @@ export class DrawTrackService {
 
     private raycaster: THREE.Raycaster;
 
-
+    public updateMousePosition(clientX: number, clientY: number) {
+        this.mousePosition.x = clientX - this.container.clientWidth/2 - this.container.offsetLeft;
+        this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY;
+    }
 
     public push() {
         console.log('push here');
 
-        this.mouse.x = ( this.pointX / this.container.clientWidth ) * 2 - 1;
-        this.mouse.y = - (this.pointY / this.container.clientHeight ) * 2 + 1;
-        this.raycaster.setFromCamera(this.mouse, this.camera);
+        this.mousePosition.x = ( this.pointX / this.container.clientWidth ) * 2 - 1;
+        this.mousePosition.y = - (this.pointY / this.container.clientHeight ) * 2 + 1;
+        this.raycaster.setFromCamera(this.mousePosition, this.camera);
         const intersects = this.raycaster.intersectObject(this.plane);
         if (intersects.length > 0) {
             const geometry = new THREE.CircleGeometry( 10, 32 );
@@ -127,7 +129,7 @@ export class DrawTrackService {
             this.container = container;
             this.pointX = positionX;
             this.pointY = positionY;
-            this.mouse = new THREE.Vector3();
+            this.mousePosition = new THREE.Vector3();
             this.raycaster = new THREE.Raycaster();
             this.createScene();
             // this.draw();

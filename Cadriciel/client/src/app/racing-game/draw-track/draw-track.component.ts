@@ -28,12 +28,18 @@ export class DrawTrackComponent implements AfterViewInit {
        this.trackService.onResize();
     }
 
-    private addPoint(event: MouseEvent): void {
+    public addPoint(event: MouseEvent): void {
         this.clientX = event.clientX;
         this.clientY = event.clientY;
         this.trackService.pointX = this.clientX;
         this.trackService.pointY = this.clientY;
         this.trackService.push();
+    }
+
+    public updateMousePosition(event: MouseEvent): void {
+        this.clientX = event.clientX; //For debug purposes
+        this.clientY = event.clientY; //For debug purposes
+        this.trackService.updateMousePosition(event.clientX, event.clientY);
     }
 
     public ngAfterViewInit() {
