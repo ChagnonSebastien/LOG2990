@@ -1,4 +1,4 @@
-from random import randint
+from random import randrange
 import json
 import pprint
 
@@ -27,6 +27,11 @@ class Grid:
     def pprintLexicon(self):
         pprint.pprint(self.lexiconByLength[10])
 
+    def getRandomWord(self):
+        return self.lexicon[randrange(0, len(self.lexicon))]
+
 grid = Grid(10, 'englishWords.json')
 print grid.sizeOfLexicon()
 grid.pprintLexicon()
+for i in range(10):
+    print grid.getRandomWord()
