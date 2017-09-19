@@ -5,6 +5,8 @@ describe('LexiconReader', ()=>{
     let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
     let lexiconReader: LexiconReader = new LexiconReader();
 
+    // readWords method
+
     it("Should return the first word of the lexicon ", ()=>{
         let firstWord:string = lexiconReader.readWords(lexiconFilePath)[0];
 
@@ -31,5 +33,24 @@ describe('LexiconReader', ()=>{
         assert(words != []);
     });
 
-    
+    // readWordsOfLength method
+
+    it("Should return no words for words of length of 0", ()=>{
+        let wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 0);
+
+        assert(wordsOfLength.length == 0);
+    });
+
+    it("Should return no words for words of length of 100", ()=>{
+        let wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 100);
+
+        assert(wordsOfLength.length == 0);
+    });
+
+    it("Should return a string containing words when length is 5", ()=>{
+        let wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 5);
+
+        assert(wordsOfLength.length != 0);
+    });
+
 });
