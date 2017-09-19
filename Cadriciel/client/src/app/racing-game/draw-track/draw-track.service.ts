@@ -94,7 +94,7 @@ export class DrawTrackService {
 
     private updateActiveSegment() {
       let fromPoint = this.points[this.points.length - 1].position;
-      this.activeSegment.geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition) ,10);
+      this.activeSegment.geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition), 20);
       this.activeSegment.geometry.rotateZ(Math.atan((this.mousePosition.y - fromPoint.y)/(this.mousePosition.x - fromPoint.x)));
       this.activeSegment.position.x = ((this.mousePosition.x - fromPoint.x) / 2) + fromPoint.x;
       this.activeSegment.position.y = ((this.mousePosition.y - fromPoint.y) / 2) + fromPoint.y;
@@ -133,7 +133,7 @@ export class DrawTrackService {
     }
 
     private newActiveSegment() {
-        let geometry = new THREE.PlaneGeometry( 0, 20 );
+        let geometry = new THREE.PlaneGeometry( 0, 30 );
         let material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
         let segment = new THREE.Mesh( geometry, material );
         segment.position.z = -4;
