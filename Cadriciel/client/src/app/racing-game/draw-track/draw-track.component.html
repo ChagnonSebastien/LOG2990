@@ -7,15 +7,14 @@
 on-click="onEvent($event)"
 on-dblclick="onEvent($event)"
 on-contextmenu="onEvent($event)">
-<p class="type">Type: {{event?.type}}</p>    
+<p class="type">Type: {{event?.type}}</p>
 <p>x: {{clientX}}, y: {{clientY}}</p>
 <p>ctrl: {{event?.ctrlKey}}, shift: {{event?.shiftKey}}, meta: {{event?.metaKey}}</p>
 </div>
 </div>
 -->
 <h1>Draw track</h1>
-<div #container on-click="coordinates($event)">
-        <p class="type">Type: {{event?.type}}</p>    
-        <p>x: {{clientX}}, y: {{clientY}}</p>
-        <p>ctrl: {{event?.ctrlKey}}, shift: {{event?.shiftKey}}, meta: {{event?.metaKey}}</p>
-</div>
+<p class="type">Type: {{event?.type}}</p>
+<p>x: {{clientX}}, y: {{clientY}}</p>
+<p>ctrl: {{event?.ctrlKey}}, shift: {{event?.shiftKey}}, meta: {{event?.metaKey}}</p>
+<div #container on-click="coordinates($event)"></div>
