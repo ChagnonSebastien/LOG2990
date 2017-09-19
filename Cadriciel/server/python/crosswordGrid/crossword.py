@@ -31,10 +31,12 @@ class Crossword:
     def generateCrossword(self):
         self.gridGenerator.generateGrid()
         wordsToFill = self.gridGenerator.wordsToFill()
+        print wordsToFill
         for wordToFill in wordsToFill:
-            #self.gridGenerator.printGrid()
+            self.gridGenerator.printGrid()
             nextToFill = self.gridGenerator.wordsToFill()[0]
             wordChoices = self.allWordsThatMatch(nextToFill["current"])
+            #print nextToFill
             if len(wordChoices) > 0:
                 wordChoice = wordChoices[randint(0, len(wordChoices) - 1)]
                 print wordChoice, "at index", nextToFill["i"], nextToFill["j"], "direction: ", nextToFill["direction"]

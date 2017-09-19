@@ -3,7 +3,8 @@ with open("../lexicon/englishWords.txt") as f:
     words = map(str.strip, f.readlines())
 
 # Sort list of words by length ascending
-sortedWords = sorted(words, key=lambda x: len(x))
+wordsThatFit = filter(lambda x: len(x) < 11, words)
+sortedWords = sorted(wordsThatFit, key=lambda x: len(x))
 
 # Dump sorted words as JSON
 import json
