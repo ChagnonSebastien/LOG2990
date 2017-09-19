@@ -26,7 +26,6 @@ export class DrawTrackService {
         this.createScene();
         this.initialiseFirstPointHighlight();
         this.initialiseActivePoint();
-        this.initialiseActiveSegment();
         this.startRenderingLoop();
     }
 
@@ -57,12 +56,6 @@ export class DrawTrackService {
         this.activePoint = new THREE.Mesh( geometry, material );
     }
 
-    private initialiseActiveSegment() {
-        let geometry = new THREE.CircleGeometry( 10, 32 );
-        let material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
-        this.activeSegment = new THREE.Mesh( geometry, material );
-    }
-
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
@@ -81,6 +74,7 @@ export class DrawTrackService {
         this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY
 
         this.updateActivePoint();
+        this.updateActiveSegment();
     }
 
     private updateActivePoint() {
@@ -89,6 +83,14 @@ export class DrawTrackService {
             this.scene.add(this.activePoint);
             this.isActivePointInScene = true;
         }
+    }
+
+    private updateActiveSegment() {
+      this.activePoint.position.set(this.mousePosition.x, this.mousePosition.y, -3);
+      if (!this.isActivePointInScene) {
+          this.scene.add(this.activePoint);
+          this.isActivePointInScene = true;
+      }
     }
 
     public addPoint() {
@@ -101,12 +103,26 @@ export class DrawTrackService {
         this.points.push(circle);
         if (this.points.length === 1) {
             this.addHighlight();
+            this.activeSegment = this.newActiveSegment();
+        } else {
+            this.pushSegment();
         }
     }
 
     public addHighlight() {
         this.firstPointHighlight.position.set(this.mousePosition.x, this.mousePosition.y, -1);
         this.scene.add(this.firstPointHighlight);
+    }
+
+    private pushSegment() {
+        this.segments.push(this.activeSegment);
+        this.activeSegment = this.newActiveSegment();
+    }
+
+    private newActiveSegment() {
+        let geometry = new THREE.PlaneGeometry( 0, 20 );
+        let material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
+        return new THREE.Mesh( geometry, material );
     }
 
     public removePoint() {
