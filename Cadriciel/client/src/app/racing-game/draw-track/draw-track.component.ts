@@ -23,16 +23,9 @@ export class DrawTrackComponent implements AfterViewInit {
     @ViewChild('container')
     private containerRef: ElementRef;
 
-    @HostListener('mousewheel', ['$event'])
-    public getMouseDownPoint(event: any) {
-        this.trackService.click();
-        // this.trackService.getMousePosition(event);
-    }
-
-
-    private onEvent(event: MouseEvent): void {
-        this.event = event;
-        this.trackService.click();
+    @HostListener('window:resize', ['$event'])
+    public onResize() {
+       this.trackService.onResize();
     }
 
     private addPoint(event: MouseEvent): void {

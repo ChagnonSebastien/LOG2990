@@ -10,7 +10,7 @@ export class DrawTrackService {
 
     private projector: THREE.Projector;
 
-    private camera: THREE.PerspectiveCamera;
+    private camera: THREE.OrthographicCamera;
 
     private plane: THREE.Mesh;
 
@@ -59,18 +59,15 @@ export class DrawTrackService {
         this.scene = new THREE.Scene();
 
         /* Camera */
-        const aspectRatio = this.getAspectRatio();
-        this.camera = new THREE.PerspectiveCamera(
-            this.fieldOfView,
-            aspectRatio,
-            this.nearClippingPane,
-            this.farClippingPane
+        this.camera = new THREE.OrthographicCamera(
+            this.container.clientWidth / - 2,
+            this.container.clientWidth / 2,
+            this.container.clientHeight / 2,
+            this.container.clientHeight / - 2,
+            1,
+            1000
         );
         this.camera.position.z = this.cameraZ;
-    }
-
-    private getAspectRatio() {
-        return this.container.clientWidth / this.container.clientHeight;
     }
 
     private startRenderingLoop() {
@@ -82,14 +79,15 @@ export class DrawTrackService {
     }
 
     private render() {
-        // this.raycaster.setFromCamera( this.mouse, this.camera );
         requestAnimationFrame(() => this.render());
-        // this.push();
         this.renderer.render(this.scene, this.camera);
     }
 
     public onResize() {
-        this.camera.aspect = this.getAspectRatio();
+        this.camera.left = this.container.clientWidth / -2;
+        this.camera.right = this.container.clientWidth / 2;
+        this.camera.top = this.container.clientHeight / 2;
+        this.camera.bottom = this.container.clientHeight / - 2;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
