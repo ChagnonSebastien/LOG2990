@@ -68,5 +68,28 @@ describe('LexiconReader', ()=>{
     });
 
     // getWordsMatchingPattern
-    
+
+    it("Should not return words when searching this pattern: empty string", ()=>{
+        let wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '');
+
+        assert(wordsMatchingPattern.length == 0);
+    });
+
+    it("Should return all words of 5 letters when searching this pattern: '     ' (5 spaces)", ()=>{
+        let wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '     ');
+
+        assert(wordsMatchingPattern[0].length == 5);
+    });
+
+    it("Should return words of four letters, starting with a and finishing with e when searching this pattern: 'a  e'", ()=>{
+        let wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, 'a  e');
+
+        assert(wordsMatchingPattern[0][0] == 'a' && wordsMatchingPattern[0][3] == 'e');
+    });
+
+    it("Should return words of five letters with an e at index 2 and an e at index 5", ()=>{
+        let wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '  e  e');
+
+        assert(wordsMatchingPattern[0][2] == 'e' && wordsMatchingPattern[0][5] == 'e');
+    });
 });
