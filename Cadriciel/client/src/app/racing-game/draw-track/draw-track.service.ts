@@ -71,10 +71,11 @@ export class DrawTrackService {
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition.x = clientX - this.container.clientWidth/2 - this.container.offsetLeft;
-        this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY
+        this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY;
 
         this.updateActivePoint();
-        this.updateActiveSegment();
+      if (this.points.length > 0)
+          this.updateActiveSegment(this.points[this.points.length - 1].position);
     }
 
     private updateActivePoint() {
@@ -85,12 +86,15 @@ export class DrawTrackService {
         }
     }
 
-    private updateActiveSegment() {
-      this.activePoint.position.set(this.mousePosition.x, this.mousePosition.y, -3);
-      if (!this.isActivePointInScene) {
-          this.scene.add(this.activePoint);
-          this.isActivePointInScene = true;
-      }
+    private updateActiveSegment(fromPoint: THREE.Vector3) {
+      this.activeSegment.geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition) ,10);
+      this.activeSegment.geometry.rotateZ(Math.atan((this.mousePosition.y - fromPoint.y)/(this.mousePosition.x - fromPoint.x)));
+      this.activeSegment.position.x = (this.mousePosition.x - fromPoint.x) / 2;
+      this.activeSegment.position.y = (this.mousePosition.y - fromPoint.y) / 2;
+    }
+
+    private distance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
+        return Math.sqrt(Math.pow(vector2.x - vector1.x,2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
     public addPoint() {
