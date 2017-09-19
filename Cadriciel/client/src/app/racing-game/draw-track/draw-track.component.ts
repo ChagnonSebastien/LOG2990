@@ -28,6 +28,10 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.addPoint();
     }
 
+  public removePoint(event: MouseEvent): void {
+    this.trackService.removePoint();
+  }
+
     public updateMousePosition(event: MouseEvent): void {
         this.trackService.updateMousePosition(event.clientX, event.clientY);
     }

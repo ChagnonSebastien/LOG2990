@@ -14,4 +14,4 @@ on-contextmenu="onEvent($event)">
 </div>
 -->
 <h1>Draw track</h1>
-<div #container (click)="addPoint($event)" (mousemove)="updateMousePosition($event)"></div>
+<div oncontextmenu="return false;" #container (click)="addPoint($event)" (mousemove)="updateMousePosition($event)" (auxclick)="removePoint($event)"></div>

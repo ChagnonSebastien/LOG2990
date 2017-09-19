@@ -64,6 +64,10 @@ export class DrawTrackService {
         this.points.push(circle);
     }
 
+    public removePoint() {
+        this.scene.remove(this.points.pop());
+    }
+
     public onResize() {
         this.camera.left = this.container.clientWidth / -2;
         this.camera.right = this.container.clientWidth / 2;
