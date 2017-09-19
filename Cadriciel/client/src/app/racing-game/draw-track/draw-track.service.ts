@@ -14,12 +14,19 @@ export class DrawTrackService {
     private mousePosition: THREE.Vector3 = new THREE.Vector3();
 
     private points: THREE.Mesh[] = [];
+    private segments: THREE.Mesh[] = [];
     private firstPointHighlight: THREE.Mesh;
+
+    private activePoint: THREE.Mesh;
+    private activeSegment: THREE.Mesh;
+    private isActivePointInScene: boolean = false;
 
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
         this.initialiseFirstPointHighlight();
+        this.initialiseActivePoint();
+        this.initialiseActiveSegment();
         this.startRenderingLoop();
     }
 
@@ -44,6 +51,18 @@ export class DrawTrackService {
         this.firstPointHighlight = new THREE.Mesh( geometry, material );
     }
 
+    private initialiseActivePoint() {
+        let geometry = new THREE.CircleGeometry( 10, 32 );
+        let material = new THREE.MeshBasicMaterial( { color: 0x0000FF } );
+        this.activePoint = new THREE.Mesh( geometry, material );
+    }
+
+    private initialiseActiveSegment() {
+        let geometry = new THREE.CircleGeometry( 10, 32 );
+        let material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
+        this.activeSegment = new THREE.Mesh( geometry, material );
+    }
+
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
@@ -59,7 +78,17 @@ export class DrawTrackService {
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition.x = clientX - this.container.clientWidth/2 - this.container.offsetLeft;
-        this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY;
+        this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY
+
+        this.updateActivePoint();
+    }
+
+    private updateActivePoint() {
+        this.activePoint.position.set(this.mousePosition.x, this.mousePosition.y, -3);
+        if (!this.isActivePointInScene) {
+            this.scene.add(this.activePoint);
+            this.isActivePointInScene = true;
+        }
     }
 
     public addPoint() {
