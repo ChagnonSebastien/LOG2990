@@ -1,10 +1,7 @@
 import { Lexicon } from './lexicon';
 import { assert } from 'chai';
-import * as request from 'request';
-import * as chai from 'chai';
 
 describe('Lexicon', ()=>{
-    let lexicon: Lexicon = new Lexicon();
     let chai = require('chai');
     let chaiHttp = require('chai-http');
     chai.use(chaiHttp);
@@ -19,7 +16,7 @@ describe('Lexicon', ()=>{
         });
     });
 
-    //getWordFrequency
+    // getWordFrequency
 
     it("Should return the frequency of the word cat", (done)=>{
         chai.request('http://localhost:3000')
@@ -70,7 +67,7 @@ describe('Lexicon', ()=>{
         });
     });
 
-    //getWordsWithCharAt
+    // getWordsWithCharAt
 
     it("Should return all the words with a 'b' at index 2", (done)=>{
         chai.request('http://localhost:3000')
@@ -82,7 +79,7 @@ describe('Lexicon', ()=>{
         });
     });
 
-    //getWordsMatchingPattern
+    // getWordsMatchingPattern
 
     it("Should return all words matching this pattern 'a e '", (done)=>{
         chai.request('http://localhost:3000')
@@ -104,7 +101,7 @@ describe('Lexicon', ()=>{
         });
     });
 
-    //getUncommonWords
+    // getUncommonWords
 /*
    it("Should return some uncommon words", (done)=>{
         chai.request('http://localhost:3000')
