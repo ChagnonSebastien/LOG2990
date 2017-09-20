@@ -5,14 +5,21 @@ import re
 import copy
 from collections import deque
 import timeit
+import time
+
+defaultGridSize = 10
+#constraintsGene = [(7, False), (3, False), (6, False), (0, False), (5, False), (9, False), (4, True), (7, True), (2, False), (1, True), (4, False), (1, False), (5, True), (8, True), (3, True), (0, True), (6, True), (8, False), (2, True), (9, True)]
+# constraintsGene = [(7, False), (3, False), (6, False), (0, False), (5, False), (4, True), (9, False), (4, False), (2, False), (7, True), (1, False), (1, True), (8, True), (0, True), (3, True), (8, False), (9, True), (6, True), (2, True), (5, True)]
+#constraintsGene = [(i / 2, True if i % 2 == 0 else False) for i in range(defaultGridSize * 2)]
+constraintsGene = [(i % defaultGridSize, True if i < defaultGridSize else False) for i in range(defaultGridSize * 2)]
 
 class Grid:
     'Crossword Grid'
 
-    def __init__(self, size, lexicon):
-        self.reset(size, lexicon)
+    def __init__(self, size, lexicon, gene):
+        self.reset(size, lexicon, gene)
 
-    def reset(self, size, lexicon):
+    def reset(self, size, lexicon, gene):
         self.size = size
         self.lexiconFile = lexicon
         self.getLexicon(lexicon)
@@ -22,8 +29,8 @@ class Grid:
         self.gridContribution = [[[] for j in range(self.size)] for i in range(self.size)]
         self.words = set()
         self.wordsInCrossword = []
-        self.constraintsToSatisfy = [(i / 2, True if i % 2 == 0 else False) for i in range(self.size * 2)]
-        shuffle(self.constraintsToSatisfy)
+        self.originalGene = gene
+        self.constraintsToSatisfy = gene
         self.constraintsToSatisfy = deque(self.constraintsToSatisfy)
     
     def getLexicon(self, lexicon):
@@ -58,7 +65,10 @@ class Grid:
         words = set()
         for i in range(3, 11):
             for j in range(i + 1, self.size):
-                words |= set(self.getWordsWith(pattern[i:j]))
+                if pattern == ' ' * self.size or len(pattern[i:j].strip()) > 0:
+                    words |= set(self.getWordsWith(pattern[i:j]))
+                else:
+                    continue
         if len(words) > 0:
             return list(words)[randrange(0, len(words))]
         else:
@@ -105,7 +115,10 @@ class Grid:
 
         # insertion
         contribution = {"word": word, "i": i, "j": j, "horizontal": horizontal}
+        #print word
         for letter in word:
+            #self.printGrid()
+            #time.sleep(0.1)
             if not self.insertLetter(letter, i, j):
                 # rollback
                 self.grid = tempGrid
@@ -163,29 +176,50 @@ class Grid:
         if len(wordToInsert) == 0:
             return False
         randomIndexes = [i for i in range(0, self.size - len(wordToInsert))]
-        shuffle(randomIndexes)
-        for i in randomIndexes:
-            if where[1] == True:
-                self.insertWord(wordToInsert, where[0], i, True)
-            else:
-                self.insertWord(wordToInsert, i, where[0], False)
-            if wordToInsert in self.words:
-                return True
+        bestIndex = 0
+        bestScore = 0
+        if pattern == ' ' * self.size:
+            shuffle(randomIndexes)
+        for index in randomIndexes:
+            indexScore = 0
+            for j, character in enumerate(wordToInsert):
+                if character == pattern[index + j]:
+                    indexScore += 1
+            if indexScore >= bestScore:
+                bestIndex = index
+                bestScore = indexScore
+        #print bestIndex, bestScore
+        #self.printGrid()
+        if where[1] == True:
+            self.insertWord(wordToInsert, where[0], bestIndex, True)
+        else:
+            self.insertWord(wordToInsert, bestIndex, where[0], False)
+        return True
+        # shuffle(randomIndexes)
+        # for i in randomIndexes:
+        #     if where[1] == True:
+        #         self.insertWord(wordToInsert, where[0], i, True)
+        #     else:
+        #         self.insertWord(wordToInsert, i, where[0], False)
+        #     if wordToInsert in self.words:
+        #         return True
     
     def generate(self):
         start = timeit.default_timer()
         bestScore = 0
+        totalScore = 0
         bestGrid = copy.deepcopy(self.grid)
         bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
         bestGridContribution = copy.deepcopy(self.gridContribution)
         bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
         bestWords = copy.deepcopy(self.words)
-        for i in range(5):
+        for i in range(3):
             while len(self.constraintsToSatisfy) > 0:
                 #self.printGrid()
                 if not self.insertRandomWord():
-                    self.reset(self.size, self.lexiconFile)
+                    self.reset(self.size, self.lexiconFile, self.originalGene)
             gridScore = self.scoreGrid()
+            totalScore += gridScore
             #self.printGrid()
             #print "Score of grid: ", gridScore
             if gridScore > bestScore:
@@ -195,7 +229,7 @@ class Grid:
                 bestGridContribution = copy.deepcopy(self.gridContribution)
                 bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
                 bestWords = copy.deepcopy(self.words)
-            self.reset(self.size, self.lexiconFile)
+            self.reset(self.size, self.lexiconFile, self.originalGene)
         self.grid = bestGrid
         self.gridLetterCounter = bestGridLetterCounter
         self.gridContribution = bestGridContribution
@@ -207,7 +241,8 @@ class Grid:
         #pprint.pprint(self.gridContribution)
         #pprint.pprint(self.gridLetterCounter)
         print "BEST SCORE :", bestScore        
-        print "Total time:", stop - start
+        #print "Total time:", stop - start
+        return totalScore
 
     def scoreGrid(self):
         score = 0
@@ -225,23 +260,52 @@ class Grid:
                 print letter + ' |',
             print '\n-' + '-' * 4 * self.size
 
-uncommonGrid = Grid(10, 'uncommonWords.json')
-# print grid.constraintsToSatisfy
-#pprint.pprint(grid.gridContribution)
-#print grid.sizeOfLexicon()
-#grid.pprintLexicon()
-# print grid.insertWord('hello', 0, 0, horizontal=True)
-# print grid.insertWord('hello', 1, 0, True)
-# print grid.insertWord('lisa', 2, 2, True)
-# print grid.insertWord('oval', 0, 4, False)
-# print grid.insertWord('audrey', 2, 4, True)
-# grid.deleteWord('hello', 0, 0, True)
-# pprint.pprint(grid.gridContribution)
-# grid.deleteWord('oval', 0, 4, False)
-uncommonGrid.generate()
+# generations of evolution
+nGenerations = 100
+geneA = constraintsGene
+geneB = constraintsGene
 
-commonGrid = Grid(10, 'commonWords.json')
-commonGrid.generate()
+def mutateGene(gene):
+    rand1 = randrange(0, len(gene))
+    rand2 = randrange(0, len(gene))
+    temp = gene[rand1]
+    gene[rand1] = gene[rand2]
+    gene[rand2] = temp
+    return gene
 
-intermediateGrid = Grid(10, 'englishWords.json')
-intermediateGrid.generate()
+bestScoreOfAllGenerations = 0
+for i in range(nGenerations):
+    #geneA = mutateGene(geneA)
+    gridA = Grid(10, 'englishWords.json', geneA)
+    gridB = Grid(10, 'englishWords.json', geneB)
+
+    scoreA = gridA.generate()
+    scoreB = gridB.generate()
+    if scoreA > scoreB:
+        geneB = geneA
+    else:
+        geneA = geneB
+    print "Best gene in generation", i, "is", geneA, "with score", scoreA if scoreA > scoreB else scoreB
+
+print "Final gene after", i, "generations is", geneA
+
+# uncommonGrid = Grid(10, 'uncommonWords.json')
+# # print grid.constraintsToSatisfy
+# #pprint.pprint(grid.gridContribution)
+# #print grid.sizeOfLexicon()
+# #grid.pprintLexicon()
+# # print grid.insertWord('hello', 0, 0, horizontal=True)
+# # print grid.insertWord('hello', 1, 0, True)
+# # print grid.insertWord('lisa', 2, 2, True)
+# # print grid.insertWord('oval', 0, 4, False)
+# # print grid.insertWord('audrey', 2, 4, True)
+# # grid.deleteWord('hello', 0, 0, True)
+# # pprint.pprint(grid.gridContribution)
+# # grid.deleteWord('oval', 0, 4, False)
+# uncommonGrid.generate()
+
+# commonGrid = Grid(10, 'commonWords.json')
+# commonGrid.generate()
+
+# intermediateGrid = Grid(10, 'englishWords.json')
+# intermediateGrid.generate()
