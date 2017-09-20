@@ -1,9 +1,9 @@
 export class Demo {
     constructor() {
-        
+
     }
 
-    public getData():string{
+    public getData(): string {
         return "dummy";
     }
 }

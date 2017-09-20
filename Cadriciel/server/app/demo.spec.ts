@@ -1,9 +1,9 @@
-import {assert} from 'chai';
+import { assert } from 'chai';
 import { Demo } from "./demo";
 
-describe('Demo', ()=>{
+describe('Demo', () => {
 
-    it("Should", ()=>{
+    it("Should", () => {
         let demo = new Demo();
         assert(true);
     });

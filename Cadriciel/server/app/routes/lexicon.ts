@@ -32,7 +32,7 @@ module Route {
             let wordLength = req.params.wordLength;
             let lexiconReader = new LexiconReader();
             let lexiconFilePath: string = '../server/lexicon/englishWords.txt';
-            let wordsOfLength:string[] = lexiconReader.readWordsOfLength(lexiconFilePath, wordLength);
+            let wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, wordLength);
             res.send(wordsOfLength);
         }
 
@@ -66,14 +66,14 @@ module Route {
             let uncommonWords: string[] = [];
 
 
-            for(let y = 0; y < numberOfRequests; y++) {
-                let i:number = Math.floor(Math.random() * numberOfWords);
+            for (let y = 0; y < numberOfRequests; y++) {
+                let i: number = Math.floor(Math.random() * numberOfWords);
                 request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
                     body = JSON.parse(body);
-                    if(body.totalCount <= uncommonWordsMaxFrequency ){
+                    if (body.totalCount <= uncommonWordsMaxFrequency) {
                         uncommonWords.push(lexicon[i]);
                     }
-                    if(y == 1) {
+                    if (y == 1) {
                         res.send(uncommonWords);
                     }
                 });
@@ -92,14 +92,14 @@ module Route {
             let commonWords: string[] = [];
 
 
-            for(let y = 0; y < numberOfRequests; y++) {
-                let i:number = Math.floor(Math.random() * numberOfWords);
+            for (let y = 0; y < numberOfRequests; y++) {
+                let i: number = Math.floor(Math.random() * numberOfWords);
                 request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
                     body = JSON.parse(body);
-                    if(body.totalCount > commonWordsMinFrequency ){
+                    if (body.totalCount > commonWordsMinFrequency) {
                         commonWords.push(lexicon[i]);
                     }
-                    if(y == 1 || commonWords.length >= 2) {
+                    if (y == 1 || commonWords.length >= 2) {
                         res.send(commonWords);
                     }
                 });
@@ -116,8 +116,8 @@ module Route {
                 body = JSON.parse(body);
                 res.send(JSON.stringify(body.totalCount));
             });
-            
-        }  
+
+        }
     }
 }
 
