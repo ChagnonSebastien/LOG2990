@@ -12,6 +12,8 @@ export class DrawTrackService {
     private scene: THREE.Scene;
 
     private mousePosition: THREE.Vector3 = new THREE.Vector3();
+    private mouseOnFirstPoint: boolean = false;
+    private loopClosed: boolean = false;
 
     private points: THREE.Mesh[] = [];
     private segments: THREE.Mesh[] = [];
@@ -78,10 +80,25 @@ export class DrawTrackService {
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition.x = clientX - this.container.clientWidth/2 - this.container.offsetLeft;
         this.mousePosition.y = this.container.clientHeight/2 + this.container.offsetTop - clientY;
+        if (this.points.length > 0 && !this.loopClosed) {
 
-        this.updateActivePoint();
-      if (this.points.length > 0)
-          this.updateActiveSegment();
+            if (this.checkIfMouseIsOnFirstPoint()) {
+                this.mousePosition = this.points[0].position.clone();
+                if (!this.mouseOnFirstPoint) {
+                  this.mouseOnFirstPoint = true;
+                  this.updateActiveSegment();
+                  this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF });
+                }
+            } else {
+                if (this.mouseOnFirstPoint) {
+                   this.mouseOnFirstPoint = false;
+                   this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
+                }
+                this.updateActiveSegment();
+            }
+        }
+        if (!this.loopClosed)
+          this.updateActivePoint();
     }
 
     private updateActivePoint() {
@@ -90,6 +107,10 @@ export class DrawTrackService {
             this.scene.add(this.activePoint);
             this.isActivePointInScene = true;
         }
+    }
+
+    private checkIfMouseIsOnFirstPoint(): boolean {
+        return this.distance(this.mousePosition, this.points[0].position) < 20;
     }
 
     private updateActiveSegment() {
@@ -105,19 +126,23 @@ export class DrawTrackService {
     }
 
     public addPoint() {
-        let geometry = new THREE.CircleGeometry( 10, 32 );
-        let material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
-        let circle = new THREE.Mesh( geometry, material );
-        circle.position.set(this.mousePosition.x, this.mousePosition.y, 0);
-        this.scene.add( circle );
+        if (!this.mouseOnFirstPoint) {
+            let geometry = new THREE.CircleGeometry(10, 32);
+            let material = new THREE.MeshBasicMaterial({color: 0xFF0000});
+            let circle = new THREE.Mesh(geometry, material);
+            circle.position.set(this.mousePosition.x, this.mousePosition.y, 0);
+            this.scene.add(circle);
 
-        this.points.push(circle);
-        if (this.points.length === 1) {
-            this.addHighlight();
-            this.scene.add(this.activeSegment);
-            this.updateActiveSegment();
+            this.points.push(circle);
+            if (this.points.length === 1) {
+              this.addHighlight();
+              this.scene.add(this.activeSegment);
+              this.updateActiveSegment();
+            } else {
+              this.pushSegment();
+            }
         } else {
-            this.pushSegment();
+            this.loopClosed = true;
         }
     }
 
@@ -142,13 +167,19 @@ export class DrawTrackService {
     }
 
     public removePoint() {
-        this.scene.remove(this.points.pop());
-        if (this.points.length === 0) {
-            this.removeHighlight();
-            this.scene.remove(this.activeSegment);
-        }
-        if (this.segments.length > 0) {
-            this.removeSegment();
+        if (!this.loopClosed) {
+            this.scene.remove(this.points.pop());
+            if (this.points.length === 0) {
+                this.removeHighlight();
+                this.scene.remove(this.activeSegment);
+            }
+            if (this.segments.length > 0) {
+                this.removeSegment();
+            }
+        } else {
+            this.loopClosed = false;
+            this.updateActiveSegment();
+            this.updateActivePoint();
         }
     }
 
