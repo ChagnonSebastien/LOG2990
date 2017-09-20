@@ -1,4 +1,18 @@
-div {
+.attributes_editor {
+  background-color: #CCC;
+  padding: 10px;
+  margin: 0;
+}
+
+.draw_window {
     display: block;
     height: 800px;
+}
+
+.attributes_editor textarea{
+    height: 100px;
+}
+
+.row button {
+    width: 100%;
 }
