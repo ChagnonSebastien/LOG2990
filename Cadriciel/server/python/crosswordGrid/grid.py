@@ -4,6 +4,7 @@ import pprint
 import re
 import copy
 from collections import deque
+import timeit
 
 class Grid:
     'Crossword Grid'
@@ -13,6 +14,7 @@ class Grid:
 
     def reset(self, size, lexicon):
         self.size = size
+        self.lexiconFile = lexicon
         self.getLexicon(lexicon)
         self.initializeLexiconByLength()
         self.grid = [ [' ' for j in range(self.size)] for i in range(self.size) ]
@@ -31,6 +33,8 @@ class Grid:
     def initializeLexiconByLength(self):
         self.lexiconByLength = {}
         for word in self.lexicon:
+            if len(word) > self.size:
+                continue
             if self.lexiconByLength.get(len(word)) is None:
                 self.lexiconByLength[len(word)] = []
             self.lexiconByLength[len(word)].append(word)
@@ -169,10 +173,49 @@ class Grid:
                 return True
     
     def generate(self):
-        while len(self.constraintsToSatisfy) > 0:
-            self.printGrid()
-            if not self.insertRandomWord():
-                self.reset(self.size, 'englishWords.json')
+        start = timeit.default_timer()
+        bestScore = 0
+        bestGrid = copy.deepcopy(self.grid)
+        bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+        bestGridContribution = copy.deepcopy(self.gridContribution)
+        bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+        bestWords = copy.deepcopy(self.words)
+        for i in range(5):
+            while len(self.constraintsToSatisfy) > 0:
+                #self.printGrid()
+                if not self.insertRandomWord():
+                    self.reset(self.size, self.lexiconFile)
+            gridScore = self.scoreGrid()
+            #self.printGrid()
+            #print "Score of grid: ", gridScore
+            if gridScore > bestScore:
+                bestScore = gridScore
+                bestGrid = copy.deepcopy(self.grid)
+                bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+                bestGridContribution = copy.deepcopy(self.gridContribution)
+                bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+                bestWords = copy.deepcopy(self.words)
+            self.reset(self.size, self.lexiconFile)
+        self.grid = bestGrid
+        self.gridLetterCounter = bestGridLetterCounter
+        self.gridContribution = bestGridContribution
+        self.wordsInCrossword = bestWordsInCrossword
+        self.words = bestWords
+        self.printGrid()
+        stop = timeit.default_timer()
+        pprint.pprint(self.wordsInCrossword)
+        #pprint.pprint(self.gridContribution)
+        #pprint.pprint(self.gridLetterCounter)
+        print "BEST SCORE :", bestScore        
+        print "Total time:", stop - start
+
+    def scoreGrid(self):
+        score = 0
+        for line in self.gridLetterCounter:
+            for letterCounter in line:
+                if letterCounter > 1:
+                    score += 1
+        return score
 
     def printGrid(self):
         print '-' * (4 * self.size + 1)
@@ -182,7 +225,7 @@ class Grid:
                 print letter + ' |',
             print '\n-' + '-' * 4 * self.size
 
-grid = Grid(10, 'englishWords.json')
+uncommonGrid = Grid(10, 'uncommonWords.json')
 # print grid.constraintsToSatisfy
 #pprint.pprint(grid.gridContribution)
 #print grid.sizeOfLexicon()
@@ -195,7 +238,10 @@ grid = Grid(10, 'englishWords.json')
 # grid.deleteWord('hello', 0, 0, True)
 # pprint.pprint(grid.gridContribution)
 # grid.deleteWord('oval', 0, 4, False)
-grid.generate()
-grid.printGrid()
-pprint.pprint(grid.wordsInCrossword)
-print len(grid.wordsInCrossword)
+uncommonGrid.generate()
+
+commonGrid = Grid(10, 'commonWords.json')
+commonGrid.generate()
+
+intermediateGrid = Grid(10, 'englishWords.json')
+intermediateGrid.generate()
