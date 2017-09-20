@@ -21,16 +21,16 @@ export class DrawTrackComponent implements AfterViewInit {
 
     @HostListener('window:resize', ['$event'])
     public onResize() {
-       this.trackService.onResize();
+        this.trackService.onResize();
     }
 
     public addPoint(event: MouseEvent): void {
         this.trackService.addPoint();
     }
 
-  public removePoint(event: MouseEvent): void {
-    this.trackService.removePoint();
-  }
+    public removePoint(event: MouseEvent): void {
+        this.trackService.removePoint();
+    }
 
     public updateMousePosition(event: MouseEvent): void {
         this.trackService.updateMousePosition(event.clientX, event.clientY);
