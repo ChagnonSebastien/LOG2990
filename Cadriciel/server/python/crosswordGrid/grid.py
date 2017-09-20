@@ -9,6 +9,9 @@ class Grid:
     'Crossword Grid'
 
     def __init__(self, size, lexicon):
+        self.reset(size, lexicon)
+
+    def reset(self, size, lexicon):
         self.size = size
         self.getLexicon(lexicon)
         self.initializeLexiconByLength()
@@ -168,7 +171,8 @@ class Grid:
     def generate(self):
         while len(self.constraintsToSatisfy) > 0:
             self.printGrid()
-            self.insertRandomWord()
+            if not self.insertRandomWord():
+                self.reset(self.size, 'englishWords.json')
 
     def printGrid(self):
         print '-' * (4 * self.size + 1)
@@ -194,3 +198,4 @@ grid = Grid(10, 'englishWords.json')
 grid.generate()
 grid.printGrid()
 pprint.pprint(grid.wordsInCrossword)
+print len(grid.wordsInCrossword)
