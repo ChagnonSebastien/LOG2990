@@ -16,3 +16,8 @@
 .row button {
     width: 100%;
 }
+
+#btn-save {
+  background-color: tomato;
+  font-size: x-large;
+}

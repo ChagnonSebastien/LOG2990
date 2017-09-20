@@ -57,10 +57,10 @@ export class DrawTrackService {
         this.activePoint = new THREE.Mesh( geometry, material );
     }
 
-  private initialiseActiveSegment() {
-    this.activeSegment = this.newActiveSegment();
-    this.scene.remove(this.activeSegment);
-  }
+    private initialiseActiveSegment() {
+      this.activeSegment = this.newActiveSegment();
+      this.scene.remove(this.activeSegment);
+    }
 
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
