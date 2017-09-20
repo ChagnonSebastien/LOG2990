@@ -99,7 +99,7 @@ module Route {
                     if(body.totalCount > commonWordsMinFrequency ){
                         commonWords.push(lexicon[i]);
                     }
-                    if(y == 1) {
+                    if(y == 1 || commonWords.length >= 2) {
                         res.send(commonWords);
                     }
                 });
