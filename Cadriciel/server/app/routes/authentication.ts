@@ -2,8 +2,8 @@ import * as express from 'express';
 
 import * as mongodb from 'mongodb';
 
-let MongoClient = mongodb.MongoClient;
-let url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const MongoClient = mongodb.MongoClient;
+const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 
 module Route {
 
@@ -15,7 +15,7 @@ module Route {
                     res.send(JSON.stringify({'data': 'connectionError'}));
                 } else {
                     db.collection('login').find().toArray().then((credentials) => {
-                        if (req.body.password == credentials[0].password) {
+                        if (req.body.password === credentials[0].password) {
                             res.send(JSON.stringify({'data': 'authenticated'}));
                         } else {
                             res.send(JSON.stringify({'data': 'invalid'}));
@@ -31,7 +31,7 @@ module Route {
                     res.send(JSON.stringify({'data': 'connectionError'}));
                 } else {
                     db.collection('login').find().toArray().then((credentials) => {
-                        if (req.body.oldPassword == credentials[0].password) {
+                        if (req.body.oldPassword === credentials[0].password) {
                             db.collection('login').findOneAndUpdate(
                                 {_id: credentials[0]._id},
                                 {$set: {password: req.body.newPassword}}
