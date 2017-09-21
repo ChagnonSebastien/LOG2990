@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
+import { TracksComponent } from './tracks/tracks.component';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
 
 import { AuthenticationService } from './authentication.service';
@@ -11,7 +12,7 @@ describe('AdminComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminComponent],
+            declarations: [AdminComponent, TracksComponent],
             providers: [AuthenticationService],
             imports: [HttpModule]
         })

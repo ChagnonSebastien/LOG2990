@@ -12,8 +12,12 @@ export class TracksComponent implements OnInit {
     tracks: Track[];
     selectedTrack: Track;
 
-    ngOnInit() {
+    constructor() {
 
+    }
+
+    ngOnInit() {
+        
     }
 
 
