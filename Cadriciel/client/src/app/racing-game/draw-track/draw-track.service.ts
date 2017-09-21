@@ -194,7 +194,8 @@ export class DrawTrackService {
     }
 
     private removeSegment() {
-        this.scene.remove(this.segments.pop());
+        this.scene.remove(this.activeSegment);
+        this.activeSegment = this.segments.pop();
         this.updateActiveSegment();
     }
 

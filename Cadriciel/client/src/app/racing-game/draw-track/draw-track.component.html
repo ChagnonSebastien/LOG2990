@@ -1,50 +1,52 @@
-<div class="attributes_editor row justify-content-center">
-  <div class="col-5">
-    <label class="control-label" for="name">Track name: </label>
-    <input class="form-control" id="name" type="text">
-    <label class="control-label" for="description">Track description: </label>
-    <textarea class="form-control" id="description"></textarea>
+<div class="container">
+  <div class="attributes_editor row justify-content-center">
+    <div class="col-5">
+      <label class="control-label" for="name">Track name: </label>
+      <input class="form-control" id="name" type="text">
+      <label class="control-label" for="description">Track description: </label>
+      <textarea class="form-control" id="description"></textarea>
+    </div>
+    <div class="col-2">
+      <label>Difficulty:</label>
+      <div class="radio">
+        <label><input type="radio" name="difficulty"> Easy</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="difficulty"> Hard</label>
+      </div>
+      <br>
+      <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled">SAVE</button>
+    </div>
+    <div class="col-4">
+      <label class="control-label" for="name">Potholes:</label>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Amount</button>
+        </div>
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Placement</button>
+        </div>
+      </div>
+      <label class="control-label" for="name">Puddles:</label>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Amount</button>
+        </div>
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Placement</button>
+        </div>
+      </div>
+      <label class="control-label" for="name">Power-ups:</label>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Amount</button>
+        </div>
+        <div class="col-6">
+          <button type="button" class="btn btn-primary">Placement</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-2">
-    <label>Difficulty:</label>
-    <div class="radio">
-      <label><input type="radio" name="difficulty"> Easy</label>
-    </div>
-    <div class="radio">
-      <label><input type="radio" name="difficulty"> Hard</label>
-    </div>
-    <br>
-    <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled">SAVE</button>
-  </div>
-  <div class="col-4">
-    <label class="control-label" for="name">Potholes:</label>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Amount</button>
-      </div>
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Placement</button>
-      </div>
-    </div>
-    <label class="control-label" for="name">Puddles:</label>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Amount</button>
-      </div>
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Placement</button>
-      </div>
-    </div>
-    <label class="control-label" for="name">Power-ups:</label>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Amount</button>
-      </div>
-      <div class="col-6">
-        <button type="button" class="btn btn-primary">Placement</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="draw_window" oncontextmenu="return false;" #container (click)="addPoint($event)" (mousemove)="updateMousePosition($event)" (auxclick)="removePoint($event)"></div>
+  <div class="draw_window" oncontextmenu="return false;" #container (click)="addPoint($event)" (mousemove)="updateMousePosition($event)" (auxclick)="removePoint($event)"></div>
+</div>
