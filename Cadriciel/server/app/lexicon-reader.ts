@@ -13,11 +13,10 @@ export class LexiconReader {
         const wordsOfLength: string[] = [];
 
         for (const word of lexicon) {
-            if (word.length === wordLength) {
+            if (word.length == wordLength) {
                 wordsOfLength.push(word);
             }
         }
-        console.log(wordsOfLength);
         return wordsOfLength;
     }
 

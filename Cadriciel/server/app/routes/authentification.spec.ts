@@ -12,7 +12,7 @@ describe('Authentication', () => {
             .post('/login')
             .send({password: 'walleandtomato'})
             .end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data == 'authenticated');
+                assert(JSON.parse(res.text).data === 'authenticated');
                 done();
             });
     });
@@ -22,7 +22,7 @@ describe('Authentication', () => {
             .post('/login')
             .send({password: 'blablabla'})
             .end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data != 'authenticated');
+                assert(JSON.parse(res.text).data !== 'authenticated');
                 done();
             });
     });
@@ -32,7 +32,7 @@ describe('Authentication', () => {
             .post('/changepassword')
             .send({oldPassword: 'walleandtomato', newPassword: 'walleandtomato'})
             .end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data == 'success');
+                assert(JSON.parse(res.text).data === 'success');
                 done();
             });
     });
@@ -42,7 +42,7 @@ describe('Authentication', () => {
             .post('/changepassword')
             .send({oldPassword: 'blablabla', newPassword: 'walleandtomato'})
             .end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data == 'invalid');
+                assert(JSON.parse(res.text).data === 'invalid');
                 done();
             });
     });
