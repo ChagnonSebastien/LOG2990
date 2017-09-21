@@ -1,13 +1,13 @@
 export class Track {
 
-    id: number;
-    name: string;
-    description: string = '';
-    type: string;
-    trackIntersections: [{ x: number, y: number }];
-    puddles: [{ distance: number, offset: number }];
-    potholes: [{ distance: number, offset: number }];
-    boosters: [{ distance: number, offset: number }];
+    public id: number;
+    public name: string;
+    public description = '';
+    public type: string;
+    public trackIntersections: { x: number, y: number } [] = [];
+    public puddles: { distance: number, offset: number }[] = [];
+    public potholes: { distance: number, offset: number } [] = [];
+    public boosters: { distance: number, offset: number } [] = [];
 
     constructor(id: number, name: string, description: string, type: string) {
         this.id = id;
@@ -17,18 +17,18 @@ export class Track {
     }
 
     public addIntersections([distance, offset]) {
-        this.trackIntersections.push(distance, offset);
+        this.trackIntersections.push({ 'x': distance, 'y': offset });
     }
 
     public addPuddles([distance, offset]) {
-        this.puddles.push(distance, offset);
+        this.puddles.push({ 'distance': distance, 'offset': offset });
     }
 
     public addPotholes([distance, offset]) {
-        this.potholes.push(distance, offset);
+        this.potholes.push({ 'distance': distance, 'offset': offset });
     }
 
     public addBoosters([distance, offset]) {
-        this.boosters.push(distance, offset);
+        this.boosters.push({ 'distance': distance, 'offset': offset });
     }
 }
