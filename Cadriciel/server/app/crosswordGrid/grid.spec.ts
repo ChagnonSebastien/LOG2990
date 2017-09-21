@@ -63,9 +63,24 @@ describe('Grid', ()=>{
         assert(randomWord !== '');
     })
 
-    it('Should add contribution 9 to the grid', ()=>{
-        testingGrid.addContribution(9, 1,3);
-        assert(testingGrid.gridContribution[1][3][0] === 9);
+    it('Should insert letter at specified position', ()=>{
+        assert(testingGrid.insertLetter('a', 1, 1));
+    })
+
+    it('Should delete letter at specified position in the grid', ()=>{
+        let deleted: boolean = testingGrid.deleteLetter('a', 1, 1);
+
+        assert(deleted);
+    })
+
+    it('Should insert a word in the grid', ()=>{
+        let inserted: boolean = testingGrid.insertWord('hello', 7, 1, true);
+        assert(inserted && testingGrid.grid[7][1] === 'h');
+    })
+
+    it('Should delete a word in the grid', ()=>{
+        let deleted: boolean = testingGrid.deleteWord('hello', 7, 1, true);
+        assert(deleted);
     })
 
 })
