@@ -14,7 +14,7 @@
       <label><input type="radio" name="difficulty"> Hard</label>
     </div>
     <br>
-    <button type="button" class="btn btn-primary" id="btn-save">SAVE</button>
+    <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled">SAVE</button>
   </div>
   <div class="col-4">
     <label class="control-label" for="name">Potholes:</label>

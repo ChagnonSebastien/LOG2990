@@ -9,6 +9,9 @@ import { DrawTrackService } from './draw-track.service';
 })
 
 export class DrawTrackComponent implements AfterViewInit {
+
+    private saveEnabled: boolean = false;
+
     constructor(private trackService: DrawTrackService) {
     }
 
@@ -26,10 +29,12 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public addPoint(event: MouseEvent): void {
         this.trackService.addPoint();
+        this.saveEnabled = this.trackService.isFinished();
     }
 
     public removePoint(event: MouseEvent): void {
         this.trackService.removePoint();
+        this.saveEnabled = false;
     }
 
     public updateMousePosition(event: MouseEvent): void {

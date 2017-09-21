@@ -188,8 +188,12 @@ export class DrawTrackService {
         this.updateActiveSegment();
     }
 
-    public removeHighlight() {
+    private removeHighlight() {
         this.scene.remove(this.firstPointHighlight);
+    }
+
+    public isFinished() {
+        return this.loopClosed;
     }
 
     public onResize() {
