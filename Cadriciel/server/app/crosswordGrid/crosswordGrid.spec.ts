@@ -64,4 +64,10 @@ describe('Crossword Grid', () =>{
         assert(crosswordGrid.grid[4][8] === '#');
     })
 
+    it("Should be able to erase a letter at specified position", ()=>{
+        let crosswordGrid = new CrosswordGrid(10);
+        crosswordGrid.addBlackSquare(4,8);
+        crosswordGrid.erase(4,8);
+        assert(crosswordGrid.grid[4][8] === ' ');
+    })
 })

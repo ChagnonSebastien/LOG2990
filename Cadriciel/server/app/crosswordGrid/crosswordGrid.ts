@@ -1,4 +1,4 @@
-import * as Tuple from 'typescript';
+import { Grid } from './grid';
 
 export class CrosswordGrid {
 
@@ -78,6 +78,14 @@ export class CrosswordGrid {
 
     /*     def erase(self, line, column):
         self.grid[line][column] = ' ' */
+    public erase(line:number, column:number){
+        this.grid[line][column] = ' ';
+    }
 
+    /*     def sections(self, line):
+        return [section for section in ''.join(line).split('#') if section != ''] */
+
+
+    
 
 }
