@@ -14,6 +14,7 @@ import * as cors from 'cors';
 
 import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
+import * as lexiconRoute from './routes/lexicon';
 
 export class Application {
 
@@ -78,11 +79,19 @@ export class Application {
         // create routes
         const index: indexRoute.Index = new indexRoute.Index();
         const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
+        const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
 
         // home page
         router.get('/basic', index.index.bind(index.index));
-        router.get('/definition/:word', index.wordDefinition.bind(index.wordDefinition));
-        router.get('/lexicon', index.englishWordLexicon.bind(index.englishWordLexicon));
+        router.get('/definition/:word', lexicon.wordDefinition.bind(lexicon.wordDefinition));
+        router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
+        router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
+        router.get('/lexicon/:char/:position', lexicon.getWordsWithCharAt.bind(lexicon.getWordsWithCharAt));
+        router.get('/uncommonWords', lexicon.getUncommonWords.bind(lexicon.getUncommonWords));
+        router.get('/commonWords', lexicon.getCommonWords.bind(lexicon.getCommonWords));
+        router.get('/frequency/:word', lexicon.getWordFrequency.bind(lexicon.getWordFrequency));
+        router.get('/pattern/:word', lexicon.getWordsMatchingPattern.bind(lexicon.getWordsMatchingPattern));
+
 
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
