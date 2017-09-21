@@ -109,7 +109,7 @@ export class Application {
         router.put('/tracksNameChange',track.updateTrackName.bind(track.updateTrackName));
         router.post('/tracksTypeChange',track.updateTrackType.bind(track.updateTrackType));
         router.post('/tracksDescChange',track.updateTrackDesc.bind(track.updateTrackDesc));
-        router.delete('/tracks/:id',track.deleteTrack.bind(track.deleteTrack));
+        router.delete('/track/:id',track.deleteTrack.bind(track.deleteTrack));
 
         // use router middleware
         this.app.use('/api', router);

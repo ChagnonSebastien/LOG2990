@@ -6,16 +6,11 @@ describe('Track', () => {
     chai.use(chaiHttp);
     const apiUrl = 'http://localhost:3000/api';
 
-    it('Should be true', (done) => {
-        assert(true);
-        done();
-    });
-
     it('Should create a new track in the database', (done) => {
         chai.request(apiUrl)
             .post('/tracks')
             .send({
-                id: "1",
+                id: 1,
                 name: "test",
                 description: "this is a test",
                 type: "pro",
@@ -29,12 +24,36 @@ describe('Track', () => {
             });
     });
 
+    it('Should update the name of the previously created track', (done) => {
+        chai.request(apiUrl)
+            .put('/tracksNameChange')
+            .send({
+                id: 1,
+                newName: 'changedName'
+            })
+            .end((err: any, res: any) => {
+                let track = JSON.parse(res.text);
+                assert(track.value.name == 'test');
+                done();
+            });
+    });
+
     it('Should return a list of tracks', (done) => {
         chai.request(apiUrl)
             .get('/tracks')
             .end((err: any, res: any) => {
                 let tracks = JSON.parse(res.text);
                 assert(tracks.length > 0);
+                done();
+            });
+    });
+
+    it('Should delete the previously created track', (done) => {
+        chai.request(apiUrl)
+            .delete('/track/1')
+            .end((err: any, res: any) => {
+                let track = JSON.parse(res.text);
+                assert(track.value.trackId == 1);
                 done();
             });
     });
