@@ -14,11 +14,10 @@ module Route {
         public getTracks(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-                    console.log("hello");
                     db.collection('tracks').find().toArray().then((tracks) => {
-                        res.json(tracks);
+                        res.send(JSON.stringify(tracks));
                     });
                 }
             });
@@ -27,7 +26,7 @@ module Route {
         public deleteTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     db.collection('tracks').remove({ id: req.params.id });
                     res.json({ msg: 'Track deleted successfully' })
@@ -40,7 +39,7 @@ module Route {
         public updateTrackName(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
 
 
@@ -53,7 +52,7 @@ module Route {
         public updateTrackType(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
 
 
@@ -66,7 +65,7 @@ module Route {
         public updateTrackDesc(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
 
 
@@ -81,7 +80,7 @@ module Route {
 
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     let newTrack = new Track({
                         id: req.body.id,
@@ -95,7 +94,7 @@ module Route {
                     });
 
                     db.collection('tracks').insert(newTrack);
-                    res.json({ msg: 'Track added successfully' });
+                    res.send({ 'data': 'success' });
                 }
             });
 
