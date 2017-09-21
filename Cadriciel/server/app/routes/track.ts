@@ -46,8 +46,7 @@ module Route {
                     db.collection('tracks').findOneAndUpdate(
                         { trackId: req.body.id },
                         { $set: { name: req.body.newName } }
-                    )
-                    .then((track) => {
+                    ).then((track) => {
                         res.send(JSON.stringify(track));
                     });
                 }
@@ -59,10 +58,12 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-
-
-                    db.collection('tracks').findOneAndUpdate({ trackId: req.body.id }, { $set: { type: req.body.newType } });
-                    res.json({ msg: 'Track updated successfully' })
+                    db.collection('tracks').findOneAndUpdate(
+                        { trackId: req.body.id },
+                        { $set: { type: req.body.newType } }
+                    ).then((track) => {
+                        res.send(JSON.stringify(track));
+                    });
                 }
             });
 
@@ -72,10 +73,12 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-
-
-                    db.collection('tracks').findOneAndUpdate({ trackId: req.body.id }, { $set: { description: req.body.newDesc } });
-                    res.json({ msg: 'Track updated successfully' })
+                    db.collection('tracks').findOneAndUpdate(
+                        { trackId: req.body.id },
+                        { $set: { description: req.body.newDesc } }
+                    ).then((track) => {
+                        res.send(JSON.stringify(track));
+                    });
                 }
             });
 
