@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 /* Home module */
-import {AdminComponent} from "./admin.component";
-import {DrawTrackComponent} from "../racing-game/draw-track/draw-track.component";
-import {DrawTrackService} from "../racing-game/draw-track/draw-track.service";
+import {AdminComponent} from './admin.component';
+import {DrawTrackComponent} from '../racing-game/draw-track/draw-track.component';
+import {DrawTrackService} from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
 
