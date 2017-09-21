@@ -10,7 +10,10 @@ import { DrawTrackService } from './draw-track.service';
 
 export class DrawTrackComponent implements AfterViewInit {
 
-    private saveEnabled: boolean = false;
+    private trackReady: boolean = false;
+    private name: String = "";
+    private description: String = "";
+    private difficulty: String = "Easy";
 
     constructor(private trackService: DrawTrackService) {
     }
@@ -29,16 +32,20 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public addPoint(event: MouseEvent): void {
         this.trackService.addPoint();
-        this.saveEnabled = this.trackService.isFinished();
+        this.trackReady = this.trackService.isFinished();
     }
 
     public removePoint(event: MouseEvent): void {
         this.trackService.removePoint();
-        this.saveEnabled = false;
+        this.trackReady = false;
     }
 
     public updateMousePosition(event: MouseEvent): void {
         this.trackService.updateMousePosition(event.clientX, event.clientY);
+    }
+
+    private checkIfCanSave(): boolean {
+        return this.trackService.isFinished() && this.name != "" && this.description != "";
     }
 
     public ngAfterViewInit() {
