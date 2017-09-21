@@ -66,4 +66,28 @@ export class Grid {
         public printLexiconInConsole(){
             console.log(this.lexicon);
         }
+
+        public getWordsWith(pattern:string): string[]{
+            return this.lexiconReader.getWordsMatchingPattern(this.lexicon, pattern);
+        }
+
+        public getBestWordForLine(pattern:string): string[] {
+            let wordsWithPattern: string[] = [];
+
+            for(let i = 0; i <  this.lexicon.length; i++){
+                if(this.lexicon[i].includes(pattern)){
+                    wordsWithPattern.push(this.lexicon[i]);
+                }
+            }
+            return wordsWithPattern;
+        }
+
+    public getRandomWord(): string {
+        return this.lexicon[Math.floor((Math.random() * this.lexicon.length) - 1)];
+    }
+
+    public addContribution(contribution: number, i: number, j:number) {
+        this.gridContribution[i][j] = [contribution];
+    }
+            
 }
