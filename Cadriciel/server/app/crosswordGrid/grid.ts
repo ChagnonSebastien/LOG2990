@@ -13,20 +13,27 @@ export class Grid {
     genes: Array<Gene>;
     contraintsToSatisfy: Array<Gene>;
     lexiconReader: LexiconReader;
+    originalGene: Array<Gene>;
+    lexiconByLength: Map<number, Array<string>>;
 
     constructor(size: number, lexiconFilePath:string, genes: Array<Gene>) {
         this.lexiconReader = new LexiconReader();
         this.gridLetterCounter = [];
         this.gridContribution = [];
         this.grid = [];
+        this.genes = [];
+        this.lexiconByLength = new Map<number, Array<string>>();
         this.reset(size, lexiconFilePath, genes);
     }
 
-    public reset(size: number, lexiconFilePath: string, genes: Array<Gene>) {
+    public reset(size: number, lexiconFilePath: string, gene: Array<Gene>) {
         this.size = size;
         this.lexiconFile = lexiconFilePath;
         this.getLexicon(lexiconFilePath);
         for(let i = 0; i < this.size; i++) {
+                this.grid[i] = [];
+                this.gridLetterCounter[i] = [];
+                this.gridContribution[i] = [];
             for(let j = 0; j < this.size; j++) {
                 this.grid[i][j] = ' ';
                 this.gridLetterCounter[i][j] = 0;
@@ -34,40 +41,29 @@ export class Grid {
             }
         }
 
-        this.genes = [];
-
+        this.wordsInCrossword = [];
+        this.originalGene = gene;
+        this.contraintsToSatisfy = gene;
     }
 
-
-    /*     def reset(self, size, lexicon, gene):
-        self.size = size
-        self.lexiconFile = lexicon
-        self.getLexicon(lexicon)
-        self.initializeLexiconByLength()
-        self.grid = [ [' ' for j in range(self.size)] for i in range(self.size) ]
-        self.gridLetterCounter = [[0 for j in range(self.size)] for i in range(self.size)]
-        self.gridContribution = [[[] for j in range(self.size)] for i in range(self.size)]
-        self.words = set()
-        self.wordsInCrossword = []
-        self.originalGene = gene
-        self.constraintsToSatisfy = gene
-        self.constraintsToSatisfy = deque(self.constraintsToSatisfy) */
-
-
-        /*     def getLexicon(self, lexicon):
-        with open(lexicon) as lexicon_file:
-            self.lexicon = json.load(lexicon_file) */
         public getLexicon(lexiconFilePath:string){
             this.lexicon = this.lexiconReader.readWords(lexiconFilePath);
         }
 
+        public initializeLexiconByLength() {
+            this.lexiconByLength = new Map<number,Array<string>>();
 
-        /*     def initializeLexiconByLength(self):
-        self.lexiconByLength = {}
-        for word in self.lexicon:
-            if len(word) > self.size:
-                continue
-            if self.lexiconByLength.get(len(word)) is None:
-                self.lexiconByLength[len(word)] = []
-            self.lexiconByLength[len(word)].append(word) */
+            for(let i = 3; i <= 10; i++) {
+                this.lexiconByLength[i] = [];
+                this.lexiconByLength[i] = this.lexiconReader.readWordsOfLength(this.lexicon, i);
+            }
+        }
+
+        public getSizeOfLexicon(): number {
+            return this.lexicon.length;
+        }
+
+        public printLexiconInConsole(){
+            console.log(this.lexicon);
+        }
 }

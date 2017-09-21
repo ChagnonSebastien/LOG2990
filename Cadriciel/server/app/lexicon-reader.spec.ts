@@ -36,19 +36,22 @@ describe('LexiconReader', () => {
     // readWordsOfLength method
 
     it('Should return no words for words of length of 0', () => {
-        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 0);
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, 0);
 
         assert(wordsOfLength.length === 0);
     });
 
     it('Should return no words for words of length of 100', () => {
-        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 100);
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, 100);
 
         assert(wordsOfLength.length === 0);
     });
 
     it('Should return a string containing words when length is 5', () => {
-        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, 5);
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, 5);
 
         assert(wordsOfLength.length !== 0);
     });
@@ -70,25 +73,29 @@ describe('LexiconReader', () => {
     // getWordsMatchingPattern
 
     it('Should not return words when searching this pattern: empty string', () => {
-        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '');
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(words, '');
 
         assert(wordsMatchingPattern.length === 0);
     });
 
     it(`Should return all words of 5 letters when searching this pattern: '     ' (5 spaces)`, () => {
-        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '     ');
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(words, '     ');
 
         assert(wordsMatchingPattern[0].length === 5);
     });
 
     it(`Should return words of four letters, starting with a and finishing with e when searching this pattern: 'a  e'`, () => {
-        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, 'a  e');
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(words, 'a  e');
 
         assert(wordsMatchingPattern[0][0] === 'a' && wordsMatchingPattern[0][3] === 'e');
     });
 
     it('Should return words of five letters with an e at index 2 and an e at index 5', () => {
-        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(lexiconFilePath, '  e  e');
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsMatchingPattern: string[] = lexiconReader.getWordsMatchingPattern(words, '  e  e');
 
         assert(wordsMatchingPattern[0][2] === 'e' && wordsMatchingPattern[0][5] === 'e');
     });
