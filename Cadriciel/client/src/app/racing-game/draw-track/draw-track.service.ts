@@ -147,6 +147,7 @@ export class DrawTrackService {
               this.addHighlight();
               this.scene.add(this.activeSegment);
               this.updateActiveSegment();
+              this.activeSegment.material = new THREE.MeshBasicMaterial({color: 0xFF7700});
             } else {
               this.pushSegment();
             }
