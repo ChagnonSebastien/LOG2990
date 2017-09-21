@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-/* Home module */
+/* Admin module */
 import { AdminComponent } from './admin.component';
+import { TracksComponent } from './tracks/tracks.component';
 
 import { AuthenticationService } from './authentication.service';
 
@@ -20,9 +21,11 @@ import { AdminRoutingModule } from './admin-routing.module';
     ],
     declarations: [
         AdminComponent,
+        TracksComponent,
     ],
     exports: [
         AdminComponent,
+        TracksComponent,
     ],
     providers: [
         AuthenticationService
