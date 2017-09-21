@@ -13,17 +13,16 @@ describe('test drawTrackService', function() {
         done();
     });
 
-    it('addPoint adds a point to junction\'s array', done => {
-        /*
-        const geometry = new THREE.CircleGeometry( 10, 32 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
-        drawTrackService.mouseOnFirstPoint = false;
-        drawTrackService.mousePosition.x = 10;
-        drawTrackService.mousePosition.y = 13;
-        drawTrackService.addPoint();
-        expect(drawTrackService.points[drawTrackService.points.length - 1].position.x).toEqual(10);
-        expect(drawTrackService.points[drawTrackService.points.length - 1].position.y).toEqual(13);
-        */
+    it('Able to definie if loop is closed', done => {
+        drawTrackService.loopClosed = false;
+        expect(drawTrackService.isFinished()).toEqual(false);
+        done();
+    });
+
+    it('Calculate distance between two points', done => {
+        const vector1 = new THREE.Vector3(1, 1, 0);
+        const vector2 = new THREE.Vector3(1, 2, 0);
+        expect(drawTrackService.distance(vector1, vector2)).toEqual(1);
         done();
     });
 });

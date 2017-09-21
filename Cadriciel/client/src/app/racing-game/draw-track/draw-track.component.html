@@ -47,6 +47,12 @@
       </div>
     </div>
   </div>
-
-  <div class="draw_window" oncontextmenu="return false;" #container (click)="addPoint($event)" (mousemove)="updateMousePosition($event)" (auxclick)="removePoint($event)"></div>
+  <div
+    class="draw_window"
+    oncontextmenu="return false;"
+    #container
+    (click)="addPoint($event)"
+    (mousemove)="updateMousePosition($event)"
+    (auxclick)="removePoint($event)">
+  </div>
 </div>
