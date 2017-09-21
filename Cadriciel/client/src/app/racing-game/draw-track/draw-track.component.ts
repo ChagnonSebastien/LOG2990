@@ -44,8 +44,10 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.updateMousePosition(event.clientX, event.clientY);
     }
 
-    private checkIfCanSave(): boolean {
-        return this.trackService.isFinished() && this.name != "" && this.description != "";
+    public switchAmount(item: String) {
+        if (this.trackReady) {
+            this.trackService.switchAmount(item);
+        }
     }
 
     public ngAfterViewInit() {
