@@ -16,7 +16,7 @@ export class DrawTrackService {
 
     public mouseOnFirstPoint = false;
 
-    private loopClosed = false;
+    public loopClosed = false;
 
     public points: THREE.Mesh[] = [];
 
@@ -130,7 +130,7 @@ export class DrawTrackService {
       this.activeSegment.position.y = ((this.mousePosition.y - fromPoint.y) / 2) + fromPoint.y;
     }
 
-    private distance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
+    public distance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
