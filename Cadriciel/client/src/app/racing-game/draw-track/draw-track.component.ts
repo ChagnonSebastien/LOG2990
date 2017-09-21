@@ -10,7 +10,7 @@ import { DrawTrackService } from './draw-track.service';
 
 export class DrawTrackComponent implements AfterViewInit {
 
-    private saveEnabled: boolean = false;
+    private saveEnabled = false;
 
     constructor(private trackService: DrawTrackService) {
     }
