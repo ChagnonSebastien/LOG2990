@@ -24,9 +24,7 @@ export class Grid {
     public gridContribution: Array<number[]>;
     public words: Set<string>;
     public wordsInCrossword: string[];
-    public gene:number;
+    public gene: number;
     public contraintsToSatisfy: number;
 
-
-    
 }
