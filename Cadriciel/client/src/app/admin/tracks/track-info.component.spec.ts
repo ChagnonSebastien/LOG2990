@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
 import { TrackInfoComponent } from './track-info.component';
+import { TrackService } from './track.service';
 
 describe('TrackInfoComponent', () => {
     let component: TrackInfoComponent;
@@ -8,7 +9,9 @@ describe('TrackInfoComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TrackInfoComponent]
+            declarations: [TrackInfoComponent],
+            providers: [TrackService],
+            imports: [HttpModule]
         })
             .compileComponents();
     }));
@@ -20,6 +23,7 @@ describe('TrackInfoComponent', () => {
     });
 
     it('should be created', () => {
+        //expect(true).toBeTruthy();
         expect(component).toBeTruthy();
     });
 });

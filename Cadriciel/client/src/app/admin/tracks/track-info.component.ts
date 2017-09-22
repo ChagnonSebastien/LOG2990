@@ -13,21 +13,24 @@ export class TrackInfoComponent implements OnInit {
     @Input() track: Track;
 
     changeDescriptionDB() {
-        this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(data => {
-
-        });
+        this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(
+            result => console.log(result)
+          
+        );
 
     }
     changeTypeDB() {
-        this.trackService.changeTrackType(this.track.trackId, this.track.type).subscribe(data => {
-
-        });
+        this.trackService.changeTrackType(this.track.trackId, this.track.type).subscribe(
+            result => console.log(result)
+            
+        );
 
     }
     changeNameDB() {
-        this.trackService.changeTrackName(this.track.trackId, this.track.name).subscribe(data => {
-
-        });
+        this.trackService.changeTrackName(this.track.trackId, this.track.name).subscribe(
+            result => console.log(result)
+           
+        );
 
     }
 

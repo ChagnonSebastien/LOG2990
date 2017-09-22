@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TrackService } from './track.service';
-import { HttpModule } from '@angular/http';
 import { Track } from './track';
 @Component({
     selector: 'tracks',
