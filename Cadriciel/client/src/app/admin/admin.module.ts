@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 /* Admin module */
 import { AdminComponent } from './admin.component';
 import { TracksComponent } from './tracks/tracks.component';
+import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
+import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
 
@@ -22,13 +24,15 @@ import { AdminRoutingModule } from './admin-routing.module';
     declarations: [
         AdminComponent,
         TracksComponent,
+        DrawTrackComponent
     ],
     exports: [
         AdminComponent,
         TracksComponent,
     ],
     providers: [
-        AuthenticationService
+        AuthenticationService,
+        DrawTrackService
     ]
 })
 export class AdminModule { }

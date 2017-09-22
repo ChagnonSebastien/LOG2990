@@ -1,0 +1,34 @@
+.container {
+    display: flex;
+    height: 800px;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: flex-start;
+}
+
+.attributes_editor {
+  background-color: #CCC;
+  padding: 10px;
+  margin: 0;
+  flex: 0 1 auto;
+}
+
+.draw_window {
+    flex: 1 1 auto;
+    position: relative;
+    display: block;
+}
+
+.attributes_editor textarea{
+    height: 100px;
+}
+
+.row button {
+    width: 100%;
+}
+
+#btn-save {
+  background-color: tomato;
+  font-size: x-large;
+  height: 80px;
+}

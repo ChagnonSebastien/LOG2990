@@ -5,7 +5,7 @@ import Stats = require('stats.js');
 @Injectable()
 export class RenderService {
 
-    private container: HTMLDivElement;
+    private container: HTMLElement;
 
     private camera: THREE.PerspectiveCamera;
 
@@ -79,7 +79,6 @@ export class RenderService {
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
-
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
@@ -99,7 +98,7 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLDivElement, rotationX: number, rotationY: number) {
+    public initialize(container: HTMLElement, rotationX: number, rotationY: number) {
         this.container = container;
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
