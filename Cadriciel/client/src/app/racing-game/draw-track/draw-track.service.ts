@@ -26,12 +26,9 @@ export class DrawTrackService {
 
     private activePoint: THREE.Mesh;
 
-    private isActivePointInScene = false;
-
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
-        this.initialiseFirstPointHighlight();
         this.initialiseActivePoint();
         this.startRenderingLoop();
     }
@@ -51,16 +48,11 @@ export class DrawTrackService {
         );
     }
 
-    private initialiseFirstPointHighlight() {
-        const geometry = new THREE.CircleGeometry( 15, 32 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
-        this.firstPointHighlight = new THREE.Mesh( geometry, material );
-    }
-
     private initialiseActivePoint() {
         const geometry = new THREE.CircleGeometry( 10, 32 );
         const material = new THREE.MeshBasicMaterial( { color: 0x0000FF } );
         this.activePoint = new THREE.Mesh( geometry, material );
+        this.scene.add(this.activePoint);
     }
 
     private startRenderingLoop() {
@@ -80,20 +72,26 @@ export class DrawTrackService {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
 
         this.pointMouseHoversOn = this.getPointUnderMouse();
-        if (this.points.length > 0 && !this.loopClosed) {
+        this.componentPositionUpdate();
+    }
 
+    private componentPositionUpdate() {
+        if (this.loopClosed) {
+            return;
+        }
+
+        if (this.points.length > 0) {
             if (this.pointMouseHoversOn === 0) {
                 this.mousePosition = this.points[0].position.clone();
-                this.updateLastSegmentPosition();
                 this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF });
             } else {
                 this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
-                this.updateLastSegmentPosition();
             }
+
+             this.updateLastSegmentPosition();
         }
-        if (!this.loopClosed) {
-            this.updateActivePoint();
-        }
+
+        this.updateActivePointPosition();
     }
 
     private getRelativeMousePosition(clientX: number, clientY: number) {
@@ -114,12 +112,8 @@ export class DrawTrackService {
         return index;
     }
 
-    private updateActivePoint() {
+    private updateActivePointPosition() {
         this.activePoint.position.set(this.mousePosition.x, this.mousePosition.y, -3);
-        if (!this.isActivePointInScene) {
-            this.scene.add(this.activePoint);
-            this.isActivePointInScene = true;
-        }
     }
 
     private checkIfMouseIsOnFirstPoint(): boolean {
@@ -163,6 +157,9 @@ export class DrawTrackService {
     }
 
     public addHighlight() {
+        const geometry = new THREE.CircleGeometry( 15, 32 );
+        const material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
+        this.firstPointHighlight = new THREE.Mesh(geometry, material);
         this.firstPointHighlight.position.set(this.mousePosition.x, this.mousePosition.y, -1);
         this.scene.add(this.firstPointHighlight);
     }
@@ -177,20 +174,18 @@ export class DrawTrackService {
     }
 
     public removePoint() {
+        if (this.points.length === 0) {
+            return;
+        }
+
         this.scene.remove(this.points.pop());
         if (this.points.length === 0) {
             this.removeHighlight();
         }
-        if (this.segments.length > 0) {
-            this.removeLastSegment();
-        }
-        this.loopClosed = false;
-        this.updateActivePoint();
-    }
 
-    private removeLastSegment() {
         this.scene.remove(this.segments.pop());
-        this.updateLastSegmentPosition();
+        this.loopClosed = false;
+        this.componentPositionUpdate();
     }
 
     private removeHighlight() {
