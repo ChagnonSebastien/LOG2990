@@ -94,11 +94,4 @@ describe('Grid', () => {
         const inserted: boolean = testingGrid.insertRandomWord();
         assert(inserted);
     });
-
-    it('Should generate the grid', () => {
-        const currentGrid: Grid = new Grid(10, lexiconFilePath, gene);
-        currentGrid.reset(10, lexiconFilePath, gene);
-        currentGrid.generate();
-        assert(true);
-    });
 });
