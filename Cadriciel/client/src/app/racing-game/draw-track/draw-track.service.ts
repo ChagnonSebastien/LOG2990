@@ -75,7 +75,21 @@ export class DrawTrackService {
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
+        if (this.currentlyDraggedIntersection !== -1) {
+            this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
+        }
         this.updateComponentsView();
+    }
+
+    private moveIntersection(intersectionIndex: number, position: THREE.Vector3) {
+        this.intersections[intersectionIndex].position.x = position.x;
+        this.intersections[intersectionIndex].position.y = position.y;
+        if (intersectionIndex === 0) {
+            this.firstPointHighlight.position.x = position.x;
+            this.firstPointHighlight.position.y = position.y;
+            this.activePoint.position.x = position.x;
+            this.activePoint.position.y = position.y;
+        }
     }
 
     private updateComponentsView() {
@@ -85,18 +99,48 @@ export class DrawTrackService {
 
     private updateComponentsPositions() {
         if (this.loopClosed) {
-            return;
-        }
-
-        if (this.intersections.length > 0) {
-            if (this.pointMouseHoversOn === 0) {
-                this.mousePosition = this.intersections[0].position.clone();
+            if (this.currentlyDraggedIntersection !== -1) {
+                this.updateBeforeAndAfterSegment(this.currentlyDraggedIntersection);
             }
 
-             this.updateLastSegmentPosition();
-        }
+        } else {
+            if (this.intersections.length > 0) {
+                if (this.pointMouseHoversOn === 0) {
+                    this.mousePosition = this.intersections[0].position.clone();
+                }
 
-        this.updateActivePointPosition();
+                this.updateLastSegmentPosition();
+            }
+
+            this.updateActivePointPosition();
+        }
+    }
+
+    private updateBeforeAndAfterSegment(movingIntersectionIndex) {
+        this.updateSegmentPosition(
+            this.segments[
+                this.currentlyDraggedIntersection - 1 < 0 ?
+                this.segments.length - 1 :
+                this.currentlyDraggedIntersection - 1
+            ],
+            this.intersections[
+                this.currentlyDraggedIntersection - 1 < 0 ?
+                this.intersections.length - 1 :
+                this.currentlyDraggedIntersection - 1
+            ].position,
+            this.intersections[
+                this.currentlyDraggedIntersection
+            ].position
+        );
+        this.updateSegmentPosition(
+            this.segments[this.currentlyDraggedIntersection],
+            this.intersections[this.currentlyDraggedIntersection].position,
+            this.intersections[
+                this.currentlyDraggedIntersection + 1 === this.intersections.length ?
+                0 :
+                this.currentlyDraggedIntersection + 1
+            ].position
+        );
     }
 
     private updateComponentsLook() {
@@ -209,6 +253,12 @@ export class DrawTrackService {
     }
 
     public removeIntersection() {
+        if (this.loopClosed) {
+            this.loopClosed = false;
+            this.updateComponentsView();
+            return;
+        }
+
         if (this.intersections.length === 0) {
             return;
         }
@@ -219,7 +269,6 @@ export class DrawTrackService {
         }
 
         this.scene.remove(this.segments.pop());
-        this.loopClosed = false;
         this.updateComponentsView();
     }
 
