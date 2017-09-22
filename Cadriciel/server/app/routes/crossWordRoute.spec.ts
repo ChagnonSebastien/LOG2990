@@ -19,8 +19,6 @@ describe('Crossword', () => {
             });
     });
 
-
-
     it('Should return a list of crosswords', (done) => {
         chai.request(apiUrl)
             .get('/crosswords')
