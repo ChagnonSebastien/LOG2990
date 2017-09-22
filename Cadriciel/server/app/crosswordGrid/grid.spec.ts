@@ -7,9 +7,9 @@ describe('Grid', ()=>{
     const gene: Array<Gene> = [];
     const testingGrid = new Grid(10,lexiconFilePath, gene);
 
-    it('Should be able to reset the size and genes', ()=>{
+    it('Should be able to reset the size', ()=>{
         let grid = new Grid(10,lexiconFilePath, gene);
-        assert(grid.size === 10 && grid.genes.length === 0);
+        assert(grid.size === 10);
     })
 
     it('Should be able to reset the lexicon', ()=>{
@@ -22,9 +22,9 @@ describe('Grid', ()=>{
         assert(grid.grid[0][0] === ' ' && grid.gridLetterCounter[0][0] === 0 && grid.gridContribution[0][0].length === 0);
     })
 
-    it('Should be able to reset words in crossword, original gene and constraints to satisfy', ()=>{
+    it('Should be able to reset words in crossword', ()=>{
         let grid = new Grid(10,lexiconFilePath, gene);
-        assert(grid.wordsInCrossword.length === 0 && grid.originalGene === gene && grid.contraintsToSatisfy === gene)
+        assert(grid.wordsInCrossword.length === 0)
     })
 
     it('Should be able to read and store the lexicon', ()=>{
@@ -47,14 +47,12 @@ describe('Grid', ()=>{
     })
 
     it('Should return all the words containing the word <hell>. No restrictions on length.', ()=>{
-        const wordsMatchingPattern = testingGrid.getBestWordForLine('hell');
-        const testingWord: string =  wordsMatchingPattern[Math.floor((Math.random() * wordsMatchingPattern.length) - 1)];
-        assert(testingWord.includes('hell'));
+        const wordsMatchingPattern: string = testingGrid.getBestWordForLine('hell');
+        assert(wordsMatchingPattern.includes('hell'));
     })
 
     it('Should return no words mathcing this pattern <bbbbbbb>', ()=>{
-        const wordsMatchingPattern = testingGrid.getBestWordForLine('bbbbbbb');
-        const testingWord: string =  wordsMatchingPattern[Math.floor((Math.random() * wordsMatchingPattern.length) - 1)];
+        const wordsMatchingPattern: string = testingGrid.getBestWordForLine('bbbbbbb');
         assert(wordsMatchingPattern.length === 0);
     })
 
@@ -81,6 +79,18 @@ describe('Grid', ()=>{
     it('Should delete a word in the grid', ()=>{
         let deleted: boolean = testingGrid.deleteWord('hello', 7, 1, true);
         assert(deleted);
+    })
+
+    it('Should insert random word in the grid', ()=>{
+        let inserted: boolean = testingGrid.insertRandomWord();
+        assert(inserted);
+    })
+
+    it('Should insert random word in the grid', ()=>{
+        let currentGrid: Grid = new Grid(10,lexiconFilePath, gene)
+        currentGrid.generate();
+        console.log(currentGrid.grid);
+        assert(true);
     })
 
 })
