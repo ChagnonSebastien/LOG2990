@@ -10,16 +10,16 @@ describe('Crossword', () => {
         chai.request(apiUrl)
             .post('/crosswords')
             .send({
-                "crossword":[["test","test"],["test2","test2"]],
-                "difficulty":"hard",
-                "listOfWords":["test2","test1"]
+                "crossword": [["test", "test"], ["test2", "test2"]],
+                "difficulty": "hard",
+                "listOfWords": ["test2", "test1"]
             }).end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data === 'Crossword added successfully');
+                assert(JSON.parse(res.text).msg === 'Crossword added successfully');
                 done();
             });
     });
 
-    
+
 
     it('Should return a list of crosswords', (done) => {
         chai.request(apiUrl)
@@ -31,12 +31,12 @@ describe('Crossword', () => {
             });
     });
 
-    it('Should delete the previously created track', (done) => {
+    it('Should delete the previously created crossword', (done) => {
         chai.request(apiUrl)
             .delete('crosswords:id')
             .end((err: any, res: any) => {
                 let crossword = JSON.parse(res.text);
-                assert(crossword.value.difficulty== "hard");
+                assert(crossword.value.difficulty == "hard");
                 done();
             });
     });
