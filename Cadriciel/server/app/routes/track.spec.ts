@@ -11,13 +11,13 @@ describe('Track', () => {
             .post('/tracks')
             .send({
                 id: 1,
-                name: "test",
-                description: "this is a test",
-                type: "pro",
-                trackIntersections: [{ "x": 1, "y": 1 }],
-                puddles: [{ "distance": 1, "offset": 1 }],
-                potholes: [{ "distance": 1, "offset": 1 }],
-                boosters: [{ "distance": 1, "offset": 1 }]
+                name: 'test',
+                description: 'this is a test',
+                type: 'pro',
+                trackIntersections: [{ 'x': 1, 'y': 1 }],
+                puddles: [{ 'distance': 1, 'offset': 1 }],
+                potholes: [{ 'distance': 1, 'offset': 1 }],
+                boosters: [{ 'distance': 1, 'offset': 1 }]
             }).end((err: any, res: any) => {
                 assert(JSON.parse(res.text).data === 'success');
                 done();
@@ -32,8 +32,8 @@ describe('Track', () => {
                 newName: 'changedName'
             })
             .end((err: any, res: any) => {
-                let track = JSON.parse(res.text);
-                assert(track.value.name == 'test');
+                const track = JSON.parse(res.text);
+                assert(track.value.name === 'test');
                 done();
             });
     });
@@ -46,8 +46,8 @@ describe('Track', () => {
                 newType: 'changedType'
             })
             .end((err: any, res: any) => {
-                let track = JSON.parse(res.text);
-                assert(track.value.type == 'pro');
+                const track = JSON.parse(res.text);
+                assert(track.value.type === 'pro');
                 done();
             });
     });
@@ -60,8 +60,8 @@ describe('Track', () => {
                 newDesc: 'newDescription'
             })
             .end((err: any, res: any) => {
-                let track = JSON.parse(res.text);
-                assert(track.value.description == 'this is a test');
+                const track = JSON.parse(res.text);
+                assert(track.value.description === 'this is a test');
                 done();
             });
     });
@@ -70,7 +70,7 @@ describe('Track', () => {
         chai.request(apiUrl)
             .get('/tracks')
             .end((err: any, res: any) => {
-                let tracks = JSON.parse(res.text);
+                const tracks = JSON.parse(res.text);
                 assert(tracks.length > 0);
                 done();
             });
@@ -80,8 +80,8 @@ describe('Track', () => {
         chai.request(apiUrl)
             .delete('/track/1')
             .end((err: any, res: any) => {
-                let track = JSON.parse(res.text);
-                assert(track.value.trackId == 1);
+                const track = JSON.parse(res.text);
+                assert(track.value.trackId === 1);
                 done();
             });
     });

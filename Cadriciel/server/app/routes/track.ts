@@ -3,10 +3,9 @@ const Track = require('./trackSchema');
 import * as express from 'express';
 
 import * as mongodb from 'mongodb';
-import * as mongoose from 'mongoose';
 
-var MongoClient = mongodb.MongoClient;
-var url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const MongoClient = mongodb.MongoClient;
+const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 
 module Route {
 
@@ -90,7 +89,7 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-                    let newTrack = new Track({
+                    const newTrack = new Track({
                         trackId: req.body.id,
                         name: req.body.name,
                         description: req.body.description,

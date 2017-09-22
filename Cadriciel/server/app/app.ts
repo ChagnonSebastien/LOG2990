@@ -104,12 +104,12 @@ export class Application {
         router.post('/changepassword', authentication.changePassword.bind(authentication.changePassword));
 
         // track api path
-        router.get('/tracks',track.getTracks.bind(track.getTracks));
+        router.get('/tracks', track.getTracks.bind(track.getTracks));
         router.post('/tracks', track.addTrack.bind(track.addTrack));
-        router.put('/tracksNameChange',track.updateTrackName.bind(track.updateTrackName));
-        router.put('/tracksTypeChange',track.updateTrackType.bind(track.updateTrackType));
-        router.put('/tracksDescChange',track.updateTrackDesc.bind(track.updateTrackDesc));
-        router.delete('/track/:id',track.deleteTrack.bind(track.deleteTrack));
+        router.put('/tracksNameChange', track.updateTrackName.bind(track.updateTrackName));
+        router.put('/tracksTypeChange', track.updateTrackType.bind(track.updateTrackType));
+        router.put('/tracksDescChange', track.updateTrackDesc.bind(track.updateTrackDesc));
+        router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // use router middleware
         this.app.use('/api', router);

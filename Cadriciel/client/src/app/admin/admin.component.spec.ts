@@ -5,9 +5,9 @@ import { TracksComponent } from './tracks/tracks.component';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
 
 import { AuthenticationService } from './authentication.service';
-import { AdminRoutingModule } from "./admin-routing.module";
-import { DrawTrackComponent } from "../racing-game/draw-track/draw-track.component";
-import { DrawTrackService } from "../racing-game/draw-track/draw-track.service";
+import { AdminRoutingModule } from './admin-routing.module';
+import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
+import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 describe('AdminComponent', () => {
     let component: AdminComponent;
@@ -35,7 +35,7 @@ describe('AdminComponent', () => {
     it('should login when the password is walleandtomato', () => {
         component.login('walleandtomato').then(res => {
             expect(res).toBeTruthy();
-        })
+        });
     });
 
     it('should not login when the password is not walleandtomato', () => {

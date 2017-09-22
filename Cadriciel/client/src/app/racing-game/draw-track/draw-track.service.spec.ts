@@ -22,7 +22,14 @@ describe('test drawTrackService', function() {
     it('Calculate distance between two points', done => {
         const vector1 = new THREE.Vector3(1, 1, 0);
         const vector2 = new THREE.Vector3(1, 2, 0);
-        expect(drawTrackService.distance(vector1, vector2)).toEqual(1);
+        expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
+        done();
+    });
+
+    it('Calculates the relative position', done => {
+        const vector1 = new THREE.Vector3(1, 1, 0);
+        const vector2 = new THREE.Vector3(1, 2, 0);
+        expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
         done();
     });
 });

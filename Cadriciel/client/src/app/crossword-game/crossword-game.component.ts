@@ -6,31 +6,31 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
-    option: string = null;
-    mode: string = null;
-    level: string = null;
+    public option: string = null;
+    public mode: string = null;
+    public level: string = null;
 
     constructor() { }
 
-    ngOnInit() {
+    public ngOnInit() {
     }
 
-    setOption(chosenOption: string): void {
+    public setOption(chosenOption: string): void {
         this.option = chosenOption;
         this.mode = null;
         this.level = null;
     }
 
-    setMode(chosenMode: string): void {
+    public setMode(chosenMode: string): void {
         this.mode = chosenMode;
     }
 
-    setLevel(chosenLevel: string): void {
+    public setLevel(chosenLevel: string): void {
         this.level = chosenLevel;
     }
 
-    isSolo(): boolean {
-        return this.option == "SOLO";
+    public isSolo(): boolean {
+        return this.option === 'SOLO';
     }
 
 }
