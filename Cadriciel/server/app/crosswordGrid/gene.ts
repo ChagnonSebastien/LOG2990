@@ -1,4 +1,4 @@
 export class Gene {
-    index: number;
-    horizontal: boolean;
-}
+    public index: number;
+    public horizontal: boolean;
+};

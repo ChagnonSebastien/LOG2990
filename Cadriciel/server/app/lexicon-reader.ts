@@ -9,7 +9,6 @@ export class LexiconReader {
     }
 
     public readWordsOfLength(lexicon: string[], wordLength: number): string[] {
-        const lexiconWords: string[] = lexicon;
         const wordsOfLength: string[] = [];
 
         for (const word of lexicon) {
