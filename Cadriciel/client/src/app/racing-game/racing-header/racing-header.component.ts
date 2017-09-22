@@ -9,7 +9,7 @@ export class RacingHeaderComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {
+    public ngOnInit() {
     }
 
 }

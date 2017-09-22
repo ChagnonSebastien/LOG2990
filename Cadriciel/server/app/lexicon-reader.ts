@@ -8,8 +8,7 @@ export class LexiconReader {
         return content;
     }
 
-    public readWordsOfLength(file: string, wordLength: number): string[] {
-        const lexicon: string[] = this.readWords(file);
+    public readWordsOfLength(lexicon: string[], wordLength: number): string[] {
         const wordsOfLength: string[] = [];
 
         for (const word of lexicon) {
@@ -33,9 +32,9 @@ export class LexiconReader {
         return wordsWithChar;
     }
 
-    public getWordsMatchingPattern(file: string, pattern: string) {
+    public getWordsMatchingPattern(lexicon: string[], pattern: string) {
         const wordsWithChar: string[] = [];
-        const wordsPatternLength: string[] = this.readWordsOfLength(file, pattern.length);
+        const wordsPatternLength: string[] = this.readWordsOfLength(lexicon, pattern.length);
 
         for (let i = 0; i < wordsPatternLength.length; i++) {
             let match = true;

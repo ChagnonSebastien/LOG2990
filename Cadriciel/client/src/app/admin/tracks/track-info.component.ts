@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Track } from './track'
+import { Track } from './track';
 import { TrackService } from './track.service';
 
 @Component({
@@ -10,31 +10,27 @@ import { TrackService } from './track.service';
     providers: [TrackService]
 })
 export class TrackInfoComponent implements OnInit {
-    @Input() track: Track;
+    @Input() public track: Track;
 
-    changeDescriptionDB() {
+    public changeDescriptionDB() {
         this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(
             result => console.log(result)
-          
         );
-
     }
-    changeTypeDB() {
+
+    public changeTypeDB() {
         this.trackService.changeTrackType(this.track.trackId, this.track.type).subscribe(
             result => console.log(result)
-            
         );
-
     }
-    changeNameDB() {
+
+    public changeNameDB() {
         this.trackService.changeTrackName(this.track.trackId, this.track.name).subscribe(
             result => console.log(result)
-           
         );
-
     }
 
-    save() {
+    public save() {
         this.changeNameDB();
         this.changeDescriptionDB();
         this.changeTypeDB();
@@ -42,7 +38,7 @@ export class TrackInfoComponent implements OnInit {
 
     constructor(private trackService: TrackService) { }
 
-    ngOnInit() {
+    public ngOnInit() {
     }
 
 }

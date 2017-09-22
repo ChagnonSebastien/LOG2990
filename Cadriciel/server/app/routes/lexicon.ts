@@ -32,7 +32,8 @@ module Route {
             const wordLength = req.params.wordLength;
             const lexiconReader = new LexiconReader();
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
-            const wordsOfLength: string[] = lexiconReader.readWordsOfLength(lexiconFilePath, wordLength);
+            const words: string[] = lexiconReader.readWords(lexiconFilePath);
+            const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, wordLength);
             res.send(wordsOfLength);
         }
 
@@ -49,7 +50,8 @@ module Route {
             const pattern = req.params.word;
             const lexiconReader = new LexiconReader();
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
-            const wordsWithChar = lexiconReader.getWordsMatchingPattern(lexiconFilePath, pattern);
+            const words: string[] = lexiconReader.readWords(lexiconFilePath);
+            const wordsWithChar = lexiconReader.getWordsMatchingPattern(words, pattern);
             res.send(wordsWithChar);
         }
 
