@@ -26,6 +26,8 @@ export class DrawTrackService {
 
     private activePoint: THREE.Mesh;
 
+    private currentlyDraggedIntersection = -1;
+
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
@@ -224,11 +226,15 @@ export class DrawTrackService {
     }
 
     public startDrag() {
-        console.log('drag start');
+        if (this.loopClosed && this.currentlyDraggedIntersection === -1) {
+            this.currentlyDraggedIntersection = this.pointMouseHoversOn;
+        }
     }
 
     public endDrag() {
-        console.log('drag stop');
+        if (this.currentlyDraggedIntersection !== -1) {
+            this.currentlyDraggedIntersection = -1;
+        }
     }
 
     public isFinished() {
