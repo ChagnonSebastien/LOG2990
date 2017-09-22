@@ -17,13 +17,13 @@ import { CubeModule } from './cube/cube.module';
         CubeModule
     ],
     declarations: [
-        HomeComponent,
+        HomeComponent
     ],
     exports: [
-        HomeComponent,
+        HomeComponent
     ],
     providers: [
-        BasicService,
+        BasicService
     ]
 })
 export class HomeModule { }

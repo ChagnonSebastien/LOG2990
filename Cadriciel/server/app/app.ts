@@ -15,6 +15,7 @@ import * as cors from 'cors';
 import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
+import * as trackRoute from './routes/track';
 
 export class Application {
 
@@ -80,9 +81,12 @@ export class Application {
         const index: indexRoute.Index = new indexRoute.Index();
         const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
         const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
+        const track: trackRoute.Tracks = new trackRoute.Tracks();
 
         // home page
         router.get('/basic', index.index.bind(index.index));
+
+        // lexicon service api path
         router.get('/definition/:word', lexicon.wordDefinition.bind(lexicon.wordDefinition));
         router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
         router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
@@ -98,6 +102,14 @@ export class Application {
 
         // changePassword api path
         router.post('/changepassword', authentication.changePassword.bind(authentication.changePassword));
+
+        // track api path
+        router.get('/tracks', track.getTracks.bind(track.getTracks));
+        router.post('/tracks', track.addTrack.bind(track.addTrack));
+        router.put('/tracksNameChange', track.updateTrackName.bind(track.updateTrackName));
+        router.put('/tracksTypeChange', track.updateTrackType.bind(track.updateTrackType));
+        router.put('/tracksDescChange', track.updateTrackDesc.bind(track.updateTrackDesc));
+        router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // use router middleware
         this.app.use('/api', router);

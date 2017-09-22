@@ -205,44 +205,49 @@ class Grid:
         #         return True
     
     def generate(self):
-        start = timeit.default_timer()
-        bestScore = 0
-        totalScore = 0
-        bestGrid = copy.deepcopy(self.grid)
-        bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
-        bestGridContribution = copy.deepcopy(self.gridContribution)
-        bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
-        bestWords = copy.deepcopy(self.words)
-        for i in range(3):
-            while len(self.constraintsToSatisfy) > 0:
+        while len(self.constraintsToSatisfy) > 0:
                 #self.printGrid()
                 if not self.insertRandomWord():
                     self.reset(self.size, self.lexiconFile, self.originalGene)
-            gridScore = self.scoreGrid()
-            totalScore += gridScore
-            #self.printGrid()
-            #print "Score of grid: ", gridScore
-            if gridScore > bestScore:
-                bestScore = gridScore
-                bestGrid = copy.deepcopy(self.grid)
-                bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
-                bestGridContribution = copy.deepcopy(self.gridContribution)
-                bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
-                bestWords = copy.deepcopy(self.words)
-            self.reset(self.size, self.lexiconFile, self.originalGene)
-        self.grid = bestGrid
-        self.gridLetterCounter = bestGridLetterCounter
-        self.gridContribution = bestGridContribution
-        self.wordsInCrossword = bestWordsInCrossword
-        self.words = bestWords
-        self.printGrid()
-        stop = timeit.default_timer()
-        pprint.pprint(self.wordsInCrossword)
-        #pprint.pprint(self.gridContribution)
-        #pprint.pprint(self.gridLetterCounter)
-        print "BEST SCORE :", bestScore        
-        #print "Total time:", stop - start
-        return totalScore
+        # start = timeit.default_timer()
+        # bestScore = 0
+        # totalScore = 0
+        # bestGrid = copy.deepcopy(self.grid)
+        # bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+        # bestGridContribution = copy.deepcopy(self.gridContribution)
+        # bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+        # bestWords = copy.deepcopy(self.words)
+        # for i in range(3):
+        #     while len(self.constraintsToSatisfy) > 0:
+        #         #self.printGrid()
+        #         if not self.insertRandomWord():
+        #             self.reset(self.size, self.lexiconFile, self.originalGene)
+        #     gridScore = self.scoreGrid()
+        #     totalScore += gridScore
+        #     #self.printGrid()
+        #     #print "Score of grid: ", gridScore
+        #     if gridScore > bestScore:
+        #         bestScore = gridScore
+        #         bestGrid = copy.deepcopy(self.grid)
+        #         bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+        #         bestGridContribution = copy.deepcopy(self.gridContribution)
+        #         bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+        #         bestWords = copy.deepcopy(self.words)
+        #     self.reset(self.size, self.lexiconFile, self.originalGene)
+        # self.grid = bestGrid
+        # self.gridLetterCounter = bestGridLetterCounter
+        # self.gridContribution = bestGridContribution
+        # self.wordsInCrossword = bestWordsInCrossword
+        # self.words = bestWords
+        # self.printGrid()
+        # stop = timeit.default_timer()
+        # pprint.pprint(self.wordsInCrossword)
+        # #pprint.pprint(self.gridContribution)
+        # #pprint.pprint(self.gridLetterCounter)
+        # print "BEST SCORE :", bestScore        
+        # #print "Total time:", stop - start
+        # return totalScore
+        return 15
 
     def scoreGrid(self):
         score = 0
@@ -285,6 +290,7 @@ for i in range(nGenerations):
         geneB = geneA
     else:
         geneA = geneB
+    gridA.printGrid()
     print "Best gene in generation", i, "is", geneA, "with score", scoreA if scoreA > scoreB else scoreB
 
 print "Final gene after", i, "generations is", geneA

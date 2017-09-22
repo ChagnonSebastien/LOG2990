@@ -1,0 +1,9 @@
+<h2>Track List</h2>
+<ul class="tracks">
+    <li *ngFor="let track of tracks" [class.selected]="track === selectedTrack" (click)="onSelect(track)">
+        <span class="badge">{{track.trackId}}</span> {{track.name}}
+    </li>
+</ul>
+<div *ngIf="selectedTrack">
+    <!--<app-track-info [track]="selectedTrack"></app-track-info>-->
+</div>

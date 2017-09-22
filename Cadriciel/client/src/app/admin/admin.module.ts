@@ -1,11 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
-/* Home module */
+/* Admin module */
 import { AdminComponent } from './admin.component';
+import { TracksComponent } from './tracks/tracks.component';
+import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
+import { TrackInfoComponent } from './tracks/track-info.component';
+import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
+import { TrackService } from './tracks/track.service';
 
 /* Feature modules */
 
@@ -16,16 +22,24 @@ import { AdminRoutingModule } from './admin-routing.module';
     imports: [
         CommonModule,
         FormsModule,
-        AdminRoutingModule
+        AdminRoutingModule,
+        HttpModule
     ],
     declarations: [
         AdminComponent,
+        TracksComponent,
+        DrawTrackComponent,
+        TrackInfoComponent
     ],
     exports: [
         AdminComponent,
+        TracksComponent,
+        TrackInfoComponent,
     ],
     providers: [
-        AuthenticationService
+        AuthenticationService,
+        DrawTrackService,
+        TrackService
     ]
 })
 export class AdminModule { }

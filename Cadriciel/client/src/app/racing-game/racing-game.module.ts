@@ -10,7 +10,6 @@ import { TracksComponent } from './tracks/tracks.component';
 // Unused
 import { InGameComponent } from './in-game/in-game.component';
 import { TrackEditorComponent } from './track-editor/track-editor.component';
-import { AdministrationComponent } from './administration/administration.component';
 import { TrackAdminComponent } from './track-admin/track-admin.component';
 import { TrackInfoComponent } from './track-info/track-info.component';
 
@@ -26,7 +25,6 @@ import { TrackInfoComponent } from './track-info/track-info.component';
         TracksComponent,
         InGameComponent,
         TrackEditorComponent,
-        AdministrationComponent,
         TrackAdminComponent,
         TrackInfoComponent,
     ],

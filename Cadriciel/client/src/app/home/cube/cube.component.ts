@@ -13,7 +13,7 @@ export class CubeComponent implements AfterViewInit {
     constructor(private renderService: RenderService) {
     }
 
-    private get container(): HTMLDivElement {
+    private get container(): HTMLElement {
         return this.containerRef.nativeElement;
     }
 

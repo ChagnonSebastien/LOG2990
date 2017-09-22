@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 
 @Component({
-    selector: 'admin-component',
+    selector: 'app-admin-component',
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.css']
 })
@@ -20,14 +20,14 @@ export class AdminComponent implements OnInit {
 
     public async login(passwordInput: string): Promise<boolean> {
         await this.authenticationService.authenticate(passwordInput).then(res => {
-            this.passwordCorrect = (res == 'authenticated');
+            this.passwordCorrect = (res === 'authenticated');
         });
         return await this.passwordCorrect;
     }
 
     public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
         await this.authenticationService.changePassword(oldPassword, newPassword).then(res => {
-            this.passwordChanged = (res == 'success');
+            this.passwordChanged = (res === 'success');
         });
         return await this.passwordChanged;
     }

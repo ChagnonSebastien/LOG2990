@@ -22,7 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
     declarations: [
-        AppComponent,
+        AppComponent
     ],
     imports: [
         BrowserModule,
@@ -34,7 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
         AdminModule
     ],
     providers: [
-        { provide: APP_BASE_HREF, useValue: '/' },
+        { provide: APP_BASE_HREF, useValue: '/' }
     ],
     bootstrap: [AppComponent]
 })
