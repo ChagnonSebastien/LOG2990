@@ -27,13 +27,13 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.onResize();
     }
 
-    public addPoint(event: MouseEvent): void {
-        this.trackService.addPoint();
+    public addIntersection(event: MouseEvent): void {
+        this.trackService.addIntersection();
         this.saveEnabled = this.trackService.isFinished();
     }
 
-    public removePoint(event: MouseEvent): void {
-        this.trackService.removePoint();
+    public removeIntersection(event: MouseEvent): void {
+        this.trackService.removeIntersection();
         this.saveEnabled = false;
     }
 

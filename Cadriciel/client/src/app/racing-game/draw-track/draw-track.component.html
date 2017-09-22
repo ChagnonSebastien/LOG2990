@@ -51,8 +51,8 @@
     class="draw_window"
     oncontextmenu="return false;"
     #container
-    (click)="addPoint($event)"
     (mousemove)="updateMousePosition($event)"
-    (auxclick)="removePoint($event)">
+    (click)="addIntersection($event)"
+    (auxclick)="removeIntersection($event)">
   </div>
 </div>

@@ -18,7 +18,7 @@ export class DrawTrackService {
 
     public loopClosed = false;
 
-    public points: THREE.Mesh[] = [];
+    public intersections: THREE.Mesh[] = [];
 
     private segments: THREE.Mesh[] = [];
 
@@ -70,28 +70,41 @@ export class DrawTrackService {
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
-
         this.pointMouseHoversOn = this.getPointUnderMouse();
-        this.componentPositionUpdate();
+        this.updateComponentsView();
     }
 
-    private componentPositionUpdate() {
+    private updateComponentsView() {
+        this.updateComponentsPositions();
+        this.updateComponentsLook();
+    }
+
+    private updateComponentsPositions() {
         if (this.loopClosed) {
             return;
         }
 
-        if (this.points.length > 0) {
+        if (this.intersections.length > 0) {
             if (this.pointMouseHoversOn === 0) {
-                this.mousePosition = this.points[0].position.clone();
-                this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF });
-            } else {
-                this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
+                this.mousePosition = this.intersections[0].position.clone();
             }
 
              this.updateLastSegmentPosition();
         }
 
         this.updateActivePointPosition();
+    }
+
+    private updateComponentsLook() {
+        if (this.loopClosed || this.intersections.length === 0) {
+            return;
+        }
+
+        if (this.pointMouseHoversOn === 0) {
+            this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF });
+        } else {
+            this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
+        }
     }
 
     private getRelativeMousePosition(clientX: number, clientY: number) {
@@ -104,11 +117,16 @@ export class DrawTrackService {
     private getPointUnderMouse(): number {
         const service = this;
         let index = -1;
-        this.points.forEach(function(point, i, array) {
-            if (service.distance(service.mousePosition, point.position) < 20) {
-                index = i;
-            }
-        });
+        try {
+            this.intersections.forEach(function(point, i, array) {
+                if (service.getXYDistance(service.mousePosition, point.position) < 25) {
+                    index = i;
+                    throw new Error('To exit the forEach loop');
+                }
+            });
+        } catch (e) {
+            // Does nothing
+        }
         return index;
     }
 
@@ -117,7 +135,7 @@ export class DrawTrackService {
     }
 
     private checkIfMouseIsOnFirstPoint(): boolean {
-        return this.distance(this.mousePosition, this.points[0].position) < 20;
+        return this.getXYDistance(this.mousePosition, this.intersections[0].position) < 20;
     }
 
     private updateLastSegmentPosition() {
@@ -125,29 +143,33 @@ export class DrawTrackService {
             return;
         }
 
-        const fromPoint = this.points[this.points.length - 1].position;
-        this.segments[this.segments.length - 1].geometry = new THREE.PlaneGeometry(this.distance(fromPoint, this.mousePosition), 20);
-        this.segments[this.segments.length - 1].geometry.rotateZ(
-            Math.atan((this.mousePosition.y - fromPoint.y) / (this.mousePosition.x - fromPoint.x)));
-        this.segments[this.segments.length - 1].position.x = ((this.mousePosition.x - fromPoint.x) / 2) + fromPoint.x;
-        this.segments[this.segments.length - 1].position.y = ((this.mousePosition.y - fromPoint.y) / 2) + fromPoint.y;
+        this.updateSegmentPosition(
+            this.segments[this.segments.length - 1],
+            this.intersections[this.intersections.length - 1].position,
+            this.mousePosition
+        );
+        this.segments[this.segments.length - 1].position.z = -4;
     }
 
-    public distance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
+    private updateSegmentPosition(segment: THREE.Mesh, fromPosition: THREE.Vector3, toPosition: THREE.Vector3) {
+        segment.geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);
+        segment.geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
+        segment.position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
+        segment.position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
+    }
+
+    public getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
-    public addPoint() {
+    public addIntersection() {
         if (this.pointMouseHoversOn === -1 && !this.loopClosed) {
-            const geometry = new THREE.CircleGeometry(10, 32);
-            const material = new THREE.MeshBasicMaterial({color: 0xFF0000});
-            const circle = new THREE.Mesh(geometry, material);
-            circle.position.set(this.mousePosition.x, this.mousePosition.y, 0);
-            this.scene.add(circle);
+            const intersection = this.newIntersection(this.mousePosition.x, this.mousePosition.y);
+            this.scene.add(intersection);
+            this.intersections.push(intersection);
 
-            this.points.push(circle);
             this.segments.push(this.newSegment());
-            if (this.points.length === 1) {
+            if (this.intersections.length === 1) {
               this.addHighlight();
               this.segments[0].material = new THREE.MeshBasicMaterial({color: 0xFF7700});
             }
@@ -173,22 +195,30 @@ export class DrawTrackService {
         return segment;
     }
 
-    public removePoint() {
-        if (this.points.length === 0) {
+    private newIntersection(positionX: number, positionY: number): THREE.Mesh {
+        const geometry = new THREE.CircleGeometry(10, 32);
+        const material = new THREE.MeshBasicMaterial({color: 0xFF0000});
+        const intersection = new THREE.Mesh(geometry, material);
+        intersection.position.set(positionX, positionY, 0);
+        return intersection;
+    }
+
+    public removeIntersection() {
+        if (this.intersections.length === 0) {
             return;
         }
 
-        this.scene.remove(this.points.pop());
-        if (this.points.length === 0) {
-            this.removeHighlight();
+        this.scene.remove(this.intersections.pop());
+        if (this.intersections.length === 0) {
+            this.removeFirstIntersectionHighlight();
         }
 
         this.scene.remove(this.segments.pop());
         this.loopClosed = false;
-        this.componentPositionUpdate();
+        this.updateComponentsView();
     }
 
-    private removeHighlight() {
+    private removeFirstIntersectionHighlight() {
         this.scene.remove(this.firstPointHighlight);
     }
 
