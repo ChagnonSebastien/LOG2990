@@ -25,7 +25,7 @@ export class Grid {
 
 
 
-    constructor(size: number, lexiconFilePath: string, genes: Array<Gene>) {
+    constructor(size: number, lexiconFilePath:string, genes: Array<Gene>) {
         this.lexiconReader = new LexiconReader();
         this.gridLetterCounter = [];
         this.gridContribution = [];
@@ -41,11 +41,11 @@ export class Grid {
         this.size = size;
         this.lexiconFile = lexiconFilePath;
         this.getLexicon(lexiconFilePath);
-        for (let i = 0; i < this.size; i++) {
-            this.grid[i] = [];
-            this.gridLetterCounter[i] = [];
-            this.gridContribution[i] = [];
-            for (let j = 0; j < this.size; j++) {
+        for(let i = 0; i < this.size; i++) {
+                this.grid[i] = [];
+                this.gridLetterCounter[i] = [];
+                this.gridContribution[i] = [];
+            for(let j = 0; j < this.size; j++) {
                 this.grid[i][j] = ' ';
                 this.gridLetterCounter[i][j] = 0;
                 this.gridContribution[i][j] = [];
@@ -55,9 +55,9 @@ export class Grid {
         this.wordsInCrossword = [];
 
 
-        for (let i = 0; i < this.size * 2; i++) {
-            if (i < this.size) {
-                let singleGene: Gene = { index: i % this.size, horizontal: true };
+        for(let i = 0; i <  this.size * 2; i++){
+            if(i < this.size){
+                let singleGene: Gene = {index: i % this.size, horizontal: true};
                 this.genes.push(singleGene);
             }
         }
@@ -65,60 +65,60 @@ export class Grid {
         this.originalGene = this.genes;
     }
 
-    /* constraintsGene = [(i % defaultGridSize, True if i < defaultGridSize else False) for i in range(defaultGridSize * 2)]
+        /* constraintsGene = [(i % defaultGridSize, True if i < defaultGridSize else False) for i in range(defaultGridSize * 2)]
 for i in range(defaultGridSize * 2):
-if i < defaultGridSize:
-    constraintsGene.append(i % defaultGridSize, True)
-else:
-    constraintsGene.append(i % defaultGridSize, False) */
+    if i < defaultGridSize:
+        constraintsGene.append(i % defaultGridSize, True)
+    else:
+        constraintsGene.append(i % defaultGridSize, False) */
 
-    public getLexicon(lexiconFilePath: string) {
-        this.lexicon = this.lexiconReader.readWords(lexiconFilePath);
-    }
-
-    public initializeLexiconByLength() {
-        this.lexiconByLength = new Map<number, Array<string>>();
-
-        for (let i = 3; i <= 10; i++) {
-            this.lexiconByLength[i] = [];
-            this.lexiconByLength[i] = this.lexiconReader.readWordsOfLength(this.lexicon, i);
+        public getLexicon(lexiconFilePath:string){
+            this.lexicon = this.lexiconReader.readWords(lexiconFilePath);
         }
-    }
 
-    public getSizeOfLexicon(): number {
-        return this.lexicon.length;
-    }
+        public initializeLexiconByLength() {
+            this.lexiconByLength = new Map<number,Array<string>>();
 
-    public printLexiconInConsole() {
-        console.log(this.lexicon);
-    }
-
-    public getWordsWith(pattern: string): string[] {
-        return this.lexiconReader.getWordsMatchingPattern(this.lexicon, pattern);
-    }
-
-    public getBestWordForLine(pattern: string): string {
-        let wordsWithPattern: string[] = [];
-
-        for (let i = 0; i < this.lexicon.length; i++) {
-            if (this.lexicon[i].includes(pattern)) {
-                wordsWithPattern.push(this.lexicon[i]);
+            for(let i = 3; i <= 10; i++) {
+                this.lexiconByLength[i] = [];
+                this.lexiconByLength[i] = this.lexiconReader.readWordsOfLength(this.lexicon, i);
             }
         }
 
-        if (wordsWithPattern.length > 0) {
-            let randomIndex = Math.floor(Math.random() * (wordsWithPattern.length - 1));
-            return wordsWithPattern[randomIndex];
+        public getSizeOfLexicon(): number {
+            return this.lexicon.length;
         }
-        return '';
-    }
+
+        public printLexiconInConsole(){
+            console.log(this.lexicon);
+        }
+
+        public getWordsWith(pattern:string): string[]{
+            return this.lexiconReader.getWordsMatchingPattern(this.lexicon, pattern);
+        }
+
+        public getBestWordForLine(pattern:string): string {
+            let wordsWithPattern: string[] = [];
+
+            for(let i = 0; i <  this.lexicon.length; i++){
+                if(this.lexicon[i].includes(pattern)){
+                    wordsWithPattern.push(this.lexicon[i]);
+                }
+            }
+
+            if(wordsWithPattern.length > 0){
+                let randomIndex = Math.floor(Math.random() * (wordsWithPattern.length - 1));
+                return wordsWithPattern[randomIndex];
+            }
+            return '';
+        }
 
     public getRandomWord(): string {
         return this.lexicon[Math.floor((Math.random() * this.lexicon.length) - 1)];
     }
-
-    public insertLetter(letter: string, i: number, j: number): boolean {
-        if (this.gridLetterCounter[i][j] > 0 && this.grid[i][j] !== letter) {
+    
+    public insertLetter(letter:string, i:number, j:number): boolean{
+        if(this.gridLetterCounter[i][j] > 0 && this.grid[i][j] !== letter){
             return false;
         }
         this.grid[i][j] = letter;
@@ -126,28 +126,28 @@ else:
         return true;
     }
 
-    public deleteLetter(letter: string, i: number, j: number): boolean {
-        if (this.grid[i][j] != letter) {
+    public deleteLetter(letter:string, i: number, j:number):boolean{
+        if(this.grid[i][j] != letter){
             return false;
         }
-        if (this.gridLetterCounter[i][j] > 1) {
+        if(this.gridLetterCounter[i][j] > 1){
             this.gridLetterCounter[i][j]--;
         }
         else {
             this.gridLetterCounter[i][j] = 0;
-            this.grid[i][j] = ' '
+            this.grid[i][j]= ' '
         }
 
         return true;
     }
 
-    public insertWord(word: string, i: number, j: number, horizontal: boolean): boolean {
-
-        if (this.words.has(word)) {
+    public insertWord(word:string, i:number, j:number, horizontal:boolean): boolean{
+        
+        if(this.words.has(word)){
             return false;
         }
 
-        if ((horizontal && this.size < (j + word.length)) || (!horizontal && this.size < (i + word.length))) {
+        if((horizontal && this.size < (j + word.length)) || (!horizontal && this.size < (i + word.length))) {
             return false;
         }
 
@@ -156,13 +156,13 @@ else:
         let originalI = i;
         let originalJ = j;
 
-        for (let letter of word) {
-            if (!this.insertLetter(letter, i, j)) {
+        for(let letter of word){
+            if(!this.insertLetter(letter, i, j)){
                 this.grid = tempGrid;
                 this.gridLetterCounter = tempCounter;
                 return false;
             }
-            if (horizontal) {
+            if(horizontal) {
                 j++;
             }
             else {
@@ -170,17 +170,17 @@ else:
             }
         }
         this.words.add(word);
-        this.wordsInCrossword.push({ word: word, i: originalI, j: originalJ, horizontal: horizontal });
+        this.wordsInCrossword.push({word: word, i: originalI, j: originalJ, horizontal: horizontal});
         return true;
 
     }
 
-    public deleteWord(word: string, i: number, j: number, horizontal: boolean): boolean {
-        if (!this.words.has(word)) {
+    public deleteWord(word:string, i:number, j:number, horizontal:boolean): boolean {
+        if(!this.words.has(word)){
             return false;
         }
 
-        if ((horizontal && this.size < (j + word.length)) || (!horizontal && this.size < (i + word.length))) {
+        if((horizontal && this.size < (j + word.length)) || (!horizontal && this.size < (i + word.length))) {
             return false;
         }
 
@@ -189,15 +189,15 @@ else:
         let originalI = i;
         let originalJ = j;
 
-        let contribution: wordInCrossword = { word: word, i: i, j: j, horizontal: horizontal };
+        let contribution: wordInCrossword = {word: word, i: i, j: j, horizontal: horizontal};
 
-        for (let letter of word) {
-            if (!this.deleteLetter(letter, i, j)) {
+        for(let letter of word){
+            if(!this.deleteLetter(letter, i, j)){
                 this.grid = tempGrid;
                 this.gridLetterCounter = tempCounter;
                 return false;
             }
-            if (horizontal) {
+            if(horizontal){
                 j++;
             }
             else {
@@ -205,23 +205,23 @@ else:
             }
         }
         this.words.delete(word);
-        let wordIndex: number;
-        let wordToDelete: wordInCrossword = { word: word, i: i, j: j, horizontal: horizontal };
-        for (let i = 0; i < this.wordsInCrossword.length; i++) {
-            if (this.wordsInCrossword[i][word] === wordToDelete[word]) {
+        let wordIndex:number;
+        let wordToDelete: wordInCrossword = {word: word, i: i, j: j, horizontal: horizontal};
+        for(let i = 0; i < this.wordsInCrossword.length; i++){
+            if(this.wordsInCrossword[i][word] === wordToDelete[word]) {
                 wordIndex = i;
             }
-
+        
         }
 
-        delete (this.wordsInCrossword[wordIndex]);
+        delete(this.wordsInCrossword[wordIndex]);
         return true;
     }
 
-    public shuffle(array: Array<any>): Array<any> {
+    public shuffle(array: Array<any>): Array<any>{
         let i = 0, j = 0, temp = null;
 
-        for (let i = array.length - 1; i > 0; i--) {
+        for(let i = array.length - 1; i > 0; i--){
             j = Math.floor(Math.random() * (i + 1));
             temp = array[i];
             array[i] = array[j];
@@ -234,51 +234,51 @@ else:
     public insertRandomWord(): boolean {
         let where: Gene;
         let pattern: string = '';
-        if (this.contraintsToSatisfy.length > 0) {
+        if(this.contraintsToSatisfy.length > 0){
             this.contraintsToSatisfy.reverse();
             where = this.contraintsToSatisfy.pop();
             this.contraintsToSatisfy.reverse();
         }
 
-        if (where[1] === true) {
+        if(where[1] === true){
             pattern = JSON.stringify(this.grid[where[0]]);
         }
 
         else {
-            for (let i = 0; i < this.size; i++) {
+            for(let i = 0; i < this.size; i ++){
                 pattern.concat(this.grid[i][where[0]]);
             }
         }
         let wordToInsert = this.getBestWordForLine(pattern);
-        if (wordToInsert.length === 0) {
+        if(wordToInsert.length === 0){
             return false;
         }
-
+        
         let randomIndexes: number[] = [];
-        for (let i = 0; i < (this.size - wordToInsert.length); i++) {
+        for(let i = 0; i < (this.size - wordToInsert.length); i++){
             randomIndexes[i] = i;
         }
 
         let bestIndex = 0;
         let bestScore = 0;
 
-        if (pattern === '          ') {
+        if(pattern === '          '){
             randomIndexes = this.shuffle(randomIndexes);
         }
 
-        for (let index of randomIndexes) {
+        for(let index of randomIndexes){
             let indexScore = 0;
-            for (let j = 0; j < wordToInsert.length; j++) {
-                if (wordToInsert[j] == pattern[index + j]) {
+            for(let j = 0; j < wordToInsert.length; j++){
+                if(wordToInsert[j] == pattern[index + j]){
                     indexScore++;
                 }
             }
-            if (indexScore >= bestScore) {
+            if(indexScore >= bestScore){
                 bestIndex = index;
                 bestScore = indexScore;
             }
         }
-        if (where.horizontal === true) {
+        if(where.horizontal === true){
             this.insertWord(wordToInsert, where.index, bestIndex, true);
         }
         else {
@@ -297,49 +297,49 @@ else:
         let bestWordsInCrossword = this.wordsInCrossword;
         let bestWords = this.words;
 
-        while (this.contraintsToSatisfy.length > 0) {
-            if (!this.insertRandomWord()) {
-                this.reset(this.size, this.lexiconFile, this.originalGene);
+        while(this.contraintsToSatisfy.length > 0){
+                if(!this.insertRandomWord()){
+                    this.reset(this.size, this.lexiconFile, this.originalGene);
+                }
             }
-        }
     }
 
-    /* def generate(self):
-            start = timeit.default_timer()
-            bestScore = 0
-            totalScore = 0
-            bestGrid = copy.deepcopy(self.grid)
-            bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
-            bestGridContribution = copy.deepcopy(self.gridContribution)
-            bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
-            bestWords = copy.deepcopy(self.words)
-            for i in range(3):
-                while len(self.constraintsToSatisfy) > 0:
-                    if not self.insertRandomWord():
-                        self.reset(self.size, self.lexiconFile, self.originalGene)
-                gridScore = self.scoreGrid()
-                totalScore += gridScore
-                #self.printGrid()
-                #print "Score of grid: ", gridScore
-                if gridScore > bestScore:
-                    bestScore = gridScore
-                    bestGrid = copy.deepcopy(self.grid)
-                    bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
-                    bestGridContribution = copy.deepcopy(self.gridContribution)
-                    bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
-                    bestWords = copy.deepcopy(self.words)
-                self.reset(self.size, self.lexiconFile, self.originalGene)
-            self.grid = bestGrid
-            self.gridLetterCounter = bestGridLetterCounter
-            self.gridContribution = bestGridContribution
-            self.wordsInCrossword = bestWordsInCrossword
-            self.words = bestWords
-            self.printGrid()
-            stop = timeit.default_timer()
-            pprint.pprint(self.wordsInCrossword)
-            #pprint.pprint(self.gridContribution)
-            #pprint.pprint(self.gridLetterCounter)
-            print "BEST SCORE :", bestScore        
-            #print "Total time:", stop - start
-            return totalScore */
+/* def generate(self):
+        start = timeit.default_timer()
+        bestScore = 0
+        totalScore = 0
+        bestGrid = copy.deepcopy(self.grid)
+        bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+        bestGridContribution = copy.deepcopy(self.gridContribution)
+        bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+        bestWords = copy.deepcopy(self.words)
+        for i in range(3):
+            while len(self.constraintsToSatisfy) > 0:
+                if not self.insertRandomWord():
+                    self.reset(self.size, self.lexiconFile, self.originalGene)
+            gridScore = self.scoreGrid()
+            totalScore += gridScore
+            #self.printGrid()
+            #print "Score of grid: ", gridScore
+            if gridScore > bestScore:
+                bestScore = gridScore
+                bestGrid = copy.deepcopy(self.grid)
+                bestGridLetterCounter = copy.deepcopy(self.gridLetterCounter)
+                bestGridContribution = copy.deepcopy(self.gridContribution)
+                bestWordsInCrossword = copy.deepcopy(self.wordsInCrossword)
+                bestWords = copy.deepcopy(self.words)
+            self.reset(self.size, self.lexiconFile, self.originalGene)
+        self.grid = bestGrid
+        self.gridLetterCounter = bestGridLetterCounter
+        self.gridContribution = bestGridContribution
+        self.wordsInCrossword = bestWordsInCrossword
+        self.words = bestWords
+        self.printGrid()
+        stop = timeit.default_timer()
+        pprint.pprint(self.wordsInCrossword)
+        #pprint.pprint(self.gridContribution)
+        #pprint.pprint(self.gridLetterCounter)
+        print "BEST SCORE :", bestScore        
+        #print "Total time:", stop - start
+        return totalScore */
 }
