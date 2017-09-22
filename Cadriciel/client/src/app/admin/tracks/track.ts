@@ -1,6 +1,6 @@
 export class Track {
 
-    public id: number;
+    public trackId: number;
     public name: string;
     public description = '';
     public type: string;
@@ -10,7 +10,7 @@ export class Track {
     public boosters: { distance: number, offset: number } [] = [];
 
     constructor(id: number, name: string, description: string, type: string) {
-        this.id = id;
+        this.trackId = id;
         this.name = name;
         this.description = description;
         this.type = type;

@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { AppModule } from '../../app.module';
+
 import { TracksComponent } from './tracks.component';
 
 describe('TracksComponent', () => {
@@ -8,7 +10,9 @@ describe('TracksComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ TracksComponent ]
+            imports: [
+                AppModule
+            ]
         })
             .compileComponents();
     }));
