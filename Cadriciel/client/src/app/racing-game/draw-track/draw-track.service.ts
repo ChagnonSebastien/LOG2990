@@ -148,6 +148,7 @@ export class DrawTrackService {
             this.intersections[this.intersections.length - 1].position,
             this.mousePosition
         );
+
         this.segments[this.segments.length - 1].position.z = -4;
     }
 
@@ -220,6 +221,14 @@ export class DrawTrackService {
 
     private removeFirstIntersectionHighlight() {
         this.scene.remove(this.firstPointHighlight);
+    }
+
+    public startDrag() {
+        console.log('drag start');
+    }
+
+    public endDrag() {
+        console.log('drag stop');
     }
 
     public isFinished() {

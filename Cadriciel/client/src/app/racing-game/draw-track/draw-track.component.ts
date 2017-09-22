@@ -27,6 +27,10 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.onResize();
     }
 
+    public updateMousePosition(event: MouseEvent): void {
+        this.trackService.updateMousePosition(event.clientX, event.clientY);
+    }
+
     public addIntersection(event: MouseEvent): void {
         this.trackService.addIntersection();
         this.saveEnabled = this.trackService.isFinished();
@@ -37,8 +41,12 @@ export class DrawTrackComponent implements AfterViewInit {
         this.saveEnabled = false;
     }
 
-    public updateMousePosition(event: MouseEvent): void {
-        this.trackService.updateMousePosition(event.clientX, event.clientY);
+    public startDrag(event: MouseEvent): void {
+        this.trackService.startDrag();
+    }
+
+    public endDrag(event: MouseEvent): void {
+        this.trackService.endDrag();
     }
 
     public ngAfterViewInit() {
