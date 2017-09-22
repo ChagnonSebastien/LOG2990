@@ -203,25 +203,6 @@ export class DrawTrackService {
         return this.loopClosed;
     }
 
-    public switchAmount(item: String) {
-        this.potholes.push(this.newRandomLocation());
-        console.log(this.potholes[this.potholes.length - 1])
-    }
-
-    private newRandomLocation(): {distance: number, offset: number} {
-        return {distance: Math.random() * this.getTrackLenght(), offset: Math.random() * (Math.random() < 0.5 ? -1 : 1)};
-    }
-
-    private getTrackLenght(): number {
-        let distance = 0;
-        let service = this;
-        this.points.forEach(function(currentValue, index, array) {
-            distance += service.distance(currentValue.position, (index === 0) ? array[array.length - 1].position : array[index - 1].position);
-        });
-        console.log(distance);
-        return distance;
-    }
-
     public onResize() {
         this.camera.left = this.container.clientWidth / -2;
         this.camera.right = this.container.clientWidth / 2;
