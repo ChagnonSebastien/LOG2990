@@ -52,12 +52,12 @@ export class LexiconReader {
     }
 
     public async getUncommonWords(lexicon: string[]): Promise<string[]> {
-        let commonwords:string[] = [];
+        let commonwords: string[] = [];
 
-        for(let i = 0; i < 40; i++) {
+        for (let i = 0; i < 40; i++) {
             let randomIndex = Math.floor(Math.random() * lexicon.length);
-            let frequency:number = await this.getWordFrequency(lexicon[randomIndex]);
-            if(frequency < 2){
+            let frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
+            if (frequency < 2) {
                 commonwords.push(lexicon[randomIndex]);
             }
         }
@@ -66,12 +66,12 @@ export class LexiconReader {
     }
 
     public async getCommonWords(lexicon: string[]): Promise<string[]> {
-        let commonwords:string[] = [];
+        let commonwords: string[] = [];
 
-        for(let i = 0; i < 40; i++) {
+        for (let i = 0; i < 40; i++) {
             let randomIndex = Math.floor(Math.random() * lexicon.length);
-            let frequency:number = await this.getWordFrequency(lexicon[randomIndex]);
-            if(frequency >= 2){
+            let frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
+            if (frequency >= 2) {
                 commonwords.push(lexicon[randomIndex]);
             }
         }
@@ -94,7 +94,7 @@ export class LexiconReader {
     public getWordDefinitions(word: string): Promise<string[]> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-        let definitions:string[] = [];
+        let definitions: string[] = [];
 
         return new Promise<string[]>(resolve => {
             request(`${uri}/${word}/${options}`, (error, response, body) => {
@@ -102,7 +102,7 @@ export class LexiconReader {
                     definitions = [];
                 } else {
                     body = JSON.parse(body);
-                    for(let i = 0; i < body.length; i++){
+                    for (let i = 0; i < body.length; i++) {
                         definitions.push(body[i].text);
                     }
                 }
