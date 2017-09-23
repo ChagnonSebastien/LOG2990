@@ -11,8 +11,8 @@ describe('Lexicon', () => {
             .get('/api/definition/cat')
             .end((err: any, res: any) => {
                 assert(res.text === '"A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties."');
-                done();
             });
+        done();
     });
 
     // getWordFrequency
@@ -23,8 +23,8 @@ describe('Lexicon', () => {
             .end((err: any, res: any) => {
                 const content: string = res.text;
                 assert(content === '8');
-                done();
             });
+        done();
     });
 
     it('Should return Invalid word if the input is not a word', (done) => {
@@ -98,5 +98,29 @@ describe('Lexicon', () => {
                 assert(content[0].length === 3 && content[content.length - 1].length === 3);
                 done();
             });
+    });
+
+    // get some commonwords
+
+    it('Should return some commonWords', (done) => {
+        chai.request('http://localhost:3000')
+            .get('/api/commonWords')
+            .end((err: any, res: any) => {
+                const content: string[] = res.body;
+                assert(content.length > 0);
+            });
+        done();
+    });
+
+    // get some uncommonwords 
+
+    it('Should return some uncommonWords', (done) => {
+        chai.request('http://localhost:3000')
+            .get('/api/uncommonWords')
+            .end((err: any, res: any) => {
+                const content: string[] = res.body;
+                assert(content.length > 0);
+            });
+        done();
     });
 });

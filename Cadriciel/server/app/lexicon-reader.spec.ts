@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { assert, expect } from 'chai';
 import { LexiconReader } from './lexicon-reader';
 
 describe('LexiconReader', () => {
@@ -59,13 +59,15 @@ describe('LexiconReader', () => {
     // getWordsWithChar
 
     it('Should return empty array when searching for words with a at position 100', () => {
-        const wordsWithChar: string[] = lexiconReader.getWordsWithChar(lexiconFilePath, 'a', 100);
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsWithChar: string[] = lexiconReader.getWordsWithChar(words, 'a', 100);
 
         assert(wordsWithChar.length === 0);
     });
 
     it('Should return an array of words with a at position 0', () => {
-        const wordsWithChar: string[] = lexiconReader.getWordsWithChar(lexiconFilePath, 'a', 0);
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        const wordsWithChar: string[] = lexiconReader.getWordsWithChar(words, 'a', 0);
 
         assert(wordsWithChar[0][0] === 'a');
     });
@@ -99,4 +101,30 @@ describe('LexiconReader', () => {
 
         assert(wordsMatchingPattern[0][2] === 'e' && wordsMatchingPattern[0][5] === 'e');
     });
+
+    it('Should return 8 as the frequency of the word cat.', () => {
+        const randomWord = 'cat';
+        return lexiconReader.getWordFrequency(randomWord).then(function(data) {
+            expect(data).to.equal(8);
+        });
+    });
+
+    it('Should return the list of some uncommonwords in the lexicon', (done) => {
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        lexiconReader.getUncommonWords(words).then(function(data) {
+            expect(data.length).to.be.greaterThan(0);
+            console.log(data);
+            done();
+        });
+    }).timeout(10000);
+
+    it('Should return the list of some commonwords in the lexicon', (done) => {
+        const words: string[] = lexiconReader.readWords(lexiconFilePath);
+        lexiconReader.getCommonWords(words).then(function(data) {
+            expect(data.length).to.be.greaterThan(0);
+            console.log(data);
+            done();
+        });
+    }).timeout(10000);
+
 });
