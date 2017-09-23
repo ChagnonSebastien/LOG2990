@@ -87,7 +87,7 @@ export class Application {
         router.get('/basic', index.index.bind(index.index));
 
         // lexicon service api path
-        router.get('/definition/:word', lexicon.wordDefinition.bind(lexicon.wordDefinition));
+        router.get('/definition/:word', lexicon.wordDefinitions.bind(lexicon.wordDefinitions));
         router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
         router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
         router.get('/lexicon/:char/:position', lexicon.getWordsWithCharAt.bind(lexicon.getWordsWithCharAt));

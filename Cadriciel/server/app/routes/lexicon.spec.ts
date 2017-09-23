@@ -6,11 +6,11 @@ describe('Lexicon', () => {
     chai.use(chaiHttp);
 
 
-    it('Should return the definition of cat', (done) => {
+    it('Should return the definitions of cat', (done) => {
         chai.request('http://localhost:3000')
             .get('/api/definition/cat')
             .end((err: any, res: any) => {
-                assert(res.text === '"A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties."');
+                assert(res.text[0] === '"A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties."');
             });
         done();
     });
@@ -25,15 +25,6 @@ describe('Lexicon', () => {
                 assert(content === '8');
             });
         done();
-    });
-
-    it('Should return Invalid word if the input is not a word', (done) => {
-        chai.request('http://localhost:3000')
-            .get('/api/definition/pziefrserawer')
-            .end((err: any, res: any) => {
-                assert(res.text === 'Invalid word');
-                done();
-            });
     });
 
     it('Should return all the words of the lexicon', (done) => {

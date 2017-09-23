@@ -79,7 +79,7 @@ export class LexiconReader {
         return commonwords;
     }
 
-    public getWordFrequency(word:string): Promise<number> {
+    public getWordFrequency(word: string): Promise<number> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
 
@@ -88,6 +88,26 @@ export class LexiconReader {
                 body = JSON.parse(body);
                 resolve(body.totalCount);
             })
+        });
+    }
+
+    public getWordDefinitions(word: string): Promise<string[]> {
+        const uri = 'http://api.wordnik.com:80/v4/word.json';
+        const options = 'definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+        let definitions:string[] = [];
+
+        return new Promise<string[]>(resolve => {
+            request(`${uri}/${word}/${options}`, (error, response, body) => {
+                if (body === '[]') {
+                    definitions = [];
+                } else {
+                    body = JSON.parse(body);
+                    for(let i = 0; i < body.length; i++){
+                        definitions.push(body[i].text);
+                    }
+                }
+                resolve(definitions);
+            });
         });
     }
 }

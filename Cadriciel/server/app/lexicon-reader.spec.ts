@@ -113,7 +113,6 @@ describe('LexiconReader', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
         lexiconReader.getUncommonWords(words).then(function(data) {
             expect(data.length).to.be.greaterThan(0);
-            console.log(data);
             done();
         });
     }).timeout(10000);
@@ -122,9 +121,15 @@ describe('LexiconReader', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
         lexiconReader.getCommonWords(words).then(function(data) {
             expect(data.length).to.be.greaterThan(0);
-            console.log(data);
             done();
         });
     }).timeout(10000);
+
+    it('Should return all the definitions of the word random', (done) => {
+        lexiconReader.getWordDefinitions('aalii').then(function(data) {
+            expect(data.length).to.be.greaterThan(0);
+            done();
+        });
+    });
 
 });

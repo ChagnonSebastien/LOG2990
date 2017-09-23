@@ -6,18 +6,11 @@ module Route {
 
     export class Lexicon {
 
-        public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const uri = 'http://api.wordnik.com:80/v4/word.json';
-            const options = 'definitions?limit=1&includeRelated=true&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+        public async wordDefinitions(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
-            request(`${uri}/${word}/${options}`, (error, response, body) => {
-                if (body === '[]') {
-                    res.send('Invalid word');
-                } else {
-                    body = JSON.parse(body);
-                    res.send(JSON.stringify(body[0].text));
-                }
-            });
+            const lexiconReader = new LexiconReader();
+            let definitions: string[] = await lexiconReader.getWordDefinitions(word);
+            res.send(definitions);
         }
 
         public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
