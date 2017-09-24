@@ -10,7 +10,7 @@ import { TrackService } from './track.service';
     providers: [TrackService]
 })
 export class TrackInfoComponent implements OnInit {
-    @Input() public  track: Track;
+    @Input()  track: Track;
 
     public changeDescriptionDB() {
         this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(
