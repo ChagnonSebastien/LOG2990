@@ -10,25 +10,21 @@ describe('Lexicon', () => {
         chai.request(apiUrl)
             .get('/definition/cat')
             .end((err: any, res: any) => {
-                let definitions = JSON.parse(res.text);
-                assert(definitions[0] == 'A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties.');
+                const definitions = JSON.parse(res.text);
+                assert(definitions[0] === 'A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties.');
                 done();
             });
     });
-
-    // TODO: Definition of cat should not be blablabla
 
     it('Should return multiple definitions of cat', (done) => {
         chai.request(apiUrl)
             .get('/definition/cat')
             .end((err: any, res: any) => {
-                let definitions = JSON.parse(res.text);
+                const definitions = JSON.parse(res.text);
                 assert(definitions.length > 1);
                 done();
             });
     });
-
-    // getWordFrequency
 
     it('Should return the frequency of the word cat', (done) => {
         chai.request(apiUrl)
@@ -70,8 +66,6 @@ describe('Lexicon', () => {
             });
     });
 
-    // getWordsWithCharAt
-
     it('Should return all the words with a b at index 2', (done) => {
         chai.request(apiUrl)
             .get('/lexicon/b/2')
@@ -81,8 +75,6 @@ describe('Lexicon', () => {
                 done();
             });
     });
-
-    // getWordsMatchingPattern
 
     it('Should return all words matching this pattern <a e >', (done) => {
         chai.request(apiUrl)
@@ -104,8 +96,6 @@ describe('Lexicon', () => {
             });
     });
 
-    // get some commonwords
-
     it('Should return some commonWords', (done) => {
         chai.request(apiUrl)
             .get('/commonWords')
@@ -115,8 +105,6 @@ describe('Lexicon', () => {
                 done();
             });
     }).timeout(15000);
-
-    // get some uncommonwords 
 
     it('Should return some uncommonWords', (done) => {
         chai.request(apiUrl)

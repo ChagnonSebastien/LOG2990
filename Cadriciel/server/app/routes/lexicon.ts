@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as request from 'request';
 import { LexiconReader } from '../lexicon-reader';
 
 module Route {
@@ -9,7 +8,7 @@ module Route {
         public async wordDefinitions(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
             const lexiconReader = new LexiconReader();
-            let definitions: string[] = await lexiconReader.getWordDefinitions(word);
+            const definitions: string[] = await lexiconReader.getWordDefinitions(word);
             res.send(definitions);
         }
 
@@ -54,7 +53,7 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            let uncommonwords:string[] = await lexiconReader.getUncommonWords(words);
+            const uncommonwords: string[] = await lexiconReader.getUncommonWords(words);
             res.send(uncommonwords);
         }
 
@@ -63,14 +62,14 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            let commonwords:string[] = await lexiconReader.getCommonWords(words);
+            const commonwords: string[] = await lexiconReader.getCommonWords(words);
             res.send(commonwords);
         }
 
         public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
             const lexiconReader = new LexiconReader();
-            let frequency = await lexiconReader.getWordFrequency(word);
+            const frequency = await lexiconReader.getWordFrequency(word);
             res.send(frequency.toString());
         }
     }

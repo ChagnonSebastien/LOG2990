@@ -5,8 +5,6 @@ describe('LexiconReader', () => {
     const lexiconFilePath = '../server/lexicon/englishWords.txt';
     const lexiconReader: LexiconReader = new LexiconReader();
 
-    // readWords method
-
     it('Should return the first word of the lexicon ', () => {
         const firstWord: string = lexiconReader.readWords(lexiconFilePath)[0];
 
@@ -33,8 +31,6 @@ describe('LexiconReader', () => {
         assert(words !== []);
     });
 
-    // readWordsOfLength method
-
     it('Should return no words for words of length of 0', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
         const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, 0);
@@ -56,8 +52,6 @@ describe('LexiconReader', () => {
         assert(wordsOfLength.length !== 0);
     });
 
-    // getWordsWithChar
-
     it('Should return empty array when searching for words with a at position 100', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
         const wordsWithChar: string[] = lexiconReader.getWordsWithChar(words, 'a', 100);
@@ -71,8 +65,6 @@ describe('LexiconReader', () => {
 
         assert(wordsWithChar[0][0] === 'a');
     });
-
-    // getWordsMatchingPattern
 
     it('Should not return words when searching this pattern: empty string', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
@@ -104,14 +96,14 @@ describe('LexiconReader', () => {
 
     it('Should return 8 as the frequency of the word cat.', () => {
         const randomWord = 'cat';
-        return lexiconReader.getWordFrequency(randomWord).then(function(data) {
+        return lexiconReader.getWordFrequency(randomWord).then(function (data) {
             expect(data).to.equal(8);
         });
     });
 
     it('Should return the list of some uncommonwords in the lexicon', (done) => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
-        lexiconReader.getUncommonWords(words).then(function(data) {
+        lexiconReader.getUncommonWords(words).then(function (data) {
             expect(data.length).to.be.greaterThan(0);
             done();
         });
@@ -119,14 +111,14 @@ describe('LexiconReader', () => {
 
     it('Should return the list of some commonwords in the lexicon', (done) => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
-        lexiconReader.getCommonWords(words).then(function(data) {
+        lexiconReader.getCommonWords(words).then(function (data) {
             expect(data.length).to.be.greaterThan(0);
             done();
         });
     }).timeout(15000);
 
     it('Should return all the definitions of the word aalii', (done) => {
-        lexiconReader.getWordDefinitions('aalii').then(function(data) {
+        lexiconReader.getWordDefinitions('aalii').then(function (data) {
             expect(data.length).to.be.greaterThan(0);
             done();
         });
