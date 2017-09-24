@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as request from 'request';
 
 export class LexiconReader {
 
@@ -19,8 +20,7 @@ export class LexiconReader {
         return wordsOfLength;
     }
 
-    public getWordsWithChar(file: string, character: string, position: number) {
-        const lexicon: string[] = this.readWords(file);
+    public getWordsWithChar(lexicon: string[], character: string, position: number) {
         const wordsWithChar: string[] = [];
 
         for (const word of lexicon) {
@@ -49,6 +49,68 @@ export class LexiconReader {
         }
 
         return wordsWithChar;
+    }
+
+    public async getUncommonWords(lexicon: string[]): Promise<string[]> {
+        const commonwords: string[] = [];
+
+        for (let i = 0; i < 40; i++) {
+            const randomIndex = Math.floor(Math.random() * lexicon.length);
+            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
+            if (frequency < 2) {
+                commonwords.push(lexicon[randomIndex]);
+            }
+        }
+
+        return commonwords;
+    }
+
+    public async getCommonWords(lexicon: string[]): Promise<string[]> {
+        const commonwords: string[] = [];
+
+        for (let i = 0; i < 40; i++) {
+            const randomIndex = Math.floor(Math.random() * lexicon.length);
+            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
+            if (frequency >= 2) {
+                commonwords.push(lexicon[randomIndex]);
+            }
+        }
+
+        return commonwords;
+    }
+
+    public getWordFrequency(word: string): Promise<number> {
+        const uri = 'http://api.wordnik.com:80/v4/word.json';
+        const options = 'frequency?useCanonical=false&startYear=2012&endYear=' +
+                        '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+
+        return new Promise<number>(resolve => {
+            request(`${uri}/${word}/${options}`, (error, response, body) => {
+                body = JSON.parse(body);
+                resolve(body.totalCount);
+            });
+        });
+    }
+
+    public getWordDefinitions(word: string): Promise<string[]> {
+        const uri = 'http://api.wordnik.com:80/v4/word.json';
+        const options = 'definitions?limit=200&includeRelated=true&useCanonical=false' +
+                        '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+        let definitions: string[] = [];
+
+        return new Promise<string[]>(resolve => {
+            request(`${uri}/${word}/${options}`, (error, response, body) => {
+                if (body === '[]') {
+                    definitions = [];
+                } else {
+                    body = JSON.parse(body);
+                    for (let i = 0; i < body.length; i++) {
+                        definitions.push(body[i].text);
+                    }
+                }
+                resolve(definitions);
+            });
+        });
     }
 }
 

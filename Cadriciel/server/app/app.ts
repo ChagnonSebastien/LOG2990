@@ -11,7 +11,7 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as CrossWordsRoute from './routes/crossWordRoute'
+import * as CrossWordsRoute from './routes/crossWordRoute';
 import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
@@ -87,7 +87,7 @@ export class Application {
         router.get('/basic', index.index.bind(index.index));
 
         // lexicon service api path
-        router.get('/definition/:word', lexicon.wordDefinition.bind(lexicon.wordDefinition));
+        router.get('/definition/:word', lexicon.wordDefinitions.bind(lexicon.wordDefinitions));
         router.get('/lexicon', lexicon.englishWordLexicon.bind(lexicon.englishWordLexicon));
         router.get('/lexicon/:wordLength', lexicon.getWordsOfLength.bind(lexicon.getWordsOfLength));
         router.get('/lexicon/:char/:position', lexicon.getWordsWithCharAt.bind(lexicon.getWordsWithCharAt));
@@ -112,9 +112,9 @@ export class Application {
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // crossword api path
-        router.post('/crosswords',crosswords.addCrossWord.bind(crosswords.addCrossWord));
-        router.delete('/crosswords:id',crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
-        router.get('/crosswords',crosswords.getCrossWords.bind(crosswords.getCrossWords));
+        router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
+        router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
+        router.get('/crosswords', crosswords.getCrossWords.bind(crosswords.getCrossWords));
 
         // use router middleware
         this.app.use('/api', router);

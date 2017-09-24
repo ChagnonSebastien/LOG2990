@@ -1,23 +1,15 @@
 import * as express from 'express';
-import * as request from 'request';
 import { LexiconReader } from '../lexicon-reader';
 
 module Route {
 
     export class Lexicon {
 
-        public wordDefinition(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const uri = 'http://api.wordnik.com:80/v4/word.json';
-            const options = 'definitions?limit=1&includeRelated=true&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+        public async wordDefinitions(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
-            request(`${uri}/${word}/${options}`, (error, response, body) => {
-                if (body === '[]') {
-                    res.send('Invalid word');
-                } else {
-                    body = JSON.parse(body);
-                    res.send(JSON.stringify(body[0].text));
-                }
-            });
+            const lexiconReader = new LexiconReader();
+            const definitions: string[] = await lexiconReader.getWordDefinitions(word);
+            res.send(definitions);
         }
 
         public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -42,7 +34,8 @@ module Route {
             const position = Number(req.params.position);
             const lexiconReader = new LexiconReader();
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
-            const wordsWithChar = lexiconReader.getWordsWithChar(lexiconFilePath, charWanted, position);
+            const words: string[] = lexiconReader.readWords(lexiconFilePath);
+            const wordsWithChar = lexiconReader.getWordsWithChar(words, charWanted, position);
             res.send(wordsWithChar);
         }
 
@@ -55,69 +48,29 @@ module Route {
             res.send(wordsWithChar);
         }
 
-
-        public getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const uri = 'http://api.wordnik.com:80/v4/word.json';
-            const options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
+        public async getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             const lexiconReader = new LexiconReader();
-            const lexicon: string[] = lexiconReader.readWords(lexiconFilePath);
-            const numberOfWords: number = lexicon.length;
-            const numberOfRequests = 20;
-            const uncommonWordsMaxFrequency = 2;
-            const uncommonWords: string[] = [];
+            const lexiconFilePath = '../server/lexicon/englishWords.txt';
+            const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-
-            for (let y = 0; y < numberOfRequests; y++) {
-                const i: number = Math.floor(Math.random() * numberOfWords);
-                request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
-                    body = JSON.parse(body);
-                    if (body.totalCount <= uncommonWordsMaxFrequency) {
-                        uncommonWords.push(lexicon[i]);
-                    }
-                    if (y === 1) {
-                        res.send(uncommonWords);
-                    }
-                });
-            }
+            const uncommonwords: string[] = await lexiconReader.getUncommonWords(words);
+            res.send(uncommonwords);
         }
 
-        public getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const uri = 'http://api.wordnik.com:80/v4/word.json';
-            const options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
+        public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             const lexiconReader = new LexiconReader();
-            const lexicon: string[] = lexiconReader.readWords(lexiconFilePath);
-            const numberOfWords: number = lexicon.length;
-            const numberOfRequests = 20;
-            const commonWordsMinFrequency = 1;
-            const commonWords: string[] = [];
+            const lexiconFilePath = '../server/lexicon/englishWords.txt';
+            const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-
-            for (let y = 0; y < numberOfRequests; y++) {
-                const i: number = Math.floor(Math.random() * numberOfWords);
-                request(`${uri}/${lexicon[i]}/${options}`, (error, response, body) => {
-                    body = JSON.parse(body);
-                    if (body.totalCount > commonWordsMinFrequency) {
-                        commonWords.push(lexicon[i]);
-                    }
-                    if (y === 1 || commonWords.length >= 2) {
-                        res.send(commonWords);
-                    }
-                });
-            }
+            const commonwords: string[] = await lexiconReader.getCommonWords(words);
+            res.send(commonwords);
         }
 
-        public getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const uri = 'http://api.wordnik.com:80/v4/word.json';
-            const options = 'frequency?useCanonical=false&startYear=2012&endYear=2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+        public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
-
-            request(`${uri}/${word}/${options}`, (error, response, body) => {
-                body = JSON.parse(body);
-                res.send(JSON.stringify(body.totalCount));
-            });
-
+            const lexiconReader = new LexiconReader();
+            const frequency = await lexiconReader.getWordFrequency(word);
+            res.send(frequency.toString());
         }
     }
 }
