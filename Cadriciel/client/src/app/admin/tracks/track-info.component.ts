@@ -10,20 +10,23 @@ import { TrackService } from './track.service';
     providers: [TrackService]
 })
 export class TrackInfoComponent implements OnInit {
-    @Input()  track: Track;
+    @Input() public track: Track;
 
     public changeDescriptionDB() {
         this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(
+            result => console.log(result)
         );
     }
 
     public changeTypeDB() {
         this.trackService.changeTrackType(this.track.trackId, this.track.type).subscribe(
+            result => console.log(result)
         );
     }
 
     public changeNameDB() {
         this.trackService.changeTrackName(this.track.trackId, this.track.name).subscribe(
+            result => console.log(result)
         );
     }
 
@@ -31,10 +34,6 @@ export class TrackInfoComponent implements OnInit {
         this.changeNameDB();
         this.changeDescriptionDB();
         this.changeTypeDB();
-    }
-
-    public setTrack(track:Track){
-        this.track=track;
     }
 
     constructor(private trackService: TrackService) { }
