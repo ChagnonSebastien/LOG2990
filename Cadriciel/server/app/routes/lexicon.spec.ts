@@ -34,7 +34,6 @@ describe('Lexicon', () => {
         chai.request(apiUrl)
             .get('/frequency/cat')
             .end((err: any, res: any) => {
-                console.log(res);
                 const content: string = res.text;
                 assert(content === '8');
                 done();
@@ -115,7 +114,7 @@ describe('Lexicon', () => {
                 assert(content.length > 0);
                 done();
             });
-    });
+    }).timeout(15000);
 
     // get some uncommonwords 
 
@@ -127,5 +126,5 @@ describe('Lexicon', () => {
                 assert(content.length > 0);
                 done();
             });
-    });
+    }).timeout(15000);
 });

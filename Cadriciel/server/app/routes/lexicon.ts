@@ -70,8 +70,8 @@ module Route {
         public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
             const word = req.params.word;
             const lexiconReader = new LexiconReader();
-            const frequency:number = await lexiconReader.getWordFrequency(word);
-            res.send(frequency);
+            let frequency = await lexiconReader.getWordFrequency(word);
+            res.send(frequency.toString());
         }
     }
 }

@@ -115,7 +115,7 @@ describe('LexiconReader', () => {
             expect(data.length).to.be.greaterThan(0);
             done();
         });
-    }).timeout(10000);
+    }).timeout(15000);
 
     it('Should return the list of some commonwords in the lexicon', (done) => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
@@ -123,9 +123,9 @@ describe('LexiconReader', () => {
             expect(data.length).to.be.greaterThan(0);
             done();
         });
-    }).timeout(10000);
+    }).timeout(15000);
 
-    it('Should return all the definitions of the word random', (done) => {
+    it('Should return all the definitions of the word aalii', (done) => {
         lexiconReader.getWordDefinitions('aalii').then(function(data) {
             expect(data.length).to.be.greaterThan(0);
             done();

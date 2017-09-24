@@ -87,7 +87,7 @@ export class LexiconReader {
             request(`${uri}/${word}/${options}`, (error, response, body) => {
                 body = JSON.parse(body);
                 resolve(body.totalCount);
-            })
+            });
         });
     }
 
