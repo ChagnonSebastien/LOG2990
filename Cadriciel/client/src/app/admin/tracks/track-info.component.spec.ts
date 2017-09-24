@@ -11,7 +11,7 @@ describe('TrackInfoComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TrackInfoComponent],
             providers: [TrackService],
-            imports: [HttpModule,FormsModule]
+            imports: [HttpModule, FormsModule]
         })
             .compileComponents();
     }));
@@ -23,7 +23,7 @@ describe('TrackInfoComponent', () => {
     });
 
     it('should be created', () => {
-        //expect(true).toBeTruthy();
+        // expect(true).toBeTruthy();
         expect(component).toBeTruthy();
     });
 });

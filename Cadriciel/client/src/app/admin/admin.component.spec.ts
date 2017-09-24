@@ -15,9 +15,9 @@ describe('AdminComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminComponent, DrawTrackComponent, TracksComponent,TrackInfoComponent],
+            declarations: [AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
             providers: [AuthenticationService, DrawTrackService],
-            imports: [HttpModule, AdminRoutingModule,FormsModule]
+            imports: [HttpModule, AdminRoutingModule, FormsModule]
         })
             .compileComponents();
     }));
