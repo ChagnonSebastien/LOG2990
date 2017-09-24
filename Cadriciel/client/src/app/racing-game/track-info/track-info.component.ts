@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-track-info',
+    selector: 'aapp-track-info',
     templateUrl: './track-info.component.html',
     styleUrls: ['./track-info.component.css']
 })
