@@ -1,9 +1,8 @@
-import { Observer, TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 @Injectable()
-export class DrawTrackService implements Observer {
+export class DrawTrackService {
 
     private container: HTMLElement;
 
@@ -30,8 +29,6 @@ export class DrawTrackService implements Observer {
     private currentlyDraggedIntersection = -1;
 
     private potholes: {distance: number, offset: number}[] = [];
-
-    constructor(public trackValidationService: TrackValidationService) {}
 
     public initialise(container: HTMLElement) {
         this.container = container;
@@ -302,8 +299,5 @@ export class DrawTrackService implements Observer {
         this.camera.bottom = this.container.clientHeight / - 2;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-    }
-
-    public update() {
     }
 }
