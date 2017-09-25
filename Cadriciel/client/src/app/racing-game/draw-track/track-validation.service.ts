@@ -96,20 +96,20 @@ export class TrackValidationService {
                         clampDistances.push(distance);
                     } else {
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point1
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point2.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point2
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point2,
+                            toCompare.line2.point1
                         ));
-                        clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point2.y), 2)
+                        clampDistances.push(service.distance(
+                            toCompare.line1.point2,
+                            toCompare.line2.point2
                         ));
                     }
                 } else if (intersection.x > Math.max(toCompare.line1.point1.x, toCompare.line1.point2.x)) {
@@ -131,20 +131,20 @@ export class TrackValidationService {
                         clampDistances.push(distance);
                     } else {
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point1
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point2.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point2
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point2,
+                            toCompare.line2.point1
                         ));
-                        clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point2.y), 2)
+                        clampDistances.push(service.distance(
+                            toCompare.line1.point2,
+                            toCompare.line2.point2
                         ));
                     }
                 }
@@ -168,20 +168,20 @@ export class TrackValidationService {
                         clampDistances.push(distance);
                     } else {
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point1
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point2.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point2
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point2,
+                            toCompare.line2.point1
                         ));
-                        clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point2.y), 2)
+                        clampDistances.push(service.distance(
+                            toCompare.line1.point2,
+                            toCompare.line2.point2
                         ));
                     }
                 } else if (intersection.x > Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x)) {
@@ -203,20 +203,20 @@ export class TrackValidationService {
                         clampDistances.push(distance);
                     } else {
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point1
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point1.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point1.y - toCompare.line2.point2.y), 2)
+                            toCompare.line1.point1,
+                            toCompare.line2.point2
                         ));
                         clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point1.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point1.y), 2)
+                            toCompare.line1.point2,
+                            toCompare.line2.point1
                         ));
-                        clampDistances.push(Math.sqrt(
-                            Math.pow((toCompare.line1.point2.x - toCompare.line2.point2.x), 2) +
-                            Math.pow((toCompare.line1.point2.y - toCompare.line2.point2.y), 2)
+                        clampDistances.push(service.distance(
+                            toCompare.line1.point2,
+                            toCompare.line2.point2
                         ));
                     }
                 }
@@ -249,6 +249,19 @@ export class TrackValidationService {
             }
         );
         return minimum;
+    }
+
+    public distance(point1: {x: number, y: number}, point2: {x: number, y: number}): number {
+        return Math.sqrt(
+            Math.pow((point1.x - point2.x), 2) +
+            Math.pow((point1.y - point2.y), 2)
+        );
+    }
+
+    public getLineParameters(point1: {x: number, y: number}, point2: {x: number, y: number}): {a: number, b: number} {
+        const a = (point2.y - point1.y) / (point2.x - point1.x);
+        const b = (point1.y - (a * point1.x));
+        return {a, b};
     }
 
     public twoLineIntersection(
