@@ -33,8 +33,8 @@ export class TrackInfoComponent implements OnInit {
         this.changeTypeDB();
     }
 
-    public setTrack(track:Track){
-        this.track=track;
+    public setTrack(track: Track) {
+        this.track = track;
     }
 
     constructor(private trackService: TrackService) { }

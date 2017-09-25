@@ -6,9 +6,10 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-
     constructor() { }
-
     public ngOnInit() {
+    }
+
+    public drawCrossword(){
     }
 }
