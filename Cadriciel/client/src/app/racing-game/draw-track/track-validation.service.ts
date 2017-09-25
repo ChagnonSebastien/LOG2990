@@ -47,7 +47,32 @@ export class TrackValidationService {
     }
 
     public checkSegmentIntersections(index: number) {
+        const service = this;
+        this.trackElements.forEach(
+            (segment, i, segments) => {
+                const clampDistances: number[] = [];
 
+
+
+                const minimumSegmentsDistance = clampDistances.length > 0 ? service.minimum(clampDistances) : 0;
+                if (minimumSegmentsDistance < 25) {
+
+                    return;
+                }
+            }
+        );
+    }
+
+    public minimum(array: number[]): number {
+        let minimum = array[0];
+        array.forEach(
+            (number) => {
+                if (number < minimum) {
+                    minimum = number;
+                }
+            }
+        );
+        return minimum;
     }
 
     public twoLineIntersection(
