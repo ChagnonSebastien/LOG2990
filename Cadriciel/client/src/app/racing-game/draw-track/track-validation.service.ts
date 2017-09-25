@@ -50,57 +50,56 @@ export class TrackValidationService {
         const service = this;
         this.trackElements.forEach(
             (segment, i, segments) => {
-                let clampDistances: number[] = [];
 
-                const toCompare = {
-                    line1: {
-                        point1: segments[index].intersection,
-                        point2: segments[index + 1 === segments.length ? 0 : index + 1].intersection
-                    },
-                    line2: {
-                        point1: segments[i].intersection,
-                        point2: segments[i + 1 === segments.length ? 0 : i + 1].intersection
-                    }
-                };
-                const intersection = service.twoLineIntersection(toCompare.line1, toCompare.line2);
+                const line1 = service.getLine(index, segments);
+                const line2 = service.getLine(i, segments);
+                const intersection = service.twoLineIntersection(line1, line2);
                 // Evaluate for two paralele lines
 
-                {
-                    const distances: number[] = service.checkForClamp(intersection, toCompare.line1, toCompare.line2);
-                    clampDistances = clampDistances.concat(distances);
-                }
-                {
-                    const distances: number[] = service.checkForClamp(intersection, toCompare.line2, toCompare.line1);
-                    clampDistances = clampDistances.concat(distances);
-                }
+                let clampDistances: number[] = [];
+                const optimisedDistancesLine1: number[] = service.checkForClamp(intersection, line1, line2);
+                clampDistances = clampDistances.concat(optimisedDistancesLine1);
+                const optimisedDistancesLine2: number[] = service.checkForClamp(intersection, line2, line1);
+                clampDistances = clampDistances.concat(optimisedDistancesLine2);
 
                 const minimumSegmentsDistance = clampDistances.length > 0 ? service.minimum(clampDistances) : 0;
-                if (minimumSegmentsDistance < 25) {
-                    if (-1 === segments[index].segmentIntersections.indexOf(i)) {
-                        segments[index].segmentIntersections.push(i);
-                        segments[i].segmentIntersections.push(index);
-                    }
-                } else {
-                    const arrayPosition1 = segments[index].segmentIntersections.indexOf(i);
-                    if (-1 < arrayPosition1) {
-                        segments[index].segmentIntersections.splice(arrayPosition1, 1);
-                        const arrayPosition2 = segments[i].segmentIntersections.indexOf(index);
-                        segments[i].segmentIntersections.splice(arrayPosition2, 1);
-                    }
-                }
+                service.updateSegmentsValidity(minimumSegmentsDistance, i, index);
             }
         );
+    }
+
+    public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
+        if (minimumSegmentsDistance < 25) {
+            if (-1 === this.trackElements[index2].segmentIntersections.indexOf(index1)) {
+                this.trackElements[index2].segmentIntersections.push(index1);
+                this.trackElements[index1].segmentIntersections.push(index2);
+            }
+        } else {
+            const arrayPosition1 = this.trackElements[index2].segmentIntersections.indexOf(index1);
+            if (-1 < arrayPosition1) {
+                this.trackElements[index2].segmentIntersections.splice(arrayPosition1, 1);
+                const arrayPosition2 = this.trackElements[index1].segmentIntersections.indexOf(index2);
+                this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);
+            }
+        }
+    }
+
+    public getLine(index, segments) {
+        return {
+            point1: segments[index].intersection,
+            point2: segments[index + 1 === segments.length ? 0 : index + 1].intersection
+        };
     }
 
     public checkForClamp(intersection, line1, line2): number[] {
         let distances: number[] = [];
 
         if (intersection.x < Math.min(line1.point1.x, line1.point2.x)) {
-            const clampDistances = this.clampAndGetClosestPoints(Math.min(line1.point1.x, line1.point2.x), line1, line2);
+            const clampDistances = this.clampAndGetOptimalPoints(Math.min(line1.point1.x, line1.point2.x), line1, line2);
             distances = distances.concat(clampDistances);
 
         } else if (intersection.x > Math.max(line1.point1.x, line1.point2.x)) {
-            const clampDistances = this.clampAndGetClosestPoints(Math.max(line1.point1.x, line1.point2.x), line1, line2);
+            const clampDistances = this.clampAndGetOptimalPoints(Math.max(line1.point1.x, line1.point2.x), line1, line2);
             distances = distances.concat(clampDistances);
 
         }
@@ -108,7 +107,7 @@ export class TrackValidationService {
         return distances;
     }
 
-    public clampAndGetClosestPoints(x, line1, line2): number[] {
+    public clampAndGetOptimalPoints(x, line1, line2): number[] {
 
         const lineParameters = this.getLineParameters(line1);
         const clampedPoint = {x, y: this.solveLineEquation(x, lineParameters)};
