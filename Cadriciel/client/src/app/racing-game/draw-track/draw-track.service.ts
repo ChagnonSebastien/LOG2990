@@ -38,6 +38,7 @@ export class DrawTrackService implements Observer {
         this.createScene();
         this.initialiseActivePoint();
         this.startRenderingLoop();
+        this.trackValidationService.addObserver(this);
     }
 
     private createScene() {
@@ -78,6 +79,7 @@ export class DrawTrackService implements Observer {
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
+        this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
         if (this.currentlyDraggedIntersection !== -1) {
             this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
         }
@@ -221,12 +223,14 @@ export class DrawTrackService implements Observer {
             this.intersections.push(intersection);
 
             this.segments.push(this.newSegment());
+            this.trackValidationService.addPoint(this.mousePosition);
             if (this.intersections.length === 1) {
               this.addHighlight();
               this.segments[0].material = new THREE.MeshBasicMaterial({color: 0xFF7700});
             }
         } else if (this.pointMouseHoversOn === 0) {
             this.loopClosed = true;
+            this.trackValidationService.removeLastPoint();
         }
     }
 
@@ -258,10 +262,12 @@ export class DrawTrackService implements Observer {
     public removeIntersection() {
         if (this.loopClosed) {
             this.loopClosed = false;
+            this.trackValidationService.addPoint(this.mousePosition);
             this.updateComponentsView();
             return;
         }
 
+        this.trackValidationService.removeLastPoint();
         if (this.intersections.length === 0) {
             return;
         }
@@ -304,6 +310,13 @@ export class DrawTrackService implements Observer {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public update() {
+    public update(index: number, valid: boolean) {
+        if (index < this.segments.length) {
+            if (valid) {
+                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+            } else {
+                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+            }
+        }
     }
 }

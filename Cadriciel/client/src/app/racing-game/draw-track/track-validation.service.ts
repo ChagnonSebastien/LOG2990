@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 export interface Observer {
-    update(): void;
+    update(index: number, valid: boolean): void;
 }
 
 @Injectable()
@@ -12,7 +12,7 @@ export class TrackValidationService {
         intersectionAngle: boolean,
         segmentLengthValid: boolean,
         segmentIntersections: number[]
-    }[] = [];
+    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: false, segmentLengthValid: false, segmentIntersections: [] }];
 
     public trackClosed = false;
 
@@ -31,8 +31,10 @@ export class TrackValidationService {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentLength(this.trackElements.length - 1);
-        this.checkSegmentIntersections(this.trackElements.length - 2);
-        this.checkSegmentIntersections(this.trackElements.length - 1);
+        this.checkSegmentIntersections(index);
+        this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
+        this.notify(index);
+        this.notify(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkPointAngle(0);
         this.checkPointAngle(this.trackElements.length - 1);
         this.checkPointAngle(this.trackElements.length - 2);
@@ -72,27 +74,23 @@ export class TrackValidationService {
         );
     }
 
-    public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
-        if (minimumSegmentsDistance < 25) {
-            if (-1 === this.trackElements[index2].segmentIntersections.indexOf(index1)) {
-                this.trackElements[index2].segmentIntersections.push(index1);
-                this.trackElements[index1].segmentIntersections.push(index2);
-            }
-        } else {
-            const arrayPosition1 = this.trackElements[index2].segmentIntersections.indexOf(index1);
-            if (-1 < arrayPosition1) {
-                this.trackElements[index2].segmentIntersections.splice(arrayPosition1, 1);
-                const arrayPosition2 = this.trackElements[index1].segmentIntersections.indexOf(index2);
-                this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);
-            }
-        }
-    }
-
     public getLine(index, segments) {
         return {
             point1: segments[index].intersection,
             point2: segments[index + 1 === segments.length ? 0 : index + 1].intersection
         };
+    }
+
+    public twoLineIntersection( line1, line2 ): {x: number, y: number} {
+        const lineParameters1 = this.getLineParameters(line1);
+        const lineParameters2 = this.getLineParameters(line2);
+
+        if (lineParameters1.a === lineParameters2.a) {
+            throw new Error();
+        }
+
+        const x = (lineParameters2.b - lineParameters1.b) / (lineParameters1.a - lineParameters2.a);
+        return {x, y: this.solveYIntercept(x, lineParameters1)};
     }
 
     public checkForClamp(intersection, line1, line2): number[] {
@@ -109,6 +107,22 @@ export class TrackValidationService {
         }
 
         return distances;
+    }
+
+    public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
+        if (minimumSegmentsDistance < 25) {
+            if (-1 === this.trackElements[index2].segmentIntersections.indexOf(index1)) {
+                this.trackElements[index2].segmentIntersections.push(index1);
+                this.trackElements[index1].segmentIntersections.push(index2);
+            }
+        } else {
+            const arrayPosition1 = this.trackElements[index2].segmentIntersections.indexOf(index1);
+            if (-1 < arrayPosition1) {
+                this.trackElements[index2].segmentIntersections.splice(arrayPosition1, 1);
+                const arrayPosition2 = this.trackElements[index1].segmentIntersections.indexOf(index2);
+                this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);
+            }
+        }
     }
 
     public clampAndGetOptimalPoints(x, line1, line2): number[] {
@@ -184,26 +198,6 @@ export class TrackValidationService {
         return distances;
     }
 
-    public twoLineIntersection(
-        line1: {point1: {x: number, y: number}, point2: {x: number, y: number}},
-        line2: {point1: {x: number, y: number}, point2: {x: number, y: number}}
-    ): {x: number, y: number} {
-        const a1 = (line1.point2.y - line1.point1.y) / (line1.point2.x - line1.point1.x);
-        const a2 = (line2.point2.y - line2.point1.y) / (line2.point2.x - line2.point1.x);
-
-        if (a1 === a2) {
-            return null;
-        }
-
-        const b1 = (line1.point1.y - (a1 * line1.point1.x));
-        const b2 = (line2.point1.y - (a1 * line2.point1.x));
-
-        const x = (b2 - b1) / (a1 - a2);
-        const y = (a1 * x) + b1;
-
-        return {x, y};
-    }
-
     public checkPointAngle(index: number) {
 
     }
@@ -212,7 +206,10 @@ export class TrackValidationService {
         this.observer = observer;
     }
 
-    public notify() {
-        this.observer.update();
+    public notify(index: number) {
+        if (index < this.trackElements.length  && index > -1) {
+            console.log(true);
+            this.observer.update(index, this.trackElements[index].segmentIntersections.length === 0);
+        }
     }
 }
