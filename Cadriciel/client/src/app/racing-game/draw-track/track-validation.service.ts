@@ -50,175 +50,28 @@ export class TrackValidationService {
         const service = this;
         this.trackElements.forEach(
             (segment, i, segments) => {
-                const clampDistances: number[] = [];
+                let clampDistances: number[] = [];
 
                 const toCompare = {
                     line1: {
-                        point1: {
-                            x: segments[index].intersection.x,
-                            y: segments[index].intersection.y
-                        },
-                        point2: {
-                            x: segments[index + 1 === segments.length ? 0 : index + 1].intersection.x,
-                            y: segments[index + 1 === segments.length ? 0 : index + 1].intersection.y
-                        }
+                        point1: segments[index].intersection,
+                        point2: segments[index + 1 === segments.length ? 0 : index + 1].intersection
                     },
                     line2: {
-                        point1: {
-                            x: segments[i].intersection.x,
-                            y: segments[i].intersection.y
-                        },
-                        point2: {
-                            x: segments[index + 1 === segments.length ? 0 : index + 1].intersection.x,
-                            y: segments[index + 1 === segments.length ? 0 : index + 1].intersection.y
-                        }
+                        point1: segments[i].intersection,
+                        point2: segments[i + 1 === segments.length ? 0 : i + 1].intersection
                     }
                 };
                 const intersection = service.twoLineIntersection(toCompare.line1, toCompare.line2);
                 // Evaluate for two paralele lines
 
-                if (intersection.x < Math.min(toCompare.line1.point1.x, toCompare.line1.point2.x)) {
-                    const x = Math.min(toCompare.line1.point1.x, toCompare.line1.point2.x);
-                    const a = (toCompare.line1.point2.y - toCompare.line1.point1.y) / (toCompare.line1.point2.x - toCompare.line1.point1.x);
-                    const b = (toCompare.line1.point1.y - (a * toCompare.line1.point1.x));
-                    const y = (a * x) + b;
-
-                    const ai = -1 / a;
-                    const bi = (y - (ai * x));
-                    const xi = (bi - b) / (a - ai);
-
-                    if (
-                        Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x) <= xi &&
-                        Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x) >= xi
-                    ) {
-                        const yi = (a * x) + b;
-                        const distance = Math.sqrt(Math.pow((xi - x), 2) + Math.pow((yi - y), 2));
-                        clampDistances.push(distance);
-                    } else {
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point2
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point2,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(service.distance(
-                            toCompare.line1.point2,
-                            toCompare.line2.point2
-                        ));
-                    }
-                } else if (intersection.x > Math.max(toCompare.line1.point1.x, toCompare.line1.point2.x)) {
-                    const x = Math.max(toCompare.line1.point1.x, toCompare.line1.point2.x);
-                    const a = (toCompare.line1.point2.y - toCompare.line1.point1.y) / (toCompare.line1.point2.x - toCompare.line1.point1.x);
-                    const b = (toCompare.line1.point1.y - (a * toCompare.line1.point1.x));
-                    const y = (a * x) + b;
-
-                    const ai = -1 / a;
-                    const bi = (y - (ai * x));
-                    const xi = (bi - b) / (a - ai);
-
-                    if (
-                        Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x) <= xi &&
-                        Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x) >= xi
-                    ) {
-                        const yi = (a * x) + b;
-                        const distance = Math.sqrt(Math.pow((xi - x), 2) + Math.pow((yi - y), 2));
-                        clampDistances.push(distance);
-                    } else {
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point2
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point2,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(service.distance(
-                            toCompare.line1.point2,
-                            toCompare.line2.point2
-                        ));
-                    }
+                {
+                    const distances: number[] = service.checkForClamp(intersection, toCompare.line1, toCompare.line2);
+                    clampDistances = clampDistances.concat(distances);
                 }
-
-                if (intersection.x < Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x)) {
-                    const x = Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x);
-                    const a = (toCompare.line2.point2.y - toCompare.line2.point1.y) / (toCompare.line2.point2.x - toCompare.line2.point1.x);
-                    const b = (toCompare.line2.point1.y - (a * toCompare.line2.point1.x));
-                    const y = (a * x) + b;
-
-                    const ai = -1 / a;
-                    const bi = (y - (ai * x));
-                    const xi = (bi - b) / (a - ai);
-
-                    if (
-                        Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x) <= xi &&
-                        Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x) >= xi
-                    ) {
-                        const yi = (a * x) + b;
-                        const distance = Math.sqrt(Math.pow((xi - x), 2) + Math.pow((yi - y), 2));
-                        clampDistances.push(distance);
-                    } else {
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point2
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point2,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(service.distance(
-                            toCompare.line1.point2,
-                            toCompare.line2.point2
-                        ));
-                    }
-                } else if (intersection.x > Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x)) {
-                    const x = Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x);
-                    const a = (toCompare.line2.point2.y - toCompare.line2.point1.y) / (toCompare.line2.point2.x - toCompare.line2.point1.x);
-                    const b = (toCompare.line2.point1.y - (a * toCompare.line2.point1.x));
-                    const y = (a * x) + b;
-
-                    const ai = -1 / a;
-                    const bi = (y - (ai * x));
-                    const xi = (bi - b) / (a - ai);
-
-                    if (
-                        Math.min(toCompare.line2.point1.x, toCompare.line2.point2.x) <= xi &&
-                        Math.max(toCompare.line2.point1.x, toCompare.line2.point2.x) >= xi
-                    ) {
-                        const yi = (a * x) + b;
-                        const distance = Math.sqrt(Math.pow((xi - x), 2) + Math.pow((yi - y), 2));
-                        clampDistances.push(distance);
-                    } else {
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point1,
-                            toCompare.line2.point2
-                        ));
-                        clampDistances.push(Math.sqrt(
-                            toCompare.line1.point2,
-                            toCompare.line2.point1
-                        ));
-                        clampDistances.push(service.distance(
-                            toCompare.line1.point2,
-                            toCompare.line2.point2
-                        ));
-                    }
+                {
+                    const distances: number[] = service.checkForClamp(intersection, toCompare.line2, toCompare.line1);
+                    clampDistances = clampDistances.concat(distances);
                 }
 
                 const minimumSegmentsDistance = clampDistances.length > 0 ? service.minimum(clampDistances) : 0;
@@ -237,6 +90,49 @@ export class TrackValidationService {
                 }
             }
         );
+    }
+
+    public checkForClamp(intersection, line1, line2): number[] {
+        let distances: number[] = [];
+
+        if (intersection.x < Math.min(line1.point1.x, line1.point2.x)) {
+
+            const clampDistances = this.clampAndGetClosestPoints(Math.min(line1.point1.x, line1.point2.x), line1, line2);
+            distances = distances.concat(clampDistances);
+
+        } else if (intersection.x > Math.max(line1.point1.x, line1.point2.x)) {
+
+            const clampDistances = this.clampAndGetClosestPoints(Math.max(line1.point1.x, line1.point2.x), line1, line2);
+            distances = distances.concat(clampDistances);
+
+        }
+
+        return distances;
+    }
+
+    public clampAndGetClosestPoints(x, line1, line2): number[] {
+
+        const lineParameters1 = this.getLineParameters(line1);
+        const y = (lineParameters1.a * x) + lineParameters1.b;
+
+        const ai = -1 / lineParameters1.a;
+        const bi = (y - (ai * x));
+        const xi = (bi - lineParameters1.b) / (lineParameters1.a - ai);
+        const yi = (lineParameters1.a * x) + lineParameters1.b;
+
+        let distances: number[] = [];
+        if (
+            Math.min(line2.point1.x, line2.point2.x) <= xi &&
+            Math.max(line2.point1.x, line2.point2.x) >= xi
+        ) {
+            const clampToLineDistance = this.distance({x, y}, {x: xi, y: yi});
+            distances.push(clampToLineDistance);
+        } else {
+            const endToEndDistances = this.getAllEndToEndDistances(line1, line2);
+            distances = distances.concat(endToEndDistances);
+        }
+
+        return distances;
     }
 
     public minimum(array: number[]): number {
@@ -258,10 +154,30 @@ export class TrackValidationService {
         );
     }
 
-    public getLineParameters(point1: {x: number, y: number}, point2: {x: number, y: number}): {a: number, b: number} {
-        const a = (point2.y - point1.y) / (point2.x - point1.x);
-        const b = (point1.y - (a * point1.x));
+    public getLineParameters(line: {point1: {x: number, y: number}, point2: {x: number, y: number}}): {a: number, b: number} {
+        const a = (line.point2.y - line.point1.y) / (line.point2.x - line.point1.x);
+        const b = (line.point1.y - (a * line.point1.x));
         return {a, b};
+    }
+
+    public getAllEndToEndDistances(
+        line1: {
+            point1: { x: number, y: number },
+            point2: { x: number, y: number }
+        },
+        line2: {
+            point1: { x: number, y: number },
+            point2: { x: number, y: number }
+        }
+    ): number[] {
+        const distances: number[] = [];
+
+        distances.push(this.distance( line1.point1, line2.point1 ));
+        distances.push(this.distance( line1.point1, line2.point2 ));
+        distances.push(this.distance( line1.point2, line2.point1 ));
+        distances.push(this.distance( line1.point2, line2.point2 ));
+
+        return distances;
     }
 
     public twoLineIntersection(
