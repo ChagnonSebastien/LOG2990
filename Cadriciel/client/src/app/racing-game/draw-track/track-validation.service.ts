@@ -51,6 +51,10 @@ export class TrackValidationService {
         this.trackElements.forEach(
             (segment, i, segments) => {
 
+                if ( Math.abs(index - i) < 2 || Math.abs(index - i) === (segments.length - 1) ) {
+                    return;
+                }
+
                 const line1 = service.getLine(index, segments);
                 const line2 = service.getLine(i, segments);
                 const intersection = service.twoLineIntersection(line1, line2);
