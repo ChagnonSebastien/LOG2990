@@ -29,11 +29,7 @@ import { TrackInfoComponent } from './track-info/track-info.component';
         TrackEditorComponent,
         TrackAdminComponent,
         TrackInfoComponent,
-<<<<<<< HEAD
        
-=======
-        CrosswordGameInterfaceComponent,
->>>>>>> 455aa9f7fc76495f9c5a6b1fb541b75de30d74a6
     ],
     exports: [
         RacingGameComponent,
