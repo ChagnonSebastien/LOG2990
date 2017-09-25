@@ -28,9 +28,12 @@ export class TrackValidationService {
     }
 
     public updatePoint(index: number, intersection: THREE.Vector3) {
+        console.log(this.trackElements);
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentLength(this.trackElements.length - 1);
+        console.log(index);
+        console.log(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.notify(index);
@@ -115,6 +118,7 @@ export class TrackValidationService {
                 this.trackElements[index2].segmentIntersections.push(index1);
                 this.trackElements[index1].segmentIntersections.push(index2);
             }
+            console.log('DO: ', index1,  ' ', index2, minimumSegmentsDistance);
         } else {
             const arrayPosition1 = this.trackElements[index2].segmentIntersections.indexOf(index1);
             if (-1 < arrayPosition1) {
@@ -122,6 +126,7 @@ export class TrackValidationService {
                 const arrayPosition2 = this.trackElements[index1].segmentIntersections.indexOf(index2);
                 this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);
             }
+            console.log('DON\'T: ', index1,  ' ', index2, minimumSegmentsDistance);
         }
     }
 
@@ -208,7 +213,6 @@ export class TrackValidationService {
 
     public notify(index: number) {
         if (index < this.trackElements.length  && index > -1) {
-            console.log(true);
             this.observer.update(index, this.trackElements[index].segmentIntersections.length === 0);
         }
     }
