@@ -1,17 +1,13 @@
-<div id="crossword_container">
-    <table id="crossword">
-    </table>
+<div id="wrapper"> 
+    
+<tr *ngFor="let ligne of rawCrossword ; let i = index">
+        <td *ngFor="let colonne of ligne; let j = index" >
+                <input 
+                  
+                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0'}" 
+                type="text" maxLength="1"
+                [(ngModel)]="rawCrossword[i][j]"        
+            />        
+        </td>
+    </tr>
 </div>
-
-<div id="hints_container">
-    <h3>Vertical</h3>
-        <div id="vertical_hints_container"></div>
-    <h3>Horizontal</h3>
-        <div id="horizontal_hints_container"></div>
-</div>
-
-<div id="buttons_container">
-    <button id="clear_all">Clear All</button>
-    <button id="check">Check</button>
-    <button id="solve">Solve</button>
-    <button id
