@@ -1,0 +1,13 @@
+<div id="wrapper"> 
+    
+<tr *ngFor="let ligne of rawCrossword ; let i = index">
+        <td *ngFor="let colonne of ligne; let j = index" >
+                <input 
+                  
+                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0'}" 
+                type="text" maxLength="1"
+                [(ngModel)]="rawCrossword[i][j]"        
+            />        
+        </td>
+    </tr>
+</div>

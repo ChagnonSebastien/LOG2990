@@ -29,7 +29,7 @@ describe('Crossword', () => {
             });
     });
 
-    it('Should delete the previously created crossword', (done) => {
+    /*it('Should delete the previously created crossword', (done) => {
         chai.request(apiUrl)
             .delete('crosswords:id')
             .end((err: any, res: any) => {
@@ -37,5 +37,6 @@ describe('Crossword', () => {
                 assert(crossword.value.difficulty == "hard");
                 done();
             });
-    });
+    });*/
+
 });
