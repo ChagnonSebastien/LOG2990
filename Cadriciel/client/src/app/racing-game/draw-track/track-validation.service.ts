@@ -112,27 +112,35 @@ export class TrackValidationService {
 
     public clampAndGetClosestPoints(x, line1, line2): number[] {
 
-        const lineParameters1 = this.getLineParameters(line1);
-        const y = (lineParameters1.a * x) + lineParameters1.b;
+        const lineParameters = this.getLineParameters(line1);
+        const clampedPoint = {x, y: this.solveLineEquation(x, lineParameters)};
 
-        const ai = -1 / lineParameters1.a;
-        const bi = (y - (ai * x));
-        const xi = (bi - lineParameters1.b) / (lineParameters1.a - ai);
-        const yi = (lineParameters1.a * x) + lineParameters1.b;
+        const a = -1 / lineParameters.a;
+        const permenticularParameters = {a, b: (clampedPoint.y - (a * clampedPoint.x))};
 
+        const xOptimalOnLine2 = (permenticularParameters.b - lineParameters.b) / (lineParameters.a - permenticularParameters.a);
+        const optimalPointOnLine2 = {x: xOptimalOnLine2, y: this.solveLineEquation(xOptimalOnLine2, permenticularParameters)};
+
+        return this.findOptimalPoints(clampedPoint, line1, optimalPointOnLine2, line2);
+    }
+
+    public findOptimalPoints(clampedPoint, line1, optimalPointOnLine2, line2): number[] {
         let distances: number[] = [];
         if (
-            Math.min(line2.point1.x, line2.point2.x) <= xi &&
-            Math.max(line2.point1.x, line2.point2.x) >= xi
+            Math.min(line2.point1.x, line2.point2.x) <= optimalPointOnLine2.x &&
+            Math.max(line2.point1.x, line2.point2.x) >= optimalPointOnLine2.x
         ) {
-            const clampToLineDistance = this.distance({x, y}, {x: xi, y: yi});
+            const clampToLineDistance = this.distance(clampedPoint, optimalPointOnLine2);
             distances.push(clampToLineDistance);
         } else {
             const endToEndDistances = this.getAllEndToEndDistances(line1, line2);
             distances = distances.concat(endToEndDistances);
         }
-
         return distances;
+    }
+
+    public solveLineEquation(x, lineParameters): number {
+        return (lineParameters.a * x) + lineParameters.b;
     }
 
     public minimum(array: number[]): number {
