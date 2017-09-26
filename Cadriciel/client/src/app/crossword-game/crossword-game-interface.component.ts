@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-  public rawCrossword: [[String]] =   [['0', '0', '0', '0', 'p', '0', '0', '0', '0', '0'],
+  
+    public rawCrossword: [[String]] = [['0', '0', '0', '0', 'p', '0', '0', '0', '0', '0'],
                                       ['0', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
                                       ['0', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
                                       ['0', 'h', 'y', 'd', 'e', 'r', 'a', 'b', 'a', 'd'],
@@ -19,9 +20,35 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                                       ['0', '0', '0', '0', '0', '0', 'e', '0', '0', '0']];
 
     public list0fWords : [String];
-    public wordsIndex:[[String,{x:number,y:number}]];
+    public wordsIndex:[[String,{i:number,j:number}]];
+    public gridSqaures : [{i:number,j:number,isActive:boolean}];
+    public activeSquareCoord : {i:number,j:number};
+    
+    
+    public handleClick(i,j){
+        console.log("hello");
+        console.log(this.activeSquareCoord.i);
+          this.activeSquareCoord={
+            i:i,
+            j:j
+        };
+    }
+    public isActive(i,j):boolean{
+       // console.log(this.activeSquareCoord.i);
+        return (i == this.activeSquareCoord.i && j ==this.activeSquareCoord)
+       
+     }
+
+
     constructor() { }
     public ngOnInit() {
+
+        this.activeSquareCoord={
+            i:-1,
+            j:-1
+        };
+
+        
     }
 
 }

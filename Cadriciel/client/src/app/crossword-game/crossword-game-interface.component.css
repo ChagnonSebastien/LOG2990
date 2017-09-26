@@ -26,7 +26,10 @@
     float: left;
     text-transform: uppercase;
   }
-
-  .imput{
-    text-transform: uppercase;
+ 
+  .active{
+    border: 3px solid red;
+    text-transform: lowercase;
+    background-color: red;
   }
+  
