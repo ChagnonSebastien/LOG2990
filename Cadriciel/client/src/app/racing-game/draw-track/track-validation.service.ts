@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
-export interface Observer {
-    update(index: number, valid: boolean): void;
-}
-
 @Injectable()
 export class TrackValidationService {
     public trackElements: {
@@ -15,8 +11,6 @@ export class TrackValidationService {
     }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: false, segmentLengthValid: false, segmentIntersections: [] }];
 
     public trackClosed = false;
-
-    public observer: Observer;
 
     public addPoint(intersection: THREE.Vector3) {
         this.trackElements.push(
@@ -34,8 +28,6 @@ export class TrackValidationService {
         this.checkSegmentLength(this.trackElements.length - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
-        this.notify(index);
-        this.notify(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkPointAngle(0);
         this.checkPointAngle(this.trackElements.length - 1);
         this.checkPointAngle(this.trackElements.length - 2);
@@ -54,7 +46,8 @@ export class TrackValidationService {
         this.trackElements.forEach(
             (segment, i, segments) => {
 
-                if ( Math.abs(index - i) < 2 || Math.abs(index - i) === (segments.length - 1) ) {
+                if ((Math.abs(index - i) < 2 || Math.abs(index - i) === (segments.length - 1)) ||
+                    (!service.trackClosed && (i === segments.length - 1 ||  index === segments.length - 1))) {
                     return;
                 }
 
@@ -217,13 +210,7 @@ export class TrackValidationService {
 
     }
 
-    public addObserver(observer: Observer) {
-        this.observer = observer;
-    }
-
-    public notify(index: number) {
-        if (index < this.trackElements.length  && index > -1) {
-            this.observer.update(index, this.trackElements[index].segmentIntersections.length === 0);
-        }
+    public isValid(index: number) {
+        return this.trackElements[index].segmentIntersections.length === 0;
     }
 }

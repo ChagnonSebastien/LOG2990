@@ -1,9 +1,9 @@
-import { Observer, TrackValidationService } from './track-validation.service';
+import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 @Injectable()
-export class DrawTrackService implements Observer {
+export class DrawTrackService {
 
     private container: HTMLElement;
 
@@ -38,7 +38,6 @@ export class DrawTrackService implements Observer {
         this.createScene();
         this.initialiseActivePoint();
         this.startRenderingLoop();
-        this.trackValidationService.addObserver(this);
     }
 
     private createScene() {
@@ -79,7 +78,9 @@ export class DrawTrackService implements Observer {
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
-        this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
+        if (!this.loopClosed) {
+            this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
+        }
         if (this.currentlyDraggedIntersection !== -1) {
             this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
         }
@@ -158,6 +159,14 @@ export class DrawTrackService implements Observer {
         } else {
             this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
         }
+
+        this.segments.forEach((segment, index) => {
+            if (this.trackValidationService.isValid(index)) {
+                segment.material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+            } else {
+                segment.material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+            }
+        });
     }
 
     private getRelativeMousePosition(clientX: number, clientY: number) {
@@ -230,6 +239,7 @@ export class DrawTrackService implements Observer {
             }
         } else if (this.pointMouseHoversOn === 0) {
             this.loopClosed = true;
+            this.trackValidationService.trackClosed = true;
             this.trackValidationService.removeLastPoint();
         }
     }
@@ -262,6 +272,7 @@ export class DrawTrackService implements Observer {
     public removeIntersection() {
         if (this.loopClosed) {
             this.loopClosed = false;
+            this.trackValidationService.trackClosed = false;4
             this.trackValidationService.addPoint(this.mousePosition);
             this.updateComponentsView();
             return;
