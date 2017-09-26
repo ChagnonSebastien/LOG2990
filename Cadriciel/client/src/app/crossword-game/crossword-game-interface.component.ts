@@ -26,7 +26,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     {word: 'banglore', indice : 'Information Technology Hub'}, {word: 'hyderabad', indice : 'Cultural Hub'},
     {word: 'delhi', indice : 'Capital of India'}, {word: 'mumbai', indice : 'India financial capital'},
     {word: 'kashmir', indice : 'Saffron region'} ];
-    public wordsIndex: [[String, {i: number, j: number}]];
+    public wordsIndexes: [[String, {i: number, j: number}]];
     public gridSqaures: [{i: number, j: number, isActive: boolean}];
     public activeSquareCoord: {i: number, j: number};
     public handleClick(i, j) {
@@ -34,10 +34,41 @@ export class CrosswordGameInterfaceComponent implements OnInit {
             i: i,
             j: j
         };
+        var indexes :{i:number,j:number}[]= this.findWordIndexes('kashmir',this.rawCrossword[9],9,true);
+        console.log(indexes);
     }
     public isActive(i, j): boolean {
-       console.log('hello');
+       
         return (i === this.activeSquareCoord.i && j === this.activeSquareCoord.j);
+     }
+
+     public(fillWordsIndexes){
+        
+     }
+
+     public findWordIndexes(word:string,gridPart:[String], columnOrRowIndex:number,row:boolean){
+        
+        var indexes :{i:number,j:number}[]=[];
+        //indexes.push({i:1,j:1});
+        
+        for(var k = 0 ; k < gridPart.length && indexes.length !=word.length ;k++ )
+         {  //console.log(gridPart[k]);
+            if(gridPart[k]==word[k])
+            {   
+                if(row)
+                indexes.push({i:columnOrRowIndex,j:k})
+                   //indexes[k]=({i:columnOrRowIndex,j:k});
+                else 
+                indexes.push({i:k,j:columnOrRowIndex});
+            }
+            else 
+                {
+                
+                //console.log(indexes);
+                indexes.splice(0,indexes.length);}
+         }
+        // console.log(indexes);
+         return(indexes);
      }
 
     constructor() { }
