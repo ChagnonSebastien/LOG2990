@@ -1,14 +1,14 @@
 #wrapper {
     border: 1px solid black;
-    width: 450px;
-    height: 450px;
+    width: 580px;
+    height: 640px;
     margin: 0 auto;
   }
 
   
   .filled {
-    width: 28px;
-    height: 28px;
+    width: 58px;
+    height: 58px;
     background: black;
     border: 1px solid black;
     padding: 0;
@@ -18,8 +18,8 @@
   }
   
   .empty {
-    width: 28px;
-    height: 28px;
+    width: 58px;
+    height: 58px;
     border: 1px solid black;
     padding: 0;
     margin: 0;
@@ -29,7 +29,7 @@
  
   .active{
     border: 3px solid red;
-    text-transform: lowercase;
-    background-color: red;
+  
+   
   }
   

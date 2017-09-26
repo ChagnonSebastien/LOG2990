@@ -2,17 +2,31 @@
     
 <tr *ngFor="let ligne of rawCrossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >
-                <input 
+              
+             
+            <input 
                   
-                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':isActive(i,j)}" 
+                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j)}" 
                 type="text" maxLength="1"
                 [(ngModel)]="rawCrossword[i][j]"   
-                ng-click="handleClick(i,j)"
+                (click)="handleClick(i,j)"
                 
             /> 
-            
+    
             
                    
         </td>
     </tr>
+</div>
+
+<div id ="indices">
+<h2>Indices</h2>
+    <tr *ngFor="let hint of listOfWordsAndHints ; let k = index">
+
+        <td >
+          <button> <p>  {{listOfWordsAndHints[k].indice}} </p> </button>   
+       </td>
+
+    </tr>
+
 </div>

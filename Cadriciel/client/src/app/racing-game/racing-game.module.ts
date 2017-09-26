@@ -29,7 +29,6 @@ import { TrackInfoComponent } from './track-info/track-info.component';
         TrackEditorComponent,
         TrackAdminComponent,
         TrackInfoComponent,
-       
     ],
     exports: [
         RacingGameComponent,
