@@ -32,8 +32,6 @@ export class TrackValidationService {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentLength(this.trackElements.length - 1);
-        console.log(index);
-        console.log(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.notify(index);
@@ -93,23 +91,34 @@ export class TrackValidationService {
         }
 
         const x = (lineParameters2.b - lineParameters1.b) / (lineParameters1.a - lineParameters2.a);
-        return {x, y: this.solveYIntercept(x, lineParameters1)};
+        return {x, y: this.solveLineEquation(x, lineParameters1)};
     }
 
     public checkForClamp(intersection, line1, line2): number[] {
-        let distances: number[] = [];
+        const distance: number[] = [];
 
-        if (intersection.x < Math.min(line1.point1.x, line1.point2.x)) {
-            const clampDistances = this.clampAndGetOptimalPoints(Math.min(line1.point1.x, line1.point2.x), line1, line2);
-            distances = distances.concat(clampDistances);
+        console.log(intersection, line1, line2);
 
-        } else if (intersection.x > Math.max(line1.point1.x, line1.point2.x)) {
-            const clampDistances = this.clampAndGetOptimalPoints(Math.max(line1.point1.x, line1.point2.x), line1, line2);
-            distances = distances.concat(clampDistances);
-
+        if (
+            Math.min(line1.point1.x, line1.point2.x) <= intersection.x &&
+            Math.max(line1.point1.x, line1.point2.x) >= intersection.x &&
+            Math.min(line1.point1.y, line1.point2.y) <= intersection.y &&
+            Math.max(line1.point1.y, line1.point2.y) >= intersection.y
+        ) {
+            console.log(1);
+            return distance;
         }
 
-        return distances;
+        const optimalPoint = {x: NaN, y: NaN};
+        optimalPoint.x = Math.abs(intersection.x - line1.point1.x) < Math.abs(intersection.x - line1.point1.x) ?
+            line1.point1.x :
+            line1.point2.x;
+        optimalPoint.y = Math.abs(intersection.y - line1.point1.y) < Math.abs(intersection.y - line1.point1.y) ?
+            line1.point1.y :
+            line1.point2.y;
+
+        distance.push(this.clampAndGetOptimalPoint(optimalPoint, line1, line2));
+        return distance;
     }
 
     public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
@@ -118,7 +127,6 @@ export class TrackValidationService {
                 this.trackElements[index2].segmentIntersections.push(index1);
                 this.trackElements[index1].segmentIntersections.push(index2);
             }
-            console.log('DO: ', index1,  ' ', index2, minimumSegmentsDistance);
         } else {
             const arrayPosition1 = this.trackElements[index2].segmentIntersections.indexOf(index1);
             if (-1 < arrayPosition1) {
@@ -126,29 +134,31 @@ export class TrackValidationService {
                 const arrayPosition2 = this.trackElements[index1].segmentIntersections.indexOf(index2);
                 this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);
             }
-            console.log('DON\'T: ', index1,  ' ', index2, minimumSegmentsDistance);
         }
     }
 
-    public clampAndGetOptimalPoints(x, line1, line2): number[] {
-
+    public clampAndGetOptimalPoint(clampedPoint, line1, line2): number {
+/*
         const lineParameters = this.getLineParameters(line1);
-        const clampedPoint = {x, y: this.solveLineEquation(x, lineParameters)};
+        const clampedPoint = {x, y: this.solveLineEquation(x, lineParameters)}; */
 
+        const lineParameters = this.getLineParameters(line2);
         const slope = -1 / lineParameters.a;
         const permenticularParameters = {a: slope, b: this.solveYIntercept(clampedPoint, slope)};
 
         const xOptimal = (permenticularParameters.b - lineParameters.b) / (lineParameters.a - permenticularParameters.a);
         const optimalPoint = {x: xOptimal, y: this.solveLineEquation(xOptimal, permenticularParameters)};
 
-        return this.findOptimalPoints(clampedPoint, line1, optimalPoint, line2);
+        return this.findOptimalPoint(clampedPoint, line1, optimalPoint, line2);
     }
 
-    public findOptimalPoints(clampedPoint, line1, optimalPoint, line2): number[] {
+    public findOptimalPoint(clampedPoint, line1, optimalPoint, line2): number {
         let distances: number[] = [];
         if (
             Math.min(line2.point1.x, line2.point2.x) <= optimalPoint.x &&
-            Math.max(line2.point1.x, line2.point2.x) >= optimalPoint.x
+            Math.max(line2.point1.x, line2.point2.x) >= optimalPoint.x &&
+            Math.min(line2.point1.y, line2.point2.y) <= optimalPoint.y &&
+            Math.max(line2.point1.y, line2.point2.y) >= optimalPoint.y
         ) {
             const clampToOptimalDistance = this.distance(clampedPoint, optimalPoint);
             distances.push(clampToOptimalDistance);
@@ -156,7 +166,7 @@ export class TrackValidationService {
             const endToEndDistances = this.getAllEndToEndDistances(line1, line2);
             distances = distances.concat(endToEndDistances);
         }
-        return distances;
+        return this.minimum(distances);
     }
 
     public solveYIntercept(point, slope): number {
