@@ -30,8 +30,9 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
     public activeIndexes: Index[]= [];
 
-    public handleClick(k) {
-          this.activeIndexes = this.wordsIndexes[k].indexes;
+    public handleClick($event, k) {
+        this.activeIndexes = this.wordsIndexes[k].indexes.slice();
+        $event.stopPropagation();
         }
 
     public isActive(i, j): boolean {
@@ -116,6 +117,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
             column.push(this.rawCrossword[i][index]);
         }
         return column;
+     }
+
+     public cancelSelection($event) {
+        this.activeIndexes.splice(0, this.activeIndexes.length);
+     }
+
+     public handleInput($event) {
+        event.stopPropagation();
      }
 
     constructor() { }

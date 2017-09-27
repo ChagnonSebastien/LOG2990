@@ -1,4 +1,4 @@
-<div id="page">
+<div id="page" (click)="cancelSelection($event)" >
 <div id="wrapper"> 
     
 <tr *ngFor="let ligne of rawCrossword ; let i = index">
@@ -10,8 +10,9 @@
                 [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j)}" 
                 type="text" maxLength="1"
                 [(ngModel)]="rawCrossword[i][j]"   
-               
+                (click)="handleInput($event)"
                 
+               
             /> 
                 
         </td>
@@ -23,7 +24,7 @@
     <tr *ngFor="let hint of wordsIndexes; let k = index">
 
         <td >
-          <button (click)="handleClick(k)"> <p>  {{hint.hint}} </p> </button>   
+          <button class="btn" (click)="handleClick($event,k)">   {{hint.hint}}  </button>   
        </td>
 
     </tr>
