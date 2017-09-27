@@ -16,6 +16,10 @@ export class Crossword {
         if (i >= this.size || j >= this.size) {
             return true;
         }
+
+        if (i < 0 || j < 0) {
+            return true;
+        }
         return false;
     }
 
