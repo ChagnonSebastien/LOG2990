@@ -256,7 +256,7 @@ export class DrawTrackService {
     }
 
     private newSegment(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry( 0, 30 );
+        const geometry = new THREE.PlaneGeometry( 0, 20 );
         const material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
         const segment = new THREE.Mesh( geometry, material );
         segment.position.z = -4;

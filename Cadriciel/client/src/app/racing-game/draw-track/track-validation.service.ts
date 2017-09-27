@@ -6,15 +6,15 @@ export class TrackValidationService {
     public trackElements: {
         intersection: THREE.Vector3,
         intersectionAngle: boolean,
-        segmentLengthValid: boolean,
+        segmentLength: number,
         segmentIntersections: number[]
-    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: false, segmentLengthValid: false, segmentIntersections: [] }];
+    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: false, segmentLength: 0, segmentIntersections: [] }];
 
     public trackClosed = false;
 
     public addPoint(intersection: THREE.Vector3) {
         this.trackElements.push(
-            { intersection, intersectionAngle: false, segmentLengthValid: false, segmentIntersections: [] }
+            { intersection, intersectionAngle: false, segmentLength: 0, segmentIntersections: [] }
         );
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentIntersections(this.trackElements.length - 2);
@@ -23,8 +23,8 @@ export class TrackValidationService {
 
     public updatePoint(index: number, intersection: THREE.Vector3) {
         this.trackElements[index].intersection = intersection;
-        this.checkSegmentLength(this.trackElements.length - 2);
-        this.checkSegmentLength(this.trackElements.length - 1);
+        this.checkSegmentLength(index);
+        this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkPointAngle(0);
@@ -44,7 +44,8 @@ export class TrackValidationService {
     }
 
     public checkSegmentLength(index: number) {
-
+        const line = this.getLine(index);
+        this.trackElements[index].segmentLength = this.distance(line.point1, line.point2);
     }
 
     public checkSegmentIntersections(index: number) {
@@ -61,8 +62,8 @@ export class TrackValidationService {
                     return;
                 }
 
-                const line1 = service.getLine(index, segments);
-                const line2 = service.getLine(i, segments);
+                const line1 = service.getLine(index);
+                const line2 = service.getLine(i);
                 const intersection = service.twoLineIntersection(line1, line2);
                 // Evaluate for two paralele lines
 
@@ -78,10 +79,10 @@ export class TrackValidationService {
         );
     }
 
-    public getLine(index, segments) {
+    public getLine(index) {
         return {
-            point1: segments[index].intersection,
-            point2: segments[index + 1 === segments.length ? 0 : index + 1].intersection
+            point1: this.trackElements[index].intersection,
+            point2: this.trackElements[index + 1 === this.trackElements.length ? 0 : index + 1].intersection
         };
     }
 
@@ -217,6 +218,7 @@ export class TrackValidationService {
     }
 
     public isValid(index: number) {
-        return this.trackElements[index].segmentIntersections.length === 0;
+        return (this.trackElements[index].segmentIntersections.length === 0 &&
+                this.trackElements[index].segmentLength >= 40);
     }
 }
