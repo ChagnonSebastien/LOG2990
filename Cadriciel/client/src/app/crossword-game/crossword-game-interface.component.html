@@ -10,7 +10,7 @@
                 [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j)}" 
                 type="text" maxLength="1"
                 [(ngModel)]="rawCrossword[i][j]"   
-                (click)="handleClick(i,j)"
+               
                 
             /> 
                 
@@ -20,10 +20,10 @@
 
 <div id ="indices">
 <h2>Indices</h2>
-    <tr *ngFor="let hint of listOfWordsAndHints ; let k = index">
+    <tr *ngFor="let hint of wordsIndexes; let k = index">
 
         <td >
-          <button> <p>  {{listOfWordsAndHints[k].indice}} </p> </button>   
+          <button (click)="handleClick(k)"> <p>  {{hint.hint}} </p> </button>   
        </td>
 
     </tr>

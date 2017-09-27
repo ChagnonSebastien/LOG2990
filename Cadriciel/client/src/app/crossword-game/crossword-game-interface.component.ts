@@ -27,21 +27,21 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     {word: 'delhi', indice : 'Capital of India'}, {word: 'mumbai', indice : 'India financial capital'},
     {word: 'kashmir', indice : 'Saffron region'} ];
 
-    public wordsIndexes: {word: string, indexes: Index[], position: string}[] = [];
+    public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
+    public activeIndexes: Index[]= [];
 
-    public gridSqaures: [{i: number, j: number, isActive: boolean}];
-    public activeSquareCoord: {i: number, j: number};
+    public handleClick(k) {
+          this.activeIndexes = this.wordsIndexes[k].indexes;
+        }
 
-    public handleClick(i, j) {
-          this.activeSquareCoord = {
-            i: i,
-            j: j
-        };
-
-    }
     public isActive(i, j): boolean {
 
-        return (i === this.activeSquareCoord.i && j === this.activeSquareCoord.j);
+       for (let k = 0 ; k < this.activeIndexes.length ; k++) {
+            if (this.activeIndexes[k].i === i && this.activeIndexes[k].j === j ) {
+                return true;
+            }
+       }
+       return false;
      }
 
      public fillWordsIndexes() {
@@ -58,9 +58,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                 (this.listOfWordsAndHints[k].word, this.rawCrossword[l], l, true);
 
                 if (indexes.length !== 0) {
-
-
-                    this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes, position: 'horizontal'});
+                    this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes,
+                     position: 'horizontal', hint: this.listOfWordsAndHints[k].indice});
                     break;
 
             } else {
@@ -71,7 +70,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                 (this.listOfWordsAndHints[k].word, this.getColumn(l), l, false);
 
                 if (indexes.length !== 0) {
-                    this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes, position: 'vertical'});
+                    this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes,
+                    position: 'vertical', hint: this.listOfWordsAndHints[k].indice});
                     break;
               }
 
@@ -120,11 +120,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
     constructor() { }
     public ngOnInit() {
-        // on init set the active as none of the grid squares
-        this.activeSquareCoord = {
-            i: -1,
-            j: -1
-        };
+
+        this.fillWordsIndexes();
     }
 
 }
