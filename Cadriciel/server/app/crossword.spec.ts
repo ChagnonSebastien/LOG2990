@@ -32,6 +32,11 @@ describe('Crossword', () => {
             expect(crossword.indexOutOfBounds(0, 9)).to.be.false;
             expect(crossword.indexOutOfBounds(9, 0)).to.be.false;
         });
+
+        it('should return false when i or j is smaller than 0', () => {
+            expect(crossword.indexOutOfBounds(-1, 0)).to.be.true;
+            expect(crossword.indexOutOfBounds(0, -1)).to.be.true;
+        })
     })
 
     describe('addLetter(i: number, j: number, letter: string) { }', () => {
