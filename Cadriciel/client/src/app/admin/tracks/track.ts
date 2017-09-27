@@ -4,16 +4,18 @@ export class Track {
     public name: string;
     public description = '';
     public type: string;
+    public appreciation: number;
     public trackIntersections: { x: number, y: number } [] = [];
     public puddles: { distance: number, offset: number }[] = [];
     public potholes: { distance: number, offset: number } [] = [];
     public boosters: { distance: number, offset: number } [] = [];
 
-    constructor(id: number, name: string, description: string, type: string) {
+    constructor(id: number, name: string, description: string, type: string, appreciation: number) {
         this.trackId = id;
         this.name = name;
         this.description = description;
         this.type = type;
+        this.appreciation = appreciation;
     }
 
     public addIntersections([distance, offset]) {
