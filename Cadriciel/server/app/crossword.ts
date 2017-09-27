@@ -13,6 +13,9 @@ export class Crossword {
     }
 
     public indexOutOfBounds(i: number, j: number): boolean {
+        if (i >= this.size || j >= this.size) {
+            return true;
+        }
         return false;
     }
 
