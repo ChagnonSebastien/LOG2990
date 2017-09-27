@@ -83,6 +83,7 @@ export class DrawTrackService {
         }
         if (this.currentlyDraggedIntersection !== -1) {
             this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
+            this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
         }
         this.updateComponentsView();
     }
@@ -150,6 +151,16 @@ export class DrawTrackService {
     }
 
     private updateComponentsLook() {
+        if (this.currentlyDraggedIntersection !== -1 || !this.loopClosed) {
+            this.segments.forEach((segment, index) => {
+                if (this.trackValidationService.isValid(index)) {
+                    segment.material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+                } else {
+                    segment.material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+                }
+            });
+        }
+
         if (this.loopClosed || this.intersections.length === 0) {
             return;
         }
@@ -159,14 +170,6 @@ export class DrawTrackService {
         } else {
             this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
         }
-
-        this.segments.forEach((segment, index) => {
-            if (this.trackValidationService.isValid(index)) {
-                segment.material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
-            } else {
-                segment.material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
-            }
-        });
     }
 
     private getRelativeMousePosition(clientX: number, clientY: number) {
@@ -237,7 +240,7 @@ export class DrawTrackService {
               this.addHighlight();
               this.segments[0].material = new THREE.MeshBasicMaterial({color: 0xFF7700});
             }
-        } else if (this.pointMouseHoversOn === 0) {
+        } else if (this.pointMouseHoversOn === 0 && !this.loopClosed) {
             this.loopClosed = true;
             this.trackValidationService.trackClosed = true;
             this.trackValidationService.removeLastPoint();
@@ -272,16 +275,17 @@ export class DrawTrackService {
     public removeIntersection() {
         if (this.loopClosed) {
             this.loopClosed = false;
-            this.trackValidationService.trackClosed = false;4
+            this.trackValidationService.trackClosed = false;
             this.trackValidationService.addPoint(this.mousePosition);
             this.updateComponentsView();
             return;
         }
 
-        this.trackValidationService.removeLastPoint();
         if (this.intersections.length === 0) {
             return;
         }
+
+        this.trackValidationService.removeLastPoint();
 
         this.scene.remove(this.intersections.pop());
         if (this.intersections.length === 0) {

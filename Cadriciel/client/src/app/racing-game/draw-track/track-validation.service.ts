@@ -22,7 +22,6 @@ export class TrackValidationService {
     }
 
     public updatePoint(index: number, intersection: THREE.Vector3) {
-        console.log(this.trackElements);
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentLength(this.trackElements.length - 1);
@@ -34,7 +33,14 @@ export class TrackValidationService {
     }
 
     public removeLastPoint() {
-        this.trackElements.pop();
+        this.trackElements.splice(this.trackElements.length - (this.trackClosed ? 1 : 2), 1);
+        this.trackElements.forEach((segment, index, segments) => {
+            const removedPosition = segment.segmentIntersections.indexOf(segments.length - 1);
+            if (-1 < removedPosition) {
+                segment.segmentIntersections.splice(removedPosition, 1);
+            }
+        });
+        this.checkSegmentIntersections(this.trackElements.length - 2);
     }
 
     public checkSegmentLength(index: number) {
@@ -45,7 +51,6 @@ export class TrackValidationService {
         const service = this;
         this.trackElements.forEach(
             (segment, i, segments) => {
-
                 if ((Math.abs(index - i) < 2 || Math.abs(index - i) === (segments.length - 1)) ||
                     (!service.trackClosed && (i === segments.length - 1 ||  index === segments.length - 1))) {
                     return;
@@ -64,10 +69,8 @@ export class TrackValidationService {
                 let clampDistances: number[] = [];
                 const optimisedDistancesLine1: number[] = service.checkForClamp(intersection, line1, line2);
                 clampDistances = clampDistances.concat(optimisedDistancesLine1);
-                console.log(clampDistances);
                 const optimisedDistancesLine2: number[] = service.checkForClamp(intersection, line2, line1);
                 clampDistances = clampDistances.concat(optimisedDistancesLine2);
-                console.log(clampDistances, '.');
 
                 const minimumSegmentsDistance = clampDistances.length > 0 ? service.minimum(clampDistances) : 0;
                 service.updateSegmentsValidity(minimumSegmentsDistance, i, index);
