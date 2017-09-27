@@ -7,7 +7,7 @@ export class TrackService {
     constructor(private http: Http) { }
 
     public deleteTrack(id) {
-        return this.http.delete('http://localhost:3000/api/tracks' + id).map(res => res.json());
+        return this.http.delete('http://localhost:3000/api/track/' + id).map(res => res.json());
     }
 
     public changeTrackType(id: number, newType: String) {
@@ -19,7 +19,7 @@ export class TrackService {
             'newType': newType
         };
 
-        return this.http.post('http://localhost:3000/api/tracksTypeChange', information, { headers: headers }).map(res => res.json());
+        return this.http.put('http://localhost:3000/api/tracksTypeChange', information, { headers: headers }).map(res => res.json());
     }
 
 
@@ -33,7 +33,7 @@ export class TrackService {
             'newDesc': newDesc
         };
 
-        return this.http.post('http://localhost:3000/api/tracksDescChange', information, { headers: headers }).map(res => res.json());
+        return this.http.put('http://localhost:3000/api/tracksDescChange', information, { headers: headers }).map(res => res.json());
     }
 
 
