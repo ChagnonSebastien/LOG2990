@@ -6,17 +6,6 @@ import 'rxjs/add/operator/map';
 export class TrackService {
     constructor(private http: Http) { }
 
-    public getTracks() {
-        return this.http.get('http://localhost:3000/api/tracks').map(res => res.json());
-    }
-
-    public addTracks(newTrack) {
-
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        return this.http.post('http://localhost:3000/api/tracks', newTrack, { headers: headers }).map(res => res.json());
-    }
-
     public deleteTrack(id) {
         return this.http.delete('http://localhost:3000/api/tracks' + id).map(res => res.json());
     }

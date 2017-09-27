@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrackService } from './track.service';
 import { Track } from './track';
+import { Http, Headers } from '@angular/http';
 @Component({
     selector: 'app-tracks',
     templateUrl: './tracks.component.html',
@@ -11,10 +12,10 @@ export class TracksComponent implements OnInit {
 
     public tracks: Track[];
     public selectedTrack: Track;
-    constructor(private trackService: TrackService) { }
+    constructor(private trackService: TrackService, private http: Http) { }
 
     public ngOnInit() {
-        this.trackService.getTracks().subscribe(tracks => this.tracks = tracks);
+        this.getTracks().subscribe(tracks => this.tracks = tracks);
     }
 
     public onSelect(track: Track): void {
@@ -33,5 +34,16 @@ export class TracksComponent implements OnInit {
             }
         });
 
+    }
+
+    public getTracks() {
+        return this.http.get('http://localhost:3000/api/tracks').map(res => res.json());
+    }
+
+    public addTracks(newTrack) {
+
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.post('http://localhost:3000/api/tracks', newTrack, { headers: headers }).map(res => res.json());
     }
 }
