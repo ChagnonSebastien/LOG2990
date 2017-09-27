@@ -96,7 +96,6 @@ export class Application {
         router.get('/frequency/:word', lexicon.getWordFrequency.bind(lexicon.getWordFrequency));
         router.get('/pattern/:word', lexicon.getWordsMatchingPattern.bind(lexicon.getWordsMatchingPattern));
 
-
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
 
@@ -112,6 +111,7 @@ export class Application {
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // crossword api path
+        router.get('/crossword', crosswords.getCrossword.bind(crosswords.getCrossword));
         router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
         router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
         router.get('/crosswords', crosswords.getCrossWords.bind(crosswords.getCrossWords));
