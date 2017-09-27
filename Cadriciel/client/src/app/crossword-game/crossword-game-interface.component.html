@@ -1,22 +1,22 @@
 <div id="page" (click)="cancelSelection($event)" >
 <div id="wrapper"> 
-    
+<form> 
 <tr *ngFor="let ligne of rawCrossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >
               
-             
+              
             <input 
                   
                 [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j)}" 
-                type="text" maxLength="1"
-                [(ngModel)]="rawCrossword[i][j]"   
+                type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
+                (keypress)="filterInput($event,j ,i)"
                 (click)="handleInput($event)"
                 
-               
             /> 
                 
         </td>
     </tr>
+</form>  
 </div>
 
 <div id ="indices">

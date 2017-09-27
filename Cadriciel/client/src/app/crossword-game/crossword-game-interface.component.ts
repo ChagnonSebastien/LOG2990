@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
 
 @Component({
     selector: 'app-crossword-game-interface',
@@ -126,6 +126,20 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      public handleInput($event) {
         event.stopPropagation();
      }
+
+    public filterInput(event: any, i: number, j: number) {
+           console.log('heloo');
+        // Check if number is a letter
+        if ((event.keyCode < 65 || event.charCode > 122) || (event.charCode >= 91 && event.charCode <= 96)) {
+            // stop event to prevent entering something else than letters
+            this.disableEvent(event);
+     }
+    }
+
+     private disableEvent(event: any) {
+        event.preventDefault();
+        event.returnValue = false;
+    }
 
     constructor() { }
     public ngOnInit() {
