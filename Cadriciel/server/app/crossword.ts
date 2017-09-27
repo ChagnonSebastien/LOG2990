@@ -12,6 +12,10 @@ export class Crossword {
         return Array(size).fill(line);
     }
 
+    public indexOutOfBounds(i: number, j: number): boolean {
+        return false;
+    }
+
     public addLetter(i: number, j: number, letter: string): boolean {
         if (i >= this.size || j >= this.size) {
             return false;
