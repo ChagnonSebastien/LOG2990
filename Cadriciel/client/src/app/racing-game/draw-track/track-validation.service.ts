@@ -5,16 +5,16 @@ import * as THREE from 'three';
 export class TrackValidationService {
     public trackElements: {
         intersection: THREE.Vector3,
-        intersectionAngle: boolean,
+        intersectionAngle: number[],
         segmentLength: number,
         segmentIntersections: number[]
-    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: false, segmentLength: 0, segmentIntersections: [] }];
+    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }];
 
     public trackClosed = false;
 
     public addPoint(intersection: THREE.Vector3) {
         this.trackElements.push(
-            { intersection, intersectionAngle: false, segmentLength: 0, segmentIntersections: [] }
+            { intersection, intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }
         );
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentIntersections(this.trackElements.length - 2);
@@ -27,9 +27,9 @@ export class TrackValidationService {
         this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
-        this.checkPointAngle(0);
-        this.checkPointAngle(this.trackElements.length - 1);
-        this.checkPointAngle(this.trackElements.length - 2);
+        this.checkPointAngle(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
+        this.checkPointAngle(index);
+        this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1);
     }
 
     public removeLastPoint() {
@@ -214,11 +214,32 @@ export class TrackValidationService {
     }
 
     public checkPointAngle(index: number) {
+        if (!this.trackClosed && (index === 0 || index === this.trackElements.length - 1)) {
+            return;
+        }
 
+        const line1 = this.getLine(index);
+        const line2 = this.getLine((index - 1) === -1 ? this.trackElements.length - 1 : index - 1);
+        const angle1 = this.getAngle(line1);
+        const angle2 = this.getAngle(line2);
+        const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
+        const angleVariation = rawAngleVariation % (2 * Math.PI);
+        this.trackElements[index - 1 === -1 ? this.trackElements.length - 1 : index - 1].intersectionAngle[0] = angleVariation;
+        this.trackElements[index].intersectionAngle[1] = angleVariation;
+    }
+
+    public getAngle(line): number {
+        const rawAngle = Math.atan((line.point2.y - line.point1.y) / (line.point2.x - line.point1.x));
+        return (
+            (line.point2.x - line.point1.x > 0) ||
+            (line.point2.x - line.point1.x === 0 && line.point2.y - line.point1.y >= 0)
+        ) ? rawAngle : rawAngle + Math.PI;
     }
 
     public isValid(index: number) {
-        return (this.trackElements[index].segmentIntersections.length === 0 &&
-                this.trackElements[index].segmentLength >= 40);
+        return (/*this.trackElements[index].segmentIntersections.length === 0 &&
+                this.trackElements[index].segmentLength >= 40 &&*/
+                (this.trackElements[index].intersectionAngle[1] <= Math.PI &&
+                    this.trackElements[index].intersectionAngle[0] <= Math.PI));
     }
 }
