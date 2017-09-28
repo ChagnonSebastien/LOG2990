@@ -22,22 +22,38 @@ describe('Crossword', () => {
         });
     });
 
-    describe('indexOutOfBounds(i: number, j: number): boolean { }', () => {
-        it('should return false when i or j is greater than 10', () => {
-            expect(crossword.indexOutOfBounds(10, 0)).to.be.true;
-            expect(crossword.indexOutOfBounds(0, 10)).to.be.true;
+    describe('indexOutOfBounds(i: number): boolean { }', () => {
+        it('should return true when i is smaller than 0', () => {
+            expect(crossword.indexOutOfBounds(-1)).to.be.true;
         });
 
-        it('should return true when i or j is between 0 and 10', () => {
-            expect(crossword.indexOutOfBounds(0, 9)).to.be.false;
-            expect(crossword.indexOutOfBounds(9, 0)).to.be.false;
+        it('should return true when i is greater than or equal to 10', () => {
+            expect(crossword.indexOutOfBounds(10)).to.be.true;
         });
 
-        it('should return false when i or j is smaller than 0', () => {
-            expect(crossword.indexOutOfBounds(-1, 0)).to.be.true;
-            expect(crossword.indexOutOfBounds(0, -1)).to.be.true;
-        })
-    })
+        it('should return false when i is between 0 and 9', () => {
+            expect(crossword.indexOutOfBounds(0)).to.be.false;
+            expect(crossword.indexOutOfBounds(4)).to.be.false;
+            expect(crossword.indexOutOfBounds(9)).to.be.false;
+        });
+    });
+
+    describe('indexesOutOfBounds(i: number, j: number): boolean { }', () => {
+        it('should return true when i or j is greater than or equal to 10', () => {
+            expect(crossword.indexesOutOfBounds(10, 0)).to.be.true;
+            expect(crossword.indexesOutOfBounds(0, 10)).to.be.true;
+        });
+
+        it('should return false when i or j is between 0 and 9', () => {
+            expect(crossword.indexesOutOfBounds(0, 9)).to.be.false;
+            expect(crossword.indexesOutOfBounds(9, 0)).to.be.false;
+        });
+
+        it('should return true when i or j is smaller than 0', () => {
+            expect(crossword.indexesOutOfBounds(-1, 0)).to.be.true;
+            expect(crossword.indexesOutOfBounds(0, -1)).to.be.true;
+        });
+    });
 
     describe('addLetter(i: number, j: number, letter: string) { }', () => {
         it('should insert the letter "a" at coordinates (3, 0)', () => {

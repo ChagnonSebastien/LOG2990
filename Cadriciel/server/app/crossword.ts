@@ -12,22 +12,18 @@ export class Crossword {
         return Array(size).fill(line);
     }
 
-    public indexOutOfBounds(i: number, j: number): boolean {
-        if (i >= this.size || j >= this.size) {
-            return true;
-        }
+    public indexOutOfBounds(i: number): boolean {
+        return i < 0 || i >= this.size;
+    }
 
-        if (i < 0 || j < 0) {
-            return true;
-        }
-        return false;
+    public indexesOutOfBounds(i: number, j: number): boolean {
+        return this.indexOutOfBounds(i) || this.indexOutOfBounds(j);
     }
 
     public addLetter(i: number, j: number, letter: string): boolean {
-        if (i >= this.size || j >= this.size) {
+        if (this.indexesOutOfBounds(i, j)) {
             return false;
         }
-
         this.grid[i][j] = letter;
         return true;
     }
