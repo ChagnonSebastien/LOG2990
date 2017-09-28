@@ -9,8 +9,9 @@
       <label>description: </label>
       <input [(ngModel)]="track.description"  placeholder="description"/>
       <label>type: </label>
-      <input [(ngModel)]="track.type" placeholder="type"/>
-      <label>appreciation: {{track.appreciation}} </label>
+      <input [(ngModel)]="track.type" placeholder="type"/><br/>
+      <label>appreciation: {{track.appreciation}} </label><br/>
+      <label>timePlayed: {{track.timePlayed}} </label>
     </p>
     <button class="btn" (click)="save()">Save</button>
   </div>
