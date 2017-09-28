@@ -8,8 +8,12 @@ export class Crossword {
     }
 
     public getEmptyGrid(size: number): String[][] {
-        const line = Array(size).fill(' ');
-        return Array(size).fill(line);
+        return new Array(size).fill(null).map(u => {
+            const line = new Array(size).fill(null).map(u => {
+                return ' ';
+            });
+            return line;
+        });
     }
 
     public indexOutOfBounds(i: number): boolean {
@@ -32,10 +36,14 @@ export class Crossword {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
-        let added = true;
-        for (let k = 0; k < word.length; k++) {
-            added = this.addLetter(i, j + k, word.charAt(k)) ? added : false;
+        for (const letter of word) {
+            if (!this.addLetter(i, j, letter)) {
+                return false;
+            } else {
+                i = horizontal ? i : ++i;
+                j = horizontal ? ++j : j;
+            }
         }
-        return added;
+        return true;
     }
 }

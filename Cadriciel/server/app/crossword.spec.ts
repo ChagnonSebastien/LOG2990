@@ -74,5 +74,12 @@ describe('Crossword', () => {
             expect(crossword.grid[0][2]).to.equal('l');
             expect(crossword.grid[0][4]).to.equal('o');
         });
+
+        it('should add the word hello vertically from position (0, 0) to (4, 0)', () => {
+            expect(crossword.addWord(0, 0, 'hello', false)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('h');
+            expect(crossword.grid[2][0]).to.equal('l');
+            expect(crossword.grid[4][0]).to.equal('o');
+        });
     });
 });

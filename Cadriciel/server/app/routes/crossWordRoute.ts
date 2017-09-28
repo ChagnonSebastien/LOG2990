@@ -13,7 +13,7 @@ module Route {
 
         public getCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
             const crossword = new Crossword(10);
-            console.log(crossword.grid);
+            crossword.addWord(0, 0, 'hellaso', true);
             res.send(JSON.stringify({
                 'data': crossword.grid
             }));
