@@ -7,9 +7,9 @@
               
             <input 
                   
-                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j)}" 
+                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':findIndexOfWordWithIndex(i,j)}" 
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
-                (keypress)="filterInput($event,j ,i)"
+                (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)"
                 
             /> 
@@ -21,13 +21,14 @@
 
 <div id ="indices">
 <h2>Indices</h2>
+    <table id= "hints"> 
     <tr *ngFor="let hint of wordsIndexes; let k = index">
 
         <td >
-          <button class="btn" (click)="handleClick($event,k)">   {{hint.hint}}  </button>   
+          <button class="btn" (click)="handleClick($event,k)" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
        </td>
 
     </tr>
-
+</table>
 </div>
 </div>

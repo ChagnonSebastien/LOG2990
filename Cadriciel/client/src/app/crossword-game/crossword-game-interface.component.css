@@ -29,6 +29,13 @@
  
   .active{
     border: 3px solid red;
-   
+   background-color: #E9D1D1
   }
-
+.correctWord{
+  border: 3px solid #7BF57B;
+  background-color: #CAF8D0
+}
+#hints{
+  border-collapse:separate; 
+  border-spacing:0px 4px;
+}

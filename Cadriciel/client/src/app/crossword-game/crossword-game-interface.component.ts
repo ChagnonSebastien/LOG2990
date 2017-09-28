@@ -28,8 +28,9 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     {word: 'kashmir', indice : 'Saffron region'} ];
 
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
-    public activeIndexes: Index[]= [];
-
+    public activeIndexes: Index[] = [];
+    public correctIndexes: Index[] = [];
+    public kValue = 20;
     public handleClick($event, k) {
         this.activeIndexes = this.wordsIndexes[k].indexes.slice();
         $event.stopPropagation();
@@ -128,22 +129,77 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      }
 
     public filterInput(event: any, i: number, j: number) {
-           console.log('heloo');
-        // Check if number is a letter
+        // Check if input is a letter
         if ((event.keyCode < 65 || event.charCode > 122) || (event.charCode >= 91 && event.charCode <= 96)) {
             // stop event to prevent entering something else than letters
             this.disableEvent(event);
+
+     } else {
+        this.checkIfCorrectInput(event.charCode, i, j);
      }
+   }
+
+   //check if the word was found 
+   public checkWordFound( k: number) {
+    if (k < this.wordsIndexes.length) {
+    for (let i = 0 ; i < this.wordsIndexes[k].indexes.length ; i ++) {
+        if (!(this.checkWordFoundWithIndex(this.wordsIndexes[k].indexes[i].i, this.wordsIndexes[k].indexes[i].j))) {
+             return false;
+        }
+    }
+    return true;
+}
+    return false;
+}
+
+
+ // find index in table wordIndexes of the word which contains a letter of the index passed in parameter on the grid
+public findIndexOfWordWithIndex(i: number, j: number) {
+
+    for (let k = 0 ; k < this.wordsIndexes.length ; k ++) {
+        for (let l = 0 ; l < this.wordsIndexes[k].indexes.length ; l ++) {
+            if (this.wordsIndexes[k].indexes[l].i === i && this.wordsIndexes[k].indexes[l].j === j) {
+                 if (this.checkWordFound(k)) {
+                    return true;
+                 }
+            }
+        }
+    }
+    return false;
+
+}
+
+// check if  the letter enterted at this particular index contains the correct letter
+private checkWordFoundWithIndex(i: number, j: number) {
+    let found = false;
+
+     for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
+         if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
+             found = true;
+         }
+     }
+     return found;
     }
 
-     private disableEvent(event: any) {
+
+
+
+
+
+  private disableEvent(event: any) {
         event.preventDefault();
         event.returnValue = false;
+    }
+    //to do remove when wrong 
+    private checkIfCorrectInput(charCode: number, i: number, j: number) {
+        if (this.rawCrossword[i][j].charCodeAt(0) === charCode) {
+            let index : Index = {i: i, j: j};
+            this.correctIndexes.push(index);
+        }
     }
 
     constructor() { }
     public ngOnInit() {
-
         this.fillWordsIndexes();
     }
 
