@@ -30,4 +30,8 @@ export class Crossword {
         this.grid[i][j] = letter;
         return true;
     }
+
+    public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        return false;
+    }
 }

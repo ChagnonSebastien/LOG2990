@@ -66,4 +66,10 @@ describe('Crossword', () => {
             expect(crossword.addLetter(0, 10, 'a')).to.be.false;
         });
     });
+
+    describe('addWord(i: number, j: number, word: string, horizontal: boolean) { }', () => {
+        it('should add the word hello at position (0, 0)', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+        });
+    });
 });
