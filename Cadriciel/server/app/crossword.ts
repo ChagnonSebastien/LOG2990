@@ -24,6 +24,9 @@ export class Crossword {
         if (this.indexesOutOfBounds(i, j)) {
             return false;
         }
+        if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
+            return false;
+        }
         this.grid[i][j] = letter;
         return true;
     }
