@@ -68,8 +68,11 @@ describe('Crossword', () => {
     });
 
     describe('addWord(i: number, j: number, word: string, horizontal: boolean) { }', () => {
-        it('should add the word hello at position (0, 0)', () => {
+        it('should add the word hello horizontally from position (0, 0) to (0, 4)', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('h');
+            expect(crossword.grid[0][2]).to.equal('l');
+            expect(crossword.grid[0][4]).to.equal('o');
         });
     });
 });

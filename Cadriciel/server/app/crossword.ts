@@ -32,6 +32,10 @@ export class Crossword {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
-        return false;
+        let added = true;
+        for (let k = 0; k < word.length; k++) {
+            added = this.addLetter(i, j + k, word.charAt(k)) ? added : false;
+        }
+        return added;
     }
 }
