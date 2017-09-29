@@ -63,4 +63,20 @@ export class Crossword {
         this.grid[i][j] = ' ';
         return true;
     }
+
+    public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        const savedState = Utilities.deepCopy(this.grid);
+
+        for (const letter of word) {
+            if (!this.deleteLetter(i, j, letter)) {
+                this.grid = savedState; // rollback
+                return false;
+            } else {
+                i = horizontal ? i : i + 1;
+                j = horizontal ? j + 1 : j;
+            }
+        }
+
+        return true;
+    }
 }

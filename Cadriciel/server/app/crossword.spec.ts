@@ -118,4 +118,14 @@ describe('Crossword', () => {
             expect(crossword.deleteLetter(0, 0, 'ab')).to.be.false;
         });
     });
+
+    describe('deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean { }', () => {
+        it('should delete a previously inserted word', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.deleteWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal(' ');
+            expect(crossword.grid[0][2]).to.equal(' ');
+            expect(crossword.grid[0][4]).to.equal(' ');
+        });
+    });
 });
