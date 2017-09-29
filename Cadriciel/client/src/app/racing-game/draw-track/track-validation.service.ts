@@ -18,7 +18,7 @@ export class TrackValidationService {
         );
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentIntersections(this.trackElements.length - 2);
-        this.checkPointAngle(this.trackElements.length - 2);
+        this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
     }
 
     public updatePoint(index: number, intersection: THREE.Vector3) {
@@ -27,9 +27,13 @@ export class TrackValidationService {
         this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
-        this.checkPointAngle(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
-        this.checkPointAngle(index);
-        this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1);
+        this.checkPointAngle(
+            index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
+            (index + this.trackElements.length - 2) % this.trackElements.length
+        );
+        this.checkPointAngle(index, index - 1 === -1 ? this.trackElements.length - 1 : index - 1);
+        this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1,  index);
+        console.log(this.trackElements[this.trackElements.length - 3].intersectionAngle);
     }
 
     public removeLastPoint() {
@@ -65,7 +69,6 @@ export class TrackValidationService {
                 const line1 = service.getLine(index);
                 const line2 = service.getLine(i);
                 const intersection = service.twoLineIntersection(line1, line2);
-                // Evaluate for two paralele lines
 
                 let clampDistances: number[] = [];
                 const optimisedDistancesLine1: number[] = service.checkForClamp(intersection, line1, line2);
@@ -213,32 +216,29 @@ export class TrackValidationService {
         return distances;
     }
 
-    public checkPointAngle(index: number) {
-        if (!this.trackClosed && (index === 0 || index === this.trackElements.length - 1)) {
+    public checkPointAngle(index1: number, index2: number) {
+        if (!this.trackClosed && (index1 === 0 || index1 === this.trackElements.length - 1)) {
             return;
         }
 
-        const line1 = this.getLine(index);
-        const line2 = this.getLine((index - 1) === -1 ? this.trackElements.length - 1 : index - 1);
+        const line1 = this.getLine(index1);
+        const line2 = this.getLine(index2);
         const angle1 = this.getAngle(line1);
         const angle2 = this.getAngle(line2);
         const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
-        const angleVariation = rawAngleVariation % (2 * Math.PI);
-        this.trackElements[index - 1 === -1 ? this.trackElements.length - 1 : index - 1].intersectionAngle[0] = angleVariation;
-        this.trackElements[index].intersectionAngle[1] = angleVariation;
+        const angleVariation = (rawAngleVariation + (2 * Math.PI)) % (2 * Math.PI);
+        this.trackElements[index2].intersectionAngle[0] = angleVariation;
+        this.trackElements[index1].intersectionAngle[1] = angleVariation;
     }
 
     public getAngle(line): number {
         const rawAngle = Math.atan((line.point2.y - line.point1.y) / (line.point2.x - line.point1.x));
-        return (
-            (line.point2.x - line.point1.x > 0) ||
-            (line.point2.x - line.point1.x === 0 && line.point2.y - line.point1.y >= 0)
-        ) ? rawAngle : rawAngle + Math.PI;
+        return ( line.point2.x - line.point1.x >= 0 ) ? rawAngle : rawAngle + Math.PI;
     }
 
     public isValid(index: number) {
-        return (/*this.trackElements[index].segmentIntersections.length === 0 &&
-                this.trackElements[index].segmentLength >= 40 &&*/
+        return (this.trackElements[index].segmentIntersections.length === 0 &&
+                this.trackElements[index].segmentLength >= 40 &&
                 (this.trackElements[index].intersectionAngle[1] <= Math.PI &&
                     this.trackElements[index].intersectionAngle[0] <= Math.PI));
     }
