@@ -45,8 +45,8 @@ export class Crossword {
                 this.grid = savedState; // rollback
                 return false;
             } else {
-                i = horizontal ? i : ++i;
-                j = horizontal ? ++j : j;
+                i = horizontal ? i : i + 1;
+                j = horizontal ? j + 1 : j;
             }
         }
 

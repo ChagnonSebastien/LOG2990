@@ -67,6 +67,11 @@ describe('Crossword', () => {
             expect(crossword.addLetter(10, 0, 'a')).to.be.false;
             expect(crossword.addLetter(0, 10, 'a')).to.be.false;
         });
+
+        it('should not add a letter if it is not a single character', () => {
+            expect(crossword.addLetter(0, 0, '')).to.be.false;
+            expect(crossword.addLetter(0, 0, 'ab')).to.be.false;
+        });
     });
 
     describe('addWord(i: number, j: number, word: string, horizontal: boolean) { }', () => {
@@ -106,6 +111,11 @@ describe('Crossword', () => {
 
         it('should not delete a letter if the square is blank', () => {
             expect(crossword.deleteLetter(0, 0, 'h')).to.be.false;
+        });
+
+        it('should not delete a letter if it is not a single character', () => {
+            expect(crossword.deleteLetter(0, 0, '')).to.be.false;
+            expect(crossword.deleteLetter(0, 0, 'ab')).to.be.false;
         });
     });
 });
