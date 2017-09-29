@@ -4,6 +4,7 @@ export class Crossword {
     public size: number;
     public grid: String[][];
     public previousGridState: String[][];
+    private letterCounter: String[][];
 
     constructor(size: number) {
         this.size = size;
@@ -12,9 +13,13 @@ export class Crossword {
     }
 
     public getEmptyGrid(size: number): String[][] {
+        return this.newGrid(size, ' ');
+    }
+
+    public newGrid(size: number, fill: any): Array<any> {
         return new Array(size).fill(null).map(u => {
             const line = new Array(size).fill(null).map(u => {
-                return ' ';
+                return fill;
             });
             return line;
         });
