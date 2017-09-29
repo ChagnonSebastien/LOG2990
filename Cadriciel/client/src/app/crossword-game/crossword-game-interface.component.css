@@ -9,7 +9,7 @@
   .filled {
     width: 58px;
     height: 58px;
-    background: black;
+    background:rgba(0,0,0,0);
     border: 1px solid black;
     padding: 0;
     margin: 0;
@@ -38,4 +38,37 @@
 #hints{
   border-collapse:separate; 
   border-spacing:0px 4px;
+}
+
+
+.selected{
+  background-color: #119AE9
+
+}
+
+#page{
+  background: url('./space_background.jpg');
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+#grid{
+  border-top: 500px;
+}
+
+#Horizontal_Header {
+  padding-left: 5px; 
+  padding-bottom:3px; 
+   color: #8AD1F1;
+   font-weight:bold;
+}
+
+#Vertical_Header{
+  padding-left: 5px; 
+  padding-bottom:3px; 
+   color: #8AD1F1;
+   font-weight:bold;
 }

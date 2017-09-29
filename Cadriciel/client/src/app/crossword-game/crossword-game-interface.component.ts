@@ -30,7 +30,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
-    public kValue = 20;
+    public kSelected = 20;
     public handleClick($event, k) {
         this.activeIndexes = this.wordsIndexes[k].indexes.slice();
         $event.stopPropagation();
@@ -122,6 +122,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
      public cancelSelection($event) {
         this.activeIndexes.splice(0, this.activeIndexes.length);
+        this.kSelected = 20;
      }
 
      public handleInput($event) {
@@ -169,6 +170,24 @@ public findIndexOfWordWithIndex(i: number, j: number) {
 
 }
 
+
+public selectK(k) {
+    this.kSelected = k ;
+}
+
+public checkVertical(position: string) {
+
+    return position === 'vertical';
+
+}
+
+public checkHorizontal(position: string) {
+
+    return position === 'horizontal';
+
+}
+
+
 // check if  the letter enterted at this particular index contains the correct letter
 private checkWordFoundWithIndex(i: number, j: number) {
     let found = false;
@@ -190,7 +209,9 @@ private checkWordFoundWithIndex(i: number, j: number) {
         event.preventDefault();
         event.returnValue = false;
     }
-    //to do remove when wrong 
+
+
+    //to do remove when wrong @@@@@@@@@@@@@@@@@@@@@@@@@
     private checkIfCorrectInput(charCode: number, i: number, j: number) {
         if (this.rawCrossword[i][j].charCodeAt(0) === charCode) {
             let index : Index = {i: i, j: j};
