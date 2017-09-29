@@ -40,11 +40,10 @@ export class Crossword {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
-        const savedState = Utilities.deepCopy(this.grid);
-
+        this.saveState();
         for (const letter of word) {
             if (!this.addLetter(i, j, letter)) {
-                this.grid = savedState; // rollback
+                this.rollback();
                 return false;
             } else {
                 i = horizontal ? i : i + 1;
@@ -67,11 +66,10 @@ export class Crossword {
     }
 
     public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
-        const savedState = Utilities.deepCopy(this.grid);
-
+        this.saveState();
         for (const letter of word) {
             if (!this.deleteLetter(i, j, letter)) {
-                this.grid = savedState; // rollback
+                this.rollback();
                 return false;
             } else {
                 i = horizontal ? i : i + 1;
