@@ -75,7 +75,30 @@ describe('TrackValidationService', () => {
         }));
     });
 
-    describe('The \'solveLineEquation\' method', () => {
+    describe('The \'solveLineEquationWithY\' method', () => {
+        it('works for a angular line',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const y = -5;
+            const lineParameters = {a: 1, b: -4, c: 1};
+            expect(service.solveLineEquationWithY(y, lineParameters)).toEqual(-21);
+        }));
+
+        it('works for a line in the x axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const y = 10;
+            const lineParameters = {a: 0, b: -2, c: 1};
+            expect(service.solveLineEquationWithY(y, lineParameters)).toBeDefined();
+        }));
+
+        it('works for a line in the y axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const y = 5;
+            const lineParameters = {a: 56, b: 0, c: 1};
+            expect(service.solveLineEquationWithY(y, lineParameters)).toEqual(-1 / 56);
+        }));
+    });
+
+    describe('The \'solveLineEquationWithX\' method', () => {
         it('works for a angular line',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const x = -5;
@@ -167,14 +190,14 @@ describe('TrackValidationService', () => {
             const line2 = {point1: {x: -2, y: 7}, point2: {x: 3, y: 7}};
             expect(service.clampAndGetOptimalPoint(clampedPoint, line1, line2)).toEqual(4);
         }));
-/*
+
         it('if the optimal point is on the second segment for a vertical seccond line',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const clampedPoint = {x: 3, y: 3};
             const line1 = {point1: {x: 0, y: 0}, point2: {x: 3, y: 3}};
             const line2 = {point1: {x: 3, y: 1}, point2: {x: 3, y: 7}};
             expect(service.clampAndGetOptimalPoint(clampedPoint, line1, line2)).toEqual(0);
-        })); */
+        }));
 
         it('if the optimal point is not on the second segment for a hozintal second line',
         inject([TrackValidationService], (service: TrackValidationService) => {
