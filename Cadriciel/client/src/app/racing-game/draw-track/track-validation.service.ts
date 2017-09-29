@@ -33,7 +33,6 @@ export class TrackValidationService {
         );
         this.checkPointAngle(index, index - 1 === -1 ? this.trackElements.length - 1 : index - 1);
         this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1,  index);
-        console.log(this.trackElements[this.trackElements.length - 3].intersectionAngle);
     }
 
     public removeLastPoint() {
@@ -44,6 +43,9 @@ export class TrackValidationService {
                 segment.segmentIntersections.splice(removedPosition, 1);
             }
         });
+        this.trackElements[this.trackElements.length - (this.trackClosed ? 1 : 2)].intersectionAngle[1] = 0;
+        this.checkPointAngle(this.trackElements.length - 1, this.trackElements.length - 2);
+        this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
         this.checkSegmentIntersections(this.trackElements.length - 2);
     }
 
@@ -227,8 +229,8 @@ export class TrackValidationService {
         const angle2 = this.getAngle(line2);
         const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
         const angleVariation = (rawAngleVariation + (2 * Math.PI)) % (2 * Math.PI);
-        this.trackElements[index2].intersectionAngle[0] = angleVariation;
-        this.trackElements[index1].intersectionAngle[1] = angleVariation;
+        this.trackElements[index1].intersectionAngle[0] = angleVariation;
+        this.trackElements[index2].intersectionAngle[1] = angleVariation;
     }
 
     public getAngle(line): number {
