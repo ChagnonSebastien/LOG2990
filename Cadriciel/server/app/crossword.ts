@@ -3,6 +3,7 @@ import { Utilities } from './utilities';
 export class Crossword {
     public size: number;
     public grid: String[][];
+    public previousGridState: String[][];
 
     constructor(size: number) {
         this.size = size;
@@ -77,6 +78,11 @@ export class Crossword {
             }
         }
 
+        return true;
+    }
+
+    public saveState(): boolean {
+        this.previousGridState = Utilities.deepCopy(this.grid);
         return true;
     }
 }

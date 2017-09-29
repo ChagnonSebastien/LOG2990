@@ -128,4 +128,17 @@ describe('Crossword', () => {
             expect(crossword.grid[0][4]).to.equal(' ');
         });
     });
+
+    describe('saveState() { }', () => {
+        it('should make a deep copy of the current grid', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.saveState()).to.be.true;
+            expect(crossword.grid[0][0]).to.equal(crossword.previousGridState[0][0]);
+            expect(crossword.grid[0][2]).to.equal(crossword.previousGridState[0][2]);
+            expect(crossword.grid[0][4]).to.equal(crossword.previousGridState[0][4]);
+            const i = randomIndex();
+            const j = randomIndex();
+            expect(crossword.grid[i][j]).to.equal(crossword.previousGridState[i][j]);
+        });
+    });
 });
