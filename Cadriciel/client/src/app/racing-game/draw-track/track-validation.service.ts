@@ -118,13 +118,11 @@ export class TrackValidationService {
         const distance: number[] = [];
 
         if (
-            Math.min(line1.point1.x, line1.point2.x) <= intersection.x &&
-            Math.max(line1.point1.x, line1.point2.x) >= intersection.x &&
-            Math.min(line1.point1.y, line1.point2.y) <= intersection.y &&
-            Math.max(line1.point1.y, line1.point2.y) >= intersection.y
+            Math.min(line1.point1.x, line1.point2.x) > intersection.x ||
+            Math.max(line1.point1.x, line1.point2.x) < intersection.x ||
+            Math.min(line1.point1.y, line1.point2.y) > intersection.y ||
+            Math.max(line1.point1.y, line1.point2.y) < intersection.y
         ) {
-            return distance;
-        } else {
             const optimalPoint = {x: NaN, y: NaN};
             optimalPoint.x = Math.abs(intersection.x - line1.point1.x) < Math.abs(intersection.x - line1.point2.x) ?
                 line1.point1.x :
@@ -149,8 +147,6 @@ export class TrackValidationService {
             b: -lineParameters.a,
             c: -((lineParameters.b * point.x) + (-lineParameters.a * point.y))
         };
-        console.log(lineParameters);
-        console.log(permenticularParameters);
 
         return this.twoLineIntersection(lineParameters, permenticularParameters);
     }

@@ -215,4 +215,114 @@ describe('TrackValidationService', () => {
             expect(service.clampAndGetOptimalPoint(clampedPoint, line1, line2)).toEqual(1);
         }));
     });
+
+    describe('The \'checkForClamp\' method', () => {
+        it('if the intersection is on both segments',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 1000, y: 474}, point2: {x: -2344, y: 63}};
+            const line2 = {point1: {x: 1000, y: 0}, point2: {x: -2344, y: 1324}};
+            expect(service.checkForClamp(service.twoLineIntersection(line1, line2), line1, line2).length).toEqual(0);
+        }));
+
+        it('if the intersection is only on the second segment and the perpendicular of the second line on the clamped point touches it',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 0, y: 0}, point2: {x: -1, y: -1}};
+            const line2 = {point1: {x: 0, y: 10}, point2: {x: 10, y: 0}};
+            const lineParameters1 = service.getLineParameters(line1);
+            const lineParameters2 = service.getLineParameters(line2);
+            expect(service.checkForClamp(service.twoLineIntersection(lineParameters1, lineParameters2), line1, line2).length).toEqual(1);
+            expect(service.checkForClamp(service.twoLineIntersection(lineParameters1, lineParameters2), line1, line2)[0]).
+                toEqual(Math.sqrt(200) / 2);
+        }));
+
+        it('if the intersection is only on the second segment and' +
+            'the perpendicular of the second line on the clamped point doesn\'t touches it',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 0, y: 0}, point2: {x: -1, y: -1}};
+            const line2 = {point1: {x: 6, y: 8}, point2: {x: 20, y: 8}};
+            const lineParameters1 = service.getLineParameters(line1);
+            const lineParameters2 = service.getLineParameters(line2);
+            expect(service.checkForClamp(service.twoLineIntersection(lineParameters1, lineParameters2), line1, line2).length).toEqual(1);
+            expect(service.checkForClamp(service.twoLineIntersection(lineParameters1, lineParameters2), line1, line2).indexOf(10)).
+                toBeGreaterThan(-1);
+        }));
+    });
+
+    describe('The \'distanceToLine\' method', () => {
+        it('for a line in the x axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 0, y: 0};
+            const line = {point1: {x: 6, y: 8}, point2: {x: 20, y: 8}};
+            expect(service.distanceToLine(point, line)).toEqual(8);
+        }));
+
+        it('for a line in the y axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 2, y: 12370};
+            const line = {point1: {x: -1, y: 4}, point2: {x: -1, y: 8}};
+            expect(service.distanceToLine(point, line)).toEqual(3);
+        }));
+
+        it('for an angular line',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 10, y: 5};
+            const line = {point1: {x: 6, y: 8}, point2: {x: 9, y: 12}};
+            expect(service.distanceToLine(point, line)).toEqual(5);
+        }));
+    });
+
+    describe('The \'twoLineIntersection\' method', () => {
+        it('a line in a straight axis and the other in an angular axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = service.getLineParameters({point1: {x: 4, y: 4}, point2: {x: 5, y: 4}});
+            const line2 = service.getLineParameters({point1: {x: 1, y: 8}, point2: {x: 0, y: 0}});
+            expect(service.twoLineIntersection(line1, line2)).toEqual({x: 0.5, y: 4});
+        }));
+
+        it('two lines in an angular axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = service.getLineParameters({point1: {x: 1, y: 8}, point2: {x: 5, y: 4}});
+            const line2 = service.getLineParameters({point1: {x: 1, y: 8}, point2: {x: 0, y: 0}});
+            expect(service.twoLineIntersection(line1, line2)).toEqual({x: 1, y: 8});
+        }));
+
+        it('two lines in a straight axis',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = service.getLineParameters({point1: {x: 4, y: 4}, point2: {x: 5, y: 4}});
+            const line2 = service.getLineParameters({point1: {x: 1, y: 8}, point2: {x: 1, y: 0}});
+            expect(service.twoLineIntersection(line1, line2)).toEqual({x: 1, y: 4});
+        }));
+    });
+
+    describe('The \'getAngle\' method', () => {
+        it('works for Angle 0',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 4, y: 4}, point2: {x: 5, y: 4}};
+            expect(service.getAngle(line1)).toEqual(0);
+        }));
+
+        it('works for Angle PI',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 4, y: 4}, point2: {x: -3, y: 4}};
+            expect(service.getAngle(line1)).toEqual(Math.PI);
+        }));
+
+        it('works for Angle PI/6',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 0, y: 0}, point2: {x: Math.sqrt(3) / 2, y: 1 / 2}};
+            expect(service.getAngle(line1)).toBeCloseTo(Math.PI / 6);
+        }));
+
+        it('works for Angle 5PI/3',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 0, y: 0}, point2: {x: 1 / 2, y: -Math.sqrt(3) / 2}};
+            expect(service.getAngle(line1)).toEqual(-Math.PI / 3);
+        }));
+
+        it('works for Angle 3PI/4',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const line1 = {point1: {x: 0, y: 0}, point2: {x: -Math.sqrt(2) / 2, y: Math.sqrt(2) / 2}};
+            expect(service.getAngle(line1)).toEqual(3 * Math.PI / 4);
+        }));
+    });
 });
