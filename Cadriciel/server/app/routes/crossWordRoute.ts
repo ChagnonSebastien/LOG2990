@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
+import { Crossword } from '../crossword';
 const CrossWord = require('./crossWordSchema');
 var mongoose = require('mongoose');
 
@@ -9,6 +10,14 @@ var url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990
 module Route {
 
     export class CrossWords {
+
+        public getCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
+            const crossword = new Crossword(10);
+            crossword.addWord(0, 0, 'hellaso', true);
+            res.send(JSON.stringify({
+                'data': crossword.grid
+            }));
+        }
 
         public getCrossWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
