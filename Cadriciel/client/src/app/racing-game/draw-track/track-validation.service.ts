@@ -54,7 +54,9 @@ export class TrackValidationService {
                 segment.segmentIntersections.splice(removedPosition, 1);
             }
         });
-        this.trackElements[this.trackElements.length - (this.trackClosed ? 1 : 2)].intersectionAngle[1] = 0;
+        if (this.trackElements.length > 1) {
+            this.trackElements[this.trackElements.length - (this.trackClosed ? 1 : 2)].intersectionAngle[1] = 0;
+        }
         this.checkPointAngle(this.trackElements.length - 1, this.trackElements.length - 2);
         this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
         this.checkSegmentIntersections(this.trackElements.length - 2);
@@ -230,7 +232,8 @@ export class TrackValidationService {
     }
 
     public checkPointAngle(index1: number, index2: number) {
-        if (!this.trackClosed && (index2 === this.trackElements.length - 1 || index1 === this.trackElements.length - 1)) {
+        if (!this.trackClosed && (index2 === this.trackElements.length - 1 || index1 === this.trackElements.length - 1) ||
+            index1 < 0 || index2 < 0) {
             return;
         }
 
