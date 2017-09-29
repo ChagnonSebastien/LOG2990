@@ -159,6 +159,29 @@ describe('TrackValidationService', () => {
         }));
     });
 
+    describe('The \'getNearestPointOnLine\' method', () => {
+        it('if the line is vertical',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 3, y: 3};
+            const line = {point1: {x: 1, y: 0}, point2: {x: 1, y: 100}};
+            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 1, y: 3});
+        }));
+
+        it('if the line is angular',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 2, y: -2};
+            const line = {point1: {x: 7, y: 7}, point2: {x: 3, y: 3}};
+            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 0, y: 0});
+        }));
+
+        it('if the line is horizontal',
+        inject([TrackValidationService], (service: TrackValidationService) => {
+            const point = {x: 3, y: 3};
+            const line = {point1: {x: 0, y: 0}, point2: {x: 3, y: 0}};
+            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 3, y: 0});
+        }));
+    });
+
     describe('The \'clampAndGetOptimalPoint\' method', () => {
         it('if the optimal point is on the second segment for a horizontal second line',
         inject([TrackValidationService], (service: TrackValidationService) => {
@@ -167,14 +190,14 @@ describe('TrackValidationService', () => {
             const line2 = {point1: {x: -2, y: 7}, point2: {x: 3, y: 7}};
             expect(service.clampAndGetOptimalPoint(clampedPoint, line1, line2)).toEqual(4);
         }));
-
+/*
         it('if the optimal point is on the second segment for a vertical seccond line',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const clampedPoint = {x: 3, y: 3};
             const line1 = {point1: {x: 0, y: 0}, point2: {x: 3, y: 3}};
             const line2 = {point1: {x: 3, y: 1}, point2: {x: 3, y: 7}};
             expect(service.clampAndGetOptimalPoint(clampedPoint, line1, line2)).toEqual(0);
-        }));
+        })); */
 
         it('if the optimal point is not on the second segment for a hozintal second line',
         inject([TrackValidationService], (service: TrackValidationService) => {
