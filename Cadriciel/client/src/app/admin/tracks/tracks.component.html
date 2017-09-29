@@ -8,4 +8,6 @@
     <button (click)="deleteTrack(track.trackId)">Delete</button>
   </li>
 </ul>
+<div *ngIf="selectedTrack">
 <app-track-info [track]="selectedTrack"></app-track-info>
+</div>

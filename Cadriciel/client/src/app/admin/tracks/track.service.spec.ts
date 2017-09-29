@@ -17,4 +17,18 @@ describe('TrackService', () => {
     it('should be created', inject([TrackService], (service: TrackService) => {
         expect(service).toBeTruthy();
     }));
+
+    // deleteTrack
+
+    it('sshould delete a track with id 4', inject([TrackService], (service: TrackService) => {
+        service.deleteTrack(4).subscribe(res => {
+            expect(res.trackId).toMatch('4');
+        });
+    }));
+
+    //changetracktype
+
+    //changetrackdescription
+
+    //changetrackname
 });

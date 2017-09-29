@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Track } from './track';
 
 describe('Track', () => {
-    const track = new Track(1, 'a', 'b', 'c');
+    const track = new Track(1, 'a', 'b', 'c', 4, 0);
 
     it('should be created', function() {
         expect(track).toBeDefined();
