@@ -33,26 +33,26 @@ describe('TrackValidationService', () => {
         }));
     });
 
-    describe('The \'line\' method', () => {
+    describe('The \'getLineParameters\' method', () => {
         it('works with a straight line in the x axis',
         inject([TrackValidationService], (service: TrackValidationService) => {
-            const line = {point1: {x: -1, y: 1}, point2: {x: 100, y: 1}};
+            const line = {point1: {x: -1, y: -5.2}, point2: {x: 100, y: -5.2}};
             expect(service.getLineParameters(line).a).toEqual(0);
-            expect(service.getLineParameters(line).b).toEqual(1);
+            expect(service.getLineParameters(line).c / service.getLineParameters(line).b).toEqual(5.2);
         }));
 
         it('works with a angular line',
         inject([TrackValidationService], (service: TrackValidationService) => {
-            const line = {point1: {x: -100, y: 0}, point2: {x: 100, y: 900}};
-            expect(service.getLineParameters(line).a).toEqual(4.5);
-            expect(service.getLineParameters(line).b).toEqual(450);
+            const line = {point1: {x: 1, y: 0}, point2: {x: 0, y: 1}};
+            expect(service.getLineParameters(line).c / service.getLineParameters(line).b).toEqual(-1);
+            expect(service.getLineParameters(line).c / service.getLineParameters(line).b).toEqual(-1);
         }));
 
         it('works with a straight line in the y axis',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const line = {point1: {x: 5, y: 0}, point2: {x: 5, y: 900}};
-            expect(service.getLineParameters(line).a).toEqual(Infinity);
-            expect(service.getLineParameters(line).b).toEqual(-Infinity);
+            expect(service.getLineParameters(line).b).toEqual(0);
+            expect(service.getLineParameters(line).c / service.getLineParameters(line).a).toEqual(-5);
         }));
     });
 
@@ -78,46 +78,23 @@ describe('TrackValidationService', () => {
     describe('The \'solveLineEquation\' method', () => {
         it('works for a angular line',
         inject([TrackValidationService], (service: TrackValidationService) => {
-            const x = 5;
-            const lineParameters = {a: 1, b: -4};
-            expect(service.solveLineEquation(x, lineParameters)).toEqual(1);
+            const x = -5;
+            const lineParameters = {a: 1, b: -4, c: 1};
+            expect(service.solveLineEquationWithX(x, lineParameters)).toEqual(-1);
         }));
 
-        it('works for a line in the y axis',
+        it('works for a line in the x axis',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const x = 10;
-            const lineParameters = {a: 0, b: -4};
-            expect(service.solveLineEquation(x, lineParameters)).toEqual(-4);
-        }));
-
-        it('works for a line in the x axis',
-        inject([TrackValidationService], (service: TrackValidationService) => {
-            const x = 5;
-            const lineParameters = {a: Infinity, b: -Infinity};
-            expect(service.solveLineEquation(x, lineParameters)).toEqual(NaN);
-        }));
-    });
-
-    describe('The \'solveYIntercept\' method', () => {
-        it('works for a angular line',
-        inject([TrackValidationService], (service: TrackValidationService) => {
-            const point = {x: 5, y: 2};
-            const slope = 2;
-            expect(service.solveYIntercept(point, slope)).toEqual(-8);
+            const lineParameters = {a: 0, b: -2, c: 1};
+            expect(service.solveLineEquationWithX(x, lineParameters)).toEqual(1 / 2);
         }));
 
         it('works for a line in the y axis',
         inject([TrackValidationService], (service: TrackValidationService) => {
-            const point = {x: 5, y: 2};
-            const slope = 0;
-            expect(service.solveYIntercept(point, slope)).toEqual(2);
-        }));
-
-        it('works for a line in the x axis',
-        inject([TrackValidationService], (service: TrackValidationService) => {
-            const point = {x: 5, y: 2};
-            const slope = Infinity;
-            expect(service.solveYIntercept(point, slope)).toEqual(-Infinity);
+            const x = 5;
+            const lineParameters = {a: 56, b: 0, c: 1};
+            expect(service.solveLineEquationWithX(x, lineParameters)).toBeDefined();
         }));
     });
 
@@ -171,14 +148,14 @@ describe('TrackValidationService', () => {
         inject([TrackValidationService], (service: TrackValidationService) => {
             const point = {x: 2, y: -2};
             const line = {point1: {x: 7, y: 7}, point2: {x: 3, y: 3}};
-            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 0, y: 0});
+            expect(service.getNearestPointOnLine(point, line)).toEqual({x: -0, y: 0});
         }));
 
         it('if the line is horizontal',
         inject([TrackValidationService], (service: TrackValidationService) => {
             const point = {x: 3, y: 3};
             const line = {point1: {x: 0, y: 0}, point2: {x: 3, y: 0}};
-            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 3, y: 0});
+            expect(service.getNearestPointOnLine(point, line)).toEqual({x: 3, y: -0});
         }));
     });
 

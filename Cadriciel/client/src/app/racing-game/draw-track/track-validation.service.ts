@@ -83,7 +83,7 @@ export class TrackValidationService {
 
                 const line1 = service.getLine(index);
                 const line2 = service.getLine(i);
-                const intersection = service.twoLineIntersection(line1, line2);
+                const intersection = service.twoLineIntersection(this.getLineParameters(line1), this.getLineParameters(line2));
 
                 let clampDistances: number[] = [];
                 const optimisedDistancesLine1: number[] = service.checkForClamp(intersection, line1, line2);
@@ -105,11 +105,13 @@ export class TrackValidationService {
     }
 
     public twoLineIntersection( line1, line2 ): {x: number, y: number} {
-        const lineParameters1 = this.getLineParameters(line1);
-        const lineParameters2 = this.getLineParameters(line2);
-
-        const x = (lineParameters2.b - lineParameters1.b) / (lineParameters1.a - lineParameters2.a);
-        return {x, y: this.solveLineEquation(x, lineParameters1)};
+        if (line1.a === 0) {
+            const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return {x, y: this.solveLineEquationWithX(x, line1)};
+        } else {
+            const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return {x: this.solveLineEquationWithY(y, line1), y};
+        }
     }
 
     public checkForClamp(intersection, line1, line2): number[] {
@@ -142,11 +144,15 @@ export class TrackValidationService {
 
     public getNearestPointOnLine(point, line) {
         const lineParameters = this.getLineParameters(line);
-        const slope = -1 / lineParameters.a;
-        const permenticularParameters = {a: slope, b: this.solveYIntercept(point, slope)};
+        const permenticularParameters = {
+            a: lineParameters.b,
+            b: -lineParameters.a,
+            c: -((lineParameters.b * point.x) + (-lineParameters.a * point.y))
+        };
+        console.log(lineParameters);
+        console.log(permenticularParameters);
 
-        const xOptimal = (permenticularParameters.b - lineParameters.b) / (lineParameters.a - permenticularParameters.a);
-        return {x: xOptimal, y: this.solveLineEquation(xOptimal, permenticularParameters)};
+        return this.twoLineIntersection(lineParameters, permenticularParameters);
     }
 
     public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
@@ -187,12 +193,12 @@ export class TrackValidationService {
         return this.minimum(distances);
     }
 
-    public solveYIntercept(point, slope): number {
-        return (point.y - (slope * point.x));
+    public solveLineEquationWithX(x, lineParameters): number {
+        return ((lineParameters.a * x) + lineParameters.c) / -lineParameters.b;
     }
 
-    public solveLineEquation(x, lineParameters): number {
-        return (lineParameters.a * x) + lineParameters.b;
+    public solveLineEquationWithY(y, lineParameters): number {
+        return ((lineParameters.b * y) + lineParameters.c) / -lineParameters.a;
     }
 
     public minimum(array: number[]): number {
@@ -214,10 +220,11 @@ export class TrackValidationService {
         );
     }
 
-    public getLineParameters( line ): {a: number, b: number} {
-        const a = (line.point2.y - line.point1.y) / (line.point2.x - line.point1.x);
-        const b = (line.point1.y - (a * line.point1.x));
-        return {a, b};
+    public getLineParameters( line ): {a: number, b: number, c: number} {
+        const a = line.point1.y - line.point2.y;
+        const b = line.point2.x - line.point1.x;
+        const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);
+        return {a, b, c};
     }
 
     public getAllEndToEndDistances( line1, line2 ): number[] {
