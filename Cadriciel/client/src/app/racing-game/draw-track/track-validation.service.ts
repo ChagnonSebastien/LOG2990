@@ -16,9 +16,12 @@ export class TrackValidationService {
         this.trackElements.push(
             { intersection, intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }
         );
+        this.trackElements[0].intersectionAngle[0] = 0;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentIntersections(this.trackElements.length - 2);
-        this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
+        if (this.trackElements.length > 2) {
+            this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
+        }
     }
 
     public updatePoint(index: number, intersection: THREE.Vector3) {
@@ -31,8 +34,16 @@ export class TrackValidationService {
             index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
             (index + this.trackElements.length - 2) % this.trackElements.length
         );
-        this.checkPointAngle(index, index - 1 === -1 ? this.trackElements.length - 1 : index - 1);
-        this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1,  index);
+        this.checkPointAngle(
+            index,
+            index - 1 === -1 ? this.trackElements.length - 1 : index - 1
+        );
+        this.checkPointAngle(
+            index + 1 === this.trackElements.length ? 0 : index + 1,
+            this.trackClosed ? index : (
+                this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25 ?
+                index - 1 : index)
+        );
     }
 
     public removeLastPoint() {
@@ -219,7 +230,7 @@ export class TrackValidationService {
     }
 
     public checkPointAngle(index1: number, index2: number) {
-        if (!this.trackClosed && (index1 === 0 || index1 === this.trackElements.length - 1)) {
+        if (!this.trackClosed && (index2 === this.trackElements.length - 1 || index1 === this.trackElements.length - 1)) {
             return;
         }
 

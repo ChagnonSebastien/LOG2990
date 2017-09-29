@@ -79,6 +79,9 @@ export class DrawTrackService {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
         if (!this.loopClosed) {
+            if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0].position) < 25) {
+                this.mousePosition = this.intersections[0].position;
+            }
             this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
         }
         if (this.currentlyDraggedIntersection !== -1) {
