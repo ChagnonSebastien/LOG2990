@@ -8,6 +8,7 @@ export class Crossword {
     constructor(size: number) {
         this.size = size;
         this.grid = this.getEmptyGrid(size);
+        this.saveState();
     }
 
     public getEmptyGrid(size: number): String[][] {
@@ -83,6 +84,11 @@ export class Crossword {
 
     public saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
+        return true;
+    }
+
+    public rollback(): boolean {
+        this.grid = Utilities.deepCopy(this.previousGridState);
         return true;
     }
 }

@@ -130,7 +130,7 @@ describe('Crossword', () => {
     });
 
     describe('saveState() { }', () => {
-        it('should make a deep copy of the current grid', () => {
+        it('should make a copy of the current grid', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.saveState()).to.be.true;
             expect(crossword.grid[0][0]).to.equal(crossword.previousGridState[0][0]);
@@ -139,6 +139,31 @@ describe('Crossword', () => {
             const i = randomIndex();
             const j = randomIndex();
             expect(crossword.grid[i][j]).to.equal(crossword.previousGridState[i][j]);
+        });
+
+        it('should be a deep copy', () => {
+            expect(crossword.saveState()).to.be.true;
+            expect(crossword.grid).to.not.equal(crossword.previousGridState);
+        });
+    });
+
+    describe('rollback() { }', () => {
+        it('should rollback to previous state', () => {
+            expect(crossword.saveState()).to.be.true;
+            expect(crossword.addLetter(0, 0, 'a')).to.be.true;
+            expect(crossword.addLetter(0, 9, 'a')).to.be.true;
+            expect(crossword.addLetter(9, 0, 'a')).to.be.true;
+            expect(crossword.addLetter(9, 9, 'a')).to.be.true;
+            expect(crossword.rollback()).to.be.true;
+            expect(crossword.grid[0][0]).to.equal(' ');
+            expect(crossword.grid[0][9]).to.equal(' ');
+            expect(crossword.grid[9][0]).to.equal(' ');
+            expect(crossword.grid[9][9]).to.equal(' ');
+        });
+
+        it('should be a deep copy', () => {
+            expect(crossword.rollback()).to.be.true;
+            expect(crossword.previousGridState).to.not.equal(crossword.grid);
         });
     });
 });
