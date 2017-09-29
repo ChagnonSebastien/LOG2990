@@ -1,9 +1,13 @@
 import { expect } from 'chai';
 import { Crossword } from './crossword';
 
+const size = 10;
+function randomIndex(): number {
+    return Math.floor(Math.random() * size);
+}
+
 describe('Crossword', () => {
     let crossword: Crossword;
-    const size = 10;
 
     beforeEach(() => {
         crossword = new Crossword(size);
@@ -16,9 +20,7 @@ describe('Crossword', () => {
         });
 
         it('should return a grid with empty characters', () => {
-            const i = Math.floor(Math.random() * size) + 0;
-            const j = Math.floor(Math.random() * size) + 0;
-            expect(crossword.grid[i][j]).to.equal(' ');
+            expect(crossword.grid[randomIndex()][randomIndex()]).to.equal(' ');
         });
     });
 
@@ -93,6 +95,13 @@ describe('Crossword', () => {
             expect(crossword.grid[0][0]).to.equal('h');
             expect(crossword.grid[0][2]).to.equal('l');
             expect(crossword.grid[0][4]).to.equal('o');
+        });
+    });
+
+    describe('deleteLetter(i: number, j: number, letter: string): boolean { }', () => {
+        it('should delete a letter at the specified position', () => {
+            expect(crossword.addLetter(0, 0, 'h')).to.be.true;
+            expect(crossword.deleteLetter(0, 0, 'h')).to.be.true;
         });
     });
 });

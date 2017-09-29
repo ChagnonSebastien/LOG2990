@@ -52,4 +52,12 @@ export class Crossword {
 
         return true;
     }
+
+    public deleteLetter(i: number, j: number, letter: string): boolean {
+        if (this.indexesOutOfBounds(i, j) || this.grid[i][j] !== letter) {
+            return false;
+        }
+        this.grid[i][j] = ' ';
+        return true;
+    }
 }
