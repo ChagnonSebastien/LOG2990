@@ -148,6 +148,17 @@ describe('Crossword', () => {
             expect(crossword.grid[i][j]).to.equal(crossword.previousGridState[i][j]);
         });
 
+        it('should make a copy of the current gridCounter', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.saveState()).to.be.true;
+            expect(crossword.gridCounter[0][0]).to.equal(crossword.previousGridCounter[0][0]);
+            expect(crossword.gridCounter[0][2]).to.equal(crossword.previousGridCounter[0][2]);
+            expect(crossword.gridCounter[0][4]).to.equal(crossword.previousGridCounter[0][4]);
+            const i = randomIndex();
+            const j = randomIndex();
+            expect(crossword.gridCounter[i][j]).to.equal(crossword.previousGridCounter[i][j]);
+        });
+
         it('should be a deep copy', () => {
             expect(crossword.saveState()).to.be.true;
             expect(crossword.grid).to.not.equal(crossword.previousGridState);
@@ -155,7 +166,7 @@ describe('Crossword', () => {
     });
 
     describe('rollback() { }', () => {
-        it('should rollback to previous state', () => {
+        it('should rollback grid to previous state', () => {
             expect(crossword.saveState()).to.be.true;
             expect(crossword.addLetter(0, 0, 'a')).to.be.true;
             expect(crossword.addLetter(0, 9, 'a')).to.be.true;
@@ -166,6 +177,19 @@ describe('Crossword', () => {
             expect(crossword.grid[0][9]).to.equal(' ');
             expect(crossword.grid[9][0]).to.equal(' ');
             expect(crossword.grid[9][9]).to.equal(' ');
+        });
+
+        it('should rollback gridCounter to previous state', () => {
+            expect(crossword.saveState()).to.be.true;
+            expect(crossword.addLetter(0, 0, 'a')).to.be.true;
+            expect(crossword.addLetter(0, 9, 'a')).to.be.true;
+            expect(crossword.addLetter(9, 0, 'a')).to.be.true;
+            expect(crossword.addLetter(9, 9, 'a')).to.be.true;
+            expect(crossword.rollback()).to.be.true;
+            expect(crossword.gridCounter[0][0]).to.equal(0);
+            expect(crossword.gridCounter[0][9]).to.equal(0);
+            expect(crossword.gridCounter[9][0]).to.equal(0);
+            expect(crossword.gridCounter[9][9]).to.equal(0);
         });
 
         it('should be a deep copy', () => {

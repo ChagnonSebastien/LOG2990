@@ -4,16 +4,14 @@ export class Crossword {
     public size: number;
     public grid: String[][];
     public previousGridState: String[][];
-    private letterCounter: String[][];
+    public previousGridCounter: number[][];
+    public gridCounter: number[][];
 
     constructor(size: number) {
         this.size = size;
-        this.grid = this.getEmptyGrid(size);
+        this.grid = this.newGrid(size, ' ');
+        this.gridCounter = this.newGrid(size, 0);
         this.saveState();
-    }
-
-    public getEmptyGrid(size: number): String[][] {
-        return this.newGrid(size, ' ');
     }
 
     public newGrid(size: number, fill: any): Array<any> {
@@ -41,6 +39,7 @@ export class Crossword {
             return false;
         }
         this.grid[i][j] = letter;
+        this.gridCounter[i][j]++;
         return true;
     }
 
@@ -66,7 +65,12 @@ export class Crossword {
         if (this.grid[i][j] !== letter) {
             return false;
         }
-        this.grid[i][j] = ' ';
+        if (this.gridCounter[i][j] > 1) {
+            this.gridCounter[i][j]--;
+        } else {
+            this.gridCounter[i][j] = 0;
+            this.grid[i][j] = ' ';
+        }
         return true;
     }
 
@@ -87,11 +91,13 @@ export class Crossword {
 
     public saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
+        this.previousGridCounter = Utilities.deepCopy(this.gridCounter);
         return true;
     }
 
     public rollback(): boolean {
         this.grid = Utilities.deepCopy(this.previousGridState);
+        this.gridCounter = Utilities.deepCopy(this.previousGridCounter);
         return true;
     }
 }
