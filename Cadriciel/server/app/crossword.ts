@@ -1,3 +1,5 @@
+import { Utilities } from './utilities';
+
 export class Crossword {
     public size: number;
     public grid: String[][];
@@ -36,14 +38,18 @@ export class Crossword {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        const savedState = Utilities.deepCopy(this.grid);
+
         for (const letter of word) {
             if (!this.addLetter(i, j, letter)) {
+                this.grid = savedState; // rollback
                 return false;
             } else {
                 i = horizontal ? i : ++i;
                 j = horizontal ? ++j : j;
             }
         }
+
         return true;
     }
 }

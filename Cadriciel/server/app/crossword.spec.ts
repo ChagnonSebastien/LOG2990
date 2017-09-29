@@ -81,5 +81,18 @@ describe('Crossword', () => {
             expect(crossword.grid[2][0]).to.equal('l');
             expect(crossword.grid[4][0]).to.equal('o');
         });
+
+        it('should allow overwriting when adding the same letter', () => {
+            expect(crossword.addWord(0, 0, 'hello', false)).to.be.true;
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+        });
+
+        it('should rollback when it fails to insert a word', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.addWord(0, 0, 'world', true)).to.be.false;
+            expect(crossword.grid[0][0]).to.equal('h');
+            expect(crossword.grid[0][2]).to.equal('l');
+            expect(crossword.grid[0][4]).to.equal('o');
+        });
     });
 });
