@@ -103,5 +103,9 @@ describe('Crossword', () => {
             expect(crossword.addLetter(0, 0, 'h')).to.be.true;
             expect(crossword.deleteLetter(0, 0, 'h')).to.be.true;
         });
+
+        it('should not delete a letter if the square is blank', () => {
+            expect(crossword.deleteLetter(0, 0, 'h')).to.be.false;
+        });
     });
 });

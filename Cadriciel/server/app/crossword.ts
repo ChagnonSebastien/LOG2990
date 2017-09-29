@@ -27,7 +27,7 @@ export class Crossword {
     }
 
     public addLetter(i: number, j: number, letter: string): boolean {
-        if (this.indexesOutOfBounds(i, j)) {
+        if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
             return false;
         }
         if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
@@ -54,7 +54,10 @@ export class Crossword {
     }
 
     public deleteLetter(i: number, j: number, letter: string): boolean {
-        if (this.indexesOutOfBounds(i, j) || this.grid[i][j] !== letter) {
+        if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
+            return false;
+        }
+        if (this.grid[i][j] !== letter) {
             return false;
         }
         this.grid[i][j] = ' ';
