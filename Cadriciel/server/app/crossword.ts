@@ -4,8 +4,8 @@ export class Crossword {
     public size: number;
     public grid: String[][];
     public previousGridState: String[][];
-    public previousGridCounter: number[][];
     public gridCounter: number[][];
+    public previousGridCounter: number[][];
 
     constructor(size: number) {
         this.size = size;
