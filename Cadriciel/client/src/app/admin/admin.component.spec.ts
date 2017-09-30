@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
 import { AdminComponent } from './admin.component';
 import { TracksComponent } from './tracks/tracks.component';
 import { ConnectionBackend, Http, HttpModule, RequestOptions } from '@angular/http';
@@ -8,6 +8,7 @@ import { AuthenticationService } from './authentication.service';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
 import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
+import { TrackInfoComponent } from './tracks/track-info.component';
 
 describe('AdminComponent', () => {
     let component: AdminComponent;
@@ -15,9 +16,9 @@ describe('AdminComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminComponent, DrawTrackComponent, TracksComponent],
+            declarations: [AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
             providers: [AuthenticationService, DrawTrackService],
-            imports: [HttpModule, AdminRoutingModule]
+            imports: [HttpModule, AdminRoutingModule, FormsModule]
         })
             .compileComponents();
     }));
