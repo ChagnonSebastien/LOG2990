@@ -166,17 +166,31 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      * Prevent the user from entering numbers and symbols.
      ************************************************************/
     public filterInput(event: any, i: number, j: number): void {
+        const x = event.which || event.keyCode;
+        console.log(event.which || event.keyCode);
         // Check if input is a letter
-        if ((event.keyCode < 65 || event.charCode > 122) || (event.charCode >= 91 && event.charCode <= 96)) {
+        if (((x < 65 || x > 122) || (x >= 91 && x <= 96)) && x !== 8) {
             // stop event to prevent entering something else than letters
             this.disableEvent(event);
-
-     } else {
-        this.checkIfCorrectInput(event.charCode, i, j);
+     }else {
+        this.checkIfCorrectInput(x, i, j);
      }
    }
 
-
+     /***********************************************************
+     * This function is used to delete the the correct index
+     * when the backspace key is invoked.
+     ************************************************************/
+   public handleDelete(event, i: number, j: number) {
+    const x = event.which || event.keyCode;
+   if (x === 8) {
+    for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
+        if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
+            this.correctIndexes.splice(k, 1);
+        }
+      }
+    }
+   }
    /***********************************************************
    * Check if the word was found by the user
    ***************************************************************/
@@ -264,8 +278,11 @@ public checkWordFoundWithIndex(i: number, j: number): boolean {
 /***********************************************************
 *Check if the user input matches the crossword grid
 ***************************************************************/
-  public checkIfCorrectInput(charCode: number, i: number, j: number): void {
-        if (this.rawCrossword[i][j].charCodeAt(0) === charCode) {
+  public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
+      console.log('testing key codes');
+      console.log(this.rawCrossword[i][j].charCodeAt(0));
+      console.log(keyCode);
+        if (this.rawCrossword[i][j].charCodeAt(0) === keyCode) {
             let index : Index = {i: i, j: j};
             this.correctIndexes.push(index);
         } else {
@@ -276,6 +293,7 @@ public checkWordFoundWithIndex(i: number, j: number): boolean {
         }
       }
     }
+
 
     constructor() { }
 

@@ -10,7 +10,8 @@
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)" 
-                [readonly] = "colonne == '0'"   
+                [readonly] = "colonne == '0'"
+                (keydown)="handleDelete($event,i,j)"   
             /> 
                 
         </td>
