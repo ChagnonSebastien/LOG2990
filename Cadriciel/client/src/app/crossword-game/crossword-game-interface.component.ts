@@ -30,12 +30,23 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
-    public kSelected = 20;
-    public handleClick($event, k) {
+    public kSelected = -1;
+
+
+
+     /***********************************************************
+     * This function is called when the user clicks on a input.
+     * It ads the index to the list of actives indexes.
+     ************************************************************/
+    public handleClick($event, k): void {
         this.activeIndexes = this.wordsIndexes[k].indexes.slice();
         $event.stopPropagation();
         }
 
+    /***********************************************************
+     * This function is called to check if a crossword grid is
+     * currently  active.
+     ************************************************************/
     public isActive(i, j): boolean {
 
        for (let k = 0 ; k < this.activeIndexes.length ; k++) {
@@ -46,7 +57,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
        return false;
      }
 
-     public fillWordsIndexes() {
+     /***********************************************************
+     * This function fills up the wordIndexes data structure.
+     * For every word in the list of words it associates:
+     * a list of each index in the grid where a letter of the word is located
+     * a positon which states if the word is vertical or horizontal
+     * the hint associated with the word.
+     ************************************************************/
+     public fillWordsIndexes(): void {
 
         for (let k = 0 ; k < this.listOfWordsAndHints.length ; k++ ) {
 
@@ -83,10 +101,13 @@ export class CrosswordGameInterfaceComponent implements OnInit {
        }
     }
 
-     // Returns the indexes of a given word if it is contained in a grid column or row
-     public findWordIndexes(word: string, gridPart: string[], columnOrRowIndex: number, row: boolean) {
+     /***********************************************************
+     * Returns the indexes of a given word in the grid. Returns
+     * emtpy array of indexes if it is not in the grid.
+     ************************************************************/
+     public findWordIndexes(word: string, gridPart: string[], columnOrRowIndex: number, row: boolean): Index[] {
 
-        let indexes : Index[] = [];
+        const indexes: Index[] = [];
 
         for (let k = 0 ; k < gridPart.length && indexes.length !== word.length ; k++ ) {
             if (gridPart[k] === word[indexes.length]) {
@@ -108,11 +129,15 @@ export class CrosswordGameInterfaceComponent implements OnInit {
             indexes.splice(0, indexes.length);
             }
 
-         return(indexes);
+         return indexes;
      }
 
-     public getColumn(index: number) {
-        let column : string[] = [];
+     /***********************************************************
+     * Return the column of the crossword grid at the given index
+     ************************************************************/
+     public getColumn(index: number): string[] {
+
+        const column: string[] = [];
 
         for ( let i = 0; i < 11; i++) {
             column.push(this.rawCrossword[i][index]);
@@ -120,16 +145,27 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         return column;
      }
 
-     public cancelSelection($event) {
+     /***********************************************************
+     * This function is used to unselect the selected crossword
+     * grids when the user clicks outside the grid
+     ************************************************************/
+     public cancelSelection($event): void {
         this.activeIndexes.splice(0, this.activeIndexes.length);
-        this.kSelected = 20;
+        this.kSelected = -1;
      }
 
-     public handleInput($event) {
+
+     /***********************************************************
+     * Cancel the event propagation
+     ************************************************************/
+     public handleInput($event): void {
         event.stopPropagation();
      }
 
-    public filterInput(event: any, i: number, j: number) {
+     /***********************************************************
+     * Prevent the user from entering numbers and symbols.
+     ************************************************************/
+    public filterInput(event: any, i: number, j: number): void {
         // Check if input is a letter
         if ((event.keyCode < 65 || event.charCode > 122) || (event.charCode >= 91 && event.charCode <= 96)) {
             // stop event to prevent entering something else than letters
@@ -140,22 +176,27 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      }
    }
 
-   //check if the word was found 
-   public checkWordFound( k: number) {
-    if (k < this.wordsIndexes.length) {
+
+   /***********************************************************
+   * Check if the word was found by the user
+   ***************************************************************/
+   public checkWordFound( k: number): boolean {
+    if (k < this.wordsIndexes.length && k > -1) {
     for (let i = 0 ; i < this.wordsIndexes[k].indexes.length ; i ++) {
         if (!(this.checkWordFoundWithIndex(this.wordsIndexes[k].indexes[i].i, this.wordsIndexes[k].indexes[i].j))) {
              return false;
         }
     }
     return true;
-}
-    return false;
+    }
+  return false;
 }
 
-
- // find index in table wordIndexes of the word which contains a letter of the index passed in parameter on the grid
-public findIndexOfWordWithIndex(i: number, j: number) {
+/***********************************************************
+* Using the index of a word char , return the positon of the word
+* in the wordIndexes array
+***************************************************************/
+public findIndexOfWordWithIndex(i: number, j: number): boolean {
 
     for (let k = 0 ; k < this.wordsIndexes.length ; k ++) {
         for (let l = 0 ; l < this.wordsIndexes[k].indexes.length ; l ++) {
@@ -167,29 +208,40 @@ public findIndexOfWordWithIndex(i: number, j: number) {
         }
     }
     return false;
-
 }
 
-
-public selectK(k) {
+/***********************************************************
+*Set the variable kSelected which represents the positon of
+*the selected word in the wordIndexes table
+***************************************************************/
+public selectK(k): void {
     this.kSelected = k ;
 }
 
-public checkVertical(position: string) {
+
+/***********************************************************
+*Check if the word positon is vertical
+***************************************************************/
+public checkVertical(position: string): boolean {
 
     return position === 'vertical';
 
 }
 
-public checkHorizontal(position: string) {
+/***********************************************************
+*Check if the word positon is horizontal
+***************************************************************/
+public checkHorizontal(position: string): boolean {
 
     return position === 'horizontal';
 
 }
 
-
-// check if  the letter enterted at this particular index contains the correct letter
-private checkWordFoundWithIndex(i: number, j: number) {
+/***********************************************************
+*Check if  the letter enterted at this particular index
+*contains the correct letter
+***************************************************************/
+public checkWordFoundWithIndex(i: number, j: number): boolean {
     let found = false;
 
      for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
@@ -201,37 +253,41 @@ private checkWordFoundWithIndex(i: number, j: number) {
     }
 
 
-
-
-
-
-  private disableEvent(event: any) {
+/***********************************************************
+*Disable the event
+***************************************************************/
+  public disableEvent(event: any): void {
         event.preventDefault();
         event.returnValue = false;
     }
 
-
-    //to do remove when wrong @@@@@@@@@@@@@@@@@@@@@@@@@
-    private checkIfCorrectInput(charCode: number, i: number, j: number) {
+/***********************************************************
+*Check if the user input matches the crossword grid
+***************************************************************/
+  public checkIfCorrectInput(charCode: number, i: number, j: number): void {
         if (this.rawCrossword[i][j].charCodeAt(0) === charCode) {
             let index : Index = {i: i, j: j};
             this.correctIndexes.push(index);
-        }
-        else 
+        } else {
         for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
             if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
-                this.correctIndexes.splice(k,1);
+                this.correctIndexes.splice(k, 1);
             }
         }
+      }
     }
 
     constructor() { }
+
     public ngOnInit() {
         this.fillWordsIndexes();
     }
 
 }
 
+/***********************************************************
+* Interface used for the positon of a crossword grid
+***************************************************************/
 interface Index {
     i: number;
     j: number;
