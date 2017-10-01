@@ -9,9 +9,7 @@
                 [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':findIndexOfWordWithIndex(i,j)}" 
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
-                (click)="handleInput($event)"
-                [readonly]="findIndexOfWordWithIndex(i,j)"
-            
+                (click)="handleInput($event)"    
             /> 
                 
         </td>

@@ -33,7 +33,13 @@
   }
 .correctWord{
   border: 3px solid #7BF57B;
-  background-color: #CAF8D0
+  background-color: #CAF8D0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events:none;
+  
 }
 #hints{
   border-collapse:separate; 

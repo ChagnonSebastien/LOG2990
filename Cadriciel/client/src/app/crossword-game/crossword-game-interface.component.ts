@@ -217,6 +217,12 @@ private checkWordFoundWithIndex(i: number, j: number) {
             let index : Index = {i: i, j: j};
             this.correctIndexes.push(index);
         }
+        else 
+        for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
+            if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
+                this.correctIndexes.splice(k,1);
+            }
+        }
     }
 
     constructor() { }
