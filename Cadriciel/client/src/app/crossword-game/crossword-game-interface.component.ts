@@ -158,7 +158,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      /***********************************************************
      * Cancel the event propagation
      ************************************************************/
-     public handleInput($event): void {
+     public handleInput(event): void {
         event.stopPropagation();
      }
 
