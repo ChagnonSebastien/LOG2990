@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Crossword } from './crossword';
+import { CrosswordGenerator } from './crossword';
 
 const size = 10;
 function randomIndex(): number {
@@ -7,10 +7,10 @@ function randomIndex(): number {
 }
 
 describe('Crossword', () => {
-    let crossword: Crossword;
+    let crossword: CrosswordGenerator;
 
     beforeEach(() => {
-        crossword = new Crossword(size);
+        crossword = new CrosswordGenerator(size);
     });
 
     describe('getEmptyGrid(size: number) : String[][] { }', () => {

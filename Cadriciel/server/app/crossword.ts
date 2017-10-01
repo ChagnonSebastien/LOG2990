@@ -1,17 +1,22 @@
 import { Utilities } from './utilities';
+import { Lexicon } from './lexicon';
+import * as path from 'path';
 
-export class Crossword {
+export class CrosswordGenerator {
     public size: number;
     public grid: String[][];
     public previousGridState: String[][];
     public gridCounter: number[][];
     public previousGridCounter: number[][];
+    public lexicon: Lexicon;
 
     constructor(size: number) {
         this.size = size;
         this.grid = this.newGrid(size, ' ');
         this.gridCounter = this.newGrid(size, 0);
         this.saveState();
+        let jsonPath = path.join(__dirname, '..', '..', '..', 'app', 'lexicon.json');
+        this.lexicon = new Lexicon(jsonPath);
     }
 
     public newGrid(size: number, fill: any): Array<any> {

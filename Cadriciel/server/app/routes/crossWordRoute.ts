@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
-import { Crossword } from '../crossword';
+import { CrosswordGenerator } from '../crossword';
 const CrossWord = require('./crossWordSchema');
 var mongoose = require('mongoose');
 
@@ -12,7 +12,7 @@ module Route {
     export class CrossWords {
 
         public getCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const crossword = new Crossword(10);
+            const crossword = new CrosswordGenerator(10);
             crossword.addWord(0, 0, 'hellaso', true);
             res.send(JSON.stringify({
                 'data': crossword.grid
