@@ -1,0 +1,60 @@
+<div id="page" (click)="cancelSelection($event)" >
+  <div id="conteneur"> 
+<div id="wrapper"> 
+<tr *ngFor="let ligne of rawCrossword ; let i = index">
+        <td *ngFor="let colonne of ligne; let j = index"  >
+              
+              
+            <input 
+                [ngClass]="{'filled': colonne == '0', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':findIndexOfWordWithIndex(i,j)}" 
+                type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
+                (keypress)="filterInput($event,i ,j)"
+                (click)="handleInput($event)"    
+            /> 
+                
+        </td>
+    </tr> 
+</div>
+
+<div id ="indices">
+    
+        <table>
+                <tr>
+                <td>
+                    <table>
+                        
+                            <tr >
+                                <td id="Horizontal_Header">Horizontal</td>
+                            </tr>
+                        
+                        <tbody>
+                                <tr *ngFor="let hint of wordsIndexes; let k = index">
+                                        <td *ngIf = "checkHorizontal(hint.position)" headers="horizontal">
+                                        <button class="btn" (click)="handleClick($event,k);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                        </td>
+                                </tr>
+                               
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                <table>
+                        <thead>
+                            <tr>
+                                <td id="Vertical_Header">Vertical</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let hint of wordsIndexes; let k = index">
+                                        <td *ngIf = "checkVertical(hint.position)" headers="vertical">
+                                        <button class="btn" (click)="handleClick($event,k);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                         </td>
+                                 </tr>
+                        </tbody>
+                    </table>
+                </td>
+                </tr>
+                </table>
+ </div>
+ </div>
+</div>
