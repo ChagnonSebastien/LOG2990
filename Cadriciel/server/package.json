@@ -9,6 +9,7 @@
     "test": "mocha -r ts-node/register 'app/**/*.spec.ts'",
     "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
+    "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
     "test-once": "tsc && karma start karma.conf.js --single-run || npm run-script coverage",
     "coverage": "remap-istanbul -i coverage/coverage-final.json -o coverage -t html",
     "tsc": "tsc",

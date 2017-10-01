@@ -15,7 +15,7 @@ export class CrosswordGenerator {
         this.grid = this.newGrid(size, ' ');
         this.gridCounter = this.newGrid(size, 0);
         this.saveState();
-        let jsonPath = path.join(__dirname, '..', '..', '..', 'app', 'lexicon.json');
+        let jsonPath = path.join(__dirname, '..', '..', '..', 'app', 'words.json');
         this.lexicon = new Lexicon(jsonPath);
     }
 
