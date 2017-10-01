@@ -103,6 +103,23 @@ describe('Crossword', () => {
         });
     });
 
+    describe('addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean { }', () => {
+        it('should add a black square after the word', () => {
+            expect(crossword.addBlackSquares(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][5]).to.equal('#');
+        });
+
+        it('should add a black square before the word', () => {
+            expect(crossword.addBlackSquares(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('#');
+        });
+
+        it('should fail to add a black square if another word is using the square', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.addBlackSquares(1, 0, 'hello', false)).to.be.false;
+        });
+    });
+
     describe('deleteLetter(i: number, j: number, letter: string): boolean { }', () => {
         it('should delete a letter at the specified position', () => {
             expect(crossword.addLetter(0, 0, 'h')).to.be.true;

@@ -58,6 +58,31 @@ export class Crossword {
         return true;
     }
 
+    public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (horizontal) {
+            if (j > 0) {
+                if (!this.addLetter(i, j - 1, '#')) {
+                    return false;
+                }
+            } else if (j + word.length < this.size) {
+                if (!this.addLetter(i, j + word.length, '#')) {
+                    return false;
+                }
+            }
+        } else {
+            if (i > 0) {
+                if (!this.addLetter(i - 1, j, '#')) {
+                    return false;
+                }
+            } else if (i + word.length < this.size) {
+                if (!this.addLetter(i + word.length, j, '#')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public deleteLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
             return false;
