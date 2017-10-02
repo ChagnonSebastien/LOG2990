@@ -1,6 +1,7 @@
 import { Utilities } from './utilities';
 
 export class Crossword {
+    public _id: string;
     public size: number;
     public grid: String[][];
     public previousGridState: String[][];
