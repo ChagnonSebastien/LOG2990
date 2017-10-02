@@ -64,4 +64,13 @@ describe('Lexicon', () => {
             expect(wordsThatMatch.includes('hello')).to.be.true;
         });
     });
+
+    describe('subpatterns(pattern: string): string[] { }', () => {
+        it('should return all the subpatterns', () => {
+            const patterns = lexicon.subpatterns('h   o');
+            expect(patterns.includes('h  ')).to.be.true;
+            expect(patterns.includes('  o')).to.be.true;
+            expect(patterns.includes('h   o')).to.be.true;
+        });
+    });
 });

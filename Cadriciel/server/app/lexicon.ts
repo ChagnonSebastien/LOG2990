@@ -26,11 +26,31 @@ export class Lexicon {
     }
 
     public allWordsOfLength(length: number): Array<string> {
-        return this.wordsOfLength(length, true).concat(this.wordsOfLength(length, false));
+        return this.wordsOfLength(length, true)
+            .concat(this.wordsOfLength(length, false));
     }
 
     public wordsMatching(pattern: string): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
-        return this.allWordsOfLength(pattern.length).filter(word => patternRegex.test(word));
+        return this.allWordsOfLength(pattern.length)
+            .filter(word => patternRegex.test(word));
+    }
+
+    public subpatterns(pattern: string): string[] {
+        const results: Set<string> = new Set<string>();
+        for (let length = 3; length < 10; length++) {
+            for (let index = 0; index < 10 - length; index++) {
+                results.add(pattern.substr(index, length));
+            }
+        }
+        return Array.from(results);
+    }
+
+    public bestWordForSubpattern(subpattern: string): string {
+        return '';
+    }
+
+    public bestWordForPattern(pattern: string): string {
+        return '';
     }
 }

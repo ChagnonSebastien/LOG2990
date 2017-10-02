@@ -2,6 +2,8 @@ import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
 import * as path from 'path';
 
+const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
+
 export class CrosswordGenerator {
     public size: number;
     public grid: String[][];
@@ -15,8 +17,7 @@ export class CrosswordGenerator {
         this.grid = this.newGrid(size, ' ');
         this.gridCounter = this.newGrid(size, 0);
         this.saveState();
-        let jsonPath = path.join(__dirname, '..', '..', '..', 'app', 'words.json');
-        this.lexicon = new Lexicon(jsonPath);
+        this.loadLexicon(lexiconPath);
     }
 
     public newGrid(size: number, fill: any): Array<any> {
@@ -26,6 +27,10 @@ export class CrosswordGenerator {
             });
             return line;
         });
+    }
+
+    public loadLexicon(file: string) {
+        this.lexicon = new Lexicon(lexiconPath);
     }
 
     public indexOutOfBounds(i: number): boolean {
