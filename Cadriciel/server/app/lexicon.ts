@@ -46,16 +46,20 @@ export class Lexicon {
         return Array.from(results);
     }
 
-    public bestWordsForPattern(pattern: string) {
+    public wordsForPattern(pattern: string) {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
             return new Array<string>();
         } else {
-            return this.bestWordsForNonEmptyPattern(pattern);
+            return this.wordsForNonEmptyPattern(pattern);
         }
     }
 
-    public bestWordsForNonEmptyPattern(pattern: string): string[] {
+    public wordsForNonEmptyPattern(pattern: string): string[] {
+        if (pattern.trim().length === 0) {
+            return new Array<string>();
+        }
+
         const subpatterns: string[] = this.subpatterns(pattern);
         const nonEmptySubpatterns = subpatterns.filter(subpattern => {
             const isNotEmpty: boolean = subpattern.trim().length > 0;
@@ -66,6 +70,7 @@ export class Lexicon {
         }).reduce((previous, current) => {
             return previous.concat(current);
         });
+
         return Array.from(new Set(wordsForPattern));
     }
 

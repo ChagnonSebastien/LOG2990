@@ -79,9 +79,24 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('bestWordForPattern(pattern: string): string { }', () => {
+    describe('wordsForPattern(pattern: string): string[] { }', () => {
         it('should return the best word for a given pattern', () => {
-            console.log(lexicon.bestWordsForPattern('h   o'));
+            console.log(lexicon.wordsForPattern('h   o'));
+        });
+    });
+
+    describe('wordsForNonEmptyPattern(pattern: string): string[] { }', () => {
+        it('should return all words that fit the subpatterns of the pattern', () => {
+            const words: string[] = lexicon.wordsForNonEmptyPattern('h   o');
+            expect(words.includes('hello')).to.be.true;
+            expect(words.includes('cello')).to.be.false;
+            expect(words.includes('eat')).to.be.false;
+            expect(words.includes('ham')).to.be.true;
+        });
+
+        it('should not return anything if the pattern provided is blank', () => {
+            const words: string[] = lexicon.wordsForNonEmptyPattern('     ');
+            expect(words.length).to.equal(0);
         });
     });
 
