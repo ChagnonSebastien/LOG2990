@@ -66,11 +66,29 @@ describe('Lexicon', () => {
     });
 
     describe('subpatterns(pattern: string): string[] { }', () => {
-        it('should return all the subpatterns', () => {
+        it('should return all the subpatterns of "h   o"', () => {
             const patterns = lexicon.subpatterns('h   o');
             expect(patterns.includes('h  ')).to.be.true;
             expect(patterns.includes('  o')).to.be.true;
             expect(patterns.includes('h   o')).to.be.true;
+        });
+
+        it('should not return any duplicate patterns', () => {
+            const patterns = lexicon.subpatterns(' '.repeat(10));
+            expect(patterns.length).to.equal(8);
+        });
+    });
+
+    describe('bestWordForPattern(pattern: string): string { }', () => {
+        it('should return the best word for a given pattern', () => {
+            console.log(lexicon.bestWordsForPattern('h   o'));
+        });
+    });
+
+    describe('randomWordFromArray(words: string[]): string { }', () => {
+        it('should return a random word contained in the array provided', () => {
+            const words: string[] = ['hello', 'world', 'walleandtomato', 'tomato'];
+            expect(words.includes(lexicon.randomWordFromArray(words))).to.be.true;
         });
     });
 });

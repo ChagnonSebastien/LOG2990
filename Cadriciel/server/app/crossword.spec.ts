@@ -6,7 +6,7 @@ function randomIndex(): number {
     return Math.floor(Math.random() * size);
 }
 
-describe('Crossword', () => {
+describe('CrosswordGenerator', () => {
     let crossword: CrosswordGenerator;
 
     beforeEach(() => {
@@ -164,36 +164,36 @@ describe('Crossword', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.saveState()).to.be.true;
             expect(crossword.grid[0][0])
-                    .to.equal(crossword.previousGridState[0][0]);
+                .to.equal(crossword.previousGridState[0][0]);
             expect(crossword.grid[0][2])
-                    .to.equal(crossword.previousGridState[0][2]);
+                .to.equal(crossword.previousGridState[0][2]);
             expect(crossword.grid[0][4])
-                    .to.equal(crossword.previousGridState[0][4]);
+                .to.equal(crossword.previousGridState[0][4]);
             const i = randomIndex();
             const j = randomIndex();
             expect(crossword.grid[i][j])
-                    .to.equal(crossword.previousGridState[i][j]);
+                .to.equal(crossword.previousGridState[i][j]);
         });
 
         it('should make a copy of the current gridCounter', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.saveState()).to.be.true;
             expect(crossword.gridCounter[0][0])
-                    .to.equal(crossword.previousGridCounter[0][0]);
+                .to.equal(crossword.previousGridCounter[0][0]);
             expect(crossword.gridCounter[0][2])
-                    .to.equal(crossword.previousGridCounter[0][2]);
+                .to.equal(crossword.previousGridCounter[0][2]);
             expect(crossword.gridCounter[0][4])
-                    .to.equal(crossword.previousGridCounter[0][4]);
+                .to.equal(crossword.previousGridCounter[0][4]);
             const i = randomIndex();
             const j = randomIndex();
             expect(crossword.gridCounter[i][j])
-                    .to.equal(crossword.previousGridCounter[i][j]);
+                .to.equal(crossword.previousGridCounter[i][j]);
         });
 
         it('should be a deep copy', () => {
             expect(crossword.saveState()).to.be.true;
             expect(crossword.grid)
-                    .to.not.equal(crossword.previousGridState);
+                .to.not.equal(crossword.previousGridState);
         });
     });
 
@@ -227,7 +227,7 @@ describe('Crossword', () => {
         it('should be a deep copy', () => {
             expect(crossword.rollback()).to.be.true;
             expect(crossword.previousGridState)
-                    .to.not.equal(crossword.grid);
+                .to.not.equal(crossword.grid);
         });
     });
 });

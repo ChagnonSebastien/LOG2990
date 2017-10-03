@@ -38,19 +38,38 @@ export class Lexicon {
 
     public subpatterns(pattern: string): string[] {
         const results: Set<string> = new Set<string>();
-        for (let length = 3; length < 10; length++) {
-            for (let index = 0; index < 10 - length; index++) {
+        for (let length = 3; length <= pattern.length; length++) {
+            for (let index = 0; index <= pattern.length - length; index++) {
                 results.add(pattern.substr(index, length));
             }
         }
         return Array.from(results);
     }
 
-    public bestWordForSubpattern(subpattern: string): string {
-        return '';
+    public bestWordsForPattern(pattern: string) {
+        const isBlankPattern: boolean = pattern.trim().length === 0;
+        if (isBlankPattern) {
+            return new Array<string>();
+        } else {
+            return this.bestWordsForNonEmptyPattern(pattern);
+        }
     }
 
-    public bestWordForPattern(pattern: string): string {
-        return '';
+    public bestWordsForNonEmptyPattern(pattern: string): string[] {
+        const subpatterns: string[] = this.subpatterns(pattern);
+        const nonEmptySubpatterns = subpatterns.filter(subpattern => {
+            const isNotEmpty: boolean = subpattern.trim().length > 0;
+            return isNotEmpty;
+        });
+        const wordsForPattern = nonEmptySubpatterns.map(subpattern => {
+            return this.wordsMatching(subpattern);
+        }).reduce((previous, current) => {
+            return previous.concat(current);
+        });
+        return Array.from(new Set(wordsForPattern));
+    }
+
+    public randomWordFromArray(words: string[]): string {
+        return words[Math.floor(Math.random() * words.length)];
     }
 }
