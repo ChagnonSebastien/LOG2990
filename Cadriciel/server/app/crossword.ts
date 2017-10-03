@@ -124,6 +124,31 @@ export class CrosswordGenerator {
         return true;
     }
 
+    public scoreWord(word: string, pattern: string): number {
+        let score = 0;
+        for (let i = 0; i < word.length; i++) {
+            score = word[i] === pattern[i] ? score + 1 : score;
+        }
+        return score;
+    }
+
+    public addRandomWord(i: number, horizontal: boolean) {
+        if (horizontal) {
+            const pattern = this.grid[i].join('');
+            const randomWord = this.lexicon
+                .randomWordFromArray(this.lexicon.wordsForPattern(pattern));
+            let insertIndex = 0;
+            let maxScore = 0;
+            for (let index = 0; index < pattern.length - randomWord.length + 1; index++) {
+                const score = this.scoreWord(randomWord, pattern.substr(index, randomWord.length));
+                if (score > maxScore) {
+                    insertIndex = index;
+                    maxScore = score;
+                }
+            }
+        }
+    }
+
     public saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
         this.previousGridCounter = Utilities.deepCopy(this.gridCounter);

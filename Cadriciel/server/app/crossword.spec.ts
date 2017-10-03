@@ -159,6 +159,16 @@ describe('CrosswordGenerator', () => {
         });
     });
 
+    describe('scoreWord(word: string, pattern: string) { }', () => {
+        it('should give a score of 5 when matching hello to hello', () => {
+            expect(crossword.scoreWord('hello', 'hello')).to.equal(5);
+        });
+
+        it('should give a score of 0 when the word is hello and the pattern is blank', () => {
+            expect(crossword.scoreWord('hello', '     ')).to.equal(0);
+        });
+    });
+
     describe('saveState() { }', () => {
         it('should make a copy of the current grid', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
