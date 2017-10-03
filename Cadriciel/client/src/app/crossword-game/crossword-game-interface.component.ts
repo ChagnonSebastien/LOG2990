@@ -6,9 +6,9 @@ import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from 
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-    public rawCrossword: [[string]] = [['0', '0', '0', '0', 'p', '0', '0', '0', '0', '0'],
-                                      ['0', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
-                                      ['0', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
+    public rawCrossword: [[string]] = [['c', '0', '0', '0', 'p', '0', 'c', 'a', 't', 'e'],
+                                      ['a', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
+                                      ['t', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
                                       ['0', 'h', 'y', 'd', 'e', 'r', 'a', 'b', 'a', 'd'],
                                       ['0', '0', '0', '0', '0', '0', 'n', '0', '0', 'e'],
                                       ['0', '0', '0', '0', '0', '0', 'g', '0', '0', 'l'],
@@ -25,7 +25,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public listOfWordsAndHints: [{word: string, indice: string}] = [{word: 'pune', indice : 'Education Hub' },
     {word: 'bangalore', indice : 'Information Technology Hub'}, {word: 'hyderabad', indice : 'Cultural Hub'},
     {word: 'delhi', indice : 'Capital of India'}, {word: 'mumbai', indice : 'India financial capital'},
-    {word: 'kashmir', indice : 'Saffron region'} ];
+    {word: 'kashmir', indice : 'Saffron region'}, {word: 'cate', indice : 'A choice or dainty food'},
+    {word: 'cat', indice : 'A small domesticated mammal kept as a pet '} ];
 
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
     public activeIndexes: Index[] = [];
@@ -70,12 +71,12 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
             // check for rows first
 
-            for (let l = 0 ; l < this.rawCrossword.length ; l++ ) {
+            for (let p = 0 ; p < this.rawCrossword.length ; p++ ) {
 
                 // get word indexes for a given row. Will return empty if not present in that row
 
-                let indexes: Index[] = this.findWordIndexes
-                (this.listOfWordsAndHints[k].word, this.rawCrossword[l], l, true);
+                let indexes: Index[] = this.findWordIndexesRow
+                (this.listOfWordsAndHints[k].word, this.rawCrossword[p], p);
 
                 if (indexes.length !== 0) {
                     this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes,
@@ -86,8 +87,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
                 // try in column of given index
 
-                indexes = this.findWordIndexes
-                (this.listOfWordsAndHints[k].word, this.getColumn(l), l, false);
+                indexes = this.findWordIndexesColumn
+                (this.listOfWordsAndHints[k].word, this.getColumn(p), p);
 
                 if (indexes.length !== 0) {
                     this.wordsIndexes.push({word: this.listOfWordsAndHints[k].word, indexes: indexes,
@@ -102,35 +103,61 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
      /***********************************************************
-     * Returns the indexes of a given word in the grid. Returns
-     * emtpy array of indexes if it is not in the grid.
+     * Returns the indexes of a given word in a row of the grid. Returns
+     * emtpy array if it is not in the grid.
      ************************************************************/
-     public findWordIndexes(word: string, gridPart: string[], columnOrRowIndex: number, row: boolean): Index[] {
+     public findWordIndexesRow(word: string, gridPart: string[], columnOrRowIndex: number): Index[] {
 
         const indexes: Index[] = [];
 
         for (let k = 0 ; k < gridPart.length && indexes.length !== word.length ; k++ ) {
             if (gridPart[k] === word[indexes.length]) {
 
-                if (row) {
-                    indexes.push({i: columnOrRowIndex, j: k});
-                } else {
-                     indexes.push({i: k, j: columnOrRowIndex});
-                }
+                 indexes.push({i: columnOrRowIndex, j: k});
 
-            } else {
+                } else {
                 indexes.splice(0, indexes.length);
             }
         }
             /*test for two special condions firt before returning
             1. the first letter of the word is the last letter of the given column or row
             2. make sure the word we found is not actually part of a larger word eg : cat could be found in catastrophic*/
-            if (indexes.length < word.length) {
+            if (indexes.length < word.length || (indexes[0].j !== 0 && gridPart[indexes[0].j - 1 ] !== '0') ||
+            ( indexes[indexes.length - 1].j !== gridPart.length - 1 && gridPart[indexes[indexes.length - 1].j + 1 ] !== '0')) {
             indexes.splice(0, indexes.length);
             }
 
          return indexes;
      }
+
+
+    /***********************************************************
+     * Returns the indexes of a given word in a column of the grid. Returns
+     * emtpy array if it is not in the grid.
+     ************************************************************/
+    public findWordIndexesColumn(word: string, gridPart: string[], columnOrRowIndex: number): Index[] {
+
+               const indexes: Index[] = [];
+
+                for (let k = 0 ; k < gridPart.length && indexes.length !== word.length ; k++ ) {
+                    if (gridPart[k] === word[indexes.length]) {
+
+                        indexes.push({i: k, j: columnOrRowIndex});
+
+                        } else {
+                        indexes.splice(0, indexes.length);
+                    }
+                }
+                    /*test for two special condions firt before returning
+                    1. the first letter of the word is the last letter of the given column or row
+                    2. make sure the word we found is not actually part of a larger word eg : cat could be found in catastrophic*/
+                    if (indexes.length < word.length || ( indexes[0].i !== 0 && gridPart[indexes[0].i - 1 ] !== '0') ||
+                 (indexes[indexes.length - 1].i !== gridPart.length - 1 && gridPart[indexes[indexes.length - 1].i + 1 ] !== '0')) {
+                    indexes.splice(0, indexes.length);
+                    }
+
+                 return indexes;
+             }
 
      /***********************************************************
      * Return the column of the crossword grid at the given index
