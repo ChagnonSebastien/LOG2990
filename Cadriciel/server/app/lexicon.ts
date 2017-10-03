@@ -1,3 +1,4 @@
+import * as console from 'console';
 import * as fs from 'fs';
 
 export class Lexicon {
@@ -28,6 +29,15 @@ export class Lexicon {
     public allWordsOfLength(length: number): Array<string> {
         return this.wordsOfLength(length, true)
             .concat(this.wordsOfLength(length, false));
+    }
+
+    public wordsWithLengthUpTo(length: number): Array<string> {
+        return new Array(length - 2).fill(null)
+            .map((value, index) => {
+                return this.allWordsOfLength(index + 3);
+            }).reduce((previous, current) => {
+                return previous.concat(current);
+            });
     }
 
     public wordsMatching(pattern: string): Array<string> {
