@@ -34,20 +34,19 @@ export class CrosswordGenerator {
         crosswords.forEach(element => {
             if(element.difficulty = 'hard' && this.hardCrosswords.length < 5) {
                 this.hardCrosswords.push(element);
+                this.deleteCrossword(element);
+                this.generateCrossword('hard');
             }
             else if (element.difficulty = 'normal' && this.normalCrosswords.length < 5) {
                 this.normalCrosswords.push(element);
+                this.deleteCrossword(element);
+                this.generateCrossword('normal');
             } else if (element.difficulty = 'easy' && this.easyCrosswords.length < 5) {
                 this.easyCrosswords.push(element);
+                this.deleteCrossword(element);
+                this.generateCrossword('easy');
             }
         });
-
-        //delete chosen crossword from database
-
-        //generate 5 easy crossword
-        //generate 5 medium crossword
-        //generate 5 hard crossword
-
     }
 
     public generateCrossword(level: string): Promise<boolean> {
