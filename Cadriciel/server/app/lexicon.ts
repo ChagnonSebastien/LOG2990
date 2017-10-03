@@ -59,7 +59,7 @@ export class Lexicon {
     public wordsForPattern(pattern: string) {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
-            return new Array<string>();
+            return this.wordsWithLengthUpTo(pattern.length);
         } else {
             return this.wordsForNonEmptyPattern(pattern);
         }

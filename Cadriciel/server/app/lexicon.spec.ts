@@ -98,8 +98,12 @@ describe('Lexicon', () => {
     });
 
     describe('wordsForPattern(pattern: string): string[] { }', () => {
-        it('should return the best word for a given pattern', () => {
-            //console.log(lexicon.wordsForPattern('h   o'));
+        it('should only match words with h and/or o when the pattern is "h   o     "', () => {
+            const words = lexicon.wordsForPattern('h   o     ');
+            expect(words.includes('hello')).to.be.true;
+            expect(words.includes('cello')).to.be.false;
+            expect(words.includes('organ')).to.be.true;
+            expect(words.includes('boring')).to.be.true;
         });
     });
 
