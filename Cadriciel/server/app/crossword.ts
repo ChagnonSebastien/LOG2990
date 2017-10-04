@@ -146,29 +146,25 @@ export class CrosswordGenerator {
     }
 
     public addRandomWord(i: number, horizontal: boolean): boolean {
+        let pattern = '';
         if (horizontal) {
-            const pattern = this.grid[i].join('');
-            const wordsForPattern = this.lexicon.wordsForPattern(pattern);
-            if (wordsForPattern.length > 0) {
-                const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
-                const insertIndex = this.bestInsertIndex(randomWord, pattern);
-                return this.addWord(i, insertIndex, randomWord, true);
-            } else {
-                return false;
-            }
+            pattern = this.grid[i].join('');
         } else {
-            let pattern: string = '';
             for (let index = 0; index < this.size; index++) {
                 pattern += this.grid[index][i];
             }
-            const wordsForPattern = this.lexicon.wordsForPattern(pattern);
-            if (wordsForPattern.length > 0) {
-                const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
-                const insertIndex = this.bestInsertIndex(randomWord, pattern);
-                return this.addWord(insertIndex, i, randomWord, false);
+        }
+        const wordsForPattern = this.lexicon.wordsForPattern(pattern);
+        if (wordsForPattern.length > 0) {
+            const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
+            const insertIndex = this.bestInsertIndex(randomWord, pattern);
+            if (horizontal) {
+                return this.addWord(i, insertIndex, randomWord, true);
             } else {
-                return false;
+                return this.addWord(insertIndex, i, randomWord, false);
             }
+        } else {
+            return false;
         }
     }
 
