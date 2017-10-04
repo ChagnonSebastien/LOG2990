@@ -160,14 +160,7 @@ export class CrosswordGenerator {
     }
 
     public addRandomWord(i: number, horizontal: boolean): boolean {
-        let pattern = '';
-        if (horizontal) {
-            pattern = this.grid[i].join('');
-        } else {
-            for (let index = 0; index < this.size; index++) {
-                pattern += this.grid[index][i];
-            }
-        }
+        const pattern = this.patternForLine(i, horizontal);
         const wordsForPattern = this.lexicon.wordsForPattern(pattern);
         if (wordsForPattern.length > 0) {
             const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
