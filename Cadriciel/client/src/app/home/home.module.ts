@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
 
 import { BasicService } from './basic.service';
+import { CameraService } from '../racing-game/camera.service';
 
 /* Feature modules */
 import { CubeModule } from './cube/cube.module';
@@ -23,7 +24,8 @@ import { CubeModule } from './cube/cube.module';
         HomeComponent
     ],
     providers: [
-        BasicService
+        BasicService,
+        CameraService
     ]
 })
 export class HomeModule { }

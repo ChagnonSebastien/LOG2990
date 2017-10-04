@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
+import { CameraService } from '../../racing-game/camera.service';
 
 @Injectable()
 export class RenderService {
@@ -17,17 +18,12 @@ export class RenderService {
 
     private scene: THREE.Scene;
 
-    private cameraZ = 400;
-
-    private fieldOfView = 70;
-
-    private nearClippingPane = 1;
-
-    private farClippingPane = 1000;
-
     public rotationSpeedX = 0.005;
 
     public rotationSpeedY = 0.01;
+
+    constructor(private cameraService: CameraService) {
+    }
 
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
@@ -49,18 +45,9 @@ export class RenderService {
     }
 
     private createScene() {
-        /* Scene */
         this.scene = new THREE.Scene();
-
-        /* Camera */
-        const aspectRatio = this.getAspectRatio();
-        this.camera = new THREE.PerspectiveCamera(
-            this.fieldOfView,
-            aspectRatio,
-            this.nearClippingPane,
-            this.farClippingPane
-        );
-        this.camera.position.z = this.cameraZ;
+        this.cameraService.initialiseCamera(this.container);
+        this.camera = this.cameraService.getCamera();
     }
 
     private getAspectRatio() {
