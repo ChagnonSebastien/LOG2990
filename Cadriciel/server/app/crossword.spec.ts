@@ -120,6 +120,12 @@ describe('CrosswordGenerator', () => {
             expect(crossword.grid[0][0]).to.equal('#');
         });
 
+        it('should add a black square before and after the word', () => {
+            expect(crossword.addBlackSquares(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('#');
+            expect(crossword.grid[0][6]).to.equal('#');
+        })
+
         it('should fail to add a black square if another word is using the square', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.addBlackSquares(1, 0, 'hello', false)).to.be.false;
@@ -172,6 +178,18 @@ describe('CrosswordGenerator', () => {
     describe('bestInsertIndex(word: string, pattern: string): number { }', () => {
         it('should give an index of 3 when the word is hello and the pattern is "   h   o "', () => {
             expect(crossword.bestInsertIndex('hello', '   h   o  ')).to.equal(3);
+        });
+    });
+
+    describe('patternForLine(i: number, horizontal: boolean) { }', () => {
+        it('should return the pattern "#         " if horizontal on a blank grid', () => {
+            expect(crossword.addWord(1, 0, 'hello', false)).to.be.true;
+            expect(crossword.patternForLine(0, true)).to.equal('#' + ' '.repeat(size - 1));
+        });
+
+        it('should return the pattern "          " if vertical on a blank grid', () => {
+            expect(crossword.addWord(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.patternForLine(0, false)).to.equal(' '.repeat(size));
         });
     });
 

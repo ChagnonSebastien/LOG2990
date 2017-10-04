@@ -74,7 +74,8 @@ export class CrosswordGenerator {
                 if (!this.addLetter(i, j - 1, '#')) {
                     return false;
                 }
-            } else if (j + word.length < this.size) {
+            }
+            if (j + word.length < this.size) {
                 if (!this.addLetter(i, j + word.length, '#')) {
                     return false;
                 }
@@ -84,7 +85,8 @@ export class CrosswordGenerator {
                 if (!this.addLetter(i - 1, j, '#')) {
                     return false;
                 }
-            } else if (i + word.length < this.size) {
+            }
+            if (i + word.length < this.size) {
                 if (!this.addLetter(i + word.length, j, '#')) {
                     return false;
                 }
@@ -143,6 +145,10 @@ export class CrosswordGenerator {
             }
         }
         return insertIndex;
+    }
+
+    public patternForLine(i: number, horizontal: boolean) {
+        return this.grid[i].join('');
     }
 
     public addRandomWord(i: number, horizontal: boolean): boolean {
