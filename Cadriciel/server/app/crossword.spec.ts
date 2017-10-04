@@ -209,7 +209,7 @@ describe('CrosswordGenerator', () => {
 
     describe('generateCrossword() { }', () => {
         it('should generate a crossword', () => {
-            crossword.generateCrossword();
+            crossword.generateCrossword('intermediate');
         });
     });
 

@@ -191,7 +191,7 @@ export class CrosswordGenerator {
         }
     }
 
-    public generateCrossword(): string[][] {
+    public generateCrossword(difficulty: string): string[][] {
         for (let i = 0; i < this.size; i++) {
             this.addRandomWord(i, true);
             this.addRandomWord(this.size - i - 1, false);
