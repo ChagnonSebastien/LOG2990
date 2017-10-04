@@ -148,7 +148,15 @@ export class CrosswordGenerator {
     }
 
     public patternForLine(i: number, horizontal: boolean) {
-        return this.grid[i].join('');
+        if (horizontal) {
+            return this.grid[i].join('');
+        } else {
+            let pattern = '';
+            for (let index = 0; index < this.size; index++) {
+                pattern += this.grid[index][i];
+            }
+            return pattern;
+        }
     }
 
     public addRandomWord(i: number, horizontal: boolean): boolean {

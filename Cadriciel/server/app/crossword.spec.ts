@@ -187,9 +187,9 @@ describe('CrosswordGenerator', () => {
             expect(crossword.patternForLine(0, true)).to.equal('#' + ' '.repeat(size - 1));
         });
 
-        it('should return the pattern "          " if vertical on a blank grid', () => {
+        it('should return the pattern "#         " if vertical on a blank grid', () => {
             expect(crossword.addWord(0, 1, 'hello', true)).to.be.true;
-            expect(crossword.patternForLine(0, false)).to.equal(' '.repeat(size));
+            expect(crossword.patternForLine(0, false)).to.equal('#' + ' '.repeat(size - 1));
         });
     });
 
