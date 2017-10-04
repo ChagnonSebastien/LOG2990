@@ -71,6 +71,15 @@ export class CrosswordGenerator {
         return true;
     }
 
+    public addSpacing(i: number, j: number, horizontal: boolean): boolean {
+        if (this.indexesOutOfBounds(i, j)) {
+            return false;
+        }
+        if (horizontal && this.grid[i][j] === ' ') {
+            return this.addLetter(i, j, '-');
+        }
+    }
+
     public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
         if (horizontal) {
             if (j > 0) {
@@ -96,6 +105,10 @@ export class CrosswordGenerator {
             }
         }
         return true;
+    }
+
+    public addHorizontalSpacing(i: number, j: number, word: string): boolean {
+        return false;
     }
 
     public deleteLetter(i: number, j: number, letter: string): boolean {
