@@ -169,6 +169,26 @@ describe('CrosswordGenerator', () => {
         });
     });
 
+    describe('bestInsertIndex(word: string, pattern: string): number { }', () => {
+        it('should give an index of 3 when the word is hello and the pattern is "   h   o "', () => {
+            expect(crossword.bestInsertIndex('hello', '   h   o  ')).to.equal(3);
+        });
+    });
+
+    describe('addRandomWord(i: number, horizontal: boolean): boolean { }', () => {
+        it('should add a random word horizontally', () => {
+            expect(crossword.addRandomWord(0, true)).to.be.true;
+            expect(crossword.grid[0][0]).to.not.equal(' ');
+            expect(crossword.grid[0][1]).to.not.equal(' ');
+        });
+
+        it('should add a random word vertically', () => {
+            expect(crossword.addRandomWord(0, false)).to.be.true;
+            expect(crossword.grid[0][0]).to.not.equal(' ');
+            expect(crossword.grid[1][0]).to.not.equal(' ');
+        });
+    });
+
     describe('saveState() { }', () => {
         it('should make a copy of the current grid', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;

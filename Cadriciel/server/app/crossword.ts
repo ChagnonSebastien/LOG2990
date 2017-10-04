@@ -55,6 +55,7 @@ export class CrosswordGenerator {
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
         this.saveState();
+        this.addBlackSquares(i, j, word, horizontal);
         for (const letter of word) {
             if (!this.addLetter(i, j, letter)) {
                 this.rollback();
@@ -64,7 +65,6 @@ export class CrosswordGenerator {
                 j = horizontal ? j + 1 : j;
             }
         }
-
         return true;
     }
 
@@ -132,19 +132,42 @@ export class CrosswordGenerator {
         return score;
     }
 
-    public addRandomWord(i: number, horizontal: boolean) {
+    public bestInsertIndex(word: string, pattern: string): number {
+        let insertIndex = 0;
+        let maxScore = 0;
+        for (let index = 0; index < pattern.length - word.length + 1; index++) {
+            const score = this.scoreWord(word, pattern.substr(index, word.length));
+            if (score > maxScore) {
+                insertIndex = index;
+                maxScore = score;
+            }
+        }
+        return insertIndex;
+    }
+
+    public addRandomWord(i: number, horizontal: boolean): boolean {
         if (horizontal) {
             const pattern = this.grid[i].join('');
-            const randomWord = this.lexicon
-                .randomWordFromArray(this.lexicon.wordsForPattern(pattern));
-            let insertIndex = 0;
-            let maxScore = 0;
-            for (let index = 0; index < pattern.length - randomWord.length + 1; index++) {
-                const score = this.scoreWord(randomWord, pattern.substr(index, randomWord.length));
-                if (score > maxScore) {
-                    insertIndex = index;
-                    maxScore = score;
-                }
+            const wordsForPattern = this.lexicon.wordsForPattern(pattern);
+            if (wordsForPattern.length > 0) {
+                const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
+                const insertIndex = this.bestInsertIndex(randomWord, pattern);
+                return this.addWord(i, insertIndex, randomWord, true);
+            } else {
+                return false;
+            }
+        } else {
+            let pattern: string = '';
+            for (let index = 0; index < this.size; index++) {
+                pattern += this.grid[index][i];
+            }
+            const wordsForPattern = this.lexicon.wordsForPattern(pattern);
+            if (wordsForPattern.length > 0) {
+                const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
+                const insertIndex = this.bestInsertIndex(randomWord, pattern);
+                return this.addWord(insertIndex, i, randomWord, false);
+            } else {
+                return false;
             }
         }
     }
