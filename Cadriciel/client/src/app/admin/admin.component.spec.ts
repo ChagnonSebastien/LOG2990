@@ -1,3 +1,4 @@
+import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
@@ -16,7 +17,7 @@ describe('AdminComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AdminComponent, DrawTrackComponent, TracksComponent],
-            providers: [AuthenticationService, DrawTrackService],
+            providers: [AuthenticationService, DrawTrackService, TrackValidationService],
             imports: [HttpModule, AdminRoutingModule]
         })
             .compileComponents();

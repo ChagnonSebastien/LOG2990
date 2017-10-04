@@ -1,3 +1,4 @@
+import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
@@ -29,6 +30,8 @@ export class DrawTrackService {
     private currentlyDraggedIntersection = -1;
 
     private potholes: {distance: number, offset: number}[] = [];
+
+    constructor(public trackValidationService: TrackValidationService) {}
 
     public initialise(container: HTMLElement) {
         this.container = container;
@@ -75,8 +78,15 @@ export class DrawTrackService {
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
+        if (!this.loopClosed) {
+            if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0].position) < 25) {
+                this.mousePosition = this.intersections[0].position;
+            }
+            this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
+        }
         if (this.currentlyDraggedIntersection !== -1) {
             this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
+            this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
         }
         this.updateComponentsView();
     }
@@ -144,6 +154,16 @@ export class DrawTrackService {
     }
 
     private updateComponentsLook() {
+        if (this.currentlyDraggedIntersection !== -1 || !this.loopClosed) {
+            this.segments.forEach((segment, index) => {
+                if (this.trackValidationService.isValid(index)) {
+                    segment.material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+                } else {
+                    segment.material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+                }
+            });
+        }
+
         if (this.loopClosed || this.intersections.length === 0) {
             return;
         }
@@ -218,12 +238,15 @@ export class DrawTrackService {
             this.intersections.push(intersection);
 
             this.segments.push(this.newSegment());
+            this.trackValidationService.addPoint(this.mousePosition);
             if (this.intersections.length === 1) {
               this.addHighlight();
               this.segments[0].material = new THREE.MeshBasicMaterial({color: 0xFF7700});
             }
-        } else if (this.pointMouseHoversOn === 0) {
+        } else if (this.pointMouseHoversOn === 0 && !this.loopClosed) {
             this.loopClosed = true;
+            this.trackValidationService.trackClosed = true;
+            this.trackValidationService.removeLastPoint();
         }
     }
 
@@ -236,7 +259,7 @@ export class DrawTrackService {
     }
 
     private newSegment(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry( 0, 30 );
+        const geometry = new THREE.PlaneGeometry( 0, 20 );
         const material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
         const segment = new THREE.Mesh( geometry, material );
         segment.position.z = -4;
@@ -255,6 +278,8 @@ export class DrawTrackService {
     public removeIntersection() {
         if (this.loopClosed) {
             this.loopClosed = false;
+            this.trackValidationService.trackClosed = false;
+            this.trackValidationService.addPoint(this.mousePosition);
             this.updateComponentsView();
             return;
         }
@@ -262,6 +287,8 @@ export class DrawTrackService {
         if (this.intersections.length === 0) {
             return;
         }
+
+        this.trackValidationService.removeLastPoint();
 
         this.scene.remove(this.intersections.pop());
         if (this.intersections.length === 0) {
@@ -299,5 +326,15 @@ export class DrawTrackService {
         this.camera.bottom = this.container.clientHeight / - 2;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    }
+
+    public update(index: number, valid: boolean) {
+        if (index < this.segments.length) {
+            if (valid) {
+                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+            } else {
+                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+            }
+        }
     }
 }
