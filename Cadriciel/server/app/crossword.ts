@@ -6,8 +6,8 @@ const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
 
 export class CrosswordGenerator {
     public size: number;
-    public grid: String[][];
-    public previousGridState: String[][];
+    public grid: string[][];
+    public previousGridState: string[][];
     public gridCounter: number[][];
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
@@ -191,12 +191,12 @@ export class CrosswordGenerator {
         }
     }
 
-    public generateCrossword() {
+    public generateCrossword(): string[][] {
         for (let i = 0; i < this.size; i++) {
             this.addRandomWord(i, true);
             this.addRandomWord(this.size - i - 1, false);
         }
-        console.log(this.grid);
+        return this.grid;
     }
 
     public saveState(): boolean {
