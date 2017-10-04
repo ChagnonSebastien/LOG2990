@@ -32,7 +32,7 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkHorizontal(hint.position)" headers="horizontal">
-                                        <button class="btn" (click)="handleClick($event,k);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                        <button class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
                                         </td>
                                 </tr>
                                
@@ -49,7 +49,7 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkVertical(hint.position)" headers="vertical">
-                                        <button class="btn" (click)="handleClick($event,k);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                        <button class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
                                          </td>
                                  </tr>
                         </tbody>

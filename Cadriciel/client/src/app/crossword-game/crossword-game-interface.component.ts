@@ -25,7 +25,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public listOfWordsAndHints: [{word: string, indice: string}] = [{word: 'pune', indice : 'Education Hub' },
     {word: 'bangalore', indice : 'Information Technology Hub'}, {word: 'hyderabad', indice : 'Cultural Hub'},
     {word: 'delhi', indice : 'Capital of India'}, {word: 'mumbai', indice : 'India financial capital'},
-    {word: 'kashmir', indice : 'Saffron region'}, {word: 'cate', indice : 'A choice or dainty food'},
+    {word: 'kashmir', indice : 'Saffron region'}, {word: 'cate', indice : 'A choice of dainty food'},
     {word: 'cat', indice : 'A small domesticated mammal kept as a pet '} ];
 
     public wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] = [];
@@ -39,8 +39,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      * This function is called when the user clicks on a input.
      * It ads the index to the list of actives indexes.
      ************************************************************/
-    public handleClick($event, k): void {
-        this.activeIndexes = this.wordsIndexes[k].indexes.slice();
+    public handleClick($event, indexes: Index[]): void {
+        this.activeIndexes = indexes.slice();
         $event.stopPropagation();
         }
 
@@ -194,7 +194,6 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      ************************************************************/
     public filterInput(event: any, i: number, j: number): void {
         const x = event.which || event.keyCode;
-        console.log(event.which || event.keyCode);
         // Check if input is a letter
         if (((x < 65 || x > 122) || (x >= 91 && x <= 96)) && x !== 8) {
             // stop event to prevent entering something else than letters
@@ -306,9 +305,6 @@ public checkWordFoundWithIndex(i: number, j: number): boolean {
 *Check if the user input matches the crossword grid
 ***************************************************************/
   public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
-      console.log('testing key codes');
-      console.log(this.rawCrossword[i][j].charCodeAt(0));
-      console.log(keyCode);
         if (this.rawCrossword[i][j].charCodeAt(0) === keyCode) {
             let index : Index = {i: i, j: j};
             this.correctIndexes.push(index);
@@ -326,6 +322,7 @@ public checkWordFoundWithIndex(i: number, j: number): boolean {
 
     public ngOnInit() {
         this.fillWordsIndexes();
+        console.log(this.wordsIndexes);
     }
 
 }
