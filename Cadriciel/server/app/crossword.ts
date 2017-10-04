@@ -55,7 +55,10 @@ export class CrosswordGenerator {
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
         this.saveState();
-        this.addBlackSquares(i, j, word, horizontal);
+        if (!this.addBlackSquares(i, j, word, horizontal)) {
+            this.rollback();
+            return false;
+        }
         for (const letter of word) {
             if (!this.addLetter(i, j, letter)) {
                 this.rollback();
@@ -173,6 +176,14 @@ export class CrosswordGenerator {
         } else {
             return false;
         }
+    }
+
+    public generateCrossword() {
+        for (let i = 0; i < this.size; i++) {
+            this.addRandomWord(i, true);
+            this.addRandomWord(this.size - i - 1, false);
+        }
+        console.log(this.grid);
     }
 
     public saveState(): boolean {

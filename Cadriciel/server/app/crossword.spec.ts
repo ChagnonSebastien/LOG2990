@@ -207,6 +207,12 @@ describe('CrosswordGenerator', () => {
         });
     });
 
+    describe('generateCrossword() { }', () => {
+        it('should generate a crossword', () => {
+            crossword.generateCrossword();
+        });
+    });
+
     describe('saveState() { }', () => {
         it('should make a copy of the current grid', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
