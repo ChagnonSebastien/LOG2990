@@ -1,21 +1,28 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
-import { Crossword } from '../crossword';
+import { CrosswordDB } from './crosswordDB';
 const CrossWord = require('../routes/crossWordSchema');
 var mongoose = require('mongoose');
-
 var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+
 export class CrosswordGenerator {
 
-    public easyCrosswords: Array<Crossword> = [];
-    public normalCrosswords: Array<Crossword> = [];
-    public hardCrosswords: Array<Crossword> = [];
+    public easyCrosswords: Array<CrosswordDB> = [];
+    public normalCrosswords: Array<CrosswordDB> = [];
+    public hardCrosswords: Array<CrosswordDB> = [];
 
-    public getCrossWords(): Promise<Array<Crossword>> {
-        let crosswordsList: Array<Crossword>;
+    public async initializeServerCrossword(): Promise<boolean> {
+        let crosswords: Array<CrosswordDB> =  await this.getCrossWords();
+        let stored: boolean = await this.storeServerCrosswords(crosswords);
 
-        return new Promise<Array<Crossword>>(resolve => {
+        return stored;
+    }
+
+    public getCrossWords(): Promise<Array<CrosswordDB>> {
+        let crosswordsList: Array<CrosswordDB>;
+
+        return new Promise<Array<CrosswordDB>>(resolve => {
             MongoClient.connect(url, (err, db) => {
                 if(err) {
                     crosswordsList = [];
@@ -30,21 +37,28 @@ export class CrosswordGenerator {
         });
     }
 
-    public storeServerCrosswords(crosswords: Array<any>): void {
-        crosswords.forEach(element => {
-            if(element.difficulty = 'hard' && this.hardCrosswords.length < 5) {
-                this.hardCrosswords.push(element);
-                this.deleteCrossword(element);
-                this.generateCrossword('hard');
-            }
-            else if (element.difficulty = 'normal' && this.normalCrosswords.length < 5) {
-                this.normalCrosswords.push(element);
-                this.deleteCrossword(element);
-                this.generateCrossword('normal');
-            } else if (element.difficulty = 'easy' && this.easyCrosswords.length < 5) {
-                this.easyCrosswords.push(element);
-                this.deleteCrossword(element);
-                this.generateCrossword('easy');
+    public async storeServerCrosswords(crosswords: Array<CrosswordDB>): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            crosswords.forEach(element => {
+                if(element.difficulty === 'hard' && this.hardCrosswords.length < 5) {
+                    this.hardCrosswords.push(element);
+                    this.deleteCrossword(element);
+                    this.generateCrossword('hard');
+                } else if (element.difficulty === 'normal' && this.normalCrosswords.length < 5) {
+                    this.normalCrosswords.push(element);
+                    this.deleteCrossword(element);
+                    this.generateCrossword('normal');
+                } else if (element.difficulty === 'easy' && this.easyCrosswords.length < 5) {
+                    this.easyCrosswords.push(element);
+                    this.deleteCrossword(element);
+                    this.generateCrossword('easy');
+                }
+            });
+
+            if(this.hardCrosswords.length === 5 && this.normalCrosswords.length === 5 && this.easyCrosswords.length === 5){
+                resolve(true);
+            } else {
+                resolve(false);
             }
         });
     }
@@ -71,7 +85,7 @@ export class CrosswordGenerator {
     }
     
 
-    public deleteCrossword(crossword: Crossword): Promise<boolean> {
+    public deleteCrossword(crossword: CrosswordDB): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
@@ -84,5 +98,45 @@ export class CrosswordGenerator {
                 }
             });
         }); 
+    }
+
+    public getCrossword(level:string): CrosswordDB {
+        // TODO: store crossword in server
+        let crossword: CrosswordDB;
+        if(level === 'easy') {
+            crossword = this.easyCrosswords.pop();
+            this.generateCrossword(level);
+            this.storeOneServerCrossword(level);
+        } else if (level === 'normal') {
+            crossword = this.normalCrosswords.pop();
+            this.generateCrossword(level);
+            this.storeOneServerCrossword(level);
+        } else if (level === 'hard') {
+            crossword = this.hardCrosswords.pop();
+            this.generateCrossword(level);
+            this.storeOneServerCrossword(level);
+        }
+        return crossword;
+    }
+
+    public storeOneServerCrossword(level: string): Promise<boolean> {
+        if(level === 'easy' || level === 'normal' || level === 'hard') { 
+            return new Promise<boolean>(resolve => {
+                MongoClient.connect(url, (err, db) => {
+                    if(err) {
+                        resolve(false);
+                    } else {
+                        db.collection('crosswords_tests').findOneAndDelete({"difficulty": level}).then((crossword) => {
+                            resolve(crossword.value.difficulty === level);
+                        });
+                    }
+                })
+            })
+        } else {
+            return new Promise<boolean>(resolve => {
+                resolve(false);
+            })
+        }
+
     }
 }
