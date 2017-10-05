@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb';
-let url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
-let MongoClient = mongodb.MongoClient;
+const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const MongoClient = mongodb.MongoClient;
 let connection: mongodb.Db = null;
 
 module DbConnection {

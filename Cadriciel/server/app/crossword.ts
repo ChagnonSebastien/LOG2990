@@ -21,7 +21,7 @@ export class CrosswordGenerator {
     }
 
     public newGrid(size: number, fill: any): Array<any> {
-        return new Array(size).fill(null).map(u => {
+        return new Array(size).fill(null).map(res => {
             const line = new Array(size).fill(null).map(u => {
                 return fill;
             });

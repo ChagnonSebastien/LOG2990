@@ -124,7 +124,7 @@ describe('CrosswordGenerator', () => {
             expect(crossword.addBlackSquares(0, 1, 'hello', true)).to.be.true;
             expect(crossword.grid[0][0]).to.equal('#');
             expect(crossword.grid[0][6]).to.equal('#');
-        })
+        });
 
         it('should fail to add a black square if another word is using the square', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;

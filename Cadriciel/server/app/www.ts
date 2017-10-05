@@ -8,7 +8,6 @@
 import { Application } from './app';
 import * as http from 'http';
 
-let url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 const db = require('./db-connection');
 
 // start app after database is connected
