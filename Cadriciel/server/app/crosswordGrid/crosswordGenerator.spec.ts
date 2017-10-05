@@ -4,9 +4,10 @@ import { CrosswordDB } from './crosswordDB';
 
 const chai = require('chai');
 const expect = chai.expect;
+const collection = 'crosswords_tests';
 
 describe('Crossword Generator', () => {
-    const crosswordGenerator = new CrosswordGenerator();
+    const crosswordGenerator = new CrosswordGenerator(collection);
     let crosswordsList: Array<CrosswordDB> = [];
 
     it('Should get all the crosswords from the database', (done)=> {
@@ -72,7 +73,7 @@ describe('Crossword Generator', () => {
     });
 
     it('Should initialize server crosswords by store 5 crosswords for each level', (done) => {
-        let testCrosswordGenerator = new CrosswordGenerator();
+        let testCrosswordGenerator = new CrosswordGenerator(collection);
         testCrosswordGenerator.initializeServerCrossword().then(function(data) {
             assert(data);
             assert(testCrosswordGenerator.easyCrosswords.length === 5);

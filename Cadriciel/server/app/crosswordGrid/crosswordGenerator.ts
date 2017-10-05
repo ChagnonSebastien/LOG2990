@@ -7,10 +7,14 @@ var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 
 export class CrosswordGenerator {
-
+    private collection: string;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
     public hardCrosswords: Array<CrosswordDB> = [];
+
+    constructor(collection: string) {
+        this.collection = collection;
+    }
 
     public async initializeServerCrossword(): Promise<boolean> {
         let crosswords: Array<CrosswordDB> =  await this.getCrossWords();
