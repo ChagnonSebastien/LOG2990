@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CrosswordGameInterfaceComponent } from './crossword-game-interface.component';
 
 describe('CrosswordGameInterfaceComponent', () => {
@@ -18,6 +17,9 @@ describe('CrosswordGameInterfaceComponent', () => {
         fixture = TestBed.createComponent(CrosswordGameInterfaceComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+    });
+
+    it('should be created', () => {
         component.rawCrossword = [['c', '0', '0', '0', 'p', '0', 'c', 'a', 't', 'e'],
         ['a', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
         ['t', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
@@ -35,9 +37,6 @@ describe('CrosswordGameInterfaceComponent', () => {
         {word: 'delhi', indice : 'Capital of India'}, {word: 'mumbai', indice : 'India financial capital'},
         {word: 'kashmir', indice : 'Saffron region'}, {word: 'cate', indice : 'A choice of dainty food'},
         {word: 'cat', indice : 'A small domesticated mammal kept as a pet '} ];
-    });
-
-    it('should be created', () => {
         expect(component).toBeTruthy();
     });
 
@@ -63,7 +62,7 @@ describe('CrosswordGameInterfaceComponent', () => {
        expect(component.wordsIndexes).toEqual(wordsIndexes);
     });
 
-    it('activate the word indexes when its hint is clicked', () => {
+    it('should activate the word indexes when its hint is clicked', () => {
         const activeIndexes: Index[] = [{i: 0, j: 0}, {i: 1, j: 0}, {i: 2, j: 0}];
         const event: Event = new Event('click');
         component.handleClick(event, activeIndexes);
@@ -71,7 +70,47 @@ describe('CrosswordGameInterfaceComponent', () => {
 
     });
 
+    it('should return that a active index is active', () => {
+        const activeIndexes: Index[] = [{i: 0, j: 0}];
+        const event: Event = new Event('click');
+        component.handleClick(event, activeIndexes);
+        expect(component.isActive(0, 0)).toBeTruthy();
+        });
+
+     it('should cancel the selection of the word when clicking outside the grid', () => {
+        const activeIndexes: Index[] = [{i: 0, j: 0}];
+        const event: Event = new Event('click');
+        component.handleClick(event, activeIndexes);
+        component.cancelSelection(event);
+        expect(component.activeIndexes.length).toEqual(0);
+    });
+
+    it('should return the first column of the raw crossword', () => {
+        expect(component.getColumn(0)).toEqual(['c', 'a', 't', '0', '0', '0', '0', '0', '0', 'k', '0']);
+    });
+
+    it('should prevent the user from entering something else than a letter character', () => {
+        const event: any = document.createEvent('CustomEvent');
+        event.which = 48;
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 0, 0);
+        expect(component.correctIndexes.length).toEqual(0);
+    });
+
+    it('should delete the correct index when the backspace key is pressed', () => {
+        const event: any = document.createEvent('CustomEvent');
+        event.which = 99;
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 0, 0);
+        event.which = 8;
+        event.initEvent('keydown', true, true);
+        component.handleDelete(event, 0, 0);
+        expect(component.correctIndexes.length).toEqual(0);
+    });
+
+
 });
+
 
 interface Index {
     i: number;

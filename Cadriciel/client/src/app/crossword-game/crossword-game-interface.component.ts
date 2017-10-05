@@ -218,12 +218,13 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
    }
    /***********************************************************
-   * Check if the word was found by the user
+   * Check if the word was found by the user using its postion
+   * in the wordIndexes array
    ***************************************************************/
-   public checkWordFound( k: number): boolean {
-    if (k < this.wordsIndexes.length && k > -1) {
-    for (let i = 0 ; i < this.wordsIndexes[k].indexes.length ; i ++) {
-        if (!(this.checkWordFoundWithIndex(this.wordsIndexes[k].indexes[i].i, this.wordsIndexes[k].indexes[i].j))) {
+   public checkWordFound( wordPosition: number): boolean {
+    if (wordPosition < this.wordsIndexes.length && wordPosition > -1) {
+    for (let i = 0 ; i < this.wordsIndexes[wordPosition].indexes.length ; i ++) {
+        if (!(this.checkCorrectIndexes(this.wordsIndexes[wordPosition].indexes[i].i, this.wordsIndexes[wordPosition].indexes[i].j))) {
              return false;
         }
     }
@@ -233,10 +234,10 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 }
 
 /***********************************************************
-* Using the index of a word char , return the positon of the word
-* in the wordIndexes array
+* Using the index of a grid , check if the words containing
+* that index were found.
 ***************************************************************/
-public findIndexOfWordWithIndex(i: number, j: number): boolean {
+public checkWordWithIndex(i: number, j: number): boolean {
 
     for (let k = 0 ; k < this.wordsIndexes.length ; k ++) {
         for (let l = 0 ; l < this.wordsIndexes[k].indexes.length ; l ++) {
@@ -281,7 +282,7 @@ public checkHorizontal(position: string): boolean {
 *Check if  the letter enterted at this particular index
 *contains the correct letter
 ***************************************************************/
-public checkWordFoundWithIndex(i: number, j: number): boolean {
+public checkCorrectIndexes(i: number, j: number): boolean {
     let found = false;
 
      for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
@@ -306,7 +307,7 @@ public checkWordFoundWithIndex(i: number, j: number): boolean {
 ***************************************************************/
   public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
         if (this.rawCrossword[i][j].charCodeAt(0) === keyCode) {
-            let index : Index = {i: i, j: j};
+            let index: Index = {i: i, j: j};
             this.correctIndexes.push(index);
         } else {
         for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
