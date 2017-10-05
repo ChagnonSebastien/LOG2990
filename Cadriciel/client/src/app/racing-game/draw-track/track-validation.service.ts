@@ -42,7 +42,7 @@ export class TrackValidationService {
             index + 1 === this.trackElements.length ? 0 : index + 1,
             this.trackClosed ? index : (
                 this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25 ?
-                index - 1 : index)
+                    index - 1 : index)
         );
     }
 
@@ -72,7 +72,7 @@ export class TrackValidationService {
         this.trackElements.forEach(
             (segment, i, segments) => {
                 if ((Math.abs(index - i) < 2 || Math.abs(index - i) === (segments.length - 1)) ||
-                    (!service.trackClosed && (i === segments.length - 1 ||  index === segments.length - 1))) {
+                    (!service.trackClosed && (i === segments.length - 1 || index === segments.length - 1))) {
                     return;
                 }
 
@@ -104,13 +104,13 @@ export class TrackValidationService {
         };
     }
 
-    public twoLineIntersection( line1, line2 ): {x: number, y: number} {
+    public twoLineIntersection(line1, line2): { x: number, y: number } {
         if (line1.a === 0) {
             const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return {x, y: this.solveLineEquationWithX(x, line1)};
+            return { x, y: this.solveLineEquationWithX(x, line1) };
         } else {
             const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return {x: this.solveLineEquationWithY(y, line1), y};
+            return { x: this.solveLineEquationWithY(y, line1), y };
         }
     }
 
@@ -123,7 +123,7 @@ export class TrackValidationService {
             Math.min(line1.point1.y, line1.point2.y) > intersection.y ||
             Math.max(line1.point1.y, line1.point2.y) < intersection.y
         ) {
-            const optimalPoint = {x: NaN, y: NaN};
+            const optimalPoint = { x: NaN, y: NaN };
             optimalPoint.x = Math.abs(intersection.x - line1.point1.x) < Math.abs(intersection.x - line1.point2.x) ?
                 line1.point1.x :
                 line1.point2.x;
@@ -209,27 +209,27 @@ export class TrackValidationService {
         return minimum;
     }
 
-    public distance(point1: {x: number, y: number}, point2: {x: number, y: number}): number {
+    public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
         return Math.sqrt(
             Math.pow((point1.x - point2.x), 2) +
             Math.pow((point1.y - point2.y), 2)
         );
     }
 
-    public getLineParameters( line ): {a: number, b: number, c: number} {
+    public getLineParameters(line): { a: number, b: number, c: number } {
         const a = line.point1.y - line.point2.y;
         const b = line.point2.x - line.point1.x;
         const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);
-        return {a, b, c};
+        return { a, b, c };
     }
 
-    public getAllEndToEndDistances( line1, line2 ): number[] {
+    public getAllEndToEndDistances(line1, line2): number[] {
         const distances: number[] = [];
 
-        distances.push(this.distance( line1.point1, line2.point1 ));
-        distances.push(this.distance( line1.point1, line2.point2 ));
-        distances.push(this.distance( line1.point2, line2.point1 ));
-        distances.push(this.distance( line1.point2, line2.point2 ));
+        distances.push(this.distance(line1.point1, line2.point1));
+        distances.push(this.distance(line1.point1, line2.point2));
+        distances.push(this.distance(line1.point2, line2.point1));
+        distances.push(this.distance(line1.point2, line2.point2));
 
         return distances;
     }
@@ -252,13 +252,13 @@ export class TrackValidationService {
 
     public getAngle(line): number {
         const rawAngle = Math.atan((line.point2.y - line.point1.y) / (line.point2.x - line.point1.x));
-        return ( line.point2.x - line.point1.x >= 0 ) ? rawAngle : rawAngle + Math.PI;
+        return (line.point2.x - line.point1.x >= 0) ? rawAngle : rawAngle + Math.PI;
     }
 
     public isValid(index: number) {
         return (this.trackElements[index].segmentIntersections.length === 0 &&
-                this.trackElements[index].segmentLength >= 40 &&
-                (this.trackElements[index].intersectionAngle[1] <= Math.PI &&
-                    this.trackElements[index].intersectionAngle[0] <= Math.PI));
+            this.trackElements[index].segmentLength >= 40 &&
+            (this.trackElements[index].intersectionAngle[1] <= Math.PI &&
+                this.trackElements[index].intersectionAngle[0] <= Math.PI));
     }
 }

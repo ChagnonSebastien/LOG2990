@@ -1,5 +1,5 @@
 import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
 import { TracksComponent } from './tracks/tracks.component';

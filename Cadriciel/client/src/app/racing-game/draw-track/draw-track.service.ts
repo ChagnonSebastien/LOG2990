@@ -29,9 +29,9 @@ export class DrawTrackService {
 
     private currentlyDraggedIntersection = -1;
 
-    private potholes: {distance: number, offset: number}[] = [];
+    private potholes: { distance: number, offset: number }[] = [];
 
-    constructor(public trackValidationService: TrackValidationService) {}
+    constructor(public trackValidationService: TrackValidationService) { }
 
     public initialise(container: HTMLElement) {
         this.container = container;
@@ -56,9 +56,9 @@ export class DrawTrackService {
     }
 
     private initialiseActivePoint() {
-        const geometry = new THREE.CircleGeometry( 10, 32 );
-        const material = new THREE.MeshBasicMaterial( { color: 0x0000FF } );
-        this.activePoint = new THREE.Mesh( geometry, material );
+        const geometry = new THREE.CircleGeometry(10, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0x0000FF });
+        this.activePoint = new THREE.Mesh(geometry, material);
         this.scene.add(this.activePoint);
     }
 
@@ -129,14 +129,14 @@ export class DrawTrackService {
     private updateBeforeAndAfterSegment(movingIntersectionIndex) {
         this.updateSegmentPosition(
             this.segments[
-                this.currentlyDraggedIntersection - 1 < 0 ?
+            this.currentlyDraggedIntersection - 1 < 0 ?
                 this.segments.length - 1 :
                 this.currentlyDraggedIntersection - 1
             ],
             this.intersections[
                 this.currentlyDraggedIntersection - 1 < 0 ?
-                this.intersections.length - 1 :
-                this.currentlyDraggedIntersection - 1
+                    this.intersections.length - 1 :
+                    this.currentlyDraggedIntersection - 1
             ].position,
             this.intersections[
                 this.currentlyDraggedIntersection
@@ -147,8 +147,8 @@ export class DrawTrackService {
             this.intersections[this.currentlyDraggedIntersection].position,
             this.intersections[
                 this.currentlyDraggedIntersection + 1 === this.intersections.length ?
-                0 :
-                this.currentlyDraggedIntersection + 1
+                    0 :
+                    this.currentlyDraggedIntersection + 1
             ].position
         );
     }
@@ -157,9 +157,9 @@ export class DrawTrackService {
         if (this.currentlyDraggedIntersection !== -1 || !this.loopClosed) {
             this.segments.forEach((segment, index) => {
                 if (this.trackValidationService.isValid(index)) {
-                    segment.material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+                    segment.material = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
                 } else {
-                    segment.material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+                    segment.material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
                 }
             });
         }
@@ -169,9 +169,9 @@ export class DrawTrackService {
         }
 
         if (this.pointMouseHoversOn === 0) {
-            this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF });
+            this.firstPointHighlight.material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
         } else {
-            this.firstPointHighlight.material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 });
+            this.firstPointHighlight.material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
         }
     }
 
@@ -186,7 +186,7 @@ export class DrawTrackService {
         const service = this;
         let index = -1;
         try {
-            this.intersections.forEach(function(point, i, array) {
+            this.intersections.forEach(function (point, i, array) {
                 if (service.getXYDistance(service.mousePosition, point.position) < 25) {
                     index = i;
                     throw new Error('To exit the forEach loop');
@@ -240,8 +240,8 @@ export class DrawTrackService {
             this.segments.push(this.newSegment());
             this.trackValidationService.addPoint(this.mousePosition);
             if (this.intersections.length === 1) {
-              this.addHighlight();
-              this.segments[0].material = new THREE.MeshBasicMaterial({color: 0xFF7700});
+                this.addHighlight();
+                this.segments[0].material = new THREE.MeshBasicMaterial({ color: 0xFF7700 });
             }
         } else if (this.pointMouseHoversOn === 0 && !this.loopClosed) {
             this.loopClosed = true;
@@ -251,17 +251,17 @@ export class DrawTrackService {
     }
 
     public addHighlight() {
-        const geometry = new THREE.CircleGeometry( 15, 32 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xF5CD30 } );
+        const geometry = new THREE.CircleGeometry(15, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
         this.firstPointHighlight = new THREE.Mesh(geometry, material);
         this.firstPointHighlight.position.set(this.mousePosition.x, this.mousePosition.y, -1);
         this.scene.add(this.firstPointHighlight);
     }
 
     private newSegment(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry( 0, 20 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xBB1515 } );
-        const segment = new THREE.Mesh( geometry, material );
+        const geometry = new THREE.PlaneGeometry(0, 20);
+        const material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
+        const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
         this.scene.add(segment);
         return segment;
@@ -269,7 +269,7 @@ export class DrawTrackService {
 
     private newIntersection(positionX: number, positionY: number): THREE.Mesh {
         const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({color: 0xFF0000});
+        const material = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
         const intersection = new THREE.Mesh(geometry, material);
         intersection.position.set(positionX, positionY, 0);
         return intersection;
@@ -331,9 +331,9 @@ export class DrawTrackService {
     public update(index: number, valid: boolean) {
         if (index < this.segments.length) {
             if (valid) {
-                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
+                this.segments[index].material = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
             } else {
-                this.segments[index].material = new THREE.MeshBasicMaterial( {color: 0xBB1515} );
+                this.segments[index].material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
             }
         }
     }
