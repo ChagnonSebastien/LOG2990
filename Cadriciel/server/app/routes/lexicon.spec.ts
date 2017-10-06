@@ -11,7 +11,7 @@ describe('Lexicon', () => {
             .get('/definition/cat')
             .end((err: any, res: any) => {
                 const definitions = JSON.parse(res.text);
-                assert(definitions[0] === 'A small carnivorous mammal (Felis catus or F. domesticus) domesticated since early times as a catcher of rats and mice and as a pet and existing in several distinctive breeds and varieties.');
+                assert(definitions[0].includes('A small carnivorous mammal'));
                 done();
             });
     });

@@ -97,7 +97,7 @@ describe('CrosswordGenerator', () => {
 
         it('should allow overwriting when adding the same letter', () => {
             expect(crossword.addWord(0, 0, 'hello', false)).to.be.true;
-            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.addWord(0, 0, 'ham', true)).to.be.true;
         });
 
         it('should rollback when it fails to insert a word', () => {
@@ -106,6 +106,16 @@ describe('CrosswordGenerator', () => {
             expect(crossword.grid[0][0]).to.equal('h');
             expect(crossword.grid[0][2]).to.equal('l');
             expect(crossword.grid[0][4]).to.equal('o');
+        });
+
+        it('should add a word to the word list', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.words.has('hello')).to.be.true;
+        });
+
+        it('should not add a word already present in the crossword', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.addWord(1, 1, 'hello', true)).to.be.false;
         });
     });
 
@@ -149,7 +159,7 @@ describe('CrosswordGenerator', () => {
 
         it('should not delete a letter unless no more words are using it', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
-            expect(crossword.addWord(0, 0, 'hello', false)).to.be.true;
+            expect(crossword.addWord(0, 0, 'ham', false)).to.be.true;
             expect(crossword.deleteLetter(0, 0, 'h')).to.be.true;
             expect(crossword.grid[0][0]).to.equal('h');
         });
@@ -162,6 +172,13 @@ describe('CrosswordGenerator', () => {
             expect(crossword.grid[0][0]).to.equal(' ');
             expect(crossword.grid[0][2]).to.equal(' ');
             expect(crossword.grid[0][4]).to.equal(' ');
+        });
+
+        it('should remove the deleted word from the word list', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.words.has('hello')).to.be.true;
+            expect(crossword.deleteWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.words.has('hello')).to.be.false;
         });
     });
 

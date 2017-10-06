@@ -22,7 +22,7 @@ module Route {
         public getCrossWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({'data': 'connectionError' }));
                 } else {
 
                     db.collection('crosswords').find().toArray().then((crosswords) => {
@@ -35,12 +35,12 @@ module Route {
         public deleteCrossWord(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    console.log("error");
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    console.log('error');
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     console.log(req.params.id);
                     const objId = new mongoose.Types.ObjectId(req.params.id);
-                    db.collection('crosswords').deleteOne({ "_id": objId });
+                    db.collection('crosswords').deleteOne({ '_id': objId });
                     res.json({ msg: 'Crossword deleted successfully' });
                 }
 
@@ -53,9 +53,9 @@ module Route {
 
             MongoClient.connect(url, (err, db) => {
                 if (err) {
-                    res.send(JSON.stringify({ "data": "connectionError" }));
+                    res.send(JSON.stringify({ 'data': 'connectionError'}));
                 } else {
-                    let newCrossWord = new CrossWord({
+                    const newCrossWord = new CrossWord({
                         crossword: req.body.crossword,
                         difficulty: req.body.difficulty,
                         listOfWords: req.body.listOfWords
