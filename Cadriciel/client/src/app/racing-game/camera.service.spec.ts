@@ -1,6 +1,4 @@
 import { CameraService } from './camera.service';
-import { TestBed, inject } from '@angular/core/testing';
-import * as THREE from 'three';
 
 describe('test drawTrackService', function() {
     let cameraService: CameraService;
