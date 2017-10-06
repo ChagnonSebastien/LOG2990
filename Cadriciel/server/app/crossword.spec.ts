@@ -1,19 +1,19 @@
 import { expect } from 'chai';
-import { Crossword } from './crossword';
+import { CrosswordGenerator } from './crossword';
 
 const size = 10;
 function randomIndex(): number {
     return Math.floor(Math.random() * size);
 }
 
-describe('Crossword', () => {
-    let crossword: Crossword;
+describe('CrosswordGenerator', () => {
+    let crossword: CrosswordGenerator;
 
     beforeEach(() => {
-        crossword = new Crossword(size);
+        crossword = new CrosswordGenerator(size);
     });
 
-    describe('getEmptyGrid(size: number) : String[][] { }', () => {
+    describe('newGrid(size: number, fill: any) : Array<any> { }', () => {
         it('should return a grid with size 10 x 10', () => {
             expect(crossword.grid.length).to.equal(10);
             expect(crossword.grid[0].length).to.equal(10);
@@ -21,6 +21,12 @@ describe('Crossword', () => {
 
         it('should return a grid with empty characters', () => {
             expect(crossword.grid[randomIndex()][randomIndex()]).to.equal(' ');
+        });
+    });
+
+    describe('loadLexicon(file: string)', () => {
+        it('should load the lexicon', () => {
+            expect(crossword.lexicon.lexiconByLength['common']['3'].length).to.be.greaterThan(0);
         });
     });
 
@@ -103,6 +109,29 @@ describe('Crossword', () => {
         });
     });
 
+    describe('addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean { }', () => {
+        it('should add a black square after the word', () => {
+            expect(crossword.addBlackSquares(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][5]).to.equal('#');
+        });
+
+        it('should add a black square before the word', () => {
+            expect(crossword.addBlackSquares(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('#');
+        });
+
+        it('should add a black square before and after the word', () => {
+            expect(crossword.addBlackSquares(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.grid[0][0]).to.equal('#');
+            expect(crossword.grid[0][6]).to.equal('#');
+        });
+
+        it('should fail to add a black square if another word is using the square', () => {
+            expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
+            expect(crossword.addBlackSquares(1, 0, 'hello', false)).to.be.false;
+        });
+    });
+
     describe('deleteLetter(i: number, j: number, letter: string): boolean { }', () => {
         it('should delete a letter at the specified position', () => {
             expect(crossword.addLetter(0, 0, 'h')).to.be.true;
@@ -136,32 +165,89 @@ describe('Crossword', () => {
         });
     });
 
+    describe('scoreWord(word: string, pattern: string) { }', () => {
+        it('should give a score of 5 when matching hello to hello', () => {
+            expect(crossword.scoreWord('hello', 'hello')).to.equal(5);
+        });
+
+        it('should give a score of 0 when the word is hello and the pattern is blank', () => {
+            expect(crossword.scoreWord('hello', '     ')).to.equal(0);
+        });
+    });
+
+    describe('bestInsertIndex(word: string, pattern: string): number { }', () => {
+        it('should give an index of 3 when the word is hello and the pattern is "   h   o "', () => {
+            expect(crossword.bestInsertIndex('hello', '   h   o  ')).to.equal(3);
+        });
+    });
+
+    describe('patternForLine(i: number, horizontal: boolean) { }', () => {
+        it('should return the pattern "#         " if horizontal on a blank grid', () => {
+            expect(crossword.addWord(1, 0, 'hello', false)).to.be.true;
+            expect(crossword.patternForLine(0, true)).to.equal('#' + ' '.repeat(size - 1));
+        });
+
+        it('should return the pattern "#         " if vertical on a blank grid', () => {
+            expect(crossword.addWord(0, 1, 'hello', true)).to.be.true;
+            expect(crossword.patternForLine(0, false)).to.equal('#' + ' '.repeat(size - 1));
+        });
+    });
+
+    describe('addRandomWord(i: number, horizontal: boolean): boolean { }', () => {
+        it('should add a random word horizontally', () => {
+            expect(crossword.addRandomWord(0, true)).to.be.true;
+            expect(crossword.grid[0][0]).to.not.equal(' ');
+            expect(crossword.grid[0][1]).to.not.equal(' ');
+        });
+
+        it('should add a random word vertically', () => {
+            expect(crossword.addRandomWord(0, false)).to.be.true;
+            expect(crossword.grid[0][0]).to.not.equal(' ');
+            expect(crossword.grid[1][0]).to.not.equal(' ');
+        });
+    });
+
+    describe('generateCrossword() { }', () => {
+        it('should generate a crossword', () => {
+            crossword.generateCrossword('intermediate');
+        });
+    });
+
     describe('saveState() { }', () => {
         it('should make a copy of the current grid', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.saveState()).to.be.true;
-            expect(crossword.grid[0][0]).to.equal(crossword.previousGridState[0][0]);
-            expect(crossword.grid[0][2]).to.equal(crossword.previousGridState[0][2]);
-            expect(crossword.grid[0][4]).to.equal(crossword.previousGridState[0][4]);
+            expect(crossword.grid[0][0])
+                .to.equal(crossword.previousGridState[0][0]);
+            expect(crossword.grid[0][2])
+                .to.equal(crossword.previousGridState[0][2]);
+            expect(crossword.grid[0][4])
+                .to.equal(crossword.previousGridState[0][4]);
             const i = randomIndex();
             const j = randomIndex();
-            expect(crossword.grid[i][j]).to.equal(crossword.previousGridState[i][j]);
+            expect(crossword.grid[i][j])
+                .to.equal(crossword.previousGridState[i][j]);
         });
 
         it('should make a copy of the current gridCounter', () => {
             expect(crossword.addWord(0, 0, 'hello', true)).to.be.true;
             expect(crossword.saveState()).to.be.true;
-            expect(crossword.gridCounter[0][0]).to.equal(crossword.previousGridCounter[0][0]);
-            expect(crossword.gridCounter[0][2]).to.equal(crossword.previousGridCounter[0][2]);
-            expect(crossword.gridCounter[0][4]).to.equal(crossword.previousGridCounter[0][4]);
+            expect(crossword.gridCounter[0][0])
+                .to.equal(crossword.previousGridCounter[0][0]);
+            expect(crossword.gridCounter[0][2])
+                .to.equal(crossword.previousGridCounter[0][2]);
+            expect(crossword.gridCounter[0][4])
+                .to.equal(crossword.previousGridCounter[0][4]);
             const i = randomIndex();
             const j = randomIndex();
-            expect(crossword.gridCounter[i][j]).to.equal(crossword.previousGridCounter[i][j]);
+            expect(crossword.gridCounter[i][j])
+                .to.equal(crossword.previousGridCounter[i][j]);
         });
 
         it('should be a deep copy', () => {
             expect(crossword.saveState()).to.be.true;
-            expect(crossword.grid).to.not.equal(crossword.previousGridState);
+            expect(crossword.grid)
+                .to.not.equal(crossword.previousGridState);
         });
     });
 
@@ -194,7 +280,8 @@ describe('Crossword', () => {
 
         it('should be a deep copy', () => {
             expect(crossword.rollback()).to.be.true;
-            expect(crossword.previousGridState).to.not.equal(crossword.grid);
+            expect(crossword.previousGridState)
+                .to.not.equal(crossword.grid);
         });
     });
 });

@@ -6,8 +6,8 @@ import { CrosswordGameComponent } from './crossword-game.component';
 @NgModule({
   imports: [RouterModule.forChild([
     { path: 'crossword-game', component: CrosswordGameComponent},
-    {path : 'crossword-test' ,component: CrosswordGameInterfaceComponent}
-  
+    {path : 'crossword-test', component: CrosswordGameInterfaceComponent}
+
   ])],
   exports: [RouterModule]
 })
