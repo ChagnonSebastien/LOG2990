@@ -84,7 +84,10 @@ export class CrosswordGenerator {
         }
         if (horizontal && this.grid[i][j] === ' ') {
             return this.addLetter(i, j, '-');
+        } else if (!horizontal && this.grid[i][j] === ' ') {
+            return this.addLetter(i, j, '|');
         }
+        return false;
     }
 
     public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
