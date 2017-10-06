@@ -108,6 +108,54 @@ describe('CrosswordGameInterfaceComponent', () => {
         expect(component.correctIndexes.length).toEqual(0);
     });
 
+    it('should return true using the word postion  when all the correct letters of a word are entered', () => {
+        const event: any = document.createEvent('CustomEvent');
+
+        event.which = 99; // c
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 0, 0);
+
+        event.which = 97; // a
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 1, 0);
+
+        event.which = 116; // t
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 2, 0);
+
+        expect(component.checkWordFound(7)).toBeTruthy();
+    });
+
+    it('should set the selected k', () => {
+        component.selectK(0);
+        expect(component.kSelected).toEqual(0);
+    });
+
+    it('should return true when a word in the crossword is left to right', () => {
+        expect(component.checkHorizontal(component.wordsIndexes[6].position)).toBeTruthy();
+    });
+
+    it('should return true when a word in the crossword is top to bottom', () => {
+        expect(component.checkVertical(component.wordsIndexes[7].position)).toBeTruthy();
+    });
+
+    it('should return true using the word index when all the correct letters of a word are entered', () => {
+        const event: any = document.createEvent('CustomEvent');
+
+        event.which = 99; // c
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 0, 0);
+
+        event.which = 97; // a
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 1, 0);
+
+        event.which = 116; // t
+        event.initEvent('keypress', true, true);
+        component.filterInput(event, 2, 0);
+
+        expect(component.checkWordWithIndex(1, 0)).toBeTruthy();
+    });
 
 });
 

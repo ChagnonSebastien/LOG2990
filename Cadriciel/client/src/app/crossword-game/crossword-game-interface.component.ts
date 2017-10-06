@@ -208,7 +208,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      * when the backspace key is invoked.
      ************************************************************/
    public handleDelete(event, i: number, j: number) {
-    const x = event.which || event.keyCode;
+    const x = event.keyCode || event.which;
    if (x === 8) {
     for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
         if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
@@ -252,6 +252,21 @@ public checkWordWithIndex(i: number, j: number): boolean {
 }
 
 /***********************************************************
+*Check if  the letter enterted at this particular index
+*contains the correct letter
+***************************************************************/
+public checkCorrectIndexes(i: number, j: number): boolean {
+    let found = false;
+
+     for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
+         if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
+             found = true;
+         }
+     }
+     return found;
+    }
+
+/***********************************************************
 *Set the variable kSelected which represents the positon of
 *the selected word in the wordIndexes table
 ***************************************************************/
@@ -278,21 +293,6 @@ public checkHorizontal(position: string): boolean {
 
 }
 
-/***********************************************************
-*Check if  the letter enterted at this particular index
-*contains the correct letter
-***************************************************************/
-public checkCorrectIndexes(i: number, j: number): boolean {
-    let found = false;
-
-     for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
-         if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j ) {
-             found = true;
-         }
-     }
-     return found;
-    }
-
 
 /***********************************************************
 *Disable the event
@@ -303,10 +303,11 @@ public checkCorrectIndexes(i: number, j: number): boolean {
     }
 
 /***********************************************************
-*Check if the user input matches the crossword grid
+*Check if the user input matches the crossword grid. If so add
+* it to the correct indexes lisr
 ***************************************************************/
   public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
-        if (this.rawCrossword[i][j].charCodeAt(0) === keyCode) {
+        if (this.rawCrossword[i][j].charCodeAt(0) === keyCode || this.rawCrossword[i][j].charCodeAt(0) - 32 === keyCode) {
             let index: Index = {i: i, j: j};
             this.correctIndexes.push(index);
         } else {
