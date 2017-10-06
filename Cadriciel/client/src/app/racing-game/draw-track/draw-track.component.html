@@ -47,14 +47,7 @@
       </div>
     </div>
   </div>
-  <div
-    class="draw_window"
-    oncontextmenu="return false;"
-    #container
-    (mousemove)="updateMousePosition($event)"
-    (click)="addIntersection($event)"
-    (auxclick)="removeIntersection($event)"
-    (mousedown)="startDrag($event)"
-    (mouseup)="endDrag($event)">
+  <div class="draw_window" oncontextmenu="return false;" #container (mousemove)="updateMousePosition($event)" (click)="addIntersection($event)"
+    (auxclick)="removeIntersection($event)" (mousedown)="startDrag($event)" (mouseup)="endDrag($event)">
   </div>
 </div>

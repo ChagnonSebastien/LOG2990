@@ -1,11 +1,11 @@
+import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
-import { TestBed, inject } from '@angular/core/testing';
 import * as THREE from 'three';
 
-describe('test drawTrackService', function() {
+describe('test drawTrackService', function () {
     let drawTrackService: DrawTrackService;
     beforeEach(() => {
-        drawTrackService = new DrawTrackService();
+        drawTrackService = new DrawTrackService(new TrackValidationService());
     });
 
     it('construction test', done => {

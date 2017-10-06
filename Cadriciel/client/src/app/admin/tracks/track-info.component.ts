@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Track } from './track';
 import { TrackService } from './track.service';
 
@@ -34,6 +33,10 @@ export class TrackInfoComponent implements OnInit {
         this.changeNameDB();
         this.changeDescriptionDB();
         this.changeTypeDB();
+    }
+
+    public setTrack(track: Track) {
+        this.track = track;
     }
 
     constructor(private trackService: TrackService) { }
