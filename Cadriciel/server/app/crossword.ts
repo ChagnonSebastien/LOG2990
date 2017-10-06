@@ -135,6 +135,9 @@ export class CrosswordGenerator {
     }
 
     public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (!this.words.has(word)) {
+            return false;
+        }
         this.saveState();
         for (const letter of word) {
             if (!this.deleteLetter(i, j, letter)) {
@@ -146,6 +149,7 @@ export class CrosswordGenerator {
             }
         }
 
+        this.words.delete(word);
         return true;
     }
 
