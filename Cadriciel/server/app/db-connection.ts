@@ -20,7 +20,7 @@ module DbConnection {
 
     export function get() {
         if (!connection) {
-            throw new Error('connection to database to established yet!');
+            throw new Error('connection to database not established yet!');
         }
         return connection;
     }

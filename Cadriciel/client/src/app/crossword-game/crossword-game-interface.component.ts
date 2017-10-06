@@ -18,7 +18,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     ['k', 'a', 's', 'h', 'm', 'i', 'r', '0', '0', '0'],
     ['0', '0', '0', '0', '0', '0', 'e', '0', '0', '0']];
 
-    // public list0fWords: [String] = ['pune', 'bangalore', 'hyderabad', 'delhi', 'mumbai', 'kashmir' ];
+    // public listOfWords: [String] = ['pune', 'bangalore', 'hyderabad', 'delhi', 'mumbai', 'kashmir' ];
     // public indices: [String] = ['Education Hub', 'Information Technology Hub', 'Cultural Hub', 'Capital of India',
     // 'India financial capital', 'Saffron region'];
 
@@ -32,6 +32,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
     public kSelected = -1;
+    public cheatMode = false;
 
 
 
@@ -228,7 +229,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public checkWordFound(wordPosition: number): boolean {
         if (wordPosition < this.wordsIndexes.length && wordPosition > -1) {
             for (let i = 0; i < this.wordsIndexes[wordPosition].indexes.length; i++) {
-                if (!(this.checkCorrectIndexes(this.wordsIndexes[wordPosition].indexes[i].i, this.wordsIndexes[wordPosition].indexes[i].j))) {
+                if (!(this.checkCorrectIndexes(this.wordsIndexes[wordPosition].indexes[i].i,
+                    this.wordsIndexes[wordPosition].indexes[i].j))) {
                     return false;
                 }
             }
@@ -323,6 +325,19 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         }
     }
 
+    /***********************************************************
+    * Used to set the cheat mode variable to on
+    ***************************************************************/
+    public activateCheatMode(): void {
+        this.cheatMode = true;
+
+    }
+   /***********************************************************
+    * Used to set the cheat mode variable to off
+    ***************************************************************/
+    public deactivateCheatMode(): void {
+        this.cheatMode = false;
+    }
 
     constructor() { }
 
