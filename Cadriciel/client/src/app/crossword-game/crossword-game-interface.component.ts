@@ -308,7 +308,7 @@ public checkHorizontal(position: string): boolean {
 ***************************************************************/
   public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
         if (this.rawCrossword[i][j].charCodeAt(0) === keyCode || this.rawCrossword[i][j].charCodeAt(0) - 32 === keyCode) {
-            let index: Index = {i: i, j: j};
+            const index: Index = {i: i, j: j};
             this.correctIndexes.push(index);
         } else {
         for (let k = 0 ; k < this.correctIndexes.length ; k ++) {
