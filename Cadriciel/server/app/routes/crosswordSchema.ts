@@ -1,14 +1,14 @@
-//Import the mongoose module
+// Import the mongoose module
 var mongoose = require('mongoose');
 
-//Set up mongoose connection
+// Set up mongoose connection
 var mongoDB = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 mongoose.connect(mongoDB, {useMongoClient: true});
 
-//Get the default connection
+// Get the default connection
 var db = mongoose.connection;
 
-//Bind connection to error event (to get notification of connection errors)
+// Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
@@ -23,7 +23,6 @@ const CwSchema = mongoose.Schema ({
     listOfWords:{
         type:[String]
     }
-    
 });
 
 

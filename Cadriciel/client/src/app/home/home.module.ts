@@ -5,16 +5,10 @@ import { FormsModule } from '@angular/forms';
 /* Home module */
 import { HomeComponent } from './home.component';
 
-import { BasicService } from './basic.service';
-
-/* Feature modules */
-import { CubeModule } from './cube/cube.module';
-
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule,
-        CubeModule
+        FormsModule
     ],
     declarations: [
         HomeComponent
@@ -22,8 +16,6 @@ import { CubeModule } from './cube/cube.module';
     exports: [
         HomeComponent
     ],
-    providers: [
-        BasicService
-    ]
+    providers: []
 })
 export class HomeModule { }

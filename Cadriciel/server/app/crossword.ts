@@ -1,26 +1,38 @@
 import { Utilities } from './utilities';
+import { Lexicon } from './lexicon';
+import * as path from 'path';
 
-export class Crossword {
+const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
+
+export class CrosswordGenerator {
     public size: number;
-    public grid: String[][];
-    public previousGridState: String[][];
+    public grid: string[][];
+    public previousGridState: string[][];
     public gridCounter: number[][];
     public previousGridCounter: number[][];
+    public lexicon: Lexicon;
+    public words: Set<string>;
 
     constructor(size: number) {
         this.size = size;
+        this.words = new Set<string>();
         this.grid = this.newGrid(size, ' ');
         this.gridCounter = this.newGrid(size, 0);
         this.saveState();
+        this.loadLexicon(lexiconPath);
     }
 
     public newGrid(size: number, fill: any): Array<any> {
-        return new Array(size).fill(null).map(u => {
+        return new Array(size).fill(null).map(res => {
             const line = new Array(size).fill(null).map(u => {
                 return fill;
             });
             return line;
         });
+    }
+
+    public loadLexicon(file: string) {
+        this.lexicon = new Lexicon(lexiconPath);
     }
 
     public indexOutOfBounds(i: number): boolean {
@@ -44,7 +56,15 @@ export class Crossword {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (this.words.has(word)) {
+            return false;
+        }
+
         this.saveState();
+        if (!this.addBlackSquares(i, j, word, horizontal)) {
+            this.rollback();
+            return false;
+        }
         for (const letter of word) {
             if (!this.addLetter(i, j, letter)) {
                 this.rollback();
@@ -54,8 +74,48 @@ export class Crossword {
                 j = horizontal ? j + 1 : j;
             }
         }
-
+        this.words.add(word);
         return true;
+    }
+
+    public addSpacing(i: number, j: number, horizontal: boolean): boolean {
+        if (this.indexesOutOfBounds(i, j)) {
+            return false;
+        }
+        if (horizontal && this.grid[i][j] === ' ') {
+            return this.addLetter(i, j, '-');
+        }
+    }
+
+    public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (horizontal) {
+            if (j > 0) {
+                if (!this.addLetter(i, j - 1, '#')) {
+                    return false;
+                }
+            }
+            if (j + word.length < this.size) {
+                if (!this.addLetter(i, j + word.length, '#')) {
+                    return false;
+                }
+            }
+        } else {
+            if (i > 0) {
+                if (!this.addLetter(i - 1, j, '#')) {
+                    return false;
+                }
+            }
+            if (i + word.length < this.size) {
+                if (!this.addLetter(i + word.length, j, '#')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public addHorizontalSpacing(i: number, j: number, word: string): boolean {
+        return false;
     }
 
     public deleteLetter(i: number, j: number, letter: string): boolean {
@@ -75,6 +135,9 @@ export class Crossword {
     }
 
     public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (!this.words.has(word)) {
+            return false;
+        }
         this.saveState();
         for (const letter of word) {
             if (!this.deleteLetter(i, j, letter)) {
@@ -86,7 +149,65 @@ export class Crossword {
             }
         }
 
+        this.words.delete(word);
         return true;
+    }
+
+    public scoreWord(word: string, pattern: string): number {
+        let score = 0;
+        for (let i = 0; i < word.length; i++) {
+            score = word[i] === pattern[i] ? score + 1 : score;
+        }
+        return score;
+    }
+
+    public bestInsertIndex(word: string, pattern: string): number {
+        let insertIndex = 0;
+        let maxScore = 0;
+        for (let index = 0; index < pattern.length - word.length + 1; index++) {
+            const score = this.scoreWord(word, pattern.substr(index, word.length));
+            if (score > maxScore) {
+                insertIndex = index;
+                maxScore = score;
+            }
+        }
+        return insertIndex;
+    }
+
+    public patternForLine(i: number, horizontal: boolean) {
+        if (horizontal) {
+            return this.grid[i].join('');
+        } else {
+            let pattern = '';
+            for (let index = 0; index < this.size; index++) {
+                pattern += this.grid[index][i];
+            }
+            return pattern;
+        }
+    }
+
+    public addRandomWord(i: number, horizontal: boolean): boolean {
+        const pattern = this.patternForLine(i, horizontal);
+        const wordsForPattern = this.lexicon.wordsForPattern(pattern);
+        if (wordsForPattern.length > 0) {
+            const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
+            const insertIndex = this.bestInsertIndex(randomWord, pattern);
+            if (horizontal) {
+                return this.addWord(i, insertIndex, randomWord, true);
+            } else {
+                return this.addWord(insertIndex, i, randomWord, false);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public generateCrossword(difficulty: string): string[][] {
+        for (let i = 0; i < this.size; i++) {
+            this.addRandomWord(i, true);
+            this.addRandomWord(this.size - i - 1, false);
+        }
+        return this.grid;
     }
 
     public saveState(): boolean {
