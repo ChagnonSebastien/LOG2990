@@ -11,9 +11,11 @@ export class CrosswordGenerator {
     public gridCounter: number[][];
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
+    public words: Set<string>;
 
     constructor(size: number) {
         this.size = size;
+        this.words = new Set<string>();
         this.grid = this.newGrid(size, ' ');
         this.gridCounter = this.newGrid(size, 0);
         this.saveState();
@@ -54,6 +56,10 @@ export class CrosswordGenerator {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (this.words.has(word)) {
+            return false;
+        }
+
         this.saveState();
         if (!this.addBlackSquares(i, j, word, horizontal)) {
             this.rollback();
@@ -68,6 +74,7 @@ export class CrosswordGenerator {
                 j = horizontal ? j + 1 : j;
             }
         }
+        this.words.add(word);
         return true;
     }
 
@@ -128,6 +135,9 @@ export class CrosswordGenerator {
     }
 
     public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        if (!this.words.has(word)) {
+            return false;
+        }
         this.saveState();
         for (const letter of word) {
             if (!this.deleteLetter(i, j, letter)) {
@@ -139,6 +149,7 @@ export class CrosswordGenerator {
             }
         }
 
+        this.words.delete(word);
         return true;
     }
 

@@ -35,6 +35,10 @@ export class TrackInfoComponent implements OnInit {
         this.changeTypeDB();
     }
 
+    public setTrack(track: Track) {
+        this.track = track;
+    }
+
     constructor(private trackService: TrackService) { }
 
     public ngOnInit() {

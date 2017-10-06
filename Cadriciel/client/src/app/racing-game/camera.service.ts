@@ -26,12 +26,19 @@ export class CameraService {
         this.orthographicCamera = this.setOrthographicCamera(container);
         this.perspectiveCamera = this.setPerspectiveCamera(container);
         this.camera = this.setPerspectiveCamera(container);
-        this.orthographicCamera.position.set(CAMERA_POSITION);
-        this.perspectiveCamera.position.set(CAMERA_POSITION);
-        this.camera.position.x = CAMERA_POSITION.x;
-        this.camera.position.y = CAMERA_POSITION.y;
-        this.camera.position.z = CAMERA_POSITION.z;
-        console.log(this.camera);
+        this.defaultCamerasPosition();
+    }
+
+    public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
+        const camera = new THREE.OrthographicCamera(
+            - container.clientWidth / 2,
+            container.clientWidth / 2,
+            container.clientHeight / 2,
+            - container.clientHeight / 2,
+            0,
+            50
+        );
+        return camera;
     }
 
     public setPerspectiveCamera(container: HTMLElement): THREE.PerspectiveCamera {
@@ -51,16 +58,16 @@ export class CameraService {
         return this.camera;
     }
 
-    public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
-        const camera = new THREE.OrthographicCamera(
-            - container.clientWidth / 2,
-            container.clientWidth / 2,
-            container.clientHeight / 2,
-            - container.clientHeight / 2,
-            0,
-            50
-        );
-        return camera;
+    private defaultCamerasPosition () {
+        this.orthographicCamera.position.x = CAMERA_POSITION.x;
+        this.orthographicCamera.position.y = CAMERA_POSITION.y;
+        this.orthographicCamera.position.z = CAMERA_POSITION.z;
+        this.perspectiveCamera.position.x = CAMERA_POSITION.x;
+        this.perspectiveCamera.position.y = CAMERA_POSITION.y;
+        this.perspectiveCamera.position.z = CAMERA_POSITION.z;
+        this.camera.position.x = CAMERA_POSITION.x;
+        this.camera.position.y = CAMERA_POSITION.y;
+        this.camera.position.z = CAMERA_POSITION.z;
     }
 
     public getAspectRatio(width: number, height: number) {
@@ -92,11 +99,9 @@ export class CameraService {
     }
 
     public cameraOnMoveWithObject (object: any) {
-        // this.perspectiveCamera.position.set(newCameraPosition);
         this.setPositionPerspectiveCamera(object);
         this.perspectiveCamera.lookAt(object.position);
         this.perspectiveCamera.updateProjectionMatrix();
-        // this.orthographicCamera.position.set(newCameraPosition);
         this.setOrthographicCamera(object);
         this.perspectiveCamera.lookAt(object.position);
         this.orthographicCamera.updateProjectionMatrix();
