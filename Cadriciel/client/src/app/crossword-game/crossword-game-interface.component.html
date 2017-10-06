@@ -32,7 +32,8 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkHorizontal(hint.position)" headers="horizontal">
-                                        <button class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button> 
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                         </td>
                                 </tr>
                                
@@ -49,14 +50,18 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkVertical(hint.position)" headers="vertical">
-                                        <button class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>   
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>  
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                          </td>
                                  </tr>
                         </tbody>
                     </table>
                 </td>
                 </tr>
+                <button id = "cheatModeBtn" (click)="activateCheatMode()">Cheat Mode</button>
+                <button id = "cheatModeBtn" (click)="deactivateCheatMode()">Cheat Mode Off</button>
                 </table>
+                
  </div>
  </div>
 </div>
