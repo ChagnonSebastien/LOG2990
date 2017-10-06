@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
-import * as db from '../db-connection';
+const db = require('../db-connection');
 
 module Route {
 
