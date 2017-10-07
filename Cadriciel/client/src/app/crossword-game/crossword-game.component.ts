@@ -5,7 +5,6 @@ import {CrosswordGameInfoService} from './crossword-game-info.service';
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',
     styleUrls: ['./crossword-game.component.css'],
-    providers: [CrosswordGameInfoService]
 })
 export class CrosswordGameComponent implements OnInit {
     public option: string = null;

@@ -9,16 +9,16 @@ export class CrosswordGameInfoService {
     public mode: string = null;
     public level: string = null;
 
-    public getOption() {
-        return this.option;
+    public getOption(): Promise<string>  {
+        return Promise.resolve(this.option);
     }
 
-    public getMode() {
-        return this.mode;
+    public getMode(): Promise<string> {
+        return Promise.resolve(this.option);
     }
 
-    public getLevel() {
-        return this.level;
+    public getLevel(): Promise<string> {
+        return Promise.resolve(this.option);
     }
 
 }
