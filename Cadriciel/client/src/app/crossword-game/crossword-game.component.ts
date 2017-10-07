@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import {CrosswordGameInfoService} from './crossword-game-info.service';
+
 @Component({
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',
-    styleUrls: ['./crossword-game.component.css']
+    styleUrls: ['./crossword-game.component.css'],
+    providers: [CrosswordGameInfoService]
 })
 export class CrosswordGameComponent implements OnInit {
     public option: string = null;
     public mode: string = null;
     public level: string = null;
 
-    constructor() { }
+    constructor(private crosswordGameInfoService: CrosswordGameInfoService) { }
 
     public ngOnInit() {
     }
@@ -32,4 +35,10 @@ export class CrosswordGameComponent implements OnInit {
         return this.option === 'SOLO';
     }
 
+    public saveOptions(): void {
+        this.crosswordGameInfoService.option = this.option;
+        this.crosswordGameInfoService.mode = this.mode;
+        this.crosswordGameInfoService.level = this.level;
+
+    }
 }

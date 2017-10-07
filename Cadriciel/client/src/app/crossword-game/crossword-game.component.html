@@ -31,6 +31,15 @@
       </h1>
     </div>
   </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="confirm"></span>
+        <button  (click)="saveOptions()"  [disabled]="option==null || mode == null || level == null" type="button" class="confirmBtn" [routerLink]="['/crossword-test']">Confirm</button>
+      </h1>
+    </div>
+  </div>
 </div>
 </div> 
 

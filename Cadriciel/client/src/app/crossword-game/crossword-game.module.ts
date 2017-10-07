@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {CrosswordGameInterfaceComponent} from './crossword-game-interface.component';
 import { CrosswordGameComponent } from './crossword-game.component';
 import { CrosswordGameRoutingModule} from './crossword-game-routing.module';
+import { CrosswordGameInformationComponent } from './crossword-game-information/crossword-game-information.component';
 
 @NgModule({
     imports: [
@@ -11,7 +12,7 @@ import { CrosswordGameRoutingModule} from './crossword-game-routing.module';
         FormsModule,
         CrosswordGameRoutingModule
     ],
-    declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent],
+    declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent, CrosswordGameInformationComponent],
     exports: [CrosswordGameComponent, CrosswordGameInterfaceComponent],
     providers: []
 })
