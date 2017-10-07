@@ -15,6 +15,7 @@
     margin: 0;
     float: left;
     text-transform: uppercase;
+    text-align: center;
   }
   
   .empty {
@@ -25,6 +26,7 @@
     margin: 0;
     float: left;
     text-transform: uppercase;
+    text-align: center;
   }
  
   .active{
@@ -51,7 +53,7 @@
 
 
 .selected{
-  background-color: #119AE9
+  background-color: #B0B0E6
 
 }
 
@@ -99,4 +101,37 @@
   margin-top :30px;
   margin-right: 10px;
   border-color: transparent
+}
+
+.btn:hover{
+  background-color: #B0B0E6
+
+}
+
+.btn:disabled{
+  text-decoration: line-through
+}
+
+.btn:active{
+  transform: translateY(4px);
+}
+
+#cheatModeOnBtn:hover{
+  background-color: #99E09B
+
+}
+
+#cheatModeOffBtn:hover{
+  background-color: #EC9C99
+
+}
+
+#cheatModeOnBtn:active{
+  transform: translateY(4px);
+
+}
+
+#cheatModeOffBtn:active{
+  transform: translateY(4px);
+
 }
