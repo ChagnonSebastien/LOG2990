@@ -28,9 +28,10 @@ describe('Crossword Generator', () => {
     });
 
     it('Should delete crossword according to id', (done)=> {
-        let randomCrossword = crosswordsList[0];
-        crosswordGenerator.deleteCrossword(randomCrossword).then(function(data) {
+        let easyCrossword = crosswordGenerator.easyCrosswords.pop();
+        crosswordGenerator.deleteCrossword(easyCrossword).then(function(data) {
             let deleted = data;
+            assert(crosswordGenerator.easyCrosswords.length === 4)
             assert(deleted);
             done();
         });
@@ -59,6 +60,7 @@ describe('Crossword Generator', () => {
 
     it('Should return a crossword of level easy', () => {
         let easyCrossword = crosswordGenerator.getCrossword('easy');
+        console.log(crosswordGenerator.easyCrosswords.length);
         assert(easyCrossword.difficulty === 'easy');
     });
 
