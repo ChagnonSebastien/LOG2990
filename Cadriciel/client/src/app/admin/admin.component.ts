@@ -8,8 +8,8 @@ import { AuthenticationService } from './authentication.service';
     styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-    private passwordCorrect: boolean;
-    private passwordChanged: boolean;
+    public passwordCorrect: boolean;
+    public passwordChanged: boolean;
 
     constructor(private authenticationService: AuthenticationService) { }
 
