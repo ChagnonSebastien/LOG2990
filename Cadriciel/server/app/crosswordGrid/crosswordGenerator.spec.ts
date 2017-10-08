@@ -99,24 +99,27 @@ describe('Crossword Generator', () => {
         });
     });
 
-    it('Should return a crossword of level easy', () => {
+    it('Should return a crossword of level easy', (done) => {
         crosswordGenerator.getCrossword('easy').then(function (data) {
             assert(data.difficulty === 'easy');
             assert(crosswordGenerator.easyCrosswords.length === 6);
+            done();
         });
     });
 
-    it('Should return a crossword of level hard', () => {
+    it('Should return a crossword of level hard', (done) => {
         crosswordGenerator.getCrossword('hard').then(function (data) {
             assert(data.difficulty === 'hard');
             assert(crosswordGenerator.hardCrosswords.length === 6);
+            done();
         });
     });
 
-    it('Should return a crossword of level normal', () => {
+    it('Should return a crossword of level normal', (done) => {
         crosswordGenerator.getCrossword('normal').then(function (data) {
             assert(data.difficulty === 'normal');
             assert(crosswordGenerator.normalCrosswords.length === 6);
+            done();
         });
     });
 });
