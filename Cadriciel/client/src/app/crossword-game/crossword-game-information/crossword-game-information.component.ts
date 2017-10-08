@@ -14,13 +14,13 @@ export class CrosswordGameInformationComponent implements OnInit {
   constructor(private crosswordGameInfoService: CrosswordGameInfoService) { }
 
   public ngOnInit() {
-    this.getOption();
+    this.getInformation();
   }
 
-  public getOption(): void {
+  public getInformation(): void {
     this.crosswordGameInfoService.getOption().then(option => this.option = option);
-    this.crosswordGameInfoService.getMode().then(mode => this.option = mode);
-    this.crosswordGameInfoService.getLevel().then(level => this.option = level);
+    this.crosswordGameInfoService.getMode().then(mode => this.mode = mode);
+    this.crosswordGameInfoService.getLevel().then(level => this.level = level);
 
   }
 }

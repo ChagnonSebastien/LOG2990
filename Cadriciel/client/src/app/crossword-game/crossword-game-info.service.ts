@@ -14,11 +14,11 @@ export class CrosswordGameInfoService {
     }
 
     public getMode(): Promise<string> {
-        return Promise.resolve(this.option);
+        return Promise.resolve(this.mode);
     }
 
     public getLevel(): Promise<string> {
-        return Promise.resolve(this.option);
+        return Promise.resolve(this.level);
     }
 
 }
