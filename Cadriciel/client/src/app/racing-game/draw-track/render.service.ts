@@ -20,6 +20,8 @@ export class RenderService {
 
     private segments: THREE.Mesh[] = [];
 
+    private trackClosed = false;
+
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
@@ -39,6 +41,7 @@ export class RenderService {
         );
 
         this.intersections.push(this.newIntersection(new THREE.Vector2(0, 0)));
+        this.segments.push(this.newSegment());
     }
 
     private startRenderingLoop() {
@@ -70,7 +73,6 @@ export class RenderService {
         const material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
         const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
-        this.scene.add(segment);
         return segment;
     }
 
@@ -79,8 +81,27 @@ export class RenderService {
             return;
         }
 
-        this.intersections[index].position.setX(position.x);
-        this.intersections[index].position.setY(position.y);
+        this.intersections[index].position.set(position.x, position.y, this.intersections[index].position.z);
+        if (index === 0 && this.trackClosed) {
+            this.firstPointHighlight.position.set(position.x, position.y, this.firstPointHighlight.position.z);
+        }
+
+        this.updateSegmentPosition(index - 1 > -1 ? index - 1 : this.intersections.length - 1);
+        this.updateSegmentPosition(index);
+    }
+
+    private updateSegmentPosition(index: number) {
+        const fromPosition = this.intersections[index].position;
+        const toPosition = this.intersections[index + 1 < this.intersections.length ? index + 1 : 0].position;
+
+        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);
+        this.segments[index].geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
+        this.segments[index].position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
+        this.segments[index].position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
+    }
+
+    private getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
+        return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
     public addIntersection(position: THREE.Vector2) {
@@ -90,10 +111,11 @@ export class RenderService {
 
         this.intersections[this.intersections.length - 1].position.setZ(0);
         this.intersections.push(this.newIntersection(position));
-        this.segments.push(this.newSegment());
+        this.segments.splice(this.segments.length - 1, 0, this.newSegment());
+        this.scene.add(this.segments[this.segments.length - 2]);
     }
 
-    public addHighlight(position: THREE.Vector2) {
+    private addHighlight(position: THREE.Vector2) {
         const geometry = new THREE.CircleGeometry(15, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
         this.firstPointHighlight = new THREE.Mesh(geometry, material);
