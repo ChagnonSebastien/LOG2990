@@ -14,13 +14,13 @@ export class DrawTrackService {
 
     private scene: THREE.Scene;
 
-    public mousePosition: THREE.Vector3 = new THREE.Vector3();
+    public mousePosition: THREE.Vector2 = new THREE.Vector2();
 
     public pointMouseHoversOn = -1;
 
-    public loopClosed = false;
+    public trackClosed = false;
 
-    public intersections: THREE.Mesh[] = [];
+    public intersections: THREE.Vector2[] = [new THREE.Vector2(0, 0)];
 
     private segments: THREE.Mesh[] = [];
 
@@ -35,25 +35,56 @@ export class DrawTrackService {
     constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
 
     public initialise(container: HTMLElement) {
+        this.container = container;
         this.renderService.initialise(container);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
         this.pointMouseHoversOn = this.getPointUnderMouse();
-        if (!this.loopClosed) {
-            if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0].position) < 25) {
-                this.mousePosition = this.intersections[0].position;
+        if (!this.trackClosed) {
+            if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0]) < 25) {
+                this.mousePosition = this.intersections[0];
             }
+            this.renderService.updateIntersectionPosition(this.intersections.length - 1, this.mousePosition);
             this.trackValidationService.updatePoint(this.segments.length, this.mousePosition);
         }
         if (this.currentlyDraggedIntersection !== -1) {
-            this.moveIntersection(this.currentlyDraggedIntersection, this.mousePosition);
+            this.intersections[this.currentlyDraggedIntersection] = this.mousePosition;
+            this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
             this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
         }
-        this.updateComponentsView();
     }
 
+    private getRelativeMousePosition(clientX: number, clientY: number) {
+        const relativePosition = new THREE.Vector2();
+        relativePosition.x = clientX - this.container.clientWidth / 2 - this.container.offsetLeft;
+        relativePosition.y = this.container.clientHeight / 2 + this.container.offsetTop - clientY;
+        return relativePosition;
+    }
+
+    private getPointUnderMouse(): number {
+        const service = this;
+        let index = -1;
+        try {
+            this.intersections.forEach(function (point, i, array) {
+                if (service.getXYDistance(service.mousePosition, point) < 25) {
+                    index = i;
+                    throw new Error('To exit the forEach loop');
+                }
+            });
+        } catch (e) {
+            // Does nothing
+        }
+        return index;
+    }
+
+    public getXYDistance(vector1: THREE.Vector2, vector2: THREE.Vector2) {
+        return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
+    }
+
+
+ /*
     private moveIntersection(intersectionIndex: number, position: THREE.Vector3) {
         this.intersections[intersectionIndex].position.x = position.x;
         this.intersections[intersectionIndex].position.y = position.y;
@@ -71,7 +102,7 @@ export class DrawTrackService {
     }
 
     private updateComponentsPositions() {
-        if (this.loopClosed) {
+        if (this.trackClosed) {
             if (this.currentlyDraggedIntersection !== -1) {
                 this.updateBeforeAndAfterSegment(this.currentlyDraggedIntersection);
             }
@@ -117,7 +148,7 @@ export class DrawTrackService {
     }
 
     private updateComponentsLook() {
-        if (this.currentlyDraggedIntersection !== -1 || !this.loopClosed) {
+        if (this.currentlyDraggedIntersection !== -1 || !this.trackClosed) {
             this.segments.forEach((segment, index) => {
                 if (this.trackValidationService.isValid(index)) {
                     segment.material = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
@@ -127,7 +158,7 @@ export class DrawTrackService {
             });
         }
 
-        if (this.loopClosed || this.intersections.length === 0) {
+        if (this.trackClosed || this.intersections.length === 0) {
             return;
         }
 
@@ -136,29 +167,6 @@ export class DrawTrackService {
         } else {
             this.firstPointHighlight.material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
         }
-    }
-
-    private getRelativeMousePosition(clientX: number, clientY: number) {
-        const relativePosition = new THREE.Vector3();
-        relativePosition.x = clientX - this.container.clientWidth / 2 - this.container.offsetLeft;
-        relativePosition.y = this.container.clientHeight / 2 + this.container.offsetTop - clientY;
-        return relativePosition;
-    }
-
-    private getPointUnderMouse(): number {
-        const service = this;
-        let index = -1;
-        try {
-            this.intersections.forEach(function (point, i, array) {
-                if (service.getXYDistance(service.mousePosition, point.position) < 25) {
-                    index = i;
-                    throw new Error('To exit the forEach loop');
-                }
-            });
-        } catch (e) {
-            // Does nothing
-        }
-        return index;
     }
 
     private updateActivePointPosition() {
@@ -190,12 +198,8 @@ export class DrawTrackService {
         segment.position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
     }
 
-    public getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
-        return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
-    }
-
     public addIntersection() {
-        if (this.pointMouseHoversOn === -1 && !this.loopClosed) {
+        if (this.pointMouseHoversOn === -1 && !this.trackClosed) {
             const intersection = this.newIntersection(this.mousePosition.x, this.mousePosition.y);
             this.scene.add(intersection);
             this.intersections.push(intersection);
@@ -206,8 +210,8 @@ export class DrawTrackService {
                 this.addHighlight();
                 this.segments[0].material = new THREE.MeshBasicMaterial({ color: 0xFF7700 });
             }
-        } else if (this.pointMouseHoversOn === 0 && !this.loopClosed) {
-            this.loopClosed = true;
+        } else if (this.pointMouseHoversOn === 0 && !this.trackClosed) {
+            this.trackClosed = true;
             this.trackValidationService.trackClosed = true;
             this.trackValidationService.removeLastPoint();
         }
@@ -239,8 +243,8 @@ export class DrawTrackService {
     }
 
     public removeIntersection() {
-        if (this.loopClosed) {
-            this.loopClosed = false;
+        if (this.trackClosed) {
+            this.trackClosed = false;
             this.trackValidationService.trackClosed = false;
             this.trackValidationService.addPoint(this.mousePosition);
             this.updateComponentsView();
@@ -267,7 +271,7 @@ export class DrawTrackService {
     }
 
     public startDrag() {
-        if (this.loopClosed && this.currentlyDraggedIntersection === -1) {
+        if (this.trackClosed && this.currentlyDraggedIntersection === -1) {
             this.currentlyDraggedIntersection = this.pointMouseHoversOn;
         }
     }
@@ -279,7 +283,7 @@ export class DrawTrackService {
     }
 
     public isFinished() {
-        return this.loopClosed;
+        return this.trackClosed;
     }
 
     public onResize() {
@@ -300,4 +304,5 @@ export class DrawTrackService {
             }
         }
     }
+    */
 }

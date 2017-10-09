@@ -34,17 +34,7 @@ export class RenderService {
             viewDepth
         );
 
-        this.intersections.push(this.newPoint(0, 0));
-    }
-
-    private newPoint(positionX: number, positionY: number) {
-        const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0x0000FF });
-        const point = new THREE.Mesh(geometry, material);
-        point.position.setX(positionX);
-        point.position.setY(positionY);
-        this.scene.add(point);
-        return point;
+        this.intersections.push(this.newIntersection(0, 0));
     }
 
     private startRenderingLoop() {
@@ -58,5 +48,24 @@ export class RenderService {
     private render() {
         requestAnimationFrame(() => this.render());
         this.renderer.render(this.scene, this.camera);
+    }
+
+    private newIntersection(positionX: number, positionY: number) {
+        const geometry = new THREE.CircleGeometry(10, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+        const point = new THREE.Mesh(geometry, material);
+        point.position.setX(positionX);
+        point.position.setY(positionY);
+        this.scene.add(point);
+        return point;
+    }
+
+    public updateIntersectionPosition(index: number, position: THREE.Vector2) {
+        if (index >= this.intersections.length) {
+            return;
+        }
+
+        this.intersections[index].position.setX(position.x);
+        this.intersections[index].position.setY(position.y);
     }
 }

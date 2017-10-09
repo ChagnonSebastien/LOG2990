@@ -4,15 +4,15 @@ import * as THREE from 'three';
 @Injectable()
 export class TrackValidationService {
     public trackElements: {
-        intersection: THREE.Vector3,
+        intersection: THREE.Vector2,
         intersectionAngle: number[],
         segmentLength: number,
         segmentIntersections: number[]
-    }[] = [{ intersection: new THREE.Vector3(), intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }];
+    }[] = [{ intersection: new THREE.Vector2(), intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }];
 
     public trackClosed = false;
 
-    public addPoint(intersection: THREE.Vector3) {
+    public addPoint(intersection: THREE.Vector2) {
         this.trackElements.push(
             { intersection, intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }
         );
@@ -24,7 +24,7 @@ export class TrackValidationService {
         }
     }
 
-    public updatePoint(index: number, intersection: THREE.Vector3) {
+    public updatePoint(index: number, intersection: THREE.Vector2) {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(index);
         this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);

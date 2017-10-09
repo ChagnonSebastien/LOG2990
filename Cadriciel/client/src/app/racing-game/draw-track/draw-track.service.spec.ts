@@ -1,3 +1,4 @@
+import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
 import * as THREE from 'three';
@@ -5,7 +6,7 @@ import * as THREE from 'three';
 describe('test drawTrackService', function () {
     let drawTrackService: DrawTrackService;
     beforeEach(() => {
-        drawTrackService = new DrawTrackService(new TrackValidationService());
+        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService());
     });
 
     it('construction test', done => {
@@ -14,7 +15,7 @@ describe('test drawTrackService', function () {
     });
 
     it('Able to definie if loop is closed', done => {
-        drawTrackService.loopClosed = false;
+        drawTrackService.trackClosed = false;
         expect(drawTrackService.isFinished()).toEqual(false);
         done();
     });
