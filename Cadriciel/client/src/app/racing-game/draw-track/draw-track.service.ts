@@ -35,6 +35,7 @@ export class DrawTrackService {
     constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
 
     public initialise(container: HTMLElement) {
+        this.renderService.initialise(container);
         this.container = container;
         this.createScene();
         this.initialiseActivePoint();
