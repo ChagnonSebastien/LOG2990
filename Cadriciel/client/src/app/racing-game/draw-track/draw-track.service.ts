@@ -55,7 +55,7 @@ export class DrawTrackService {
         let index = -1;
         try {
             this.intersections.forEach(function (point, i, array) {
-                if (service.getXYDistance(service.mousePosition, point) < 25 && i !== array.length - 1) {
+                if (service.getXYDistance(service.mousePosition, point) < 25 && (i !== array.length - 1 || service.trackClosed)) {
                     index = i;
                     throw new Error('To exit the forEach loop');
                 }
@@ -104,173 +104,6 @@ export class DrawTrackService {
         // this.trackValidationService.removeLastPoint();
     }
 
-    public isFinished(): boolean {
-        return false;
-    }
-
-    public startDrag() {
-        return false;
-    }
-
-    public endDrag() {
-        return false;
-    }
-
-    public onResize() {
-        this.renderService.onResize();
-    }
-
-
- /*
-    private moveIntersection(intersectionIndex: number, position: THREE.Vector3) {
-        this.intersections[intersectionIndex].position.x = position.x;
-        this.intersections[intersectionIndex].position.y = position.y;
-        if (intersectionIndex === 0) {
-            this.firstPointHighlight.position.x = position.x;
-            this.firstPointHighlight.position.y = position.y;
-            this.activePoint.position.x = position.x;
-            this.activePoint.position.y = position.y;
-        }
-    }
-
-    private updateComponentsView() {
-        this.updateComponentsPositions();
-        this.updateComponentsLook();
-    }
-
-    private updateComponentsPositions() {
-        if (this.trackClosed) {
-            if (this.currentlyDraggedIntersection !== -1) {
-                this.updateBeforeAndAfterSegment(this.currentlyDraggedIntersection);
-            }
-
-        } else {
-            if (this.intersections.length > 0) {
-                if (this.pointMouseHoversOn === 0) {
-                    this.mousePosition = this.intersections[0].position.clone();
-                }
-
-                this.updateLastSegmentPosition();
-            }
-
-            this.updateActivePointPosition();
-        }
-    }
-
-    private updateBeforeAndAfterSegment(movingIntersectionIndex) {
-        this.updateSegmentPosition(
-            this.segments[
-            this.currentlyDraggedIntersection - 1 < 0 ?
-                this.segments.length - 1 :
-                this.currentlyDraggedIntersection - 1
-            ],
-            this.intersections[
-                this.currentlyDraggedIntersection - 1 < 0 ?
-                    this.intersections.length - 1 :
-                    this.currentlyDraggedIntersection - 1
-            ].position,
-            this.intersections[
-                this.currentlyDraggedIntersection
-            ].position
-        );
-        this.updateSegmentPosition(
-            this.segments[this.currentlyDraggedIntersection],
-            this.intersections[this.currentlyDraggedIntersection].position,
-            this.intersections[
-                this.currentlyDraggedIntersection + 1 === this.intersections.length ?
-                    0 :
-                    this.currentlyDraggedIntersection + 1
-            ].position
-        );
-    }
-
-    private updateComponentsLook() {
-        if (this.currentlyDraggedIntersection !== -1 || !this.trackClosed) {
-            this.segments.forEach((segment, index) => {
-                if (this.trackValidationService.isValid(index)) {
-                    segment.material = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
-                } else {
-                    segment.material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
-                }
-            });
-        }
-
-        if (this.trackClosed || this.intersections.length === 0) {
-            return;
-        }
-
-        if (this.pointMouseHoversOn === 0) {
-            this.firstPointHighlight.material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-        } else {
-            this.firstPointHighlight.material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
-        }
-    }
-
-    private updateActivePointPosition() {
-        this.activePoint.position.set(this.mousePosition.x, this.mousePosition.y, -3);
-    }
-
-    private checkIfMouseIsOnFirstPoint(): boolean {
-        return this.getXYDistance(this.mousePosition, this.intersections[0].position) < 20;
-    }
-
-    private updateLastSegmentPosition() {
-        if (this.segments.length === 0) {
-            return;
-        }
-
-        this.updateSegmentPosition(
-            this.segments[this.segments.length - 1],
-            this.intersections[this.intersections.length - 1].position,
-            this.mousePosition
-        );
-
-        this.segments[this.segments.length - 1].position.z = -4;
-    }
-
-    private updateSegmentPosition(segment: THREE.Mesh, fromPosition: THREE.Vector3, toPosition: THREE.Vector3) {
-        segment.geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);
-        segment.geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
-        segment.position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
-        segment.position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
-    }
-
-    private newIntersection(positionX: number, positionY: number): THREE.Mesh {
-        const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
-        const intersection = new THREE.Mesh(geometry, material);
-        intersection.position.set(positionX, positionY, 0);
-        return intersection;
-    }
-
-    public removeIntersection() {
-        if (this.trackClosed) {
-            this.trackClosed = false;
-            this.trackValidationService.trackClosed = false;
-            this.trackValidationService.addPoint(this.mousePosition);
-            this.updateComponentsView();
-            return;
-        }
-
-        if (this.intersections.length === 0) {
-            return;
-        }
-
-        this.trackValidationService.removeLastPoint();
-
-        this.scene.remove(this.intersections.pop());
-        if (this.intersections.length === 0) {
-            this.removeFirstIntersectionHighlight();
-        }
-
-        this.scene.remove(this.segments.pop());
-        this.updateComponentsView();
-    }
-
-    private removeFirstIntersectionHighlight() {
-        this.scene.remove(this.firstPointHighlight);
-    }
-
     public startDrag() {
         if (this.trackClosed && this.currentlyDraggedIntersection === -1) {
             this.currentlyDraggedIntersection = this.pointMouseHoversOn;
@@ -287,14 +120,7 @@ export class DrawTrackService {
         return this.trackClosed;
     }
 
-    public update(index: number, valid: boolean) {
-        if (index < this.segments.length) {
-            if (valid) {
-                this.segments[index].material = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
-            } else {
-                this.segments[index].material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
-            }
-        }
+    public onResize() {
+        this.renderService.onResize();
     }
-    */
 }
