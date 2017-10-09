@@ -6,7 +6,9 @@ const viewDepth = 10;
 @Injectable()
 export class RenderService {
 
-    public container: HTMLElement;
+    private container: HTMLElement;
+
+    private renderer: THREE.WebGLRenderer;
 
     private camera: THREE.OrthographicCamera;
 
@@ -27,5 +29,18 @@ export class RenderService {
             -viewDepth,
             viewDepth
         );
+    }
+
+    private startRenderingLoop() {
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setPixelRatio(devicePixelRatio);
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        this.container.appendChild(this.renderer.domElement);
+        this.render();
+    }
+
+    private render() {
+        requestAnimationFrame(() => this.render());
+        this.renderer.render(this.scene, this.camera);
     }
 }
