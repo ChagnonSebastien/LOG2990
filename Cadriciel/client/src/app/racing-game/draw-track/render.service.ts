@@ -14,6 +14,8 @@ export class RenderService {
 
     private scene: THREE.Scene;
 
+    private intersections: THREE.Mesh[] = [];
+
     public initialise(container: HTMLElement) {
         this.container = container;
         this.createScene();
@@ -31,6 +33,18 @@ export class RenderService {
             -viewDepth,
             viewDepth
         );
+
+        this.intersections.push(this.newPoint(0, 0));
+    }
+
+    private newPoint(positionX: number, positionY: number) {
+        const geometry = new THREE.CircleGeometry(10, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0x0000FF });
+        const point = new THREE.Mesh(geometry, material);
+        point.position.setX(positionX);
+        point.position.setY(positionY);
+        this.scene.add(point);
+        return point;
     }
 
     private startRenderingLoop() {

@@ -36,14 +36,6 @@ export class DrawTrackService {
 
     public initialise(container: HTMLElement) {
         this.renderService.initialise(container);
-        this.initialiseActivePoint();
-    }
-
-    private initialiseActivePoint() {
-        const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0x0000FF });
-        this.activePoint = new THREE.Mesh(geometry, material);
-        this.scene.add(this.activePoint);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
