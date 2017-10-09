@@ -1,3 +1,4 @@
+import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -31,7 +32,7 @@ export class DrawTrackService {
 
     private potholes: { distance: number, offset: number }[] = [];
 
-    constructor(public trackValidationService: TrackValidationService) { }
+    constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
 
     public initialise(container: HTMLElement) {
         this.container = container;
