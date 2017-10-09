@@ -1,12 +1,24 @@
 import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
-
+import {LexiconService} from './lexicon.service';
 @Component({
     selector: 'app-crossword-game-interface',
     templateUrl: './crossword-game-interface.component.html',
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-    public rawCrossword: [[string]] = [['c', '0', '0', '0', 'p', '0', 'c', 'a', 't', 'e'],
+    public rawCrossword: [[string]] = [['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
+    ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
+    ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
+    ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
+    ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
+    ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
+    ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
+    ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
+    ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
+    ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']];
+
+
+    /*[[string]] = [['c', '0', '0', '0', 'p', '0', 'c', 'a', 't', 'e'],
     ['a', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
     ['t', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
     ['0', 'h', 'y', 'd', 'e', 'r', 'a', 'b', 'a', 'd'],
@@ -16,23 +28,24 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     ['0', '0', '0', '0', '0', '0', 'l', '0', '0', 'i'],
     ['0', '0', '0', '0', '0', '0', 'o', '0', '0', '0'],
     ['k', 'a', 's', 'h', 'm', 'i', 'r', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', 'e', '0', '0', '0']];
+    ['0', '0', '0', '0', '0', '0', 'e', '0', '0', '0']];*/
 
-    // public listOfWords: [String] = ['pune', 'bangalore', 'hyderabad', 'delhi', 'mumbai', 'kashmir' ];
+     public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
     // public indices: [String] = ['Education Hub', 'Information Technology Hub', 'Cultural Hub', 'Capital of India',
     // 'India financial capital', 'Saffron region'];
 
-    public listOfWordsAndHints: [{ word: string, indice: string }] = [{ word: 'pune', indice: 'Education Hub' },
+   /* public listOfWordsAndHints: [{ word: string, indice: string }] = [{ word: 'pune', indice: 'Education Hub' },
     { word: 'bangalore', indice: 'Information Technology Hub' }, { word: 'hyderabad', indice: 'Cultural Hub' },
     { word: 'delhi', indice: 'Capital of India' }, { word: 'mumbai', indice: 'India financial capital' },
     { word: 'kashmir', indice: 'Saffron region' }, { word: 'cate', indice: 'A choice of dainty food' },
-    { word: 'cat', indice: 'A small domesticated mammal kept as a pet ' }];
+    { word: 'cat', indice: 'A small domesticated mammal kept as a pet ' }];*/
 
     public wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
     public kSelected = -1;
     public cheatMode = false;
+    public definition: string;
 
 
 
@@ -67,8 +80,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * the hint associated with the word.
     ************************************************************/
     public fillWordsIndexes(): void {
-
-        for (let k = 0; k < this.listOfWordsAndHints.length; k++) {
+        for (let k = 0; k < this.listOfWords.length; k++) {
 
             // check for rows first
 
@@ -77,13 +89,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                 // get word indexes for a given row. Will return empty if not present in that row
 
                 let indexes: Index[] = this.findWordIndexesRow
-                    (this.listOfWordsAndHints[k].word, this.rawCrossword[p], p);
+                    (this.listOfWords[k], this.rawCrossword[p], p);
 
                 if (indexes.length !== 0) {
                     this.wordsIndexes.push({
-                        word: this.listOfWordsAndHints[k].word, indexes: indexes,
-                        position: 'horizontal', hint: this.listOfWordsAndHints[k].indice
+                        word: this.listOfWords[k], indexes: indexes,
+                        position: 'horizontal', hint: ''
                     });
+                    this.getDefinition(this.listOfWords[k], 'easy', this.wordsIndexes.length - 1);
                     break;
 
                 } else {
@@ -91,13 +104,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                     // try in column of given index
 
                     indexes = this.findWordIndexesColumn
-                        (this.listOfWordsAndHints[k].word, this.getColumn(p), p);
+                        (this.listOfWords[k], this.getColumn(p), p);
 
                     if (indexes.length !== 0) {
                         this.wordsIndexes.push({
-                            word: this.listOfWordsAndHints[k].word, indexes: indexes,
-                            position: 'vertical', hint: this.listOfWordsAndHints[k].indice
+                            word: this.listOfWords[k], indexes: indexes,
+                            position: 'vertical', hint: ''
                         });
+                        this.getDefinition(this.listOfWords[k], 'easy', this.wordsIndexes.length - 1);
                         break;
                     }
 
@@ -171,7 +185,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
         const column: string[] = [];
 
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < this.rawCrossword[0].length; i++) {
             column.push(this.rawCrossword[i][index]);
         }
         return column;
@@ -339,9 +353,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         this.cheatMode = false;
     }
 
-    constructor() { }
+    public getDefinition(word: string, difficulty: string, position: number) {
+     this.lexiconService.getWordDefinition(word, difficulty).then(res => {
+         this.wordsIndexes[position].hint = res;
+        });
+    }
+    constructor(private lexiconService: LexiconService) { }
 
-    public ngOnInit() {
+    public  ngOnInit() {
         this.fillWordsIndexes();
     }
 
