@@ -83,6 +83,27 @@ export class DrawTrackService {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
+    public addIntersection() {
+    }
+
+    public removeIntersection() {
+    }
+
+    public isFinished(): boolean {
+        return false;
+    }
+
+    public startDrag() {
+        return false;
+    }
+
+    public endDrag() {
+        return false;
+    }
+
+    public onResize() {
+    }
+
 
  /*
     private moveIntersection(intersectionIndex: number, position: THREE.Vector3) {
