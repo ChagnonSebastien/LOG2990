@@ -122,4 +122,17 @@ export class RenderService {
         this.firstPointHighlight.position.set(position.x, position.y, -1);
         this.scene.add(this.firstPointHighlight);
     }
+
+    public removeIntersection() {
+        this.scene.remove(this.intersections[this.intersections.length - 2]);
+        this.intersections.splice(this.intersections.length - 2, 1);
+        this.scene.remove(this.segments[this.segments.length - 2]);
+        this.segments.splice(this.segments.length - 2, 1);
+
+        if (this.intersections.length === 1) {
+            this.scene.remove(this.firstPointHighlight);
+        } else {
+            this.updateSegmentPosition(this.segments.length - 2);
+        }
+    }
 }

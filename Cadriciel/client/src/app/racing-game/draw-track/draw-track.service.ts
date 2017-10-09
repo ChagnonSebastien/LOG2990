@@ -48,11 +48,11 @@ export class DrawTrackService {
             }
             this.intersections[this.intersections.length - 1] = this.mousePosition.clone();
             this.renderService.updateIntersectionPosition(this.intersections.length - 1, this.mousePosition);
-            this.trackValidationService.updatePoint(this.intersections.length - 1, this.mousePosition);
+            // this.trackValidationService.updatePoint(this.intersections.length - 1, this.mousePosition);
         } else if (this.currentlyDraggedIntersection !== -1) {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
             this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
-            this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
+            // this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
         }
 
     }
@@ -89,15 +89,29 @@ export class DrawTrackService {
             this.intersections.push(this.mousePosition.clone());
             this.renderService.addIntersection(this.mousePosition);
 
-            this.trackValidationService.addPoint(this.mousePosition);
+            // this.trackValidationService.addPoint(this.mousePosition);
         } else if (this.pointMouseHoversOn === 0 && !this.trackClosed && this.intersections.length > 3) {
             this.trackClosed = true;
-            this.trackValidationService.trackClosed = true;
-            this.trackValidationService.removeLastPoint();
+            // this.trackValidationService.trackClosed = true;
+            // this.trackValidationService.removeLastPoint();
         }
     }
 
     public removeIntersection() {
+        if (this.trackClosed) {
+            this.trackClosed = false;
+            // this.trackValidationService.trackClosed = false;
+            // this.trackValidationService.addPoint(this.mousePosition);
+            this.renderService.removeIntersection();
+            return;
+        }
+
+        if (this.intersections.length === 1) {
+            return;
+        }
+        this.intersections.splice(this.intersections.length - 2, 1);
+        this.renderService.removeIntersection();
+        // this.trackValidationService.removeLastPoint();
     }
 
     public isFinished(): boolean {
