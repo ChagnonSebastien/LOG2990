@@ -20,7 +20,7 @@ export class RenderService {
 
     private segments: THREE.Mesh[] = [];
 
-    private trackClosed = false;
+    public trackClosed = false;
 
     public initialise(container: HTMLElement) {
         this.container = container;
@@ -134,5 +134,18 @@ export class RenderService {
         } else {
             this.updateSegmentPosition(this.segments.length - 2);
         }
+    }
+
+    public openTrack(position: THREE.Vector2) {
+        this.trackClosed = false;
+        this.intersections.push(this.newIntersection(position));
+        this.segments.push(this.newSegment());
+        this.updateSegmentPosition(this.segments.length - 2);
+    }
+
+    public closeTrack() {
+        this.trackClosed = true;
+        this.scene.remove(this.intersections.pop());
+        this.segments.pop();
     }
 }

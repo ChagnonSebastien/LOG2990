@@ -8,12 +8,6 @@ export class DrawTrackService {
 
     private container: HTMLElement;
 
-    private camera: THREE.OrthographicCamera;
-
-    private renderer: THREE.WebGLRenderer;
-
-    private scene: THREE.Scene;
-
     public mousePosition: THREE.Vector2 = new THREE.Vector2();
 
     public pointMouseHoversOn = -1;
@@ -22,15 +16,7 @@ export class DrawTrackService {
 
     public intersections: THREE.Vector2[] = [new THREE.Vector2(0, 0)];
 
-    private segments: THREE.Mesh[] = [];
-
-    private firstPointHighlight: THREE.Mesh;
-
-    private activePoint: THREE.Mesh;
-
     private currentlyDraggedIntersection = -1;
-
-    private potholes: { distance: number, offset: number }[] = [];
 
     constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
 
@@ -92,23 +78,27 @@ export class DrawTrackService {
             // this.trackValidationService.addPoint(this.mousePosition);
         } else if (this.pointMouseHoversOn === 0 && !this.trackClosed && this.intersections.length > 3) {
             this.trackClosed = true;
+            this.intersections.pop();
+            this.renderService.closeTrack();
             // this.trackValidationService.trackClosed = true;
             // this.trackValidationService.removeLastPoint();
         }
     }
 
     public removeIntersection() {
-        if (this.trackClosed) {
-            this.trackClosed = false;
-            // this.trackValidationService.trackClosed = false;
-            // this.trackValidationService.addPoint(this.mousePosition);
-            this.renderService.removeIntersection();
-            return;
-        }
-
         if (this.intersections.length === 1) {
             return;
         }
+
+        if (this.trackClosed) {
+            // this.trackValidationService.trackClosed = false;
+            // this.trackValidationService.addPoint(this.mousePosition);
+            this.intersections.push(this.mousePosition);
+            this.renderService.openTrack(this.mousePosition);
+            this.trackClosed = false;
+            return;
+        }
+
         this.intersections.splice(this.intersections.length - 2, 1);
         this.renderService.removeIntersection();
         // this.trackValidationService.removeLastPoint();
