@@ -36,24 +36,7 @@ export class DrawTrackService {
 
     public initialise(container: HTMLElement) {
         this.renderService.initialise(container);
-        this.container = container;
-        this.createScene();
         this.initialiseActivePoint();
-    }
-
-    private createScene() {
-        /* Scene */
-        this.scene = new THREE.Scene();
-
-        /* Camera */
-        this.camera = new THREE.OrthographicCamera(
-            this.container.clientWidth / - 2,
-            this.container.clientWidth / 2,
-            this.container.clientHeight / 2,
-            this.container.clientHeight / - 2,
-            -10,
-            10
-        );
     }
 
     private initialiseActivePoint() {
@@ -61,19 +44,6 @@ export class DrawTrackService {
         const material = new THREE.MeshBasicMaterial({ color: 0x0000FF });
         this.activePoint = new THREE.Mesh(geometry, material);
         this.scene.add(this.activePoint);
-    }
-
-    private startRenderingLoop() {
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setPixelRatio(devicePixelRatio);
-        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-        this.container.appendChild(this.renderer.domElement);
-        this.render();
-    }
-
-    private render() {
-        requestAnimationFrame(() => this.render());
-        this.renderer.render(this.scene, this.camera);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
