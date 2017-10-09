@@ -16,6 +16,8 @@ export class RenderService {
 
     public initialise(container: HTMLElement) {
         this.container = container;
+        this.createScene();
+        this.startRenderingLoop();
     }
 
     private createScene() {

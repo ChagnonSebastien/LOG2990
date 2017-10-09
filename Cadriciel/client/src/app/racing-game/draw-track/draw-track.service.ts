@@ -39,7 +39,6 @@ export class DrawTrackService {
         this.container = container;
         this.createScene();
         this.initialiseActivePoint();
-        this.startRenderingLoop();
     }
 
     private createScene() {
