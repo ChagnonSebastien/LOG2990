@@ -117,6 +117,7 @@ export class DrawTrackService {
     }
 
     public onResize() {
+        this.renderService.onResize();
     }
 
 
@@ -284,15 +285,6 @@ export class DrawTrackService {
 
     public isFinished() {
         return this.trackClosed;
-    }
-
-    public onResize() {
-        this.camera.left = this.container.clientWidth / -2;
-        this.camera.right = this.container.clientWidth / 2;
-        this.camera.top = this.container.clientHeight / 2;
-        this.camera.bottom = this.container.clientHeight / - 2;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
     public update(index: number, valid: boolean) {

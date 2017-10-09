@@ -148,4 +148,13 @@ export class RenderService {
         this.scene.remove(this.intersections.pop());
         this.segments.pop();
     }
+
+    public onResize() {
+        this.camera.left = this.container.clientWidth / -2;
+        this.camera.right = this.container.clientWidth / 2;
+        this.camera.top = this.container.clientHeight / 2;
+        this.camera.bottom = this.container.clientHeight / - 2;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    }
 }
