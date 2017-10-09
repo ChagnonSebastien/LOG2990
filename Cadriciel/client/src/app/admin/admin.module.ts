@@ -1,3 +1,4 @@
+import { RenderService } from './../racing-game/draw-track/render.service';
 import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -40,6 +41,7 @@ import { AdminRoutingModule } from './admin-routing.module';
     providers: [
         AuthenticationService,
         DrawTrackService,
+        RenderService,
         TrackValidationService,
         TrackService
     ]
