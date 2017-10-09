@@ -6,13 +6,24 @@ const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
 const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 
-export class CrosswordGenerator {
+export class ServerCrosswords {
+    private static instance: ServerCrosswords;
     private collection: string;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
     public hardCrosswords: Array<CrosswordDB> = [];
 
-    constructor(collection: string) {
+    private constructor() {
+    }
+
+    public static getInstance() {
+        if (!ServerCrosswords.instance) {
+            ServerCrosswords.instance = new ServerCrosswords();
+        }
+        return ServerCrosswords.instance;
+    }
+
+    public setCollection(collection: string) {
         this.collection = collection;
     }
 
@@ -26,7 +37,7 @@ export class CrosswordGenerator {
                     crosswordsList = [];
                     resolve(crosswordsList);
                 } else {
-                    db.collection('crosswords_tests').find().toArray().then((crosswords) => {
+                    db.collection(this.collection).find().toArray().then((crosswords) => {
                         crosswordsList = crosswords;
                         resolve(crosswordsList);
                     });
@@ -44,7 +55,7 @@ export class CrosswordGenerator {
                     resolve(false);
                 } else {
                     const objId = new mongoose.Types.ObjectId(crossword._id);
-                    db.collection('crosswords_tests').deleteOne({ '_id': objId });
+                    db.collection(this.collection).deleteOne({ '_id': objId });
                     resolve(true);
                 }
             });
@@ -65,7 +76,7 @@ export class CrosswordGenerator {
                             listOfWords: ['test1', 'test2']
                         });
 
-                        db.collection('crosswords_tests').insert(newCrossWord);
+                        db.collection(this.collection).insert(newCrossWord);
                         resolve(true);
                     }
                 });
@@ -113,7 +124,7 @@ export class CrosswordGenerator {
                     if (err) {
                         resolve(false);
                     } else {
-                        db.collection('crosswords_tests').findOneAndDelete({ 'difficulty': level }).then((crossword) => {
+                        db.collection(this.collection).findOneAndDelete({ 'difficulty': level }).then((crossword) => {
                             if (level === 'easy') {
                                 this.easyCrosswords.push(crossword.value);
                             } else if (level === 'normal') {
@@ -134,7 +145,6 @@ export class CrosswordGenerator {
     }
 
     public getCrossword(level: string): Promise<CrosswordDB> {
-        // TODO: store crossword in server
         let crossword: CrosswordDB;
         if (level === 'easy') {
             return new Promise<CrosswordDB>(resolve => {
