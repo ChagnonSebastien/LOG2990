@@ -5,7 +5,7 @@ export class Authentication {
     private connection: mongodb.Db;
     private collection: string;
 
-    constructor(collection: string){
+    constructor(collection: string) {
         this.collection = collection;
     }
 
