@@ -91,7 +91,7 @@ export class DrawTrackService {
         if (this.trackClosed) {
             this.intersections.push(this.mousePosition);
             this.renderService.openTrack(this.mousePosition);
-            // this.trackValidationService.openTrack();
+            this.trackValidationService.openTrack(this.mousePosition);
             this.trackClosed = false;
             return;
         }

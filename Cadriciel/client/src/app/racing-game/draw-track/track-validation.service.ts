@@ -5,18 +5,17 @@ import * as THREE from 'three';
 export class TrackValidationService {
     public trackElements: {
         intersection: THREE.Vector2,
-        intersectionAngle: number[],
+        intersectionAngl: number,
         segmentLength: number,
         segmentIntersections: number[]
-    }[] = [{ intersection: new THREE.Vector2(), intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }];
+    }[] = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
 
-    public trackClosed = false;
+    private trackClosed = false;
 
     public addIntersection(intersection: THREE.Vector2) {
         this.trackElements.push(
-            { intersection, intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }
+            { intersection, intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }
         );
-        this.trackElements[0].intersectionAngle[0] = 0;
         this.checkSegmentLength(this.trackElements.length - 2);
         this.checkSegmentIntersections(this.trackElements.length - 2);
         if (this.trackElements.length > 2) {
@@ -30,26 +29,37 @@ export class TrackValidationService {
         this.checkPointAngle(0, this.trackElements.length - 1);
     }
 
+    public openTrack(position: THREE.Vector2) {
+        this.trackClosed = false;
+        this.addIntersection(position);
+    }
+
     public updatePoint(index: number, intersection: THREE.Vector2) {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(index);
         this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
+
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
-        this.checkPointAngle(
-            index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
-            (index + this.trackElements.length - 2) % this.trackElements.length
-        );
-        this.checkPointAngle(
-            index,
-            index - 1 === -1 ? this.trackElements.length - 1 : index - 1
-        );
-        this.checkPointAngle(
-            index + 1 === this.trackElements.length ? 0 : index + 1,
-            this.trackClosed ? index : (
-                this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25 ?
-                    index - 1 : index)
-        );
+
+        if (this.trackElements.length > 2) {
+            this.checkPointAngle(
+                index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
+                (index + this.trackElements.length - 2) % this.trackElements.length
+            );
+            this.checkPointAngle(
+                index,
+                index - 1 === -1 ? this.trackElements.length - 1 : index - 1
+            );
+            if (this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25) {
+                this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, this.trackClosed ? index : index - 1);
+            } else {
+                if (!this.trackClosed) {
+                    this.trackElements[0].intersectionAngl = 0;
+                }
+                this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, index);
+            }
+        }
     }
 
     public removeIntersection() {
@@ -60,9 +70,6 @@ export class TrackValidationService {
                 segment.segmentIntersections.splice(removedPosition, 1);
             }
         });
-        if (this.trackElements.length > 1) {
-            this.trackElements[this.trackElements.length - (this.trackClosed ? 1 : 2)].intersectionAngle[1] = 0;
-        }
         this.checkPointAngle(this.trackElements.length - 1, this.trackElements.length - 2);
         this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
         this.checkSegmentIntersections(this.trackElements.length - 2);
@@ -252,8 +259,7 @@ export class TrackValidationService {
         const angle2 = this.getAngle(line2);
         const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
         const angleVariation = (rawAngleVariation + (2 * Math.PI)) % (2 * Math.PI);
-        this.trackElements[index1].intersectionAngle[0] = angleVariation;
-        this.trackElements[index2].intersectionAngle[1] = angleVariation;
+        this.trackElements[index1].intersectionAngl = angleVariation;
     }
 
     public getAngle(line): number {
@@ -262,9 +268,39 @@ export class TrackValidationService {
     }
 
     public isValid(index: number) {
-        return (this.trackElements[index].segmentIntersections.length === 0 &&
-            this.trackElements[index].segmentLength >= 40 &&
-            (this.trackElements[index].intersectionAngle[1] <= Math.PI &&
-                this.trackElements[index].intersectionAngle[0] <= Math.PI));
+        return (
+            this.isLengthValid(index) &&
+            this.isSegmentsIntersectionValid(index) &&
+            this.isFirstAngleValid(index) &&
+            this.isSecondAngleValid(index)
+        );
+    }
+
+    private isLengthValid(index: number) {
+        return this.trackElements[index].segmentLength >= 40;
+    }
+
+    private isSegmentsIntersectionValid(index: number) {
+        return this.trackElements[index].segmentIntersections.length === 0;
+    }
+
+    private isFirstAngleValid(index: number) {
+        if (!this.trackClosed && index === 0) {
+            return true;
+        }
+
+        return this.trackElements[index].intersectionAngl <= Math.PI;
+    }
+
+    private isSecondAngleValid(index: number) {
+        let nextSegment = index + 1 < this.trackElements.length ? index + 1 : 0;
+        if (!this.trackClosed && index === this.trackElements.length - 2) {
+            if (this.trackElements[index + 1].segmentLength >= 25) {
+                return true;
+            }
+            nextSegment = 0;
+        }
+
+        return this.trackElements[nextSegment].intersectionAngl <= Math.PI;
     }
 }
