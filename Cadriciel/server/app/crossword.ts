@@ -5,7 +5,7 @@ import * as path from 'path';
 const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
 
 export class CrosswordGenerator {
-    public _id: string;
+    public id: string;
     public difficulty: string;
     public size: number;
     public grid: string[][];
