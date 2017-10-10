@@ -1,52 +1,41 @@
 import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
 import {LexiconService} from './lexicon.service';
+import {CrosswordGameInfoService} from './crossword-game-info.service';
 @Component({
     selector: 'app-crossword-game-interface',
     templateUrl: './crossword-game-interface.component.html',
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-    public rawCrossword: [[string]] = [['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
-    ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
-    ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
-    ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
-    ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
-    ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
-    ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
-    ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
-    ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
-    ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']];
-
-
-    /*[[string]] = [['c', '0', '0', '0', 'p', '0', 'c', 'a', 't', 'e'],
-    ['a', '0', '0', '0', 'u', '0', '0', '0', '0', '0'],
-    ['t', '0', '0', '0', 'n', '0', 'b', '0', '0', '0'],
-    ['0', 'h', 'y', 'd', 'e', 'r', 'a', 'b', 'a', 'd'],
-    ['0', '0', '0', '0', '0', '0', 'n', '0', '0', 'e'],
-    ['0', '0', '0', '0', '0', '0', 'g', '0', '0', 'l'],
-    ['0', '0', 'm', 'u', 'm', 'b', 'a', 'i', '0', 'h'],
-    ['0', '0', '0', '0', '0', '0', 'l', '0', '0', 'i'],
-    ['0', '0', '0', '0', '0', '0', 'o', '0', '0', '0'],
-    ['k', 'a', 's', 'h', 'm', 'i', 'r', '0', '0', '0'],
-    ['0', '0', '0', '0', '0', '0', 'e', '0', '0', '0']];*/
-
-     public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
-    // public indices: [String] = ['Education Hub', 'Information Technology Hub', 'Cultural Hub', 'Capital of India',
-    // 'India financial capital', 'Saffron region'];
-
-   /* public listOfWordsAndHints: [{ word: string, indice: string }] = [{ word: 'pune', indice: 'Education Hub' },
-    { word: 'bangalore', indice: 'Information Technology Hub' }, { word: 'hyderabad', indice: 'Cultural Hub' },
-    { word: 'delhi', indice: 'Capital of India' }, { word: 'mumbai', indice: 'India financial capital' },
-    { word: 'kashmir', indice: 'Saffron region' }, { word: 'cate', indice: 'A choice of dainty food' },
-    { word: 'cat', indice: 'A small domesticated mammal kept as a pet ' }];*/
-
+    public rawCrossword: [[string]];
+    public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
     public wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
     public kSelected = -1;
     public cheatMode = false;
+    public difficulty: string;
 
+    /***********************************************************
+    * This function sets the raw crossword
+    ************************************************************/
+    public setRawCrossword(): void {
+        this.rawCrossword = [['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
+        ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
+        ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
+        ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
+        ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
+        ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
+        ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
+        ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
+        ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
+        ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']];
+    }
 
+    public getDifficulty() {
+        this.crosswordGameInfoService.getMode().then(mode => this.difficulty = mode);
+
+    }
 
 
     /***********************************************************
@@ -96,7 +85,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                         word: this.listOfWords[k], indexes: indexes,
                         position: 'horizontal', hint: ''
                     });
-                    this.getDefinition(this.listOfWords[k], 'easy', this.wordsIndexes.length - 1);
+                    this.setDefinition(this.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
                     break;
 
                 } else {
@@ -111,7 +100,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                             word: this.listOfWords[k], indexes: indexes,
                             position: 'vertical', hint: ''
                         });
-                        this.getDefinition(this.listOfWords[k], 'easy', this.wordsIndexes.length - 1);
+                        this.setDefinition(this.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
                         break;
                     }
 
@@ -352,15 +341,19 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public deactivateCheatMode(): void {
         this.cheatMode = false;
     }
-
-    public getDefinition(word: string, difficulty: string, position: number) {
+    /**************************************************************
+    * Used to set the definiton of a word in the wordIndexes array
+    ***************************************************************/
+    public setDefinition(word: string, difficulty: string, position: number) {
      this.lexiconService.getWordDefinition(word, difficulty).then(res => {
          this.wordsIndexes[position].hint = res;
         });
     }
-    constructor(private lexiconService: LexiconService) { }
+    constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService ) { }
 
     public  ngOnInit() {
+        this.getDifficulty();
+        this.setRawCrossword();
         this.fillWordsIndexes();
     }
 
