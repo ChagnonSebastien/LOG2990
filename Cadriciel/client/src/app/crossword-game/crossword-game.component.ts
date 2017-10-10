@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
-
 @Component({
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',

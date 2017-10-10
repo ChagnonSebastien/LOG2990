@@ -355,6 +355,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         this.getDifficulty();
         this.setRawCrossword();
         this.fillWordsIndexes();
+        console.log(this.wordsIndexes);
     }
 
 }
