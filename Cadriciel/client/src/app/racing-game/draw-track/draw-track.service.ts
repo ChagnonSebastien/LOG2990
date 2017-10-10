@@ -79,7 +79,7 @@ export class DrawTrackService {
             this.trackClosed = true;
             this.intersections.pop();
             this.renderService.closeTrack();
-            // this.trackValidationService.closeTrack();
+            this.trackValidationService.closeTrack();
         }
     }
 

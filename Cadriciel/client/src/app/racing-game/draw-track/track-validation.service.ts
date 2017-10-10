@@ -24,6 +24,12 @@ export class TrackValidationService {
         }
     }
 
+    public closeTrack() {
+        this.trackElements.pop();
+        this.trackClosed = true;
+        this.checkPointAngle(0, this.trackElements.length - 1);
+    }
+
     public updatePoint(index: number, intersection: THREE.Vector2) {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(index);
