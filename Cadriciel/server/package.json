@@ -12,6 +12,7 @@
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
     "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
     "test-server-crosswords": "mocha -r ts-node/register app/**/serverCrosswords.spec.ts",
+    "test-server-crosswords-route": "mocha -r ts-node/register app/**/serverCrosswordsRoute.spec.ts",
     "test-once": "tsc && karma start karma.conf.js --single-run || npm run-script coverage",
     "test-auth": "mocha -r ts-node/register app/**/authentification.spec.ts",
     "test-auth-service": "mocha -r ts-node/register app/**/authentication.spec.ts",

@@ -1,19 +1,24 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
 import { CrosswordDB } from './crosswordDB';
+import { CrosswordGenerator } from '../crossword';
 const CrossWord = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
 const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const crosswordSize = 10;
 
 export class ServerCrosswords {
     private static instance: ServerCrosswords;
     private collection: string;
+    private crosswordGenerator: CrosswordGenerator;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
     public hardCrosswords: Array<CrosswordDB> = [];
 
+
     private constructor() {
+        this.crosswordGenerator = new CrosswordGenerator(crosswordSize);
     }
 
     public static getInstance() {
@@ -70,10 +75,12 @@ export class ServerCrosswords {
                     if (err) {
                         resolve(false);
                     } else {
+                        const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
+                        const wordList = Array.from(this.crosswordGenerator.words);
                         const newCrossWord = new CrossWord({
-                            crossword: [['test', 'test'], ['test2', 'test2']],
+                            crossword: crosswordGenerated,
                             difficulty: level,
-                            listOfWords: ['test1', 'test2']
+                            listOfWords: wordList
                         });
 
                         db.collection(this.collection).insert(newCrossWord);
@@ -144,7 +151,7 @@ export class ServerCrosswords {
         }
     }
 
-    public getCrossword(level: string): Promise<CrosswordDB> {
+    public async getCrossword(level: string): Promise<CrosswordDB> {
         let crossword: CrosswordDB;
         if (level === 'easy') {
             return new Promise<CrosswordDB>(resolve => {

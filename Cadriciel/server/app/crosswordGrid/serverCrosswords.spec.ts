@@ -62,7 +62,7 @@ describe('Server Crosswords', () => {
                 });
             });
         });
-    }).timeout(8000);
+    }).timeout(15000);
 
     it('Should initialize server crosswords by storing 5 crosswords for each level', (done) => {
         serverCrosswords.initializeServerCrossword().then(function (data) {
@@ -122,4 +122,7 @@ describe('Server Crosswords', () => {
             done();
         });
     });
+
+    // reset collection to crosswords
+    serverCrosswords.setCollection('crosswords');
 });
