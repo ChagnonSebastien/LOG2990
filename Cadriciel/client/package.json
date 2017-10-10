@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
-    "precommit": "npm run lint"
+    "prepush": "npm run lint"
   },
   "private": true,
   "dependencies": {
