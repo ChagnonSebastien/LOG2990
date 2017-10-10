@@ -45,7 +45,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     public correctIndexes: Index[] = [];
     public kSelected = -1;
     public cheatMode = false;
-    public definition: string;
+
 
 
 

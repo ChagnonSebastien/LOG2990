@@ -1,5 +1,6 @@
 <div id="page" (click)="cancelSelection($event)" >
   <div id="conteneur"> 
+ <app-crossword-game-information></app-crossword-game-information>
 <div id="wrapper"> 
 <tr *ngFor="let ligne of rawCrossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >
@@ -17,8 +18,8 @@
         </td>
     </tr> 
 </div>
-<app-crossword-game-information></app-crossword-game-information>
-<div id ="indices">
+ </div>
+ <div id ="indices">
     
         <table>
                 <tr>
@@ -63,6 +64,5 @@
                 </table>
 
                            
- </div>
  </div>
 </div>
