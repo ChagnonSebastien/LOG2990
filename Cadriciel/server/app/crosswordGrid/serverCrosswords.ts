@@ -1,4 +1,3 @@
-import * as express from 'express';
 import * as mongodb from 'mongodb';
 import { CrosswordDB } from './crosswordDB';
 import { CrosswordGenerator } from '../crossword';

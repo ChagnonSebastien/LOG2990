@@ -1,8 +1,7 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
-import * as path from 'path';
 
-const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
+const lexiconPath = './app/words.json';
 
 export class CrosswordGenerator {
     public id: string;

@@ -8,7 +8,7 @@ const collection = 'crosswords_tests';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    serverCrosswords.setCollection('crosswords_tests');
+    serverCrosswords.setCollection(collection);
     let crosswordsList: Array<CrosswordDB> = [];
 
     it('Should get all the crosswords from the database', (done) => {
