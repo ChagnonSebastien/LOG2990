@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
     "lint": "tslint app/**/*.ts app/*.ts --force -t verbose",
-    "test": "mocha -r ts-node/register app/**/*.spec.ts",
+    "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
     "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
@@ -22,7 +22,8 @@
     "clean": "rimraf out node_modules",
     "postinstall": "rimraf false",
     "postcheckout": "git pull",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "postcommit": "npm test"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
