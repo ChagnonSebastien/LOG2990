@@ -1,3 +1,4 @@
+import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
@@ -7,6 +8,8 @@ const viewDepth = 10;
 export class RenderService {
 
     private container: HTMLElement;
+
+    private trackValidationService: TrackValidationService;
 
     private renderer: THREE.WebGLRenderer;
 
@@ -22,8 +25,9 @@ export class RenderService {
 
     public trackClosed = false;
 
-    public initialise(container: HTMLElement) {
+    public initialise(container: HTMLElement, trackValidationService: TrackValidationService) {
         this.container = container;
+        this.trackValidationService = trackValidationService;
         this.createScene();
         this.startRenderingLoop();
     }
@@ -88,6 +92,8 @@ export class RenderService {
 
         this.updateSegmentPosition(index - 1 > -1 ? index - 1 : this.intersections.length - 1);
         this.updateSegmentPosition(index);
+
+        this.updateSegmentsValidity();
     }
 
     private updateSegmentPosition(index: number) {
@@ -98,6 +104,14 @@ export class RenderService {
         this.segments[index].geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         this.segments[index].position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
         this.segments[index].position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
+    }
+
+    private updateSegmentsValidity() {
+        this.segments.forEach((segment, index) => {
+            segment.material = new THREE.MeshBasicMaterial(
+                this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
+            );
+        });
     }
 
     private getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3) {

@@ -22,7 +22,7 @@ export class DrawTrackService {
 
     public initialise(container: HTMLElement) {
         this.container = container;
-        this.renderService.initialise(container);
+        this.renderService.initialise(container, this.trackValidationService);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
@@ -34,11 +34,11 @@ export class DrawTrackService {
             }
             this.intersections[this.intersections.length - 1] = this.mousePosition.clone();
             this.renderService.updateIntersectionPosition(this.intersections.length - 1, this.mousePosition);
-            // this.trackValidationService.updatePoint(this.intersections.length - 1, this.mousePosition);
+            this.trackValidationService.updatePoint(this.intersections.length - 1, this.mousePosition);
         } else if (this.currentlyDraggedIntersection !== -1) {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
             this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
-            // this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
+            this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
         }
 
     }
