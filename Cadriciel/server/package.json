@@ -21,7 +21,6 @@
     "tsc:w": "tsc -w",
     "clean": "rimraf out node_modules",
     "postinstall": "rimraf false",
-    "postcheckout": "git pull",
     "precommit": "npm run lint"
   },
   "dependencies": {
