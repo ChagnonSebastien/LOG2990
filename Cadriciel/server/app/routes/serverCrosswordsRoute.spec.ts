@@ -11,7 +11,6 @@ describe('Server Crosswords Route', () => {
         chai.request(apiUrl)
             .get('/crossword/crosswords_tests/easy')
             .end((err: any, res: any) => {
-                console.log(res);
                 const crossword = JSON.parse(res.text);
                 assert(crossword.difficulty === 'easy');
                 done();
@@ -22,7 +21,6 @@ describe('Server Crosswords Route', () => {
         chai.request(apiUrl)
             .get('/crossword/crosswords_tests/normal')
             .end((err: any, res: any) => {
-                console.log(res);
                 const crossword = JSON.parse(res.text);
                 assert(crossword.difficulty === 'normal');
                 done();
@@ -33,7 +31,6 @@ describe('Server Crosswords Route', () => {
         chai.request(apiUrl)
             .get('/crossword/crosswords_tests/hard')
             .end((err: any, res: any) => {
-                console.log(res);
                 const crossword = JSON.parse(res.text);
                 assert(crossword.difficulty === 'hard');
                 done();

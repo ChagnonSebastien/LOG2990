@@ -10,7 +10,7 @@ const crosswordSize = 10;
 
 export class ServerCrosswords {
     private static instance: ServerCrosswords;
-    private collection: string;
+    public collection: string;
     private crosswordGenerator: CrosswordGenerator;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
@@ -164,18 +164,18 @@ export class ServerCrosswords {
             });
         } else if (level === 'normal') {
             return new Promise<CrosswordDB>(resolve => {
-                crossword = this.normalCrosswords.pop();
                 this.generateCrossword(level).then((data) => {
                     this.storeOneServerCrossword(level).then((stored) => {
+                        crossword = this.normalCrosswords.pop();
                         resolve(crossword);
                     });
                 });
             });
         } else if (level === 'hard') {
             return new Promise<CrosswordDB>(resolve => {
-                crossword = this.hardCrosswords.pop();
                 this.generateCrossword(level).then((data) => {
                     this.storeOneServerCrossword(level).then((stored) => {
+                        crossword = this.hardCrosswords.pop();
                         resolve(crossword);
                     });
                 });

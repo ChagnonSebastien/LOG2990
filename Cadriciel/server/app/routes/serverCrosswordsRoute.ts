@@ -14,7 +14,6 @@ module Route {
             this.serverCrosswords = ServerCrosswords.getInstance();
             this.serverCrosswords.setCollection(req.params.collection);
             const level = req.params.level;
-
             this.serverCrosswords.getCrossword(level).then((crossword) => {
                 res.send(JSON.stringify(crossword));
             });

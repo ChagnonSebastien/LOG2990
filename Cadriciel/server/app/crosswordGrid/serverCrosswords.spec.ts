@@ -105,7 +105,7 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.easyCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
 
     it('Should return a crossword of level hard', (done) => {
         serverCrosswords.getCrossword('hard').then(function (data) {
@@ -113,7 +113,7 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.hardCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
 
     it('Should return a crossword of level normal', (done) => {
         serverCrosswords.getCrossword('normal').then(function (data) {
@@ -121,7 +121,7 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.normalCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
 
     // reset collection to crosswords
     serverCrosswords.setCollection('crosswords');
