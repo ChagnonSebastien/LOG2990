@@ -46,7 +46,7 @@ export class TrackValidationService {
         );
     }
 
-    public removeLastPoint() {
+    public removeIntersection() {
         this.trackElements.splice(this.trackElements.length - (this.trackClosed ? 1 : 2), 1);
         this.trackElements.forEach((segment, index, segments) => {
             const removedPosition = segment.segmentIntersections.indexOf(segments.length - 1);

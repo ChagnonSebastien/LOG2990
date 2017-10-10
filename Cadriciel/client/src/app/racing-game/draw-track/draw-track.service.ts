@@ -33,14 +33,13 @@ export class DrawTrackService {
                 this.mousePosition = this.intersections[0];
             }
             this.intersections[this.intersections.length - 1] = this.mousePosition.clone();
-            this.renderService.updateIntersectionPosition(this.intersections.length - 1, this.mousePosition);
             this.trackValidationService.updatePoint(this.intersections.length - 1, this.mousePosition);
+            this.renderService.updateIntersectionPosition(this.intersections.length - 1, this.mousePosition);
         } else if (this.currentlyDraggedIntersection !== -1) {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
-            this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
             this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
+            this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
         }
-
     }
 
     private getRelativeMousePosition(clientX: number, clientY: number) {
@@ -73,9 +72,9 @@ export class DrawTrackService {
     public addIntersection() {
         if (this.pointMouseHoversOn === -1 && !this.trackClosed) {
             this.intersections.push(this.mousePosition.clone());
+            this.trackValidationService.addIntersection(this.mousePosition);
             this.renderService.addIntersection(this.mousePosition);
 
-            this.trackValidationService.addIntersection(this.mousePosition);
         } else if (this.pointMouseHoversOn === 0 && !this.trackClosed && this.intersections.length > 3) {
             this.trackClosed = true;
             this.intersections.pop();
@@ -98,8 +97,8 @@ export class DrawTrackService {
         }
 
         this.intersections.splice(this.intersections.length - 2, 1);
+        this.trackValidationService.removeIntersection();
         this.renderService.removeIntersection();
-        // this.trackValidationService.removeIntersection();
     }
 
     public startDrag() {
