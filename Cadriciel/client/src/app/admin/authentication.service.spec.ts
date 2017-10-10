@@ -52,21 +52,6 @@ describe('AuthenticationService', () => {
         expect(result).toBe('invalid');
       }));
 
-      it('authenticate() while server is down', fakeAsync(() => {
-        let result: String;
-        let catchedError: any;
-        this.authenticationService.authenticate(passWord)
-            .then((forAuthentication: String) => result = forAuthentication)
-            .catch((error: any) => catchedError = error);
-        this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          status: 404,
-          statusText: 'URL not Found',
-        })));
-        tick();
-        expect(result).toBeUndefined();
-        expect(catchedError).toBeDefined();
-      }));
-
       // changePassword()
       it('changePassword() should query current service url', () => {
         this.authenticationService.changePassword(passWord, 'newPassWord');
@@ -93,20 +78,4 @@ describe('AuthenticationService', () => {
         tick();
         expect(result).toBe('invalid');
       }));
-
-      it('changePassword() while server is down', fakeAsync(() => {
-        let result: String;
-        let catchedError: any;
-        this.authenticationService.changePassword(passWord, 'newPassWord')
-            .then((changedWord: String) => result = changedWord)
-            .catch((error: any) => catchedError = error);
-        this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          status: 404,
-          statusText: 'URL not Found',
-        })));
-        tick();
-        expect(result).toBeUndefined();
-        expect(catchedError).toBeDefined();
-      }));
-
 });
