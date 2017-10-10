@@ -16,11 +16,15 @@ export class CrosswordGenerator {
 
     constructor(size: number) {
         this.size = size;
-        this.words = new Set<string>();
-        this.grid = this.newGrid(size, ' ');
-        this.gridCounter = this.newGrid(size, 0);
+        this.reset();
         this.saveState();
         this.loadLexicon(lexiconPath);
+    }
+
+    private reset() {
+        this.words = new Set<string>();
+        this.grid = this.newGrid(this.size, ' ');
+        this.gridCounter = this.newGrid(this.size, 0);
     }
 
     public newGrid(size: number, fill: any): Array<any> {
@@ -118,10 +122,6 @@ export class CrosswordGenerator {
         return true;
     }
 
-    public addHorizontalSpacing(i: number, j: number, word: string): boolean {
-        return false;
-    }
-
     public deleteLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
             return false;
@@ -207,6 +207,7 @@ export class CrosswordGenerator {
     }
 
     public generateCrossword(difficulty: string): string[][] {
+        this.reset();
         for (let i = 0; i < this.size; i++) {
             this.addRandomWord(i, true);
             this.addRandomWord(this.size - i - 1, false);
