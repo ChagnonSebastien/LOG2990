@@ -21,8 +21,8 @@
     "tsc:w": "tsc -w",
     "clean": "rimraf out node_modules",
     "postinstall": "rimraf false",
-    "precommit": "npm run lint",
-    "prepush": "npm test"
+    "postcheckout": "git pull",
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
