@@ -22,8 +22,7 @@
     "clean": "rimraf out node_modules",
     "postinstall": "rimraf false",
     "postcheckout": "git pull",
-    "precommit": "npm run lint",
-    "postcommit": "npm test"
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
