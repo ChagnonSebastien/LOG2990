@@ -75,13 +75,12 @@ export class DrawTrackService {
             this.intersections.push(this.mousePosition.clone());
             this.renderService.addIntersection(this.mousePosition);
 
-            // this.trackValidationService.addPoint(this.mousePosition);
+            this.trackValidationService.addIntersection(this.mousePosition);
         } else if (this.pointMouseHoversOn === 0 && !this.trackClosed && this.intersections.length > 3) {
             this.trackClosed = true;
             this.intersections.pop();
             this.renderService.closeTrack();
-            // this.trackValidationService.trackClosed = true;
-            // this.trackValidationService.removeLastPoint();
+            // this.trackValidationService.closeTrack();
         }
     }
 
@@ -91,17 +90,16 @@ export class DrawTrackService {
         }
 
         if (this.trackClosed) {
-            // this.trackValidationService.trackClosed = false;
-            // this.trackValidationService.addPoint(this.mousePosition);
             this.intersections.push(this.mousePosition);
             this.renderService.openTrack(this.mousePosition);
+            // this.trackValidationService.openTrack();
             this.trackClosed = false;
             return;
         }
 
         this.intersections.splice(this.intersections.length - 2, 1);
         this.renderService.removeIntersection();
-        // this.trackValidationService.removeLastPoint();
+        // this.trackValidationService.removeIntersection();
     }
 
     public startDrag() {

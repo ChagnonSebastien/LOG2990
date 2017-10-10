@@ -12,7 +12,7 @@ export class TrackValidationService {
 
     public trackClosed = false;
 
-    public addPoint(intersection: THREE.Vector2) {
+    public addIntersection(intersection: THREE.Vector2) {
         this.trackElements.push(
             { intersection, intersectionAngle: [0, 0], segmentLength: 0, segmentIntersections: [] }
         );
