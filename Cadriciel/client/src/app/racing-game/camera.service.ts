@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 // standard position of camera
-const CAMERA_POSITION = new THREE.Vector3(0, 0, 1000);
-const OFFSET = 500;
-const perchPosition = new THREE.Vector3(-50, 100, 0);
+const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
+const OFFSET = 5;
+const perchPosition = new THREE.Vector3(10, 50, -75);
 
 @Injectable()
 export class CameraService {
@@ -14,7 +14,7 @@ export class CameraService {
 
     private nearClippingPane = 1;
 
-    private farClippingPane = 2000;
+    private farClippingPane = 1000;
 
     private perspectiveCamera;
 
@@ -25,8 +25,7 @@ export class CameraService {
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
         this.perspectiveCamera = this.setPerspectiveCamera(container);
-        // this.camera = this.setPerspectiveCamera(container);
-        this.camera = this.setOrthographicCamera(container);
+        this.camera = this.setPerspectiveCamera(container);
         this.defaultCamerasPosition();
         console.log('initialisation de la camera');
     }
@@ -89,6 +88,7 @@ export class CameraService {
         this.orthographicCamera.position.x = object.position.x + OFFSET;
         this.orthographicCamera.position.y = object.position.y + OFFSET;
         this.orthographicCamera.position.z = object.position.z + OFFSET;
+        this.orthographicCamera.updateProjectionMatrix();
     }
 
     public selectCamera(event: any): void {
