@@ -43,6 +43,10 @@ export class CrosswordGenerator {
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
+    public setGrid(grid: string[][], words: Array<Word>) {
+
+    }
+
     public newGrid(size: number, fill: any): Array<any> {
         return new Array(size).fill(null).map(res => {
             return new Array(size).fill(null).map(u => {
@@ -238,6 +242,12 @@ export class CrosswordGenerator {
             this.addRandomWord(this.size - i - 1, false);
         }
         return this.grid;
+    }
+
+    public mutate(difficulty: string, grid: string[][], words: Array<Word>): string[][] {
+        this.reset();
+        this.setGrid(grid, words);
+        return this.generateCrossword(difficulty);
     }
 
     public saveState(): boolean {
