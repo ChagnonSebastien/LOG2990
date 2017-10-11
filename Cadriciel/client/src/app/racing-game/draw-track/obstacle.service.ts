@@ -58,7 +58,7 @@ export class ObstacleService {
     }
 
     public randomSegment(): number {
-        return Math.floor(Math.random() * this.track.length - 1) + 1;
+        return Math.floor(Math.random() * (this.track.length - 1)) + 1;
     }
 
     public randomDistance(firstHalfOnly: boolean): number {
