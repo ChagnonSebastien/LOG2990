@@ -3,6 +3,13 @@ import { Lexicon } from './lexicon';
 
 const lexiconPath = './app/words.json';
 
+interface Word {
+    word: string;
+    i: number;
+    j: number;
+    horizontal: boolean;
+}
+
 export class CrosswordGenerator {
     public id: string;
     public difficulty: string;
@@ -13,6 +20,7 @@ export class CrosswordGenerator {
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
     public words: Set<string>;
+    public wordsWithIndex: Array<Word>;
 
     constructor(size: number) {
         this.size = size;
