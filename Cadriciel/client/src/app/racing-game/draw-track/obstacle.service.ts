@@ -53,7 +53,7 @@ export class ObstacleService {
         let obstacle: Obstacle;
         do {
             obstacle = new Obstacle(type, this.randomSegment(), this.randomDistance(type === ObstacleType.Booster), this.randomOffset());
-        } while (this.isTooCloseToOtherObstacle(obstacle));
+        } while (this.isTooCloseToAnyOtherObstacle(obstacle));
         return obstacle;
     }
 
@@ -74,8 +74,78 @@ export class ObstacleService {
         return ((Math.random() * 2) - 1) * (3 / 4);
     }
 
-    private isTooCloseToOtherObstacle(obstacle: Obstacle): boolean {
+    private isTooCloseToAnyOtherObstacle(obstacle: Obstacle): boolean {
+        let tooClose = false;
+
+        if (obstacle.type !== ObstacleType.Booster) {
+            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.boosters);
+        }
+
+        if (obstacle.type !== ObstacleType.Pothole) {
+            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.potholes);
+        }
+
+        if (obstacle.type !== ObstacleType.Puddle) {
+            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.puddles);
+        }
+
+        return tooClose;
+    }
+
+    private isTooCloseToAnyOtherObstacleInList(obstacle: Obstacle, obstacles: Obstacle[]): boolean {
+        const service = this;
+        obstacles.forEach((toCompare) => {
+            if (service.isTooCloseOtherObstacle(obstacle, toCompare)) {
+                return true;
+            }
+        });
         return false;
+    }
+
+    private isTooCloseOtherObstacle(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
+        if (obstacle1.intersection === obstacle2.intersection) {
+            return this.isTooCloseOtherObstacleOnSameSegment(obstacle1, obstacle2);
+        } else if (Math.abs(obstacle1.intersection - obstacle2.intersection) === 1) {
+            return this.isTooCloseOtherObstacleOnAdjacentSegment(obstacle1, obstacle2);
+        } else {
+            return false;
+        }
+    }
+
+    private isTooCloseOtherObstacleOnSameSegment(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
+        const firstIntersection = this.track[obstacle1.intersection];
+        const secondIntersection = this.track[obstacle1.intersection + 1 === this.track.length ? 0 : obstacle1.intersection + 1];
+        const segmentLength = this.distance(firstIntersection, secondIntersection);
+
+        const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
+        const distanceFromFirstIntersectionToObstacle2 = obstacle2.distance * segmentLength;
+
+        return Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2) < 10;
+    }
+
+    private isTooCloseOtherObstacleOnAdjacentSegment(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
+        let firstobstacle;
+        let secondObstacle;
+
+        if (obstacle1.intersection < obstacle2.intersection) {
+            firstobstacle = obstacle1;
+            secondObstacle = obstacle2;
+        } else {
+            firstobstacle = obstacle2;
+            secondObstacle = obstacle1;
+        }
+
+        const firstIntersection = this.track[firstobstacle.intersection];
+        const secondIntersection = this.track[secondObstacle.intersection];
+        const thirdIntersection = this.track[secondObstacle.intersection + 1 === this.track.length ? 0 : secondObstacle.intersection + 1];
+
+        const firstSegmentLength = this.distance(firstIntersection, secondIntersection);
+        const secondSegmentLength = this.distance(secondIntersection, thirdIntersection);
+
+        const distanceFromSecondIntersectionToObstacle1 = (1 - obstacle1.distance) * firstSegmentLength;
+        const distanceFromSecondIntersectionToObstacle2 = obstacle2.distance * secondSegmentLength;
+
+        return distanceFromSecondIntersectionToObstacle1 + distanceFromSecondIntersectionToObstacle2 < 10;
     }
 
     public distance(point1: THREE.Vector2, point2: THREE.Vector2) {
