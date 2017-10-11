@@ -40,10 +40,10 @@ describe('ObstacleService', () => {
             done();
         });
 
-        it('should return any number between 0.5 and 1 if the obstacle is a booster', done => {
+        it('should return any number between 0 and 0.5 if the obstacle is a booster', done => {
             const distance = service.randomDistance(true);
-            expect(distance).toBeGreaterThanOrEqual(0.5);
-            expect(distance).toBeLessThanOrEqual(1);
+            expect(distance).toBeGreaterThanOrEqual(0);
+            expect(distance).toBeLessThanOrEqual(0.5);
             done();
         });
     });

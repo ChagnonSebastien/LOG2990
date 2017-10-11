@@ -62,12 +62,7 @@ export class ObstacleService {
     }
 
     public randomDistance(obstacleIsABooster: boolean): number {
-        let distance = Math.random();
-        if (obstacleIsABooster) {
-            distance /= 2;
-            distance += 0.5;
-        }
-        return distance;
+        return Math.random() * (obstacleIsABooster ? 0.5 : 1);
     }
 
     public randomOffset(): number {
@@ -175,7 +170,7 @@ export class ObstacleService {
             break;
         }
 
-        for (let i = 0; i < amountToReAdd; i++) {
+        for (let i = 0; i < Math.ceil(amountToReAdd / 2); i++) {
             this.addObstacle(type);
         }
     }
