@@ -78,6 +78,13 @@ export class ObstacleService {
         return false;
     }
 
+    public distance(point1: THREE.Vector2, point2: THREE.Vector2) {
+        return Math.sqrt(
+            Math.pow((point1.x - point2.x), 2) +
+            Math.pow((point1.y - point2.y), 2)
+        );
+    }
+
     public randomizeAllPositions(type: ObstacleType) {
 
     }
