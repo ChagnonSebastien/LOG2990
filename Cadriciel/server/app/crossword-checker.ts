@@ -7,6 +7,9 @@ export module CrosswordChecker {
             return true;
         }
         const parsedWords = getAllWords(crossword);
+        if (parsedWords.size !== words.length) {
+            return false;
+        }
         return words.map((word) => {
             return parsedWords.has(word);
         }).reduce((prev, cur) => {
