@@ -21,28 +21,28 @@
       <label class="control-label" for="name">Potholes:</label>
       <div class="row">
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Amount</button>
+          <button type="button" class="btn btn-primary" (click)="addObstacle(0)">Add</button>
         </div>
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Placement</button>
+          <button type="button" class="btn btn-primary" (click)="randomizePosition(0)">Shuffle Placement</button>
         </div>
       </div>
       <label class="control-label" for="name">Puddles:</label>
       <div class="row">
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Amount</button>
+          <button type="button" class="btn btn-primary" (click)="addObstacle(1)">Add</button>
         </div>
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Placement</button>
+          <button type="button" class="btn btn-primary" (click)="randomizePosition(1)">Shuffle Placement</button>
         </div>
       </div>
       <label class="control-label" for="name">Power-ups:</label>
       <div class="row">
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Amount</button>
+          <button type="button" class="btn btn-primary" (click)="addObstacle(2)">Add</button>
         </div>
         <div class="col-6">
-          <button type="button" class="btn btn-primary">Placement</button>
+          <button type="button" class="btn btn-primary" (click)="randomizePosition(2)">Shuffle Placement</button>
         </div>
       </div>
     </div>
