@@ -1,4 +1,5 @@
 import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './obstacle';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -25,6 +26,12 @@ export class RenderService {
     private firstPointHighlight: THREE.Mesh;
 
     private segments: THREE.Mesh[] = [];
+
+    private potholes: THREE.Mesh[] = this.newObstacles(0x7A571A);
+
+    private puddles: THREE.Mesh[] = this.newObstacles(0x6ADBF7);
+
+    private boosters: THREE.Mesh[] = this.newObstacles(0xFFFF00);
 
     public trackClosed = false;
 
@@ -82,6 +89,14 @@ export class RenderService {
         const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
         return segment;
+    }
+
+    private newObstacles(color: number): THREE.Mesh[] {
+        const geometry = new THREE.CircleGeometry(5, 16);
+        const material = new THREE.MeshBasicMaterial({ color });
+        const point = new THREE.Mesh(geometry, material);
+        point.position.setZ(1);
+        return [point, point.clone(), point.clone(), point.clone(), point.clone()];
     }
 
     public updateIntersectionPosition(index: number, position: THREE.Vector2) {
@@ -165,6 +180,10 @@ export class RenderService {
         this.trackClosed = true;
         this.scene.remove(this.intersections.pop());
         this.segments.pop();
+    }
+
+    public updateObstaclesPositions(type: Obstacle[]) {
+
     }
 
     public onResize() {

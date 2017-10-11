@@ -1,4 +1,5 @@
 import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
@@ -45,6 +46,9 @@ export class DrawTrackService {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
             this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
             this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Puddle));
         }
     }
 
@@ -98,6 +102,10 @@ export class DrawTrackService {
             this.intersections.push(this.mousePosition);
             this.renderService.openTrack(this.mousePosition);
             this.trackValidationService.openTrack(this.mousePosition);
+            this.obstacleService.removeAllObstacles();
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Puddle));
             this.trackClosed = false;
             return;
         }
@@ -123,20 +131,22 @@ export class DrawTrackService {
         return this.trackClosed;
     }
 
-    public addObstacle(typeNumber: number) {
+    public addObstacle(type: number) {
         if (!this.trackClosed) {
             return;
         }
 
-        this.obstacleService.addObstacle(typeNumber);
+        this.obstacleService.addObstacle(type);
+        this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(type));
     }
 
-    public randomizeAllPositions(typeNumber: number) {
+    public randomizeAllPositions(type: number) {
         if (!this.trackClosed) {
             return;
         }
 
-        this.obstacleService.randomizeAllPositions(typeNumber);
+        this.obstacleService.randomizeAllPositions(type);
+        this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(type));
     }
 
     public onResize() {
