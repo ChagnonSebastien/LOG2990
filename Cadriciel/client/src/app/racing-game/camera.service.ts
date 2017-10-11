@@ -37,7 +37,7 @@ export class CameraService {
             container.clientWidth / 2,
             container.clientHeight / 2,
             - container.clientHeight / 2,
-            0,
+            1,
             2000
         );
         return camera;
