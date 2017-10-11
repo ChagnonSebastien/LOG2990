@@ -44,7 +44,9 @@ export class CrosswordGenerator {
     }
 
     public setGrid(grid: string[][], words: Array<Word>) {
-
+        words.map((word) => {
+            return this.addWord(word.i, word.j, word.word, word.horizontal);
+        });
     }
 
     public newGrid(size: number, fill: any): Array<any> {
