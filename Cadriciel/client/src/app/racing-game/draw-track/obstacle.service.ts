@@ -57,16 +57,16 @@ export class ObstacleService {
         return obstacle;
     }
 
-    private randomSegment(): number {
+    public randomSegment(): number {
         return Math.floor(Math.random() * this.track.length - 1) + 1;
     }
 
-    private randomDistance(firstHalfOnly: boolean): number {
+    public randomDistance(firstHalfOnly: boolean): number {
         return Math.random() / (firstHalfOnly ? 2 : 1);
     }
 
-    private randomOffset(): number {
-        return (Math.random() * 2) - 1;
+    public randomOffset(): number {
+        return ((Math.random() * 2) - 1) * (3 / 4);
     }
 
     private isTooCloseToOtherObstacle(obstacle: Obstacle): boolean {

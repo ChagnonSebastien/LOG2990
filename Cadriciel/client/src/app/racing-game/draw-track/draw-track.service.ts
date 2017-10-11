@@ -28,6 +28,7 @@ export class DrawTrackService {
     public initialise(container: HTMLElement) {
         this.container = container;
         this.renderService.initialise(container, this.trackValidationService, this.obstacleService);
+        this.obstacleService.initialize(this.intersections);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
