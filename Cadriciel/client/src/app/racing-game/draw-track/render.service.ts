@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -10,6 +11,8 @@ export class RenderService {
     private container: HTMLElement;
 
     private trackValidationService: TrackValidationService;
+
+    private obstacleService: ObstacleService;
 
     private renderer: THREE.WebGLRenderer;
 
@@ -25,9 +28,10 @@ export class RenderService {
 
     public trackClosed = false;
 
-    public initialise(container: HTMLElement, trackValidationService: TrackValidationService) {
+    public initialise(container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService) {
         this.container = container;
         this.trackValidationService = trackValidationService;
+        this.obstacleService = obstacleService;
         this.createScene();
         this.startRenderingLoop();
     }

@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
@@ -18,11 +19,15 @@ export class DrawTrackService {
 
     private currentlyDraggedIntersection = -1;
 
-    constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
+    constructor(
+        public renderService: RenderService,
+        public trackValidationService: TrackValidationService,
+        public obstacleService: ObstacleService
+    ) { }
 
     public initialise(container: HTMLElement) {
         this.container = container;
-        this.renderService.initialise(container, this.trackValidationService);
+        this.renderService.initialise(container, this.trackValidationService, this.obstacleService);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
