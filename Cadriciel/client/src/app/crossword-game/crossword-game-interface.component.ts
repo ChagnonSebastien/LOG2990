@@ -9,26 +9,19 @@ import {CrosswordService} from './crossword.service';
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
     public crossword: {rawCrossword: [[string]], listOfWords: [string]} = {rawCrossword: [['']], listOfWords: ['']};
-    // public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
     public wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
     public kSelected = -1;
     public cheatMode = false;
     public difficulty: string;
+    public dataAvailable = false;
 
     /***********************************************************
     * This function sets the raw crossword
     ************************************************************/
     public setRawCrossword(): void {
     }
-
-    public async getDifficulty(): Promise<string> {
-        this.crosswordGameInfoService.getMode().then(mode => this.difficulty = mode);
-        return await this.difficulty;
-
-    }
-
 
     /***********************************************************
     * This function is called when the user clicks on a input.
@@ -51,125 +44,6 @@ export class CrosswordGameInterfaceComponent implements OnInit {
             }
         }
         return false;
-    }
-
-    /***********************************************************
-    * This function fills up the wordIndexes data structure.
-    * For every word in the list of words it associates:
-    * a list of each index in the grid where a letter of the word is located
-    * a positon which states if the word is vertical or horizontal
-    * the hint associated with the word.
-    ************************************************************/
-    public fillWordsIndexes(): void {
-        for (let k = 0; k < this.crossword.listOfWords.length; k++) {
-
-            // check for rows first
-
-            for (let p = 0; p < this.crossword.rawCrossword.length; p++) {
-
-                // get word indexes for a given row. Will return empty if not present in that row
-
-                let indexes: Index[] = this.findWordIndexesRow
-                    (this.crossword.listOfWords[k], this.crossword.rawCrossword[p], p);
-
-                if (indexes.length !== 0) {
-                    this.wordsIndexes.push({
-                        word: this.crossword.listOfWords[k], indexes: indexes,
-                        position: 'horizontal', hint: ''
-                    });
-                    this.setDefinition(this.crossword.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
-                    break;
-
-                } else {
-
-                    // try in column of given index
-
-                    indexes = this.findWordIndexesColumn
-                        (this.crossword.listOfWords[k], this.getColumn(p), p);
-
-                    if (indexes.length !== 0) {
-                        this.wordsIndexes.push({
-                            word: this.crossword.listOfWords[k], indexes: indexes,
-                            position: 'vertical', hint: ''
-                        });
-                        this.setDefinition(this.crossword.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
-                        break;
-                    }
-
-                }
-            }
-
-        }
-    }
-
-    /***********************************************************
-    * Returns the indexes of a given word in a row of the grid. Returns
-    * emtpy array if it is not in the grid.
-    ************************************************************/
-    public findWordIndexesRow(word: string, gridPart: string[], columnOrRowIndex: number): Index[] {
-
-        const indexes: Index[] = [];
-
-        for (let k = 0; k < gridPart.length && indexes.length !== word.length; k++) {
-            if (gridPart[k] === word[indexes.length]) {
-
-                indexes.push({ i: columnOrRowIndex, j: k });
-
-            } else {
-                indexes.splice(0, indexes.length);
-            }
-        }
-        /*test for two special condions firt before returning
-        1. the first letter of the word is the last letter of the given column or row
-        2. make sure the word we found is not actually part of a larger word eg : cat could be found in catastrophic*/
-        if (indexes.length < word.length || (indexes[0].j !== 0 && gridPart[indexes[0].j - 1] !== '0') ||
-            (indexes[indexes.length - 1].j !== gridPart.length - 1 && gridPart[indexes[indexes.length - 1].j + 1] !== '0')) {
-            indexes.splice(0, indexes.length);
-        }
-
-        return indexes;
-    }
-
-
-    /***********************************************************
-     * Returns the indexes of a given word in a column of the grid. Returns
-     * emtpy array if it is not in the grid.
-     ************************************************************/
-    public findWordIndexesColumn(word: string, gridPart: string[], columnOrRowIndex: number): Index[] {
-
-        const indexes: Index[] = [];
-
-        for (let k = 0; k < gridPart.length && indexes.length !== word.length; k++) {
-            if (gridPart[k] === word[indexes.length]) {
-
-                indexes.push({ i: k, j: columnOrRowIndex });
-
-            } else {
-                indexes.splice(0, indexes.length);
-            }
-        }
-        /*test for two special condions firt before returning
-        1. the first letter of the word is the last letter of the given column or row
-        2. make sure the word we found is not actually part of a larger word eg : cat could be found in catastrophic*/
-        if (indexes.length < word.length || (indexes[0].i !== 0 && gridPart[indexes[0].i - 1] !== '0') ||
-            (indexes[indexes.length - 1].i !== gridPart.length - 1 && gridPart[indexes[indexes.length - 1].i + 1] !== '0')) {
-            indexes.splice(0, indexes.length);
-        }
-
-        return indexes;
-    }
-
-    /***********************************************************
-    * Return the column of the crossword grid at the given index
-    ************************************************************/
-    public getColumn(index: number): string[] {
-
-        const column: string[] = [];
-
-        for (let i = 0; i < this.crossword.rawCrossword[0].length; i++) {
-            column.push(this.crossword.rawCrossword[i][index]);
-        }
-        return column;
     }
 
     /***********************************************************
@@ -280,7 +154,6 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     *Check if the word positon is vertical
     ***************************************************************/
     public checkVertical(position: string): boolean {
-
         return position === 'vertical';
 
     }
@@ -289,9 +162,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     *Check if the word positon is horizontal
     ***************************************************************/
     public checkHorizontal(position: string): boolean {
-
         return position === 'horizontal';
-
     }
 
 
@@ -337,10 +208,22 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     /**************************************************************
     * Used to set the definiton of a word in the wordIndexes array.
     ***************************************************************/
-    public setDefinition(word: string, difficulty: string, position: number) {
-     this.lexiconService.getWordDefinition(word, difficulty).then(res => {
-         this.wordsIndexes[position].hint = res;
+    public async setDefinitions(): Promise< { word: string, indexes: Index[], position: string, hint: string }[]> {
+       for (let i = 0; i < this.crossword.listOfWords.length; i++) {
+            await this.lexiconService.getWordDefinition(this.crossword.listOfWords[i], this.difficulty).then(res => {
+            this.wordsIndexes[i].hint = res;
+           });
+        }
+    return await this.wordsIndexes;
+ }
+
+    public async getWordsIndexes(): Promise< {word: string, indexes: Index[], position: string, hint: string }[]> {
+        await this.crosswordService.getWordsIndexes(this.crossword).then(res => {
+            for (let i = 0 ; i < res.length ; i ++) {
+             this.wordsIndexes.push(res[i]);
+          }
         });
+        return await this.wordsIndexes;
     }
 
     /**************************************************************
@@ -348,26 +231,32 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * the crossword service.
     ***************************************************************/
     public async getCrossword(): Promise<{rawCrossword: [[string]], listOfWords: [string]}> {
-        await this.crosswordService.getCrossword('normal').then(res => {
+        const level: string = this.difficulty.toLowerCase();
+        await this.crosswordService.getCrossword(level).then(res => {
             this.crossword = {rawCrossword: res.crossword , listOfWords : res.listOfWords};
-            console.log(res.listOfWords);
-            console.log(res.crossword);
            });
            return await this.crossword;
        }
 
+       public async getDifficulty(): Promise<string> {
+        await this.crosswordGameInfoService.getLevel().then(level => this.difficulty = level);
+        return await this.difficulty;
+
+    }
     constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
                 private crosswordService: CrosswordService ) { }
 
     public ngOnInit() {
         this.getDifficulty().then(res => {
             this.getCrossword().then(response => {
-                this.fillWordsIndexes();
-                console.log(this.wordsIndexes);
+                this.getWordsIndexes().then(indexes => {
+                this.setDefinitions().then(data => {
+                    this.dataAvailable = true;
+                });
+              });
             });
            });
     }
-
 }
 
 /***********************************************************

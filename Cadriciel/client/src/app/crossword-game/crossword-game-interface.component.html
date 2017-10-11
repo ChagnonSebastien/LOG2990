@@ -1,3 +1,4 @@
+<div *ngIf="dataAvailable">
 <div id="page" (click)="cancelSelection($event)" >
   <div id="conteneur"> 
  <app-crossword-game-information></app-crossword-game-information>
@@ -11,7 +12,7 @@
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)" 
-                [readonly] = "colonne == '0'"
+                [readonly] = "colonne==' ' || colonne =='#'"
                 (keydown)="handleDelete($event,i,j)"   
             /> 
                 
@@ -65,4 +66,5 @@
 
                            
  </div>
+</div>
 </div>
