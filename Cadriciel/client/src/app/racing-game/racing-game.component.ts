@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { RenderService } from './render.service';
+import { CameraService } from './camera.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
-    styleUrls: ['./racing-game.component.css']
+    styleUrls: ['./racing-game.component.css'],
+    providers: [RenderService, CameraService]
 })
 export class RacingGameComponent implements AfterViewInit {
 
@@ -30,7 +32,7 @@ export class RacingGameComponent implements AfterViewInit {
         this.renderService.onResize();
     }
 
-    public turnCamera (event: any): void {
+    public turnCamera(event: any): void {
         this.renderService.changeView(event);
         console.log('tourner camera');
     }
