@@ -29,7 +29,9 @@ describe('CrosswordGameInterfaceComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should fill word indexes', () => {
+    it('should fill word indexes', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
 
        const wordsIndexes: {word: string, indexes: Index[], position: string, hint: string}[] =
        [{word: 'grip', indexes: [{i: 2, j: 6}, {i: 2, j: 7}, {i: 2, j: 8}, {i: 2, j: 9}], position: 'horizontal',
@@ -53,10 +55,11 @@ describe('CrosswordGameInterfaceComponent', () => {
        position: 'vertical', hint: 'Chiefly British   A streetcar line. '},
        {word: 'bible', indexes: [{i: 1, j: 8}, {i: 2, j: 8}, {i: 3, j: 8}, {i: 4, j: 8}, {i: 5, j: 8}],
        position: 'vertical', hint: 'A holystone. '}];
-       console.log('the dif issss' + component.difficulty);
-       console.log(component.wordsIndexes);
+
        expect(component.wordsIndexes).toEqual(wordsIndexes);
-    });
+
+     });
+   }));
 
 
 
