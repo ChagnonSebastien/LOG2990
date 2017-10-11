@@ -8,7 +8,13 @@ export class ObstacleService {
     private puddles: Obstacle[] = [];
     private boosters: Obstacle[] = [];
 
+    private track: THREE.Vector2[];
+
     constructor() {}
+
+    public initialize(track: THREE.Vector2[]) {
+        this.track = track;
+    }
 
     public addObstacle(type: ObstacleType) {
         switch (type) {
@@ -36,13 +42,35 @@ export class ObstacleService {
             list.push();
             break;
         default:
-            list = [];
+            while (list.length > 0) {
+                list.pop();
+            }
             break;
         }
     }
 
     private newObstacle(type: ObstacleType): Obstacle {
-        return null;
+        let obstacle: Obstacle;
+        do {
+            obstacle = new Obstacle(type, this.randomSegment(), this.randomDistance(type === ObstacleType.Booster), this.randomOffset());
+        } while (this.isTooCloseToOtherObstacle(obstacle));
+        return obstacle;
+    }
+
+    private randomSegment(): number {
+        return Math.floor(Math.random() * this.track.length - 1) + 1;
+    }
+
+    private randomDistance(firstHalfOnly: boolean): number {
+        return Math.random() / (firstHalfOnly ? 2 : 1);
+    }
+
+    private randomOffset(): number {
+        return (Math.random() * 2) - 1;
+    }
+
+    private isTooCloseToOtherObstacle(obstacle: Obstacle): boolean {
+        return false;
     }
 
     public randomizeAllPositions(type: ObstacleType) {
