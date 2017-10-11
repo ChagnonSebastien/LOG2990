@@ -21,7 +21,7 @@ module Route {
         }
 
         public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const wordLength = req.params.wordLength;
+            const wordLength: number = +req.params.wordLength;
             const lexiconReader = new LexiconReader();
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
