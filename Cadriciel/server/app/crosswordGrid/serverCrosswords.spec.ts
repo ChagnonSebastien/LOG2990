@@ -8,7 +8,7 @@ const collection = 'crosswords_tests';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    serverCrosswords.setCollection('crosswords_tests');
+    serverCrosswords.setCollection(collection);
     let crosswordsList: Array<CrosswordDB> = [];
 
     it('Should get all the crosswords from the database', (done) => {
@@ -62,7 +62,7 @@ describe('Server Crosswords', () => {
                 });
             });
         });
-    }).timeout(8000);
+    }).timeout(15000);
 
     it('Should initialize server crosswords by storing 5 crosswords for each level', (done) => {
         serverCrosswords.initializeServerCrossword().then(function (data) {
@@ -105,7 +105,7 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.easyCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
 
     it('Should return a crossword of level hard', (done) => {
         serverCrosswords.getCrossword('hard').then(function (data) {
@@ -113,7 +113,7 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.hardCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
 
     it('Should return a crossword of level normal', (done) => {
         serverCrosswords.getCrossword('normal').then(function (data) {
@@ -121,5 +121,8 @@ describe('Server Crosswords', () => {
             assert(serverCrosswords.normalCrosswords.length === 6);
             done();
         });
-    });
+    }).timeout(10000);
+
+    // reset collection to crosswords
+    serverCrosswords.setCollection('crosswords');
 });

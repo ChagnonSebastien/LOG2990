@@ -1,11 +1,10 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
-import * as path from 'path';
 
-const lexiconPath = path.join(__dirname, '..', 'app', 'words.json');
+const lexiconPath = './app/words.json';
 
 export class CrosswordGenerator {
-    public _id: string;
+    public id: string;
     public difficulty: string;
     public size: number;
     public grid: string[][];
@@ -17,19 +16,22 @@ export class CrosswordGenerator {
 
     constructor(size: number) {
         this.size = size;
-        this.words = new Set<string>();
-        this.grid = this.newGrid(size, ' ');
-        this.gridCounter = this.newGrid(size, 0);
+        this.reset();
         this.saveState();
         this.loadLexicon(lexiconPath);
     }
 
+    private reset() {
+        this.words = new Set<string>();
+        this.grid = this.newGrid(this.size, ' ');
+        this.gridCounter = this.newGrid(this.size, 0);
+    }
+
     public newGrid(size: number, fill: any): Array<any> {
         return new Array(size).fill(null).map(res => {
-            const line = new Array(size).fill(null).map(u => {
+            return new Array(size).fill(null).map(u => {
                 return fill;
             });
-            return line;
         });
     }
 
@@ -84,10 +86,18 @@ export class CrosswordGenerator {
         if (this.indexesOutOfBounds(i, j)) {
             return false;
         }
-        if (horizontal && this.grid[i][j] === ' ') {
-            return this.addLetter(i, j, '-');
-        } else if (!horizontal && this.grid[i][j] === ' ') {
-            return this.addLetter(i, j, '|');
+        if (horizontal) {
+            if (this.grid[i][j] === ' ') {
+                return this.addLetter(i, j, '-');
+            } else if (this.grid[i][j] === '|') {
+                return this.addLetter(i, j, '+');
+            }
+        } else {
+            if (this.grid[i][j] === ' ') {
+                return this.addLetter(i, j, '|');
+            } else if (this.grid[i][j] === '-') {
+                return this.addLetter(i, j, '+');
+            }
         }
         return false;
     }
@@ -117,10 +127,6 @@ export class CrosswordGenerator {
             }
         }
         return true;
-    }
-
-    public addHorizontalSpacing(i: number, j: number, word: string): boolean {
-        return false;
     }
 
     public deleteLetter(i: number, j: number, letter: string): boolean {
@@ -208,6 +214,7 @@ export class CrosswordGenerator {
     }
 
     public generateCrossword(difficulty: string): string[][] {
+        this.reset();
         for (let i = 0; i < this.size; i++) {
             this.addRandomWord(i, true);
             this.addRandomWord(this.size - i - 1, false);

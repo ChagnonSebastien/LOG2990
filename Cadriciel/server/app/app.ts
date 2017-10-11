@@ -16,6 +16,7 @@ import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
 import * as trackRoute from './routes/track';
+import * as serverCrosswords from './routes/serverCrosswordsRoute';
 
 export class Application {
 
@@ -83,6 +84,8 @@ export class Application {
         const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
         const track: trackRoute.Tracks = new trackRoute.Tracks();
         const crosswords: CrossWordsRoute.CrossWords = new CrossWordsRoute.CrossWords();
+        const serverStoredCrosswords: serverCrosswords.ServerCrosswordsRoute = new serverCrosswords.ServerCrosswordsRoute('crosswords');
+
         // home page
         router.get('/basic', index.index.bind(index.index));
 
@@ -111,6 +114,8 @@ export class Application {
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // crossword api path
+        router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
+        // to delete
         router.get('/crossword', crosswords.getCrossword.bind(crosswords.getCrossword));
         router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
         router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
