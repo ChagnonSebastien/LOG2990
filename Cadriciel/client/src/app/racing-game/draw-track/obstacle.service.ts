@@ -39,7 +39,7 @@ export class ObstacleService {
             list.push(this.newObstacle(type));
         /* falls through */
         case 0:
-            list.push();
+            list.push(this.newObstacle(type));
             break;
         default:
             while (list.length > 0) {
@@ -156,15 +156,45 @@ export class ObstacleService {
     }
 
     public randomizeAllPositions(type: ObstacleType) {
+        const amountBoosters = this.boosters.length;
+        const amountPotholes = this.potholes.length;
+        const amountPuddles = this.puddles.length;
 
+        this.removeAllObstacles();
+
+        for (let i = 0; i < amountBoosters; i++) {
+            this.addObstacle(ObstacleType.Booster);
+        }
+
+        for (let i = 0; i < amountPotholes; i++) {
+            this.addObstacle(ObstacleType.Pothole);
+        }
+
+        for (let i = 0; i < amountPuddles; i++) {
+            this.addObstacle(ObstacleType.Puddle);
+        }
     }
 
     public getObstacles(type: ObstacleType) {
+        switch (type) {
+            case ObstacleType.Booster:
+            return this.boosters;
 
+            case ObstacleType.Pothole:
+            return this.potholes;
+
+            case ObstacleType.Puddle:
+            return this.puddles;
+
+            default:
+            return [];
+        }
     }
 
     public removeAllObstacles() {
-
+        this.boosters = [];
+        this.potholes = [];
+        this.puddles = [];
     }
 
 }
