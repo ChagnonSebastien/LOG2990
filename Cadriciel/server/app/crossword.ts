@@ -86,10 +86,18 @@ export class CrosswordGenerator {
         if (this.indexesOutOfBounds(i, j)) {
             return false;
         }
-        if (horizontal && this.grid[i][j] === ' ') {
-            return this.addLetter(i, j, '-');
-        } else if (!horizontal && this.grid[i][j] === ' ') {
-            return this.addLetter(i, j, '|');
+        if (horizontal) {
+            if (this.grid[i][j] === ' ') {
+                return this.addLetter(i, j, '-');
+            } else if (this.grid[i][j] === '|') {
+                return this.addLetter(i, j, '+');
+            }
+        } else {
+            if (this.grid[i][j] === ' ') {
+                return this.addLetter(i, j, '|');
+            } else if (this.grid[i][j] === '-') {
+                return this.addLetter(i, j, '+');
+            }
         }
         return false;
     }

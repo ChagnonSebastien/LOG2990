@@ -238,9 +238,8 @@ describe('CrosswordGenerator', () => {
 
     describe('generateCrossword() { }', () => {
         it('should generate a crossword', () => {
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 1; i++) {
                 crossword.generateCrossword('intermediate');
-                console.log(crossword.words);
             }
         });
     });
