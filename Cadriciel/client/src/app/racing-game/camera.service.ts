@@ -27,6 +27,7 @@ export class CameraService {
         this.perspectiveCamera = this.setPerspectiveCamera(container);
         this.camera = this.setPerspectiveCamera(container);
         this.defaultCamerasPosition();
+        console.log('salut');
     }
 
     public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {

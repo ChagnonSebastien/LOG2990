@@ -1,16 +1,16 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
-import { RenderService } from '../home/cube/render.service';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener } from '@angular/core';
+import { RenderService } from './render.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-racing-game',
-    templateUrl: './racing-game.component.html',
-    styleUrls: ['./racing-game.component.css']
+    selector: 'app-cube-component',
+    templateUrl: './cube.component.html',
+    styleUrls: ['./cube.component.css']
 })
-export class RacingGameComponent implements AfterViewInit {
+
+export class CubeComponent implements AfterViewInit {
 
     constructor(private renderService: RenderService) {
-
     }
 
     private get container(): HTMLElement {
@@ -24,7 +24,7 @@ export class RacingGameComponent implements AfterViewInit {
     public rotationSpeedX = 0.005;
 
     @Input()
-    public rotationSpeedY = 0.005;
+    public rotationSpeedY = 0.01;
 
     @HostListener('window:resize', ['$event'])
     public onResize() {
@@ -34,5 +34,4 @@ export class RacingGameComponent implements AfterViewInit {
     public ngAfterViewInit() {
         this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
     }
-
 }
