@@ -2,10 +2,19 @@ import { CrosswordGenerator } from './crossword';
 
 export module CrosswordChecker {
     export function verify(crossword: CrosswordGenerator): boolean {
-        return true;
+        const words = Array.from(crossword.words);
+        if (words.length === 0) {
+            return true;
+        }
+        const parsedWords = getAllWords(crossword);
+        return words.map((word) => {
+            return parsedWords.has(word);
+        }).reduce((prev, cur) => {
+            return prev && cur;
+        });
     }
 
-    export function getWords(crossword: CrosswordGenerator, horizontal: boolean): Set<string> {
+    function getWords(crossword: CrosswordGenerator, horizontal: boolean): Set<string> {
         const separators = [' ', '#'];
         // Extracts words from grid by joining the squares, then splitting
         return new Set(crossword.grid.map((line, index) => {
@@ -19,7 +28,7 @@ export module CrosswordChecker {
         }));
     }
 
-    export function getAllWords(crossword: CrosswordGenerator): Set<string> {
+    function getAllWords(crossword: CrosswordGenerator): Set<string> {
         return new Set([...getWords(crossword, true), ...getWords(crossword, false)]);
     }
 }
