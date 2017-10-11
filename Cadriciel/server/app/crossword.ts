@@ -21,7 +21,7 @@ export class CrosswordGenerator {
         this.loadLexicon(lexiconPath);
     }
 
-    private reset() {
+    public reset() {
         this.words = new Set<string>();
         this.grid = this.newGrid(this.size, ' ');
         this.gridCounter = this.newGrid(this.size, 0);
