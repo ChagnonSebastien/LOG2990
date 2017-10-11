@@ -1,15 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { RenderService } from './render.service';
 
 @Component({
+    moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css']
 })
-export class RacingGameComponent implements OnInit {
+export class RacingGameComponent implements AfterViewInit {
 
-    constructor() { }
+    constructor(private renderService: RenderService) {
+    }
 
-    public ngOnInit() {
+    private get container(): HTMLElement {
+        return this.containerRef.nativeElement;
+    }
+
+    @ViewChild('container')
+    private containerRef: ElementRef;
+
+    @Input()
+    public rotationSpeedX = 0.005;
+
+    @Input()
+    public rotationSpeedY = 0.005;
+
+    @HostListener('window:resize', ['$event'])
+    public onResize() {
+        this.renderService.onResize();
+    }
+
+    public turnCamera (event: any): void {
+        this.renderService.changeView(event);
+        console.log('tourner camera');
+    }
+
+    public ngAfterViewInit() {
+        this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
     }
 
 }

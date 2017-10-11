@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { RacingGameComponent } from './racing-game.component';
+import { RenderService } from './render.service';
+import { CameraService } from './camera.service';
 
 @NgModule({
     imports: [
@@ -15,6 +17,6 @@ import { RacingGameComponent } from './racing-game.component';
     exports: [
         RacingGameComponent
     ],
-    providers: []
+    providers: [RenderService, CameraService]
 })
 export class RacingGameModule { }
