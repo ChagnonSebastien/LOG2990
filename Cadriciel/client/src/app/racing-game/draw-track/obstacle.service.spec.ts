@@ -32,4 +32,20 @@ describe('ObstacleService', () => {
         });
     });
 
+    describe('The \'randomDistance\' method', () => {
+        it('should return any number between 0 and 1 if the obstacle is not a booster', done => {
+            const segment = service.randomDistance(false);
+            expect(segment).toBeGreaterThanOrEqual(0);
+            expect(segment).toBeLessThanOrEqual(1);
+            done();
+        });
+
+        it('should return any number between 0.5 and 1 if the obstacle is a booster', done => {
+            const segment = service.randomDistance(true);
+            expect(segment).toBeGreaterThanOrEqual(0.5);
+            expect(segment).toBeLessThanOrEqual(1);
+            done();
+        });
+    });
+
 });

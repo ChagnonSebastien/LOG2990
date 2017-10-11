@@ -61,8 +61,13 @@ export class ObstacleService {
         return Math.floor(Math.random() * (this.track.length - 1)) + 1;
     }
 
-    public randomDistance(firstHalfOnly: boolean): number {
-        return Math.random() / (firstHalfOnly ? 2 : 1);
+    public randomDistance(obstacleIsABooster: boolean): number {
+        let distance = Math.random();
+        if (obstacleIsABooster) {
+            distance /= 2;
+            distance += 0.5;
+        }
+        return distance;
     }
 
     public randomOffset(): number {
