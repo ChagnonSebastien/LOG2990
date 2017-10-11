@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
+import { ObstacleService } from './obstacle.service';
+import { ObstacleType } from './obstacle';
 
 @Component({
     moduleId: module.id,
@@ -12,7 +14,7 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public saveEnabled = false;
 
-    constructor(private trackService: DrawTrackService) {
+    constructor(private trackService: DrawTrackService, private obstacleService: ObstacleService) {
     }
 
     private get container(): HTMLDivElement {
@@ -51,5 +53,13 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         this.trackService.initialise(this.container);
+    }
+
+    public addObstacle(type: number) {
+        this.obstacleService.addObstacle(type);
+    }
+
+    public randomizePosition(type: number) {
+        this.obstacleService.randomizeAllPositions(type);
     }
 }
