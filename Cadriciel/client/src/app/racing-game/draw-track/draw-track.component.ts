@@ -56,10 +56,10 @@ export class DrawTrackComponent implements AfterViewInit {
     }
 
     public addObstacle(type: number) {
-        this.obstacleService.addObstacle(type);
+        this.trackService.addObstacle(type);
     }
 
     public randomizePosition(type: number) {
-        this.obstacleService.randomizeAllPositions(type);
+        this.trackService.randomizeAllPositions(type);
     }
 }

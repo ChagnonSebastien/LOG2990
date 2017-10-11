@@ -156,22 +156,27 @@ export class ObstacleService {
     }
 
     public randomizeAllPositions(type: ObstacleType) {
-        const amountBoosters = this.boosters.length;
-        const amountPotholes = this.potholes.length;
-        const amountPuddles = this.puddles.length;
+        let amountToReAdd = 0;
 
-        this.removeAllObstacles();
+        switch (type) {
+            case ObstacleType.Booster:
+            amountToReAdd = this.boosters.length;
+            this.boosters = [];
+            break;
 
-        for (let i = 0; i < amountBoosters; i++) {
-            this.addObstacle(ObstacleType.Booster);
+            case ObstacleType.Pothole:
+            amountToReAdd = this.potholes.length;
+            this.potholes = [];
+            break;
+
+            case ObstacleType.Puddle:
+            amountToReAdd = this.puddles.length;
+            this.puddles = [];
+            break;
         }
 
-        for (let i = 0; i < amountPotholes; i++) {
-            this.addObstacle(ObstacleType.Pothole);
-        }
-
-        for (let i = 0; i < amountPuddles; i++) {
-            this.addObstacle(ObstacleType.Puddle);
+        for (let i = 0; i < amountToReAdd; i++) {
+            this.addObstacle(type);
         }
     }
 

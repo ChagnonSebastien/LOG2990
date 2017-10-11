@@ -123,6 +123,22 @@ export class DrawTrackService {
         return this.trackClosed;
     }
 
+    public addObstacle(typeNumber: number) {
+        if (!this.trackClosed) {
+            return;
+        }
+
+        this.obstacleService.addObstacle(typeNumber);
+    }
+
+    public randomizeAllPositions(typeNumber: number) {
+        if (!this.trackClosed) {
+            return;
+        }
+
+        this.obstacleService.randomizeAllPositions(typeNumber);
+    }
+
     public onResize() {
         this.renderService.onResize();
     }
