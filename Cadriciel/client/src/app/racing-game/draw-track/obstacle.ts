@@ -1,4 +1,4 @@
-enum ObstacleType {
+export enum ObstacleType {
     Pothole,
     Puddle,
     Booster,
