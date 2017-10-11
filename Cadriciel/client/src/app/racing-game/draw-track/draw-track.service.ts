@@ -46,9 +46,9 @@ export class DrawTrackService {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
             this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
             this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Booster));
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Pothole));
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Puddle));
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
         }
     }
 
@@ -103,9 +103,9 @@ export class DrawTrackService {
             this.renderService.openTrack(this.mousePosition);
             this.trackValidationService.openTrack(this.mousePosition);
             this.obstacleService.removeAllObstacles();
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Booster));
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Pothole));
-            this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(ObstacleType.Puddle));
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
             this.trackClosed = false;
             return;
         }
@@ -137,7 +137,7 @@ export class DrawTrackService {
         }
 
         this.obstacleService.addObstacle(type);
-        this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(type));
+        this.renderService.updateObstaclesPositions(type, this.obstacleService.getObstacles(type));
     }
 
     public randomizeAllPositions(type: number) {
@@ -146,7 +146,7 @@ export class DrawTrackService {
         }
 
         this.obstacleService.randomizeAllPositions(type);
-        this.renderService.updateObstaclesPositions(this.obstacleService.getObstacles(type));
+        this.renderService.updateObstaclesPositions(type, this.obstacleService.getObstacles(type));
     }
 
     public onResize() {

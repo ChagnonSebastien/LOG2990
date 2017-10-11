@@ -66,34 +66,31 @@ export class ObstacleService {
     }
 
     public randomOffset(): number {
-        return ((Math.random() * 2) - 1) * (3 / 4);
+        return ((Math.random() * 2) - 1) * (1 / 2);
     }
 
     private isTooCloseToAnyOtherObstacle(obstacle: Obstacle): boolean {
         let tooClose = false;
 
-        if (obstacle.type !== ObstacleType.Booster) {
-            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.boosters);
-        }
-
-        if (obstacle.type !== ObstacleType.Pothole) {
-            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.potholes);
-        }
-
-        if (obstacle.type !== ObstacleType.Puddle) {
-            tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.puddles);
-        }
+        tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.boosters);
+        tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.potholes);
+        tooClose = tooClose || this.isTooCloseToAnyOtherObstacleInList(obstacle, this.puddles);
 
         return tooClose;
     }
 
     private isTooCloseToAnyOtherObstacleInList(obstacle: Obstacle, obstacles: Obstacle[]): boolean {
         const service = this;
-        obstacles.forEach((toCompare) => {
-            if (service.isTooCloseOtherObstacle(obstacle, toCompare)) {
-                return true;
-            }
-        });
+        try {
+            obstacles.forEach((toCompare) => {
+                if (service.isTooCloseOtherObstacle(obstacle, toCompare)) {
+                    throw new Error();
+                }
+            });
+        } catch (e) {
+            console.log('damn son!');
+            return true;
+        }
         return false;
     }
 
@@ -115,6 +112,7 @@ export class ObstacleService {
         const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
         const distanceFromFirstIntersectionToObstacle2 = obstacle2.distance * segmentLength;
 
+        console.log(Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2));
         return Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2) < 10;
     }
 
