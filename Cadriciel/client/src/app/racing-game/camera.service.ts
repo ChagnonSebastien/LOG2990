@@ -25,7 +25,8 @@ export class CameraService {
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
         this.perspectiveCamera = this.setPerspectiveCamera(container);
-        this.camera = this.setPerspectiveCamera(container);
+        // this.camera = this.setPerspectiveCamera(container);
+        this.camera = this.setOrthographicCamera(container);
         this.defaultCamerasPosition();
         console.log('initialisation de la camera');
     }
@@ -37,7 +38,7 @@ export class CameraService {
             container.clientHeight / 2,
             - container.clientHeight / 2,
             0,
-            50
+            2000
         );
         return camera;
     }
