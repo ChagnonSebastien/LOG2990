@@ -60,6 +60,11 @@ export class RenderService {
         this.camera = this.cameraService.getCamera();
     }
 
+    public cameraFollowingObject(object: any) {
+        this.cameraService.cameraOnMoveWithObject(object);
+        this.camera = this.cameraService.getCamera();
+    }
+
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
