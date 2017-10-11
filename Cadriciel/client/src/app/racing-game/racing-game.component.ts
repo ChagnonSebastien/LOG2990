@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
-import { RenderService } from '../home/cube/render.service';
+import { RenderService } from './render.service';
 
 @Component({
     moduleId: module.id,
@@ -10,7 +10,6 @@ import { RenderService } from '../home/cube/render.service';
 export class RacingGameComponent implements AfterViewInit {
 
     constructor(private renderService: RenderService) {
-
     }
 
     private get container(): HTMLElement {
@@ -29,6 +28,11 @@ export class RacingGameComponent implements AfterViewInit {
     @HostListener('window:resize', ['$event'])
     public onResize() {
         this.renderService.onResize();
+    }
+
+    public turnCamera (event: any): void {
+        this.renderService.changeView(event);
+        console.log('tourner camera');
     }
 
     public ngAfterViewInit() {

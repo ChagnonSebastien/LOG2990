@@ -14,7 +14,7 @@ export class CameraService {
 
     private nearClippingPane = 1;
 
-    private farClippingPane = 1000;
+    private farClippingPane = 2000;
 
     private perspectiveCamera;
 
@@ -27,7 +27,7 @@ export class CameraService {
         this.perspectiveCamera = this.setPerspectiveCamera(container);
         this.camera = this.setPerspectiveCamera(container);
         this.defaultCamerasPosition();
-        console.log('salut');
+        console.log('initialisation de la camera');
     }
 
     public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
