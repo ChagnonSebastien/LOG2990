@@ -18,4 +18,8 @@ export module CrosswordChecker {
             return prev.concat(cur);
         }));
     }
+
+    export function getAllWords(crossword: CrosswordGenerator): Set<string> {
+        return new Set([...getWords(crossword, true), ...getWords(crossword, false)]);
+    }
 }
