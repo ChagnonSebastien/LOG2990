@@ -4,20 +4,13 @@ import * as request from 'request';
 export class LexiconReader {
 
     public readWords(file: string): string[] {
-        let content: string[];
-        content = fs.readFileSync(file, 'utf8').split('\r\n');
-        return content;
+        return fs.readFileSync(file, 'utf8').split('\r\n');
     }
 
     public readWordsOfLength(lexicon: string[], wordLength: number): string[] {
-        const wordsOfLength: string[] = [];
-
-        for (const word of lexicon) {
-            if (word.length == wordLength) {
-                wordsOfLength.push(word);
-            }
-        }
-        return wordsOfLength;
+        return lexicon.filter((word) => {
+            return wordLength === word.length;
+        });
     }
 
     public getWordsWithChar(lexicon: string[], character: string, position: number) {
