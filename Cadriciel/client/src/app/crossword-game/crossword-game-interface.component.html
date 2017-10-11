@@ -2,12 +2,12 @@
   <div id="conteneur"> 
  <app-crossword-game-information></app-crossword-game-information>
 <div id="wrapper"> 
-<tr *ngFor="let ligne of rawCrossword ; let i = index">
+<tr *ngFor="let ligne of this.crossword.rawCrossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >
               
               
             <input 
-                [ngClass]="{'filled': colonne == '0' || colonne == '#', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':checkWordWithIndex(i,j)}" 
+                [ngClass]="{'filled': colonne == ' ' || colonne == '#', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':checkWordWithIndex(i,j)}" 
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)" 

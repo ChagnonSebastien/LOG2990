@@ -1,14 +1,15 @@
 import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
 import {LexiconService} from './lexicon.service';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
+import {CrosswordService} from './crossword.service';
 @Component({
     selector: 'app-crossword-game-interface',
     templateUrl: './crossword-game-interface.component.html',
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-    public rawCrossword: [[string]];
-    public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
+    public crossword: {rawCrossword: [[string]], listOfWords: [string]} = {rawCrossword: [['']], listOfWords: ['']};
+    // public listOfWords: [string] = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
     public wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
@@ -20,20 +21,11 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * This function sets the raw crossword
     ************************************************************/
     public setRawCrossword(): void {
-        this.rawCrossword = [['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
-        ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
-        ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
-        ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
-        ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
-        ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
-        ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
-        ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
-        ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
-        ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']];
     }
 
-    public getDifficulty() {
+    public async getDifficulty(): Promise<string> {
         this.crosswordGameInfoService.getMode().then(mode => this.difficulty = mode);
+        return await this.difficulty;
 
     }
 
@@ -69,23 +61,23 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * the hint associated with the word.
     ************************************************************/
     public fillWordsIndexes(): void {
-        for (let k = 0; k < this.listOfWords.length; k++) {
+        for (let k = 0; k < this.crossword.listOfWords.length; k++) {
 
             // check for rows first
 
-            for (let p = 0; p < this.rawCrossword.length; p++) {
+            for (let p = 0; p < this.crossword.rawCrossword.length; p++) {
 
                 // get word indexes for a given row. Will return empty if not present in that row
 
                 let indexes: Index[] = this.findWordIndexesRow
-                    (this.listOfWords[k], this.rawCrossword[p], p);
+                    (this.crossword.listOfWords[k], this.crossword.rawCrossword[p], p);
 
                 if (indexes.length !== 0) {
                     this.wordsIndexes.push({
-                        word: this.listOfWords[k], indexes: indexes,
+                        word: this.crossword.listOfWords[k], indexes: indexes,
                         position: 'horizontal', hint: ''
                     });
-                    this.setDefinition(this.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
+                    this.setDefinition(this.crossword.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
                     break;
 
                 } else {
@@ -93,14 +85,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
                     // try in column of given index
 
                     indexes = this.findWordIndexesColumn
-                        (this.listOfWords[k], this.getColumn(p), p);
+                        (this.crossword.listOfWords[k], this.getColumn(p), p);
 
                     if (indexes.length !== 0) {
                         this.wordsIndexes.push({
-                            word: this.listOfWords[k], indexes: indexes,
+                            word: this.crossword.listOfWords[k], indexes: indexes,
                             position: 'vertical', hint: ''
                         });
-                        this.setDefinition(this.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
+                        this.setDefinition(this.crossword.listOfWords[k], this.difficulty, this.wordsIndexes.length - 1);
                         break;
                     }
 
@@ -174,8 +166,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
         const column: string[] = [];
 
-        for (let i = 0; i < this.rawCrossword[0].length; i++) {
-            column.push(this.rawCrossword[i][index]);
+        for (let i = 0; i < this.crossword.rawCrossword[0].length; i++) {
+            column.push(this.crossword.rawCrossword[i][index]);
         }
         return column;
     }
@@ -316,7 +308,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * it to the correct indexes lisr
     ***************************************************************/
     public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
-        if (this.rawCrossword[i][j].charCodeAt(0) === keyCode || this.rawCrossword[i][j].charCodeAt(0) - 32 === keyCode) {
+        if (this.crossword.rawCrossword[i][j].charCodeAt(0) === keyCode ||
+        this.crossword.rawCrossword[i][j].charCodeAt(0) - 32 === keyCode) {
             const index: Index = { i: i, j: j };
             this.correctIndexes.push(index);
         } else {
@@ -329,33 +322,50 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
     /***********************************************************
-    * Used to set the cheat mode variable to on
+    * Used to set the cheat mode variable to on.
     ***************************************************************/
     public activateCheatMode(): void {
         this.cheatMode = true;
 
     }
    /***********************************************************
-    * Used to set the cheat mode variable to off
+    * Used to set the cheat mode variable to off.
     ***************************************************************/
     public deactivateCheatMode(): void {
         this.cheatMode = false;
     }
     /**************************************************************
-    * Used to set the definiton of a word in the wordIndexes array
+    * Used to set the definiton of a word in the wordIndexes array.
     ***************************************************************/
     public setDefinition(word: string, difficulty: string, position: number) {
      this.lexiconService.getWordDefinition(word, difficulty).then(res => {
          this.wordsIndexes[position].hint = res;
         });
     }
-    constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService ) { }
 
-    public  ngOnInit() {
-        this.getDifficulty();
-        this.setRawCrossword();
-        this.fillWordsIndexes();
-        console.log(this.wordsIndexes);
+    /**************************************************************
+    * Used to get the crossword from the server by using the
+    * the crossword service.
+    ***************************************************************/
+    public async getCrossword(): Promise<{rawCrossword: [[string]], listOfWords: [string]}> {
+        await this.crosswordService.getCrossword('normal').then(res => {
+            this.crossword = {rawCrossword: res.crossword , listOfWords : res.listOfWords};
+            console.log(res.listOfWords);
+            console.log(res.crossword);
+           });
+           return await this.crossword;
+       }
+
+    constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
+                private crosswordService: CrosswordService ) { }
+
+    public ngOnInit() {
+        this.getDifficulty().then(res => {
+            this.getCrossword().then(response => {
+                this.fillWordsIndexes();
+                console.log(this.wordsIndexes);
+            });
+           });
     }
 
 }

@@ -7,6 +7,7 @@ import { CrosswordGameRoutingModule} from './crossword-game-routing.module';
 import { CrosswordGameInformationComponent } from './crossword-game-information/crossword-game-information.component';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import {LexiconService} from './lexicon.service';
+import {CrosswordService} from './crossword.service';
 @NgModule({
     imports: [
         CommonModule,
@@ -15,6 +16,6 @@ import {LexiconService} from './lexicon.service';
     ],
     declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent, CrosswordGameInformationComponent],
     exports: [CrosswordGameComponent, CrosswordGameInterfaceComponent],
-    providers: [CrosswordGameInfoService, LexiconService]
+    providers: [CrosswordGameInfoService, LexiconService, CrosswordService]
 })
 export class CrosswordGameModule { }
