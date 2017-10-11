@@ -29,10 +29,9 @@ describe('CrosswordChecker', () => {
 
     describe('getAllWords()', () => {
         it('should get all the words parsed from the crossword', () => {
+            crosswordGenerator.generateCrossword('easy');
             const words = Array.from(crosswordGenerator.words);
             const parsedWords = CrosswordChecker.getAllWords(crosswordGenerator);
-            console.log(parsedWords);
-            console.log(words);
             expect(words.map((word) => {
                 return parsedWords.has(word);
             }).reduce((prev, cur) => {

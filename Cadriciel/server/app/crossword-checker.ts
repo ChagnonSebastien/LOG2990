@@ -9,10 +9,10 @@ export module CrosswordChecker {
         const separators = [' ', '#'];
         // Extracts words from grid by joining the squares, then splitting
         return new Set(crossword.grid.map((line, index) => {
-            return crossword.patternForLine(index, true)
+            return crossword.patternForLine(index, horizontal)
                 .split(new RegExp(separators.join('|'), 'g'))
                 .filter((value) => {
-                    return value !== '';
+                    return value.length > 1;
                 });
         }).reduce((prev, cur) => {
             return prev.concat(cur);
