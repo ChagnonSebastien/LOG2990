@@ -8,7 +8,7 @@
     "lint": "tslint app/**/*.ts app/*.ts --force -t verbose",
     "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
-    "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts'",
+    "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts' 'app/**/crossword-checker.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
     "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
     "test-server-crosswords": "mocha -r ts-node/register app/**/serverCrosswords.spec.ts",

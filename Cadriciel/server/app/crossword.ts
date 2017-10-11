@@ -3,6 +3,20 @@ import { Lexicon } from './lexicon';
 
 const lexiconPath = './app/words.json';
 
+class Word {
+    public word: string;
+    public i: number;
+    public j: number;
+    public horizontal: boolean;
+
+    constructor(i: number, j: number, word: string, horizontal: boolean) {
+        this.i = i;
+        this.j = j;
+        this.word = word;
+        this.horizontal = horizontal;
+    }
+}
+
 export class CrosswordGenerator {
     public id: string;
     public difficulty: string;
@@ -13,6 +27,7 @@ export class CrosswordGenerator {
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
     public words: Set<string>;
+    public wordsWithIndex: Array<Word>;
 
     constructor(size: number) {
         this.size = size;
@@ -21,8 +36,9 @@ export class CrosswordGenerator {
         this.loadLexicon(lexiconPath);
     }
 
-    private reset() {
+    public reset() {
         this.words = new Set<string>();
+        this.wordsWithIndex = new Array<Word>();
         this.grid = this.newGrid(this.size, ' ');
         this.gridCounter = this.newGrid(this.size, 0);
     }
@@ -60,6 +76,7 @@ export class CrosswordGenerator {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        const wordToAdd: Word = new Word(i, j, word, horizontal);
         if (this.words.has(word)) {
             return false;
         }
@@ -79,6 +96,7 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
+        this.wordsWithIndex.push(wordToAdd);
         return true;
     }
 
