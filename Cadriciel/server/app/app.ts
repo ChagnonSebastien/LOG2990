@@ -115,11 +115,6 @@ export class Application {
 
         // crossword api path
         router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
-        // to delete
-        router.get('/crossword', crosswords.getCrossword.bind(crosswords.getCrossword));
-        router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
-        router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
-        router.get('/crosswords', crosswords.getCrossWords.bind(crosswords.getCrossWords));
 
         // use router middleware
         this.app.use('/api', router);

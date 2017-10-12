@@ -4,7 +4,7 @@ import { CrosswordChecker } from './crossword-checker';
 
 const lexiconPath = './app/words.json';
 
-class Word {
+export class Word {
     public word: string;
     public i: number;
     public j: number;

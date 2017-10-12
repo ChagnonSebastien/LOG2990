@@ -11,6 +11,7 @@ export class ServerCrosswords {
     private static instance: ServerCrosswords;
     public collection: string;
     private crosswordGenerator: CrosswordGenerator;
+    public mutatedGrid: CrosswordDB;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
     public hardCrosswords: Array<CrosswordDB> = [];
@@ -76,10 +77,12 @@ export class ServerCrosswords {
                     } else {
                         const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
                         const wordList = Array.from(this.crosswordGenerator.words);
+                        const wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
                         const newCrossWord = new crosswordSchema({
                             crossword: crosswordGenerated,
                             difficulty: level,
-                            listOfWords: wordList
+                            listOfWords: wordList,
+                            wordsWithIndex: wordsWithIndex
                         });
 
                         db.collection(this.collection).insert(newCrossWord);
@@ -174,7 +177,10 @@ export class ServerCrosswords {
                 });
             });
         }
+    }
 
+    public mutate(crossword: CrosswordDB) {
+        this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
     }
 
 
