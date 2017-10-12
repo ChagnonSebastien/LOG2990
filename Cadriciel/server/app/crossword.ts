@@ -228,13 +228,11 @@ export class CrosswordGenerator {
 
     public generateCrossword(difficulty: string): string[][] {
         this.reset();
-        while (this.words.size < 13) {
-            let foundWord = false;
+        let foundWord = true;
+        while (foundWord) {
+            foundWord = false;
             for (let i = 0; i < this.size; i++) {
                 foundWord = foundWord || this.addRandomWord(i, true) || this.addRandomWord(this.size - i - 1, false);
-            }
-            if (!foundWord) {
-                this.reset();
             }
         }
 
