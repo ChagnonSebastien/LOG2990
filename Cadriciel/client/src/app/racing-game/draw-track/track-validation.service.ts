@@ -76,7 +76,12 @@ export class TrackValidationService {
     }
 
     public checkSegmentLength(index: number) {
-        const line = this.getLine(index);
+        let line;
+        try {
+            line = this.getLine(index);
+        } catch (e) {
+            return;
+        }
         this.trackElements[index].segmentLength = this.distance(line.point1, line.point2);
     }
 
@@ -94,8 +99,14 @@ export class TrackValidationService {
                     return;
                 }
 
-                const line1 = service.getLine(index);
-                const line2 = service.getLine(i);
+                let line1;
+                let line2;
+                try {
+                    line1 = service.getLine(index);
+                    line2 = service.getLine(i);
+                } catch (e) {
+                    return;
+                }
                 const intersection = service.twoLineIntersection(this.getLineParameters(line1), this.getLineParameters(line2));
 
                 let clampDistances: number[] = [];
@@ -111,10 +122,13 @@ export class TrackValidationService {
     }
 
     public getLine(index) {
-        return {
-            point1: this.trackElements[index].intersection,
-            point2: this.trackElements[index + 1 === this.trackElements.length ? 0 : index + 1].intersection
-        };
+        const point1 = this.trackElements[index].intersection;
+        const point2 = this.trackElements[index + 1 === this.trackElements.length ? 0 : index + 1].intersection;
+        if (this.distance(point1, point2) === 0) {
+            throw new Error();
+        }
+
+        return {point1, point2};
     }
 
     public twoLineIntersection(line1, line2): { x: number, y: number } {
@@ -253,8 +267,15 @@ export class TrackValidationService {
             return;
         }
 
-        const line1 = this.getLine(index1);
-        const line2 = this.getLine(index2);
+        let line1;
+        let line2;
+        try {
+            line1 = this.getLine(index1);
+            line2 = this.getLine(index2);
+        } catch (e) {
+            return;
+        }
+
         const angle1 = this.getAngle(line1);
         const angle2 = this.getAngle(line2);
         const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
