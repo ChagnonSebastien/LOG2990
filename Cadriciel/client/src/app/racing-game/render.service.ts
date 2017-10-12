@@ -28,6 +28,7 @@ export class RenderService {
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
+        this.cube.position.z += 5;
     }
 
     private createCube() {
@@ -75,13 +76,13 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.cameraFollowingObject(this.cube);
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
+        this.cameraFollowingObject(this.cube);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }

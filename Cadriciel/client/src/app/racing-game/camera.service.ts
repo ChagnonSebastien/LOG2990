@@ -105,7 +105,7 @@ export class CameraService {
         this.perspectiveCamera.lookAt(object.position);
         this.perspectiveCamera.updateProjectionMatrix();
         this.setOrthographicCamera(object);
-        this.perspectiveCamera.lookAt(object.position);
+        this.orthographicCamera.lookAt(object.position);
         this.orthographicCamera.updateProjectionMatrix();
 
         if (this.camera.isOrthographicCamera) {
