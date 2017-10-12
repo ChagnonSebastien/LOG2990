@@ -53,8 +53,9 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const uncommonwords: string[] = await lexiconReader.getUncommonWords(words);
-            res.send(uncommonwords);
+            lexiconReader.getUncommonWords(words).then((uncommonWords) => {
+                res.send(uncommonWords);
+            });
         }
 
         public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -62,8 +63,9 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const commonwords: string[] = await lexiconReader.getCommonWords(words);
-            res.send(commonwords);
+            lexiconReader.getCommonWords(words).then((commonWords) => {
+                res.send(commonWords);
+            });
         }
 
         public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
