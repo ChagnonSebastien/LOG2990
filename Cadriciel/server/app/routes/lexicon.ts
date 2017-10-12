@@ -1,6 +1,5 @@
 import * as express from 'express';
 import { LexiconReader } from '../lexicon-reader';
-import * as async from 'async';
 
 module Route {
 
@@ -54,16 +53,8 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const randomWords = Array(40).fill(null).map((value) => {
-                const randomWord = words[Math.floor(Math.random() * words.length)];
-                return randomWord;
-            });
-            async.filter(randomWords, (word, callback) => {
-                lexiconReader.getWordFrequency(word).then((value) => {
-                    callback(null, value < 1);
-                });
-            }, (err, results) => {
-                res.send(results);
+            lexiconReader.getUncommonWords(words).then((uncommonWords) => {
+                res.send(uncommonWords);
             });
         }
 
@@ -72,16 +63,8 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const randomWords = Array(40).fill(null).map((value) => {
-                const randomWord = words[Math.floor(Math.random() * words.length)];
-                return randomWord;
-            });
-            async.filter(randomWords, (word, callback) => {
-                lexiconReader.getWordFrequency(word).then((value) => {
-                    callback(null, value >= 1);
-                });
-            }, (err, results) => {
-                res.send(results);
+            lexiconReader.getCommonWords(words).then((commonWords) => {
+                res.send(commonWords);
             });
         }
 

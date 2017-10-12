@@ -1,15 +1,7 @@
 import * as fs from 'fs';
 import * as request from 'request';
+import * as async from 'async';
 
-class Word {
-    public word: string;
-    public frequency: number;
-
-    constructor(word: string, frequency: number) {
-        this.word = word;
-        this.frequency = frequency;
-    }
-}
 export class LexiconReader {
 
     public readWords(file: string): string[] {
@@ -53,31 +45,38 @@ export class LexiconReader {
         return wordsWithChar;
     }
 
-    public async getUncommonWords(lexicon: string[]): Promise<string[]> {
-        const commonwords: string[] = [];
-
-        for (let i = 0; i < 40; i++) {
-            const randomIndex = Math.floor(Math.random() * lexicon.length);
-            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
-            if (frequency < 2) {
-                commonwords.push(lexicon[randomIndex]);
-            }
-        }
-
-        return commonwords;
+    public async getUncommonWords(lexicon: string[]): Promise<any> {
+        const randomWords = Array(40).fill(null).map((value) => {
+            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+            return randomWord;
+        });
+        return new Promise(
+            (resolve) => {
+                async.filter(randomWords, (word, callback) => {
+                    this.getWordFrequency(word).then((frequency) => {
+                        callback(null, frequency < 1);
+                    });
+                }, (err, results: string[]) => {
+                    resolve(results);
+                });
+            });
     }
 
-    public async getCommonWords(lexicon: string[]): Promise<string[]> {
-        const commonwords: string[] = [];
-
-        for (let i = 0; i < 40; i++) {
-            const randomIndex = Math.floor(Math.random() * lexicon.length);
-            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
-            if (frequency >= 2) {
-                commonwords.push(lexicon[randomIndex]);
-            }
-        }
-        return commonwords;
+    public async getCommonWords(lexicon: string[]): Promise<any> {
+        const randomWords = Array(40).fill(null).map((value) => {
+            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+            return randomWord;
+        });
+        return new Promise(
+            (resolve) => {
+                async.filter(randomWords, (word, callback) => {
+                    this.getWordFrequency(word).then((frequency) => {
+                        callback(null, frequency >= 1);
+                    });
+                }, (err, results: string[]) => {
+                    resolve(results);
+                });
+            });
     }
 
     public getWordFrequency(word: string): Promise<number> {
