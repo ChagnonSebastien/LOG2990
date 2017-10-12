@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { LexiconReader } from '../lexicon-reader';
+import * as async from 'async';
 
 module Route {
 
@@ -62,8 +63,17 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const commonwords: string[] = await lexiconReader.getCommonWords(words);
-            res.send(commonwords);
+            const randomWords = await Array(40).fill(null).map((value) => {
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                return randomWord;
+            });
+            await async.filter(randomWords, (word, callback) => {
+                lexiconReader.getWordFrequency(word).then((value) => {
+                    callback(null, value >= 2);
+                });
+            }, (err, results) => {
+                res.send(results);
+            });
         }
 
         public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {

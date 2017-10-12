@@ -68,12 +68,8 @@ export class LexiconReader {
     }
 
     public async getCommonWords(lexicon: string[]): Promise<string[]> {
-        return Array(40).fill(null).map((value) => {
-            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
-            return randomWord;
-        });
-        /*const commonwords: string[] = [];
-    
+        const commonwords: string[] = [];
+
         for (let i = 0; i < 40; i++) {
             const randomIndex = Math.floor(Math.random() * lexicon.length);
             const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
@@ -81,8 +77,7 @@ export class LexiconReader {
                 commonwords.push(lexicon[randomIndex]);
             }
         }
-    
-        return commonwords;*/
+        return commonwords;
     }
 
     public getWordFrequency(word: string): Promise<number> {
