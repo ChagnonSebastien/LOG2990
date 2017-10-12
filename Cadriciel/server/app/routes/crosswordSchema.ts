@@ -1,6 +1,5 @@
 // Import the mongoose module
 import * as mongoose from 'mongoose';
-import { Word } from '../crossword';
 
 // Set up mongoose connection
 var mongoDB = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
