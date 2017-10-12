@@ -54,8 +54,17 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const uncommonwords: string[] = await lexiconReader.getUncommonWords(words);
-            res.send(uncommonwords);
+            const randomWords = Array(40).fill(null).map((value) => {
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                return randomWord;
+            });
+            async.filter(randomWords, (word, callback) => {
+                lexiconReader.getWordFrequency(word).then((value) => {
+                    callback(null, value < 1);
+                });
+            }, (err, results) => {
+                res.send(results);
+            });
         }
 
         public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -63,13 +72,13 @@ module Route {
             const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
-            const randomWords = await Array(40).fill(null).map((value) => {
+            const randomWords = Array(40).fill(null).map((value) => {
                 const randomWord = words[Math.floor(Math.random() * words.length)];
                 return randomWord;
             });
-            await async.filter(randomWords, (word, callback) => {
+            async.filter(randomWords, (word, callback) => {
                 lexiconReader.getWordFrequency(word).then((value) => {
-                    callback(null, value >= 2);
+                    callback(null, value >= 1);
                 });
             }, (err, results) => {
                 res.send(results);
