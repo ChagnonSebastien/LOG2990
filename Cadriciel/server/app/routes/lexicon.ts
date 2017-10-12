@@ -1,6 +1,5 @@
 import * as express from 'express';
 import { LexiconReader } from '../lexicon-reader';
-import * as async from 'async';
 
 module Route {
 
