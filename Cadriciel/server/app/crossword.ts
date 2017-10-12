@@ -212,7 +212,7 @@ export class CrosswordGenerator {
 
     public addRandomWord(i: number, horizontal: boolean): boolean {
         const pattern = this.patternForLine(i, horizontal);
-        const wordsForPattern = this.lexicon.wordsForPattern(pattern);
+        const wordsForPattern = this.lexicon.allWordsForPattern(pattern);
         if (wordsForPattern.length > 0) {
             const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
             const insertIndex = this.bestInsertIndex(randomWord, pattern);
