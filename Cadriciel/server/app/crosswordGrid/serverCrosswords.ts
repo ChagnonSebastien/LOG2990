@@ -1,7 +1,7 @@
 import * as mongodb from 'mongodb';
 import { CrosswordDB } from './crosswordDB';
 import { CrosswordGenerator } from '../crossword';
-const CrossWord = require('../routes/crossWordSchema');
+const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
 const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
@@ -76,7 +76,7 @@ export class ServerCrosswords {
                     } else {
                         const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
                         const wordList = Array.from(this.crosswordGenerator.words);
-                        const newCrossWord = new CrossWord({
+                        const newCrossWord = new crosswordSchema({
                             crossword: crosswordGenerated,
                             difficulty: level,
                             listOfWords: wordList
