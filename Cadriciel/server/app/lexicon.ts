@@ -30,6 +30,15 @@ export class Lexicon {
             .concat(this.wordsOfLength(length, false));
     }
 
+    public wordsOfLengthUpTo(length: number, common: boolean): Array<string> {
+        return new Array(length - 2).fill(null)
+        .map((value, index) => {
+            return this.wordsOfLength(index + 3, common);
+        }).reduce((previous, current) => {
+            return previous.concat(current);
+        });
+    }
+
     public allWordsOfLengthUpTo(length: number): Array<string> {
         return new Array(length - 2).fill(null)
             .map((value, index) => {
