@@ -119,18 +119,6 @@ describe('CrosswordGenerator', () => {
         });
     });
 
-    describe('addSpacing(i: number, j: number, horizontal: boolean): boolean { }', () => {
-        it('should add spacing horizontally with -', () => {
-            expect(crossword.addSpacing(0, 0, true)).to.be.true;
-            expect(crossword.grid[0][0]).to.equal('-');
-        });
-
-        it('should add spacing vertically with |', () => {
-            expect(crossword.addSpacing(0, 0, false)).to.be.true;
-            expect(crossword.grid[0][0]).to.equal('|');
-        });
-    });
-
     describe('addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean { }', () => {
         it('should add a black square after the word', () => {
             expect(crossword.addBlackSquares(0, 0, 'hello', true)).to.be.true;
@@ -238,10 +226,11 @@ describe('CrosswordGenerator', () => {
 
     describe('generateCrossword() { }', () => {
         it('should generate a crossword', () => {
-            for (let i = 0; i < 1; i++) {
-                crossword.generateCrossword('intermediate');
-            }
-        });
+            crossword.generateCrossword('normal');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(12);
+        }).timeout(15000);
     });
 
     describe('saveState() { }', () => {

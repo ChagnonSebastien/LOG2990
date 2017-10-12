@@ -1,5 +1,6 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
+import { CrosswordChecker } from './crossword-checker';
 
 const lexiconPath = './app/words.json';
 
@@ -27,6 +28,7 @@ export class CrosswordGenerator {
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
     public words: Set<string>;
+    public previousWords: Set<string>;
     public wordsWithIndex: Array<Word>;
 
     constructor(size: number) {
@@ -102,28 +104,12 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
-        this.wordsWithIndex.push(wordToAdd);
-        return true;
-    }
-
-    public addSpacing(i: number, j: number, horizontal: boolean): boolean {
-        if (this.indexesOutOfBounds(i, j)) {
+        if (CrosswordChecker.verify(this) === false) {
+            this.rollback();
             return false;
         }
-        if (horizontal) {
-            if (this.grid[i][j] === ' ') {
-                return this.addLetter(i, j, '-');
-            } else if (this.grid[i][j] === '|') {
-                return this.addLetter(i, j, '+');
-            }
-        } else {
-            if (this.grid[i][j] === ' ') {
-                return this.addLetter(i, j, '|');
-            } else if (this.grid[i][j] === '-') {
-                return this.addLetter(i, j, '+');
-            }
-        }
-        return false;
+        this.wordsWithIndex.push(wordToAdd);
+        return true;
     }
 
     public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
@@ -185,6 +171,9 @@ export class CrosswordGenerator {
         }
 
         this.words.delete(word);
+        this.wordsWithIndex = this.wordsWithIndex.filter((value) => {
+            return value.word !== word;
+        });
         return true;
     }
 
@@ -239,10 +228,16 @@ export class CrosswordGenerator {
 
     public generateCrossword(difficulty: string): string[][] {
         this.reset();
-        for (let i = 0; i < this.size; i++) {
-            this.addRandomWord(i, true);
-            this.addRandomWord(this.size - i - 1, false);
+        while (this.words.size < 13) {
+            let foundWord = false;
+            for (let i = 0; i < this.size; i++) {
+                foundWord = foundWord || this.addRandomWord(i, true) || this.addRandomWord(this.size - i - 1, false);
+            }
+            if (!foundWord) {
+                this.reset();
+            }
         }
+
         return this.grid;
     }
 
@@ -255,12 +250,26 @@ export class CrosswordGenerator {
     public saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
         this.previousGridCounter = Utilities.deepCopy(this.gridCounter);
+        this.previousWords = new Set(Array.from(this.words));
         return true;
     }
 
     public rollback(): boolean {
         this.grid = Utilities.deepCopy(this.previousGridState);
         this.gridCounter = Utilities.deepCopy(this.previousGridCounter);
+        this.words = new Set(Array.from(this.previousWords));
         return true;
+    }
+
+    public printGrid() {
+        console.log('-'.repeat(4 * this.size + 1));
+        this.grid.forEach((line) => {
+            process.stdout.write('|');
+            line.forEach((letter) => {
+                process.stdout.write(' ' + letter + ' |');
+            });
+            process.stdout.write('\n');
+            console.log('-'.repeat(4 * this.size + 1));
+        });
     }
 }
