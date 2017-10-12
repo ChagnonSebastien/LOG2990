@@ -54,7 +54,7 @@ export class LexiconReader {
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {
                     this.getWordFrequency(word).then((frequency) => {
-                        callback(null, frequency >= 1);
+                        callback(null, frequency < 1);
                     });
                 }, (err, results: string[]) => {
                     resolve(results);
@@ -71,7 +71,7 @@ export class LexiconReader {
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {
                     this.getWordFrequency(word).then((frequency) => {
-                        callback(null, frequency < 1);
+                        callback(null, frequency >= 1);
                     });
                 }, (err, results: string[]) => {
                     resolve(results);
