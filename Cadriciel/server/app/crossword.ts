@@ -1,7 +1,22 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
+import { CrosswordChecker } from './crossword-checker';
 
 const lexiconPath = './app/words.json';
+
+export class Word {
+    public word: string;
+    public i: number;
+    public j: number;
+    public horizontal: boolean;
+
+    constructor(i: number, j: number, word: string, horizontal: boolean) {
+        this.i = i;
+        this.j = j;
+        this.word = word;
+        this.horizontal = horizontal;
+    }
+}
 
 export class CrosswordGenerator {
     public id: string;
@@ -13,6 +28,8 @@ export class CrosswordGenerator {
     public previousGridCounter: number[][];
     public lexicon: Lexicon;
     public words: Set<string>;
+    public previousWords: Set<string>;
+    public wordsWithIndex: Array<Word>;
 
     constructor(size: number) {
         this.size = size;
@@ -21,10 +38,17 @@ export class CrosswordGenerator {
         this.loadLexicon(lexiconPath);
     }
 
-    private reset() {
+    public reset() {
         this.words = new Set<string>();
+        this.wordsWithIndex = new Array<Word>();
         this.grid = this.newGrid(this.size, ' ');
         this.gridCounter = this.newGrid(this.size, 0);
+    }
+
+    public setGrid(words: Array<Word>) {
+        words.map((word) => {
+            return this.addWord(word.i, word.j, word.word, word.horizontal);
+        });
     }
 
     public newGrid(size: number, fill: any): Array<any> {
@@ -60,6 +84,7 @@ export class CrosswordGenerator {
     }
 
     public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+        const wordToAdd: Word = new Word(i, j, word, horizontal);
         if (this.words.has(word)) {
             return false;
         }
@@ -79,27 +104,12 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
-        return true;
-    }
-
-    public addSpacing(i: number, j: number, horizontal: boolean): boolean {
-        if (this.indexesOutOfBounds(i, j)) {
+        if (CrosswordChecker.verify(this) === false) {
+            this.rollback();
             return false;
         }
-        if (horizontal) {
-            if (this.grid[i][j] === ' ') {
-                return this.addLetter(i, j, '-');
-            } else if (this.grid[i][j] === '|') {
-                return this.addLetter(i, j, '+');
-            }
-        } else {
-            if (this.grid[i][j] === ' ') {
-                return this.addLetter(i, j, '|');
-            } else if (this.grid[i][j] === '-') {
-                return this.addLetter(i, j, '+');
-            }
-        }
-        return false;
+        this.wordsWithIndex.push(wordToAdd);
+        return true;
     }
 
     public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
@@ -161,6 +171,9 @@ export class CrosswordGenerator {
         }
 
         this.words.delete(word);
+        this.wordsWithIndex = this.wordsWithIndex.filter((value) => {
+            return value.word !== word;
+        });
         return true;
     }
 
@@ -215,22 +228,46 @@ export class CrosswordGenerator {
 
     public generateCrossword(difficulty: string): string[][] {
         this.reset();
-        for (let i = 0; i < this.size; i++) {
-            this.addRandomWord(i, true);
-            this.addRandomWord(this.size - i - 1, false);
+        let foundWord = true;
+        while (foundWord) {
+            foundWord = false;
+            for (let i = 0; i < this.size; i++) {
+                foundWord = foundWord || this.addRandomWord(i, true) || this.addRandomWord(this.size - i - 1, false);
+            }
         }
+
         return this.grid;
+    }
+
+    public mutate(difficulty: string, words: Array<Word>): string[][] {
+        this.reset();
+        this.setGrid(words);
+        return this.generateCrossword(difficulty);
     }
 
     public saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
         this.previousGridCounter = Utilities.deepCopy(this.gridCounter);
+        this.previousWords = new Set(Array.from(this.words));
         return true;
     }
 
     public rollback(): boolean {
         this.grid = Utilities.deepCopy(this.previousGridState);
         this.gridCounter = Utilities.deepCopy(this.previousGridCounter);
+        this.words = new Set(Array.from(this.previousWords));
         return true;
+    }
+
+    public printGrid() {
+        console.log('-'.repeat(4 * this.size + 1));
+        this.grid.forEach((line) => {
+            process.stdout.write('|');
+            line.forEach((letter) => {
+                process.stdout.write(' ' + letter + ' |');
+            });
+            process.stdout.write('\n');
+            console.log('-'.repeat(4 * this.size + 1));
+        });
     }
 }

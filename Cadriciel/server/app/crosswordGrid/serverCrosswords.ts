@@ -1,7 +1,7 @@
 import * as mongodb from 'mongodb';
 import { CrosswordDB } from './crosswordDB';
 import { CrosswordGenerator } from '../crossword';
-const CrossWord = require('../routes/crossWordSchema');
+const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
 const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
@@ -11,6 +11,7 @@ export class ServerCrosswords {
     private static instance: ServerCrosswords;
     public collection: string;
     private crosswordGenerator: CrosswordGenerator;
+    public mutatedGrid: CrosswordDB;
     public easyCrosswords: Array<CrosswordDB> = [];
     public normalCrosswords: Array<CrosswordDB> = [];
     public hardCrosswords: Array<CrosswordDB> = [];
@@ -76,10 +77,12 @@ export class ServerCrosswords {
                     } else {
                         const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
                         const wordList = Array.from(this.crosswordGenerator.words);
-                        const newCrossWord = new CrossWord({
+                        const wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
+                        const newCrossWord = new crosswordSchema({
                             crossword: crosswordGenerated,
                             difficulty: level,
-                            listOfWords: wordList
+                            listOfWords: wordList,
+                            wordsWithIndex: wordsWithIndex
                         });
 
                         db.collection(this.collection).insert(newCrossWord);
@@ -94,16 +97,10 @@ export class ServerCrosswords {
         for (const element of crosswords) {
             if (element.difficulty === 'hard' && this.hardCrosswords.length < 5) {
                 this.hardCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('hard');
             } else if (element.difficulty === 'normal' && this.normalCrosswords.length < 5) {
                 this.normalCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('normal');
             } else if (element.difficulty === 'easy' && this.easyCrosswords.length < 5) {
                 this.easyCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('easy');
             }
         }
 
@@ -180,7 +177,10 @@ export class ServerCrosswords {
                 });
             });
         }
+    }
 
+    public mutate(crossword: CrosswordDB) {
+        this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
     }
 
 
