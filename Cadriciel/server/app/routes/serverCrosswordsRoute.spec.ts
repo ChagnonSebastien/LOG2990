@@ -15,7 +15,7 @@ describe('Server Crosswords Route', () => {
                 assert(crossword.difficulty === 'easy');
                 done();
         });
-    });
+    }).timeout(3000);
 
     it('Returns a normal crossword', (done) => {
         chai.request(apiUrl)
@@ -25,7 +25,7 @@ describe('Server Crosswords Route', () => {
                 assert(crossword.difficulty === 'normal');
                 done();
         });
-    });
+    }).timeout(3000);
 
     it('Returns a normal crossword', (done) => {
         chai.request(apiUrl)
@@ -35,6 +35,6 @@ describe('Server Crosswords Route', () => {
                 assert(crossword.difficulty === 'hard');
                 done();
         });
-    });
+    }).timeout(3000);
 
 });

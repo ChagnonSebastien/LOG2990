@@ -32,21 +32,21 @@ describe('Server Crosswords', () => {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should generate a new normal crossword', (done) => {
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should generate a new hard crossword', (done) => {
         serverCrosswords.generateCrossword('hard').then(function (data) {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should save on server according to difficulties', (done) => {
         serverCrosswords.getCrossWords().then(function (data) {

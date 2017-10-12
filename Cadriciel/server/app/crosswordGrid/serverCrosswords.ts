@@ -94,16 +94,10 @@ export class ServerCrosswords {
         for (const element of crosswords) {
             if (element.difficulty === 'hard' && this.hardCrosswords.length < 5) {
                 this.hardCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('hard');
             } else if (element.difficulty === 'normal' && this.normalCrosswords.length < 5) {
                 this.normalCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('normal');
             } else if (element.difficulty === 'easy' && this.easyCrosswords.length < 5) {
                 this.easyCrosswords.push(element);
-                await this.deleteCrossword(element);
-                await this.generateCrossword('easy');
             }
         }
 
