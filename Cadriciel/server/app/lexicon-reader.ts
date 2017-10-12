@@ -2,15 +2,6 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as async from 'async';
 
-class Word {
-    public word: string;
-    public frequency: number;
-
-    constructor(word: string, frequency: number) {
-        this.word = word;
-        this.frequency = frequency;
-    }
-}
 export class LexiconReader {
 
     public readWords(file: string): string[] {
