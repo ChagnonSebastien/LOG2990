@@ -1,6 +1,15 @@
 import * as fs from 'fs';
 import * as request from 'request';
 
+class Word {
+    public word: string;
+    public frequency: number;
+
+    constructor(word: string, frequency: number) {
+        this.word = word;
+        this.frequency = frequency;
+    }
+}
 export class LexiconReader {
 
     public readWords(file: string): string[] {
@@ -68,14 +77,13 @@ export class LexiconReader {
                 commonwords.push(lexicon[randomIndex]);
             }
         }
-
         return commonwords;
     }
 
     public getWordFrequency(word: string): Promise<number> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'frequency?useCanonical=false&startYear=2012&endYear=' +
-                        '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
 
         return new Promise<number>(resolve => {
             request(`${uri}/${word}/${options}`, (error, response, body) => {
@@ -88,7 +96,7 @@ export class LexiconReader {
     public getWordDefinitions(word: string): Promise<string[]> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'definitions?limit=200&includeRelated=true&useCanonical=false' +
-                        '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
         let definitions: string[] = [];
 
         return new Promise<string[]>(resolve => {
