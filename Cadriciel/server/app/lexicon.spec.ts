@@ -53,16 +53,16 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('wordsWithLengthUpTo(length: number): Array<string> { }', () => {
+    describe('allWordsOfLengthUpTo(length: number): Array<string> { }', () => {
         it('should get all the words of length 3 and only 3', () => {
-            const words = lexicon.wordsWithLengthUpTo(3);
+            const words = lexicon.allWordsOfLengthUpTo(3);
             const lengths = Array.from(new Set(words.map(value => value.length)));
             expect(lengths[0]).to.equal(3);
             expect(lengths.length).to.equal(1);
         });
 
         it('should get all the words of same length and shorter', () => {
-            const words = lexicon.wordsWithLengthUpTo(6);
+            const words = lexicon.allWordsOfLengthUpTo(6);
             const maxLength = words.map(value => value.length)
                 .reduce((previous, current) => {
                     return previous > current ? previous : current;

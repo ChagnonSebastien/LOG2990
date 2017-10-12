@@ -30,7 +30,7 @@ export class Lexicon {
             .concat(this.wordsOfLength(length, false));
     }
 
-    public wordsWithLengthUpTo(length: number): Array<string> {
+    public allWordsOfLengthUpTo(length: number): Array<string> {
         return new Array(length - 2).fill(null)
             .map((value, index) => {
                 return this.allWordsOfLength(index + 3);
@@ -58,7 +58,7 @@ export class Lexicon {
     public allWordsForPattern(pattern: string) {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
-            return this.wordsWithLengthUpTo(pattern.length);
+            return this.allWordsOfLengthUpTo(pattern.length);
         } else {
             return this.wordsForNonEmptyPattern(pattern);
         }
