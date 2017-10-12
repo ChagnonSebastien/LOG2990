@@ -100,9 +100,9 @@ export class DrawTrackService {
 
         if (this.trackClosed) {
             this.intersections.push(this.mousePosition);
-            this.renderService.openTrack(this.mousePosition);
             this.trackValidationService.openTrack(this.mousePosition);
             this.obstacleService.removeAllObstacles();
+            this.renderService.openTrack(this.mousePosition);
             this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
             this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
             this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
@@ -111,7 +111,7 @@ export class DrawTrackService {
         }
 
         this.intersections.splice(this.intersections.length - 2, 1);
-        this.trackValidationService.removeIntersection();
+        this.trackValidationService.removeIntersection(this.mousePosition);
         this.renderService.removeIntersection();
     }
 

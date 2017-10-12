@@ -167,6 +167,8 @@ export class RenderService {
         } else {
             this.updateSegmentPosition(this.segments.length - 2);
         }
+
+        this.updateSegmentsValidity();
     }
 
     public openTrack(position: THREE.Vector2) {
@@ -174,6 +176,7 @@ export class RenderService {
         this.intersections.push(this.newIntersection(position));
         this.segments.push(this.newSegment());
         this.updateSegmentPosition(this.segments.length - 2);
+        this.updateSegmentsValidity();
     }
 
     public closeTrack() {
