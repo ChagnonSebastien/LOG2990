@@ -1,3 +1,5 @@
+import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './obstacle';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -11,6 +13,8 @@ export class RenderService {
 
     private trackValidationService: TrackValidationService;
 
+    private obstacleService: ObstacleService;
+
     private renderer: THREE.WebGLRenderer;
 
     private camera: THREE.OrthographicCamera;
@@ -23,11 +27,18 @@ export class RenderService {
 
     private segments: THREE.Mesh[] = [];
 
+    private potholes: THREE.Mesh[] = this.newObstacles(0x000000);
+
+    private puddles: THREE.Mesh[] = this.newObstacles(0x0051a8);
+
+    private boosters: THREE.Mesh[] = this.newObstacles(0xffbb00);
+
     public trackClosed = false;
 
-    public initialise(container: HTMLElement, trackValidationService: TrackValidationService) {
+    public initialise(container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService) {
         this.container = container;
         this.trackValidationService = trackValidationService;
+        this.obstacleService = obstacleService;
         this.createScene();
         this.startRenderingLoop();
     }
@@ -78,6 +89,14 @@ export class RenderService {
         const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
         return segment;
+    }
+
+    private newObstacles(color: number): THREE.Mesh[] {
+        const geometry = new THREE.CircleGeometry(5, 16);
+        const material = new THREE.MeshBasicMaterial({ color });
+        const point = new THREE.Mesh(geometry, material);
+        point.position.setZ(1);
+        return [point, point.clone(), point.clone(), point.clone(), point.clone()];
     }
 
     public updateIntersectionPosition(index: number, position: THREE.Vector2) {
@@ -161,6 +180,67 @@ export class RenderService {
         this.trackClosed = true;
         this.scene.remove(this.intersections.pop());
         this.segments.pop();
+    }
+
+    public updateObstaclesPositions(type: ObstacleType, obstacles: Obstacle[]) {
+        switch (type) {
+            case ObstacleType.Booster:
+            this.updateObstaclesPositionsInList(obstacles, this.boosters);
+            break;
+
+            case ObstacleType.Pothole:
+            this.updateObstaclesPositionsInList(obstacles, this.potholes);
+            break;
+
+            case ObstacleType.Puddle:
+            this.updateObstaclesPositionsInList(obstacles, this.puddles);
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    private updateObstaclesPositionsInList(obstacles: Obstacle[], meshList: THREE.Mesh[]) {
+        meshList.forEach((mesh, index) => {
+            if (obstacles.length <= index) {
+                this.scene.remove(mesh);
+            } else {
+                const newPosition = this.calculateObstaclePosition(obstacles[index]);
+                mesh.position.setX(newPosition.x);
+                mesh.position.setY(newPosition.y);
+                this.scene.add(mesh);
+            }
+        });
+    }
+
+    private calculateObstaclePosition(obstacle: Obstacle): THREE.Vector2 {
+        const point1 = this.intersections[obstacle.intersection].position;
+        const point2 = this.intersections[obstacle.intersection + 1 === this.intersections.length ? 0 : obstacle.intersection + 1].position;
+
+        const positionWithoutOffset = this.getPositionWithoutOffset(point1, point2, obstacle.distance);
+        const segmentAngle = this.getAngle(point1, point2);
+        const offsetAngle = this.getOffsetAngle(segmentAngle, obstacle.offset);
+
+        return new THREE.Vector2(
+            positionWithoutOffset.x + (10 * Math.abs(obstacle.offset) * Math.cos(offsetAngle)),
+            positionWithoutOffset.y + (10 * Math.abs(obstacle.offset) * Math.sin(offsetAngle))
+        );
+    }
+
+    public getPositionWithoutOffset(point1: THREE.Vector3, point2: THREE.Vector3, distance: number): THREE.Vector2 {
+        const x = ((point2.x - point1.x) * distance) + point1.x;
+        const y = ((point2.y - point1.y) * distance) + point1.y;
+        return new THREE.Vector2(x, y);
+    }
+
+    public getAngle(point1: THREE.Vector3, point2: THREE.Vector3): number {
+        const rawAngle = Math.atan((point2.y - point1.y) / (point2.x - point1.x));
+        return (point2.x - point1.x >= 0) ? rawAngle : rawAngle + Math.PI;
+    }
+
+    public getOffsetAngle(angle: number, offset: number): number {
+        return angle + (Math.PI / 2 * (offset > 0 ? 1 : -1));
     }
 
     public onResize() {

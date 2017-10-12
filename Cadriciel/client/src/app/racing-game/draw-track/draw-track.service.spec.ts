@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
@@ -6,7 +7,7 @@ import * as THREE from 'three';
 describe('test drawTrackService', function () {
     let drawTrackService: DrawTrackService;
     beforeEach(() => {
-        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService());
+        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService(), new ObstacleService());
     });
 
     it('construction test', done => {

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener } from '@angular/core';
-import { RenderService } from './render.service';
+import { RenderService } from '../../racing-game/render.service';
 
 @Component({
     moduleId: module.id,

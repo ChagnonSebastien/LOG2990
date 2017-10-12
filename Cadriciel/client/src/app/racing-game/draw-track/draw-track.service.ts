@@ -1,3 +1,5 @@
+import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
@@ -18,11 +20,16 @@ export class DrawTrackService {
 
     private currentlyDraggedIntersection = -1;
 
-    constructor(public renderService: RenderService, public trackValidationService: TrackValidationService) { }
+    constructor(
+        public renderService: RenderService,
+        public trackValidationService: TrackValidationService,
+        public obstacleService: ObstacleService
+    ) { }
 
     public initialise(container: HTMLElement) {
         this.container = container;
-        this.renderService.initialise(container, this.trackValidationService);
+        this.renderService.initialise(container, this.trackValidationService, this.obstacleService);
+        this.obstacleService.initialize(this.intersections);
     }
 
     public updateMousePosition(clientX: number, clientY: number) {
@@ -39,6 +46,9 @@ export class DrawTrackService {
             this.intersections[this.currentlyDraggedIntersection] = this.mousePosition.clone();
             this.trackValidationService.updatePoint(this.currentlyDraggedIntersection, this.mousePosition);
             this.renderService.updateIntersectionPosition(this.currentlyDraggedIntersection, this.mousePosition);
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
         }
     }
 
@@ -92,6 +102,10 @@ export class DrawTrackService {
             this.intersections.push(this.mousePosition);
             this.renderService.openTrack(this.mousePosition);
             this.trackValidationService.openTrack(this.mousePosition);
+            this.obstacleService.removeAllObstacles();
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
             this.trackClosed = false;
             return;
         }
@@ -115,6 +129,24 @@ export class DrawTrackService {
 
     public isFinished() {
         return this.trackClosed;
+    }
+
+    public addObstacle(type: number) {
+        if (!this.trackClosed) {
+            return;
+        }
+
+        this.obstacleService.addObstacle(type);
+        this.renderService.updateObstaclesPositions(type, this.obstacleService.getObstacles(type));
+    }
+
+    public randomizeAllPositions(type: number) {
+        if (!this.trackClosed) {
+            return;
+        }
+
+        this.obstacleService.randomizeAllPositions(type);
+        this.renderService.updateObstaclesPositions(type, this.obstacleService.getObstacles(type));
     }
 
     public onResize() {

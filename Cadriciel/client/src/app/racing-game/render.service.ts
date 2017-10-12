@@ -31,7 +31,7 @@ export class RenderService {
     }
 
     private createCube() {
-        const geometry = new THREE.BoxGeometry(200, 200, 200);
+        const geometry = new THREE.BoxGeometry(20, 20, 20);
 
         for (let i = 0; i < geometry.faces.length; i += 2) {
             const hex = Math.random() * 0xffffff;
@@ -42,6 +42,7 @@ export class RenderService {
         const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
         this.cube = new THREE.Mesh(geometry, material);
         this.scene.add(this.cube);
+        console.log('cube ajouté');
     }
 
     private createScene() {
@@ -57,15 +58,24 @@ export class RenderService {
 
     public changeView (event: any): void {
         this.cameraService.selectCamera(event);
+        this.updateCamera();
+    }
+
+    public updateCamera(): void {
         this.camera = this.cameraService.getCamera();
+    }
+
+    public cameraFollowingObject(object: any) {
+        this.cameraService.cameraOnMoveWithObject(object);
+        this.updateCamera();
     }
 
     private startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-
         this.container.appendChild(this.renderer.domElement);
+        this.cameraFollowingObject(this.cube);
         this.render();
     }
 
@@ -80,14 +90,12 @@ export class RenderService {
         this.stats = new Stats();
         this.stats.dom.style.position = 'absolute';
         this.stats.dom.style.top = '64px';
-
         this.container.appendChild(this.stats.dom);
     }
 
     public onResize() {
         this.camera.aspect = this.getAspectRatio();
         this.camera.updateProjectionMatrix();
-
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
