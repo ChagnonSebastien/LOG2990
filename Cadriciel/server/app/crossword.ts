@@ -43,7 +43,7 @@ export class CrosswordGenerator {
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
-    public setGrid(grid: string[][], words: Array<Word>) {
+    public setGrid(words: Array<Word>) {
         words.map((word) => {
             return this.addWord(word.i, word.j, word.word, word.horizontal);
         });
@@ -246,9 +246,9 @@ export class CrosswordGenerator {
         return this.grid;
     }
 
-    public mutate(difficulty: string, grid: string[][], words: Array<Word>): string[][] {
+    public mutate(difficulty: string, words: Array<Word>): string[][] {
         this.reset();
-        this.setGrid(grid, words);
+        this.setGrid(words);
         return this.generateCrossword(difficulty);
     }
 
