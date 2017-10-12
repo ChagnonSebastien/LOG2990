@@ -102,7 +102,6 @@ describe('Lexicon', () => {
             .end((err: any, res: any) => {
                 const content: string[] = res.body;
                 assert(content.length > 0);
-                console.log(content);
                 done();
             });
     }).timeout(15000);
@@ -113,7 +112,6 @@ describe('Lexicon', () => {
             .end((err: any, res: any) => {
                 const content: string[] = res.body;
                 assert(content.length > 0);
-                console.log(content);
                 done();
             });
     }).timeout(15000);
