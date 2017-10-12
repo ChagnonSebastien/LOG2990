@@ -88,7 +88,6 @@ export class ObstacleService {
                 }
             });
         } catch (e) {
-            console.log('damn son!');
             return true;
         }
         return false;
@@ -112,7 +111,6 @@ export class ObstacleService {
         const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
         const distanceFromFirstIntersectionToObstacle2 = obstacle2.distance * segmentLength;
 
-        console.log(Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2));
         return Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2) < 10;
     }
 

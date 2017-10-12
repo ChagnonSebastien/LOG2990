@@ -32,6 +32,7 @@ export class TrackValidationService {
     public openTrack(position: THREE.Vector2) {
         this.trackClosed = false;
         this.addIntersection(position);
+        this.updatePoint(this.trackElements.length - 1, position);
     }
 
     public updatePoint(index: number, intersection: THREE.Vector2) {
@@ -42,27 +43,30 @@ export class TrackValidationService {
         this.checkSegmentIntersections(index);
         this.checkSegmentIntersections(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
 
-        if (this.trackElements.length > 2) {
-            this.checkPointAngle(
-                index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
-                (index + this.trackElements.length - 2) % this.trackElements.length
-            );
-            this.checkPointAngle(
-                index,
-                index - 1 === -1 ? this.trackElements.length - 1 : index - 1
-            );
-            if (this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25) {
-                this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, this.trackClosed ? index : index - 1);
-            } else {
-                if (!this.trackClosed) {
-                    this.trackElements[0].intersectionAngl = 0;
-                }
-                this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, index);
+        if (this.trackElements.length < 3) {
+            return;
+        }
+
+        this.checkPointAngle(
+            index - 1 < 0 ? this.trackElements.length - 1 : index - 1,
+            (index - 2 + this.trackElements.length) % this.trackElements.length
+        );
+
+        this.checkPointAngle(
+            index,
+            index - 1 === -1 ? this.trackElements.length - 1 : index - 1
+        );
+        if (this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) < 25) {
+            this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, this.trackClosed ? index : index - 1);
+        } else {
+            if (!this.trackClosed) {
+                this.trackElements[0].intersectionAngl = 0;
             }
+            this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, index);
         }
     }
 
-    public removeIntersection() {
+    public removeIntersection(mousePotition: THREE.Vector2) {
         this.trackElements.splice(this.trackElements.length - (this.trackClosed ? 1 : 2), 1);
         this.trackElements.forEach((segment, index, segments) => {
             const removedPosition = segment.segmentIntersections.indexOf(segments.length - 1);
@@ -73,6 +77,7 @@ export class TrackValidationService {
         this.checkPointAngle(this.trackElements.length - 1, this.trackElements.length - 2);
         this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);
         this.checkSegmentIntersections(this.trackElements.length - 2);
+        this.updatePoint(this.trackElements.length - 1, mousePotition);
     }
 
     public checkSegmentLength(index: number) {
@@ -80,6 +85,7 @@ export class TrackValidationService {
         try {
             line = this.getLine(index);
         } catch (e) {
+            this.trackElements[index].segmentLength = 0;
             return;
         }
         this.trackElements[index].segmentLength = this.distance(line.point1, line.point2);
@@ -306,10 +312,6 @@ export class TrackValidationService {
     }
 
     private isFirstAngleValid(index: number) {
-        if (!this.trackClosed && index === 0) {
-            return true;
-        }
-
         return this.trackElements[index].intersectionAngl <= Math.PI;
     }
 
