@@ -3,7 +3,6 @@ import * as THREE from 'three';
 
 // standard position of camera
 const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
-const OFFSET = 5;
 const perchPosition = new THREE.Vector3(10, 50, -75);
 
 @Injectable()
@@ -21,6 +20,12 @@ export class CameraService {
     private orthographicCamera;
 
     public container: HTMLElement;
+
+    public offsetX = 5;
+
+    public offsetY = 5;
+
+    public offsetZ = 5;
 
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
@@ -85,9 +90,9 @@ export class CameraService {
     }
 
     public setPositionOrthographicCamera(object: any) {
-        this.orthographicCamera.position.x = object.position.x + OFFSET;
-        this.orthographicCamera.position.y = object.position.y + OFFSET;
-        this.orthographicCamera.position.z = object.position.z + OFFSET;
+        this.orthographicCamera.position.x = object.position.x + this.offsetX;
+        this.orthographicCamera.position.y = object.position.y + this.offsetY;
+        this.orthographicCamera.position.z = object.position.z + this.offsetZ;
         this.orthographicCamera.updateProjectionMatrix();
     }
 
@@ -100,12 +105,26 @@ export class CameraService {
         }
     }
 
+    public zoomCamera(event: any): void {
+        // 43 corresponding to '+' in ASCII
+        // 45 corresponding to '+' in ASCII
+        if (event.keyCode === 43) {
+            this.offsetX += 1;
+            this.offsetY += 1;
+            this.offsetZ += 1;
+        } else if (event.keyCode === 45) {
+            this.offsetX -= 1;
+            this.offsetY -= 1;
+            this.offsetZ -= 1;
+        }
+    }
+
     public cameraOnMoveWithObject (object: any) {
         this.setPositionPerspectiveCamera(object);
         this.perspectiveCamera.lookAt(object.position);
         this.perspectiveCamera.updateProjectionMatrix();
         this.setOrthographicCamera(object);
-        this.perspectiveCamera.lookAt(object.position);
+        this.orthographicCamera.lookAt(object.position);
         this.orthographicCamera.updateProjectionMatrix();
 
         if (this.camera.isOrthographicCamera) {
