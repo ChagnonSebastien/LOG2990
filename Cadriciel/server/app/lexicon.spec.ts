@@ -193,9 +193,11 @@ describe('Lexicon', () => {
         it('should only match words with h and/or o when the pattern is "h   o     "', () => {
             const words = lexicon.allWordsForPattern('h   o     ');
             expect(words.includes('hello')).to.be.true;
+            expect(words.includes('hydro')).to.be.true;
             expect(words.includes('cello')).to.be.false;
             expect(words.includes('organ')).to.be.true;
             expect(words.includes('boring')).to.be.true;
+            expect(words.includes('codeine')).to.be.true;
         });
     });
 
