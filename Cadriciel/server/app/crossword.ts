@@ -210,9 +210,21 @@ export class CrosswordGenerator {
         }
     }
 
-    public addRandomWord(i: number, horizontal: boolean): boolean {
+    public addRandomWord(i: number, horizontal: boolean, difficulty: string): boolean {
         const pattern = this.patternForLine(i, horizontal);
-        const wordsForPattern = this.lexicon.allWordsForPattern(pattern);
+
+        let wordsForPattern: string[];
+        switch (difficulty) {
+            case ('easy'):
+                wordsForPattern = this.lexicon.wordsForPattern(pattern, true);
+                break;
+            case ('normal'):
+                wordsForPattern = this.lexicon.allWordsForPattern(pattern);
+                break;
+            case ('hard'):
+                wordsForPattern = this.lexicon.wordsForPattern(pattern, false);
+        }
+
         if (wordsForPattern.length > 0) {
             const randomWord = this.lexicon.randomWordFromArray(wordsForPattern);
             const insertIndex = this.bestInsertIndex(randomWord, pattern);
@@ -232,7 +244,9 @@ export class CrosswordGenerator {
         while (foundWord) {
             foundWord = false;
             for (let i = 0; i < this.size; i++) {
-                foundWord = foundWord || this.addRandomWord(i, true) || this.addRandomWord(this.size - i - 1, false);
+                foundWord = foundWord
+                    || this.addRandomWord(i, true, difficulty)
+                    || this.addRandomWord(this.size - i - 1, false, difficulty);
             }
         }
 
