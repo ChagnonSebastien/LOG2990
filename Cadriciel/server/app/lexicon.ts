@@ -70,11 +70,11 @@ export class Lexicon {
         if (isBlankPattern) {
             return this.allWordsOfLengthUpTo(pattern.length);
         } else {
-            return this.wordsForNonEmptyPattern(pattern);
+            return this.allWordsForNonEmptyPattern(pattern);
         }
     }
 
-    public wordsForNonEmptyPattern(pattern: string): string[] {
+    public allWordsForNonEmptyPattern(pattern: string): string[] {
         if (pattern.trim().length === 0) {
             return new Array<string>();
         }

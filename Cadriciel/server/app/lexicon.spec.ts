@@ -171,9 +171,9 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('wordsForNonEmptyPattern(pattern: string): string[] { }', () => {
+    describe('allWordsForNonEmptyPattern(pattern: string): string[] { }', () => {
         it('should return all words that fit the subpatterns of the pattern', () => {
-            const words: string[] = lexicon.wordsForNonEmptyPattern('h   o');
+            const words: string[] = lexicon.allWordsForNonEmptyPattern('h   o');
             expect(words.includes('hello')).to.be.true;
             expect(words.includes('cello')).to.be.false;
             expect(words.includes('eat')).to.be.false;
@@ -181,7 +181,7 @@ describe('Lexicon', () => {
         });
 
         it('should not return anything if the pattern provided is blank', () => {
-            const words: string[] = lexicon.wordsForNonEmptyPattern('     ');
+            const words: string[] = lexicon.allWordsForNonEmptyPattern('     ');
             expect(words.length).to.equal(0);
         });
     });
