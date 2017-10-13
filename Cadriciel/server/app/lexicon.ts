@@ -48,7 +48,7 @@ export class Lexicon {
             });
     }
 
-    public wordsMatching(pattern: string): Array<string> {
+    public allWordsMatching(pattern: string): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
         return this.allWordsOfLength(pattern.length)
             .filter(word => patternRegex.test(word));
@@ -84,7 +84,7 @@ export class Lexicon {
             return isNotEmpty;
         });
         const wordsForPattern = nonEmptySubpatterns.map(subpattern => {
-            return this.wordsMatching(subpattern);
+            return this.allWordsMatching(subpattern);
         }).reduce((previous, current) => {
             return previous.concat(current);
         });

@@ -119,9 +119,9 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('wordsMatching()', () => {
+    describe('allWordsMatching()', () => {
         it('should get all the words matching "h   o"', () => {
-            const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o');
+            const wordsThatMatch: Array<string> = lexicon.allWordsMatching('h   o');
             expect(wordsThatMatch.includes('hello')).to.be.true;
             expect(wordsThatMatch.includes('hydro')).to.be.true;
             expect(wordsThatMatch.includes('hullo')).to.be.true;
