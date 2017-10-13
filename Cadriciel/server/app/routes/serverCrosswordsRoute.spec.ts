@@ -27,7 +27,7 @@ describe('Server Crosswords Route', () => {
         });
     }).timeout(3000);
 
-    it('Returns a normal crossword', (done) => {
+    it('Returns a hard crossword', (done) => {
         chai.request(apiUrl)
             .get('/crossword/crosswords_tests/hard')
             .end((err: any, res: any) => {

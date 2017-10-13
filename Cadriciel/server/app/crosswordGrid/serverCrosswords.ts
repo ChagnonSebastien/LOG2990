@@ -33,7 +33,7 @@ export class ServerCrosswords {
     }
 
     // get all the crosswords from the database
-    public getCrossWords(): Promise<Array<CrosswordDB>> {
+    public getCrosswordsFromDB(): Promise<Array<CrosswordDB>> {
         let crosswordsList: Array<CrosswordDB>;
 
         return new Promise<Array<CrosswordDB>>(resolve => {
@@ -114,7 +114,7 @@ export class ServerCrosswords {
     }
 
     public async initializeServerCrossword(): Promise<boolean> {
-        const crosswords: Array<CrosswordDB> = await this.getCrossWords();
+        const crosswords: Array<CrosswordDB> = await this.getCrosswordsFromDB();
         const stored: boolean = await this.storeServerCrosswords(crosswords);
 
         return stored;
