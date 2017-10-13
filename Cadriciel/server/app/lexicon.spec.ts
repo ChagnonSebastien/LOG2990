@@ -119,6 +119,22 @@ describe('Lexicon', () => {
         });
     });
 
+    describe('wordsMatching()', () => {
+        it('should get all the common words matching "h   o"', () => {
+            const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o', true);
+            expect(wordsThatMatch.includes('hello')).to.be.true;
+        });
+
+        it('should get all the uncommon words matching "h   o"', () => {
+            const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o', false);
+            expect(wordsThatMatch.includes('hydro')).to.be.true;
+            expect(wordsThatMatch.includes('hullo')).to.be.true;
+            expect(wordsThatMatch.includes('hallo')).to.be.true;
+            expect(wordsThatMatch.includes('hollo')).to.be.true;
+            expect(wordsThatMatch.includes('hippo')).to.be.true;
+        });
+    });
+
     describe('allWordsMatching()', () => {
         it('should get all the words matching "h   o"', () => {
             const wordsThatMatch: Array<string> = lexicon.allWordsMatching('h   o');
@@ -126,8 +142,8 @@ describe('Lexicon', () => {
             expect(wordsThatMatch.includes('hydro')).to.be.true;
             expect(wordsThatMatch.includes('hullo')).to.be.true;
             expect(wordsThatMatch.includes('hallo')).to.be.true;
-            expect(wordsThatMatch.includes('hello')).to.be.true;
-            expect(wordsThatMatch.includes('hello')).to.be.true;
+            expect(wordsThatMatch.includes('hollo')).to.be.true;
+            expect(wordsThatMatch.includes('hippo')).to.be.true;
         });
     });
 

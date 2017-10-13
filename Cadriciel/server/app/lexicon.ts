@@ -44,6 +44,12 @@ export class Lexicon {
             .concat(this.wordsOfLengthUpTo(length, false));
     }
 
+    public wordsMatching(pattern: string, common: boolean): Array<string> {
+        const patternRegex = this.patternToRegex(pattern);
+        return this.wordsOfLength(pattern.length, common)
+            .filter(word => patternRegex.test(word));
+    }
+
     public allWordsMatching(pattern: string): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
         return this.allWordsOfLength(pattern.length)
