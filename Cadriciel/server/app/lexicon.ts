@@ -75,12 +75,8 @@ export class Lexicon {
     }
 
     public allWordsForPattern(pattern: string) {
-        const isBlankPattern: boolean = pattern.trim().length === 0;
-        if (isBlankPattern) {
-            return this.allWordsOfLengthUpTo(pattern.length);
-        } else {
-            return this.allWordsForNonEmptyPattern(pattern);
-        }
+        return this.wordsForPattern(pattern, true)
+            .concat(this.wordsForPattern(pattern, false));
     }
 
     public wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
