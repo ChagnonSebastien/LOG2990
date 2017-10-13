@@ -74,6 +74,25 @@ export class Lexicon {
         }
     }
 
+    public wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
+        if (pattern.trim().length === 0) {
+            return new Array<string>();
+        }
+
+        const subpatterns: string[] = this.subpatterns(pattern);
+        const nonEmptySubpatterns = subpatterns.filter(subpattern => {
+            const isNotEmpty: boolean = subpattern.trim().length > 0;
+            return isNotEmpty;
+        });
+        const wordsForPattern = nonEmptySubpatterns.map(subpattern => {
+            return this.wordsMatching(subpattern, common);
+        }).reduce((previous, current) => {
+            return previous.concat(current);
+        });
+
+        return Array.from(new Set(wordsForPattern));
+    }
+
     public allWordsForNonEmptyPattern(pattern: string): string[] {
         if (pattern.trim().length === 0) {
             return new Array<string>();
