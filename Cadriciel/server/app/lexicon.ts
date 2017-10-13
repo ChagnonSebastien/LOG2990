@@ -51,9 +51,8 @@ export class Lexicon {
     }
 
     public allWordsMatching(pattern: string): Array<string> {
-        const patternRegex = this.patternToRegex(pattern);
-        return this.allWordsOfLength(pattern.length)
-            .filter(word => patternRegex.test(word));
+        return this.wordsMatching(pattern, true)
+            .concat(this.wordsMatching(pattern, false));
     }
 
     public subpatterns(pattern: string): string[] {
