@@ -32,20 +32,16 @@ export class Lexicon {
 
     public wordsOfLengthUpTo(length: number, common: boolean): Array<string> {
         return new Array(length - 2).fill(null)
-        .map((value, index) => {
-            return this.wordsOfLength(index + 3, common);
-        }).reduce((previous, current) => {
-            return previous.concat(current);
-        });
-    }
-
-    public allWordsOfLengthUpTo(length: number): Array<string> {
-        return new Array(length - 2).fill(null)
             .map((value, index) => {
-                return this.allWordsOfLength(index + 3);
+                return this.wordsOfLength(index + 3, common);
             }).reduce((previous, current) => {
                 return previous.concat(current);
             });
+    }
+
+    public allWordsOfLengthUpTo(length: number): Array<string> {
+        return this.wordsOfLengthUpTo(length, true)
+            .concat(this.wordsOfLengthUpTo(length, false));
     }
 
     public allWordsMatching(pattern: string): Array<string> {
