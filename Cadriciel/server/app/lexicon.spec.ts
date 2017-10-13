@@ -167,6 +167,28 @@ describe('Lexicon', () => {
         });
     });
 
+    describe('wordsForPattern(pattern: string): string[] { }', () => {
+        it('should only match common words with h and/or o when the pattern is "h   o     "', () => {
+            const words = lexicon.wordsForPattern('h   o     ', true);
+            expect(words.includes('hello')).to.be.true;
+            expect(words.includes('hydro')).to.be.false;
+            expect(words.includes('cello')).to.be.false;
+            expect(words.includes('organ')).to.be.true;
+            expect(words.includes('boring')).to.be.true;
+            expect(words.includes('codeine')).to.be.false;
+        });
+
+        it('should only match uncommon words with h and/or o when the pattern is "h   o     "', () => {
+            const words = lexicon.wordsForPattern('h   o     ', false);
+            expect(words.includes('hello')).to.be.false;
+            expect(words.includes('hydro')).to.be.true;
+            expect(words.includes('cello')).to.be.false;
+            expect(words.includes('organ')).to.be.false;
+            expect(words.includes('boring')).to.be.false;
+            expect(words.includes('codeine')).to.be.true;
+        });
+    });
+
     describe('allWordsForPattern(pattern: string): string[] { }', () => {
         it('should only match words with h and/or o when the pattern is "h   o     "', () => {
             const words = lexicon.allWordsForPattern('h   o     ');
