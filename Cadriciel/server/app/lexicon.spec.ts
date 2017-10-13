@@ -123,10 +123,16 @@ describe('Lexicon', () => {
         it('should get all the common words matching "h   o"', () => {
             const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o', true);
             expect(wordsThatMatch.includes('hello')).to.be.true;
+            expect(wordsThatMatch.includes('hydro')).to.be.false;
+            expect(wordsThatMatch.includes('hullo')).to.be.false;
+            expect(wordsThatMatch.includes('hallo')).to.be.false;
+            expect(wordsThatMatch.includes('hollo')).to.be.false;
+            expect(wordsThatMatch.includes('hippo')).to.be.false;
         });
 
         it('should get all the uncommon words matching "h   o"', () => {
             const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o', false);
+            expect(wordsThatMatch.includes('hello')).to.be.false;
             expect(wordsThatMatch.includes('hydro')).to.be.true;
             expect(wordsThatMatch.includes('hullo')).to.be.true;
             expect(wordsThatMatch.includes('hallo')).to.be.true;
