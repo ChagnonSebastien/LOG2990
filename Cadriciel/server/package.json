@@ -8,7 +8,7 @@
     "lint": "tslint app/**/*.ts app/*.ts --force -t verbose",
     "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
-    "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts'",
+    "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts' 'app/**/crossword-checker.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
     "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
     "test-server-crosswords": "mocha -r ts-node/register app/**/serverCrosswords.spec.ts",
@@ -16,6 +16,7 @@
     "test-once": "tsc && karma start karma.conf.js --single-run || npm run-script coverage",
     "test-auth": "mocha -r ts-node/register app/**/authentification.spec.ts",
     "test-auth-service": "mocha -r ts-node/register app/**/authentication.spec.ts",
+    "test-reader": "mocha -r ts-node/register app/lexicon-reader.spec.ts",
     "coverage": "remap-istanbul -i coverage/coverage-final.json -o coverage -t html",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
@@ -25,6 +26,7 @@
     "prepush": "npm run lint"
   },
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.0",
     "cors": "~2.8.1",
@@ -42,6 +44,7 @@
     "systemjs": "0.19.39"
   },
   "devDependencies": {
+    "@types/async": "^2.0.44",
     "@types/body-parser": "1.16.5",
     "@types/chai": "4.0.4",
     "@types/chai-http": "^3.0.3",

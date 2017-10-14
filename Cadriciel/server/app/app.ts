@@ -11,7 +11,6 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as CrossWordsRoute from './routes/crossWordRoute';
 import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
@@ -83,7 +82,6 @@ export class Application {
         const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
         const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
         const track: trackRoute.Tracks = new trackRoute.Tracks();
-        const crosswords: CrossWordsRoute.CrossWords = new CrossWordsRoute.CrossWords();
         const serverStoredCrosswords: serverCrosswords.ServerCrosswordsRoute = new serverCrosswords.ServerCrosswordsRoute('crosswords');
 
         // home page
@@ -115,11 +113,6 @@ export class Application {
 
         // crossword api path
         router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
-        // to delete
-        router.get('/crossword', crosswords.getCrossword.bind(crosswords.getCrossword));
-        router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
-        router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
-        router.get('/crosswords', crosswords.getCrossWords.bind(crosswords.getCrossWords));
 
         // use router middleware
         this.app.use('/api', router);

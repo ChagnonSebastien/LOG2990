@@ -1,3 +1,5 @@
+import { ObstacleService } from './obstacle.service';
+import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
 import * as THREE from 'three';
@@ -5,7 +7,7 @@ import * as THREE from 'three';
 describe('test drawTrackService', function () {
     let drawTrackService: DrawTrackService;
     beforeEach(() => {
-        drawTrackService = new DrawTrackService(new TrackValidationService());
+        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService(), new ObstacleService());
     });
 
     it('construction test', done => {
@@ -14,21 +16,21 @@ describe('test drawTrackService', function () {
     });
 
     it('Able to definie if loop is closed', done => {
-        drawTrackService.loopClosed = false;
+        drawTrackService.trackClosed = false;
         expect(drawTrackService.isFinished()).toEqual(false);
         done();
     });
 
     it('Calculate distance between two points', done => {
-        const vector1 = new THREE.Vector3(1, 1, 0);
-        const vector2 = new THREE.Vector3(1, 2, 0);
+        const vector1 = new THREE.Vector2(1, 1);
+        const vector2 = new THREE.Vector2(1, 2);
         expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
         done();
     });
 
     it('Calculates the relative position', done => {
-        const vector1 = new THREE.Vector3(1, 1, 0);
-        const vector2 = new THREE.Vector3(1, 2, 0);
+        const vector1 = new THREE.Vector2(1, 1);
+        const vector2 = new THREE.Vector2(1, 2);
         expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
         done();
     });

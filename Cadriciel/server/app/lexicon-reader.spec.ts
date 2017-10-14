@@ -48,8 +48,12 @@ describe('LexiconReader', () => {
     it('Should return a string containing words when length is 5', () => {
         const words: string[] = lexiconReader.readWords(lexiconFilePath);
         const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, 5);
-
         assert(wordsOfLength.length !== 0);
+        expect(wordsOfLength.map((word) => {
+            return word.length === 5;
+        }).reduce((prev, cur) => {
+            return prev && cur;
+        })).to.be.true;
     });
 
     it('Should return empty array when searching for words with a at position 100', () => {

@@ -119,18 +119,6 @@ describe('CrosswordGenerator', () => {
         });
     });
 
-    describe('addSpacing(i: number, j: number, horizontal: boolean): boolean { }', () => {
-        it('should add spacing horizontally with -', () => {
-            expect(crossword.addSpacing(0, 0, true)).to.be.true;
-            expect(crossword.grid[0][0]).to.equal('-');
-        });
-
-        it('should add spacing vertically with |', () => {
-            expect(crossword.addSpacing(0, 0, false)).to.be.true;
-            expect(crossword.grid[0][0]).to.equal('|');
-        });
-    });
-
     describe('addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean { }', () => {
         it('should add a black square after the word', () => {
             expect(crossword.addBlackSquares(0, 0, 'hello', true)).to.be.true;
@@ -224,25 +212,39 @@ describe('CrosswordGenerator', () => {
 
     describe('addRandomWord(i: number, horizontal: boolean): boolean { }', () => {
         it('should add a random word horizontally', () => {
-            expect(crossword.addRandomWord(0, true)).to.be.true;
+            expect(crossword.addRandomWord(0, true, 'normal')).to.be.true;
             expect(crossword.grid[0][0]).to.not.equal(' ');
             expect(crossword.grid[0][1]).to.not.equal(' ');
         });
 
         it('should add a random word vertically', () => {
-            expect(crossword.addRandomWord(0, false)).to.be.true;
+            expect(crossword.addRandomWord(0, false, 'normal')).to.be.true;
             expect(crossword.grid[0][0]).to.not.equal(' ');
             expect(crossword.grid[1][0]).to.not.equal(' ');
         });
     });
 
     describe('generateCrossword() { }', () => {
-        it('should generate a crossword', () => {
-            for (let i = 0; i < 10; i++) {
-                crossword.generateCrossword('intermediate');
-                console.log(crossword.words);
-            }
-        });
+        it('should generate an easy crossword', () => {
+            crossword.generateCrossword('easy');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(0);
+        }).timeout(15000);
+
+        it('should generate a normal crossword', () => {
+            crossword.generateCrossword('normal');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(0);
+        }).timeout(15000);
+
+        it('should generate a hard crossword', () => {
+            crossword.generateCrossword('hard');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(0);
+        }).timeout(15000);
     });
 
     describe('saveState() { }', () => {

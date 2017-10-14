@@ -22,6 +22,9 @@ const CwSchema = new mongoose.Schema({
     },
     listOfWords: {
         type: [String]
+    },
+    wordsWithIndex: {
+        type: [{i: Number, j: Number, word: String, horizontal: Boolean}]
     }
 });
 

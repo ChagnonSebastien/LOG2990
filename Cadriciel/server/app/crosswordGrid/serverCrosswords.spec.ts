@@ -12,7 +12,7 @@ describe('Server Crosswords', () => {
     let crosswordsList: Array<CrosswordDB> = [];
 
     it('Should get all the crosswords from the database', (done) => {
-        serverCrosswords.getCrossWords().then(function (data) {
+        serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             expect(data.length).to.be.greaterThan(0);
             done();
@@ -32,27 +32,27 @@ describe('Server Crosswords', () => {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should generate a new normal crossword', (done) => {
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should generate a new hard crossword', (done) => {
         serverCrosswords.generateCrossword('hard').then(function (data) {
             assert(data);
             done();
         });
-    });
+    }).timeout(5000);
 
     it('Should save on server according to difficulties', (done) => {
-        serverCrosswords.getCrossWords().then(function (data) {
+        serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             serverCrosswords.storeServerCrosswords(crosswordsList).then(function (stored) {
-                serverCrosswords.getCrossWords().then(function (c) {
+                serverCrosswords.getCrosswordsFromDB().then(function (c) {
                     const storedCrosswords: Array<CrosswordDB> = c;
                     assert(crosswordsList.length === storedCrosswords.length);
                     assert(serverCrosswords.easyCrosswords.length === 5);
