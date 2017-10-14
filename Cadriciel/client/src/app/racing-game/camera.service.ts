@@ -64,7 +64,7 @@ export class CameraService {
         return this.camera;
     }
 
-    private defaultCamerasPosition () {
+    private defaultCamerasPosition() {
         this.orthographicCamera.position.x = CAMERA_POSITION.x;
         this.orthographicCamera.position.y = CAMERA_POSITION.y;
         this.orthographicCamera.position.z = CAMERA_POSITION.z;
@@ -119,7 +119,7 @@ export class CameraService {
         }
     }
 
-    public cameraOnMoveWithObject (object: any) {
+    public cameraOnMoveWithObject(object: any) {
         this.setPositionPerspectiveCamera(object);
         this.perspectiveCamera.lookAt(object.position);
         this.perspectiveCamera.updateProjectionMatrix();

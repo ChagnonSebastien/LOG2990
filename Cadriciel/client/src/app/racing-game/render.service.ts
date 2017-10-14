@@ -57,7 +57,7 @@ export class RenderService {
         return this.container.clientWidth / this.container.clientHeight;
     }
 
-    public changeView (event: any): void {
+    public changeView(event: any): void {
         this.cameraService.selectCamera(event);
         this.updateCamera();
     }
