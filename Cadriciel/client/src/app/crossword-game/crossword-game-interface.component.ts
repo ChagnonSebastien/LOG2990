@@ -332,9 +332,9 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         this.cheatMode = true;
 
     }
-   /***********************************************************
-    * Used to set the cheat mode variable to off
-    ***************************************************************/
+    /***********************************************************
+     * Used to set the cheat mode variable to off
+     ***************************************************************/
     public deactivateCheatMode(): void {
         this.cheatMode = false;
     }
