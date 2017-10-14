@@ -10,7 +10,7 @@ export class ObstacleService {
 
     private track: THREE.Vector2[];
 
-    constructor() {}
+    constructor() { }
 
     public initialize(track: THREE.Vector2[]) {
         this.track = track;
@@ -19,33 +19,33 @@ export class ObstacleService {
     public addObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
-            this.addObstacleToList(this.boosters, type);
-            break;
+                this.addObstacleToList(this.boosters, type);
+                break;
 
             case ObstacleType.Pothole:
-            this.addObstacleToList(this.potholes, type);
-            break;
+                this.addObstacleToList(this.potholes, type);
+                break;
 
             case ObstacleType.Puddle:
-            this.addObstacleToList(this.puddles, type);
-            break;
+                this.addObstacleToList(this.puddles, type);
+                break;
         }
     }
 
     private addObstacleToList(list: Obstacle[], type: ObstacleType) {
         switch (list.length) {
-        case 1:
-        case 3:
-            list.push(this.newObstacle(type));
-        /* falls through */
-        case 0:
-            list.push(this.newObstacle(type));
-            break;
-        default:
-            while (list.length > 0) {
-                list.pop();
-            }
-            break;
+            case 1:
+            case 3:
+                list.push(this.newObstacle(type));
+            /* falls through */
+            case 0:
+                list.push(this.newObstacle(type));
+                break;
+            default:
+                while (list.length > 0) {
+                    list.pop();
+                }
+                break;
         }
     }
 
@@ -151,19 +151,19 @@ export class ObstacleService {
 
         switch (type) {
             case ObstacleType.Booster:
-            amountToReAdd = this.boosters.length;
-            this.boosters = [];
-            break;
+                amountToReAdd = this.boosters.length;
+                this.boosters = [];
+                break;
 
             case ObstacleType.Pothole:
-            amountToReAdd = this.potholes.length;
-            this.potholes = [];
-            break;
+                amountToReAdd = this.potholes.length;
+                this.potholes = [];
+                break;
 
             case ObstacleType.Puddle:
-            amountToReAdd = this.puddles.length;
-            this.puddles = [];
-            break;
+                amountToReAdd = this.puddles.length;
+                this.puddles = [];
+                break;
         }
 
         for (let i = 0; i < Math.ceil(amountToReAdd / 2); i++) {
@@ -174,16 +174,16 @@ export class ObstacleService {
     public getObstacles(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
-            return this.boosters;
+                return this.boosters;
 
             case ObstacleType.Pothole:
-            return this.potholes;
+                return this.potholes;
 
             case ObstacleType.Puddle:
-            return this.puddles;
+                return this.puddles;
 
             default:
-            return [];
+                return [];
         }
     }
 

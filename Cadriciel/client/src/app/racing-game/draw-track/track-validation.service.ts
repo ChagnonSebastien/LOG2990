@@ -134,7 +134,7 @@ export class TrackValidationService {
             throw new Error();
         }
 
-        return {point1, point2};
+        return { point1, point2 };
     }
 
     public twoLineIntersection(line1, line2): { x: number, y: number } {

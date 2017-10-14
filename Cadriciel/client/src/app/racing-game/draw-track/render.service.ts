@@ -188,19 +188,19 @@ export class RenderService {
     public updateObstaclesPositions(type: ObstacleType, obstacles: Obstacle[]) {
         switch (type) {
             case ObstacleType.Booster:
-            this.updateObstaclesPositionsInList(obstacles, this.boosters);
-            break;
+                this.updateObstaclesPositionsInList(obstacles, this.boosters);
+                break;
 
             case ObstacleType.Pothole:
-            this.updateObstaclesPositionsInList(obstacles, this.potholes);
-            break;
+                this.updateObstaclesPositionsInList(obstacles, this.potholes);
+                break;
 
             case ObstacleType.Puddle:
-            this.updateObstaclesPositionsInList(obstacles, this.puddles);
-            break;
+                this.updateObstaclesPositionsInList(obstacles, this.puddles);
+                break;
 
             default:
-            break;
+                break;
         }
     }
 
