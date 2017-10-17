@@ -41,18 +41,22 @@
 .container {
     min-height: 1000px;
     min-width: 1700px;
-    background: url('./setup_background.jpg');
+    background-image: url('./setup_background.jpg');
     color: white;
-    border-radius:10px;
-    margin-top: 1%;
     padding-top: 300px;
     font-family: monospace;
-    border-color:white;
-    border-width: 10px;
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   
 }
 
 .page {
-    background-color:black;
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .row {
@@ -75,3 +79,52 @@
     margin-right:22.5%;
 }
 
+.form .usernameInput {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 400px;
+  }
+ .usernameInput {
+    font-size: 200%;
+    letter-spacing: 3px;
+    color: white;
+  }
+
+  .loader {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #188F8D;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin-left: 200px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    text-align: center;  
+}
+
+.loadingText{
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    z-index: 1;
+    width: 750px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+}

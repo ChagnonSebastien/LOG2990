@@ -8,7 +8,7 @@
 import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
-
+import { SocketManager } from './socket.service';
 const db = require('./db-connection');
 
 // start app after database is connected
@@ -36,6 +36,9 @@ db.connect()
                 server.listen(appPort);
                 server.on('error', onError);
                 server.on('listening', onListening);
+
+                const socketManager = new SocketManager(server);
+                socketManager.handleSockets()
 
                 /**
                  * Normalise le port en un nombre, une chaîne de caractères ou la valeur false.
