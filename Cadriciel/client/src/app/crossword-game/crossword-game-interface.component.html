@@ -1,3 +1,8 @@
+<div *ngIf = "!dataAvailable" class = "loading"> 
+    <div  class="loader">
+    </div>
+    <h2 class = "loadingText"> Loading you crossword...</h2>
+</div>
 <div *ngIf="dataAvailable">
 <div id="page" (click)="cancelSelection($event)" >
   <div id="conteneur"> 
