@@ -38,7 +38,7 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public assimilateAndEstrangeCamera(event: any): void {
-        this.renderService.zoomOnCamera(event);
+        this.renderService.zoomCamera(event);
         console.log('zoomer');
     }
 

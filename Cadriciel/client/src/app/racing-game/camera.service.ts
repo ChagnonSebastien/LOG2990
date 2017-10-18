@@ -94,6 +94,7 @@ export class CameraService {
         this.orthographicCamera.position.y = object.position.y + this.offsetY;
         this.orthographicCamera.position.z = object.position.z + this.offsetZ;
         this.orthographicCamera.updateProjectionMatrix();
+        console.log('affiche de la cote ' /*+ this.orthographicCamera.position.z*/);
     }
 
     public selectCamera(event: any): void {
@@ -102,20 +103,6 @@ export class CameraService {
             this.camera = this.perspectiveCamera;
         } else if (this.camera.isPerspectiveCamera && event.keyCode === 67) {
             this.camera = this.orthographicCamera;
-        }
-    }
-
-    public zoomCamera(event: any): void {
-        // 43 corresponding to '+' in ASCII
-        // 45 corresponding to '+' in ASCII
-        if (event.keyCode === 43) {
-            // this.offsetX += 1;
-            // this.offsetY += 1;
-            this.offsetZ += 5;
-        } else if (event.keyCode === 45) {
-            // this.offsetX -= 1;
-            // this.offsetY -= 1;
-            this.offsetZ -= 5;
         }
     }
 

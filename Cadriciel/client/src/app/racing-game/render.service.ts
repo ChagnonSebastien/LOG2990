@@ -22,6 +22,12 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
+    public fov;
+
+    public zoom = 1.0;
+
+    public inc = -0.01;
+
     constructor(private cameraService: CameraService) {
     }
 
@@ -62,9 +68,7 @@ export class RenderService {
         this.updateCamera();
     }
 
-    public zoomOnCamera(event: any): void {
-        this.cameraService.zoomCamera(event);
-        this.updateCamera();
+    public zoomCamera(event: any): void {
     }
 
     public updateCamera(): void {
@@ -81,12 +85,19 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
+        this.fov = this.camera.fov;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
+        this.camera.fov = this.fov * this.zoom;
+        this.camera.updateProjectionMatrix();
+        this.zoom += this.inc;
+        if ( this.zoom <= 0.2 || this.zoom >= 1.0) {
+            this.inc = -this.inc;
+        }
         this.cameraFollowingObject(this.cube);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
