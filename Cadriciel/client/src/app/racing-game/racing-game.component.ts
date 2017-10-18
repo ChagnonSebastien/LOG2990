@@ -37,6 +37,11 @@ export class RacingGameComponent implements AfterViewInit {
         console.log('tourner camera');
     }
 
+    public assimilateAndEstrangeCamera(event: any): void {
+        this.renderService.zoomOnCamera(event);
+        console.log('zoomer');
+    }
+
     public ngAfterViewInit() {
         this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
     }

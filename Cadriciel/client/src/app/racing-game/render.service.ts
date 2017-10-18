@@ -28,7 +28,7 @@ export class RenderService {
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-        this.cube.position.z += 5;
+        // this.cube.position.z += 5;
     }
 
     private createCube() {
@@ -59,6 +59,11 @@ export class RenderService {
 
     public changeView(event: any): void {
         this.cameraService.selectCamera(event);
+        this.updateCamera();
+    }
+
+    public zoomOnCamera(event: any): void {
+        this.cameraService.zoomCamera(event);
         this.updateCamera();
     }
 
