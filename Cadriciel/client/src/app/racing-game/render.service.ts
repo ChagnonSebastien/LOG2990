@@ -62,6 +62,11 @@ export class RenderService {
         this.updateCamera();
     }
 
+    public zoomOnCamera(event: any): void {
+        this.cameraService.zoomCamera(event);
+        this.updateCamera();
+    }
+
     public updateCamera(): void {
         this.camera = this.cameraService.getCamera();
     }
