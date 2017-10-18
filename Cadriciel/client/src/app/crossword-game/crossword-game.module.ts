@@ -9,13 +9,14 @@ import {CrosswordGameInfoService} from './crossword-game-info.service';
 import {LexiconService} from './lexicon.service';
 import {CrosswordService} from './crossword.service';
 import {MultiplayerService} from './crossword-multiplayer.service';
+import { CrosswordGameRoomComponent } from './crossword-game-room/crossword-game-room.component';
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         CrosswordGameRoutingModule
     ],
-    declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent, CrosswordGameInformationComponent],
+    declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent, CrosswordGameInformationComponent, CrosswordGameRoomComponent],
     exports: [CrosswordGameComponent, CrosswordGameInterfaceComponent],
     providers: [CrosswordGameInfoService, LexiconService, CrosswordService, MultiplayerService]
 })

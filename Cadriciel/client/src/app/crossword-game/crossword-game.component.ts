@@ -54,8 +54,8 @@ export class CrosswordGameComponent implements OnInit {
 
     public saveOptions(): void {
         this.crosswordGameInfoService.option = this.option;
-        this.crosswordGameInfoService.mode = this.mode;
-        this.crosswordGameInfoService.level = this.level;
+        this.crosswordGameInfoService.game.mode = this.mode;
+        this.crosswordGameInfoService.game.difficulty = this.level;
 
         if (this.option === 'MULTIPLAYER') {
             this.multiplayerGameReady = true;
