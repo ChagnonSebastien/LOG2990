@@ -109,13 +109,13 @@ export class CameraService {
         // 43 corresponding to '+' in ASCII
         // 45 corresponding to '+' in ASCII
         if (event.keyCode === 43) {
-            this.offsetX += 1;
-            this.offsetY += 1;
-            this.offsetZ += 1;
+            // this.offsetX += 1;
+            // this.offsetY += 1;
+            this.offsetZ += 5;
         } else if (event.keyCode === 45) {
-            this.offsetX -= 1;
-            this.offsetY -= 1;
-            this.offsetZ -= 1;
+            // this.offsetX -= 1;
+            // this.offsetY -= 1;
+            this.offsetZ -= 5;
         }
     }
 

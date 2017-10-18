@@ -28,7 +28,7 @@ export class RenderService {
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-        this.cube.position.z += 5;
+        // this.cube.position.z += 5;
     }
 
     private createCube() {
