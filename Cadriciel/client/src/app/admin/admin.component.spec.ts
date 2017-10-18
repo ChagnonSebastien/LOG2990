@@ -1,4 +1,4 @@
-import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
+// import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
@@ -8,7 +8,29 @@ import { HttpModule } from '@angular/http';
 import { AuthenticationService } from './authentication.service';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
-import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
+// import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
+
+class MockAuthenticationService {
+    public authenticate(password: string): Promise<string> {
+        let result;
+        if (password === 'walleandtomato') {
+            result = 'authenticated';
+        } else {
+            result = 'invalid';
+        }
+       return Promise.resolve(result);
+    }
+
+    public changePassword(oldPassword: string, newPassword: string): Promise<string> {
+        let result;
+        if (oldPassword === 'walleandtomato') {
+            result = 'success';
+        } else {
+            result = 'invalid';
+        }
+        return Promise.resolve(result);
+    }
+}
 
 describe('AdminComponent', () => {
     let component: AdminComponent;
@@ -62,26 +84,5 @@ describe('AdminComponent', () => {
     });
 });
 
-class MockAuthenticationService {
-    public authenticate(password: string): Promise<string> {
-        let result;
-        if (password === 'walleandtomato') {
-            result = 'authenticated';
-        } else {
-            result = 'invalid';
-        }
-       return Promise.resolve(result);
-    }
-
-    public changePassword(oldPassword: string, newPassword: string): Promise<string> {
-        let result;
-        if (oldPassword === 'walleandtomato') {
-            result = 'success';
-        } else {
-            result = 'invalid';
-        }
-        return Promise.resolve(result);
-    }
-}
 
 

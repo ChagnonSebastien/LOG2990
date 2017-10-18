@@ -1,5 +1,5 @@
 import { ObstacleService } from './obstacle.service';
-import { Obstacle, ObstacleType } from './obstacle';
+import { ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
