@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
-// import { ObstacleService } from './obstacle.service';
-// import { ObstacleType } from './obstacle';
 
 @Component({
     moduleId: module.id,
@@ -14,7 +12,7 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public saveEnabled = false;
 
-    constructor(private trackService: DrawTrackService) {  // private obstacleService: ObstacleService)
+    constructor(private trackService: DrawTrackService) {
     }
 
     private get container(): HTMLDivElement {
