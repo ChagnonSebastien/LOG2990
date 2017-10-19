@@ -239,7 +239,44 @@ describe('CrosswordGenerator', () => {
             expect(crossword.words.size).to.be.greaterThan(0);
         }).timeout(15000);
 
-        it('should generate a hard crossword', () => {
+        it('should generate a new hard crossword', () => {
+            crossword.newCrossword('hard');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(0);
+        }).timeout(15000);
+    });
+
+    describe('mutate()', () => {
+        it('should mutate an easy crossword', () => {
+            crossword.newCrossword('easy');
+            crossword.printGrid();            
+            const foundWords = crossword.wordsWithIndex.filter(() => {
+                return Math.floor(Math.random() * 3) == 0;
+            });
+            expect(crossword.words.size).to.be.greaterThan(0);            
+            console.log(crossword.wordsWithIndex);            
+            console.log(foundWords);
+            console.log('MUTATING');
+            crossword.mutate('easy', foundWords);
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(foundWords.length);
+            expect(foundWords.map((word) => {
+                return crossword.words.has(word.word);
+            }).reduce((prev, cur) => {
+                return prev && cur;
+            })).to.be.true;
+        }).timeout(15000);
+
+        it('should mutate a normal crossword', () => {
+            crossword.newCrossword('normal');
+            crossword.printGrid();
+            console.log(crossword.wordsWithIndex);
+            expect(crossword.words.size).to.be.greaterThan(0);
+        }).timeout(15000);
+
+        it('should mutate a hard crossword', () => {
             crossword.newCrossword('hard');
             crossword.printGrid();
             console.log(crossword.wordsWithIndex);
