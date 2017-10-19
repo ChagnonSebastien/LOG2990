@@ -8,10 +8,10 @@ const collection = 'crosswords_tests';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    serverCrosswords.setCollection(collection);
     let crosswordsList: Array<CrosswordDB> = [];
 
     it('Should get all the crosswords from the database', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             expect(data.length).to.be.greaterThan(0);
@@ -20,6 +20,7 @@ describe('Server Crosswords', () => {
     });
 
     it('Should delete crossword according to id', (done) => {
+        serverCrosswords.setCollection(collection);
         const crosswordToDelete = crosswordsList[0];
         serverCrosswords.deleteCrossword(crosswordToDelete).then(function (data) {
             assert(data);
@@ -28,6 +29,7 @@ describe('Server Crosswords', () => {
     });
 
     it('Should generate a new easy crossword', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('easy').then(function (data) {
             assert(data);
             done();
@@ -35,6 +37,7 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should generate a new normal crossword', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
@@ -42,6 +45,7 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should generate a new hard crossword', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('hard').then(function (data) {
             assert(data);
             done();
@@ -49,6 +53,7 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should save on server according to difficulties', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             serverCrosswords.storeServerCrosswords(crosswordsList).then(function (stored) {
@@ -65,6 +70,7 @@ describe('Server Crosswords', () => {
     }).timeout(15000);
 
     it('Should initialize server crosswords by storing 5 crosswords for each level', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.initializeServerCrossword().then(function (data) {
             assert(data);
             assert(serverCrosswords.easyCrosswords.length === 5);
@@ -76,6 +82,7 @@ describe('Server Crosswords', () => {
 
 
     it('Store an easy crossword on server', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.storeOneServerCrossword('easy').then(function (data) {
             assert(data);
             assert(serverCrosswords.easyCrosswords.length === 6);
@@ -84,6 +91,7 @@ describe('Server Crosswords', () => {
     });
 
     it('Store a normal crossword on server', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.storeOneServerCrossword('normal').then(function (data) {
             assert(data);
             assert(serverCrosswords.normalCrosswords.length === 6);
@@ -92,6 +100,7 @@ describe('Server Crosswords', () => {
     });
 
     it('Store a hard crossword on server', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.storeOneServerCrossword('hard').then(function (data) {
             assert(data);
             assert(serverCrosswords.hardCrosswords.length === 6);
@@ -100,6 +109,7 @@ describe('Server Crosswords', () => {
     });
 
     it('Should return a crossword of level easy', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.getCrossword('easy').then(function (data) {
             assert(data.difficulty === 'easy');
             assert(serverCrosswords.easyCrosswords.length === 6);
@@ -108,6 +118,7 @@ describe('Server Crosswords', () => {
     }).timeout(10000);
 
     it('Should return a crossword of level hard', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.getCrossword('hard').then(function (data) {
             assert(data.difficulty === 'hard');
             assert(serverCrosswords.hardCrosswords.length === 6);
@@ -116,6 +127,7 @@ describe('Server Crosswords', () => {
     }).timeout(10000);
 
     it('Should return a crossword of level normal', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.getCrossword('normal').then(function (data) {
             assert(data.difficulty === 'normal');
             assert(serverCrosswords.normalCrosswords.length === 6);
@@ -124,9 +136,7 @@ describe('Server Crosswords', () => {
     }).timeout(10000);
 
     it('Should mutate grid', () => {
-        console.log(serverCrosswords.easyCrosswords[0]);
         serverCrosswords.mutate(serverCrosswords.easyCrosswords[0]);
-        console.log(serverCrosswords.mutatedGrid);
         assert(serverCrosswords.mutatedGrid.difficulty === 'easy');
     });
 
