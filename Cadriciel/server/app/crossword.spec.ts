@@ -13,7 +13,7 @@ describe('CrosswordGenerator', () => {
         crossword = new CrosswordGenerator(size);
     });
 
-    describe('newGrid(size: number, fill: any) : Array<any> { }', () => {
+    describe('constructor()', () => {
         it('should return a grid with size 10 x 10', () => {
             expect(crossword.grid.length).to.equal(10);
             expect(crossword.grid[0].length).to.equal(10);
@@ -24,7 +24,7 @@ describe('CrosswordGenerator', () => {
         });
     });
 
-    describe('patternForLine(i: number, horizontal: boolean) { }', () => {
+    describe('patternForLine()', () => {
         it('should return the pattern "          " if horizontal on a blank grid', () => {
             expect(crossword.patternForLine(0, true)).to.equal(' '.repeat(size));
         });
