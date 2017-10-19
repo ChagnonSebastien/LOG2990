@@ -11,7 +11,7 @@ export class Lexicon {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 
-    public patternToRegex(pattern: string): RegExp {
+    private patternToRegex(pattern: string): RegExp {
         const regex = /\s/g;
         const toMatch = pattern.replace(regex, '[a-z]');
         return new RegExp(toMatch, 'g');

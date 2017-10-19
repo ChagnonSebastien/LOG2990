@@ -10,13 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('patternToRegex()', () => {
-        it('"h   o" should match hello', () => {
-            const helloRegex = lexicon.patternToRegex('h   o');
-            expect(helloRegex.test('hello')).to.be.true;
-        });
-    });
-
     describe('words()', () => {
         it('should get common words', () => {
             expect(lexicon.words(true)['3'][0]).to.equal('ace');
