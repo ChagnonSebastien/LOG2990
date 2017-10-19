@@ -123,6 +123,13 @@ describe('Server Crosswords', () => {
         });
     }).timeout(10000);
 
+    it('Should mutate grid', () => {
+        console.log(serverCrosswords.easyCrosswords[0]);
+        serverCrosswords.mutate(serverCrosswords.easyCrosswords[0]);
+        console.log(serverCrosswords.mutatedGrid);
+        assert(serverCrosswords.mutatedGrid.difficulty === 'easy');
+    });
+
     // reset collection to crosswords
     serverCrosswords.setCollection('crosswords');
 });

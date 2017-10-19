@@ -18,6 +18,7 @@ export class ServerCrosswords {
 
 
     private constructor() {
+        this.mutatedGrid = new CrosswordDB();
         this.crosswordGenerator = new CrosswordGenerator(crosswordSize);
     }
 
@@ -180,7 +181,10 @@ export class ServerCrosswords {
     }
 
     public mutate(crossword: CrosswordDB) {
-        this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
+        this.mutatedGrid.crossword = this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
+        this.mutatedGrid.difficulty = crossword.difficulty;
+        this.mutatedGrid.listOfWords = Array.from(this.crosswordGenerator.words);
+        this.mutatedGrid.wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
     }
 
 
