@@ -21,8 +21,8 @@ describe('CrosswordGameInterfaceComponent', () => {
         fixture = TestBed.createComponent(CrosswordGameInterfaceComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        component.setRawCrossword();
-        component.listOfWords = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
+        //component.setRawCrossword();
+        //component.listOfWords = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
     });
 
     it('should be created', () => {
