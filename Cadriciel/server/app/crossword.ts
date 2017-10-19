@@ -238,7 +238,7 @@ export class CrosswordGenerator {
         }
     }
 
-    public generateCrossword(difficulty: string): string[][] {
+    private generateCrossword(difficulty: string): string[][] {
         let foundWord = true;
         while (foundWord) {
             foundWord = false;
