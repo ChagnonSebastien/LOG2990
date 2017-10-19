@@ -21,7 +21,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     /***********************************************************
     * This function sets the raw crossword
     ************************************************************/
-    public setRawCrossword(): void {
+    public setRawCrossword(crossword: string[][]): void {
+        this.game.crossword = crossword;
     }
 
     /***********************************************************

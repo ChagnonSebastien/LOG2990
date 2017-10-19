@@ -23,8 +23,19 @@ describe('CrosswordGameInterfaceComponent', () => {
         fixture = TestBed.createComponent(CrosswordGameInterfaceComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        //component.setRawCrossword();
-        //component.listOfWords = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
+        component.setRawCrossword([['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
+        ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
+        ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
+        ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
+        ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
+        ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
+        ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
+        ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
+        ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
+        ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']]);
+
+        component.game.listOfWords = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
+        component.game.option = 'SOLO';
     });
 
     it('should be created', () => {
