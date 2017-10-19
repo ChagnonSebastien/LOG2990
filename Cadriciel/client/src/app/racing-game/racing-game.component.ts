@@ -32,14 +32,9 @@ export class RacingGameComponent implements AfterViewInit {
         this.renderService.onResize();
     }
 
-    public turnCamera(event: any): void {
-        this.renderService.changeView(event);
+    public eventsListen(event: any): void {
+        this.renderService.eventsList(event);
         console.log('tourner camera');
-    }
-
-    public assimilateAndEstrangeCamera(event: any): void {
-        this.renderService.zoomCamera(event);
-        console.log('zoomer');
     }
 
     public ngAfterViewInit() {
