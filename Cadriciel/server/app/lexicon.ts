@@ -30,19 +30,29 @@ export class Lexicon {
             .concat(this.wordsOfLength(length, false));
     }
 
-    public wordsWithLengthUpTo(length: number): Array<string> {
+    public wordsOfLengthUpTo(length: number, common: boolean): Array<string> {
         return new Array(length - 2).fill(null)
             .map((value, index) => {
-                return this.allWordsOfLength(index + 3);
+                return this.wordsOfLength(index + 3, common);
             }).reduce((previous, current) => {
                 return previous.concat(current);
             });
     }
 
-    public wordsMatching(pattern: string): Array<string> {
+    public allWordsOfLengthUpTo(length: number): Array<string> {
+        return this.wordsOfLengthUpTo(length, true)
+            .concat(this.wordsOfLengthUpTo(length, false));
+    }
+
+    public wordsMatching(pattern: string, common: boolean): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
-        return this.allWordsOfLength(pattern.length)
+        return this.wordsOfLength(pattern.length, common)
             .filter(word => patternRegex.test(word));
+    }
+
+    public allWordsMatching(pattern: string): Array<string> {
+        return this.wordsMatching(pattern, true)
+            .concat(this.wordsMatching(pattern, false));
     }
 
     public subpatterns(pattern: string): string[] {
@@ -55,16 +65,21 @@ export class Lexicon {
         return Array.from(results);
     }
 
-    public wordsForPattern(pattern: string) {
+    public wordsForPattern(pattern: string, common: boolean) {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
-            return this.wordsWithLengthUpTo(pattern.length);
+            return this.wordsOfLengthUpTo(pattern.length, common);
         } else {
-            return this.wordsForNonEmptyPattern(pattern);
+            return this.wordsForNonEmptyPattern(pattern, common);
         }
     }
 
-    public wordsForNonEmptyPattern(pattern: string): string[] {
+    public allWordsForPattern(pattern: string) {
+        return this.wordsForPattern(pattern, true)
+            .concat(this.wordsForPattern(pattern, false));
+    }
+
+    public wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
         if (pattern.trim().length === 0) {
             return new Array<string>();
         }
@@ -75,12 +90,17 @@ export class Lexicon {
             return isNotEmpty;
         });
         const wordsForPattern = nonEmptySubpatterns.map(subpattern => {
-            return this.wordsMatching(subpattern);
+            return this.wordsMatching(subpattern, common);
         }).reduce((previous, current) => {
             return previous.concat(current);
         });
 
         return Array.from(new Set(wordsForPattern));
+    }
+
+    public allWordsForNonEmptyPattern(pattern: string): string[] {
+        return this.wordsForNonEmptyPattern(pattern, true)
+            .concat(this.wordsForNonEmptyPattern(pattern, false));
     }
 
     public randomWordFromArray(words: string[]): string {

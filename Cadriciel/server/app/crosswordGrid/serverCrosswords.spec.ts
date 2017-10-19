@@ -8,11 +8,14 @@ const collection = 'crosswords_tests';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    serverCrosswords.setCollection(collection);
     let crosswordsList: Array<CrosswordDB> = [];
 
+    beforeEach(() => {
+        serverCrosswords.setCollection(collection);
+    });
+
     it('Should get all the crosswords from the database', (done) => {
-        serverCrosswords.getCrossWords().then(function (data) {
+        serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             expect(data.length).to.be.greaterThan(0);
             done();
@@ -35,6 +38,7 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should generate a new normal crossword', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
@@ -49,10 +53,10 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should save on server according to difficulties', (done) => {
-        serverCrosswords.getCrossWords().then(function (data) {
+        serverCrosswords.getCrosswordsFromDB().then(function (data) {
             crosswordsList = data;
             serverCrosswords.storeServerCrosswords(crosswordsList).then(function (stored) {
-                serverCrosswords.getCrossWords().then(function (c) {
+                serverCrosswords.getCrosswordsFromDB().then(function (c) {
                     const storedCrosswords: Array<CrosswordDB> = c;
                     assert(crosswordsList.length === storedCrosswords.length);
                     assert(serverCrosswords.easyCrosswords.length === 5);
@@ -122,6 +126,11 @@ describe('Server Crosswords', () => {
             done();
         });
     }).timeout(10000);
+
+    it('Should mutate grid', () => {
+        serverCrosswords.mutate(serverCrosswords.easyCrosswords[0]);
+        assert(serverCrosswords.mutatedGrid.difficulty === 'easy');
+    });
 
     // reset collection to crosswords
     serverCrosswords.setCollection('crosswords');

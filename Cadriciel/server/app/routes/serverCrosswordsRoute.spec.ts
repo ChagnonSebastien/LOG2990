@@ -27,7 +27,7 @@ describe('Server Crosswords Route', () => {
         });
     }).timeout(3000);
 
-    it('Returns a normal crossword', (done) => {
+    it('Returns a hard crossword', (done) => {
         chai.request(apiUrl)
             .get('/crossword/crosswords_tests/hard')
             .end((err: any, res: any) => {
@@ -36,5 +36,42 @@ describe('Server Crosswords Route', () => {
                 done();
         });
     }).timeout(3000);
+
+    it('Returns a mutated easy crossword', (done) => {
+        const listOfWordsIndex = [{'i': 0, 'j': 0, 'word': 'sting', 'horizontal': true, '_id': '59e8de1bc222d70714cdb0a6'}];
+        chai.request(apiUrl)
+            .post('/mutate')
+            .send({level: 'easy', wordsWithIndex: listOfWordsIndex})
+            .end((err: any, res: any) => {
+                const crossword = JSON.parse(res.text);
+                assert(crossword.crossword.difficulty === 'easy');
+                done();
+            });
+    });
+
+    it('Returns a mutated normal crossword', (done) => {
+        const listOfWordsIndex = [{'i': 0, 'j': 0, 'word': 'gig', 'horizontal': true, '_id': '59e8de1bc222d70714cdb0a6'}];
+        chai.request(apiUrl)
+            .post('/mutate')
+            .send({level: 'normal', wordsWithIndex: listOfWordsIndex})
+            .end((err: any, res: any) => {
+                const crossword = JSON.parse(res.text);
+                assert(crossword.crossword.difficulty === 'normal');
+                done();
+            });
+    });
+
+    it('Returns a mutated hard crossword', (done) => {
+        const listOfWordsIndex = [{'i': 0, 'j': 0, 'word': 'cat', 'horizontal': true, '_id': '59e8de1bc222d70714cdb0a6'}];
+        chai.request(apiUrl)
+            .post('/mutate')
+            .send({level: 'hard', wordsWithIndex: listOfWordsIndex})
+            .end((err: any, res: any) => {
+                const crossword = JSON.parse(res.text);
+                assert(crossword.crossword.difficulty === 'hard');
+                done();
+            });
+    });
+
 
 });

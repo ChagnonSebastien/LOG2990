@@ -9,7 +9,7 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
     {path : 'crossword-test', component: CrosswordGameInterfaceComponent},
     {path : 'crossword-game-room', component: CrosswordGameRoomComponent}
 
-  ])],
-  exports: [RouterModule]
+    ])],
+    exports: [RouterModule]
 })
-export class CrosswordGameRoutingModule {}
+export class CrosswordGameRoutingModule { }

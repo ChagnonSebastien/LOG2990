@@ -20,6 +20,7 @@ export class TracksComponent implements OnInit {
     public onSelect(track: Track): void {
         this.selectedTrack = track;
     }
+
     public deleteTrack(id: number) {
         const tracks = this.tracks;
         this.trackService.deleteTrack(id).subscribe(data => {
@@ -32,6 +33,5 @@ export class TracksComponent implements OnInit {
                 }
             }
         });
-
     }
 }

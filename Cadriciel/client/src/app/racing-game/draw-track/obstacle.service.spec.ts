@@ -1,6 +1,4 @@
 import { ObstacleService } from './obstacle.service';
-import { AdminModule } from './../../admin/admin.module';
-import { TestBed, inject } from '@angular/core/testing';
 import * as THREE from 'three';
 
 describe('ObstacleService', () => {

@@ -4,10 +4,10 @@ export class Track {
     public name: string;
     public description = '';
     public type: string;
-    public trackIntersections: { x: number, y: number } [] = [];
+    public trackIntersections: { x: number, y: number }[] = [];
     public puddles: { distance: number, offset: number }[] = [];
-    public potholes: { distance: number, offset: number } [] = [];
-    public boosters: { distance: number, offset: number } [] = [];
+    public potholes: { distance: number, offset: number }[] = [];
+    public boosters: { distance: number, offset: number }[] = [];
 
     constructor(id: number, name: string, description: string, type: string) {
         this.trackId = id;
