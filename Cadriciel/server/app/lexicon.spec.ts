@@ -10,12 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('parseLexiconByLength()', () => {
-        it('should get the Lexicon from the json file', () => {
-            expect(lexicon.lexiconByLength['common']['14'][5]).to.equal('interpretation');
-        });
-    });
-
     describe('patternToRegex()', () => {
         it('"h   o" should match hello', () => {
             const helloRegex = lexicon.patternToRegex('h   o');

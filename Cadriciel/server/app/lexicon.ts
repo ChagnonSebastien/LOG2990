@@ -7,7 +7,7 @@ export class Lexicon {
         this.parseLexiconByLength(file);
     }
 
-    public parseLexiconByLength(file: string) {
+    private parseLexiconByLength(file: string) {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 
