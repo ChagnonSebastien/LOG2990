@@ -6,15 +6,18 @@ import { Word } from '../../commun/word';
 const lexiconPath = './app/words.json';
 
 export class CrosswordGenerator {
-    public size: number;
+    // public attributes
     public grid: string[][];
-    public previousGridState: string[][];
-    public gridCounter: number[][];
-    public previousGridCounter: number[][];
-    public lexicon: Lexicon;
     public words: Set<string>;
-    public previousWords: Set<string>;
     public wordsWithIndex: Array<Word>;
+
+    // private attributes
+    private size: number;
+    private previousGridState: string[][];
+    private gridCounter: number[][];
+    private previousGridCounter: number[][];
+    private lexicon: Lexicon;
+    private previousWords: Set<string>;
 
     constructor(size: number) {
         this.size = size;
@@ -23,17 +26,37 @@ export class CrosswordGenerator {
         this.loadLexicon(lexiconPath);
     }
 
+    // public methods
+    public newCrossword(difficulty: string): string[][] {
+        this.reset();
+        return this.generateCrossword(difficulty);
+    }
+
+    public mutate(difficulty: string, words: Array<Word>): string[][] {
+        this.reset();
+        this.setGrid(words);
+        return this.generateCrossword(difficulty);
+    }
+
+    public patternForLine(i: number, horizontal: boolean) {
+        if (horizontal) {
+            return this.grid[i].join('');
+        } else {
+            let pattern = '';
+            for (let index = 0; index < this.size; index++) {
+                pattern += this.grid[index][i];
+            }
+            return pattern;
+        }
+    }
+
+    // private methods
+    // used by constructor
     private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
         this.grid = this.newGrid(this.size, ' ');
         this.gridCounter = this.newGrid(this.size, 0);
-    }
-
-    private setGrid(words: Array<Word>) {
-        words.map((word) => {
-            return this.addWord(word.i, word.j, word.word, word.horizontal);
-        });
     }
 
     private newGrid(size: number, fill: any): Array<any> {
@@ -48,6 +71,7 @@ export class CrosswordGenerator {
         this.lexicon = new Lexicon(lexiconPath);
     }
 
+    // used to generate crossword
     private addLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1
             || CrosswordChecker.indexesOutOfBounds(i, j, this.size)) {
@@ -138,18 +162,6 @@ export class CrosswordGenerator {
         return insertIndex;
     }
 
-    public patternForLine(i: number, horizontal: boolean) {
-        if (horizontal) {
-            return this.grid[i].join('');
-        } else {
-            let pattern = '';
-            for (let index = 0; index < this.size; index++) {
-                pattern += this.grid[index][i];
-            }
-            return pattern;
-        }
-    }
-
     private addRandomWord(i: number, horizontal: boolean, difficulty: string): boolean {
         const pattern = this.patternForLine(i, horizontal);
 
@@ -192,17 +204,6 @@ export class CrosswordGenerator {
         return this.grid;
     }
 
-    public newCrossword(difficulty: string): string[][] {
-        this.reset();
-        return this.generateCrossword(difficulty);
-    }
-
-    public mutate(difficulty: string, words: Array<Word>): string[][] {
-        this.reset();
-        this.setGrid(words);
-        return this.generateCrossword(difficulty);
-    }
-
     private saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
         this.previousGridCounter = Utilities.deepCopy(this.gridCounter);
@@ -215,5 +216,12 @@ export class CrosswordGenerator {
         this.gridCounter = Utilities.deepCopy(this.previousGridCounter);
         this.words = new Set(Array.from(this.previousWords));
         return true;
+    }
+
+    // used to mutate crossword
+    private setGrid(words: Array<Word>) {
+        words.map((word) => {
+            return this.addWord(word.i, word.j, word.word, word.horizontal);
+        });
     }
 }
