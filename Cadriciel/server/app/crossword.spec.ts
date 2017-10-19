@@ -227,22 +227,16 @@ describe('CrosswordGenerator', () => {
     describe('newCrossword() { }', () => {
         it('should generate a new easy crossword', () => {
             crossword.newCrossword('easy');
-            crossword.printGrid();
-            console.log(crossword.wordsWithIndex);
             expect(crossword.words.size).to.be.greaterThan(0);
         }).timeout(15000);
 
         it('should generate a new normal crossword', () => {
             crossword.newCrossword('normal');
-            crossword.printGrid();
-            console.log(crossword.wordsWithIndex);
             expect(crossword.words.size).to.be.greaterThan(0);
         }).timeout(15000);
 
         it('should generate a new hard crossword', () => {
             crossword.newCrossword('hard');
-            crossword.printGrid();
-            console.log(crossword.wordsWithIndex);
             expect(crossword.words.size).to.be.greaterThan(0);
         }).timeout(15000);
     });
