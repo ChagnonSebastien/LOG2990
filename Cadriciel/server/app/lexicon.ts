@@ -1,16 +1,38 @@
 import * as fs from 'fs';
 
 export class Lexicon {
-    public lexiconByLength: any;
+    private lexiconByLength: any;
 
     constructor(file: string) {
         this.parseLexiconByLength(file);
     }
 
+    // public methods
+    public wordsForPattern(pattern: string, common: boolean) {
+        const isBlankPattern: boolean = pattern.trim().length === 0;
+        if (isBlankPattern) {
+            return this.wordsOfLengthUpTo(pattern.length, common);
+        } else {
+            return this.wordsForNonEmptyPattern(pattern, common);
+        }
+    }
+
+    public allWordsForPattern(pattern: string) {
+        return this.wordsForPattern(pattern, true)
+            .concat(this.wordsForPattern(pattern, false));
+    }
+
+    public randomWordFromArray(words: string[]): string {
+        return words[Math.floor(Math.random() * words.length)];
+    }
+
+    // private methods
+    // methods used by constructor
     private parseLexiconByLength(file: string) {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 
+    // methods used to find words that match a pattern and commonality
     private patternToRegex(pattern: string): RegExp {
         const regex = /\s/g;
         const toMatch = pattern.replace(regex, '[a-z]');
@@ -50,20 +72,6 @@ export class Lexicon {
         return Array.from(results);
     }
 
-    public wordsForPattern(pattern: string, common: boolean) {
-        const isBlankPattern: boolean = pattern.trim().length === 0;
-        if (isBlankPattern) {
-            return this.wordsOfLengthUpTo(pattern.length, common);
-        } else {
-            return this.wordsForNonEmptyPattern(pattern, common);
-        }
-    }
-
-    public allWordsForPattern(pattern: string) {
-        return this.wordsForPattern(pattern, true)
-            .concat(this.wordsForPattern(pattern, false));
-    }
-
     private wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
         if (pattern.trim().length === 0) {
             return new Array<string>();
@@ -81,9 +89,5 @@ export class Lexicon {
         });
 
         return Array.from(new Set(wordsForPattern));
-    }
-
-    public randomWordFromArray(words: string[]): string {
-        return words[Math.floor(Math.random() * words.length)];
     }
 }
