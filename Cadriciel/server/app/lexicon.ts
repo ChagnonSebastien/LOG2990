@@ -34,7 +34,7 @@ export class Lexicon {
             });
     }
 
-    public wordsMatching(pattern: string, common: boolean): Array<string> {
+    private wordsMatching(pattern: string, common: boolean): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
         return this.wordsOfLength(pattern.length, common)
             .filter(word => patternRegex.test(word));
