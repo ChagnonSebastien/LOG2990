@@ -114,6 +114,9 @@ export class Application {
         // crossword api path
         router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
 
+        // mutated crossword api path
+        router.post('/mutate', serverStoredCrosswords.getMutatedCrossword
+                    .bind(serverStoredCrosswords.getMutatedCrossword));
         // use router middleware
         this.app.use('/api', router);
 
