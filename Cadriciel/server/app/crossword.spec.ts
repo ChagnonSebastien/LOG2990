@@ -67,7 +67,7 @@ describe('CrosswordGenerator', () => {
 
             // Choose 1 word out of 3 to be 'found'
             const foundWords = crossword.wordsWithIndex.filter(() => {
-                return Math.floor(Math.random() * 3) == 0;
+                return Math.floor(Math.random() * 3) === 0;
             });
 
             crossword.mutate(difficulty, foundWords);
@@ -85,14 +85,14 @@ describe('CrosswordGenerator', () => {
 
         it('should mutate a normal crossword', () => {
             const difficulty = 'normal';
-            
+
             // Generate an easy crossword
             crossword.newCrossword(difficulty);
             expect(crossword.words.size).to.be.greaterThan(0);
 
             // Choose 1 word out of 3 to be 'found'
             const foundWords = crossword.wordsWithIndex.filter(() => {
-                return Math.floor(Math.random() * 3) == 0;
+                return Math.floor(Math.random() * 3) === 0;
             });
 
             crossword.mutate(difficulty, foundWords);
@@ -117,7 +117,7 @@ describe('CrosswordGenerator', () => {
 
             // Choose 1 word out of 3 to be 'found'
             const foundWords = crossword.wordsWithIndex.filter(() => {
-                return Math.floor(Math.random() * 3) == 0;
+                return Math.floor(Math.random() * 3) === 0;
             });
 
             crossword.mutate(difficulty, foundWords);
