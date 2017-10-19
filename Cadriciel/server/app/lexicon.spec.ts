@@ -10,20 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('subpatterns(pattern: string): string[] { }', () => {
-        it('should return all the subpatterns of "h   o"', () => {
-            const patterns = lexicon.subpatterns('h   o');
-            expect(patterns.includes('h  ')).to.be.true;
-            expect(patterns.includes('  o')).to.be.true;
-            expect(patterns.includes('h   o')).to.be.true;
-        });
-
-        it('should not return any duplicate patterns', () => {
-            const patterns = lexicon.subpatterns(' '.repeat(10));
-            expect(patterns.length).to.equal(8);
-        });
-    });
-
     describe('wordsForPattern(pattern: string): string[] { }', () => {
         it('should only match common words with h and/or o when the pattern is "h   o     "', () => {
             const words = lexicon.wordsForPattern('h   o     ', true);

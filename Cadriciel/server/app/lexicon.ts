@@ -40,7 +40,7 @@ export class Lexicon {
             .filter(word => patternRegex.test(word));
     }
 
-    public subpatterns(pattern: string): string[] {
+    private subpatterns(pattern: string): string[] {
         const results: Set<string> = new Set<string>();
         for (let length = 3; length <= pattern.length; length++) {
             for (let index = 0; index <= pattern.length - length; index++) {
