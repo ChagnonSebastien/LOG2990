@@ -83,11 +83,6 @@ export class Lexicon {
         return Array.from(new Set(wordsForPattern));
     }
 
-    public allWordsForNonEmptyPattern(pattern: string): string[] {
-        return this.wordsForNonEmptyPattern(pattern, true)
-            .concat(this.wordsForNonEmptyPattern(pattern, false));
-    }
-
     public randomWordFromArray(words: string[]): string {
         return words[Math.floor(Math.random() * words.length)];
     }

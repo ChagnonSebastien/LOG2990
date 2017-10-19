@@ -44,21 +44,6 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('allWordsForNonEmptyPattern(pattern: string): string[] { }', () => {
-        it('should return all words that fit the subpatterns of the pattern', () => {
-            const words: string[] = lexicon.allWordsForNonEmptyPattern('h   o');
-            expect(words.includes('hello')).to.be.true;
-            expect(words.includes('cello')).to.be.false;
-            expect(words.includes('eat')).to.be.false;
-            expect(words.includes('ham')).to.be.true;
-        });
-
-        it('should not return anything if the pattern provided is blank', () => {
-            const words: string[] = lexicon.allWordsForNonEmptyPattern('     ');
-            expect(words.length).to.equal(0);
-        });
-    });
-
     describe('randomWordFromArray(words: string[]): string { }', () => {
         it('should return a random word contained in the array provided', () => {
             const words: string[] = ['hello', 'world', 'walleandtomato', 'tomato'];
