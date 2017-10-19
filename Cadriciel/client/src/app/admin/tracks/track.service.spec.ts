@@ -1,8 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { Http, Headers } from '@angular/http';
-
 import { AppModule } from '../../app.module';
-
 import { TrackService } from './track.service';
 import { Track } from './track';
 

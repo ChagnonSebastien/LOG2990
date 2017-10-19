@@ -1,3 +1,6 @@
+import { ObstacleService } from './../racing-game/draw-track/obstacle.service';
+import { RenderService } from './../racing-game/draw-track/render.service';
+import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -40,6 +43,9 @@ import { AdminRoutingModule } from './admin-routing.module';
     providers: [
         AuthenticationService,
         DrawTrackService,
+        ObstacleService,
+        RenderService,
+        TrackValidationService,
         TrackService
     ]
 })

@@ -1,32 +1,86 @@
 #wrapper {
-    border: 1px solid black;
-    width: 450px;
-    height: 450px;
-    margin: 0 auto;
-  }
+  border: 1px solid black;
+  width: 580px;
+  height: 640px;
+  margin: 0 auto;
+}
 
-  
-  .filled {
-    width: 28px;
-    height: 28px;
-    background: black;
-    border: 1px solid black;
-    padding: 0;
-    margin: 0;
-    float: left;
-    text-transform: uppercase;
-  }
-  
-  .empty {
-    width: 28px;
-    height: 28px;
-    border: 1px solid black;
-    padding: 0;
-    margin: 0;
-    float: left;
-    text-transform: uppercase;
-  }
+.filled {
+  width: 58px;
+  height: 58px;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+  float: left;
+  text-transform: uppercase;
+}
 
-  .imput{
-    text-transform: uppercase;
-  }
+.empty {
+  width: 58px;
+  height: 58px;
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+  float: left;
+  text-transform: uppercase;
+}
+
+.active {
+  border: 3px solid red;
+  background-color: #E9D1D1
+}
+
+.correctWord {
+  border: 3px solid #7BF57B;
+  background-color: #CAF8D0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+#hints {
+  border-collapse: separate;
+  border-spacing: 0px 4px;
+  width: 280px;
+  height: 380px;
+  margin: 0 auto
+}
+
+.selected {
+  background-color: #119AE9
+}
+
+#page {
+  background: url('./space_background.jpg');
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  overflow: scroll;
+}
+
+#grid {
+  border-top: 500px;
+}
+
+#Horizontal_Header {
+  padding-left: 5px;
+  padding-bottom: 3px;
+  color: #8AD1F1;
+  font-weight: bold;
+}
+
+#Vertical_Header {
+  padding-left: 5px;
+  padding-bottom: 3px;
+  color: #8AD1F1;
+  font-weight: bold;
+}
+
+#conteneur {
+  display: flex;
+}

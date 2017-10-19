@@ -1,18 +1,14 @@
 <div *ngIf="track">
-  <div class="card">
-  <div class="card-header"><h1>Track Details</h1></div>
-  <div class="card-block">
-    <h4 class="card-title">{{track.name}}</h4>
-    <p class="card-text">
-      <label>name: </label>
-      <input [(ngModel)]="track.name"  placeholder="name"/>
-      <label>description: </label>
-      <input [(ngModel)]="track.description"  placeholder="description"/>
-      <label>type: </label>
-      <input [(ngModel)]="track.type" placeholder="type"/><br/>
-      <label>appreciation: {{track.appreciation}} </label><br/>
-      <label>timePlayed: {{track.timePlayed}} </label>
-    </p>
-    <button class="btn" (click)="save()">Save</button>
+  <h2>{{track.name}} track details!</h2>
+  <div>
+    <label>id: </label>{{track.trackId}}</div>
+  <div>
+    <label>Current name: {{track.name}}</label>
+    <input placeholder="name" #trackName/>
+    <label>Current description: {{track.description}}</label>
+    <input placeholder="description" #trackDescription/>
+    <label>Current type: {{track.type}}</label>
+    <input placeholder="type" #trackType/>
   </div>
+  <button (click)="save()">Save</button>
 </div>

@@ -1,42 +1,26 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { RacingGameComponent } from './racing-game.component';
-import { RacingHeaderComponent } from './racing-header/racing-header.component';
-import { TrackComponent } from './track/track.component';
-import { TracksComponent } from './tracks/tracks.component';
-import {CrosswordGameInterfaceComponent} from './crossword-game-interface.component';
-
-
-// Unused
-import { InGameComponent } from './in-game/in-game.component';
-import { TrackEditorComponent } from './track-editor/track-editor.component';
-import { TrackAdminComponent } from './track-admin/track-admin.component';
-import { TrackInfoComponent } from './track-info/track-info.component';
+import { RenderService } from './render.service';
+import { CameraService } from './camera.service';
 
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        BrowserModule,
+        HttpModule
     ],
     declarations: [
-        RacingGameComponent,
-        RacingHeaderComponent,
-        TrackComponent,
-        TracksComponent,
-        InGameComponent,
-        TrackEditorComponent,
-        TrackAdminComponent,
-        TrackInfoComponent,
-       
+        RacingGameComponent
     ],
     exports: [
-        RacingGameComponent,
-        RacingHeaderComponent,
-        TrackComponent,
-        TracksComponent,
+        RacingGameComponent
     ],
-    providers: []
+    providers: [RenderService, CameraService]
 })
 export class RacingGameModule { }

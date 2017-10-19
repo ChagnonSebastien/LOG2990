@@ -1,23 +1,17 @@
 import * as fs from 'fs';
 import * as request from 'request';
+import * as async from 'async';
 
 export class LexiconReader {
 
     public readWords(file: string): string[] {
-        let content: string[];
-        content = fs.readFileSync(file, 'utf8').split('\r\n');
-        return content;
+        return fs.readFileSync(file, 'utf8').split('\r\n');
     }
 
     public readWordsOfLength(lexicon: string[], wordLength: number): string[] {
-        const wordsOfLength: string[] = [];
-
-        for (const word of lexicon) {
-            if (word.length == wordLength) {
-                wordsOfLength.push(word);
-            }
-        }
-        return wordsOfLength;
+        return lexicon.filter((word) => {
+            return wordLength === word.length;
+        });
     }
 
     public getWordsWithChar(lexicon: string[], character: string, position: number) {
@@ -51,38 +45,44 @@ export class LexiconReader {
         return wordsWithChar;
     }
 
-    public async getUncommonWords(lexicon: string[]): Promise<string[]> {
-        const commonwords: string[] = [];
-
-        for (let i = 0; i < 40; i++) {
-            const randomIndex = Math.floor(Math.random() * lexicon.length);
-            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
-            if (frequency < 2) {
-                commonwords.push(lexicon[randomIndex]);
-            }
-        }
-
-        return commonwords;
+    public async getUncommonWords(lexicon: string[]): Promise<any> {
+        const randomWords = Array(40).fill(null).map((value) => {
+            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+            return randomWord;
+        });
+        return new Promise(
+            (resolve) => {
+                async.filter(randomWords, (word, callback) => {
+                    this.getWordFrequency(word).then((frequency) => {
+                        callback(null, frequency < 1);
+                    });
+                }, (err, results: string[]) => {
+                    resolve(results);
+                });
+            });
     }
 
-    public async getCommonWords(lexicon: string[]): Promise<string[]> {
-        const commonwords: string[] = [];
-
-        for (let i = 0; i < 40; i++) {
-            const randomIndex = Math.floor(Math.random() * lexicon.length);
-            const frequency: number = await this.getWordFrequency(lexicon[randomIndex]);
-            if (frequency >= 2) {
-                commonwords.push(lexicon[randomIndex]);
-            }
-        }
-
-        return commonwords;
+    public async getCommonWords(lexicon: string[]): Promise<any> {
+        const randomWords = Array(40).fill(null).map((value) => {
+            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+            return randomWord;
+        });
+        return new Promise(
+            (resolve) => {
+                async.filter(randomWords, (word, callback) => {
+                    this.getWordFrequency(word).then((frequency) => {
+                        callback(null, frequency >= 1);
+                    });
+                }, (err, results: string[]) => {
+                    resolve(results);
+                });
+            });
     }
 
     public getWordFrequency(word: string): Promise<number> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'frequency?useCanonical=false&startYear=2012&endYear=' +
-                        '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
 
         return new Promise<number>(resolve => {
             request(`${uri}/${word}/${options}`, (error, response, body) => {
@@ -95,7 +95,7 @@ export class LexiconReader {
     public getWordDefinitions(word: string): Promise<string[]> {
         const uri = 'http://api.wordnik.com:80/v4/word.json';
         const options = 'definitions?limit=200&includeRelated=true&useCanonical=false' +
-                        '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+            '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
         let definitions: string[] = [];
 
         return new Promise<string[]>(resolve => {

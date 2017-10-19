@@ -1,15 +1,15 @@
-import { Injectable, ReflectiveInjector } from '@angular/core';
-import {async, fakeAsync, tick,  TestBed, inject, ComponentFixture } from '@angular/core/testing';
-import {BaseRequestOptions, ConnectionBackend, Http, RequestOptions} from '@angular/http';
-import {Response, ResponseOptions} from '@angular/http';
-import {MockBackend, MockConnection} from '@angular/http/testing';
+import { ReflectiveInjector } from '@angular/core';
+import { async, fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@angular/http';
+import { Response, ResponseOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 
 import { AuthenticationService } from './authentication.service';
 
 
 describe('AuthenticationService', () => {
-    const passWord = 'truePassword';
-    const fackPassword = 'fackPassWord';
+    const password = 'truePassword';
+    const fakePassword = 'fackPassWord';
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -28,86 +28,55 @@ describe('AuthenticationService', () => {
 
     // authenticate()
     it('authenticate() should query current service url', () => {
-        this.authenticationService.authenticate(passWord);
+        this.authenticationService.authenticate(password);
         expect(this.lastConnection).toBeDefined('no http service connection at all?');
         expect(this.lastConnection.request.url).toMatch(/api\/login$/, 'url invalid');
     });
 
     it('authenticate() should return authenticated', fakeAsync(() => {
         let result: String;
-        this.authenticationService.authenticate(passWord).then((forAuthentication: String) => result = forAuthentication);
+        this.authenticationService.authenticate(password).then((forAuthentication: String) => result = forAuthentication);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify({data: 'authenticated'}),
+            body: JSON.stringify({ data: 'authenticated' }),
         })));
         tick();
         expect(result).toBe('authenticated');
-      }));
+    }));
 
-      it('authenticate() should return invalid', fakeAsync(() => {
+    it('authenticate() should return invalid', fakeAsync(() => {
         let result: String;
-        this.authenticationService.authenticate(fackPassword).then((forAuthentication: String) => result = forAuthentication);
+        this.authenticationService.authenticate(fakePassword).then((forAuthentication: String) => result = forAuthentication);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
-             body: JSON.stringify({data: 'invalid'}),
+            body: JSON.stringify({ data: 'invalid' }),
         })));
         tick();
         expect(result).toBe('invalid');
-      }));
+    }));
 
-      it('authenticate() while server is down', fakeAsync(() => {
-        let result: String;
-        let catchedError: any;
-        this.authenticationService.authenticate(passWord)
-            .then((forAuthentication: String) => result = forAuthentication)
-            .catch((error: any) => catchedError = error);
-        this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          status: 404,
-          statusText: 'URL not Found',
-        })));
-        tick();
-        expect(result).toBeUndefined();
-        expect(catchedError).toBeDefined();
-      }));
-
-      // changePassword()
-      it('changePassword() should query current service url', () => {
-        this.authenticationService.changePassword(passWord, 'newPassWord');
+    // changePassword()
+    it('changePassword() should query current service url', () => {
+        this.authenticationService.changePassword(password, 'newPassWord');
         expect(this.lastConnection).toBeDefined('no http service connection at all?');
         expect(this.lastConnection.request.url).toMatch(/api\/changepassword$/, 'url invalid');
     });
-    
+
     it('changePassword() should return success', fakeAsync(() => {
         let result: String;
-        this.authenticationService.changePassword(passWord, 'newPassWord').then((changedWord: String) => result = changedWord);
+        this.authenticationService.changePassword(password, 'newPassWord').then((changedWord: String) => result = changedWord);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify({data: 'success'}),
+            body: JSON.stringify({ data: 'success' }),
         })));
         tick();
         expect(result).toBe('success');
-      }));
+    }));
 
-      it('changePassword() should return invalid', fakeAsync(() => {
+    it('changePassword() should return invalid', fakeAsync(() => {
         let result: String;
-        this.authenticationService.changePassword(fackPassword, 'newPassWord').then((changedWord: String) => result = changedWord);
+        this.authenticationService.changePassword(fakePassword, 'newPassWord').then((changedWord: String) => result = changedWord);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify({data: 'invalid'}),
+            body: JSON.stringify({ data: 'invalid' }),
         })));
         tick();
         expect(result).toBe('invalid');
-      }));
-
-      it('changePassword() while server is down', fakeAsync(() => {
-        let result: String;
-        let catchedError: any;
-        this.authenticationService.changePassword(passWord, 'newPassWord')
-            .then((changedWord: String) => result = changedWord)
-            .catch((error: any) => catchedError = error);
-        this.lastConnection.mockRespond(new Response(new ResponseOptions({
-          status: 404,
-          statusText: 'URL not Found',
-        })));
-        tick();
-        expect(result).toBeUndefined();
-        expect(catchedError).toBeDefined();
-      }));
-
+    }));
 });

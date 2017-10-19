@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Track } from './track';
 import { TrackService } from './track.service';
 

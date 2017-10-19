@@ -11,11 +11,11 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as CrossWordsRoute from './routes/crossWordRoute';
 import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
 import * as trackRoute from './routes/track';
+import * as serverCrosswords from './routes/serverCrosswordsRoute';
 
 export class Application {
 
@@ -82,7 +82,8 @@ export class Application {
         const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
         const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
         const track: trackRoute.Tracks = new trackRoute.Tracks();
-        const crosswords: CrossWordsRoute.CrossWords = new CrossWordsRoute.CrossWords();
+        const serverStoredCrosswords: serverCrosswords.ServerCrosswordsRoute = new serverCrosswords.ServerCrosswordsRoute('crosswords');
+
         // home page
         router.get('/basic', index.index.bind(index.index));
 
@@ -95,7 +96,6 @@ export class Application {
         router.get('/commonWords', lexicon.getCommonWords.bind(lexicon.getCommonWords));
         router.get('/frequency/:word', lexicon.getWordFrequency.bind(lexicon.getWordFrequency));
         router.get('/pattern/:word', lexicon.getWordsMatchingPattern.bind(lexicon.getWordsMatchingPattern));
-
 
         // login api path
         router.post('/login', authentication.login.bind(authentication.login));
@@ -112,10 +112,11 @@ export class Application {
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // crossword api path
-        router.post('/crosswords', crosswords.addCrossWord.bind(crosswords.addCrossWord));
-        router.delete('/crosswords:id', crosswords.deleteCrossWord.bind(crosswords.deleteCrossWord));
-        router.get('/crosswords', crosswords.getCrossWords.bind(crosswords.getCrossWords));
+        router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
 
+        // mutated crossword api path
+        router.post('/mutate', serverStoredCrosswords.getMutatedCrossword
+                    .bind(serverStoredCrosswords.getMutatedCrossword));
         // use router middleware
         this.app.use('/api', router);
 
