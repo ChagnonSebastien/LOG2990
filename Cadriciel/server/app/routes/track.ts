@@ -1,5 +1,5 @@
 
-const Track = require('./trackSchema');
+const trackSchema = require('./trackSchema');
 import * as express from 'express';
 
 import * as mongodb from 'mongodb';
@@ -89,7 +89,7 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-                    const newTrack = new Track({
+                    const newTrack = new trackSchema({
                         trackId: req.body.id,
                         name: req.body.name,
                         description: req.body.description,
