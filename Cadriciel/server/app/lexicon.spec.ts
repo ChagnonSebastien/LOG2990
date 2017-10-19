@@ -10,24 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('allWordsOfLengthUpTo(length: number): Array<string> { }', () => {
-        it('should get all the words of length 3 and only 3', () => {
-            const words = lexicon.allWordsOfLengthUpTo(3);
-            const lengths = Array.from(new Set(words.map(value => value.length)));
-            expect(lengths[0]).to.equal(3);
-            expect(lengths.length).to.equal(1);
-        });
-
-        it('should get all the words of same length and shorter', () => {
-            const words = lexicon.allWordsOfLengthUpTo(6);
-            const maxLength = words.map(value => value.length)
-                .reduce((previous, current) => {
-                    return previous > current ? previous : current;
-                });
-            expect(maxLength).to.equal(6);
-        });
-    });
-
     describe('wordsMatching()', () => {
         it('should get all the common words matching "h   o"', () => {
             const wordsThatMatch: Array<string> = lexicon.wordsMatching('h   o', true);

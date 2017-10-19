@@ -34,11 +34,6 @@ export class Lexicon {
             });
     }
 
-    public allWordsOfLengthUpTo(length: number): Array<string> {
-        return this.wordsOfLengthUpTo(length, true)
-            .concat(this.wordsOfLengthUpTo(length, false));
-    }
-
     public wordsMatching(pattern: string, common: boolean): Array<string> {
         const patternRegex = this.patternToRegex(pattern);
         return this.wordsOfLength(pattern.length, common)
