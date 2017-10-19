@@ -38,6 +38,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     ************************************************************/
     public handleClick($event, indexes: Index[]): void {
         this.activeIndexes = indexes.slice();
+        this.awareSelectionOpponent();
         $event.stopPropagation();
     }
 
@@ -60,6 +61,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     ************************************************************/
     public cancelSelection($event): void {
         this.activeIndexes.splice(0, this.activeIndexes.length);
+        this.awareSelectionOpponent();
         this.kSelected = -1;
     }
 
@@ -95,9 +97,10 @@ export class CrosswordGameInterfaceComponent implements OnInit {
             for (let k = 0; k < this.correctIndexes.length; k++) {
                 if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j) {
                     this.correctIndexes.splice(k, 1);
-                }
-            }
-        }
+                    this.awareCorrectIndexOpponent();
+                 }
+             }
+         }
     }
     /***********************************************************
     * Check if the word was found by the user using its postion
@@ -150,6 +153,58 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
     /***********************************************************
+    * Check if the word was found by the user using its postion
+    * in the wordIndexes array
+    ***************************************************************/
+    public checkWordFoundOpponent(wordPosition: number): boolean {
+        if (this.game.option === 'MULTIPLAYER') {
+           if (wordPosition < this.wordsIndexes.length && wordPosition > -1) {
+               for (let i = 0; i < this.wordsIndexes[wordPosition].indexes.length; i++) {
+                   if (!(this.checkCorrectIndexesOpponent(this.wordsIndexes[wordPosition].indexes[i].i,
+                       this.wordsIndexes[wordPosition].indexes[i].j))) {
+                       return false;
+                   }
+               }
+               return true;
+           }
+           return false;
+         }
+       }
+       /***********************************************************
+       * Using the index of a grid , check if the words containing
+       * that index were found.
+       ***************************************************************/
+       public checkWordWithIndexOpponent(i: number, j: number): boolean {
+        if (this.game.option === 'MULTIPLAYER') {
+           for (let k = 0; k < this.wordsIndexes.length; k++) {
+               for (let l = 0; l < this.wordsIndexes[k].indexes.length; l++) {
+                   if (this.wordsIndexes[k].indexes[l].i === i && this.wordsIndexes[k].indexes[l].j === j) {
+                       if (this.checkWordFound(k)) {
+                           return true;
+                       }
+                   }
+               }
+           }
+           return false;
+         }
+       }
+
+       /***********************************************************
+       *Check if  the letter enterted at this particular index
+       *contains the correct letter
+       ***************************************************************/
+       public checkCorrectIndexesOpponent(i: number, j: number): boolean {
+           let found = false;
+           for (let k = 0; k < this.multiplayerService.opponentCorrectIndexes.length; k++) {
+               if (this.multiplayerService.opponentCorrectIndexes[k].i === i && this.multiplayerService.opponentCorrectIndexes[k].j === j) {
+                   found = true;
+               }
+           }
+           return found;
+       }
+
+
+    /***********************************************************
     *Set the variable kSelected which represents the positon of
     *the selected word in the wordIndexes table
     ***************************************************************/
@@ -158,11 +213,37 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
     /***********************************************************
-    * Let the opponent know we selected this hint in multiplayer
-    * mode.
+    * Let the opponent know on a change of active indexes.
     ***************************************************************/
-    public awareSelectionOpponent(indexes: Index[]): void {
-        this.multiplayerService.selectHint(indexes);
+    public awareSelectionOpponent(): void {
+        if (this.game.option === 'MULTIPLAYER') {
+        this.multiplayerService.selectHint(this.activeIndexes);
+        }
+    }
+
+    /***********************************************************
+    * Let the opponent know on a change of correct indexes.
+    ***************************************************************/
+    public awareCorrectIndexOpponent(): void {
+        if (this.game.option === 'MULTIPLAYER') {
+        this.multiplayerService.opponentFoundWord(this.correctIndexes);
+        }
+    }
+    /***********************************************************
+    * Check to see if the opponent found the word containing
+    * the index given in parameter.
+    ***************************************************************/
+    public checkIfOpponentFoundWord(i: number, j: number): boolean {
+        for (let k = 0; k < this.wordsIndexes.length; k++) {
+            for (let l = 0; l < this.wordsIndexes[k].indexes.length; l++) {
+                if (this.wordsIndexes[k].indexes[l].i === i && this.wordsIndexes[k].indexes[l].j === j) {
+                    if (this.multiplayerService.checkIfOpponentFoundWord(this.wordsIndexes[k].indexes)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /***********************************************************
@@ -191,17 +272,19 @@ export class CrosswordGameInterfaceComponent implements OnInit {
 
     /***********************************************************
     *Check if the user input matches the crossword grid. If so add
-    * it to the correct indexes lisr
+    * it to the correct indexes list
     ***************************************************************/
     public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
         if (this.game.crossword[i][j].charCodeAt(0) === keyCode ||
         this.game.crossword[i][j].charCodeAt(0) - 32 === keyCode) {
             const index: Index = { i: i, j: j };
             this.correctIndexes.push(index);
+            this.awareCorrectIndexOpponent();
         } else {
             for (let k = 0; k < this.correctIndexes.length; k++) {
                 if (this.correctIndexes[k].i === i && this.correctIndexes[k].j === j) {
                     this.correctIndexes.splice(k, 1);
+                    this.awareCorrectIndexOpponent();
                 }
             }
         }
@@ -236,9 +319,6 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     ***************************************************************/
     public async getWordsIndexes(): Promise< {word: string, indexes: Index[], position: string, hint: string }[]> {
         await this.crosswordService.getWordsIndexes(this.game.crossword, this.game.listOfWords).then(res => {
-            console.log(this.game);
-            console.log(this.game.listOfWords);
-            console.log(res);
             for (let i = 0 ; i < res.length ; i ++) {
              this.wordsIndexes.push(res[i]);
           }

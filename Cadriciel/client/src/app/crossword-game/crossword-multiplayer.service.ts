@@ -13,7 +13,7 @@ export class MultiplayerService {
     private socket: SocketIOClient.Socket;
     public currentGame: Game;
     public opponentActiveIndexes: Index[] = [];
-
+    public opponentCorrectIndexes: Index[] = [];
     constructor(private http: Http, private router: Router, private route: ActivatedRoute,
         private crosswordGameInfoService: CrosswordGameInfoService) {
         this.socket = io.connect(this.HOST_NAME + this.SERVER_PORT);
@@ -38,8 +38,15 @@ export class MultiplayerService {
             this.router.navigate([`/crossword-test`], { relativeTo: this.route });
           });
           this.socket.on('opponent selected a grid sqaure', data => {
-            console.log('yes');
             this.opponentActiveIndexes = data;
+          });
+          this.socket.on('opponent found a word', data => {
+             /* data.forEach(index => {
+                 if (this.opponentCorrectIndexes.indexOf(index) === -1) {
+                 this.opponentCorrectIndexes.push(index);
+                 }
+              });*/
+              this.opponentCorrectIndexes = data;
           });
     }
     public sendGame(difficulty: string, mode: string, username: string ) {
@@ -58,6 +65,9 @@ export class MultiplayerService {
     public selectHint(indexes: Index[]) {
         this.socket.emit('i selected a word hint', indexes, this.getOpponentSocketId());
     }
+    public opponentFoundWord(indexes: Index[]) {
+        this.socket.emit('i found a word', indexes, this.getOpponentSocketId());
+    }
     public checkIfOpponentSelected(i: number, j: number) {
         for (let k = 0; k < this.opponentActiveIndexes.length; k++) {
             if (this.opponentActiveIndexes[k].i === i && this.opponentActiveIndexes[k].j === j) {
@@ -65,6 +75,22 @@ export class MultiplayerService {
             }
         }
         return false;
+    }
+    public checkIfOpponentFoundWord(indexes: Index[]) {
+        for (let p = 0 ; p < indexes.length ; p++) {
+                if (this.myIndexOf(indexes[p]) === -1) {
+                    return false;
+             }
+        }
+        return true;
+    }
+    public myIndexOf(index: Index) {
+        for (let i = 0; i < this.opponentCorrectIndexes.length; i++) {
+            if (this.opponentCorrectIndexes[i].i === index.i && this.opponentCorrectIndexes[i].i === index.i) {
+                return i;
+            }
+        }
+        return -1;
     }
     public getOpponentSocketId() {
         if (this.currentGame.socketId1 === this.socket.id) {

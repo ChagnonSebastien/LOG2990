@@ -11,7 +11,7 @@
 <tr *ngFor="let ligne of this.game.crossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >         
             <input 
-                [ngClass]="{'filled': colonne == ' ' || colonne == '#', 'empty': colonne != '0','active':isActive(i,j)&&!checkIfOpponentSelected(i,j),'correctWord':checkWordWithIndex(i,j),'opponentActive':checkIfOpponentSelected(i,j)&&!isActive(i,j), 'bothActive':checkIfOpponentSelected(i,j)&& isActive(i,j)&&colonne != '0'}" 
+                [ngClass]="{'filled': colonne == ' ' || colonne == '#', 'empty': colonne != '0','active':isActive(i,j)&&!checkIfOpponentSelected(i,j),'correctWord':checkWordWithIndex(i,j),'correctWordOpponent':checkCorrectIndexesOpponent(i,j),'opponentActive':checkIfOpponentSelected(i,j)&&!isActive(i,j), 'bothActive':checkIfOpponentSelected(i,j)&& isActive(i,j)&&colonne != '0'}" 
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)" 
@@ -26,16 +26,15 @@
         <table>
                 <tr>
                 <td>
-                    <table>
-                        
+                    <table>                
                             <tr >
                                 <td id="Horizontal_Header">Horizontal</td>
                             </tr>       
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkHorizontal(hint.position)" headers="horizontal">
-                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button> 
-                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button> 
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                         </td>
                                 </tr>                       
                         </tbody>
@@ -51,8 +50,8 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkVertical(hint.position)" headers="vertical">
-                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>  
-                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>  
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                          </td>
                                  </tr>
                         </tbody>
