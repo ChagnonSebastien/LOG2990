@@ -17,7 +17,7 @@ export class Lexicon {
         return new RegExp(toMatch, 'g');
     }
 
-    public words(common: boolean): any {
+    private words(common: boolean): any {
         return this.lexiconByLength[common ? 'common' : 'uncommon'];
     }
 

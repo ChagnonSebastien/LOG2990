@@ -10,16 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('words()', () => {
-        it('should get common words', () => {
-            expect(lexicon.words(true)['3'][0]).to.equal('ace');
-        });
-
-        it('should get uncommon words', () => {
-            expect(lexicon.words(false)['3'][0]).to.equal('aba');
-        });
-    });
-
     describe('wordsOfLength()', () => {
         it('should get words of length 14', () => {
             const commonWords: Array<string> = lexicon.wordsOfLength(14, true);
