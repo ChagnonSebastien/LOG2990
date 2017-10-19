@@ -1,6 +1,6 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
-import { CrosswordChecker } from './crossword-checker';
+import { CrosswordService } from './crossword.service';
 import { Word } from '../../commun/word';
 
 const lexiconPath = './app/words.json';
@@ -74,7 +74,7 @@ export class CrosswordGenerator {
     // used to generate crossword
     private addLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1
-            || CrosswordChecker.indexesOutOfBounds(i, j, this.size)) {
+            || CrosswordService.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
         if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
@@ -106,7 +106,7 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
-        if (CrosswordChecker.verify(this) === false) {
+        if (CrosswordService.verify(this) === false) {
             this.rollback();
             return false;
         }

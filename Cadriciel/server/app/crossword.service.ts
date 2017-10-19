@@ -1,6 +1,6 @@
 import { CrosswordGenerator } from './crossword';
 
-export module CrosswordChecker {
+export module CrosswordService {
     export function indexesOutOfBounds(i: number, j: number, size: number): boolean {
         return indexOutOfBounds(i, size) || indexOutOfBounds(j, size);
     }
