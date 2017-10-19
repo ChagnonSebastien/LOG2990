@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
 const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 const crosswordSize = 10;
+const maxCrosswordPerLevel = 5;
 
 export class ServerCrosswords {
     private static instance: ServerCrosswords;
@@ -18,6 +19,7 @@ export class ServerCrosswords {
 
 
     private constructor() {
+        this.mutatedGrid = new CrosswordDB();
         this.crosswordGenerator = new CrosswordGenerator(crosswordSize);
     }
 
@@ -75,7 +77,7 @@ export class ServerCrosswords {
                     if (err) {
                         resolve(false);
                     } else {
-                        const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
+                        const crosswordGenerated = this.crosswordGenerator.newCrossword(level);
                         const wordList = Array.from(this.crosswordGenerator.words);
                         const wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
                         const newCrossWord = new crosswordSchema({
@@ -95,17 +97,19 @@ export class ServerCrosswords {
 
     public async storeServerCrosswords(crosswords: Array<CrosswordDB>): Promise<boolean> {
         for (const element of crosswords) {
-            if (element.difficulty === 'hard' && this.hardCrosswords.length < 5) {
+            if (element.difficulty === 'hard' && this.hardCrosswords.length < maxCrosswordPerLevel) {
                 this.hardCrosswords.push(element);
-            } else if (element.difficulty === 'normal' && this.normalCrosswords.length < 5) {
+            } else if (element.difficulty === 'normal' && this.normalCrosswords.length < maxCrosswordPerLevel) {
                 this.normalCrosswords.push(element);
-            } else if (element.difficulty === 'easy' && this.easyCrosswords.length < 5) {
+            } else if (element.difficulty === 'easy' && this.easyCrosswords.length < maxCrosswordPerLevel) {
                 this.easyCrosswords.push(element);
             }
         }
 
         return new Promise<boolean>((resolve) => {
-            if (this.hardCrosswords.length === 5 && this.normalCrosswords.length === 5 && this.easyCrosswords.length === 5) {
+            if (this.hardCrosswords.length === maxCrosswordPerLevel &&
+                this.normalCrosswords.length === maxCrosswordPerLevel &&
+                this.easyCrosswords.length === maxCrosswordPerLevel) {
                     resolve(true);
                 } else {
                     resolve(false);
@@ -149,38 +153,27 @@ export class ServerCrosswords {
 
     public async getCrossword(level: string): Promise<CrosswordDB> {
         let crossword: CrosswordDB;
-        if (level === 'easy') {
-            return new Promise<CrosswordDB>(resolve => {
-                this.generateCrossword(level).then((data) => {
-                    this.storeOneServerCrossword(level).then((stored) => {
+        return new Promise<CrosswordDB>(resolve => {
+            this.generateCrossword(level).then((data) => {
+                this.storeOneServerCrossword(level).then((stored) => {
+                    if (level === 'easy') {
                         crossword = this.easyCrosswords.pop();
-                        resolve(crossword);
-                    });
-                });
-            });
-        } else if (level === 'normal') {
-            return new Promise<CrosswordDB>(resolve => {
-                this.generateCrossword(level).then((data) => {
-                    this.storeOneServerCrossword(level).then((stored) => {
+                    } else if (level === 'normal') {
                         crossword = this.normalCrosswords.pop();
-                        resolve(crossword);
-                    });
-                });
-            });
-        } else if (level === 'hard') {
-            return new Promise<CrosswordDB>(resolve => {
-                this.generateCrossword(level).then((data) => {
-                    this.storeOneServerCrossword(level).then((stored) => {
+                    } else if (level === 'hard') {
                         crossword = this.hardCrosswords.pop();
-                        resolve(crossword);
-                    });
+                    }
+                    resolve(crossword);
                 });
             });
-        }
+        });
     }
 
     public mutate(crossword: CrosswordDB) {
-        this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
+        this.mutatedGrid.crossword = this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
+        this.mutatedGrid.difficulty = crossword.difficulty;
+        this.mutatedGrid.listOfWords = Array.from(this.crosswordGenerator.words);
+        this.mutatedGrid.wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
     }
 
 

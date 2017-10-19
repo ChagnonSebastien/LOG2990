@@ -8,8 +8,11 @@ const collection = 'crosswords_tests';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    serverCrosswords.setCollection(collection);
     let crosswordsList: Array<CrosswordDB> = [];
+
+    beforeEach(() => {
+        serverCrosswords.setCollection(collection);
+    });
 
     it('Should get all the crosswords from the database', (done) => {
         serverCrosswords.getCrosswordsFromDB().then(function (data) {
@@ -35,6 +38,7 @@ describe('Server Crosswords', () => {
     }).timeout(5000);
 
     it('Should generate a new normal crossword', (done) => {
+        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
@@ -122,6 +126,11 @@ describe('Server Crosswords', () => {
             done();
         });
     }).timeout(10000);
+
+    it('Should mutate grid', () => {
+        serverCrosswords.mutate(serverCrosswords.easyCrosswords[0]);
+        assert(serverCrosswords.mutatedGrid.difficulty === 'easy');
+    });
 
     // reset collection to crosswords
     serverCrosswords.setCollection('crosswords');
