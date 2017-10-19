@@ -249,19 +249,21 @@ describe('CrosswordGenerator', () => {
 
     describe('mutate()', () => {
         it('should mutate an easy crossword', () => {
+            // Generate an easy crossword
             crossword.newCrossword('easy');
-            crossword.printGrid();            
+            expect(crossword.words.size).to.be.greaterThan(0);
+
+            // Choose 1 word out of 3 to be 'found'
             const foundWords = crossword.wordsWithIndex.filter(() => {
                 return Math.floor(Math.random() * 3) == 0;
             });
-            expect(crossword.words.size).to.be.greaterThan(0);            
-            console.log(crossword.wordsWithIndex);            
-            console.log(foundWords);
-            console.log('MUTATING');
+
             crossword.mutate('easy', foundWords);
-            crossword.printGrid();
-            console.log(crossword.wordsWithIndex);
-            expect(crossword.words.size).to.be.greaterThan(foundWords.length);
+
+            expect(crossword.words.size)
+                .to.be.greaterThan(foundWords.length);
+
+            // Check that all 'found' words are in the new crossword
             expect(foundWords.map((word) => {
                 return crossword.words.has(word.word);
             }).reduce((prev, cur) => {
