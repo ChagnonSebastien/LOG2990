@@ -24,12 +24,6 @@ describe('CrosswordGenerator', () => {
         });
     });
 
-    describe('loadLexicon(file: string)', () => {
-        it('should load the lexicon', () => {
-            expect(crossword.lexicon.lexiconByLength['common']['3'].length).to.be.greaterThan(0);
-        });
-    });
-
     describe('patternForLine(i: number, horizontal: boolean) { }', () => {
         it('should return the pattern "          " if horizontal on a blank grid', () => {
             expect(crossword.patternForLine(0, true)).to.equal(' '.repeat(size));
