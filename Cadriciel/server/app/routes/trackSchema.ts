@@ -35,4 +35,4 @@ const trackSchema = new mongoose.Schema({
 
 });
 
-const Track = module.exports = mongoose.model('tracks', trackSchema);
+const track = module.exports = mongoose.model('tracks', trackSchema);
