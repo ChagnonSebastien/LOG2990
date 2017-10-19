@@ -34,7 +34,6 @@ export class RacingGameComponent implements AfterViewInit {
 
     public eventsListen(event: any): void {
         this.renderService.eventsList(event);
-        console.log('tourner camera');
     }
 
     public ngAfterViewInit() {
