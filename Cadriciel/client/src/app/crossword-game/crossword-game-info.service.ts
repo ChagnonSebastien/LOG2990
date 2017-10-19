@@ -25,6 +25,7 @@ export class CrosswordGameInfoService {
     }
 
     public getCrossword(level: string) {
+        console.log('here');
         if (level === 'easy' || level === 'normal' || level === 'hard') {
             return this.http.get('http://localhost:3000/api/crossword/' + this.collection + '/' + level).toPromise()
                 .then(res => res.json());
@@ -38,8 +39,12 @@ export class CrosswordGameInfoService {
             this.game.listOfWords = res.listOfWords;
          });
          return await this.game;
-        }else {
-            return Promise.resolve(this.game);
-                }
+        } else {
+             return this.getGameSettings();
+        }
+    }
+
+    public getGameSettings(): Promise<Game> {
+        return Promise.resolve(this.game);
     }
 }

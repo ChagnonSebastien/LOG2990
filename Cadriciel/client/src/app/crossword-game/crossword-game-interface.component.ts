@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from 
 import {LexiconService} from './lexicon.service';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import {CrosswordService} from './crossword.service';
+import {MultiplayerService} from './crossword-multiplayer.service';
 import { Game } from '../../../../commun/crossword/game';
 @Component({
     selector: 'app-crossword-game-interface',
@@ -24,6 +25,14 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
     /***********************************************************
+    * This function checks if the online opponent selected a
+    * a grid in the crossword.
+    ************************************************************/
+    public checkIfOpponentSelected(i: number, j: number): boolean {
+        return this.multiplayerService.checkIfOpponentSelected(i, j);
+    }
+
+    /***********************************************************
     * This function is called when the user clicks on a input.
     * It ads the index to the list of actives indexes.
     ************************************************************/
@@ -37,7 +46,6 @@ export class CrosswordGameInterfaceComponent implements OnInit {
      * currently  active.
      ************************************************************/
     public isActive(i, j): boolean {
-
         for (let k = 0; k < this.activeIndexes.length; k++) {
             if (this.activeIndexes[k].i === i && this.activeIndexes[k].j === j) {
                 return true;
@@ -149,6 +157,13 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         this.kSelected = k;
     }
 
+    /***********************************************************
+    * Let the opponent know we selected this hint in multiplayer
+    * mode.
+    ***************************************************************/
+    public awareSelectionOpponent(indexes: Index[]): void {
+        this.multiplayerService.selectHint(indexes);
+    }
 
     /***********************************************************
     *Check if the word positon is vertical
@@ -216,41 +231,35 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         }
     return await this.wordsIndexes;
  }
-
+    /**************************************************************
+    * Used to get the word indexes data stucture.
+    ***************************************************************/
     public async getWordsIndexes(): Promise< {word: string, indexes: Index[], position: string, hint: string }[]> {
         await this.crosswordService.getWordsIndexes(this.game.crossword, this.game.listOfWords).then(res => {
+            console.log(this.game);
+            console.log(this.game.listOfWords);
+            console.log(res);
             for (let i = 0 ; i < res.length ; i ++) {
              this.wordsIndexes.push(res[i]);
           }
         });
         return await this.wordsIndexes;
     }
-
     /**************************************************************
-    * Used to get the crossword from the server by using the
-    * the crossword service.
+    * Used to get the game object containing the game information.
     ***************************************************************/
-    /*public async getCrossword(): Promise<{rawCrossword: [[string]], listOfWords: [string]}> {
-        const level: string = this.game.difficulty.toLowerCase();
-        await this.crosswordService.getCrossword(level).then(res => {
-            this.crossword = {rawCrossword: res.crossword , listOfWords : res.listOfWords};
-           });
-           return await this.crossword;
-       }*/
-
        public async getGame(): Promise<Game> {
         await this.crosswordGameInfoService.getGameInfo().then(game => this.game = game);
         return await this.game;
 
     }
     constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
-                private crosswordService: CrosswordService ) {
-                }
+                private crosswordService: CrosswordService, private multiplayerService: MultiplayerService ) {}
 
     public ngOnInit() {
         this.getGame().then(game => {
                 this.getWordsIndexes().then(indexes => {
-                this.setDefinitions().then(data => {
+                    this.setDefinitions().then(data => {
                     this.dataAvailable = true;
               });
             });

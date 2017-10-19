@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import { Game } from '../../../../commun/crossword/game';
 import * as io from 'socket.io-client';
+
 @Injectable()
 export class MultiplayerService {
     private readonly HOST_NAME = 'http://' + window.location.hostname;
@@ -11,6 +12,7 @@ export class MultiplayerService {
     public missingPlayer = false;
     private socket: SocketIOClient.Socket;
     public currentGame: Game;
+    public opponentActiveIndexes: Index[] = [];
 
     constructor(private http: Http, private router: Router, private route: ActivatedRoute,
         private crosswordGameInfoService: CrosswordGameInfoService) {
@@ -30,9 +32,14 @@ export class MultiplayerService {
             this.router.navigate([`/crossword-test`], { relativeTo: this.route });
           });
           this.socket.on('player 2 joined your game', data => {
+              console.log(this.socket.id);
             this.currentGame = data;
             this.crosswordGameInfoService.game = this.currentGame;
             this.router.navigate([`/crossword-test`], { relativeTo: this.route });
+          });
+          this.socket.on('opponent selected a grid sqaure', data => {
+            console.log('yes');
+            this.opponentActiveIndexes = data;
           });
     }
     public sendGame(difficulty: string, mode: string, username: string ) {
@@ -48,5 +55,30 @@ export class MultiplayerService {
     public joinGame(gameId: string, username: string) {
         this.socket.emit('joinGame', gameId, username);
     }
+    public selectHint(indexes: Index[]) {
+        this.socket.emit('i selected a word hint', indexes, this.getOpponentSocketId());
+    }
+    public checkIfOpponentSelected(i: number, j: number) {
+        for (let k = 0; k < this.opponentActiveIndexes.length; k++) {
+            if (this.opponentActiveIndexes[k].i === i && this.opponentActiveIndexes[k].j === j) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public getOpponentSocketId() {
+        if (this.currentGame.socketId1 === this.socket.id) {
+            return this.currentGame.socketId2;
+        } else {
+            return this.currentGame.socketId1;
+        }
+    }
  }
 
+/***********************************************************
+* Interface used for the positon of a crossword grid
+***************************************************************/
+interface Index {
+    i: number;
+    j: number;
+}

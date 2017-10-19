@@ -30,12 +30,25 @@
   }
  
   .active{
-    border: 3px solid red;
-   background-color: #E9D1D1
+    border-style:solid;
+    border-color: red;
+    border-width: 4px;
+  }
+  .bothActive{
+    border-style:dotted;
+    border-bottom-color: red;
+    border-top-color: blue;
+    border-left-color: blue;
+    border-right: red;
+    border-width: 4px;
+  }
+  .opponentActive{
+    border-style:solid;
+    border-color: blue;
+    border-width: 4px;
   }
 .correctWord{
-  border: 3px solid #7BF57B;
-  background-color: #CAF8D0;
+  background-color: red;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;

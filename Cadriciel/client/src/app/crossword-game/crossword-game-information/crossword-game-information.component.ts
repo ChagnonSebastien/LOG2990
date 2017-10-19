@@ -28,6 +28,6 @@ export class CrosswordGameInformationComponent implements OnInit {
     this. getGameInfo();
   }
   public getGameInfo(): void {
-    this.crosswordGameInfoService.getGameInfo().then(game => this.game = game);
+    this.crosswordGameInfoService.getGameSettings().then(game => this.game = game);
   }
 }

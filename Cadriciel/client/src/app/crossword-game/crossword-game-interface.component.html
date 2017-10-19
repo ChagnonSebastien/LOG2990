@@ -9,24 +9,20 @@
  <app-crossword-game-information></app-crossword-game-information>
 <div id="wrapper"> 
 <tr *ngFor="let ligne of this.game.crossword ; let i = index">
-        <td *ngFor="let colonne of ligne; let j = index"  >
-              
-              
+        <td *ngFor="let colonne of ligne; let j = index"  >         
             <input 
-                [ngClass]="{'filled': colonne == ' ' || colonne == '#', 'empty': colonne != '0','active':true == isActive(i,j),'correctWord':checkWordWithIndex(i,j)}" 
+                [ngClass]="{'filled': colonne == ' ' || colonne == '#', 'empty': colonne != '0','active':isActive(i,j)&&!checkIfOpponentSelected(i,j),'correctWord':checkWordWithIndex(i,j),'opponentActive':checkIfOpponentSelected(i,j)&&!isActive(i,j), 'bothActive':checkIfOpponentSelected(i,j)&& isActive(i,j)&&colonne != '0'}" 
                 type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict 
                 (keypress)="filterInput($event,i ,j)"
                 (click)="handleInput($event)" 
                 [readonly] = "colonne==' ' || colonne =='#'"
                 (keydown)="handleDelete($event,i,j)"   
-            /> 
-                
+            />                
         </td>
     </tr> 
 </div>
  </div>
  <div id ="indices">
-    
         <table>
                 <tr>
                 <td>
@@ -34,16 +30,14 @@
                         
                             <tr >
                                 <td id="Horizontal_Header">Horizontal</td>
-                            </tr>
-                        
+                            </tr>       
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkHorizontal(hint.position)" headers="horizontal">
-                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button> 
-                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button> 
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                         </td>
-                                </tr>
-                               
+                                </tr>                       
                         </tbody>
                     </table>
                 </td>
@@ -57,8 +51,8 @@
                         <tbody>
                                 <tr *ngFor="let hint of wordsIndexes; let k = index">
                                         <td *ngIf = "checkVertical(hint.position)" headers="vertical">
-                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>  
-                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
+                                        <button *ngIf = "!cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.hint}} </button>  
+                                        <button *ngIf = "cheatMode" class="btn" (click)="handleClick($event,hint.indexes);selectK(k);awareSelectionOpponent(hint.indexes)" [ngClass]="{'selected':k==kSelected}" [disabled]="checkWordFound(k)">{{hint.word}} </button>  
                                          </td>
                                  </tr>
                         </tbody>
@@ -67,9 +61,7 @@
                 </tr>
                 <button id = "cheatModeOnBtn" (click)="activateCheatMode()">Cheat Mode</button>
                 <button id = "cheatModeOffBtn" (click)="deactivateCheatMode()">Cheat Mode Off</button>
-                </table>
-
-                           
+                </table>                       
  </div>
 </div>
 </div>
