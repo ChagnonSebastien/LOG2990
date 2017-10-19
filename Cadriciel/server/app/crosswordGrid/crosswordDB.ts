@@ -1,4 +1,4 @@
-import { Word } from '../crossword';
+import { Word } from '../../../commun/word';
 
 export class CrosswordDB {
     public _id: string;

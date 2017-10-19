@@ -76,7 +76,7 @@ export class ServerCrosswords {
                     if (err) {
                         resolve(false);
                     } else {
-                        const crosswordGenerated = this.crosswordGenerator.generateCrossword(level);
+                        const crosswordGenerated = this.crosswordGenerator.newCrossword(level);
                         const wordList = Array.from(this.crosswordGenerator.words);
                         const wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
                         const newCrossWord = new crosswordSchema({

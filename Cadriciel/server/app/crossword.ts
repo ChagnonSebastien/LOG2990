@@ -1,25 +1,11 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
 import { CrosswordChecker } from './crossword-checker';
+import { Word } from '../../commun/word';
 
 const lexiconPath = './app/words.json';
 
-export class Word {
-    public word: string;
-    public i: number;
-    public j: number;
-    public horizontal: boolean;
-
-    constructor(i: number, j: number, word: string, horizontal: boolean) {
-        this.i = i;
-        this.j = j;
-        this.word = word;
-        this.horizontal = horizontal;
-    }
-}
-
 export class CrosswordGenerator {
-    public id: string;
     public difficulty: string;
     public size: number;
     public grid: string[][];
@@ -238,8 +224,7 @@ export class CrosswordGenerator {
         }
     }
 
-    public generateCrossword(difficulty: string): string[][] {
-        this.reset();
+    private generateCrossword(difficulty: string): string[][] {
         let foundWord = true;
         while (foundWord) {
             foundWord = false;
@@ -251,6 +236,11 @@ export class CrosswordGenerator {
         }
 
         return this.grid;
+    }
+
+    public newCrossword(difficulty: string): string[][] {
+        this.reset();
+        return this.generateCrossword(difficulty);
     }
 
     public mutate(difficulty: string, words: Array<Word>): string[][] {
