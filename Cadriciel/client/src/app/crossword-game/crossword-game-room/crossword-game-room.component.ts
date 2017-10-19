@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MultiplayerService} from '../crossword-multiplayer.service';
+import {MultiplayerService} from '../services/crossword-multiplayer.service';
 import { Game } from '../../../../../commun/crossword/game';
 @Component({
   selector: 'app-crossword-game-room',

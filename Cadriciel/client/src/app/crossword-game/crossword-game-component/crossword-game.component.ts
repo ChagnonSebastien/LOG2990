@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {CrosswordGameInfoService} from './crossword-game-info.service';
-import {MultiplayerService} from './crossword-multiplayer.service';
-import { Game } from '../../../../commun/crossword/game';
+import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
+import {MultiplayerService} from '../services/crossword-multiplayer.service';
+import { Game } from '../../../../../commun/crossword/game';
 @Component({
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',

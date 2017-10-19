@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CrosswordGameInformationComponent } from './crossword-game-information.component';
-import {CrosswordGameInfoService} from '../crossword-game-info.service';
+import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
 import { HttpModule } from '@angular/http';
 describe('CrosswordGameInformationComponent', () => {
   let component: CrosswordGameInformationComponent;

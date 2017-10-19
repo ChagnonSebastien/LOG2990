@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
-import { Game } from '../../../../commun/crossword/game';
+import { Game } from '../../../../../commun/crossword/game';
 import * as io from 'socket.io-client';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {CrosswordGameInterfaceComponent} from './crossword-game-interface.component';
+import {CrosswordGameInterfaceComponent} from '../crossword-game-interface/crossword-game-interface.component';
 import { CrosswordGameComponent } from './crossword-game.component';
-import { CrosswordGameRoomComponent } from './crossword-game-room/crossword-game-room.component';
+import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-game-room.component';
 @NgModule({
   imports: [RouterModule.forChild([
     { path: 'crossword-game', component: CrosswordGameComponent},

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {CrosswordGameInfoService} from '../crossword-game-info.service';
-import {CrosswordService} from '../crossword.service';
+import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
+import {CrosswordService} from '../services/crossword.service';
 import { Game } from '../../../../../commun/crossword/game';
 
 @Component({

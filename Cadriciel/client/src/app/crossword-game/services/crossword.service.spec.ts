@@ -1,7 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-
-import { AppModule } from '../app.module';
-
+import { AppModule } from '../../app.module';
 import { CrosswordService } from './crossword.service';
 
 describe('CrosswordService', () => {

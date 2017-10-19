@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
-import {LexiconService} from './lexicon.service';
-import {CrosswordGameInfoService} from './crossword-game-info.service';
-import {CrosswordService} from './crossword.service';
-import {MultiplayerService} from './crossword-multiplayer.service';
-import { Game } from '../../../../commun/crossword/game';
+import {LexiconService} from '../services/lexicon.service';
+import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
+import {CrosswordService} from '../services/crossword.service';
+import {MultiplayerService} from '../services/crossword-multiplayer.service';
+import { Game } from '../../../../../commun/crossword/game';
 @Component({
     selector: 'app-crossword-game-interface',
     templateUrl: './crossword-game-interface.component.html',
