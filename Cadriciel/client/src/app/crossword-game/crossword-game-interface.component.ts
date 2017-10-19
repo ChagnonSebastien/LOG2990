@@ -340,7 +340,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     }
 
     public list0fWords : [String];
-    public wordsIndex:[[String,{x:number,y:number}]];
+    public wordsIndex:[[String, {x:number, y:number}]];
     constructor() { }
     public ngOnInit() {
         this.fillWordsIndexes();

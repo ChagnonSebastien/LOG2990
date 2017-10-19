@@ -15,7 +15,6 @@ import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
 import { TrackService } from './tracks/track.service';
-import { Track } from './tracks/track';
 
 /* Feature modules */
 
