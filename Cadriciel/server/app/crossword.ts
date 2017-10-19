@@ -239,7 +239,6 @@ export class CrosswordGenerator {
     }
 
     public generateCrossword(difficulty: string): string[][] {
-        this.reset();
         let foundWord = true;
         while (foundWord) {
             foundWord = false;
@@ -251,6 +250,11 @@ export class CrosswordGenerator {
         }
 
         return this.grid;
+    }
+
+    public newCrossword(difficulty: string): string[][] {
+        this.reset();
+        return this.generateCrossword(difficulty);
     }
 
     public mutate(difficulty: string, words: Array<Word>): string[][] {
