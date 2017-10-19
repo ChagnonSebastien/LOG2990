@@ -6,7 +6,6 @@ import { Word } from '../../commun/word';
 const lexiconPath = './app/words.json';
 
 export class CrosswordGenerator {
-    public id: string;
     public difficulty: string;
     public size: number;
     public grid: string[][];
