@@ -10,14 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('allWordsOfLength()', () => {
-        it('should get all words of length 14', () => {
-            const allWords: Array<string> = lexicon.allWordsOfLength(14);
-            const randIndex = Math.floor(Math.random() * allWords.length);
-            expect(allWords[randIndex].length).to.equal(14);
-        });
-    });
-
     describe('wordsOfLengthUpTo(length: number, common: boolean): Array<string> { }', () => {
         it('should get all the common words of length 3 and only 3', () => {
             const commonality = true;

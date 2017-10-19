@@ -25,11 +25,6 @@ export class Lexicon {
         return this.words(common)[length.toString()];
     }
 
-    public allWordsOfLength(length: number): Array<string> {
-        return this.wordsOfLength(length, true)
-            .concat(this.wordsOfLength(length, false));
-    }
-
     public wordsOfLengthUpTo(length: number, common: boolean): Array<string> {
         return new Array(length - 2).fill(null)
             .map((value, index) => {
