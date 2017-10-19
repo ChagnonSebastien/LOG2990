@@ -64,7 +64,7 @@ export class Lexicon {
             .concat(this.wordsForPattern(pattern, false));
     }
 
-    public wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
+    private wordsForNonEmptyPattern(pattern: string, common: boolean): string[] {
         if (pattern.trim().length === 0) {
             return new Array<string>();
         }

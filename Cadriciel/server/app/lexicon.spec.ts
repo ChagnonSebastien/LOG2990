@@ -44,32 +44,6 @@ describe('Lexicon', () => {
         });
     });
 
-    describe('wordsForNonEmptyPattern(pattern: string): string[] { }', () => {
-        it('should return only common words that fit the subpatterns of the pattern', () => {
-            const words: string[] = lexicon.wordsForNonEmptyPattern('h   o', true);
-            expect(words.includes('hydro')).to.be.false;
-            expect(words.includes('hello')).to.be.true;
-            expect(words.includes('cello')).to.be.false;
-            expect(words.includes('eat')).to.be.false;
-            expect(words.includes('ham')).to.be.true;
-        });
-
-        it('should return only uncommon words that fit the subpatterns of the pattern', () => {
-            const words: string[] = lexicon.wordsForNonEmptyPattern('h   o', false);
-            expect(words.includes('hydro')).to.be.true;
-            expect(words.includes('hello')).to.be.false;
-            expect(words.includes('cello')).to.be.false;
-            expect(words.includes('eat')).to.be.false;
-            expect(words.includes('ham')).to.be.false;
-        });
-
-        it('should not return anything if the pattern provided is blank', () => {
-            const words: string[] = lexicon.wordsForNonEmptyPattern('     ', true)
-                .concat(lexicon.wordsForNonEmptyPattern('     ', false));
-            expect(words.length).to.equal(0);
-        });
-    });
-
     describe('allWordsForNonEmptyPattern(pattern: string): string[] { }', () => {
         it('should return all words that fit the subpatterns of the pattern', () => {
             const words: string[] = lexicon.allWordsForNonEmptyPattern('h   o');
