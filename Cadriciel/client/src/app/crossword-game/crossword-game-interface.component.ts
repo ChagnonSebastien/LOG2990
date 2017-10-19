@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-crossword-game-interface',

@@ -22,13 +22,19 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
+    public fov;
+
+    public zoom = 1.0;
+
+    public inc = -0.01;
+
     constructor(private cameraService: CameraService) {
     }
 
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-        this.cube.position.z += 5;
+        // this.cube.position.z += 5;
     }
 
     private createCube() {
@@ -57,9 +63,29 @@ export class RenderService {
         return this.container.clientWidth / this.container.clientHeight;
     }
 
-    public changeView(event: any): void {
+    public eventsList(event: any): void {
         this.cameraService.selectCamera(event);
+        this.zoomCamera(event);
         this.updateCamera();
+    }
+
+    public zoomCamera(event: any): void {
+        // 107 corresponding to '+' in ASCII
+        // 109 corresponding to '-' in ASCII
+        if (event.keyCode === 107) {
+            this.zoom += this.inc;
+            console.log('zoom');
+        } else if (event.keyCode === 109) {
+            this.zoom -= this.inc;
+            console.log(this.zoom);
+        }
+    }
+
+    public updateZoom(): void {
+        this.zoom += this.inc;
+        if ( this.zoom <= 0.2 || this.zoom >= 1.0) {
+            this.inc = -this.inc;
+        }
     }
 
     public updateCamera(): void {
@@ -76,12 +102,22 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
+        this.fov = this.camera.fov;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
+        this.camera.fov = this.fov * this.zoom;
+        this.camera.updateProjectionMatrix();
+        /*
+        this.zoom += this.inc;
+        if ( this.zoom <= 0.2 || this.zoom >= 1.0) {
+            this.inc = -this.inc;
+        }
+        */
+        // this.updateZoom();
         this.cameraFollowingObject(this.cube);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();

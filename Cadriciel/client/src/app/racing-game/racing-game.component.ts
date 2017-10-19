@@ -32,8 +32,8 @@ export class RacingGameComponent implements AfterViewInit {
         this.renderService.onResize();
     }
 
-    public turnCamera(event: any): void {
-        this.renderService.changeView(event);
+    public eventsListen(event: any): void {
+        this.renderService.eventsList(event);
         console.log('tourner camera');
     }
 
