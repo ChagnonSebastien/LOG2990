@@ -10,52 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('wordsOfLengthUpTo(length: number, common: boolean): Array<string> { }', () => {
-        it('should get all the common words of length 3 and only 3', () => {
-            const commonality = true;
-            const words = lexicon.wordsOfLengthUpTo(3, commonality);
-            const lengths = Array.from(new Set(words.map(value => value.length)));
-            expect(lengths[0]).to.equal(3);
-            expect(lengths.length).to.equal(1);
-        });
-
-        it('should get all the uncommon words of length 3 and only 3', () => {
-            const commonality = false;
-            const words = lexicon.wordsOfLengthUpTo(3, commonality);
-            const lengths = Array.from(new Set(words.map(value => value.length)));
-            expect(lengths[0]).to.equal(3);
-            expect(lengths.length).to.equal(1);
-        });
-
-        it('should get all common words of same length and shorter', () => {
-            const commonality = true;
-            const words = lexicon.wordsOfLengthUpTo(6, commonality);
-            const wordLengths = words.map(value => value.length);
-            const maxLength = wordLengths.reduce((previous, current) => {
-                return previous > current ? previous : current;
-            });
-            expect(maxLength).to.equal(6);
-            const minLength = wordLengths.reduce((previous, current) => {
-                return previous < current ? previous : current;
-            });
-            expect(minLength).to.equal(3);
-        });
-
-        it('should get all uncommon words of same length and shorter', () => {
-            const commonality = false;
-            const words = lexicon.wordsOfLengthUpTo(6, commonality);
-            const wordLengths = words.map(value => value.length);
-            const maxLength = wordLengths.reduce((previous, current) => {
-                return previous > current ? previous : current;
-            });
-            expect(maxLength).to.equal(6);
-            const minLength = wordLengths.reduce((previous, current) => {
-                return previous < current ? previous : current;
-            });
-            expect(minLength).to.equal(3);
-        });
-    });
-
     describe('allWordsOfLengthUpTo(length: number): Array<string> { }', () => {
         it('should get all the words of length 3 and only 3', () => {
             const words = lexicon.allWordsOfLengthUpTo(3);
