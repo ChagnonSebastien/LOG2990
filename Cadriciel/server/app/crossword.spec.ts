@@ -67,7 +67,7 @@ describe('CrosswordGenerator', () => {
             crossword.mutate(difficulty, foundWords);
 
             expect(crossword.words.size)
-                .to.be.greaterThan(foundWords.length);
+                .to.be.at.least(foundWords.length);
 
             // Check that all 'found' words are in the new crossword
             expect(foundWords.map((word) => {
@@ -92,7 +92,7 @@ describe('CrosswordGenerator', () => {
             crossword.mutate(difficulty, foundWords);
 
             expect(crossword.words.size)
-                .to.be.greaterThan(foundWords.length);
+                .to.be.at.least(foundWords.length);
 
             // Check that all 'found' words are in the new crossword
             expect(foundWords.map((word) => {
@@ -117,7 +117,7 @@ describe('CrosswordGenerator', () => {
             crossword.mutate(difficulty, foundWords);
 
             expect(crossword.words.size)
-                .to.be.greaterThan(foundWords.length);
+                .to.be.at.least(foundWords.length);
 
             // Check that all 'found' words are in the new crossword
             expect(foundWords.map((word) => {
