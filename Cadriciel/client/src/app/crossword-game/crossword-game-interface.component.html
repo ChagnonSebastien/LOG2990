@@ -8,7 +8,7 @@
   <div id="conteneur"> 
  <app-crossword-game-information></app-crossword-game-information>
 <div id="wrapper"> 
-<tr *ngFor="let ligne of this.crossword.rawCrossword ; let i = index">
+<tr *ngFor="let ligne of this.game.crossword ; let i = index">
         <td *ngFor="let colonne of ligne; let j = index"  >
               
               

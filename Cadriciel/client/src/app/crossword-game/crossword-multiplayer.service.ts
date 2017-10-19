@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
+import { Game } from '../../../../commun/crossword/game';
 import * as io from 'socket.io-client';
 @Injectable()
 export class MultiplayerService {
@@ -23,10 +24,15 @@ export class MultiplayerService {
           this.socket.on('allGames', data => {
             this.getGames();
           });
-          this.socket.on('joined a game', data => {
+          this.socket.on('player 2 joined a game', data => {
             this.currentGame = data;
-            this.router.navigate([`/crossword-test`], { relativeTo: this.route });
             this.crosswordGameInfoService.game = this.currentGame;
+            this.router.navigate([`/crossword-test`], { relativeTo: this.route });
+          });
+          this.socket.on('player 2 joined your game', data => {
+            this.currentGame = data;
+            this.crosswordGameInfoService.game = this.currentGame;
+            this.router.navigate([`/crossword-test`], { relativeTo: this.route });
           });
     }
     public sendGame(difficulty: string, mode: string, username: string ) {
@@ -43,12 +49,4 @@ export class MultiplayerService {
         this.socket.emit('joinGame', gameId, username);
     }
  }
- interface Game {
-    id: string;
-    difficulty: string;
-    mode: string;
-    username1: string;
-    username2: string;
-    socketId1: string;
-    socketId2: string;
- }
+

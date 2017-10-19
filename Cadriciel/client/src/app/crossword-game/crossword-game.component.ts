@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import {MultiplayerService} from './crossword-multiplayer.service';
+import { Game } from '../../../../commun/crossword/game';
 @Component({
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',
@@ -53,14 +54,15 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     public saveOptions(): void {
-        this.crosswordGameInfoService.option = this.option;
+        if (this.option === 'SOLO') {
+        this.crosswordGameInfoService.game.option = this.option;
         this.crosswordGameInfoService.game.mode = this.mode;
         this.crosswordGameInfoService.game.difficulty = this.level;
-
+        this.crosswordGameInfoService.game.id = '0';
+        }
         if (this.option === 'MULTIPLAYER') {
             this.multiplayerGameReady = true;
             this.createGame();
-            console.log(this.username);
         }
     }
 

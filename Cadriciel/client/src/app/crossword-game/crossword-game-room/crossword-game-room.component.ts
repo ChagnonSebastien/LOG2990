@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MultiplayerService} from '../crossword-multiplayer.service';
+import { Game } from '../../../../../commun/crossword/game';
 @Component({
   selector: 'app-crossword-game-room',
   templateUrl: './crossword-game-room.component.html',
@@ -12,7 +13,6 @@ export class CrosswordGameRoomComponent implements OnInit {
   public ngOnInit() {
     this.multiplayerService.getGames().then(games => {
       this.games = games;
-      console.log(this.games);
     });
   }
 
@@ -21,13 +21,4 @@ export class CrosswordGameRoomComponent implements OnInit {
     this.multiplayerService.joinGame(gameId, username);
   }
 
-}
-interface Game {
-  id: string;
-  difficulty: string;
-  mode: string;
-  username1: string;
-  username2: string;
-  socketId1: string;
-  socketId2: string;
 }

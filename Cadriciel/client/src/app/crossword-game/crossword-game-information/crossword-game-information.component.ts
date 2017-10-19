@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CrosswordGameInfoService} from '../crossword-game-info.service';
+import {CrosswordService} from '../crossword.service';
+import { Game } from '../../../../../commun/crossword/game';
 
 @Component({
   selector: 'app-crossword-game-information',
@@ -7,20 +9,25 @@ import {CrosswordGameInfoService} from '../crossword-game-info.service';
   styleUrls: ['./crossword-game-information.component.css']
 })
 export class CrosswordGameInformationComponent implements OnInit {
-  public option: string = null;
-  public mode: string = null;
-  public level: string = null;
-
-  constructor(private crosswordGameInfoService: CrosswordGameInfoService) { }
-
+  public game: Game;
+  constructor(private crosswordGameInfoService: CrosswordGameInfoService, private crosswordService: CrosswordService) {
+    this.game = {
+      id: '',
+      difficulty: '',
+      mode: '',
+      option:  '',
+      username1: '',
+      username2: '',
+      socketId1: '',
+      socketId2: '',
+      crossword: [[]],
+      listOfWords: []
+  };
+   }
   public ngOnInit() {
-    this.getInformation();
+    this. getGameInfo();
   }
-
-  public getInformation(): void {
-    this.crosswordGameInfoService.getOption().then(option => this.option = option);
-    this.crosswordGameInfoService.getMode().then(mode => this.mode = mode);
-    this.crosswordGameInfoService.getLevel().then(level => this.level = level);
-
+  public getGameInfo(): void {
+    this.crosswordGameInfoService.getGameInfo().then(game => this.game = game);
   }
 }

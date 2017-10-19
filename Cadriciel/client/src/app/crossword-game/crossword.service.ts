@@ -87,40 +87,37 @@ export class CrosswordService {
     * a positon which states if the word is vertical or horizontal
     * the hint associated with the word.
     ************************************************************/
-    public getWordsIndexes(crossword: {rawCrossword: [[string]], listOfWords: [string]}):
+    public getWordsIndexes(rawCrossword: string[][], listOfWords: string[]):
      Promise<{ word: string, indexes: Index[], position: string, hint: string }[]> {
         const wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
-        for (let k = 0; k < crossword.listOfWords.length; k++) {
+        for (let k = 0; k < listOfWords.length; k++) {
             // check for rows first;
-            for (let p = 0; p < crossword.rawCrossword.length; p++) {
+            for (let p = 0; p < rawCrossword.length; p++) {
 
                 // get word indexes for a given row. Will return empty if not present in that row
 
                 let indexes: Index[] = this.findWordIndexesRow
-                    (crossword.listOfWords[k], crossword.rawCrossword[p], p);
+                    (listOfWords[k], rawCrossword[p], p);
 
                 if (indexes.length !== 0) {
                         wordsIndexes.push({
-                        word: crossword.listOfWords[k], indexes: indexes,
+                        word: listOfWords[k], indexes: indexes,
                         position: 'horizontal', hint: ''
                     });
                     break;
 
                 } else {
-
                     // try in column of given index
-
                     indexes = this.findWordIndexesColumn
-                        (crossword.listOfWords[k], this.getColumn(p, crossword), p);
+                        (listOfWords[k], this.getColumn(p, rawCrossword), p);
 
                     if (indexes.length !== 0) {
                            wordsIndexes.push({
-                            word: crossword.listOfWords[k], indexes: indexes,
+                            word: listOfWords[k], indexes: indexes,
                             position: 'vertical', hint: ''
                         });
                         break;
                     }
-
                 }
             }
 
@@ -131,11 +128,11 @@ export class CrosswordService {
     /***********************************************************
     * Return the column of the crossword grid at the given index
     ************************************************************/
-    public getColumn(index: number, crossword: {rawCrossword: [[string]], listOfWords: [string]}): string[] {
+    public getColumn(index: number, rawCrossword: string[][]): string[] {
 
                 const column: string[] = [];
-                for (let i = 0; i < crossword.rawCrossword[0].length; i++) {
-                    column.push(crossword.rawCrossword[i][index]);
+                for (let i = 0; i < rawCrossword[0].length; i++) {
+                    column.push(rawCrossword[i][index]);
                 }
                 return column;
             }

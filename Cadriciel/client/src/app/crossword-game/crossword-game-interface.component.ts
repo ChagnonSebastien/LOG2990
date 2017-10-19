@@ -2,19 +2,19 @@ import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from 
 import {LexiconService} from './lexicon.service';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import {CrosswordService} from './crossword.service';
+import { Game } from '../../../../commun/crossword/game';
 @Component({
     selector: 'app-crossword-game-interface',
     templateUrl: './crossword-game-interface.component.html',
     styleUrls: ['./crossword-game-interface.component.css']
 })
 export class CrosswordGameInterfaceComponent implements OnInit {
-    public crossword: {rawCrossword: [[string]], listOfWords: [string]} = {rawCrossword: [['']], listOfWords: ['']};
     public wordsIndexes: { word: string, indexes: Index[], position: string, hint: string }[] = [];
     public activeIndexes: Index[] = [];
     public correctIndexes: Index[] = [];
     public kSelected = -1;
     public cheatMode = false;
-    public difficulty: string;
+    public game: Game;
     public dataAvailable = false;
 
     /***********************************************************
@@ -179,8 +179,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * it to the correct indexes lisr
     ***************************************************************/
     public checkIfCorrectInput(keyCode: number, i: number, j: number): void {
-        if (this.crossword.rawCrossword[i][j].charCodeAt(0) === keyCode ||
-        this.crossword.rawCrossword[i][j].charCodeAt(0) - 32 === keyCode) {
+        if (this.game.crossword[i][j].charCodeAt(0) === keyCode ||
+        this.game.crossword[i][j].charCodeAt(0) - 32 === keyCode) {
             const index: Index = { i: i, j: j };
             this.correctIndexes.push(index);
         } else {
@@ -209,8 +209,8 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * Used to set the definiton of a word in the wordIndexes array.
     ***************************************************************/
     public async setDefinitions(): Promise< { word: string, indexes: Index[], position: string, hint: string }[]> {
-       for (let i = 0; i < this.crossword.listOfWords.length; i++) {
-            await this.lexiconService.getWordDefinition(this.crossword.listOfWords[i], this.difficulty).then(res => {
+       for (let i = 0; i < this.game.listOfWords.length; i++) {
+            await this.lexiconService.getWordDefinition(this.game.listOfWords[i], this.game.difficulty).then(res => {
             this.wordsIndexes[i].hint = res;
            });
         }
@@ -218,7 +218,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
  }
 
     public async getWordsIndexes(): Promise< {word: string, indexes: Index[], position: string, hint: string }[]> {
-        await this.crosswordService.getWordsIndexes(this.crossword).then(res => {
+        await this.crosswordService.getWordsIndexes(this.game.crossword, this.game.listOfWords).then(res => {
             for (let i = 0 ; i < res.length ; i ++) {
              this.wordsIndexes.push(res[i]);
           }
@@ -230,29 +230,28 @@ export class CrosswordGameInterfaceComponent implements OnInit {
     * Used to get the crossword from the server by using the
     * the crossword service.
     ***************************************************************/
-    public async getCrossword(): Promise<{rawCrossword: [[string]], listOfWords: [string]}> {
-        const level: string = this.difficulty.toLowerCase();
+    /*public async getCrossword(): Promise<{rawCrossword: [[string]], listOfWords: [string]}> {
+        const level: string = this.game.difficulty.toLowerCase();
         await this.crosswordService.getCrossword(level).then(res => {
             this.crossword = {rawCrossword: res.crossword , listOfWords : res.listOfWords};
            });
            return await this.crossword;
-       }
+       }*/
 
-       public async getDifficulty(): Promise<string> {
-        await this.crosswordGameInfoService.getLevel().then(level => this.difficulty = level);
-        return await this.difficulty;
+       public async getGame(): Promise<Game> {
+        await this.crosswordGameInfoService.getGameInfo().then(game => this.game = game);
+        return await this.game;
 
     }
     constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
-                private crosswordService: CrosswordService ) { }
+                private crosswordService: CrosswordService ) {
+                }
 
     public ngOnInit() {
-        this.getDifficulty().then(res => {
-            this.getCrossword().then(response => {
+        this.getGame().then(game => {
                 this.getWordsIndexes().then(indexes => {
                 this.setDefinitions().then(data => {
                     this.dataAvailable = true;
-                });
               });
             });
            });
