@@ -21,7 +21,7 @@ export class Lexicon {
         return this.lexiconByLength[common ? 'common' : 'uncommon'];
     }
 
-    public wordsOfLength(length: number, common: boolean): Array<string> {
+    private wordsOfLength(length: number, common: boolean): Array<string> {
         return this.words(common)[length.toString()];
     }
 

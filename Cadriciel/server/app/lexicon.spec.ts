@@ -10,18 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('wordsOfLength()', () => {
-        it('should get words of length 14', () => {
-            const commonWords: Array<string> = lexicon.wordsOfLength(14, true);
-            const randIndex = Math.floor(Math.random() * commonWords.length);
-            expect(commonWords[randIndex].length).to.equal(14);
-
-            const uncommonWords: Array<string> = lexicon.wordsOfLength(14, false);
-            const randIndex2 = Math.floor(Math.random() * uncommonWords.length);
-            expect(uncommonWords[randIndex2].length).to.equal(14);
-        });
-    });
-
     describe('allWordsOfLength()', () => {
         it('should get all words of length 14', () => {
             const allWords: Array<string> = lexicon.allWordsOfLength(14);
@@ -37,7 +25,6 @@ describe('Lexicon', () => {
             const lengths = Array.from(new Set(words.map(value => value.length)));
             expect(lengths[0]).to.equal(3);
             expect(lengths.length).to.equal(1);
-            expect(lexicon.wordsOfLength(3, commonality).length).to.equal(words.length);
         });
 
         it('should get all the uncommon words of length 3 and only 3', () => {
@@ -46,7 +33,6 @@ describe('Lexicon', () => {
             const lengths = Array.from(new Set(words.map(value => value.length)));
             expect(lengths[0]).to.equal(3);
             expect(lengths.length).to.equal(1);
-            expect(lexicon.wordsOfLength(3, commonality).length).to.equal(words.length);
         });
 
         it('should get all common words of same length and shorter', () => {
