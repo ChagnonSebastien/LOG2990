@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CrosswordGameInformationComponent } from './crossword-game-information.component';
 import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
+import {CrosswordService} from '../services/crossword.service';
 import { HttpModule } from '@angular/http';
 describe('CrosswordGameInformationComponent', () => {
   let component: CrosswordGameInformationComponent;
@@ -9,7 +10,7 @@ describe('CrosswordGameInformationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ CrosswordGameInformationComponent ],
-      providers: [CrosswordGameInfoService],
+      providers: [CrosswordGameInfoService, CrosswordService],
       imports: [HttpModule]
     })
     .compileComponents();
