@@ -1,22 +1,9 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
 import { CrosswordChecker } from './crossword-checker';
+import { Word } from '../../commun/word';
 
 const lexiconPath = './app/words.json';
-
-export class Word {
-    public word: string;
-    public i: number;
-    public j: number;
-    public horizontal: boolean;
-
-    constructor(i: number, j: number, word: string, horizontal: boolean) {
-        this.i = i;
-        this.j = j;
-        this.word = word;
-        this.horizontal = horizontal;
-    }
-}
 
 export class CrosswordGenerator {
     public id: string;
