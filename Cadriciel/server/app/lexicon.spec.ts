@@ -10,18 +10,6 @@ describe('Lexicon', () => {
         lexicon = new Lexicon(jsonPath);
     });
 
-    describe('allWordsMatching()', () => {
-        it('should get all the words matching "h   o"', () => {
-            const wordsThatMatch: Array<string> = lexicon.allWordsMatching('h   o');
-            expect(wordsThatMatch.includes('hello')).to.be.true;
-            expect(wordsThatMatch.includes('hydro')).to.be.true;
-            expect(wordsThatMatch.includes('hullo')).to.be.true;
-            expect(wordsThatMatch.includes('hallo')).to.be.true;
-            expect(wordsThatMatch.includes('hollo')).to.be.true;
-            expect(wordsThatMatch.includes('hippo')).to.be.true;
-        });
-    });
-
     describe('subpatterns(pattern: string): string[] { }', () => {
         it('should return all the subpatterns of "h   o"', () => {
             const patterns = lexicon.subpatterns('h   o');

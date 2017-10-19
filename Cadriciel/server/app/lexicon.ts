@@ -40,11 +40,6 @@ export class Lexicon {
             .filter(word => patternRegex.test(word));
     }
 
-    public allWordsMatching(pattern: string): Array<string> {
-        return this.wordsMatching(pattern, true)
-            .concat(this.wordsMatching(pattern, false));
-    }
-
     public subpatterns(pattern: string): string[] {
         const results: Set<string> = new Set<string>();
         for (let length = 3; length <= pattern.length; length++) {
