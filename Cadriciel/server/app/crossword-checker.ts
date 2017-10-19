@@ -1,6 +1,14 @@
 import { CrosswordGenerator } from './crossword';
 
 export module CrosswordChecker {
+    export function indexesOutOfBounds(i: number, j: number, size: number): boolean {
+        return indexOutOfBounds(i, size) || indexOutOfBounds(j, size);
+    }
+
+    function indexOutOfBounds(i: number, size: number): boolean {
+        return i < 0 || i >= size;
+    }
+
     export function verify(crossword: CrosswordGenerator): boolean {
         const words = Array.from(crossword.words);
         if (words.length === 0) {

@@ -24,20 +24,20 @@ export class CrosswordGenerator {
         this.loadLexicon(lexiconPath);
     }
 
-    public reset() {
+    private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
         this.grid = this.newGrid(this.size, ' ');
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
-    public setGrid(words: Array<Word>) {
+    private setGrid(words: Array<Word>) {
         words.map((word) => {
             return this.addWord(word.i, word.j, word.word, word.horizontal);
         });
     }
 
-    public newGrid(size: number, fill: any): Array<any> {
+    private newGrid(size: number, fill: any): Array<any> {
         return new Array(size).fill(null).map(res => {
             return new Array(size).fill(null).map(u => {
                 return fill;
@@ -45,20 +45,13 @@ export class CrosswordGenerator {
         });
     }
 
-    public loadLexicon(file: string) {
+    private loadLexicon(file: string) {
         this.lexicon = new Lexicon(lexiconPath);
     }
 
-    public indexOutOfBounds(i: number): boolean {
-        return i < 0 || i >= this.size;
-    }
-
-    public indexesOutOfBounds(i: number, j: number): boolean {
-        return this.indexOutOfBounds(i) || this.indexOutOfBounds(j);
-    }
-
-    public addLetter(i: number, j: number, letter: string): boolean {
-        if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
+    private addLetter(i: number, j: number, letter: string): boolean {
+        if (letter.length !== 1
+            || CrosswordChecker.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
         if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
@@ -69,7 +62,7 @@ export class CrosswordGenerator {
         return true;
     }
 
-    public addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
+    private addWord(i: number, j: number, word: string, horizontal: boolean): boolean {
         const wordToAdd: Word = new Word(i, j, word, horizontal);
         if (this.words.has(word)) {
             return false;
@@ -98,7 +91,7 @@ export class CrosswordGenerator {
         return true;
     }
 
-    public addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
+    private addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
         if (horizontal) {
             if (j > 0) {
                 if (!this.addLetter(i, j - 1, '#')) {
@@ -125,45 +118,7 @@ export class CrosswordGenerator {
         return true;
     }
 
-    public deleteLetter(i: number, j: number, letter: string): boolean {
-        if (letter.length !== 1 || this.indexesOutOfBounds(i, j)) {
-            return false;
-        }
-        if (this.grid[i][j] !== letter) {
-            return false;
-        }
-        if (this.gridCounter[i][j] > 1) {
-            this.gridCounter[i][j]--;
-        } else {
-            this.gridCounter[i][j] = 0;
-            this.grid[i][j] = ' ';
-        }
-        return true;
-    }
-
-    public deleteWord(i: number, j: number, word: string, horizontal: boolean): boolean {
-        if (!this.words.has(word)) {
-            return false;
-        }
-        this.saveState();
-        for (const letter of word) {
-            if (!this.deleteLetter(i, j, letter)) {
-                this.rollback();
-                return false;
-            } else {
-                i = horizontal ? i : i + 1;
-                j = horizontal ? j + 1 : j;
-            }
-        }
-
-        this.words.delete(word);
-        this.wordsWithIndex = this.wordsWithIndex.filter((value) => {
-            return value.word !== word;
-        });
-        return true;
-    }
-
-    public scoreWord(word: string, pattern: string): number {
+    private scoreWord(word: string, pattern: string): number {
         let score = 0;
         for (let i = 0; i < word.length; i++) {
             score = word[i] === pattern[i] ? score + 1 : score;
@@ -171,7 +126,7 @@ export class CrosswordGenerator {
         return score;
     }
 
-    public bestInsertIndex(word: string, pattern: string): number {
+    private bestInsertIndex(word: string, pattern: string): number {
         let insertIndex = 0;
         let maxScore = 0;
         for (let index = 0; index < pattern.length - word.length + 1; index++) {
@@ -196,7 +151,7 @@ export class CrosswordGenerator {
         }
     }
 
-    public addRandomWord(i: number, horizontal: boolean, difficulty: string): boolean {
+    private addRandomWord(i: number, horizontal: boolean, difficulty: string): boolean {
         const pattern = this.patternForLine(i, horizontal);
 
         let wordsForPattern: string[];
@@ -249,29 +204,17 @@ export class CrosswordGenerator {
         return this.generateCrossword(difficulty);
     }
 
-    public saveState(): boolean {
+    private saveState(): boolean {
         this.previousGridState = Utilities.deepCopy(this.grid);
         this.previousGridCounter = Utilities.deepCopy(this.gridCounter);
         this.previousWords = new Set(Array.from(this.words));
         return true;
     }
 
-    public rollback(): boolean {
+    private rollback(): boolean {
         this.grid = Utilities.deepCopy(this.previousGridState);
         this.gridCounter = Utilities.deepCopy(this.previousGridCounter);
         this.words = new Set(Array.from(this.previousWords));
         return true;
-    }
-
-    public printGrid() {
-        console.log('-'.repeat(4 * this.size + 1));
-        this.grid.forEach((line) => {
-            process.stdout.write('|');
-            line.forEach((letter) => {
-                process.stdout.write(' ' + letter + ' |');
-            });
-            process.stdout.write('\n');
-            console.log('-'.repeat(4 * this.size + 1));
-        });
     }
 }
