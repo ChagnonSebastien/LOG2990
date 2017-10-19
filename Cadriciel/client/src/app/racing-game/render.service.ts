@@ -34,7 +34,7 @@ export class RenderService {
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-        // this.cube.position.z += 5;
+        this.cube.position.z += 5;
     }
 
     private createCube() {
@@ -49,14 +49,12 @@ export class RenderService {
         const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
         this.cube = new THREE.Mesh(geometry, material);
         this.scene.add(this.cube);
-        console.log('cube ajouté');
     }
 
     private createScene() {
         this.scene = new THREE.Scene();
         this.cameraService.initialiseCamera(this.container);
         this.camera = this.cameraService.getCamera();
-        console.log('Camera service fonctionne');
     }
 
     private getAspectRatio() {
@@ -74,17 +72,8 @@ export class RenderService {
         // 109 corresponding to '-' in ASCII
         if (event.keyCode === 107) {
             this.zoom += this.inc;
-            console.log('zoom');
         } else if (event.keyCode === 109) {
             this.zoom -= this.inc;
-            console.log(this.zoom);
-        }
-    }
-
-    public updateZoom(): void {
-        this.zoom += this.inc;
-        if ( this.zoom <= 0.2 || this.zoom >= 1.0) {
-            this.inc = -this.inc;
         }
     }
 
@@ -111,13 +100,6 @@ export class RenderService {
         this.animateCube();
         this.camera.fov = this.fov * this.zoom;
         this.camera.updateProjectionMatrix();
-        /*
-        this.zoom += this.inc;
-        if ( this.zoom <= 0.2 || this.zoom >= 1.0) {
-            this.inc = -this.inc;
-        }
-        */
-        // this.updateZoom();
         this.cameraFollowingObject(this.cube);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
@@ -140,7 +122,6 @@ export class RenderService {
         this.container = container;
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
-
         this.createScene();
         this.createCube();
         this.initStats();

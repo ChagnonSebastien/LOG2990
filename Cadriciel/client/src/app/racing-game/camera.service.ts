@@ -32,7 +32,6 @@ export class CameraService {
         this.perspectiveCamera = this.setPerspectiveCamera(container);
         this.camera = this.setPerspectiveCamera(container);
         this.defaultCamerasPosition();
-        console.log('initialisation de la camera');
     }
 
     public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
@@ -41,8 +40,8 @@ export class CameraService {
             container.clientWidth / 2,
             container.clientHeight / 2,
             - container.clientHeight / 2,
-            1,
-            2000
+            100,
+            1000
         );
         return camera;
     }
@@ -56,7 +55,6 @@ export class CameraService {
             this.nearClippingPane,
             this.farClippingPane
         );
-
         return camera;
     }
 
@@ -94,7 +92,6 @@ export class CameraService {
         this.orthographicCamera.position.y = object.position.y + this.offsetY;
         this.orthographicCamera.position.z = object.position.z + this.offsetZ;
         this.orthographicCamera.updateProjectionMatrix();
-        console.log('affiche de la cote ' /*+ this.orthographicCamera.position.z*/);
     }
 
     public selectCamera(event: any): void {
