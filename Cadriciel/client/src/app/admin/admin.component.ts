@@ -16,6 +16,7 @@ export class AdminComponent implements OnInit {
     public ngOnInit(): void {
         this.passwordCorrect = false;
         this.passwordChanged = false;
+      //  this.modifyPassword = false;
     }
 
     public async login(passwordInput: string): Promise<boolean> {
@@ -31,4 +32,8 @@ export class AdminComponent implements OnInit {
         });
         return await this.passwordChanged;
     }
+
+   // public toggleChangePassword(): void {
+    //    this.modifyPassword = this.modifyPassword ? false : true;
+    // }
 }

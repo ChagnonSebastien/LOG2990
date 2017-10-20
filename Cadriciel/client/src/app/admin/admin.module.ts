@@ -32,12 +32,14 @@ import { AdminRoutingModule } from './admin-routing.module';
         AdminComponent,
         TracksComponent,
         DrawTrackComponent,
-        TrackInfoComponent
+        TrackInfoComponent,
+        TracksComponent,
     ],
     exports: [
         AdminComponent,
         TracksComponent,
         TrackInfoComponent,
+        TracksComponent,
     ],
     providers: [
         AuthenticationService,

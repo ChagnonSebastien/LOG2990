@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { RacingGameComponent } from './racing-game.component';
+import {ClientTracksComponent} from './client-track/client-tracks.component';
+import {ClientTrackInfoComponent} from './client-track/client-track-info.component';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 
@@ -16,10 +18,14 @@ import { CameraService } from './camera.service';
         HttpModule
     ],
     declarations: [
-        RacingGameComponent
+        RacingGameComponent,
+        ClientTracksComponent,
+        ClientTrackInfoComponent
     ],
     exports: [
-        RacingGameComponent
+        RacingGameComponent,
+        ClientTracksComponent,
+        ClientTrackInfoComponent
     ],
     providers: [RenderService, CameraService]
 })

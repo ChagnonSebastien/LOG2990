@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Track } from './track';
-import { TrackService } from './track.service';
+import { Track } from '../../admin/tracks/track';
+import { TrackService } from '../../admin/tracks/track.service';
 
 @Component({
-    selector: 'app-track-info',
-    templateUrl: './track-info.component.html',
-    styleUrls: ['./track-info.component.css'],
+    selector: 'app-client-track-info',
+    templateUrl: './client-track-info.component.html',
+    styleUrls: ['./client-track-info.component.css'],
     providers: [TrackService]
 })
-export class TrackInfoComponent implements OnInit {
+export class ClientTrackInfoComponent implements OnInit {
     @Input() public  track: Track;
 
     public changeDescriptionDB() {
