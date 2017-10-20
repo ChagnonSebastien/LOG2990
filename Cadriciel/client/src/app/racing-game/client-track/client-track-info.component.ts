@@ -8,7 +8,7 @@ import { TrackService } from '../../admin/tracks/track.service';
     styleUrls: ['./track-info.component.css'],
     providers: [TrackService]
 })
-export class TrackInfoComponent implements OnInit {
+export class ClientTrackInfoComponent implements OnInit {
     @Input() public  track: Track;
 
     public changeDescriptionDB() {
