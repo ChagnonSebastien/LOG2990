@@ -1,0 +1,51 @@
+.multiplayer-table{
+    min-width: 100%;
+    min-height: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.container{
+    background: url('../space_background.jpg');
+    border: 1px solid black;
+    min-width: 100%;
+    min-height:100%;
+    margin: 0 auto;
+    padding: 0;
+    color: white;
+    background-size: cover; 
+    min-height: 100%;
+    height:auto !important; /* cross-browser */
+    height: 100%; /* cross-browser */
+}
+
+.btn:hover{
+    background-color: #3e8e41
+
+}
+
+.btn:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+  .btn:disabled{
+    background-color: red
+
+  }
+
+  .form .usernameInput {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 400px;
+  }
+ .usernameInput {
+    font-size: 200%;
+    letter-spacing: 3px;
+    color: white;
+  }

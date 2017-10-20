@@ -1,0 +1,78 @@
+<div class="page">
+<div  class="container">
+<div *ngIf = "multiplayerGameReady" class = "loading"> 
+   <div  class="loader">
+   </div>
+   <h2 class = "loadingText"> Waiting for player 2 to join game ...</h2>
+ </div>
+  <div *ngIf="!multiplayerGameReady"> 
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+    <h1>
+      <button type="button" class="confirmBtn" [routerLink]="['/crossword-game-room']">Click here to view multiplayer games</button>
+    </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="option"><b>OPTION</b></span>
+        <button [ngClass]="{active: option == 'SOLO'}" type="button" class="btn" (click)="setOption('SOLO')">Solo</button>
+        <button [ngClass]="{active: option == 'MULTIPLAYER'}" type="button" class="btn" (click)="setOption('MULTIPLAYER')">Multiplayer</button>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="mode"><b>MODE</b></span>
+        <button [ngClass]="{active: mode == 'CLASSIC' && (isSolo() || isMultiplayer())}" [disabled]="!isSolo() && !isMultiplayer()" type="button" class="btn" (click)="setMode('CLASSIC')">Classic</button>
+        <button [ngClass]="{active: mode == 'DYNAMIC' && (isSolo() || isMultiplayer())}" [disabled]="!isSolo() && !isMultiplayer()" type="button" class="btn" (click)="setMode('DYNAMIC')">Dynamic</button>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="level"><b>LEVEL</b></span>
+        <button [ngClass]="{active: level == 'EASY' && (isSolo() || isMultiplayer())}" [disabled]="(!isSolo() && !isMultiplayer())" type="button" class="btn" (click)="setLevel('EASY')">Easy</button>
+        <button [ngClass]="{active: level == 'NORMAL' && (isSolo() || isMultiplayer())}" [disabled]="(!isSolo() && !isMultiplayer())" type="button" class="btn" (click)="setLevel('NORMAL')">Normal</button>
+        <button [ngClass]="{active: level == 'HARD' && (isSolo() || isMultiplayer())}" [disabled]="(!isSolo() && !isMultiplayer())" type="button" class="btn" (click)="setLevel('HARD')">Hard</button>
+      </h1>
+    </div>
+  </div>
+  <div *ngIf="multiplayerSet()" class="row">
+    <div class="col"></div>
+    <div class="col">
+      <div class="form">
+        <h3 class="title">What's your nickname?</h3>
+        <input class="usernameInput" id="usernameInput" type="text" maxlength="15" />
+      </div>
+    </div>
+  </div>
+  <div *ngIf="singleplayerSet()" class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="confirm"></span>
+        <button  (click)="saveOptions()"  [disabled]="option==null || mode == null || level == null" type="button" class="confirmBtn" [routerLink]="['/crossword-test']">Confirm</button>
+      </h1>
+    </div>
+  </div>
+  <div *ngIf="multiplayerSet()" class="row">
+    <div class="col"></div>
+    <div class="col">
+      <h1>
+        <span class="label label-default" id="confirm"></span>
+        <button  (click)="saveOptions()"  [disabled]="option==null || mode == null || level == null" type="button" class="confirmBtn">Create Multiplayer Game </button>
+      </h1>
+    </div>
+  </div>
+</div>
+</div>
+</div> 
+
