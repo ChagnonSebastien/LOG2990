@@ -36,10 +36,10 @@ describe('Track', () => {
 
     it('Should delete the previously created track', (done) => {
         chai.request(apiUrl)
-            .delete('/track/1')
+            .delete('/track/0')
             .end((err: any, res: any) => {
                 const track = JSON.parse(res.text);
-                assert(track.value.trackId === 1);
+                assert(track.value.trackId === 0);
                 done();
             });
     });
