@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AdminComponent } from './admin.component';
 import { TracksComponent } from './tracks/tracks.component';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { AuthenticationService } from './authentication.service';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -37,7 +38,7 @@ describe('AdminComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AdminComponent, DrawTrackComponent, TracksComponent],
-            imports: [HttpModule, AdminRoutingModule]
+            imports: [HttpModule, AdminRoutingModule, FormsModule]
         }).overrideComponent(AdminComponent, {
             set: {
                 providers: [

@@ -3,6 +3,7 @@ import { ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
+import { Track } from '../../admin/tracks/track';
 import * as THREE from 'three';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
 
 @Component({
@@ -9,6 +9,9 @@ import { DrawTrackService } from './draw-track.service';
 })
 
 export class DrawTrackComponent implements AfterViewInit {
+    public name: string;
+    public description: string;
+    public difficulty: string;
 
     public saveEnabled = false;
 
@@ -62,6 +65,9 @@ export class DrawTrackComponent implements AfterViewInit {
     }
 
     public saveTrack() {
+        console.log(this.name);
+        console.log(this.description);
+        console.log(this.difficulty);
         if (this.saveEnabled) {
             this.trackService.saveTrack();
         }

@@ -2,19 +2,19 @@
   <div class="attributes_editor row justify-content-center">
     <div class="col-5">
       <label class="control-label" for="name">Track name: </label>
-      <input class="form-control" id="name" type="text">
+      <input class="form-control" [(ngModel)]="name" type="text">
       <label class="control-label" for="description">Track description: </label>
-      <textarea class="form-control" id="description"></textarea>
+      <textarea class="form-control" [(ngModel)]="description"></textarea>
     </div>
     <div class="col-2">
       <label>Difficulty:</label>
       <div class="radio">
         <label>
-          <input type="radio" name="difficulty"> Easy</label>
+          <input type="radio" name="difficulty" [(ngModel)]="difficulty" value="easy"> Easy</label>
       </div>
       <div class="radio">
         <label>
-          <input type="radio" name="difficulty"> Hard</label>
+          <input type="radio" name="difficulty" [(ngModel)]="difficulty" value="hard"> Hard</label>
       </div>
       <br>
       <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled" (click)="saveTrack()">SAVE</button>
