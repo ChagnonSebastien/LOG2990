@@ -152,4 +152,8 @@ export class DrawTrackService {
     public onResize() {
         this.renderService.onResize();
     }
+
+    public saveTrack() {
+        return;
+    }
 }

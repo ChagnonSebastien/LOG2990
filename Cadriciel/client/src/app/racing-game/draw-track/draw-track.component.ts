@@ -60,4 +60,10 @@ export class DrawTrackComponent implements AfterViewInit {
     public randomizePosition(type: number) {
         this.trackService.randomizeAllPositions(type);
     }
+
+    public saveTrack() {
+        if (this.saveEnabled) {
+            this.trackService.saveTrack();
+        }
+    }
 }
