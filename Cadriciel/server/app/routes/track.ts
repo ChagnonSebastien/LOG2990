@@ -90,7 +90,7 @@ module Route {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     const newTrack = new trackSchema({
-                        trackId: req.body.id,
+                        trackId: req.body.trackId,
                         name: req.body.name,
                         description: req.body.description,
                         type: req.body.type,

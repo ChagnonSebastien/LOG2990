@@ -61,7 +61,7 @@ describe('test drawTrackService', function () {
         it('should save a track in the database', (done) => {
             drawTrackService.saveTrack('test', 'testing', 'advanced')
             .then((result) => {
-                expect(result).toEqual('saved');
+                expect(result).toEqual('success');
                 done();
             });
         });
