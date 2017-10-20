@@ -26,7 +26,6 @@ export class TracksComponent implements OnInit {
     public deleteTrack(id: number) {
         const tracks = this.tracks;
         this.trackService.deleteTrack(id).subscribe(data => {
-
             if (data.n === 1) {
                 for (let i = 0; i < tracks.length; i++) {
                     if (tracks[i].trackId === id) {

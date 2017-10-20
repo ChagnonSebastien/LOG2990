@@ -3,9 +3,8 @@
 <ul class="tracks">
   <li *ngFor="let track of tracks" [class.selected]="track === selectedTrack" (click)="onSelect(track)">
     <span class="badge">{{track.trackId}}</span> {{track.name}}
-    <button (click)="deleteTrack(track.trackId)">Delete</button>
   </li>
 </ul>
 <div *ngIf="selectedTrack">
-  <!--<app-track-info [track]="selectedTrack"></app-track-info>-->
+  <app-track-info [track]="selectedTrack"></app-track-info>
 </div>
