@@ -4,7 +4,11 @@ import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import { Track } from '../../admin/tracks/track';
+import { Headers, Http } from '@angular/http';
 import * as THREE from 'three';
+
+const apiUrl = 'http://localhost:3000/api';
+const headers = new Headers({ 'Content-Type': 'application/json' });
 
 @Injectable()
 export class DrawTrackService {
@@ -24,7 +28,8 @@ export class DrawTrackService {
     constructor(
         public renderService: RenderService,
         public trackValidationService: TrackValidationService,
-        public obstacleService: ObstacleService
+        public obstacleService: ObstacleService,
+        private http: Http
     ) { }
 
     public initialise(container: HTMLElement) {
@@ -176,7 +181,11 @@ export class DrawTrackService {
             this.obstacleService.getObstacles(ObstacleType.Booster)
                 .map(filterTypeFromObject)
         );
-
-        return;
+        const path = 'tracks';
+        this.http
+            .post(`${apiUrl}/${path}`,
+            JSON.stringify(trackToSave),
+            { headers: headers}
+        );
     }
 }
