@@ -23,24 +23,14 @@ describe('CrosswordGameInterfaceComponent', () => {
         fixture = TestBed.createComponent(CrosswordGameInterfaceComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        component.setRawCrossword([['0', '0', '0', 'b', '0', '0', '0', '0', '0', '0'],
-        ['0', 'g', '0', 'a', '0', '0', '0', '0', 'b', '0'],
-        ['0', 'u', '0', 'n', '0', '0', 'g', 'r', 'i', 'p'],
-        ['g', 'a', 'n', 'g', '0', 'h', '0', '0', 'b', '0'],
-        ['0', 'r', '0', 'l', '0', 'o', '0', '0', 'l', '0'],
-        ['s', 'a', 't', 'e', 'l', 'l', 'i', 't', 'e', '0'],
-        ['0', 'n', '0', 's', '0', 'y', '0', 'r', '0', '0'],
-        ['0', 't', '0', '0', '0', '0', '0', 'a', '0', '0'],
-        ['0', 'e', '0', 'm', 'i', 'n', 'i', 'm', 'u', 'm'],
-        ['0', 'e', '0', '0', '0', '0', '0', '0', '0', '0']]);
-
-        component.game.listOfWords = ['grip', 'gang', 'satellite', 'minimum', 'guarantee', 'bangles', 'holy', 'tram', 'bible' ];
-        component.game.option = 'SOLO';
     });
 
-    it('should be created', () => {
+    it('should be created', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         expect(component).toBeTruthy();
     });
+  }));
 
     it('should fill word indexes', async(() => {
         fixture.detectChanges();
@@ -74,33 +64,42 @@ describe('CrosswordGameInterfaceComponent', () => {
      });
    }));
 
-
-
-    it('should activate the word indexes when its hint is clicked', () => {
+    it('should activate the word indexes when its hint is clicked', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const activeIndexes: Index[] = [{i: 0, j: 0}, {i: 1, j: 0}, {i: 2, j: 0}];
         const event: Event = new Event('click');
         component.handleClick(event, activeIndexes);
         expect(component.activeIndexes).toEqual(activeIndexes);
 
     });
+}));
 
-    it('should return that a active index is active', () => {
+    it('should return that a active index is active', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const activeIndexes: Index[] = [{i: 0, j: 0}];
         const event: Event = new Event('click');
         component.handleClick(event, activeIndexes);
         expect(component.isActive(0, 0)).toBeTruthy();
-        });
+    });
+}));
 
-     it('should cancel the selection of the word when clicking outside the grid', () => {
+     it('should cancel the selection of the word when clicking outside the grid', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const activeIndexes: Index[] = [{i: 0, j: 0}];
         const event: Event = new Event('click');
         component.handleClick(event, activeIndexes);
         component.cancelSelection(event);
         expect(component.activeIndexes.length).toEqual(0);
     });
+}));
 
-    it('should return the first column of the raw crossword', () => {
-        //expect(component.getColumn(0)).toEqual(['0', '0', '0', 'g', '0', 's', '0', '0', '0', '0']);
+    it('should return the first column of the raw crossword', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+        // expect(component.getColumn(0)).toEqual(['0', '0', '0', 'g', '0', 's', '0', '0', '0', '0']);
     });
 
     it('should prevent the user from entering something else than a letter character', () => {
@@ -110,8 +109,11 @@ describe('CrosswordGameInterfaceComponent', () => {
         component.filterInput(event, 0, 0);
         expect(component.correctIndexes.length).toEqual(0);
     });
+}));
 
-    it('should delete the correct index when the backspace key is pressed', () => {
+    it('should delete the correct index when the backspace key is pressed', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const event: any = document.createEvent('CustomEvent');
         event.which = 103;
         event.initEvent('keypress', true, true);
@@ -121,8 +123,11 @@ describe('CrosswordGameInterfaceComponent', () => {
         component.handleDelete(event, 0, 0);
         expect(component.correctIndexes.length).toEqual(0);
     });
+}));
 
-    it('should return true using the word postion  when all the correct letters of a word are entered', () => {
+    it('should return true using the word postion  when all the correct letters of a word are entered', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const event: any = document.createEvent('CustomEvent');
 
         event.which = 103; // g
@@ -143,21 +148,33 @@ describe('CrosswordGameInterfaceComponent', () => {
 
         expect(component.checkWordFound(1)).toBeTruthy();
     });
+}));
 
-    it('should set the selected k', () => {
+    it('should set the selected k', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         component.selectK(0);
         expect(component.kSelected).toEqual(0);
     });
+}));
 
-    it('should return true when a word in the crossword is left to right', () => {
+    it('should return true when a word in the crossword is left to right', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         expect(component.checkHorizontal(component.wordsIndexes[0].position)).toBeTruthy();
     });
+}));
 
-    it('should return true when a word in the crossword is top to bottom', () => {
+    it('should return true when a word in the crossword is top to bottom', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         expect(component.checkVertical(component.wordsIndexes[7].position)).toBeTruthy();
     });
+}));
 
-    it('should return true using the word index when all the correct letters of a word are entered', () => {
+    it('should return true using the word index when all the correct letters of a word are entered', async(() => {
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
         const event: any = document.createEvent('CustomEvent');
 
         event.which = 103; // g
@@ -178,6 +195,7 @@ describe('CrosswordGameInterfaceComponent', () => {
 
         expect(component.checkWordWithIndex(3, 0)).toBeTruthy();
     });
+}));
 
 });
 
