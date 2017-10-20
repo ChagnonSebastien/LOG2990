@@ -3,7 +3,12 @@ import { ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
+import { Track } from '../../admin/tracks/track';
+import { Headers, Http } from '@angular/http';
 import * as THREE from 'three';
+
+const apiUrl = 'http://localhost:3000/api';
+const headers = new Headers({ 'Content-Type': 'application/json' });
 
 @Injectable()
 export class DrawTrackService {
@@ -23,7 +28,8 @@ export class DrawTrackService {
     constructor(
         public renderService: RenderService,
         public trackValidationService: TrackValidationService,
-        public obstacleService: ObstacleService
+        public obstacleService: ObstacleService,
+        private http: Http
     ) { }
 
     public initialise(container: HTMLElement) {
@@ -151,5 +157,35 @@ export class DrawTrackService {
 
     public onResize() {
         this.renderService.onResize();
+    }
+
+    public saveTrack(name: string, description: string, difficulty: string) {
+        const filterTypeFromObject = (object) => {
+            return {
+                segment: object.intersection,
+                distance: object.distance,
+                offset: object.offset
+            };
+        };
+
+        const trackToSave = new Track(
+            0,
+            name,
+            description,
+            difficulty,
+            this.intersections,
+            this.obstacleService.getObstacles(ObstacleType.Puddle)
+                .map(filterTypeFromObject),
+            this.obstacleService.getObstacles(ObstacleType.Pothole)
+                .map(filterTypeFromObject),
+            this.obstacleService.getObstacles(ObstacleType.Booster)
+                .map(filterTypeFromObject)
+        );
+        const path = 'tracks';
+        this.http
+            .post(`${apiUrl}/${path}`,
+            JSON.stringify(trackToSave),
+            { headers: headers}
+        );
     }
 }

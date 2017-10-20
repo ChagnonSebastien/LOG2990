@@ -1,6 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CrosswordGameComponent } from './crossword-game.component';
+import {CrosswordGameInterfaceComponent} from '../crossword-game-interface/crossword-game-interface.component';
+import { CrosswordGameRoutingModule} from './crossword-game-routing.module';
+import { CrosswordGameInformationComponent } from '../crossword-game-information/crossword-game-information.component';
+import {CrosswordGameRoomComponent} from '../crossword-game-room/crossword-game-room.component';
+import {LexiconService} from '../services/lexicon.service';
+import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
+import {CrosswordService} from '../services/crossword.service';
+import {MultiplayerService} from '../services/crossword-multiplayer.service';
+import { HttpModule } from '@angular/http';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CrosswordGameComponent', () => {
     let component: CrosswordGameComponent;
@@ -8,7 +17,10 @@ describe('CrosswordGameComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CrosswordGameComponent]
+            declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent,
+                          CrosswordGameInformationComponent, CrosswordGameRoomComponent],
+            imports: [CrosswordGameRoutingModule, HttpModule, RouterTestingModule],
+            providers: [LexiconService, CrosswordGameInfoService, CrosswordService, MultiplayerService ],
         })
             .compileComponents();
     }));

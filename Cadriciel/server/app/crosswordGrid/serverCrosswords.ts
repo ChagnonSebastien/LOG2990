@@ -61,7 +61,7 @@ export class ServerCrosswords {
                     console.log('error');
                     resolve(false);
                 } else {
-                    const objId = new mongoose.Types.ObjectId(crossword._id);
+                    const objId = new mongoose.Types.ObjectId(crossword.id);
                     db.collection(this.collection).deleteOne({ '_id': objId });
                     resolve(true);
                 }

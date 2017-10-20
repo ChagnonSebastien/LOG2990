@@ -9,6 +9,9 @@ import { DrawTrackService } from './draw-track.service';
 })
 
 export class DrawTrackComponent implements AfterViewInit {
+    public name: string;
+    public description: string;
+    public difficulty: string;
 
     public saveEnabled = false;
 
@@ -59,5 +62,11 @@ export class DrawTrackComponent implements AfterViewInit {
 
     public randomizePosition(type: number) {
         this.trackService.randomizeAllPositions(type);
+    }
+
+    public saveTrack() {
+        if (this.saveEnabled) {
+            this.trackService.saveTrack(this.name, this.description, this.difficulty);
+        }
     }
 }

@@ -17,6 +17,7 @@ import * as lexiconRoute from './routes/lexicon';
 import * as trackRoute from './routes/track';
 import * as serverCrosswords from './routes/serverCrosswordsRoute';
 
+
 export class Application {
 
     public app: express.Application;

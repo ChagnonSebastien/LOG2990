@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 // Service imports
 
 /* Feature modules */
-import { CrosswordGameModule } from './crossword-game/crossword-game.module';
+import { CrosswordGameModule } from './crossword-game/crossword-game-component/crossword-game.module';
 import { HomeModule } from './home/home.module';
 import { RacingGameModule } from './racing-game/racing-game.module';
 import { AdminModule } from './admin/admin.module';
@@ -19,9 +19,10 @@ import { AdminModule } from './admin/admin.module';
 /* Routing modules */
 import { AppRoutingModule } from './app-routing.module';
 
+
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,

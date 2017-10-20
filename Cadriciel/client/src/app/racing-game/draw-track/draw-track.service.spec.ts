@@ -2,12 +2,34 @@ import { ObstacleService } from './obstacle.service';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
+import {
+    Http,
+    BrowserXhr,
+    RequestOptions,
+    BaseRequestOptions,
+    ResponseOptions,
+    BaseResponseOptions,
+    ConnectionBackend,
+    XHRBackend,
+    XSRFStrategy,
+    CookieXSRFStrategy
+} from '@angular/http';
+import { ReflectiveInjector } from '@angular/core';
 import * as THREE from 'three';
 
 describe('test drawTrackService', function () {
     let drawTrackService: DrawTrackService;
     beforeEach(() => {
-        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService(), new ObstacleService());
+        const injector = ReflectiveInjector.resolveAndCreate([
+            Http,
+            BrowserXhr,
+            { provide: RequestOptions, useClass: BaseRequestOptions },
+            { provide: ResponseOptions, useClass: BaseResponseOptions },
+            { provide: ConnectionBackend, useClass: XHRBackend },
+            { provide: XSRFStrategy, useFactory: () => new CookieXSRFStrategy() },
+        ]);
+        const http = injector.get(Http);
+        drawTrackService = new DrawTrackService(new RenderService(), new TrackValidationService(), new ObstacleService(), http);
     });
 
     it('construction test', done => {

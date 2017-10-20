@@ -1,17 +1,17 @@
-// Import the mongoose module
 import * as mongoose from 'mongoose';
 
-// Set up mongoose connection
-var mongoDB = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
-mongoose.connect(mongoDB, { useMongoClient: true });
+mongoose.connect(
+    'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db',
+    { useMongoClient: true }
+);
 
 // Get the default connection
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 // Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const CwSchema = new mongoose.Schema({
+const crosswordSchema = new mongoose.Schema({
 
     crossword:
     {
@@ -29,4 +29,4 @@ const CwSchema = new mongoose.Schema({
 });
 
 
-const CrossWord = module.exports = mongoose.model('crosswords', CwSchema);
+module.exports = mongoose.model('crosswords', crosswordSchema);

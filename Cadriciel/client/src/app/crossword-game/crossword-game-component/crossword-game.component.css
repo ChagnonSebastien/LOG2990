@@ -1,0 +1,129 @@
+.btn {
+    min-width: 150px;
+    font-size:17pt;
+    font-weight: bold;
+}
+
+.active {
+    background: #188F8D;
+}
+
+.confirmBtn{
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+}
+
+.confirmBtn:hover{
+    background-color: #3e8e41
+
+}
+
+.confirmBtn:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+  .confirmBtn:disabled{
+    background-color: red
+
+  }
+
+
+.container {
+    min-height: 1000px;
+    min-width: 1700px;
+    background-image: url('../setup_background.jpg');
+    color: white;
+    padding-top: 300px;
+    font-family: monospace;
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   
+}
+
+.page {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.row {
+    margin-bottom:5%;
+}
+
+#option {
+    margin-right:3%;
+}
+
+#mode {
+    margin-right:8.5%;
+}
+
+#level {
+    margin-right:5.5%;
+}
+
+#confirm {
+    margin-right:22.5%;
+}
+
+.form .usernameInput {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 400px;
+  }
+ .usernameInput {
+    font-size: 200%;
+    letter-spacing: 3px;
+    color: white;
+  }
+
+  .loader {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #188F8D;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin-left: 200px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    text-align: center;  
+}
+
+.loadingText{
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    z-index: 1;
+    width: 750px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+}
