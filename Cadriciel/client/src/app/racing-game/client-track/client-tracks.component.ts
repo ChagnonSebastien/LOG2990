@@ -4,7 +4,7 @@ import { Track } from '../../admin/tracks/track';
 import { Http, Headers } from '@angular/http';
 import { TrackInfoComponent } from './client-track-info.component';
 @Component({
-    selector: 'client-app-tracks',
+    selector: 'app-client-tracks',
     templateUrl: './tracks.component.html',
     styleUrls: ['./tracks.component.css'],
     providers: [TrackService]
