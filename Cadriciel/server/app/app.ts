@@ -16,7 +16,6 @@ import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
 import * as trackRoute from './routes/track';
 import * as serverCrosswords from './routes/serverCrosswordsRoute';
-import * as client from 'socket.io';
 
 
 export class Application {

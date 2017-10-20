@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
-import {CrosswordService} from '../services/crossword.service';
 import { Game } from '../../../../../commun/crossword/game';
 
 @Component({
@@ -10,7 +9,7 @@ import { Game } from '../../../../../commun/crossword/game';
 })
 export class CrosswordGameInformationComponent implements OnInit {
   public game: Game;
-  constructor(private crosswordGameInfoService: CrosswordGameInfoService, private crosswordService: CrosswordService) {
+  constructor(private crosswordGameInfoService: CrosswordGameInfoService) {
     this.game = {
       id: '',
       difficulty: '',

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http} from '@angular/http';
 import { Game } from '../../../../../commun/crossword/game';
 @Injectable()
 export class CrosswordGameInfoService {
-    private headers = new Headers({'Content-Type': 'application/json'});
     private collection = 'crosswords';
     public game: Game;
     constructor(private http: Http) {

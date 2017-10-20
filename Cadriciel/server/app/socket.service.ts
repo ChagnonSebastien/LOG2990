@@ -19,7 +19,7 @@ export class SocketManager {
       socket.on('createGame', (difficulty: string, mode: string, username: string) => {
         this.serverCrosswords.getCrossword(difficulty.toLowerCase()).then(crossword => {
                const game: Game = {
-               id:(Math.random() + 1).toString(36).slice(2, 18),
+               id: (Math.random() + 1).toString(36).slice(2, 18),
                difficulty: difficulty,
                mode: mode ,
                option: 'MULTIPLAYER',
@@ -45,12 +45,12 @@ export class SocketManager {
               });
       socket.on('joinGame', (gameId: string, username: string) => {
          const index = this.findGameIndexById(gameId);
-         if(index !== -1) {
+         if (index !== -1) {
             const currentGame = this.gamesList[index];
             currentGame.username2 = username;
             currentGame.socketId2 = socket.id;
             socket.emit('player 2 joined a game', currentGame);
-            this.sio.to(currentGame.socketId1).emit('player 2 joined your game', currentGame)
+            this.sio.to(currentGame.socketId1).emit('player 2 joined your game', currentGame);
          }
          });
     });

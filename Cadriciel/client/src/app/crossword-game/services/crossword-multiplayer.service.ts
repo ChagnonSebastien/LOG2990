@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import {CrosswordGameInfoService} from './crossword-game-info.service';
 import { Game } from '../../../../../commun/crossword/game';
@@ -14,7 +13,7 @@ export class MultiplayerService {
     public currentGame: Game;
     public opponentActiveIndexes: Index[] = [];
     public opponentCorrectIndexes: Index[] = [];
-    constructor(private http: Http, private router: Router, private route: ActivatedRoute,
+    constructor( private router: Router, private route: ActivatedRoute,
         private crosswordGameInfoService: CrosswordGameInfoService) {
         this.socket = io.connect(this.HOST_NAME + this.SERVER_PORT);
 

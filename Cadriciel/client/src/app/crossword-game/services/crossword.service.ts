@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import 'rxjs/add/operator/map';
-
 @Injectable()
 export class CrosswordService {
-    constructor(private http: Http) { }
+    constructor() { }
      /***********************************************************
     * Returns the indexes of a given word in a row of the grid. Returns
     * emtpy array if it is not in the grid.

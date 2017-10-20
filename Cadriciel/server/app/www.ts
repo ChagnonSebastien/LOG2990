@@ -38,7 +38,7 @@ db.connect()
                 server.on('listening', onListening);
 
                 const socketManager = new SocketManager(server);
-                socketManager.handleSockets()
+                socketManager.handleSockets();
 
                 /**
                  * Normalise le port en un nombre, une chaîne de caractères ou la valeur false.

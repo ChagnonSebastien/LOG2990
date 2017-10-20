@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {LexiconService} from '../services/lexicon.service';
 import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
 import {CrosswordService} from '../services/crossword.service';
