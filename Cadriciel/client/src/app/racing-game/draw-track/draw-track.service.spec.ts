@@ -56,4 +56,14 @@ describe('test drawTrackService', function () {
         expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
         done();
     });
+
+    describe('saveTrack()', () => {
+        it('should save a track in the database', (done) => {
+            drawTrackService.saveTrack('test', 'testing', 'advanced')
+            .then((result) => {
+                expect(result).toEqual('saved');
+                done();
+            });
+        });
+    });
 });

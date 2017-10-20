@@ -159,7 +159,7 @@ export class DrawTrackService {
         this.renderService.onResize();
     }
 
-    public saveTrack(name: string, description: string, difficulty: string) {
+    public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
         const filterTypeFromObject = (object) => {
             return {
                 segment: object.intersection,
@@ -182,10 +182,17 @@ export class DrawTrackService {
                 .map(filterTypeFromObject)
         );
         const path = 'tracks';
-        this.http
+        return this.http
             .post(`${apiUrl}/${path}`,
             JSON.stringify(trackToSave),
             { headers: headers}
-        );
+        ).toPromise()
+        .then(response => response.json().data)
+        .catch(this.handleError);
+    }
+
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error); // for demo purposes only
+        return Promise.reject(error.message || error);
     }
 }
