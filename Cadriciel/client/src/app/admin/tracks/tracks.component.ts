@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TrackService } from './track.service';
 import { Track } from './track';
 import { Http, Headers } from '@angular/http';
-import { TrackInfoComponent } from './track-info.component';
+
 @Component({
     selector: 'app-tracks',
     templateUrl: './tracks.component.html',
