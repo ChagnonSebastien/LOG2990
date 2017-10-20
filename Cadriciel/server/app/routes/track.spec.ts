@@ -24,48 +24,6 @@ describe('Track', () => {
             });
     });
 
-    it('Should update the name of the previously created track', (done) => {
-        chai.request(apiUrl)
-            .put('/tracksNameChange')
-            .send({
-                id: 1,
-                newName: 'changedName'
-            })
-            .end((err: any, res: any) => {
-                const track = JSON.parse(res.text);
-                assert(track.value.name === 'test');
-                done();
-            });
-    });
-
-    it('Should update the type of the previously created track', (done) => {
-        chai.request(apiUrl)
-            .put('/tracksTypeChange')
-            .send({
-                id: 1,
-                newType: 'changedType'
-            })
-            .end((err: any, res: any) => {
-                const track = JSON.parse(res.text);
-                assert(track.value.type === 'pro');
-                done();
-            });
-    });
-
-    it('Should update the description of the previously created track', (done) => {
-        chai.request(apiUrl)
-            .put('/tracksDescChange')
-            .send({
-                id: 1,
-                newDesc: 'newDescription'
-            })
-            .end((err: any, res: any) => {
-                const track = JSON.parse(res.text);
-                assert(track.value.description === 'this is a test');
-                done();
-            });
-    });
-
     it('Should return a list of tracks', (done) => {
         chai.request(apiUrl)
             .get('/tracks')

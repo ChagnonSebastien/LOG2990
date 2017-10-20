@@ -107,9 +107,6 @@ export class Application {
         // track api path
         router.get('/tracks', track.getTracks.bind(track.getTracks));
         router.post('/tracks', track.addTrack.bind(track.addTrack));
-        router.put('/tracksNameChange', track.updateTrackName.bind(track.updateTrackName));
-        router.put('/tracksTypeChange', track.updateTrackType.bind(track.updateTrackType));
-        router.put('/tracksDescChange', track.updateTrackDesc.bind(track.updateTrackDesc));
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
         // crossword api path
