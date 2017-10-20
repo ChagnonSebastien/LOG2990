@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Track } from './track';
-import { TrackService } from './track.service';
+import { Track } from '../../admin/tracks/track';
+import { TrackService } from '../../admin/tracks/track.service';
 
 @Component({
-    selector: 'app-track-info',
+    selector: 'app-client-track-info',
     templateUrl: './track-info.component.html',
     styleUrls: ['./track-info.component.css'],
     providers: [TrackService]
