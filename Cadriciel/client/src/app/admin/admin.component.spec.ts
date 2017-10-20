@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthenticationService } from './authentication.service';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
+import { TrackInfoComponent } from './tracks/track-info.component';
 
 class MockAuthenticationService {
     public authenticate(password: string): Promise<string> {
@@ -37,7 +38,7 @@ describe('AdminComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminComponent, DrawTrackComponent, TracksComponent],
+            declarations: [AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
             imports: [HttpModule, AdminRoutingModule, FormsModule]
         }).overrideComponent(AdminComponent, {
             set: {
