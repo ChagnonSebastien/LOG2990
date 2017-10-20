@@ -65,11 +65,8 @@ export class DrawTrackComponent implements AfterViewInit {
     }
 
     public saveTrack() {
-        console.log(this.name);
-        console.log(this.description);
-        console.log(this.difficulty);
         if (this.saveEnabled) {
-            this.trackService.saveTrack();
+            this.trackService.saveTrack(this.name, this.description, this.difficulty);
         }
     }
 }

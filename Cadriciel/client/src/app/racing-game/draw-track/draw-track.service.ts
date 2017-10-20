@@ -154,7 +154,7 @@ export class DrawTrackService {
         this.renderService.onResize();
     }
 
-    public saveTrack() {
+    public saveTrack(name: string, description: string, difficulty: string) {
         return;
     }
 }
