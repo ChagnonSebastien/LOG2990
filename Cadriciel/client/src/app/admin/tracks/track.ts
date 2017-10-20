@@ -5,30 +5,27 @@ export class Track {
     public description = '';
     public type: string;
     public trackIntersections: { x: number, y: number }[] = [];
-    public puddles: { distance: number, offset: number }[] = [];
-    public potholes: { distance: number, offset: number }[] = [];
-    public boosters: { distance: number, offset: number }[] = [];
+    public puddles: { segment: number, distance: number, offset: number }[] = [];
+    public potholes: { segment: number, distance: number, offset: number }[] = [];
+    public boosters: { segment: number, distance: number, offset: number }[] = [];
 
-    constructor(id: number, name: string, description: string, type: string) {
+    constructor(
+        id: number,
+        name: string,
+        description: string,
+        type: string,
+        intersections: { x: number, y: number }[],
+        puddles: { segment: number, distance: number, offset: number }[],
+        potholes: { segment: number, distance: number, offset: number }[],
+        boosters: { segment: number, distance: number, offset: number }[]
+    ) {
         this.trackId = id;
         this.name = name;
         this.description = description;
         this.type = type;
-    }
-
-    public addIntersections([distance, offset]) {
-        this.trackIntersections.push({ 'x': distance, 'y': offset });
-    }
-
-    public addPuddles([distance, offset]) {
-        this.puddles.push({ 'distance': distance, 'offset': offset });
-    }
-
-    public addPotholes([distance, offset]) {
-        this.potholes.push({ 'distance': distance, 'offset': offset });
-    }
-
-    public addBoosters([distance, offset]) {
-        this.boosters.push({ 'distance': distance, 'offset': offset });
+        this.trackIntersections = intersections;
+        this.puddles = puddles;
+        this.potholes = potholes;
+        this.boosters = boosters;
     }
 }
