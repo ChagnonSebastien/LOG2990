@@ -10,10 +10,10 @@ describe('Track', () => {
         chai.request(apiUrl)
             .post('/tracks')
             .send({
-                id: 1,
+                trackId: '0',
                 name: 'test',
                 description: 'this is a test',
-                type: 'pro',
+                type: 'easy',
                 trackIntersections: [{ 'x': 1, 'y': 1 }],
                 puddles: [{ 'distance': 1, 'offset': 1 }],
                 potholes: [{ 'distance': 1, 'offset': 1 }],
