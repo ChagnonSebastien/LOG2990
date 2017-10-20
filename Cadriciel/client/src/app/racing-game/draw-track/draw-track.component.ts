@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
 
 @Component({
