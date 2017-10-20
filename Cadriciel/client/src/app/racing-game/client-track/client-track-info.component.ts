@@ -4,8 +4,8 @@ import { TrackService } from '../../admin/tracks/track.service';
 
 @Component({
     selector: 'app-client-track-info',
-    templateUrl: './track-info.component.html',
-    styleUrls: ['./track-info.component.css'],
+    templateUrl: './client-track-info.component.html',
+    styleUrls: ['./client-track-info.component.css'],
     providers: [TrackService]
 })
 export class ClientTrackInfoComponent implements OnInit {

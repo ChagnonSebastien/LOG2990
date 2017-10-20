@@ -5,8 +5,8 @@ import { Http, Headers } from '@angular/http';
 import { ClientTrackInfoComponent } from './client-track-info.component';
 @Component({
     selector: 'app-client-tracks',
-    templateUrl: './tracks.component.html',
-    styleUrls: ['./tracks.component.css'],
+    templateUrl: './client-tracks.component.html',
+    styleUrls: ['./client-tracks.component.css'],
     providers: [TrackService]
 })
 export class ClientTracksComponent implements OnInit {
