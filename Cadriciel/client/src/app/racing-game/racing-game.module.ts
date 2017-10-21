@@ -10,6 +10,7 @@ import { ClientTrackInfoComponent } from './client-track/client-track-info.compo
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackListComponent } from './game-initialization/track-list.component';
+import { TrackDetailComponent } from './game-initialization/track-detail.component';
 
 @NgModule({
     imports: [
@@ -22,13 +23,15 @@ import { TrackListComponent } from './game-initialization/track-list.component';
         RacingGameComponent,
         ClientTracksComponent,
         ClientTrackInfoComponent,
-        TrackListComponent
+        TrackListComponent,
+        TrackDetailComponent,
     ],
     exports: [
         RacingGameComponent,
         ClientTracksComponent,
         ClientTrackInfoComponent,
         TrackListComponent,
+        TrackDetailComponent,
     ],
     providers: [RenderService, CameraService]
 })
