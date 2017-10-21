@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminComponent } from './admin.component';
+import { AuthenticationComponent } from './authentication.component';
 import { TracksComponent } from './tracks/tracks.component';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
@@ -33,14 +33,14 @@ class MockAuthenticationService {
 }
 
 describe('AdminComponent', () => {
-    let component: AdminComponent;
-    let fixture: ComponentFixture<AdminComponent>;
+    let component: AuthenticationComponent;
+    let fixture: ComponentFixture<AuthenticationComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
+            declarations: [AuthenticationComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
             imports: [HttpModule, AdminRoutingModule, FormsModule]
-        }).overrideComponent(AdminComponent, {
+        }).overrideComponent(AuthenticationComponent, {
             set: {
                 providers: [
                     { provide: AuthenticationService, useClass: MockAuthenticationService }
@@ -50,7 +50,7 @@ describe('AdminComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AdminComponent);
+        fixture = TestBed.createComponent(AuthenticationComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
