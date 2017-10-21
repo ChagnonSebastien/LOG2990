@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { AuthenticationService } from './authentication.service';
+import { AdminComponent } from './admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
 import { TrackInfoComponent } from './tracks/track-info.component';
@@ -32,13 +33,13 @@ class MockAuthenticationService {
     }
 }
 
-describe('AdminComponent', () => {
+describe('AuthenticationComponent', () => {
     let component: AuthenticationComponent;
     let fixture: ComponentFixture<AuthenticationComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AuthenticationComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
+            declarations: [AuthenticationComponent, AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
             imports: [HttpModule, AdminRoutingModule, FormsModule]
         }).overrideComponent(AuthenticationComponent, {
             set: {
