@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { TrackService } from './track.service';
-import { Track } from './track';
+import { Track } from '../track';
 import { Http, Headers } from '@angular/http';
 
 @Component({
-    selector: 'app-tracks',
-    templateUrl: './tracks.component.html',
-    styleUrls: ['./tracks.component.css'],
+    selector: 'app-track-list',
+    templateUrl: './track-list.component.html',
+    styleUrls: ['./track-list.component.css'],
     providers: [TrackService]
 })
-export class TracksComponent implements OnInit {
+export class TrackListComponent implements OnInit {
 
     public tracks: Track[];
     public selectedTrack: Track;

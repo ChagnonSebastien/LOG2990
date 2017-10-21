@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { RacingGameComponent } from './racing-game.component';
-import {ClientTracksComponent} from './client-track/client-tracks.component';
-import {ClientTrackInfoComponent} from './client-track/client-track-info.component';
+import { ClientTracksComponent } from './client-track/client-tracks.component';
+import { ClientTrackInfoComponent } from './client-track/client-track-info.component';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
+import { TrackListComponent } from './game-initialization/track-list.component';
 
 @NgModule({
     imports: [
@@ -20,12 +21,14 @@ import { CameraService } from './camera.service';
     declarations: [
         RacingGameComponent,
         ClientTracksComponent,
-        ClientTrackInfoComponent
+        ClientTrackInfoComponent,
+        TrackListComponent
     ],
     exports: [
         RacingGameComponent,
         ClientTracksComponent,
-        ClientTrackInfoComponent
+        ClientTrackInfoComponent,
+        TrackListComponent,
     ],
     providers: [RenderService, CameraService]
 })
