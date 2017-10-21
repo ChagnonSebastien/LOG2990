@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb';
 import { CrosswordDB } from './crosswordDB';
-import { CrosswordGenerator } from '../crossword';
+import { CrosswordGenerator } from '../crossword-generator';
 const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;

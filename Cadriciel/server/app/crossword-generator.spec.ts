@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { CrosswordGenerator } from './crossword';
+import { CrosswordGenerator } from './crossword-generator';
 
 const size = 10;
 function randomIndex(): number {
