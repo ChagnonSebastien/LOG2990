@@ -47,8 +47,5 @@ fdescribe('crossword object', () => {
 
     fit('should construct', () => {
         const crossword = new Crossword(grid, wordsWithIndex, listOfWords);
-        crossword.gridWords.map((line) => {
-            console.log(line);
-        });
     });
 });
