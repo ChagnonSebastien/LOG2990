@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { User } from '../racing-game/client-track/user';
+import { User } from '../racing-game/game-initialization/user';
 
 @Component({
     selector: 'app-admin-component',
