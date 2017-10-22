@@ -1,0 +1,51 @@
+html {
+    min-height: 100%;
+    position:relative;
+}
+
+body {
+    height: 100%;
+}
+
+#cloud-container{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index:-1;
+}
+
+.spacing {
+    height: 100px;
+}
+
+.crossword-page {
+    min-height: 100%;
+    background-image: url('./space_background.jpg');
+}
+
+.square {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.black-square {
+    background: black;
+}
+
+.empty-square {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid #007bff;
+}
+
+@media (max-width: 576px) {
+    .square {
+        width: 30px;
+        height: 30px;
+    }
+}
