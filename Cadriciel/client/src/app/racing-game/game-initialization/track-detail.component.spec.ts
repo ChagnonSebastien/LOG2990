@@ -1,15 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
-import { TrackInfoComponent } from './track-info.component';
+import { TrackDetailComponent } from './track-detail.component';
+import { TrackListComponent } from './track-list.component';
 import { TrackService } from './track.service';
 import { FormsModule } from '@angular/forms';
 describe('TrackInfoComponent', () => {
-    let component: TrackInfoComponent;
-    let fixture: ComponentFixture<TrackInfoComponent>;
+    let component: TrackDetailComponent;
+    let fixture: ComponentFixture<TrackDetailComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TrackInfoComponent],
+            declarations: [TrackDetailComponent, TrackListComponent],
             providers: [TrackService],
             imports: [HttpModule, FormsModule]
         })
@@ -17,7 +18,7 @@ describe('TrackInfoComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TrackInfoComponent);
+        fixture = TestBed.createComponent(TrackDetailComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
