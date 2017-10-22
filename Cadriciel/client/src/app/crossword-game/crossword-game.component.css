@@ -32,15 +32,24 @@ body {
     height: 50px;
 }
 
-.black-square {
+.black {
     background: black;
 }
 
-.empty-square {
+.empty {
     text-transform: uppercase;
     text-align: center;
     font-size: 2em;
     border: 1px solid #007bff;
+}
+
+.found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: green;
+    color: white;
 }
 
 @media (max-width: 576px) {

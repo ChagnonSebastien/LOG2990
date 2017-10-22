@@ -3,8 +3,9 @@
   <div class="container">
     <div class="row" *ngFor="let row of this.crossword?.grid; let i = index">
       <div *ngFor="let square of row; let j = index">
-        <input class="square" [ngClass]="{ 'black-square': this.gridStatus[i][j].black, 'empty-square': this.gridStatus[i][j].empty }"
-          type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict [readonly]="this.gridStatus[i][j].black || this.gridStatus[i][j].found">
+        <input class="square" [ngClass]="{ 'black': this.crossword?.status[i][j].black, 'empty': this.crossword?.status[i][j].empty, 'found': this.crossword?.status[i][j].found }"
+          type="text" maxLength="1" pattern="[a-zA-Z]+" ng-pattern-restrict [readonly]="this.crossword?.status[i][j].black || this.crossword?.status[i][j].found" (keydown)="handleInput($event, i, j); this.crossword.checkIfWordFound(i, j)"
+          >
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ import { Crossword } from './crossword';
 })
 export class CrosswordGameComponent implements OnInit {
     public crossword: Crossword;
-    public gridStatus: SquareStatus[][];
+    private keydown: boolean;
 
     constructor(private crosswordService: CrosswordService) { }
 
@@ -20,30 +20,31 @@ export class CrosswordGameComponent implements OnInit {
                 crossword.wordsWithIndex,
                 crossword.listOfWords
             );
-
-            this.gridStatus = crossword.crossword.map((row) => {
-                return row.map((square) => {
-                    return new SquareStatus(square);
-                });
-            });
         });
     }
-}
 
-class SquareStatus {
-    public black: boolean;
-    public empty: boolean;
-    public found: boolean;
-    public selected: boolean;
-    public player1Selected: boolean;
-    public player2Selected: boolean;
+    private disableEvent(event: any): void {
+        event.preventDefault();
+        event.returnValue = false;
+    }
 
-    constructor(character: string) {
-        this.black = character === ' ' || character === '#';
-        this.empty = !this.black;
-        this.found = false;
-        this.selected = false;
-        this.player1Selected = false;
-        this.player2Selected = false;
+    public handleInput(event: KeyboardEvent, i: number, j: number): void {
+        const charCode = event.which || event.keyCode;
+        if (this.isLetter(charCode)) {
+            this.crossword.checkIfCorrectLetter(charCode, i, j);
+        } else if (this.isBackspace(charCode)) {
+            this.crossword.eraseLetter(i, j);
+        } else {
+            this.disableEvent(event);
+        }
+    }
+
+    private isLetter(keyCode: number) {
+        return keyCode >= 65 && keyCode <= 90
+            || keyCode >= 97 && keyCode <= 122;
+    }
+
+    private isBackspace(keycode: number) {
+        return keycode === 8;
     }
 }
