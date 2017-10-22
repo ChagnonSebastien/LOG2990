@@ -1,30 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { CrosswordService } from './crossword.service';
 
 @Component({
     selector: 'app-crossword-game',
     templateUrl: './crossword-game.component.html',
-    styleUrls: ['./crossword-game.component.css'],
+    styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
-    public grid: string[][] = [
-        ['a', 'p', 'p', 'e', 'a', 'l', '#', 'r', 'a', 't'],
-        ['#', ' ', ' ', '#', ' ', ' ', ' ', 'i', ' ', 'e'],
-        ['s', '#', 'a', 'p', 'p', 'e', 'n', 'd', 'i', 'x'],
-        ['t', ' ', ' ', 'r', ' ', ' ', '#', 'e', ' ', 't'],
-        ['a', '#', 'w', 'a', 'r', '#', 'p', '#', ' ', 'b'],
-        ['f', ' ', ' ', 'c', '#', 'r', 'a', 'd', 'i', 'o'],
-        ['f', 'i', 's', 't', '#', ' ', 's', ' ', ' ', 'o'],
-        ['#', ' ', ' ', 'i', ' ', ' ', '#', ' ', ' ', 'k'],
-        ['f', 'l', 'i', 'c', 'k', '#', ' ', ' ', ' ', '#'],
-        [' ', ' ', ' ', 'e', ' ', ' ', ' ', ' ', ' ', ' ']
-    ];
+    public grid: string[][];
 
     public gridStatus: SquareStatus[][];
 
+    constructor(private crosswordService: CrosswordService) { }
+
     public ngOnInit() {
-        this.gridStatus = this.grid.map((row) => {
-            return row.map((square) => {
-                return new SquareStatus(square);
+        this.crosswordService.getCrossword('easy').then((crossword) => {
+            this.grid = crossword.crossword;
+            this.gridStatus = this.grid.map((row) => {
+                return row.map((square) => {
+                    return new SquareStatus(square);
+                });
             });
         });
     }
@@ -41,5 +36,9 @@ class SquareStatus {
     constructor(character: string) {
         this.black = character === ' ' || character === '#';
         this.empty = !this.black;
+        this.found = false;
+        this.selected = false;
+        this.player1Selected = false;
+        this.player2Selected = false;
     }
 }
