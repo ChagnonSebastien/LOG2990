@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CrosswordService } from './crossword.service';
+import { Crossword } from './crossword';
 
 @Component({
     selector: 'app-crossword-game',
@@ -7,16 +8,20 @@ import { CrosswordService } from './crossword.service';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
-    public grid: string[][];
-
+    public crossword: Crossword;
     public gridStatus: SquareStatus[][];
 
     constructor(private crosswordService: CrosswordService) { }
 
     public ngOnInit() {
         this.crosswordService.getCrossword('easy').then((crossword) => {
-            this.grid = crossword.crossword;
-            this.gridStatus = this.grid.map((row) => {
+            this.crossword = new Crossword(
+                crossword.crossword,
+                crossword.wordsWithIndex,
+                crossword.listOfWords
+            );
+
+            this.gridStatus = crossword.crossword.map((row) => {
                 return row.map((square) => {
                     return new SquareStatus(square);
                 });
