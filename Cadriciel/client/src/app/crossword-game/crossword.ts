@@ -22,30 +22,40 @@ export class Crossword {
         this.status = this.initializeSquareStatus();
     }
 
-    public checkIfCorrectLetter(charCode: number, i: number, j: number) {
+    public async checkIfCorrectLetter(charCode: number, i: number, j: number) {
         const inputLetter = String.fromCharCode(charCode).toLowerCase();
         const correctLetter = this.grid[i][j].toLowerCase();
         if (!this.status[i][j].letterFound && inputLetter === correctLetter) {
-            this.gridWords[i][j].map((word) => {
-                this.wordLetterCounter[word]--;
-            });
+            this.status[i][j].letterFound = true;
+            this.updateSquareStatus(i, j);
         }
     }
 
-    public checkIfWordFound(i: number, j: number) {
+    public async updateSquareStatus(i: number, j: number) {
         this.gridWords[i][j].map((word) => {
-            if (this.wordLetterCounter[word] === 0) {
+            if (this.checkIfWordFound(i, j, word)) {
                 this.foundWord(true, word);
             }
         });
     }
 
+    private checkIfWordFound(i: number, j: number, word: string): boolean {
+        const wordInfo: Word = this.wordMap[word];
+        let found = true;
+        for (let k = 0; k < word.length; k++) {
+            if (wordInfo.horizontal) {
+                found = found && this.status[wordInfo.i][wordInfo.j + k].letterFound;
+            } else {
+                found = found && this.status[wordInfo.i + k][wordInfo.j].letterFound;
+            }
+        }
+        console.log('FOUND: ', found);
+        return found;
+    }
+
     public eraseLetter(i: number, j: number) {
         if (this.status[i][j].letterFound) {
             this.status[i][j].letterFound = false;
-            this.gridWords[i][j].map((word) => {
-                this.wordLetterCounter[word]++;
-            });
         }
     }
 
