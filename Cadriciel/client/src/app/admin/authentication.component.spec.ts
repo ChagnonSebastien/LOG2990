@@ -1,15 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthenticationComponent } from './authentication.component';
-import { TracksComponent } from './tracks/tracks.component';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import { GameInitializationModule } from '../racing-game/game-initialization/game-initialization.module';
 
 import { AuthenticationService } from './authentication.service';
 import { AdminComponent } from './admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
-import { TrackInfoComponent } from './tracks/track-info.component';
 
 class MockAuthenticationService {
     public authenticate(password: string): Promise<string> {
@@ -39,8 +38,8 @@ describe('AuthenticationComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AuthenticationComponent, AdminComponent, DrawTrackComponent, TracksComponent, TrackInfoComponent],
-            imports: [HttpModule, AdminRoutingModule, FormsModule]
+            declarations: [AuthenticationComponent, AdminComponent, DrawTrackComponent],
+            imports: [HttpModule, AdminRoutingModule, FormsModule, GameInitializationModule]
         }).overrideComponent(AuthenticationComponent, {
             set: {
                 providers: [

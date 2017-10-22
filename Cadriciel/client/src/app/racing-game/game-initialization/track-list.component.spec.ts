@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RacingGameModule } from '../racing-game.module';
+import { GameInitializationModule } from './game-initialization.module';
 import { TrackListComponent } from './track-list.component';
 
 describe('TracksComponent', () => {
@@ -9,7 +9,7 @@ describe('TracksComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                RacingGameModule
+                GameInitializationModule
             ]
         })
             .compileComponents();

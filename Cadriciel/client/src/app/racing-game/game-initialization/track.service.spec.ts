@@ -1,12 +1,12 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { RacingGameModule } from '../racing-game.module';
+import { GameInitializationModule } from './game-initialization.module';
 import { TrackService } from './track.service';
 
 describe('TrackService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                RacingGameModule
+                GameInitializationModule
             ],
             providers: [TrackService]
         });

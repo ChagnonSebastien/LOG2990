@@ -8,9 +8,8 @@ import { HttpModule } from '@angular/http';
 
 /* Admin module */
 import { AdminComponent } from './admin.component';
-import { TracksComponent } from './tracks/tracks.component';
+import { GameInitializationModule } from '../racing-game/game-initialization/game-initialization.module';
 import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.component';
-import { TrackInfoComponent } from './tracks/track-info.component';
 import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
@@ -27,21 +26,16 @@ import { AdminRoutingModule } from './admin-routing.module';
         CommonModule,
         FormsModule,
         AdminRoutingModule,
-        HttpModule
+        HttpModule,
+        GameInitializationModule,
     ],
     declarations: [
         AdminComponent,
-        TracksComponent,
         DrawTrackComponent,
-        TrackInfoComponent,
-        TracksComponent,
         AuthenticationComponent,
     ],
     exports: [
         AdminComponent,
-        TracksComponent,
-        TrackInfoComponent,
-        TracksComponent,
         AuthenticationComponent,
     ],
     providers: [
