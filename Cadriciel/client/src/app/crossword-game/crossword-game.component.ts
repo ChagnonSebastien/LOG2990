@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
 
+import { CrosswordHintsComponent } from './crossword-hints.component';
 import { CrosswordGame } from './crossword-game';
 
 @Component({

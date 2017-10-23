@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CrosswordGameInterfaceComponent } from '../crossword-game-interface/crossword-game-interface.component';
 import { CrosswordGameComponent } from '../crossword-game.component';
+import { CrosswordHintsComponent } from '../crossword-hints.component';
 import { CrosswordGameRoutingModule } from './crossword-game-routing.module';
 import { CrosswordGameInformationComponent } from '../crossword-game-information/crossword-game-information.component';
 import { CrosswordGameInfoService } from '../services/crossword-game-info.service';
@@ -21,7 +22,8 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
         CrosswordGameComponent,
         CrosswordGameInterfaceComponent,
         CrosswordGameInformationComponent,
-        CrosswordGameRoomComponent
+        CrosswordGameRoomComponent,
+        CrosswordHintsComponent
     ],
     exports: [
         CrosswordGameComponent,

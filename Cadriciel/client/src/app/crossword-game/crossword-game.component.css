@@ -22,7 +22,7 @@ body {
 }
 
 .crossword-page {
-    min-height: 100%;
+    height: auto;
     background-image: url('./space_background.jpg');
 }
 
@@ -52,7 +52,30 @@ body {
     color: white;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 1200px) {
+    .square {
+        width: 40px;
+        height: 40px;
+    }
+
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid #007bff;
+    }
+
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
+}
+
+@media (max-width: 992px) {
     .square {
         width: 30px;
         height: 30px;
