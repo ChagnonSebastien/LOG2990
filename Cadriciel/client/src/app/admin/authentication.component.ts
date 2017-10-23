@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { AuthenticationService } from './authentication.service';
-
+import { User } from '../racing-game/game-initialization/user';
 @Component({
     selector: 'app-authentication-component',
     templateUrl: './authentication.component.html',
     styleUrls: ['./authentication.component.css']
 })
 export class AuthenticationComponent implements OnInit {
+    @Input() public userType: User;
     public passwordCorrect: boolean;
     public passwordChanged: boolean;
 
