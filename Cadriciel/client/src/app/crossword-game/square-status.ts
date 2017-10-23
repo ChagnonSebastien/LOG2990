@@ -2,7 +2,6 @@ export class SquareStatus {
     public black: boolean;
     public empty: boolean;
     public found: boolean;
-    public letterFound: boolean;
     public input: string;
     public selected: boolean;
     public player1Selected: boolean;
@@ -12,7 +11,6 @@ export class SquareStatus {
         this.black = character === ' ' || character === '#';
         this.empty = !this.black;
         this.found = false;
-        this.letterFound = false;
         this.input = '';
         this.selected = false;
         this.player1Selected = false;
