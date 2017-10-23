@@ -31,10 +31,8 @@ export class CrosswordGameComponent implements OnInit {
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
         if (this.isLetter(charCode)) {
-            this.crossword.checkIfCorrectLetter(charCode, i, j);
-        } else if (this.isBackspace(charCode)) {
-            this.crossword.eraseLetter(i, j);
-        } else {
+            this.crossword.insertLetter(charCode, i, j);
+        } else if (!this.isBackspace(charCode)) {
             this.disableEvent(event);
         }
     }

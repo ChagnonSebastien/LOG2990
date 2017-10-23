@@ -7,7 +7,6 @@ export class Crossword {
     public wordsWithIndex: Array<Word>;
     public foundWords: Array<Word>;
     public wordMap: Map<string, Word>;
-    public wordLetterCounter: Map<string, number>;
     public gridWords: Array<string>[][];
     public status: SquareStatus[][];
 
@@ -17,48 +16,39 @@ export class Crossword {
         this.wordsWithIndex = wordsWithIndex;
         this.foundWords = new Array<Word>();
         this.wordMap = this.initializeWordMap();
-        this.wordLetterCounter = this.initializeWordLetterCounter(listOfWords);
         this.gridWords = this.initializeGridWords();
         this.status = this.initializeSquareStatus();
     }
 
-    public async checkIfCorrectLetter(charCode: number, i: number, j: number) {
-        const inputLetter = String.fromCharCode(charCode).toLowerCase();
-        if (!this.status[i][j].found) {
-            this.status[i][j].input = inputLetter;
+    public insertLetter(charCode: number, i: number, j: number) {
+        if (this.status[i][j].found) {
+            return; // if the letter is found, prevent modifying value
         }
+        const inputLetter = String.fromCharCode(charCode).toLowerCase();
         const correctLetter = this.grid[i][j].toLowerCase();
+        this.status[i][j].input = inputLetter;
         if (inputLetter === correctLetter) {
-            const alreadyFound = this.status[i][j].letterFound;
-            this.status[i][j].letterFound = true;
-            if (!alreadyFound) {
-                this.updateSquareStatus(i, j);
-            }
-        } else {
-            this.status[i][j].letterFound = false;
+            this.checkIfWordsFound(i, j);
         }
     }
 
-    public async updateSquareStatus(i: number, j: number) {
+    public checkIfWordsFound(i: number, j: number) {
         this.gridWords[i][j].map((word) => {
-            if (this.checkIfWordFound(i, j, word)) {
-                this.foundWord(true, word);
+            const wordInfo = this.wordMap[word];
+            if (this.wordFound(wordInfo)) {
+                this.markWordAsFound(wordInfo);
             }
         });
     }
 
-    private checkIfWordFound(i: number, j: number, word: string): boolean {
-        const wordInfo: Word = this.wordMap[word];
-        let found = true;
-        for (let k = 0; k < word.length; k++) {
-            if (wordInfo.horizontal) {
-                found = found && this.status[wordInfo.i][wordInfo.j + k].letterFound;
-            } else {
-                found = found && this.status[wordInfo.i + k][wordInfo.j].letterFound;
-            }
-        }
-        console.log('FOUND: ', found);
-        return found;
+    private wordFound(word: Word): boolean {
+        return Array(word.word.length).fill(undefined).map((val, k) => {
+            const i = word.horizontal ? word.i : word.i + k;
+            const j = word.horizontal ? word.j + k : word.j;
+            return this.status[i][j].input.toLowerCase() === this.grid[i][j].toLowerCase();
+        }).reduce((prev, cur) => {
+            return prev && cur;
+        });
     }
 
     public eraseLetter(i: number, j: number) {
@@ -73,14 +63,6 @@ export class Crossword {
             map[obj.word] = obj;
             return map;
         }, new Map<string, Word>());
-    }
-
-    // Provide letter counters for each word. When the counter reaches 0, the word is found.
-    private initializeWordLetterCounter(listOfWords: Array<string>): Map<string, number> {
-        return listOfWords.reduce((map, obj) => {
-            map[obj] = obj.length;
-            return map;
-        }, new Map<string, number>());
     }
 
     // For each square, a list of words that contributed a letter to that square.
@@ -101,13 +83,11 @@ export class Crossword {
 
     // initializeGridWords() helper: inserts the word at each square it contributes to.
     private insertWordIntoGridWords(gridWords: Array<string>[][], word: Word): Array<string>[][] {
-        for (let k = 0; k < word.word.length; k++) {
-            if (word.horizontal) {
-                gridWords[word.i][word.j + k].push(word.word);
-            } else {
-                gridWords[word.i + k][word.j].push(word.word);
-            }
-        }
+        Array(word.word.length).fill(undefined).map((val, k) => {
+            const i = word.horizontal ? word.i : word.i + k;
+            const j = word.horizontal ? word.j + k : word.j;
+            gridWords[i][j].push(word.word);
+        });
         return gridWords;
     }
 
@@ -120,19 +100,16 @@ export class Crossword {
         });
     }
 
-    private foundWord(found: boolean, word: string) {
-        const wordInfo = this.wordMap[word];
-        for (let k = 0; k < word.length; k++) {
-            if (wordInfo.horizontal) {
-                this.squareFound(true, wordInfo.i, wordInfo.j + k);
-            } else {
-                this.squareFound(true, wordInfo.i + k, wordInfo.j);
-            }
-        }
+    private markWordAsFound(word: Word) {
+        Array(word.word.length).fill(undefined).map((val, k) => {
+            const i = word.horizontal ? word.i : word.i + k;
+            const j = word.horizontal ? word.j + k : word.j;
+            this.markSquareAsFound(i, j);
+        });
     }
 
-    private squareFound(found: boolean, i: number, j: number) {
-        this.status[i][j].empty = !found;
-        this.status[i][j].found = found;
+    private markSquareAsFound(i: number, j: number) {
+        this.status[i][j].empty = false;
+        this.status[i][j].found = true;
     }
 }
