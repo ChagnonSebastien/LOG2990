@@ -24,10 +24,18 @@ export class Crossword {
 
     public async checkIfCorrectLetter(charCode: number, i: number, j: number) {
         const inputLetter = String.fromCharCode(charCode).toLowerCase();
+        if (!this.status[i][j].found) {
+            this.status[i][j].input = inputLetter;
+        }
         const correctLetter = this.grid[i][j].toLowerCase();
-        if (!this.status[i][j].letterFound && inputLetter === correctLetter) {
+        if (inputLetter === correctLetter) {
+            const alreadyFound = this.status[i][j].letterFound;
             this.status[i][j].letterFound = true;
-            this.updateSquareStatus(i, j);
+            if (!alreadyFound) {
+                this.updateSquareStatus(i, j);
+            }
+        } else {
+            this.status[i][j].letterFound = false;
         }
     }
 

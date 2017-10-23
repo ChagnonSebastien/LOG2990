@@ -57,4 +57,20 @@ body {
         width: 30px;
         height: 30px;
     }
+
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid #007bff;
+    }
+
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
 }

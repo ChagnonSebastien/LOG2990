@@ -31,7 +31,6 @@ export class CrosswordGameComponent implements OnInit {
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
         if (this.isLetter(charCode)) {
-            this.crossword.status[i][j].input = String.fromCharCode(charCode).toUpperCase();
             this.crossword.checkIfCorrectLetter(charCode, i, j);
         } else if (this.isBackspace(charCode)) {
             this.crossword.eraseLetter(i, j);
