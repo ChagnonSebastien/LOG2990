@@ -11,7 +11,6 @@ import { CrosswordGame } from './crossword-game';
 })
 export class CrosswordGameComponent implements OnInit {
     public crossword: CrosswordGame;
-    private keydown: boolean;
 
     constructor(
         private crosswordService: CrosswordService,
