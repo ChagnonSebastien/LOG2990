@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { TrackListComponent } from './track-list.component';
 import { TrackDetailComponent } from './track-detail.component';
+import { PlayerComponent } from './player.component';
 
 import { TrackService } from './track.service';
 
@@ -20,10 +21,12 @@ import { TrackService } from './track.service';
     declarations: [
         TrackListComponent,
         TrackDetailComponent,
+        PlayerComponent,
     ],
     exports: [
         TrackListComponent,
         TrackDetailComponent,
+        PlayerComponent,
     ],
     providers: [
         TrackService
