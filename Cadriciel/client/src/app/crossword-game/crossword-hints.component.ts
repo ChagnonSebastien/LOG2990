@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Hint } from './hint';
 
 @Component({
     selector: 'app-crossword-hints',
