@@ -52,9 +52,10 @@ export class CrosswordGame {
     }
 
     public eraseLetter(i: number, j: number) {
-        if (this.status[i][j].letterFound) {
-            this.status[i][j].letterFound = false;
+        if (this.status[i][j].found) {
+            return; // if the letter is found, prevent any further action
         }
+        this.status[i][j].input = '';
     }
 
     // Provide O(1) access to information on a word.

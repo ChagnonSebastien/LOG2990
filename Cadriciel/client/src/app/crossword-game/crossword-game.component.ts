@@ -37,14 +37,15 @@ export class CrosswordGameComponent implements OnInit {
         const charCode = event.which || event.keyCode;
         if (this.keyboardService.isLetter(charCode)) {
             this.crossword.insertLetter(charCode, i, j);
+        } else if (this.keyboardService.isBackspace(charCode)) {
+            this.crossword.eraseLetter(i, j);
         } else if (!this.validInputs(charCode)) {
             this.disableEvent(event);
         }
     }
 
     private validInputs(keyCode: number): boolean {
-        return this.keyboardService.isBackspace(keyCode)
-            || this.keyboardService.isTab(keyCode)
+        return this.keyboardService.isTab(keyCode)
             || this.keyboardService.isArrowKey(keyCode);
     }
 }
