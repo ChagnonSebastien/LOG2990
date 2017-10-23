@@ -8,6 +8,7 @@ import { CrosswordGameInformationComponent } from '../crossword-game-information
 import { CrosswordGameInfoService } from '../services/crossword-game-info.service';
 import { LexiconService } from '../services/lexicon.service';
 import { CrosswordService } from '../crossword.service';
+import { KeyboardService } from '../keyboard.service';
 import { MultiplayerService } from '../services/crossword-multiplayer.service';
 import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-game-room.component';
 @NgModule({
@@ -16,8 +17,22 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
         FormsModule,
         CrosswordGameRoutingModule
     ],
-    declarations: [CrosswordGameComponent, CrosswordGameInterfaceComponent, CrosswordGameInformationComponent, CrosswordGameRoomComponent],
-    exports: [CrosswordGameComponent, CrosswordGameInterfaceComponent],
-    providers: [CrosswordGameInfoService, LexiconService, CrosswordService, MultiplayerService]
+    declarations: [
+        CrosswordGameComponent,
+        CrosswordGameInterfaceComponent,
+        CrosswordGameInformationComponent,
+        CrosswordGameRoomComponent
+    ],
+    exports: [
+        CrosswordGameComponent,
+        CrosswordGameInterfaceComponent
+    ],
+    providers: [
+        CrosswordGameInfoService,
+        LexiconService,
+        CrosswordService,
+        MultiplayerService,
+        KeyboardService
+    ]
 })
 export class CrosswordGameModule { }

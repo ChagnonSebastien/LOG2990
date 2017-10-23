@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CrosswordService } from './crossword.service';
-import { Crossword } from './crossword';
+import { KeyboardService } from './keyboard.service';
+
+import { CrosswordGame } from './crossword-game';
 
 @Component({
     selector: 'app-crossword-game',
@@ -8,14 +10,17 @@ import { Crossword } from './crossword';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
-    public crossword: Crossword;
+    public crossword: CrosswordGame;
     private keydown: boolean;
 
-    constructor(private crosswordService: CrosswordService) { }
+    constructor(
+        private crosswordService: CrosswordService,
+        private keyboardService: KeyboardService
+    ) { }
 
     public ngOnInit() {
         this.crosswordService.getCrossword('easy').then((crossword) => {
-            this.crossword = new Crossword(
+            this.crossword = new CrosswordGame(
                 crossword.crossword,
                 crossword.wordsWithIndex,
                 crossword.listOfWords
@@ -30,19 +35,16 @@ export class CrosswordGameComponent implements OnInit {
 
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
-        if (this.isLetter(charCode)) {
+        if (this.keyboardService.isLetter(charCode)) {
             this.crossword.insertLetter(charCode, i, j);
-        } else if (!this.isBackspace(charCode)) {
+        } else if (!this.validInputs(charCode)) {
             this.disableEvent(event);
         }
     }
 
-    private isLetter(keyCode: number) {
-        return keyCode >= 65 && keyCode <= 90
-            || keyCode >= 97 && keyCode <= 122;
-    }
-
-    private isBackspace(keycode: number) {
-        return keycode === 8;
+    private validInputs(keyCode: number): boolean {
+        return this.keyboardService.isBackspace(keyCode)
+            || this.keyboardService.isTab(keyCode)
+            || this.keyboardService.isArrowKey(keyCode);
     }
 }

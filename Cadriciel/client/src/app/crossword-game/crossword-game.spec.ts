@@ -1,4 +1,4 @@
-import { Crossword } from './crossword';
+import { CrosswordGame } from './crossword-game';
 
 const grid = [
     ['a', 'p', 'p', 'e', 'a', 'l', '#', 'r', 'a', 't'],
@@ -46,6 +46,6 @@ const listOfWords = [
 fdescribe('crossword object', () => {
 
     fit('should construct', () => {
-        const crossword = new Crossword(grid, wordsWithIndex, listOfWords);
+        const crossword = new CrosswordGame(grid, wordsWithIndex, listOfWords);
     });
 });

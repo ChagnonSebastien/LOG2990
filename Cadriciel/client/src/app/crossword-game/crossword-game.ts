@@ -1,13 +1,13 @@
 import { Word } from '../../../../commun/word';
 import { SquareStatus } from './square-status';
 
-export class Crossword {
+export class CrosswordGame {
     private size: number;
-    public grid: string[][];
-    public wordsWithIndex: Array<Word>;
-    public foundWords: Array<Word>;
-    public wordMap: Map<string, Word>;
-    public gridWords: Array<string>[][];
+    private grid: string[][];
+    private wordsWithIndex: Array<Word>;
+    private foundWords: Array<Word>;
+    private wordMap: Map<string, Word>;
+    private gridWords: Array<string>[][];
     public status: SquareStatus[][];
 
     constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
@@ -22,7 +22,7 @@ export class Crossword {
 
     public insertLetter(charCode: number, i: number, j: number) {
         if (this.status[i][j].found) {
-            return; // if the letter is found, prevent modifying value
+            return; // if the letter is found, prevent any further action
         }
         const inputLetter = String.fromCharCode(charCode).toLowerCase();
         const correctLetter = this.grid[i][j].toLowerCase();
