@@ -28,7 +28,7 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
-                    db.collection('tracks').findOneAndDelete({ trackId: +req.params.id }).then((track) => {
+                    db.collection('tracks').findOneAndDelete({ _id: req.params.id }).then((track) => {
                         res.send(JSON.stringify(track));
                     });
                 }
@@ -43,8 +43,7 @@ module Route {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     const newTrack = new trackSchema({
-                        trackId: req.body.trackId,
-                        name: req.body.name,
+                        _id: req.body.name,
                         description: req.body.description,
                         type: req.body.type,
                         trackIntersections: req.body.trackIntersections,
