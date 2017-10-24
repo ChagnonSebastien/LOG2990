@@ -48,7 +48,9 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     public selectWord(word: string) {
-        this.crossword.clearSelectedWord(this.selectedWord);
+        if (this.selectedWord) {
+            this.crossword.clearSelectedWord(this.selectedWord);
+        }
         this.crossword.setSelectedWord(word);
         this.selectedWord = word;
     }

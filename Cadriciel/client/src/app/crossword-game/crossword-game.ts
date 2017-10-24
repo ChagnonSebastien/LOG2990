@@ -68,7 +68,12 @@ export class CrosswordGame {
     }
 
     public setSelectedWord(word: string) {
-
+        const wordInfo = this.wordMap.get(word);
+        for (let k = 0; k < word.length; k++) {
+            const i = wordInfo.horizontal ? wordInfo.i : wordInfo.i + k;
+            const j = wordInfo.horizontal ? wordInfo.j + k : wordInfo.j;
+            this.selectSquare(i, j);
+        }
     }
 
     // Provide O(1) access to information on a word.

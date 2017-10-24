@@ -5,7 +5,7 @@
       <div class="col-md-6">
         <div class="row" *ngFor="let row of this.crossword?.grid; let i = index">
           <div *ngFor="let square of row; let j = index">
-            <input class="square" [ngClass]="{ 'black': this.crossword?.status[i][j].black, 'empty': this.crossword?.status[i][j].empty, 'found': this.crossword?.status[i][j].found }"
+            <input class="square" [ngClass]="{ 'black': this.crossword?.status[i][j].black, 'empty': this.crossword?.status[i][j].empty, 'found': this.crossword?.status[i][j].found, 'selected': this.crossword?.status[i][j].selected }"
               type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.crossword?.status[i][j].black || this.crossword?.status[i][j].found"
               (keydown)="handleInput($event, i, j)" [(ngModel)]="this.crossword?.status[i][j].input">
           </div>
