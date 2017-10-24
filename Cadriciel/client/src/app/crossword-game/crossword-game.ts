@@ -120,11 +120,11 @@ export class CrosswordGame {
     }
 
     private markWordAsFound(word: Word) {
-        Array(word.word.length).fill(undefined).map((val, k) => {
+        for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
             this.markSquareAsFound(i, j);
-        });
+        }
     }
 
     private markSquareAsFound(i: number, j: number) {
