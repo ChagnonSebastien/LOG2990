@@ -49,16 +49,6 @@ export class TrackListComponent implements OnInit {
 
     public getTracks() {
         return this.http.get('http://localhost:3000/api/tracks').map(res => res.json());
-        /*
-        new Track(
-            res.json()._id,
-            res.json().description,
-            res.json().type,
-            res.json().trackIntersections,
-            res.json().puddles,
-            res.json().potholes,
-            res.json().boosters
-        ));*/
     }
 
     public addTracks(newTrack) {
