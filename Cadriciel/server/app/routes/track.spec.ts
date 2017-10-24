@@ -10,8 +10,7 @@ describe('Track', () => {
         chai.request(apiUrl)
             .post('/tracks')
             .send({
-                trackId: '0',
-                name: 'test',
+                name: 'testfrsdt',
                 description: 'this is a test',
                 type: 'easy',
                 trackIntersections: [{ 'x': 1, 'y': 1 }],
@@ -36,10 +35,10 @@ describe('Track', () => {
 
     it('Should delete the previously created track', (done) => {
         chai.request(apiUrl)
-            .delete('/track/0')
+            .delete('/track/testfrsdt')
             .end((err: any, res: any) => {
                 const track = JSON.parse(res.text);
-                assert(track.value.trackId === 0);
+                assert(track.value._id === 'testfrsdt');
                 done();
             });
     });

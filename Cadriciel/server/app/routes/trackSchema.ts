@@ -7,11 +7,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const trackSchema = new mongoose.Schema({
 
-    trackId:
+    _id:
     {
-        type: Number
-    },
-    name: {
         type: String
     },
     description: {

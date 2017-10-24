@@ -2,10 +2,9 @@ import { Track } from './track';
 
 describe('Track', () => {
     const track = new Track(
-        1,
-        'a',
-        'b',
-        'c',
+        'name',
+        'desc',
+        'diff',
         [],
         [],
         [],

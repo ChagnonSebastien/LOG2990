@@ -1,6 +1,5 @@
 export class Track {
 
-    public trackId: number;
     public name: string;
     public description = '';
     public type: string;
@@ -10,7 +9,6 @@ export class Track {
     public boosters: { segment: number, distance: number, offset: number }[] = [];
 
     constructor(
-        id: number,
         name: string,
         description: string,
         type: string,
@@ -19,7 +17,6 @@ export class Track {
         potholes: { segment: number, distance: number, offset: number }[],
         boosters: { segment: number, distance: number, offset: number }[]
     ) {
-        this.trackId = id;
         this.name = name;
         this.description = description;
         this.type = type;
