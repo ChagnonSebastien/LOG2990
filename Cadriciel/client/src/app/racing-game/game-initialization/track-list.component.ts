@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TrackService } from './track.service';
 import { Track } from '../track';
 import { Http, Headers } from '@angular/http';
+import { User } from './user';
 
 @Component({
     selector: 'app-track-list',
@@ -10,7 +11,7 @@ import { Http, Headers } from '@angular/http';
     providers: [TrackService]
 })
 export class TrackListComponent implements OnInit {
-
+    @Input() public userType: User;
     public tracks: Track[];
     public selectedTrack: Track;
     constructor(private trackService: TrackService, private http: Http) { }

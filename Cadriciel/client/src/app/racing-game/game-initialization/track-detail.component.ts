@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Track } from '../track';
 import { TrackService } from './track.service';
+import { User } from './user';
 
 @Component({
     selector: 'app-track-detail',
@@ -9,6 +10,7 @@ import { TrackService } from './track.service';
     providers: [TrackService]
 })
 export class TrackDetailComponent implements OnInit {
+    @Input() public userType: User;
     @Input() public  track: Track;
 
     public changeDescriptionDB() {
