@@ -10,7 +10,7 @@ export class TrackService {
         return this.http.delete('http://localhost:3000/api/track/' + id).map(res => res.json());
     }
 
-    public changeTrackType(id: number, newType: String) {
+    public changeTrackType(id: String, newType: String) {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -24,7 +24,7 @@ export class TrackService {
 
 
 
-    public changeTrackDescription(id: number, newDesc: String) {
+    public changeTrackDescription(id: String, newDesc: String) {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
@@ -38,7 +38,7 @@ export class TrackService {
 
 
 
-    public changeTrackName(id: number, newName: String) {
+    public changeTrackName(id: String, newName: String) {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
 

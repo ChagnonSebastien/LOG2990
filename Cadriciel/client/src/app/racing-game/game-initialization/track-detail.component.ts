@@ -14,17 +14,17 @@ export class TrackDetailComponent implements OnInit {
     @Input() public  track: Track;
 
     public changeDescriptionDB() {
-        this.trackService.changeTrackDescription(this.track.trackId, this.track.description).subscribe(
+        this.trackService.changeTrackDescription(this.track.name, this.track.description).subscribe(
         );
     }
 
     public changeTypeDB() {
-        this.trackService.changeTrackType(this.track.trackId, this.track.type).subscribe(
+        this.trackService.changeTrackType(this.track.name, this.track.type).subscribe(
         );
     }
 
     public changeNameDB() {
-        this.trackService.changeTrackName(this.track.trackId, this.track.name).subscribe(
+        this.trackService.changeTrackName(this.track.name, this.track.name).subscribe(
         );
     }
 
