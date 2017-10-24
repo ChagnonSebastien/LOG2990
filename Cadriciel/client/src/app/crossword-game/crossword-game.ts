@@ -102,11 +102,11 @@ export class CrosswordGame {
 
     // initializeGridWords() helper: inserts the word at each square it contributes to.
     private insertWordIntoGridWords(gridWords: Array<string>[][], word: Word): Array<string>[][] {
-        Array(word.word.length).fill(undefined).map((val, k) => {
+        for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
             gridWords[i][j].push(word.word);
-        });
+        }
         return gridWords;
     }
 
