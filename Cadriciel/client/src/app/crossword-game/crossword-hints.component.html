@@ -1,3 +1,7 @@
-<div class="alert alert-primary" role="alert">
-  Crossword hints component!
+<div class="row">
+  <div class="col-md-12" *ngFor="let hint of this.hints">
+    <button class="btn btn-sm btn-primary" style="margin-bottom: 4px; word-wrap: break-word; word-break: normal; white-space: normal">
+      {{hint.definition}}
+    </button>
+  </div>
 </div>

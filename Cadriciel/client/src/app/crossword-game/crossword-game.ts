@@ -4,7 +4,7 @@ import { SquareStatus } from './square-status';
 export class CrosswordGame {
     private size: number;
     private grid: string[][];
-    private wordsWithIndex: Array<Word>;
+    public wordsWithIndex: Array<Word>;
     private foundWords: Array<Word>;
     private wordMap: Map<string, Word>;
     private gridWords: Array<string>[][];

@@ -1,12 +1,3 @@
-html {
-    min-height: 100%;
-    position:relative;
-}
-
-body {
-    height: 100%;
-}
-
 #cloud-container{
     position: absolute;
     top: 0;
@@ -22,7 +13,7 @@ body {
 }
 
 .crossword-page {
-    height: auto;
+    height: 1500px;
     background-image: url('./space_background.jpg');
 }
 
