@@ -11,12 +11,16 @@ export class AuthenticationComponent implements OnInit {
     @Input() public userType: User;
     public passwordCorrect: boolean;
     public passwordChanged: boolean;
+    public accountSettings: boolean;
+    public racingGameSettings: boolean;
 
     constructor(private authenticationService: AuthenticationService) { }
 
     public ngOnInit(): void {
         this.passwordCorrect = false;
         this.passwordChanged = false;
+        this.accountSettings = true;
+        this.racingGameSettings = false;
       //  this.modifyPassword = false;
     }
 
@@ -37,4 +41,13 @@ export class AuthenticationComponent implements OnInit {
    // public toggleChangePassword(): void {
     //    this.modifyPassword = this.modifyPassword ? false : true;
     // }
+    public toggleAccountSettings(): void {
+        this.racingGameSettings = false;
+        this.accountSettings = true;
+    }
+
+    public toggleRacingGameSettings(): void {
+        this.racingGameSettings = true;
+        this.accountSettings = false;
+    }
 }
