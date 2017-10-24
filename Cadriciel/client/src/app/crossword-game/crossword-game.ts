@@ -119,12 +119,16 @@ export class CrosswordGame {
         });
     }
 
-    private markWordAsFound(word: Word) {
+    private forEachLetter(word: Word, callback) {
         for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
-            this.markSquareAsFound(i, j);
+            callback(i, j);
         }
+    }
+
+    private markWordAsFound(word: Word) {
+        this.forEachLetter(word, this.markSquareAsFound.bind(this));
     }
 
     private markSquareAsFound(i: number, j: number) {
