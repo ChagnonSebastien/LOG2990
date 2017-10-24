@@ -6,9 +6,9 @@
     <button (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
   </div>
   <div *ngIf="passwordCorrect">
-    <ul class=" nav nav-tabs" >
-      <li role="presentation" (click)="toggleAccountSettings()"><a data-toggle="tab">Account Settings</a></li>
-      <li role="presentation" (click)="toggleRacingGameSettings()"><a data-toggle="tab">Racing Game</a></li>
+    <ul class=" nav nav-tabs">
+      <li (click)="toggleAccountSettings()" [ngClass]="{'active': this.accountSettings}"><a data-toggle="tab">Account Settings</a></li>
+      <li (click)="toggleRacingGameSettings()" [ngClass]="{'active': this.racingGameSettings}"><a data-toggle="tab">Racing Game</a></li>
     </ul>
     <div class="tab-pane"  *ngIf="accountSettings">
       <hr>

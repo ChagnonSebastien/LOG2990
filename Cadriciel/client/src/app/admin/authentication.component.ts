@@ -21,7 +21,6 @@ export class AuthenticationComponent implements OnInit {
         this.passwordChanged = false;
         this.accountSettings = true;
         this.racingGameSettings = false;
-      //  this.modifyPassword = false;
     }
 
     public async login(passwordInput: string): Promise<boolean> {
@@ -38,9 +37,6 @@ export class AuthenticationComponent implements OnInit {
         return await this.passwordChanged;
     }
 
-   // public toggleChangePassword(): void {
-    //    this.modifyPassword = this.modifyPassword ? false : true;
-    // }
     public toggleAccountSettings(): void {
         this.racingGameSettings = false;
         this.accountSettings = true;
