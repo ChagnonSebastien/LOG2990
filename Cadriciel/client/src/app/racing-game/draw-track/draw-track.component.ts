@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, OnInit } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
 
 @Component({
@@ -8,14 +9,14 @@ import { DrawTrackService } from './draw-track.service';
     styleUrls: ['./draw-track.component.css']
 })
 
-export class DrawTrackComponent implements AfterViewInit {
+export class DrawTrackComponent implements AfterViewInit, OnInit {
     public name: string;
     public description: string;
     public difficulty: string;
 
     public saveEnabled = false;
 
-    constructor(private trackService: DrawTrackService) {
+    constructor(private trackService: DrawTrackService, private route: ActivatedRoute) {
     }
 
     private get container(): HTMLDivElement {
@@ -28,6 +29,10 @@ export class DrawTrackComponent implements AfterViewInit {
     @HostListener('window:resize', ['$event'])
     public onResize() {
         this.trackService.onResize();
+    }
+
+    public ngOnInit() {
+        console.log(this.route.snapshot.params['name']);
     }
 
     public updateMousePosition(event: MouseEvent): void {
