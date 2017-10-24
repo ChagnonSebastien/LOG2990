@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
+import { LexiconService } from './lexicon.service';
 
-import { CrosswordHintsComponent } from './crossword-hints.component';
 import { CrosswordGame } from './crossword-game';
+import { Hint } from './hint';
 
 @Component({
     selector: 'app-crossword-game',
@@ -12,10 +13,13 @@ import { CrosswordGame } from './crossword-game';
 })
 export class CrosswordGameComponent implements OnInit {
     public crossword: CrosswordGame;
+    public selectedWord: string;
+    private hints: Array<Hint>;
 
     constructor(
         private crosswordService: CrosswordService,
-        private keyboardService: KeyboardService
+        private keyboardService: KeyboardService,
+        private lexiconService: LexiconService
     ) { }
 
     public ngOnInit() {
@@ -25,12 +29,28 @@ export class CrosswordGameComponent implements OnInit {
                 crossword.wordsWithIndex,
                 crossword.listOfWords
             );
+            this.hints = new Array<Hint>();
+            for (const word of this.crossword.wordsWithIndex) {
+                this.lexiconService.getWordDefinition(word.word)
+                    .catch((err) => {
+                        this.handleError(err);
+                    })
+                    .then((definition) => {
+                        this.hints.push(new Hint(word.word, definition));
+                    });
+            }
         });
     }
 
     private disableEvent(event: any): void {
         event.preventDefault();
         event.returnValue = false;
+    }
+
+    public selectWord(word: string) {
+        this.crossword.clearSelectedWord(this.selectedWord);
+        this.crossword.setSelectedWord(word);
+        this.selectedWord = word;
     }
 
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
@@ -47,5 +67,10 @@ export class CrosswordGameComponent implements OnInit {
     private validInputs(keyCode: number): boolean {
         return this.keyboardService.isTab(keyCode)
             || this.keyboardService.isArrowKey(keyCode);
+    }
+
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
     }
 }

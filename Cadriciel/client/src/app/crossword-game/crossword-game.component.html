@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <app-crossword-hints [(words)]="this.crossword.wordsWithIndex"></app-crossword-hints>
+        <app-crossword-hints [hints]="this.hints" (selectedWordChanged)="this.selectWord($event)"></app-crossword-hints>
       </div>
     </div>
   </div>

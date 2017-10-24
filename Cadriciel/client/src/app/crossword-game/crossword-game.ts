@@ -58,6 +58,14 @@ export class CrosswordGame {
         this.status[i][j].input = '';
     }
 
+    public clearSelectedWord(word: string) {
+
+    }
+
+    public setSelectedWord(word: string) {
+
+    }
+
     // Provide O(1) access to information on a word.
     private initializeWordMap(): Map<string, Word> {
         return this.wordsWithIndex.reduce((map, obj) => {

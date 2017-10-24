@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, Output } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { LexiconService } from './lexicon.service';
 
 import { Hint } from './hint';
@@ -9,24 +9,16 @@ import { Word } from '../../../../commun/word';
     templateUrl: './crossword-hints.component.html',
     styleUrls: ['./crossword-hints.component.css']
 })
-export class CrosswordHintsComponent implements OnChanges {
-    @Input() public words: Array<Word>;
-    @Output() public selectedWord: string;
-    public hints: Array<Hint>;
+export class CrosswordHintsComponent {
+    public selectedWord: string;
+    @Output() private selectedWordChanged: EventEmitter<string> = new EventEmitter<string>();
+    @Input() public hints: Array<Hint>;
 
     constructor(private lexiconService: LexiconService) { }
 
-    public ngOnChanges() {
-        this.hints = new Array<Hint>();
-        for (const word of this.words) {
-            this.lexiconService.getWordDefinition(word.word)
-                .catch((err) => {
-                    this.handleError(err);
-                })
-                .then((definition) => {
-                    this.hints.push(new Hint(word.word, definition));
-                });
-        }
+    public selectWord(word: string) {
+        this.selectedWord = word;
+        this.selectedWordChanged.emit(word);
     }
 
     private handleError(error: any): Promise<any> {
