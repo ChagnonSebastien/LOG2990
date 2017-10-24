@@ -5,7 +5,7 @@ export class CrosswordGame {
     private size: number;
     private grid: string[][];
     public wordsWithIndex: Array<Word>;
-    private foundWords: Array<Word>;
+    private foundWords: Set<string>;
     private wordMap: Map<string, Word>;
     private gridWords: Array<string>[][];
     public status: SquareStatus[][];
@@ -14,7 +14,7 @@ export class CrosswordGame {
         this.size = grid.length;
         this.grid = grid;
         this.wordsWithIndex = wordsWithIndex;
-        this.foundWords = new Array<Word>();
+        this.foundWords = new Set<string>();
         this.wordMap = this.initializeWordMap();
         this.gridWords = this.initializeGridWords();
         this.status = this.initializeSquareStatus();
@@ -121,11 +121,13 @@ export class CrosswordGame {
 
     private markWordAsFound(word: Word) {
         this.forEachLetter(word, this.markSquareAsFound.bind(this));
+        this.foundWords.add(word.word);
     }
 
     private markSquareAsFound(i: number, j: number) {
         this.status[i][j].empty = false;
         this.status[i][j].found = true;
+        this.unselectSquare(i, j);
     }
 
     private selectSquare(i: number, j: number) {

@@ -10,9 +10,10 @@ import { Word } from '../../../../commun/word';
     styleUrls: ['./crossword-hints.component.css']
 })
 export class CrosswordHintsComponent {
-    public selectedWord: string;
+    @Input() public selectedWord: string;
     @Output() private selectedWordChanged: EventEmitter<string> = new EventEmitter<string>();
     @Input() public hints: Array<Hint>;
+    @Input() public foundWords: Set<string>;
 
     constructor(private lexiconService: LexiconService) { }
 
