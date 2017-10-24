@@ -72,7 +72,7 @@ describe('test drawTrackService', function () {
 
     it('should be able to post to the server a track and receive a response', fakeAsync(() => {
         let result: String;
-        const trackToSave = new Track( 0, 'a', 'b', 'c', [], [], [], []);
+        const trackToSave = new Track( 'name', 'desc', 'diff', [], [], [], []);
 
         this.drawTrackService.saveTrack('name', 'description', 'difficulty').then((serverResponse: String) => result = serverResponse);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({

@@ -169,7 +169,6 @@ export class DrawTrackService {
         };
 
         const trackToSave = new Track(
-            0,
             name,
             description,
             difficulty,
