@@ -59,7 +59,7 @@ export class CrosswordGame {
     }
 
     public clearSelectedWord(word: string) {
-
+        const wordInfo = this.wordMap.get(word);
     }
 
     public setSelectedWord(word: string) {
@@ -69,7 +69,7 @@ export class CrosswordGame {
     // Provide O(1) access to information on a word.
     private initializeWordMap(): Map<string, Word> {
         return this.wordsWithIndex.reduce((map, obj) => {
-            map[obj.word] = obj;
+            map.set(obj.word, obj);
             return map;
         }, new Map<string, Word>());
     }
