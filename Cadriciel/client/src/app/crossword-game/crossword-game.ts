@@ -34,7 +34,7 @@ export class CrosswordGame {
 
     public checkIfWordsFound(i: number, j: number) {
         this.gridWords[i][j].map((word) => {
-            const wordInfo = this.wordMap[word];
+            const wordInfo = this.wordMap.get(word);
             if (this.wordFound(wordInfo)) {
                 this.markWordAsFound(wordInfo);
             }
@@ -60,6 +60,11 @@ export class CrosswordGame {
 
     public clearSelectedWord(word: string) {
         const wordInfo = this.wordMap.get(word);
+        for (let k = 0; k < word.length; k++) {
+            const i = wordInfo.horizontal ? wordInfo.i : wordInfo.i + k;
+            const j = wordInfo.horizontal ? wordInfo.j + k : wordInfo.j;
+            this.unselectSquare(i, j);
+        }
     }
 
     public setSelectedWord(word: string) {
@@ -120,5 +125,13 @@ export class CrosswordGame {
     private markSquareAsFound(i: number, j: number) {
         this.status[i][j].empty = false;
         this.status[i][j].found = true;
+    }
+
+    private selectSquare(i: number, j: number) {
+        this.status[i][j].selected = true;
+    }
+
+    private unselectSquare(i: number, j: number) {
+        this.status[i][j].selected = false;
     }
 }
