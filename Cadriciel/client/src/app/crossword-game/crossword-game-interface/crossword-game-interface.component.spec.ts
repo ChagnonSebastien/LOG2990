@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CrosswordGameInterfaceComponent } from './crossword-game-interface.component';
 import { HttpModule } from '@angular/http';
-import {LexiconService} from '../services/lexicon.service';
+import {OldLexiconService} from '../services/lexicon.service';
 import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
 import { CrosswordGameInformationComponent} from '../crossword-game-information/crossword-game-information.component';
 import {MultiplayerService} from '../services/crossword-multiplayer.service';
@@ -13,7 +13,7 @@ describe('CrosswordGameInterfaceComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [CrosswordGameInterfaceComponent, CrosswordGameInformationComponent],
-            providers: [LexiconService, CrosswordGameInfoService, MultiplayerService, CrosswordService],
+            providers: [OldLexiconService, CrosswordGameInfoService, MultiplayerService, CrosswordService],
             imports: [HttpModule,  RouterTestingModule]
         })
             .compileComponents();

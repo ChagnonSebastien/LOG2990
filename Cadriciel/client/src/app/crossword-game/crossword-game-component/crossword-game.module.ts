@@ -7,7 +7,8 @@ import { CrosswordHintsComponent } from '../crossword-hints.component';
 import { CrosswordGameRoutingModule } from './crossword-game-routing.module';
 import { CrosswordGameInformationComponent } from '../crossword-game-information/crossword-game-information.component';
 import { CrosswordGameInfoService } from '../services/crossword-game-info.service';
-import { LexiconService } from '../services/lexicon.service';
+import { LexiconService } from '../lexicon.service';
+import { OldLexiconService } from '../services/lexicon.service';
 import { CrosswordService } from '../crossword.service';
 import { KeyboardService } from '../keyboard.service';
 import { MultiplayerService } from '../services/crossword-multiplayer.service';
@@ -31,10 +32,11 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
     ],
     providers: [
         CrosswordGameInfoService,
-        LexiconService,
+        OldLexiconService,
         CrosswordService,
         MultiplayerService,
-        KeyboardService
+        KeyboardService,
+        LexiconService
     ]
 })
 export class CrosswordGameModule { }

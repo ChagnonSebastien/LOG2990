@@ -3,7 +3,7 @@ import { Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class LexiconService {
+export class OldLexiconService {
     constructor(private http: Http) { }
 
     public getWordDefinition(word: string, difficulty: string) {
