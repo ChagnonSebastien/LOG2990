@@ -1,6 +1,6 @@
 import { DrawTrackComponent } from './draw-track.component';
 import { Obstacle, ObstacleType } from './obstacle';
-import { Track } from './../../admin/tracks/track';
+import { Track } from './../track';
 import { MockBackend } from '@angular/http/testing';
 import { TestBed, async, fakeAsync, tick, inject, ComponentFixture } from '@angular/core/testing';
 import { ObstacleService } from './obstacle.service';
