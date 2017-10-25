@@ -37,9 +37,27 @@ export class DrawTrackService {
         return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
         .then(response => {
             const track = response.json();
+            this.loadIntersection(track.trackIntersections);
+            this.obstacleService.loadObstacles(ObstacleType.Booster, track.boosters);
+            this.obstacleService.loadObstacles(ObstacleType.Pothole, track.potholes);
+            this.obstacleService.loadObstacles(ObstacleType.Puddle, track.puddles);
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
             return {description: track.description, difficulty: track.type};
         })
         .catch(this.handleError);
+    }
+
+    public loadIntersection(trackIntersections: THREE.Vector2[]) {
+        trackIntersections.forEach(intersection => {
+            this.mousePosition = new THREE.Vector2(intersection.x, intersection.y);
+            this.updateRealMousePosition();
+            this.addIntersection();
+        });
+        this.mousePosition = new THREE.Vector2(trackIntersections[0].x, trackIntersections[0].y);
+        this.updateRealMousePosition();
+        this.addIntersection();
     }
 
     public initialise(container: HTMLElement) {
@@ -50,6 +68,10 @@ export class DrawTrackService {
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
+        this.updateRealMousePosition();
+    }
+
+    public updateRealMousePosition() {
         this.pointMouseHoversOn = this.getPointUnderMouse();
         if (!this.trackClosed) {
             if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0]) < 25) {

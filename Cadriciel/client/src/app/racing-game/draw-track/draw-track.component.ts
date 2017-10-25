@@ -37,6 +37,7 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
             this.trackService.loadTrack(this.route.snapshot.params['name']).then(response => {
                 this.description = response.description;
                 this.difficulty = response.difficulty;
+                this.saveEnabled = true;
             });
         }
     }

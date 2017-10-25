@@ -16,6 +16,26 @@ export class ObstacleService {
         this.track = track;
     }
 
+    public loadObstacles(type: ObstacleType, obstacles: any[]) {
+        const extractObstacles = (obstacle) => {
+            return new Obstacle(obstacle.type, obstacle.segment, obstacle.distance, obstacle.offset);
+        };
+
+        switch (type) {
+            case ObstacleType.Booster:
+                this.boosters = obstacles.map(extractObstacles);
+                break;
+
+            case ObstacleType.Pothole:
+                this.potholes = obstacles.map(extractObstacles);
+                break;
+
+            case ObstacleType.Puddle:
+                this.puddles = obstacles.map(extractObstacles);
+                break;
+        }
+    }
+
     public addObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
