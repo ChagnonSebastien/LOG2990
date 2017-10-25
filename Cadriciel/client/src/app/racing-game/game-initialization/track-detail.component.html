@@ -4,27 +4,20 @@
   <div>
     <label>Current name: </label>
     <label class="detailColor"> {{track.name}}</label>
-    <div *ngIf="userType === 'administrator'">
-        <input placeholder="name" #trackName/>
-    </div>
     <br>
 
     <label>Current description: </label>
     <label class="detailColor">{{track.description}}</label>
-    <div *ngIf="userType === 'administrator'">
-        <input placeholder="description" #trackDescription/>
-    </div>
     <br>
 
     <label>Current type: </label>
     <label class="detailColor">{{track.type}}</label>
-    <div *ngIf="userType === 'administrator'">
-        <input placeholder="type" #trackType/>
-    </div>
     <br>
+
+    <label>Best times: </label>
   </div>
 
   <div *ngIf="userType === 'administrator'">
-      <button (click)="save()">Save</button>
+      <button (click)="save()">Edit</button>
   </div>
 </div>
