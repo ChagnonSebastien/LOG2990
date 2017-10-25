@@ -72,6 +72,8 @@ export class CrosswordGameComponent implements OnInit {
             this.disableEvent(event);
         } else if (this.keyboardService.isBackspace(charCode) && this.crossword.status[i][j].selected) {
             this.crossword.eraseLetter(i, j);
+            this.focusOnPreviousLetter(i, j);
+            this.disableEvent(event);
         } else if (!this.validInputs(charCode)) {
             this.disableEvent(event);
         }
@@ -95,20 +97,20 @@ export class CrosswordGameComponent implements OnInit {
 
     private focusOnNextLetter(i: number, j: number) {
         const wordInfo = this.crossword.wordMap.get(this.selectedWord);
-        const iEnd = wordInfo.horizontal ? wordInfo.i : wordInfo.i + wordInfo.word.length;
-        const jEnd = wordInfo.horizontal ? wordInfo.j + wordInfo.word.length : wordInfo.j;
         if (wordInfo.horizontal) {
-            if (j + 1 >= jEnd) {
-                return;
-            } else {
-                j++;
-            }
+            j = j + 1 < wordInfo.j + wordInfo.word.length ? j + 1 : j;
         } else {
-            if (i + 1 >= iEnd) {
-                return;
-            } else {
-                i++;
-            }
+            i = i + 1 < wordInfo.i + wordInfo.word.length ? i + 1 : i;
+        }
+        this.focusOnSquare(i, j);
+    }
+
+    private focusOnPreviousLetter(i: number, j: number) {
+        const wordInfo = this.crossword.wordMap.get(this.selectedWord);
+        if (wordInfo.horizontal) {
+            j = j - 1 >= wordInfo.j ? j - 1 : j;
+        } else {
+            i = i - 1 >= wordInfo.i ? i - 1 : i;
         }
         this.focusOnSquare(i, j);
     }
