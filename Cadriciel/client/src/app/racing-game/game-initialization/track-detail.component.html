@@ -1,14 +1,27 @@
+
 <div class="track-detail" *ngIf="track">
   <h2>{{track.name}} track details!</h2>
   <div>
     <label>Current name: {{track.name}}</label>
-    <input placeholder="name" #trackName/>
+    <div *ngIf="userType === 'administrator'">
+        <input placeholder="name" #trackName/>
+    </div>
     <br>
+
     <label>Current description: {{track.description}}</label>
-    <input placeholder="description" #trackDescription/>
+    <div *ngIf="userType === 'administrator'">
+        <input placeholder="description" #trackDescription/>
+    </div>
     <br>
+
     <label>Current type: {{track.type}}</label>
-    <input placeholder="type" #trackType/>
+    <div *ngIf="userType === 'administrator'">
+        <input placeholder="type" #trackType/>
+    </div>
+    <br>
   </div>
-  <button (click)="save()">Save</button>
+
+  <div *ngIf="userType === 'administrator'">
+      <button (click)="save()">Save</button>
+  </div>
 </div>
