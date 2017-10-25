@@ -5,8 +5,7 @@ export class KeyboardService {
     constructor() { }
 
     public isLetter(keyCode: number) {
-        return keyCode >= 65 && keyCode <= 90
-            || keyCode >= 97 && keyCode <= 122;
+        return keyCode >= 65 && keyCode <= 90;
     }
 
     public isBackspace(keyCode: number) {
