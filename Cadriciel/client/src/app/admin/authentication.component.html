@@ -39,7 +39,7 @@
       <hr>
     </div>
     <div class="tab-pane" *ngIf="racingGameSettings">
-      <button class="btn btn-primary" [routerLink]="['/admin/tracks/new']">
+      <button id="add-track" class="btn btn-primary" [routerLink]="['/admin/tracks/new']">
         New Track
       </button>
       <app-track-list [userType]="userType"></app-track-list>

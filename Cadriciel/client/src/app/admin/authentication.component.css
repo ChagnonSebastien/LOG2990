@@ -6,3 +6,8 @@
 .nav-tabs>li{
     font-weight: bold;
 }
+
+#add-track {
+    margin-top:40px;
+    margin-bottom: -20px;
+}
