@@ -43,6 +43,12 @@ export class RenderService {
         this.startRenderingLoop();
     }
 
+    public clear() {
+        this.intersections = [];
+        this.segments = [];
+        this.trackClosed = false;
+    }
+
     private createScene() {
         this.scene = new THREE.Scene();
 
@@ -100,6 +106,7 @@ export class RenderService {
     }
 
     public updateIntersectionPosition(index: number, position: THREE.Vector2) {
+        console.log('index', index);
         if (index >= this.intersections.length) {
             return;
         }
@@ -127,6 +134,7 @@ export class RenderService {
 
     private updateSegmentsValidity() {
         this.segments.forEach((segment, index) => {
+            console.log(segment, index);
             segment.material = new THREE.MeshBasicMaterial(
                 this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
             );

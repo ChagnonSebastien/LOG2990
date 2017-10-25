@@ -49,6 +49,18 @@ export class DrawTrackService {
         .catch(this.handleError);
     }
 
+    public clear() {
+        console.log(this.intersections.length);
+        if (this.intersections.length > 1) {
+            this.mousePosition = new THREE.Vector2();
+            this.intersections = [new THREE.Vector2(0, 0)];
+            this.trackClosed = false;
+            this.obstacleService.removeAllObstacles();
+            this.trackValidationService.clear();
+            this.renderService.clear();
+        }
+    }
+
     public loadIntersection(trackIntersections: THREE.Vector2[]) {
         trackIntersections.forEach(intersection => {
             this.mousePosition = new THREE.Vector2(intersection.x, intersection.y);

@@ -23,6 +23,11 @@ export class TrackValidationService {
         }
     }
 
+    public clear() {
+        this.trackElements = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
+        this.trackClosed = false;
+    }
+
     public closeTrack() {
         this.trackElements.pop();
         this.trackClosed = true;
