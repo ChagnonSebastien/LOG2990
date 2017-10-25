@@ -218,8 +218,8 @@ export class RenderService {
     }
 
     private calculateObstaclePosition(obstacle: Obstacle): THREE.Vector2 {
-        const point1 = this.intersections[obstacle.intersection].position;
-        const point2 = this.intersections[obstacle.intersection + 1 === this.intersections.length ? 0 : obstacle.intersection + 1].position;
+        const point1 = this.intersections[obstacle.segment].position;
+        const point2 = this.intersections[obstacle.segment + 1 === this.intersections.length ? 0 : obstacle.segment + 1].position;
 
         const positionWithoutOffset = this.getPositionWithoutOffset(point1, point2, obstacle.distance);
         const segmentAngle = this.getAngle(point1, point2);
