@@ -2,13 +2,18 @@ import { Word } from '../../../../commun/word';
 import { SquareStatus } from './square-status';
 
 export class CrosswordGame {
+    // public attributes
+
+    public wordsWithIndex: Array<Word>;
+    public wordMap: Map<string, Word>;
+    public status: SquareStatus[][];
+
+    // private attributes
+
     private size: number;
     private grid: string[][];
-    public wordsWithIndex: Array<Word>;
     private foundWords: Set<string>;
-    public wordMap: Map<string, Word>;
     private gridWords: Array<string>[][];
-    public status: SquareStatus[][];
 
     constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.size = grid.length;
@@ -20,40 +25,28 @@ export class CrosswordGame {
         this.status = this.initializeSquareStatus();
     }
 
+    // public methods
+
     public insertLetter(charCode: number, i: number, j: number) {
+        // if the letter is found or square is black, prevent any further action
         if (this.status[i][j].found || this.status[i][j].black) {
-            return; // if the letter is found, prevent any further action
+            return;
         }
+
         const inputLetter = String.fromCharCode(charCode).toLowerCase();
         const correctLetter = this.grid[i][j].toLowerCase();
+
         this.status[i][j].input = inputLetter;
+
         if (inputLetter === correctLetter) {
             this.checkIfWordsFound(i, j);
         }
     }
 
-    private checkIfWordsFound(i: number, j: number) {
-        this.gridWords[i][j].map((word) => {
-            const wordInfo = this.wordMap.get(word);
-            if (this.wordFound(wordInfo)) {
-                this.markWordAsFound(wordInfo);
-            }
-        });
-    }
-
-    private wordFound(word: Word): boolean {
-        return Array(word.word.length).fill(undefined).map((val, k) => {
-            const i = word.horizontal ? word.i : word.i + k;
-            const j = word.horizontal ? word.j + k : word.j;
-            return this.status[i][j].input.toLowerCase() === this.grid[i][j].toLowerCase();
-        }).reduce((prev, cur) => {
-            return prev && cur;
-        });
-    }
-
     public eraseLetter(i: number, j: number) {
+        // if the letter is found, prevent any further action
         if (this.status[i][j].found) {
-            return; // if the letter is found, prevent any further action
+            return;
         }
         this.status[i][j].input = '';
     }
@@ -67,6 +60,18 @@ export class CrosswordGame {
         const wordInfo = this.wordMap.get(word);
         this.forEachLetter(wordInfo, this.selectSquare.bind(this));
     }
+
+    // private methods
+
+    private forEachLetter(word: Word, callback) {
+        for (let k = 0; k < word.word.length; k++) {
+            const i = word.horizontal ? word.i : word.i + k;
+            const j = word.horizontal ? word.j + k : word.j;
+            callback(i, j);
+        }
+    }
+
+    // used by constructor
 
     // Provide O(1) access to information on a word.
     private initializeWordMap(): Map<string, Word> {
@@ -111,12 +116,26 @@ export class CrosswordGame {
         });
     }
 
-    private forEachLetter(word: Word, callback) {
+    // helper methods
+
+    private checkIfWordsFound(i: number, j: number) {
+        for (const word of this.gridWords[i][j]) {
+            const wordInfo = this.wordMap.get(word);
+            if (this.wordFound(wordInfo)) {
+                this.markWordAsFound(wordInfo);
+            }
+        }
+    }
+
+    private wordFound(word: Word): boolean {
         for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
-            callback(i, j);
+            if (this.status[i][j].input.toLowerCase() !== this.grid[i][j].toLowerCase()) {
+                return false;
+            }
         }
+        return true;
     }
 
     private markWordAsFound(word: Word) {
