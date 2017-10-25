@@ -6,7 +6,6 @@ export class CrosswordGame {
 
     public wordsWithIndex: Array<Word>;
     public wordMap: Map<string, Word>;
-    public status: SquareStatus[][];
 
     // private attributes
 
@@ -14,6 +13,7 @@ export class CrosswordGame {
     private grid: string[][];
     private foundWords: Set<string>;
     private gridWords: Array<string>[][];
+    private status: SquareStatus[][];
 
     constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.size = grid.length;
@@ -26,6 +26,10 @@ export class CrosswordGame {
     }
 
     // public methods
+
+    public getStatus(): SquareStatus[][] {
+        return this.status;
+    }
 
     public insertLetter(charCode: number, i: number, j: number) {
         // if the letter is found or square is black, prevent any further action

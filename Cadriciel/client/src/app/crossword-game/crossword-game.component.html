@@ -5,9 +5,9 @@
       <div class="col-md-6">
         <div class="row" *ngFor="let row of this.crossword?.grid; let i = index">
           <div *ngFor="let square of row; let j = index">
-            <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': this.crossword?.status[i][j].black, 'empty': this.crossword?.status[i][j].empty, 'found': this.crossword?.status[i][j].found, 'selected': this.crossword?.status[i][j].selected }"
-              type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.crossword?.status[i][j].black || this.crossword?.status[i][j].found || !this.crossword?.status[i][j].selected"
-              (keydown)="handleInput($event, i, j)" [(ngModel)]="this.crossword?.status[i][j].input" #square>
+            <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': this.crossword?.getStatus()[i][j].black, 'empty': this.crossword?.getStatus()[i][j].empty, 'found': this.crossword?.getStatus()[i][j].found, 'selected': this.crossword?.getStatus()[i][j].selected }"
+              type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.crossword?.getStatus()[i][j].black || this.crossword?.getStatus()[i][j].found || !this.crossword?.getStatus()[i][j].selected"
+              (keydown)="handleInput($event, i, j)" [(ngModel)]="this.crossword?.getStatus()[i][j].input" #square>
           </div>
         </div>
       </div>

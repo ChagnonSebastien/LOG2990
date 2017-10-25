@@ -66,11 +66,11 @@ export class CrosswordGameComponent implements OnInit {
 
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
-        if (this.keyboardService.isLetter(charCode) && this.crossword.status[i][j].selected) {
+        if (this.keyboardService.isLetter(charCode) && this.crossword.getStatus()[i][j].selected) {
             this.crossword.insertLetter(charCode, i, j);
             this.focusOnNextLetter(i, j);
             this.disableEvent(event);
-        } else if (this.keyboardService.isBackspace(charCode) && this.crossword.status[i][j].selected) {
+        } else if (this.keyboardService.isBackspace(charCode) && this.crossword.getStatus()[i][j].selected) {
             this.crossword.eraseLetter(i, j);
             this.focusOnPreviousLetter(i, j);
             this.disableEvent(event);

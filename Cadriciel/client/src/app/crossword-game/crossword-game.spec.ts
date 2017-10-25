@@ -55,19 +55,19 @@ fdescribe('#CrosswordGame', () => {
     });
 
     fit('should identify empty squares', () => {
-        expect(crossword.status[0][0].empty).toBeTruthy();
-        expect(crossword.status[1][0].empty).toBeFalsy();
+        expect(crossword.getStatus()[0][0].empty).toBeTruthy();
+        expect(crossword.getStatus()[1][0].empty).toBeFalsy();
     });
 
     fit('should identify black squares as # or " "', () => {
-        expect(crossword.status[0][0].black).toBeFalsy();
-        expect(crossword.status[1][0].black).toBeTruthy();
-        expect(crossword.status[1][1].black).toBeTruthy();
+        expect(crossword.getStatus()[0][0].black).toBeFalsy();
+        expect(crossword.getStatus()[1][0].black).toBeTruthy();
+        expect(crossword.getStatus()[1][1].black).toBeTruthy();
     });
 
     fit('should have no initial input on empty squares', () => {
-        expect(crossword.status[0][0].empty).toBeTruthy();
-        expect(crossword.status[0][0].input).toEqual('');
+        expect(crossword.getStatus()[0][0].empty).toBeTruthy();
+        expect(crossword.getStatus()[0][0].input).toEqual('');
     });
 
     fit('should initialize wordsWithIndex', () => {
@@ -83,7 +83,7 @@ fdescribe('#CrosswordGame', () => {
     });
 
     fit('nothing should be selected at initialization', () => {
-        for (const row of crossword.status) {
+        for (const row of crossword.getStatus()) {
             for (const square of row) {
                 expect(square.selected).toBeFalsy();
                 expect(square.player1Selected).toBeFalsy();
@@ -94,41 +94,41 @@ fdescribe('#CrosswordGame', () => {
 
     fdescribe('insertLetter()', () => {
         fit('should insert a letter when the square is empty', () => {
-            expect(crossword.status[0][0].empty).toBeTruthy();
+            expect(crossword.getStatus()[0][0].empty).toBeTruthy();
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
-            expect(crossword.status[0][0].input).toEqual('a');
+            expect(crossword.getStatus()[0][0].input).toEqual('a');
         });
 
         fit('should not insert a letter when the square is black', () => {
-            expect(crossword.status[1][0].black).toBeTruthy();
+            expect(crossword.getStatus()[1][0].black).toBeTruthy();
             crossword.insertLetter('A'.charCodeAt(0), 1, 0);
-            expect(crossword.status[1][0].input).toEqual('');
+            expect(crossword.getStatus()[1][0].input).toEqual('');
         });
 
         fit('should insert the word APPEAL, and it should be marked as correct when the L is inserted', () => {
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeFalsy();
+                expect(crossword.getStatus()[0][i].found).toBeFalsy();
             }
             crossword.insertLetter('P'.charCodeAt(0), 0, 1);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeFalsy();
+                expect(crossword.getStatus()[0][i].found).toBeFalsy();
             }
             crossword.insertLetter('P'.charCodeAt(0), 0, 2);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeFalsy();
+                expect(crossword.getStatus()[0][i].found).toBeFalsy();
             }
             crossword.insertLetter('E'.charCodeAt(0), 0, 3);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeFalsy();
+                expect(crossword.getStatus()[0][i].found).toBeFalsy();
             }
             crossword.insertLetter('A'.charCodeAt(0), 0, 4);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeFalsy();
+                expect(crossword.getStatus()[0][i].found).toBeFalsy();
             }
             crossword.insertLetter('L'.charCodeAt(0), 0, 5);
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].found).toBeTruthy();
+                expect(crossword.getStatus()[0][i].found).toBeTruthy();
             }
         });
 
@@ -144,7 +144,7 @@ fdescribe('#CrosswordGame', () => {
             // can't change APPEAL
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('B'.charCodeAt(0), 0, i);
-                expect(crossword.status[0][i].input).not.toEqual('b');
+                expect(crossword.getStatus()[0][i].input).not.toEqual('b');
             }
         });
 
@@ -152,12 +152,12 @@ fdescribe('#CrosswordGame', () => {
             // Insert AAAAA
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('A'.charCodeAt(0), 0, i);
-                expect(crossword.status[0][i].input).toEqual('a');
+                expect(crossword.getStatus()[0][i].input).toEqual('a');
             }
             // can change AAAAA to BBBBB
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('B'.charCodeAt(0), 0, i);
-                expect(crossword.status[0][i].input).toEqual('b');
+                expect(crossword.getStatus()[0][i].input).toEqual('b');
             }
         });
     });
@@ -175,7 +175,7 @@ fdescribe('#CrosswordGame', () => {
             // can't erase APPEAL
             for (let i = 0; i < 5; i++) {
                 crossword.eraseLetter(0, i);
-                expect(crossword.status[0][i].input).not.toEqual('');
+                expect(crossword.getStatus()[0][i].input).not.toEqual('');
             }
         });
 
@@ -183,13 +183,13 @@ fdescribe('#CrosswordGame', () => {
             // Insert AAAAA
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('A'.charCodeAt(0), 0, i);
-                expect(crossword.status[0][i].input).toEqual('a');
+                expect(crossword.getStatus()[0][i].input).toEqual('a');
             }
 
             // can erase AAAAA
             for (let i = 0; i < 5; i++) {
                 crossword.eraseLetter(0, i);
-                expect(crossword.status[0][i].input).toEqual('');
+                expect(crossword.getStatus()[0][i].input).toEqual('');
             }
         });
     });
@@ -198,12 +198,12 @@ fdescribe('#CrosswordGame', () => {
         fit('should set APPEAL as selected', () => {
             // unselected
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].selected).toBeFalsy();
+                expect(crossword.getStatus()[0][i].selected).toBeFalsy();
             }
             crossword.setSelectedWord('appeal');
             // selected
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].selected).toBeTruthy();
+                expect(crossword.getStatus()[0][i].selected).toBeTruthy();
             }
         });
     });
@@ -213,12 +213,12 @@ fdescribe('#CrosswordGame', () => {
             crossword.setSelectedWord('appeal');
             // selected
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].selected).toBeTruthy();
+                expect(crossword.getStatus()[0][i].selected).toBeTruthy();
             }
             crossword.clearSelectedWord('appeal');
             // unselected
             for (let i = 0; i < 5; i++) {
-                expect(crossword.status[0][i].selected).toBeFalsy();
+                expect(crossword.getStatus()[0][i].selected).toBeFalsy();
             }
         });
     });
