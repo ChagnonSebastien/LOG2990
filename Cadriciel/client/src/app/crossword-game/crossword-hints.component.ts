@@ -1,8 +1,6 @@
-import { Component, OnChanges, Input, Output, EventEmitter } from '@angular/core';
-import { LexiconService } from './lexicon.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Hint } from './hint';
-import { Word } from '../../../../commun/word';
 
 @Component({
     selector: 'app-crossword-hints',
@@ -16,7 +14,7 @@ export class CrosswordHintsComponent {
     @Input() public foundWords: Set<string>;
     public cheatMode: boolean;
 
-    constructor(private lexiconService: LexiconService) {
+    constructor() {
         this.cheatMode = false;
      }
 
@@ -27,10 +25,5 @@ export class CrosswordHintsComponent {
 
     public toggleCheatMode() {
         this.cheatMode = !this.cheatMode;
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
     }
 }
