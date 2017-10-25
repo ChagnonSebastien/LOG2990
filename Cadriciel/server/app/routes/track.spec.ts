@@ -14,9 +14,9 @@ describe('Track', () => {
                 description: 'this is a test',
                 type: 'easy',
                 trackIntersections: [{ 'x': 1, 'y': 1 }],
-                puddles: [{ 'distance': 1, 'offset': 1 }],
-                potholes: [{ 'distance': 1, 'offset': 1 }],
-                boosters: [{ 'distance': 1, 'offset': 1 }]
+                puddles: [{ 'segment': 1, 'distance': 1, 'offset': 1 }],
+                potholes: [{ 'segment': 1, 'distance': 1, 'offset': 1 }],
+                boosters: [{ 'segment': 1, 'distance': 1, 'offset': 1 }]
             }).end((err: any, res: any) => {
                 assert(JSON.parse(res.text).data === 'success');
                 done();

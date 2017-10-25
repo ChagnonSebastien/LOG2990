@@ -32,6 +32,45 @@ export class DrawTrackService {
         private http: Http
     ) { }
 
+    public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
+        const path = 'track';
+        return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
+        .then(response => {
+            const track = response.json();
+            this.loadIntersection(track.trackIntersections);
+            this.obstacleService.loadObstacles(ObstacleType.Booster, track.boosters);
+            this.obstacleService.loadObstacles(ObstacleType.Pothole, track.potholes);
+            this.obstacleService.loadObstacles(ObstacleType.Puddle, track.puddles);
+            this.renderService.updateObstaclesPositions(ObstacleType.Booster, this.obstacleService.getObstacles(ObstacleType.Booster));
+            this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
+            this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
+            return {description: track.description, difficulty: track.type};
+        })
+        .catch(this.handleError);
+    }
+
+    public clear() {
+        if (this.intersections.length > 1) {
+            this.mousePosition = new THREE.Vector2();
+            this.intersections = [new THREE.Vector2(0, 0)];
+            this.trackClosed = false;
+            this.obstacleService.removeAllObstacles();
+            this.trackValidationService.clear();
+            this.renderService.clear();
+        }
+    }
+
+    public loadIntersection(trackIntersections: THREE.Vector2[]) {
+        trackIntersections.forEach(intersection => {
+            this.mousePosition = new THREE.Vector2(intersection.x, intersection.y);
+            this.updateRealMousePosition();
+            this.addIntersection();
+        });
+        this.mousePosition = new THREE.Vector2(trackIntersections[0].x, trackIntersections[0].y);
+        this.updateRealMousePosition();
+        this.addIntersection();
+    }
+
     public initialise(container: HTMLElement) {
         this.container = container;
         this.renderService.initialise(container, this.trackValidationService, this.obstacleService);
@@ -40,6 +79,10 @@ export class DrawTrackService {
 
     public updateMousePosition(clientX: number, clientY: number) {
         this.mousePosition = this.getRelativeMousePosition(clientX, clientY);
+        this.updateRealMousePosition();
+    }
+
+    public updateRealMousePosition() {
         this.pointMouseHoversOn = this.getPointUnderMouse();
         if (!this.trackClosed) {
             if (this.intersections.length > 1 && this.getXYDistance(this.mousePosition, this.intersections[0]) < 25) {
@@ -134,7 +177,7 @@ export class DrawTrackService {
     }
 
     public isFinished() {
-        return this.trackClosed;
+        return this.trackClosed && this.trackValidationService.isAllValid();
     }
 
     public addObstacle(type: number) {
@@ -160,25 +203,14 @@ export class DrawTrackService {
     }
 
     public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
-        const filterTypeFromObject = (object) => {
-            return {
-                segment: object.intersection,
-                distance: object.distance,
-                offset: object.offset
-            };
-        };
-
         const trackToSave = new Track(
             name,
             description,
             difficulty,
             this.intersections,
-            this.obstacleService.getObstacles(ObstacleType.Puddle)
-                .map(filterTypeFromObject),
-            this.obstacleService.getObstacles(ObstacleType.Pothole)
-                .map(filterTypeFromObject),
+            this.obstacleService.getObstacles(ObstacleType.Puddle),
+            this.obstacleService.getObstacles(ObstacleType.Pothole),
             this.obstacleService.getObstacles(ObstacleType.Booster)
-                .map(filterTypeFromObject)
         );
         const path = 'tracks';
         return this.http

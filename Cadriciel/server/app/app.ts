@@ -106,6 +106,7 @@ export class Application {
 
         // track api path
         router.get('/tracks', track.getTracks.bind(track.getTracks));
+        router.get('/track/:id', track.getTrack.bind(track.getTrack));
         router.post('/tracks', track.addTrack.bind(track.addTrack));
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
 
