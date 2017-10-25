@@ -64,7 +64,7 @@ module Route {
                         boosters: req.body.boosters
                     });
 
-                    db.collection('tracks').insert(newTrack);
+                    db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert : true });
                     res.send({ 'data': 'success' });
                 }
             });
