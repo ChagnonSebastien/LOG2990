@@ -50,7 +50,6 @@ export class DrawTrackService {
     }
 
     public clear() {
-        console.log(this.intersections.length);
         if (this.intersections.length > 1) {
             this.mousePosition = new THREE.Vector2();
             this.intersections = [new THREE.Vector2(0, 0)];

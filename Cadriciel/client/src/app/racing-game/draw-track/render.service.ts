@@ -134,7 +134,6 @@ export class RenderService {
 
     private updateSegmentsValidity() {
         this.segments.forEach((segment, index) => {
-            console.log(segment, index);
             segment.material = new THREE.MeshBasicMaterial(
                 this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
             );
