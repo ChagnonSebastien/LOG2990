@@ -32,10 +32,15 @@ export class DrawTrackService {
         private http: Http
     ) { }
 
-    public loadTrack(name: string) {
+    public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
         const path = 'track';
-        this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
-        .then(response => response.json().data)
+        return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
+        .then(response => {
+            const track = response.json();
+            console.log(response.json());
+            // this.intersections = track.trackIntersections;
+            return {description: track.description, difficulty: track.type};
+        })
         .catch(this.handleError);
     }
 
