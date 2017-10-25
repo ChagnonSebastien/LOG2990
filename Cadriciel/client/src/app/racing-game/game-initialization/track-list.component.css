@@ -10,6 +10,11 @@
   width: 15em;
 }
 
+.list-group {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 .tracks li {
   cursor: pointer;
   position: relative;
