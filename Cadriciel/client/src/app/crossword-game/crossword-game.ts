@@ -21,7 +21,7 @@ export class CrosswordGame {
     }
 
     public insertLetter(charCode: number, i: number, j: number) {
-        if (this.status[i][j].found) {
+        if (this.status[i][j].found || this.status[i][j].black) {
             return; // if the letter is found, prevent any further action
         }
         const inputLetter = String.fromCharCode(charCode).toLowerCase();
@@ -32,7 +32,7 @@ export class CrosswordGame {
         }
     }
 
-    public checkIfWordsFound(i: number, j: number) {
+    private checkIfWordsFound(i: number, j: number) {
         this.gridWords[i][j].map((word) => {
             const wordInfo = this.wordMap.get(word);
             if (this.wordFound(wordInfo)) {
