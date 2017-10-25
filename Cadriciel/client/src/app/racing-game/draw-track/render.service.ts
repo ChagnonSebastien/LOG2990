@@ -106,7 +106,6 @@ export class RenderService {
     }
 
     public updateIntersectionPosition(index: number, position: THREE.Vector2) {
-        console.log('index', index);
         if (index >= this.intersections.length) {
             return;
         }
