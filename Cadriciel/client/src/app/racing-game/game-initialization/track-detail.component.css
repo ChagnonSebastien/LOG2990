@@ -9,3 +9,8 @@
 .detailColor {
     color: #0275D8;
 }
+
+#ulOneLine li {
+    display: inline;
+    color: #0275D8;
+}

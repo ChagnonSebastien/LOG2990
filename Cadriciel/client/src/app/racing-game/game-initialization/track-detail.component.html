@@ -14,7 +14,14 @@
     <label class="detailColor">{{track.type}}</label>
     <br>
 
-    <label>Best times: </label>
+    <label>Best times:</label>
+    <label>
+      <ul id="ulOneLine">
+        <li *ngFor="let bestTime of track.bestTimes|slice:0:5">
+            {{bestTime}}
+        </li>
+      </ul>
+    </label> 
   </div>
 
   <div *ngIf="userType === 'administrator'">
