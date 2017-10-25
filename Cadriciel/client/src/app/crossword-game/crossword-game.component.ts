@@ -48,6 +48,13 @@ export class CrosswordGameComponent implements OnInit {
         event.returnValue = false;
     }
 
+    public unselectWord() {
+        if (this.selectedWord) {
+            this.crossword.clearSelectedWord(this.selectedWord);
+            this.selectedWord = '';
+        }
+    }
+
     public selectWord(word: string) {
         if (this.selectedWord) {
             this.crossword.clearSelectedWord(this.selectedWord);
