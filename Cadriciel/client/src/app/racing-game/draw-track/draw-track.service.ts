@@ -192,25 +192,14 @@ export class DrawTrackService {
     }
 
     public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
-        const filterTypeFromObject = (object) => {
-            return {
-                segment: object.intersection,
-                distance: object.distance,
-                offset: object.offset
-            };
-        };
-
         const trackToSave = new Track(
             name,
             description,
             difficulty,
             this.intersections,
-            this.obstacleService.getObstacles(ObstacleType.Puddle)
-                .map(filterTypeFromObject),
-            this.obstacleService.getObstacles(ObstacleType.Pothole)
-                .map(filterTypeFromObject),
+            this.obstacleService.getObstacles(ObstacleType.Puddle),
+            this.obstacleService.getObstacles(ObstacleType.Pothole),
             this.obstacleService.getObstacles(ObstacleType.Booster)
-                .map(filterTypeFromObject)
         );
         const path = 'tracks';
         return this.http
