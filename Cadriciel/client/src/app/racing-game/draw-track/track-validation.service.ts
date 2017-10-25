@@ -23,6 +23,11 @@ export class TrackValidationService {
         }
     }
 
+    public clear() {
+        this.trackElements = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
+        this.trackClosed = false;
+    }
+
     public closeTrack() {
         this.trackElements.pop();
         this.trackClosed = true;
@@ -325,5 +330,13 @@ export class TrackValidationService {
         }
 
         return this.trackElements[nextSegment].intersectionAngl <= Math.PI;
+    }
+
+    public isAllValid() {
+        let valid = true;
+        for ( let i = 0; i < this.trackElements.length; i++ ) {
+            valid = valid && this.isValid(i);
+        }
+        return valid;
     }
 }

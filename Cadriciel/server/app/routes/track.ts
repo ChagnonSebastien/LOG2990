@@ -23,6 +23,18 @@ module Route {
             });
         }
 
+        public getTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
+            MongoClient.connect(url, (err, db) => {
+                if (err) {
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
+                } else {
+                    db.collection('tracks').findOne({ _id: req.params.id }).then((track) => {
+                        res.send(JSON.stringify(track));
+                    });
+                }
+            });
+        }
+
         public deleteTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
@@ -52,7 +64,7 @@ module Route {
                         boosters: req.body.boosters
                     });
 
-                    db.collection('tracks').insert(newTrack);
+                    db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert : true });
                     res.send({ 'data': 'success' });
                 }
             });

@@ -17,7 +17,7 @@
           <input type="radio" name="difficulty" [(ngModel)]="difficulty" value="hard"> Hard</label>
       </div>
       <br>
-      <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled" (click)="saveTrack()">SAVE</button>
+      <button type="button" class="btn btn-primary" id="btn-save" [disabled]="!saveEnabled" (click)="saveTrack()" [routerLink]="['/admin']">SAVE</button>
     </div>
     <div class="col-4">
       <label class="control-label" for="name">Potholes:</label>

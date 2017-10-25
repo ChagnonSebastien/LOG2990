@@ -16,6 +16,26 @@ export class ObstacleService {
         this.track = track;
     }
 
+    public loadObstacles(type: ObstacleType, obstacles: any[]) {
+        const extractObstacles = (obstacle) => {
+            return new Obstacle(type, obstacle.segment, obstacle.distance, obstacle.offset);
+        };
+
+        switch (type) {
+            case ObstacleType.Booster:
+                this.boosters = obstacles.map(extractObstacles);
+                break;
+
+            case ObstacleType.Pothole:
+                this.potholes = obstacles.map(extractObstacles);
+                break;
+
+            case ObstacleType.Puddle:
+                this.puddles = obstacles.map(extractObstacles);
+                break;
+        }
+    }
+
     public addObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
@@ -94,9 +114,9 @@ export class ObstacleService {
     }
 
     private isTooCloseOtherObstacle(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
-        if (obstacle1.intersection === obstacle2.intersection) {
+        if (obstacle1.segment === obstacle2.segment) {
             return this.isTooCloseOtherObstacleOnSameSegment(obstacle1, obstacle2);
-        } else if (Math.abs(obstacle1.intersection - obstacle2.intersection) === 1) {
+        } else if (Math.abs(obstacle1.segment - obstacle2.segment) === 1) {
             return this.isTooCloseOtherObstacleOnAdjacentSegment(obstacle1, obstacle2);
         } else {
             return false;
@@ -104,8 +124,8 @@ export class ObstacleService {
     }
 
     private isTooCloseOtherObstacleOnSameSegment(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
-        const firstIntersection = this.track[obstacle1.intersection];
-        const secondIntersection = this.track[obstacle1.intersection + 1 === this.track.length ? 0 : obstacle1.intersection + 1];
+        const firstIntersection = this.track[obstacle1.segment];
+        const secondIntersection = this.track[obstacle1.segment + 1 === this.track.length ? 0 : obstacle1.segment + 1];
         const segmentLength = this.distance(firstIntersection, secondIntersection);
 
         const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
@@ -118,7 +138,7 @@ export class ObstacleService {
         let firstobstacle;
         let secondObstacle;
 
-        if (obstacle1.intersection < obstacle2.intersection) {
+        if (obstacle1.segment < obstacle2.segment) {
             firstobstacle = obstacle1;
             secondObstacle = obstacle2;
         } else {

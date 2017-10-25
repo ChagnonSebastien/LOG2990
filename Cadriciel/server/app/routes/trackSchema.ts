@@ -21,13 +21,13 @@ const trackSchema = new mongoose.Schema({
         type: [{ x: Number, y: Number }]
     },
     puddles: {
-        type: [{ distance: Number, offset: Number }]
+        type: [{ segment: Number, distance: Number, offset: Number }]
     },
     potholes: {
-        type: [{ distance: Number, offset: Number }]
+        type: [{ segment: Number, distance: Number, offset: Number }]
     },
     boosters: {
-        type: [{ distance: Number, offset: Number }]
+        type: [{ segment: Number, distance: Number, offset: Number }]
     }
 
 });

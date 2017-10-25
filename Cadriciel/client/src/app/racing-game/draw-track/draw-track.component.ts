@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, OnInit } from '@angular/core';
 import { DrawTrackService } from './draw-track.service';
 
 @Component({
@@ -8,14 +9,14 @@ import { DrawTrackService } from './draw-track.service';
     styleUrls: ['./draw-track.component.css']
 })
 
-export class DrawTrackComponent implements AfterViewInit {
+export class DrawTrackComponent implements AfterViewInit, OnInit {
     public name: string;
     public description: string;
     public difficulty: string;
 
     public saveEnabled = false;
 
-    constructor(private trackService: DrawTrackService) {
+    constructor(private trackService: DrawTrackService, private route: ActivatedRoute) {
     }
 
     private get container(): HTMLDivElement {
@@ -30,13 +31,48 @@ export class DrawTrackComponent implements AfterViewInit {
         this.trackService.onResize();
     }
 
+    @HostListener('window:keyup', ['$event'])
+    public onKeyUp() {
+        this.saveEnabled = this.checkForSaveEnabled();
+    }
+
+    @HostListener('window:click', ['$event'])
+    public onClick() {
+        this.saveEnabled = this.checkForSaveEnabled();
+    }
+
+    private checkForSaveEnabled(): boolean {
+        let saveDisabled = false;
+        saveDisabled = saveDisabled || this.name === undefined;
+        saveDisabled = saveDisabled || this.name === '';
+        saveDisabled = saveDisabled || this.description === undefined;
+        saveDisabled = saveDisabled || this.description === '';
+        saveDisabled = saveDisabled || this.difficulty === undefined;
+        saveDisabled = saveDisabled || this.difficulty === '';
+
+        saveDisabled = saveDisabled || !this.trackService.isFinished();
+        return !saveDisabled;
+    }
+
+    public ngOnInit() {
+        this.trackService.clear();
+        if (this.route.snapshot.url[this.route.snapshot.url.length - 2].path === 'edit') {
+            this.name = this.route.snapshot.params['name'];
+            this.trackService.loadTrack(this.route.snapshot.params['name']).then(response => {
+                this.description = response.description;
+                this.difficulty = response.difficulty;
+                this.saveEnabled = true;
+            });
+        }
+    }
+
     public updateMousePosition(event: MouseEvent): void {
         this.trackService.updateMousePosition(event.clientX, event.clientY);
     }
 
     public addIntersection(event: MouseEvent): void {
         this.trackService.addIntersection();
-        this.saveEnabled = this.trackService.isFinished();
+        this.saveEnabled = this.checkForSaveEnabled();
     }
 
     public removeIntersection(event: MouseEvent): void {
