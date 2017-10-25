@@ -74,14 +74,24 @@ export class CrosswordGameComponent implements OnInit {
             this.crossword.eraseLetter(i, j);
             this.focusOnPreviousLetter(i, j);
             this.disableEvent(event);
+        } else if (this.keyboardService.isArrowKey(charCode)) {
+            this.handleArrows(charCode, i, j);
         } else if (!this.validInputs(charCode)) {
             this.disableEvent(event);
         }
     }
 
+    private handleArrows(keyCode: number, i: number, j: number) {
+        if (this.keyboardService.isLeftArrow(keyCode)
+            || this.keyboardService.isUpArrow(keyCode)) {
+            this.focusOnPreviousLetter(i, j);
+        } else {
+            this.focusOnNextLetter(i, j);
+        }
+    }
+
     private validInputs(keyCode: number): boolean {
-        return this.keyboardService.isTab(keyCode)
-            || this.keyboardService.isArrowKey(keyCode);
+        return this.keyboardService.isTab(keyCode);
     }
 
     private focusOnSelectedWord() {

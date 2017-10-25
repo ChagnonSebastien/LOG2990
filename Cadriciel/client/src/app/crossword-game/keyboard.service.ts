@@ -20,4 +20,20 @@ export class KeyboardService {
     public isArrowKey(keyCode: number) {
         return keyCode >= 37 && keyCode <= 40;
     }
+
+    public isLeftArrow(keyCode: number) {
+        return keyCode === 37;
+    }
+
+    public isRightArrow(keyCode: number) {
+        return keyCode === 39;
+    }
+
+    public isUpArrow(keyCode: number) {
+        return keyCode === 38;
+    }
+
+    public isDownArrow(keyCode: number) {
+        return keyCode === 40;
+    }
 }
