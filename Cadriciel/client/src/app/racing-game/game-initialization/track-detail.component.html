@@ -1,20 +1,23 @@
 
 <div class="track-detail" *ngIf="track">
-  <h2>{{track.name}} track details!</h2>
+  <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
-    <label>Current name: {{track.name}}</label>
+    <label>Current name: </label>
+    <label class="detailColor"> {{track.name}}</label>
     <div *ngIf="userType === 'administrator'">
         <input placeholder="name" #trackName/>
     </div>
     <br>
 
-    <label>Current description: {{track.description}}</label>
+    <label>Current description: </label>
+    <label class="detailColor">{{track.description}}</label>
     <div *ngIf="userType === 'administrator'">
         <input placeholder="description" #trackDescription/>
     </div>
     <br>
 
-    <label>Current type: {{track.type}}</label>
+    <label>Current type: </label>
+    <label class="detailColor">{{track.type}}</label>
     <div *ngIf="userType === 'administrator'">
         <input placeholder="type" #trackType/>
     </div>
