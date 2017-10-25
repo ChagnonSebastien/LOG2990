@@ -326,4 +326,12 @@ export class TrackValidationService {
 
         return this.trackElements[nextSegment].intersectionAngl <= Math.PI;
     }
+
+    public isAllValid() {
+        let valid = true;
+        for ( let i = 0; i < this.trackElements.length; i++ ) {
+            valid = valid && this.isValid(i);
+        }
+        return valid;
+    }
 }

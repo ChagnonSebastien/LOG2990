@@ -166,7 +166,7 @@ export class DrawTrackService {
     }
 
     public isFinished() {
-        return this.trackClosed;
+        return this.trackClosed && this.trackValidationService.isAllValid();
     }
 
     public addObstacle(type: number) {

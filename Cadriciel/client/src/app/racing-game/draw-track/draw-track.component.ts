@@ -31,6 +31,29 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
         this.trackService.onResize();
     }
 
+    @HostListener('window:keyup', ['$event'])
+    public onKeyUp() {
+        this.saveEnabled = this.checkForSaveEnabled();
+    }
+
+    @HostListener('window:click', ['$event'])
+    public onClick() {
+        this.saveEnabled = this.checkForSaveEnabled();
+    }
+
+    private checkForSaveEnabled(): boolean {
+        let saveDisabled = false;
+        saveDisabled = saveDisabled || this.name === undefined;
+        saveDisabled = saveDisabled || this.name === '';
+        saveDisabled = saveDisabled || this.description === undefined;
+        saveDisabled = saveDisabled || this.description === '';
+        saveDisabled = saveDisabled || this.difficulty === undefined;
+        saveDisabled = saveDisabled || this.difficulty === '';
+
+        saveDisabled = saveDisabled || !this.trackService.isFinished();
+        return !saveDisabled;
+    }
+
     public ngOnInit() {
         if (this.route.snapshot.url[this.route.snapshot.url.length - 2].path === 'edit') {
             this.name = this.route.snapshot.params['name'];
@@ -48,7 +71,7 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
 
     public addIntersection(event: MouseEvent): void {
         this.trackService.addIntersection();
-        this.saveEnabled = this.trackService.isFinished();
+        this.saveEnabled = this.checkForSaveEnabled();
     }
 
     public removeIntersection(event: MouseEvent): void {
