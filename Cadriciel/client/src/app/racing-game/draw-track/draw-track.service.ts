@@ -37,8 +37,6 @@ export class DrawTrackService {
         return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
         .then(response => {
             const track = response.json();
-            console.log(response.json());
-            // this.intersections = track.trackIntersections;
             return {description: track.description, difficulty: track.type};
         })
         .catch(this.handleError);
