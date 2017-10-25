@@ -32,6 +32,13 @@ export class DrawTrackService {
         private http: Http
     ) { }
 
+    public loadTrack(name: string) {
+        const path = 'track';
+        this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
+        .then(response => response.json().data)
+        .catch(this.handleError);
+    }
+
     public initialise(container: HTMLElement) {
         this.container = container;
         this.renderService.initialise(container, this.trackValidationService, this.obstacleService);

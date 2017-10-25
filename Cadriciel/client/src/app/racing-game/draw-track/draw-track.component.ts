@@ -32,7 +32,9 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
     }
 
     public ngOnInit() {
-        console.log(this.route.snapshot.params['name']);
+        if (this.route.snapshot.url[this.route.snapshot.url.length - 2].path === 'edit') {
+            this.trackService.loadTrack(this.route.snapshot.params['name']);
+        }
     }
 
     public updateMousePosition(event: MouseEvent): void {
