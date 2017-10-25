@@ -1,8 +1,17 @@
 <div class="row">
+  <div class="col-md-12">
+    <button class="btn mb-3" [ngClass]="{ 'btn-success': !this.cheatMode, 'btn-danger': this.cheatMode }"(click)="this.toggleCheatMode()">
+      <span *ngIf="!this.cheatMode">Activate Cheat Mode</span>
+      <span *ngIf="this.cheatMode">Deactivate Cheat Mode</span>
+    </button>
+  </div>
+</div>
+<div class="row">
   <div class="col-md-12" *ngFor="let hint of this.hints">
     <button class="btn btn-sm text-justify mb-2" [ngClass]="{ 'btn-primary': this.selectedWord === hint.word, 'btn-default': this.selectedWord !== hint.word, 'btn-success': this.foundWords.has(hint.word) }"
       style="word-wrap: break-word; word-break: normal; white-space: normal" (click)="this.selectWord(hint.word)" [disabled]="this.foundWords.has(hint.word)">
-      {{hint.definition}}
+      <span *ngIf="!this.cheatMode">{{hint.definition}}</span>
+      <span *ngIf="this.cheatMode">{{hint.word}}</span>
     </button>
   </div>
 </div>

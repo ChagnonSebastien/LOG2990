@@ -14,12 +14,19 @@ export class CrosswordHintsComponent {
     @Output() private selectedWordChanged: EventEmitter<string> = new EventEmitter<string>();
     @Input() public hints: Array<Hint>;
     @Input() public foundWords: Set<string>;
+    public cheatMode: boolean;
 
-    constructor(private lexiconService: LexiconService) { }
+    constructor(private lexiconService: LexiconService) {
+        this.cheatMode = false;
+     }
 
     public selectWord(word: string) {
         this.selectedWord = word;
         this.selectedWordChanged.emit(word);
+    }
+
+    public toggleCheatMode() {
+        this.cheatMode = !this.cheatMode;
     }
 
     private handleError(error: any): Promise<any> {

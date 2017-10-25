@@ -6,7 +6,7 @@ export class CrosswordGame {
     private grid: string[][];
     public wordsWithIndex: Array<Word>;
     private foundWords: Set<string>;
-    private wordMap: Map<string, Word>;
+    public wordMap: Map<string, Word>;
     private gridWords: Array<string>[][];
     public status: SquareStatus[][];
 
