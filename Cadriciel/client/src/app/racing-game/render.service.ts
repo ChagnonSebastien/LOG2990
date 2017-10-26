@@ -34,7 +34,7 @@ export class RenderService {
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
-        this.cube.position.z += 5;
+        // this.cube.position.z += 5;
     }
 
     private createCube() {
@@ -53,12 +53,33 @@ export class RenderService {
 
     private createScene() {
         this.scene = new THREE.Scene();
+        this.createSkyBox();
         this.cameraService.initialiseCamera(this.container);
         this.camera = this.cameraService.getCamera();
     }
 
     private getAspectRatio() {
         return this.container.clientWidth / this.container.clientHeight;
+    }
+
+    public createSkyBox() {
+        const url = '../../assets/images/skybox/';
+        const images = [url + 'xpos.png', url + 'xneg.png',
+        url + 'ypos.png', url + 'yneg.png',
+        url + 'zpos.png', url + 'zneg.png'];
+        const textureSky = THREE.ImageUtils.loadTextureCube(images);
+        const shader = THREE.ShaderLib['cube'];
+        shader.uniforms['tCube'].value = textureSky;
+        const material = new THREE.ShaderMaterial({
+            fragmentShader: shader.fragmentShader,
+            vertexShader: shader.vertexShader,
+            uniforms: shader.uniforms,
+            depthWrite: false,
+            side: THREE.BackSide
+        });
+        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000), material );
+        material.needsUpdate = true;
+        this.scene.add( skyboxMesh );
     }
 
     public eventsList(event: any): void {
