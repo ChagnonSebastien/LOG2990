@@ -36,5 +36,5 @@
   </div>
 </div>
 <div *ngIf="gameInProgress">
-  <app-crossword-game (endGameEmitter)="gameInProgress = false"></app-crossword-game>
+  <app-crossword-game [type]="type" [mode]="mode" [level]="level" (endGameEmitter)="gameInProgress = false"></app-crossword-game>
 </div>

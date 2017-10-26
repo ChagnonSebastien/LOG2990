@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
 import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
@@ -12,7 +12,10 @@ import { Hint } from './hint';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
-    @Output() private endGameEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Input() public type: string;
+    @Input() public mode: string;
+    @Input() public level: string;
+    @Output() public endGameEmitter: EventEmitter<boolean>;
     public crossword: CrosswordGame;
     public selectedWord: string;
     private hints: Array<Hint>;
@@ -22,10 +25,16 @@ export class CrosswordGameComponent implements OnInit {
         private crosswordService: CrosswordService,
         private keyboardService: KeyboardService,
         private lexiconService: LexiconService
-    ) { }
+    ) {
+        this.endGameEmitter = new EventEmitter<boolean>();
+    }
 
     public ngOnInit() {
-        this.crosswordService.getCrossword('easy').then((crossword) => {
+        this.newGame();
+    }
+
+    private newGame() {
+        this.crosswordService.getCrossword(this.level).then((crossword) => {
             this.crossword = new CrosswordGame(
                 crossword.crossword,
                 crossword.wordsWithIndex,
