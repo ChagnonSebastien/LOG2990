@@ -5,6 +5,7 @@ export class Track {
     public description = '';
     public type: string;
     public trackIntersections: { x: number, y: number }[] = [];
+    public bestTimes: number[] = [];
     public puddles: Obstacle[] = [];
     public potholes: Obstacle[] = [];
     public boosters: Obstacle[] = [];

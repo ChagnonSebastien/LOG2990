@@ -1,11 +1,19 @@
 <div class="container">
   <div *ngIf="!passwordCorrect" class="form-inline">
-    <div class="form-group mx-sm-3">
-      <input type="password" class="form-control" placeholder="Password" #passwordInput />
+    <!-- login form -->
+    <div class="wrapper">
+      <form class="form-signin">
+        <h4 class="form-signin-heading">Admin Login</h4>
+        <input type="password" class="form-control" placeholder="Password" #passwordInput />
+        <button id="login" (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
+      </form>
     </div>
-    <button (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
+    <!-- login form end -->
   </div>
   <div *ngIf="passwordCorrect">
+    <div class="page-header">
+      <h1 class="glyphicon glyphicon-user">  Administration</h1>
+    </div>
     <ul class=" nav nav-tabs">
       <li (click)="toggleAccountSettings()" [ngClass]="{'active': this.accountSettings}"><a data-toggle="tab">Account Settings</a></li>
       <li (click)="toggleRacingGameSettings()" [ngClass]="{'active': this.racingGameSettings}"><a data-toggle="tab">Racing Game</a></li>
