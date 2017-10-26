@@ -1,0 +1,28 @@
+#cloud-container {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index:-1;
+    height: 100%;
+    width: 100%;
+    
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../setup_background.jpg');    
+}
+
+.spacing {
+    height: 100px;
+}
+
+.btn1 {
+    min-width: 150px;
+    font-size: 17pt;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
