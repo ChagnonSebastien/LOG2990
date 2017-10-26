@@ -11,17 +11,24 @@
             <button class="btn btn-default btn-lg" [ngClass]="{ 'btn-primary': type === 'multiplayer' }" (click)="setType('multiplayer')">Multiplayer</button>
           </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="type">
+        <div class="row mt-3 mb-3">
           <div class="col-md-12">
             <button class="btn btn-default btn-lg" [ngClass]="{ 'btn-primary': mode == 'classic'}" (click)="setMode('classic')">Classic</button>
             <button class="btn btn-default btn-lg" [ngClass]="{ 'btn-primary': mode == 'dynamic'}" (click)="setMode('dynamic')">Dynamic</button>
           </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="type">
+        <div class="row mt-3 mb-3">
           <div class="col-md-12">
             <button class="btn btn-default btn-lg" [ngClass]="{'btn-primary': level == 'easy'}" (click)="setLevel('easy')">Easy</button>
             <button class="btn btn-default btn-lg" [ngClass]="{'btn-primary': level == 'normal'}" (click)="setLevel('normal')">Normal</button>
             <button class="btn btn-default btn-lg" [ngClass]="{'btn-primary': level == 'hard'}" (click)="setLevel('hard')">Hard</button>
+          </div>
+        </div>
+        <div class="row mt-3 mb-3" *ngIf="type && mode && level">
+          <div class="col-md-12">
+            <button class="btn btn-success btn-lg">
+              Start game
+            </button>
           </div>
         </div>
       </div>
