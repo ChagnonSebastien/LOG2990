@@ -1,0 +1,94 @@
+#cloud-container{
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index:-1;
+}
+
+.spacing {
+    height: 100px;
+}
+
+.crossword-page {
+    height: 1500px;
+    background-image: url('./space_background.jpg');
+}
+
+.square {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.black {
+    background: black;
+}
+
+.empty {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid #007bff;
+}
+
+.found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: green;
+    color: white;
+}
+
+.selected {
+    border: 2px solid #007bff !important;
+}
+
+@media (max-width: 1200px) {
+    .square {
+        width: 40px;
+        height: 40px;
+    }
+
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid #007bff;
+    }
+
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
+}
+
+@media (max-width: 992px) {
+    .square {
+        width: 30px;
+        height: 30px;
+    }
+
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid #007bff;
+    }
+
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
+}

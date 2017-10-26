@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { CrosswordService } from './crossword.service';
-import { CrosswordGenerator } from './crossword';
+import { CrosswordGenerator } from './crossword-generator';
 
 describe('CrosswordChecker', () => {
     let crosswordGenerator: CrosswordGenerator;

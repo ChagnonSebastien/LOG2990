@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import {LexiconService} from '../services/lexicon.service';
+import {OldLexiconService} from '../services/lexicon.service';
 import {CrosswordGameInfoService} from '../services/crossword-game-info.service';
 import {CrosswordService} from '../services/crossword.service';
 import {MultiplayerService} from '../services/crossword-multiplayer.service';
@@ -334,7 +334,7 @@ export class CrosswordGameInterfaceComponent implements OnInit {
         return await this.game;
 
     }
-    constructor(private lexiconService: LexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
+    constructor(private lexiconService: OldLexiconService, private crosswordGameInfoService: CrosswordGameInfoService,
                 private crosswordService: CrosswordService, private multiplayerService: MultiplayerService ) {}
 
     public ngOnInit() {
