@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren, Output, EventEmitter } from '@angular/core';
 import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
@@ -12,6 +12,7 @@ import { Hint } from './hint';
     styleUrls: ['./crossword-game.component.css']
 })
 export class CrosswordGameComponent implements OnInit {
+    @Output() private endGameEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
     public crossword: CrosswordGame;
     public selectedWord: string;
     private hints: Array<Hint>;
@@ -41,6 +42,10 @@ export class CrosswordGameComponent implements OnInit {
                     });
             }
         });
+    }
+
+    public endGame() {
+        this.endGameEmitter.emit(true);
     }
 
     private disableEvent(event: any): void {
