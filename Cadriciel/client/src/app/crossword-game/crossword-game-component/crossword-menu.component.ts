@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
     styleUrls: ['./crossword-menu.component.css'],
 })
 export class CrosswordMenuComponent {
+    public gameInProgress: boolean;
     public type: string;
     public mode: string;
     public level: string;
@@ -16,6 +17,10 @@ export class CrosswordMenuComponent {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
+    }
+
+    public startGame(type: string, mode: string, level: string) {
+        this.gameInProgress = true;
     }
 
     public setType(type: string): void {
