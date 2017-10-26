@@ -10,7 +10,7 @@
   width: 15em;
 }
 
-.list-group {
+#track-list {
   max-height: 300px;
   overflow-y: scroll;
 }

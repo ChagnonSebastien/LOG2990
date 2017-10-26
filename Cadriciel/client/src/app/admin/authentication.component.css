@@ -1,5 +1,5 @@
 .nav-tabs>li.active>a {
-    background-color: #337AB7;
+    background-color: #0069d9;
     color: white;
 }
 
@@ -9,7 +9,6 @@
 
 #add-track {
     margin-top:40px;
-    margin-bottom: -20px;
 }
 
 .wrapper {	
@@ -18,7 +17,7 @@
     margin-bottom: 80px;
 }
 
-.form-signin {
+#form {
   max-width: 380px;
   padding: 15px 35px 45px;
   margin: 0 auto;
@@ -26,7 +25,7 @@
   border-radius: 5px;
 }
 
-.form-control {
+#form-input {
 	  position: relative;
       padding:10px;
       margin-top: 15px;
@@ -35,6 +34,10 @@
 
 #login {
     margin-top:15px;
+}
+
+#authentication {
+    margin-top:50px;
 }
 
 
