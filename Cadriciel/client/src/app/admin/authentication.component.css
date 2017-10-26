@@ -1,5 +1,5 @@
 .nav-tabs>li.active>a {
-    background-color: #337AB7;
+    background-color: #0069d9;
     color: white;
 }
 
@@ -9,7 +9,6 @@
 
 #add-track {
     margin-top:40px;
-    margin-bottom: -20px;
 }
 
 .wrapper {	
@@ -35,6 +34,10 @@
 
 #login {
     margin-top:15px;
+}
+
+#authentication {
+    margin-top:50px;
 }
 
 
