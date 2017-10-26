@@ -17,7 +17,7 @@
     margin-bottom: 80px;
 }
 
-.form-signin {
+#form {
   max-width: 380px;
   padding: 15px 35px 45px;
   margin: 0 auto;
@@ -25,7 +25,7 @@
   border-radius: 5px;
 }
 
-.form-control {
+#form-input {
 	  position: relative;
       padding:10px;
       margin-top: 15px;

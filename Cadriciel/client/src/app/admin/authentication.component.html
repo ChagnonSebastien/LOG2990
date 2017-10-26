@@ -2,9 +2,9 @@
   <div *ngIf="!passwordCorrect" class="form-inline">
     <!-- login form -->
     <div class="wrapper">
-      <form class="form-signin">
+      <form class="form-signin" id="form">
         <h4 class="form-signin-heading">Admin Login</h4>
-        <input type="password" class="form-control" placeholder="Password" #passwordInput />
+        <input type="password" class="form-control" id="form-input" placeholder="Password" #passwordInput />
         <button id="login" (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
       </form>
     </div>
