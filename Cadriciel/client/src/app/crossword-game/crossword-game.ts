@@ -4,6 +4,7 @@ import { SquareStatus } from './square-status';
 export class CrosswordGame {
     // public attributes
 
+    public timer: number;
     public wordsWithIndex: Array<Word>;
     public wordMap: Map<string, Word>;
 
@@ -23,9 +24,15 @@ export class CrosswordGame {
         this.wordMap = this.initializeWordMap();
         this.gridWords = this.initializeGridWords();
         this.status = this.initializeSquareStatus();
+        this.timer = 60;
+        setInterval(this.decrementTimer.bind(this), 1000);
     }
 
     // public methods
+
+    public getTimer(): number {
+        return this.timer;
+    }
 
     public getStatus(): SquareStatus[][] {
         return this.status;
@@ -72,6 +79,12 @@ export class CrosswordGame {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
             callback(i, j);
+        }
+    }
+
+    private decrementTimer() {
+        if (this.timer > 0) {
+            this.timer--;
         }
     }
 
