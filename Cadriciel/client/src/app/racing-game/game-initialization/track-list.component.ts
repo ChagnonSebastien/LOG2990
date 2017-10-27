@@ -34,18 +34,6 @@ export class TrackListComponent implements OnInit {
         this.selectedTrack = track;
     }
 
-    public deleteTrack(name: string) {
-        const tracks = this.tracks;
-        this.trackService.deleteTrack(name).subscribe(data => {
-            if (data.n === 1) {
-                for (let i = 0; i < tracks.length; i++) {
-                    if (tracks[i].name === name) {
-                        tracks.splice(i, 1);
-                    }
-                }
-            }
-        });
-    }
 
     public getTracks() {
         return this.http.get('http://localhost:3000/api/tracks').map(res => res.json());
