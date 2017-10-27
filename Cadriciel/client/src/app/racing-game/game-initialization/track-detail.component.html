@@ -13,7 +13,9 @@
     <label>Current type: </label>
     <label class="detailColor">{{track.type}}</label>
     <br>
-
+    <label>Number of times played: </label>
+    <label class="detailColor">{{track.numberOfTimesPlayed}}</label>
+    <br>
     <label>Best times:</label>
     <label>
       <ul id="ulOneLine">
@@ -25,6 +27,7 @@
   </div>
 
   <div *ngIf="userType === 'administrator'">
-      <button (click)="save()">Edit</button>
+    <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
+    <button (click)="delete()" [routerLink]="['.']">Delete</button>
   </div>
 </div>
