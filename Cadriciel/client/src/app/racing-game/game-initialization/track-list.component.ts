@@ -8,13 +8,13 @@ import { User } from './user';
     selector: 'app-track-list',
     templateUrl: './track-list.component.html',
     styleUrls: ['./track-list.component.css'],
-    providers: [TrackService]
+    providers: []
 })
 export class TrackListComponent implements OnInit {
     @Input() public userType: User;
     public tracks: Track[];
     public selectedTrack: Track;
-    constructor(private trackService: TrackService, private http: Http) { }
+    constructor( private http: Http) { }
 
     public ngOnInit() {
         this.getTracks().subscribe(tracks => this.tracks = tracks.map((track) => {

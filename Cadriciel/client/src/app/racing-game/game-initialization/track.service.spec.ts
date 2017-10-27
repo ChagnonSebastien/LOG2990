@@ -5,7 +5,6 @@ import { Response, ResponseOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
 import { Track } from '../track';
-import { GameInitializationModule } from './game-initialization.module';
 import { TrackService } from './track.service';
 
 describe('TrackService', () => {
@@ -30,7 +29,7 @@ describe('TrackService', () => {
   //  }));
 
     it('should not deleted track', fakeAsync(() => {
-        track = new Track('name', 'dest', 'easy', [],[], [], [] );
+        track = new Track('name', 'dest', 'easy', [], [], [], [] );
         let result: String;
         this.trackService.deleteTrack(track).then((forDelete: String) => result = forDelete);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
