@@ -28,5 +28,6 @@
 
   <div *ngIf="userType === 'administrator'">
     <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
+    <button (click)="delete()" [routerLink]="['.']">Delete</button>
   </div>
 </div>
