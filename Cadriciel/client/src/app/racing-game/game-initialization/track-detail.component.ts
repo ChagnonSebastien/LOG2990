@@ -28,7 +28,6 @@ export class TrackDetailComponent implements OnInit {
 
     constructor(
         private trackService: TrackService,
-        private http: Http
     ) { }
 
     public ngOnInit() {
