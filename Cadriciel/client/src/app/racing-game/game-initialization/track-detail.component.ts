@@ -16,34 +16,12 @@ export class TrackDetailComponent implements OnInit {
     @Input() public userType: User;
     @Input() public track: Track;
 
-    public changeDescriptionDB() {
-        this.trackService.changeTrackDescription(this.track.name, this.track.description).subscribe(
-        );
-    }
-
-    public changeTypeDB() {
-        this.trackService.changeTrackType(this.track.name, this.track.type).subscribe(
-        );
-    }
-
-    public changeNameDB() {
-        this.trackService.changeTrackName(this.track.name, this.track.name).subscribe(
-        );
-    }
-
-    public save() {
-        this.changeNameDB();
-        this.changeDescriptionDB();
-        this.changeTypeDB();
-    }
-
-    public delete(): Promise<string> {
-        const path = 'track';
-        return this.http
-            .delete(`${apiUrl}/${path}/${this.track.name}`
-        ).toPromise()
-        .then(response => response.json().data)
-        .catch(this.handleError);
+    public async delete(): Promise<boolean> {
+        let response = false;
+        await this.trackService.deleteTrack(this.track).then(res => {
+            response = (res === 'success');
+        });
+        return response;
     }
 
     private handleError(error: any): Promise<any> {
