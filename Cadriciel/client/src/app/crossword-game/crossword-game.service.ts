@@ -26,33 +26,25 @@ export class CrosswordGameService {
         private hintsService: CrosswordHintsService
     ) { }
 
-    /*constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
+    // public methods
+
+    public async newGame(level: string) {
+        await this.crosswordService.getCrossword(level).then((crossword) => {
+            this.constructGame(crossword.crossword, crossword.wordsWithIndex, crossword.listOfWords);
+        });
+    }
+
+    private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.size = grid.length;
         this.grid = grid;
         this.wordsWithIndex = wordsWithIndex;
+        this.hintsService.newGame(this.wordsWithIndex);
         this.foundWords = new Set<string>();
         this.wordMap = this.initializeWordMap();
         this.gridWords = this.initializeGridWords();
         this.status = this.initializeSquareStatus();
         this.timer = 60;
         setInterval(this.decrementTimer.bind(this), 1000);
-    }*/
-
-    // public methods
-
-    public newGame(level: string) {
-        this.crosswordService.getCrossword(level).then((crossword) => {
-            this.size = crossword.crossword.length;
-            this.grid = crossword.crossword;
-            this.wordsWithIndex = crossword.wordsWithIndex;
-            this.hintsService.newGame(this.wordsWithIndex);
-            this.foundWords = new Set<string>();
-            this.wordMap = this.initializeWordMap();
-            this.gridWords = this.initializeGridWords();
-            this.status = this.initializeSquareStatus();
-            this.timer = 60;
-            setInterval(this.decrementTimer.bind(this), 1000);
-        });
     }
 
     public getTimer(): number {

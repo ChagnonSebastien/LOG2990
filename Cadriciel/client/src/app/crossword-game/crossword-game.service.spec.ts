@@ -1,4 +1,11 @@
+import { TestBed } from '@angular/core/testing';
+
+import { HttpModule } from '@angular/http';
+
+import { CrosswordService } from './crossword.service';
 import { CrosswordGameService } from './crossword-game.service';
+import { CrosswordHintsService } from './crossword-hints.service';
+import { LexiconService } from './lexicon.service';
 
 const grid = [
     ['a', 'p', 'p', 'e', 'a', 'l', '#', 'r', 'a', 't'],
@@ -43,38 +50,74 @@ const listOfWords = [
     'staff'
 ];
 
+class MockCrosswordService extends CrosswordService {
+    public getCrossword(level: string): Promise<any> {
+        return Promise.resolve({
+            crossword: grid,
+            wordsWithIndex: wordsWithIndex,
+            listOfWords: listOfWords
+        });
+    }
+}
+
+class MockLexiconService extends LexiconService {
+    public getWordDefinition(word: string): Promise<any> {
+        return Promise.resolve('');
+    }
+}
+
 let crossword: CrosswordGameService;
 
 describe('#CrosswordGame', () => {
+
     beforeEach(() => {
-        crossword = new CrosswordGameService(grid, wordsWithIndex, listOfWords);
+        TestBed.configureTestingModule({
+            imports: [HttpModule],
+            providers: [
+                CrosswordGameService,
+                CrosswordHintsService,
+                { provide: LexiconService, useClass: MockLexiconService },
+                { provide: CrosswordService, useClass: MockCrosswordService }
+            ]
+        });
+        crossword = TestBed.get(CrosswordGameService);
     });
 
     it('should construct', () => {
-        expect(crossword).toBeTruthy();
+        expect(crossword).toBeDefined();
     });
 
-    it('should identify empty squares', () => {
+    it('should initialize the timer', async () => {
+        await crossword.newGame('easy');
+        expect(crossword.getTimer()).toBeGreaterThan(0);
+    });
+
+    it('should identify empty squares', async () => {
+        await crossword.newGame('easy');
         expect(crossword.getStatus()[0][0].empty).toBeTruthy();
         expect(crossword.getStatus()[1][0].empty).toBeFalsy();
     });
 
-    it('should identify black squares as # or " "', () => {
+    it('should identify black squares as # or " "', async () => {
+        await crossword.newGame('easy');
         expect(crossword.getStatus()[0][0].black).toBeFalsy();
         expect(crossword.getStatus()[1][0].black).toBeTruthy();
         expect(crossword.getStatus()[1][1].black).toBeTruthy();
     });
 
-    it('should have no initial input on empty squares', () => {
+    it('should have no initial input on empty squares', async () => {
+        await crossword.newGame('easy');
         expect(crossword.getStatus()[0][0].empty).toBeTruthy();
         expect(crossword.getStatus()[0][0].input).toEqual('');
     });
 
-    it('should initialize wordsWithIndex', () => {
+    it('should initialize wordsWithIndex', async () => {
+        await crossword.newGame('easy');
         expect(crossword.wordsWithIndex).toEqual(wordsWithIndex);
     });
 
-    it('should initialize wordMap with all words of the crossword', () => {
+    it('should initialize wordMap with all words of the crossword', async () => {
+        await crossword.newGame('easy');
         expect(crossword.wordMap.size).toEqual(wordsWithIndex.length);
         for (const word of listOfWords) {
             expect(crossword.wordMap.has(word))
@@ -82,7 +125,8 @@ describe('#CrosswordGame', () => {
         }
     });
 
-    it('nothing should be selected at initialization', () => {
+    it('nothing should be selected at initialization', async () => {
+        await crossword.newGame('easy');
         for (const row of crossword.getStatus()) {
             for (const square of row) {
                 expect(square.selected).toBeFalsy();
@@ -93,19 +137,22 @@ describe('#CrosswordGame', () => {
     });
 
     describe('insertLetter()', () => {
-        it('should insert a letter when the square is empty', () => {
+        it('should insert a letter when the square is empty', async () => {
+            await crossword.newGame('easy');
             expect(crossword.getStatus()[0][0].empty).toBeTruthy();
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
             expect(crossword.getStatus()[0][0].input).toEqual('a');
         });
 
-        it('should not insert a letter when the square is black', () => {
+        it('should not insert a letter when the square is black', async () => {
+            await crossword.newGame('easy');
             expect(crossword.getStatus()[1][0].black).toBeTruthy();
             crossword.insertLetter('A'.charCodeAt(0), 1, 0);
             expect(crossword.getStatus()[1][0].input).toEqual('');
         });
 
-        it('should insert the word APPEAL, and it should be marked as correct when the L is inserted', () => {
+        it('should insert the word APPEAL, and it should be marked as correct when the L is inserted', async () => {
+            await crossword.newGame('easy');
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
             for (let i = 0; i < 5; i++) {
                 expect(crossword.getStatus()[0][i].found).toBeFalsy();
@@ -132,7 +179,8 @@ describe('#CrosswordGame', () => {
             }
         });
 
-        it('should prevent inserting letter if the word is found', () => {
+        it('should prevent inserting letter if the word is found', async () => {
+            await crossword.newGame('easy');
             // Insert APPEAL
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
             crossword.insertLetter('P'.charCodeAt(0), 0, 1);
@@ -148,7 +196,8 @@ describe('#CrosswordGame', () => {
             }
         });
 
-        it('should allow overwriting letter if the word is not found', () => {
+        it('should allow overwriting letter if the word is not found', async () => {
+            await crossword.newGame('easy');
             // Insert AAAAA
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('A'.charCodeAt(0), 0, i);
@@ -163,7 +212,8 @@ describe('#CrosswordGame', () => {
     });
 
     describe('eraseLetter()', () => {
-        it('should not erase a letter if the word is found', () => {
+        it('should not erase a letter if the word is found', async () => {
+            await crossword.newGame('easy');
             // Insert APPEAL
             crossword.insertLetter('A'.charCodeAt(0), 0, 0);
             crossword.insertLetter('P'.charCodeAt(0), 0, 1);
@@ -179,7 +229,8 @@ describe('#CrosswordGame', () => {
             }
         });
 
-        it('should erase a letter if the word is not found', () => {
+        it('should erase a letter if the word is not found', async () => {
+            await crossword.newGame('easy');
             // Insert AAAAA
             for (let i = 0; i < 5; i++) {
                 crossword.insertLetter('A'.charCodeAt(0), 0, i);
@@ -195,7 +246,8 @@ describe('#CrosswordGame', () => {
     });
 
     describe('setSelectedWord()', () => {
-        it('should set APPEAL as selected', () => {
+        it('should set APPEAL as selected', async () => {
+            await crossword.newGame('easy');
             // unselected
             for (let i = 0; i < 5; i++) {
                 expect(crossword.getStatus()[0][i].selected).toBeFalsy();
@@ -209,7 +261,8 @@ describe('#CrosswordGame', () => {
     });
 
     describe('clearSelectedWord()', () => {
-        it('should clear the previously selected word', () => {
+        it('should clear the previously selected word', async () => {
+            await crossword.newGame('easy');
             crossword.setSelectedWord('appeal');
             // selected
             for (let i = 0; i < 5; i++) {

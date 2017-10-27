@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { CrosswordGameInterfaceComponent } from '../crossword-game-interface/crossword-game-interface.component';
 import { CrosswordMenuComponent } from './crossword-menu.component';
 import { CrosswordGameComponent } from '../crossword-game.component';
@@ -23,7 +24,8 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
     imports: [
         CommonModule,
         FormsModule,
-        CrosswordGameRoutingModule
+        CrosswordGameRoutingModule,
+        HttpModule
     ],
     declarations: [
         CrosswordMenuComponent,
