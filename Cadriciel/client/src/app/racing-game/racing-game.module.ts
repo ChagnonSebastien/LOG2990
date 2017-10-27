@@ -1,3 +1,4 @@
+import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,6 +18,7 @@ import { TrackService } from './game-initialization/track.service';
         BrowserModule,
         HttpModule,
         GameInitializationModule,
+        RacingGameRoutingModule
     ],
     declarations: [
         RacingGameComponent,

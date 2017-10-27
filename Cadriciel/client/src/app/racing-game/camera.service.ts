@@ -15,9 +15,9 @@ export class CameraService {
 
     private farClippingPane = 1000;
 
-    private perspectiveCamera;
+    public perspectiveCamera;
 
-    private orthographicCamera;
+    public orthographicCamera;
 
     public container: HTMLElement;
 
@@ -27,6 +27,8 @@ export class CameraService {
 
     public offsetZ = 5;
 
+    public viewSize = 100;
+
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
         this.perspectiveCamera = this.setPerspectiveCamera(container);
@@ -35,12 +37,14 @@ export class CameraService {
     }
 
     public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
+        const aspectRatio = this.getAspectRatio(container.clientWidth,
+            container.clientHeight);
         const camera = new THREE.OrthographicCamera(
-            - container.clientWidth / 2,
-            container.clientWidth / 2,
-            container.clientHeight / 2,
-            - container.clientHeight / 2,
-            100,
+            - aspectRatio * this.viewSize / 2,
+            aspectRatio * this.viewSize / 2,
+            aspectRatio * this.viewSize / 2,
+            - aspectRatio * this.viewSize / 2,
+            -1000,
             1000
         );
         return camera;

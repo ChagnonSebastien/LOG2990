@@ -1,5 +1,5 @@
 
-<div class="track-detail" *ngIf="track">
+<div class="track-detail">
   <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
     <label>Current name: </label>
@@ -13,7 +13,13 @@
     <label>Current type: </label>
     <label class="detailColor">{{track.type}}</label>
     <br>
-
+    <label>Rating: </label>
+    <label *ngIf="track.rating === -1" class="detailColor">N/A</label>
+    <label *ngIf="track.rating !== -1" class="detailColor">{{track.rating}}</label>
+    <br>
+    <label>Number of times played: </label>
+    <label class="detailColor">{{track.numberOfTimesPlayed}}</label>
+    <br>
     <label>Best times:</label>
     <label>
       <ul id="ulOneLine">
@@ -23,8 +29,6 @@
       </ul>
     </label> 
   </div>
-
-  <div *ngIf="userType === 'administrator'">
-      <button (click)="save()">Edit</button>
-  </div>
+    <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
+    <button (click)="delete()" [routerLink]="['.']">Delete</button>
 </div>

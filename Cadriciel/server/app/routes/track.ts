@@ -61,13 +61,20 @@ module Route {
                         trackIntersections: req.body.trackIntersections,
                         puddles: req.body.puddles,
                         potholes: req.body.potholes,
-                        boosters: req.body.boosters
+                        boosters: req.body.boosters,
+                        rating: req.body.rating,
+                        bestTimes: req.body.bestTimes,
+                        numberOfTimesPlayed: req.body.numberOfTimesPlayed
                     });
 
                     db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert : true });
                     res.send({ 'data': 'success' });
                 }
             });
+
+        }
+
+        public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
 
         }
 

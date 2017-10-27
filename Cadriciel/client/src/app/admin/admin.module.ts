@@ -1,3 +1,6 @@
+import { AdminViewTracksComponent } from './admin-view-tracks.component';
+import { AdminViewSettingsComponent } from './admin-view-settings.component';
+import { AdminViewComponent } from './admin-view.component';
 import { ObstacleService } from './../racing-game/draw-track/obstacle.service';
 import { RenderService } from './../racing-game/draw-track/render.service';
 import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
@@ -13,7 +16,6 @@ import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.compone
 import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
-import { AuthenticationComponent } from './authentication.component';
 import { TrackService } from '../racing-game/game-initialization/track.service';
 
 /* Feature modules */
@@ -32,11 +34,12 @@ import { AdminRoutingModule } from './admin-routing.module';
     declarations: [
         AdminComponent,
         DrawTrackComponent,
-        AuthenticationComponent,
+        AdminViewComponent,
+        AdminViewSettingsComponent,
+        AdminViewTracksComponent
     ],
     exports: [
-        AdminComponent,
-        AuthenticationComponent,
+        AdminComponent
     ],
     providers: [
         AuthenticationService,

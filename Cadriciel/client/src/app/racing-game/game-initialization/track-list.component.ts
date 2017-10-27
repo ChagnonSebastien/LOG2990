@@ -1,6 +1,5 @@
 import { Track } from './../track';
 import { Component, OnInit, Input } from '@angular/core';
-import { TrackService } from './track.service';
 import { Http, Headers } from '@angular/http';
 import { User } from './user';
 
@@ -8,13 +7,14 @@ import { User } from './user';
     selector: 'app-track-list',
     templateUrl: './track-list.component.html',
     styleUrls: ['./track-list.component.css'],
-    providers: [TrackService]
+    providers: []
 })
 export class TrackListComponent implements OnInit {
     @Input() public userType: User;
     public tracks: Track[];
-    public selectedTrack: Track;
-    constructor(private trackService: TrackService, private http: Http) { }
+    public selectedTrack = '';
+
+    constructor(private http: Http) { }
 
     public ngOnInit() {
         this.getTracks().subscribe(tracks => this.tracks = tracks.map((track) => {
@@ -30,21 +30,9 @@ export class TrackListComponent implements OnInit {
         }));
     }
 
-    public onSelect(track: Track): void {
-        this.selectedTrack = track;
-    }
 
-    public deleteTrack(name: string) {
-        const tracks = this.tracks;
-        this.trackService.deleteTrack(name).subscribe(data => {
-            if (data.n === 1) {
-                for (let i = 0; i < tracks.length; i++) {
-                    if (tracks[i].name === name) {
-                        tracks.splice(i, 1);
-                    }
-                }
-            }
-        });
+    public select(track) {
+        this.selectedTrack = track.name;
     }
 
     public getTracks() {

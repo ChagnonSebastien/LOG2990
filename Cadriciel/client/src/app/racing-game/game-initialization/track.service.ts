@@ -1,53 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {Track} from '../track';
 
+const apiUrl = 'http://localhost:3000/api';
 @Injectable()
 export class TrackService {
     constructor(private http: Http) { }
 
-    public deleteTrack(id) {
-        return this.http.delete('http://localhost:3000/api/track/' + id).map(res => res.json());
+    public deleteTrack(track: Track): Promise<string> {
+        const path = 'track';
+        return this.http
+            .delete(`${apiUrl}/${path}/${track.name}`
+        ).toPromise()
+        .then(response => response.json().data)
+        .catch(this.handleError);
     }
 
-    public changeTrackType(id: String, newType: String) {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        const information = {
-            'id': id,
-            'newType': newType
-        };
-
-        return this.http.put('http://localhost:3000/api/tracksTypeChange', information, { headers: headers }).map(res => res.json());
-    }
-
-
-
-    public changeTrackDescription(id: String, newDesc: String) {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        const information = {
-            'id': id,
-            'newDesc': newDesc
-        };
-
-        return this.http.put('http://localhost:3000/api/tracksDescChange', information, { headers: headers }).map(res => res.json());
-    }
-
-
-
-    public changeTrackName(id: String, newName: String) {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        const information = {
-            'id': id,
-            'newName': newName
-        };
-
-        return this.http.put('http://localhost:3000/api/tracksNameChange', information, { headers: headers }).map(res => res.json());
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error); // for demo purposes only
+        return Promise.reject(error.message || error);
     }
 }
 
