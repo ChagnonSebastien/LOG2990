@@ -74,6 +74,10 @@ module Route {
 
         }
 
+        public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
+
+        }
+
     }
 }
 
