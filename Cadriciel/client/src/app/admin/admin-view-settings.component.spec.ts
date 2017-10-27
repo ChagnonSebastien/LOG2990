@@ -1,6 +1,8 @@
+import { AdminViewTracksComponent } from './admin-view-tracks.component';
+import { AdminViewSettingsComponent } from './admin-view-settings.component';
+import { AdminViewComponent } from './admin-view.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthenticationComponent } from './authentication.component';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { GameInitializationModule } from '../racing-game/game-initialization/game-initialization.module';
@@ -32,15 +34,15 @@ class MockAuthenticationService {
     }
 }
 
-describe('AuthenticationComponent', () => {
-    let component: AuthenticationComponent;
-    let fixture: ComponentFixture<AuthenticationComponent>;
+describe('AdminViewSettingsComponent', () => {
+    let component: AdminViewSettingsComponent;
+    let fixture: ComponentFixture<AdminViewSettingsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AuthenticationComponent, AdminComponent, DrawTrackComponent],
+            declarations: [AdminViewSettingsComponent, AdminComponent, DrawTrackComponent, AdminViewComponent, AdminViewTracksComponent],
             imports: [HttpModule, AdminRoutingModule, FormsModule, GameInitializationModule]
-        }).overrideComponent(AuthenticationComponent, {
+        }).overrideComponent(AdminViewSettingsComponent, {
             set: {
                 providers: [
                     { provide: AuthenticationService, useClass: MockAuthenticationService }
@@ -50,25 +52,13 @@ describe('AuthenticationComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AuthenticationComponent);
+        fixture = TestBed.createComponent(AdminViewSettingsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
     it('should be created', () => {
         expect(component).toBeTruthy();
-    });
-
-    it('should login when the password is walleandtomato', () => {
-        component.login('walleandtomato').then(res => {
-            expect(res).toBe(true);
-        });
-    });
-
-    it('should not login when the password is not walleandtomato', () => {
-        component.login('blablabla').then(res => {
-            expect(res).toBe(false);
-        });
     });
 
     it('should change the password when old password is walleandtomato', () => {

@@ -12,7 +12,8 @@ import { User } from './user';
 export class TrackListComponent implements OnInit {
     @Input() public userType: User;
     public tracks: Track[];
-    public selectedTrack: Track;
+    public selectedTrack = '';
+
     constructor(private http: Http) { }
 
     public ngOnInit() {
@@ -29,10 +30,10 @@ export class TrackListComponent implements OnInit {
         }));
     }
 
-    public onSelect(track: Track): void {
-        this.selectedTrack = track;
-    }
 
+    public select(track) {
+        this.selectedTrack = track.name;
+    }
 
     public getTracks() {
         return this.http.get('http://localhost:3000/api/tracks').map(res => res.json());
