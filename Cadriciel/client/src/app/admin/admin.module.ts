@@ -16,7 +16,6 @@ import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.compone
 import { DrawTrackService } from '../racing-game/draw-track/draw-track.service';
 
 import { AuthenticationService } from './authentication.service';
-import { AuthenticationComponent } from './authentication.component';
 import { TrackService } from '../racing-game/game-initialization/track.service';
 
 /* Feature modules */
@@ -35,14 +34,12 @@ import { AdminRoutingModule } from './admin-routing.module';
     declarations: [
         AdminComponent,
         DrawTrackComponent,
-        AuthenticationComponent,
         AdminViewComponent,
         AdminViewSettingsComponent,
         AdminViewTracksComponent
     ],
     exports: [
-        AdminComponent,
-        AuthenticationComponent,
+        AdminComponent
     ],
     providers: [
         AuthenticationService,

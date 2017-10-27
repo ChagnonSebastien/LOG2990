@@ -11,7 +11,6 @@ import { User } from '../racing-game/game-initialization/user';
 export class AdminComponent implements OnInit {
     @Input() public userType: User;
     public passwordCorrect: boolean;
-    public passwordChanged: boolean;
     public accountSettings: boolean;
     public racingGameSettings: boolean;
 
@@ -19,9 +18,6 @@ export class AdminComponent implements OnInit {
 
     public ngOnInit(): void {
         this.passwordCorrect = false;
-        this.passwordChanged = false;
-        this.accountSettings = true;
-        this.racingGameSettings = false;
     }
 
     public async login(passwordInput: string): Promise<boolean> {
@@ -29,22 +25,5 @@ export class AdminComponent implements OnInit {
             this.passwordCorrect = (res === 'authenticated');
         });
         return await this.passwordCorrect;
-    }
-
-    public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
-        await this.authenticationService.changePassword(oldPassword, newPassword).then(res => {
-            this.passwordChanged = (res === 'success');
-        });
-        return await this.passwordChanged;
-    }
-
-    public toggleAccountSettings(): void {
-        this.racingGameSettings = false;
-        this.accountSettings = true;
-    }
-
-    public toggleRacingGameSettings(): void {
-        this.racingGameSettings = true;
-        this.accountSettings = false;
     }
 }

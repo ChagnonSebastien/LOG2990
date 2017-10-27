@@ -1,6 +1,5 @@
+import { AuthenticationService } from './authentication.service';
 import { Component, OnInit } from '@angular/core';
-
-import { User } from '../racing-game/game-initialization/user';
 
 @Component({
     selector: 'app-admin-view-settings-component',
@@ -8,11 +7,18 @@ import { User } from '../racing-game/game-initialization/user';
     styleUrls: ['./admin-view-settings.component.css']
 })
 export class AdminViewSettingsComponent implements OnInit {
-    public userType: User = User.Administrator;
+    public passwordChanged: boolean;
 
-    constructor() { }
+    constructor(private authenticationService: AuthenticationService) { }
 
     public ngOnInit(): void {
+        this.passwordChanged = false;
+    }
 
+    public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
+        await this.authenticationService.changePassword(oldPassword, newPassword).then(res => {
+            this.passwordChanged = (res === 'success');
+        });
+        return await this.passwordChanged;
     }
 }

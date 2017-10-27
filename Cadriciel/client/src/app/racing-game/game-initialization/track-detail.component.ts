@@ -1,9 +1,8 @@
 import { Track } from './../track';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TrackService } from './track.service';
-import { User } from './user';
 
 const apiUrl = 'http://localhost:3000/api';
 

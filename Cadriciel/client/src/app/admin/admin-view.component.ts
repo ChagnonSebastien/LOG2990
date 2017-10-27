@@ -1,4 +1,3 @@
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { User } from '../racing-game/game-initialization/user';
@@ -12,7 +11,7 @@ export class AdminViewComponent implements OnInit {
     public userType: User = User.Administrator;
     public selectedTab = '';
 
-    constructor(private route: ActivatedRoute) { }
+    constructor() { }
 
     public ngOnInit(): void {
     }
