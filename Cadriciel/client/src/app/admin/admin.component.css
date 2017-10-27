@@ -2,19 +2,6 @@
     align-content: center;
 }
 
-.nav-tabs>li.active>a {
-    background-color: #0069d9;
-    color: white;
-}
-
-.nav-tabs>li{
-    font-weight: bold;
-}
-
-#add-track {
-    margin-top:40px;
-}
-
 .wrapper {	
     margin-left:35%;
 	margin-top: 80px;

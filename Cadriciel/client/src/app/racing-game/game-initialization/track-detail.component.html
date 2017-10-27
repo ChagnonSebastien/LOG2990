@@ -1,5 +1,5 @@
 
-<div class="track-detail" *ngIf="track">
+<div class="track-detail">
   <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
     <label>Current name: </label>
@@ -26,8 +26,6 @@
     </label> 
   </div>
 
-  <div *ngIf="userType === 'administrator'">
     <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
     <button (click)="delete()" [routerLink]="['.']">Delete</button>
-  </div>
 </div>

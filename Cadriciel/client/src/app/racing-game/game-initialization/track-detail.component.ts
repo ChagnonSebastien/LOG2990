@@ -1,6 +1,7 @@
+import { Track } from './../track';
+import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import { Component, OnInit, Input } from '@angular/core';
-import { Track } from '../track';
 import { TrackService } from './track.service';
 import { User } from './user';
 
@@ -13,8 +14,7 @@ const apiUrl = 'http://localhost:3000/api';
     providers: [TrackService]
 })
 export class TrackDetailComponent implements OnInit {
-    @Input() public userType: User;
-    @Input() public track: Track;
+    public track: Track = new Track('', '', '', [], [], [], []);
 
     public changeDescriptionDB() {
         this.trackService.changeTrackDescription(this.track.name, this.track.description).subscribe(
@@ -52,16 +52,49 @@ export class TrackDetailComponent implements OnInit {
         return Promise.reject(error.message || error);
     }
 
-    public setTrack(track: Track) {
-        this.track = track;
-    }
-
     constructor(
         private trackService: TrackService,
-        private http: Http
+        private http: Http,
+        private route: ActivatedRoute
     ) { }
 
     public ngOnInit() {
+        const trackName = this.route.snapshot.params['name'];
+        const path = 'track';
+
+        this.http.get(`${apiUrl}/${path}/${trackName}`).toPromise()
+        .then(response => {
+            const track = response.json();
+            this.track = new Track(
+                trackName,
+                track.description,
+                track.type,
+                track.trackIntersections,
+                track.puddles,
+                track.potholes,
+                track.boosters
+            );
+        })
+        .catch(this.handleError);
+
+        this.route.params.subscribe(
+            (params) => {
+                this.http.get(`${apiUrl}/${path}/${params.name}`).toPromise()
+                .then(response => {
+                    const track = response.json();
+                    this.track = new Track(
+                        params.name,
+                        track.description,
+                        track.type,
+                        track.trackIntersections,
+                        track.puddles,
+                        track.potholes,
+                        track.boosters
+                    );
+                })
+                .catch(this.handleError);
+            }
+        );
     }
 
 }

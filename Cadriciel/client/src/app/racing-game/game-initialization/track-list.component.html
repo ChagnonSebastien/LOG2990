@@ -1,16 +1,7 @@
 <!--<h1><img class="brand-logo"  src="../../../assets/Logo_Racing.PNG"></h1>-->
 <h2>Track List</h2>
-<div class="row">
-  <div class="col col-md-4">
-    <ul class="tracks" class="list-group" id="track-list">
-      <li *ngFor="let track of tracks" [class.selected]="track === selectedTrack" (click)="onSelect(track)" class="list-group-item">
-        <span class="badge"></span> {{track.name}}
-      </li>
-    </ul>
-  </div>
-  <div class="col">
-    <div *ngIf="selectedTrack">
-      <app-track-detail [track]="selectedTrack" [userType]="userType"></app-track-detail>
-    </div>
-  </div>
-</div>
+<ul class="tracks" class="list-group" id="track-list">
+  <li *ngFor="let track of tracks" [routerLink]="['./', track.name]" (click)="select(track)" [class.selected]="track.name === selectedTrack" class="list-group-item">
+    <span class="badge"></span> {{track.name}}
+  </li>
+</ul>
