@@ -1,4 +1,4 @@
-import { CrosswordGameService } from './crossword-game';
+import { CrosswordGameService } from './crossword-game.service';
 
 const grid = [
     ['a', 'p', 'p', 'e', 'a', 'l', '#', 'r', 'a', 't'],

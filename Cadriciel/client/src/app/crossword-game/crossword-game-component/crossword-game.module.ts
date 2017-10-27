@@ -12,7 +12,7 @@ import { OldLexiconService } from '../services/lexicon.service';
 
 import { LexiconService } from '../lexicon.service';
 import { CrosswordService } from '../crossword.service';
-import { CrosswordGameService } from '../crossword-game';
+import { CrosswordGameService } from '../crossword-game.service';
 import { CrosswordHintsService } from '../crossword-hints.service';
 import { KeyboardService } from '../keyboard.service';
 import { CrosswordGridService } from '../crossword-grid.service';

@@ -3,7 +3,7 @@ import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
 
-import { CrosswordGameService } from './crossword-game';
+import { CrosswordGameService } from './crossword-game.service';
 import { Hint } from './hint';
 
 @Component({
