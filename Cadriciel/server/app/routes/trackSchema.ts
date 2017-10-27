@@ -28,6 +28,15 @@ const trackSchema = new mongoose.Schema({
     },
     boosters: {
         type: [{ segment: Number, distance: Number, offset: Number }]
+    },
+    rating: {
+        type: Number
+    },
+    bestTimes: {
+        type: [Number]
+    },
+    numberOfTimesPlayed: {
+        type: Number
     }
 
 });
