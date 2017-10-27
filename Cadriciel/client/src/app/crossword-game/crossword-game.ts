@@ -4,7 +4,7 @@ import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints.service';
 
 import { Word } from '../../../../commun/word';
-import { SquareStatus } from './square-status';
+import { CrosswordSquare } from './square-status';
 
 @Injectable()
 export class CrosswordGameService {
@@ -19,7 +19,7 @@ export class CrosswordGameService {
     private grid: string[][];
     private foundWords: Set<string>;
     private gridWords: Array<string>[][];
-    private status: SquareStatus[][];
+    private status: CrosswordSquare[][];
 
     constructor(
         private crosswordService: CrosswordService,
@@ -59,7 +59,7 @@ export class CrosswordGameService {
         return this.timer;
     }
 
-    public getStatus(): SquareStatus[][] {
+    public getStatus(): CrosswordSquare[][] {
         return this.status;
     }
 
@@ -150,10 +150,10 @@ export class CrosswordGameService {
     }
 
     // Status of the word
-    private initializeSquareStatus(): SquareStatus[][] {
+    private initializeSquareStatus(): CrosswordSquare[][] {
         return this.grid.map((row) => {
             return row.map((square) => {
-                return new SquareStatus(square);
+                return new CrosswordSquare(square);
             });
         });
     }
