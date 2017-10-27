@@ -1,10 +1,8 @@
-import { Http } from '@angular/http';
 import { Component, OnInit, Input } from '@angular/core';
 import { Track } from '../track';
 import { TrackService } from './track.service';
 import { User } from './user';
 
-const apiUrl = 'http://localhost:3000/api';
 
 @Component({
     selector: 'app-track-detail',
@@ -22,11 +20,6 @@ export class TrackDetailComponent implements OnInit {
             response = (res === 'success');
         });
         return response;
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
     }
 
     public setTrack(track: Track) {
