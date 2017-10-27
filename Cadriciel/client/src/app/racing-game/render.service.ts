@@ -22,9 +22,7 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
-    public fov;
-
-    public zoom = 1.0;
+    public view;
 
     public inc = -0.01;
 
@@ -92,9 +90,9 @@ export class RenderService {
         // 107 corresponding to '+' in ASCII
         // 109 corresponding to '-' in ASCII
         if (event.keyCode === 107) {
-            this.zoom += this.inc;
+            this.view += this.inc;
         } else if (event.keyCode === 109) {
-            this.zoom -= this.inc;
+            this.view -= this.inc;
         }
     }
 
@@ -112,14 +110,14 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.fov = this.camera.fov;
+        this.view = this.camera.zoom;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
-        this.camera.fov = this.fov * this.zoom;
+        this.camera.zoom = this.view;
         this.camera.updateProjectionMatrix();
         this.cameraFollowingObject(this.cube);
         this.renderer.render(this.scene, this.camera);
