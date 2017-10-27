@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { TrackDetailComponent } from './track-detail.component';
@@ -12,7 +13,7 @@ describe('TrackInfoComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TrackDetailComponent, TrackListComponent],
             providers: [TrackService],
-            imports: [HttpModule, FormsModule]
+            imports: [HttpModule, FormsModule, RouterModule]
         })
             .compileComponents();
     }));

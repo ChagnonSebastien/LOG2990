@@ -25,4 +25,8 @@
       </ul>
     </label> 
   </div>
+
+  <div *ngIf="userType === 'administrator'">
+    <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
+  </div>
 </div>
