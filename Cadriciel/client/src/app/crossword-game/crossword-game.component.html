@@ -8,11 +8,11 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <div class="row" *ngFor="let row of this.crosswordGameService.grid; let i = index">
+        <div class="row" *ngFor="let row of this.gridService.grid; let i = index">
           <div *ngFor="let square of row; let j = index">
-            <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': this.crosswordGameService.getStatus()[i][j].black, 'empty': this.crosswordGameService.getStatus()[i][j].empty, 'found': this.crosswordGameService.getStatus()[i][j].found, 'selected': this.crosswordGameService.getStatus()[i][j].selected }"
-              type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.crosswordGameService.getStatus()[i][j].black || this.crosswordGameService.getStatus()[i][j].found || !this.crosswordGameService.getStatus()[i][j].selected"
-              (keydown)="handleInput($event, i, j)" [(ngModel)]="this.crosswordGameService.getStatus()[i][j].input" #square>
+            <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': this.gridService.grid[i][j].black, 'empty': this.gridService.grid[i][j].empty, 'found': this.gridService.grid[i][j].found, 'selected': this.gridService.grid[i][j].selected }"
+              type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.gridService.grid[i][j].black || this.gridService.grid[i][j].found || !this.gridService.grid[i][j].selected"
+              (keydown)="handleInput($event, i, j)" [(ngModel)]="this.gridService.grid[i][j].input" #square>
           </div>
         </div>
       </div>

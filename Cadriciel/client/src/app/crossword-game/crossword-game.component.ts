@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, Input, Output, EventEmitter } from '@a
 import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
-
+import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordGameService } from './crossword-game.service';
 import { Hint } from './hint';
 
@@ -24,7 +24,8 @@ export class CrosswordGameComponent implements OnInit {
         private crosswordService: CrosswordService,
         private keyboardService: KeyboardService,
         private lexiconService: LexiconService,
-        public crosswordGameService: CrosswordGameService
+        public crosswordGameService: CrosswordGameService,
+        private gridService: CrosswordGridService
     ) {
         this.endGameEmitter = new EventEmitter<boolean>();
     }

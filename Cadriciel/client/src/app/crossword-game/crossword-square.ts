@@ -2,7 +2,7 @@ export class CrosswordSquare {
     public black: boolean;
     public empty: boolean;
     public found: boolean;
-    private answer: string;
+    public answer: string;
     public input: string;
     public selected: boolean;
     public player1Selected: boolean;
@@ -17,5 +17,9 @@ export class CrosswordSquare {
         this.selected = false;
         this.player1Selected = false;
         this.player2Selected = false;
+    }
+
+    public letterFound(): boolean {
+        return this.answer.toLowerCase() === this.input.toLowerCase();
     }
 }
