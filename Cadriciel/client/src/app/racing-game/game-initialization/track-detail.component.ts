@@ -17,7 +17,8 @@ export class TrackDetailComponent implements OnInit {
     public async delete(): Promise<boolean> {
         let response = false;
         await this.trackService.deleteTrack(this.track).then(res => {
-            response = (res === 'success');
+            response = (res !== 'connectionError');
+            console.log(response);
         });
         return response;
     }
