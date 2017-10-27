@@ -14,12 +14,9 @@
     <label class="detailColor">{{track.type}}</label>
     <br>
     <label>Rating: </label>
-    <div *ngIf="track.rating === -1">
-      <label class="detailColor">N/A</label>
-    </div>
-    <div *ngIf="track.rating !== -1">
-      <label class="detailColor">{{track.rating}}</label>
-    </div>
+    <label *ngIf="track.rating === -1" class="detailColor">N/A</label>
+    <label *ngIf="track.rating !== -1" class="detailColor">{{track.rating}}</label>
+    <br>
     <label>Number of times played: </label>
     <label class="detailColor">{{track.numberOfTimesPlayed}}</label>
     <br>
