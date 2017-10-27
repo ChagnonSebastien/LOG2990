@@ -1,6 +1,5 @@
 import { Track } from './../track';
 import { Component, OnInit, Input } from '@angular/core';
-import { TrackService } from './track.service';
 import { Http, Headers } from '@angular/http';
 import { User } from './user';
 
@@ -14,7 +13,7 @@ export class TrackListComponent implements OnInit {
     @Input() public userType: User;
     public tracks: Track[];
     public selectedTrack: Track;
-    constructor( private http: Http) { }
+    constructor(private http: Http) { }
 
     public ngOnInit() {
         this.getTracks().subscribe(tracks => this.tracks = tracks.map((track) => {
