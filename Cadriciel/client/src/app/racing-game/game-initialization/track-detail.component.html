@@ -13,6 +13,13 @@
     <label>Current type: </label>
     <label class="detailColor">{{track.type}}</label>
     <br>
+    <label>Rating: </label>
+    <div *ngIf="track.rating === -1">
+      <label class="detailColor">N/A</label>
+    </div>
+    <div *ngIf="track.rating !== -1">
+      <label class="detailColor">{{track.rating}}</label>
+    </div>
     <label>Number of times played: </label>
     <label class="detailColor">{{track.numberOfTimesPlayed}}</label>
     <br>
