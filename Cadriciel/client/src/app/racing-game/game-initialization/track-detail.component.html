@@ -25,6 +25,6 @@
   </div>
 
   <div *ngIf="userType === 'administrator'">
-      <button (click)="save()">Edit</button>
+    <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
   </div>
 </div>
