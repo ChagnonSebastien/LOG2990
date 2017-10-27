@@ -37,12 +37,13 @@ export class TrackDetailComponent implements OnInit {
         this.changeTypeDB();
     }
 
-    public delete(): Promise<string> {
+    public delete() {
         const path = 'track';
-        return this.http
+        this.http
             .delete(`${apiUrl}/${path}/${this.track.name}`
         ).toPromise()
         .then(response => response.json().data)
+        .then(window.location.reload)
         .catch(this.handleError);
     }
 

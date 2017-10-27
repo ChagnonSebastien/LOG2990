@@ -7,10 +7,7 @@ import { TrackDetailComponent } from './racing-game/game-initialization/track-de
 import { DrawTrackComponent } from './racing-game/draw-track/draw-track.component';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'racing-game/view', component: RacingGameComponent },
-    { path: 'racing-game', component: PlayerComponent },
-    { path: 'admin/tracks/edit/:name', component: DrawTrackComponent }
+    { path: '', component: HomeComponent }
 ];
 
 @NgModule({
