@@ -1,4 +1,4 @@
-import { CrosswordGame } from './crossword-game';
+import { CrosswordGameService } from './crossword-game';
 
 const grid = [
     ['a', 'p', 'p', 'e', 'a', 'l', '#', 'r', 'a', 't'],
@@ -43,11 +43,11 @@ const listOfWords = [
     'staff'
 ];
 
-let crossword: CrosswordGame;
+let crossword: CrosswordGameService;
 
 describe('#CrosswordGame', () => {
     beforeEach(() => {
-        crossword = new CrosswordGame(grid, wordsWithIndex, listOfWords);
+        crossword = new CrosswordGameService(grid, wordsWithIndex, listOfWords);
     });
 
     it('should construct', () => {

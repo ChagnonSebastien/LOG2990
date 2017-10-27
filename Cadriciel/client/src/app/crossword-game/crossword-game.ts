@@ -1,9 +1,14 @@
+import { Injectable } from '@angular/core';
+
+import { CrosswordService } from './crossword.service';
+import { CrosswordHintsService } from './crossword-hints.service';
+
 import { Word } from '../../../../commun/word';
 import { SquareStatus } from './square-status';
 
-export class CrosswordGame {
+@Injectable()
+export class CrosswordGameService {
     // public attributes
-
     public timer: number;
     public wordsWithIndex: Array<Word>;
     public wordMap: Map<string, Word>;
@@ -16,7 +21,12 @@ export class CrosswordGame {
     private gridWords: Array<string>[][];
     private status: SquareStatus[][];
 
-    constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
+    constructor(
+        private crosswordService: CrosswordService,
+        private hintsService: CrosswordHintsService
+    ) { }
+
+    /*constructor(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.size = grid.length;
         this.grid = grid;
         this.wordsWithIndex = wordsWithIndex;
@@ -26,9 +36,24 @@ export class CrosswordGame {
         this.status = this.initializeSquareStatus();
         this.timer = 60;
         setInterval(this.decrementTimer.bind(this), 1000);
-    }
+    }*/
 
     // public methods
+
+    public newGame(level: string) {
+        this.crosswordService.getCrossword(level).then((crossword) => {
+            this.size = crossword.crossword.length;
+            this.grid = crossword.crossword;
+            this.wordsWithIndex = crossword.wordsWithIndex;
+            this.hintsService.newGame(this.wordsWithIndex);
+            this.foundWords = new Set<string>();
+            this.wordMap = this.initializeWordMap();
+            this.gridWords = this.initializeGridWords();
+            this.status = this.initializeSquareStatus();
+            this.timer = 60;
+            setInterval(this.decrementTimer.bind(this), 1000);
+        });
+    }
 
     public getTimer(): number {
         return this.timer;

@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+import { CrosswordHintsService } from './crossword-hints.service';
+
 import { Hint } from './hint';
 
 @Component({
@@ -14,7 +16,7 @@ export class CrosswordHintsComponent {
     @Input() public foundWords: Set<string>;
     public cheatMode: boolean;
 
-    constructor() {
+    constructor(public hintsService: CrosswordHintsService) {
         this.cheatMode = false;
      }
 
