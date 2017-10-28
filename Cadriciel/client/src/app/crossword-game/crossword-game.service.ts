@@ -5,7 +5,6 @@ import { CrosswordHintsService } from './crossword-hints.service';
 import { CrosswordGridService } from './crossword-grid.service';
 
 import { Word } from '../../../../commun/word';
-import { CrosswordSquare } from './crossword-square';
 
 @Injectable()
 export class CrosswordGameService {

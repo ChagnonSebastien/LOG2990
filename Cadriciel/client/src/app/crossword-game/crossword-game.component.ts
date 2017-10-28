@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
-import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
-import { LexiconService } from './lexicon.service';
 import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordGameService } from './crossword-game.service';
 import { CrosswordHintsService } from './crossword-hints.service';
-
-import { Hint } from './hint';
 
 @Component({
     selector: 'app-crossword-game',
@@ -19,13 +15,10 @@ export class CrosswordGameComponent implements OnInit {
     @Input() public level: string;
     @Output() public endGameEmitter: EventEmitter<boolean>;
     public selectedWord: string;
-    private hints: Array<Hint>;
     @ViewChildren('square') public squares;
 
     constructor(
-        private crosswordService: CrosswordService,
         private keyboardService: KeyboardService,
-        private lexiconService: LexiconService,
         public crosswordGameService: CrosswordGameService,
         private gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService
@@ -131,10 +124,5 @@ export class CrosswordGameComponent implements OnInit {
             i = i - 1 >= wordInfo.i ? i - 1 : i;
         }
         this.focusOnSquare(i, j);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
     }
 }

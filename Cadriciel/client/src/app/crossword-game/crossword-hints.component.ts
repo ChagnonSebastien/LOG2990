@@ -1,8 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 import { CrosswordHintsService } from './crossword-hints.service';
-
-import { Hint } from './hint';
 
 @Component({
     selector: 'app-crossword-hints',
@@ -11,8 +9,6 @@ import { Hint } from './hint';
 })
 export class CrosswordHintsComponent {
     @Output() private selectedWordChanged: EventEmitter<string> = new EventEmitter<string>();
-    @Input() public hints: Array<Hint>;
-    @Input() public foundWords: Set<string>;
     public cheatMode: boolean;
 
     constructor(public hintsService: CrosswordHintsService) {
