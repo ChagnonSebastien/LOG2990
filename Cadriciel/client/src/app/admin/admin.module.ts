@@ -1,3 +1,4 @@
+import { AdminViewDetailsComponent } from './admin-view-details.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
 import { AdminViewComponent } from './admin-view.component';
@@ -36,7 +37,8 @@ import { AdminRoutingModule } from './admin-routing.module';
         DrawTrackComponent,
         AdminViewComponent,
         AdminViewSettingsComponent,
-        AdminViewTracksComponent
+        AdminViewTracksComponent,
+        AdminViewDetailsComponent
     ],
     exports: [
         AdminComponent

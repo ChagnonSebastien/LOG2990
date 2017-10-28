@@ -1,3 +1,4 @@
+import { AdminViewDetailsComponent } from './admin-view-details.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
 import { AdminViewComponent } from './admin-view.component';
@@ -40,7 +41,14 @@ describe('AdminViewSettingsComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AdminViewSettingsComponent, AdminComponent, DrawTrackComponent, AdminViewComponent, AdminViewTracksComponent],
+            declarations: [
+                AdminViewSettingsComponent,
+                AdminComponent,
+                DrawTrackComponent,
+                AdminViewComponent,
+                AdminViewTracksComponent,
+                AdminViewDetailsComponent
+            ],
             imports: [HttpModule, AdminRoutingModule, FormsModule, GameInitializationModule]
         }).overrideComponent(AdminViewSettingsComponent, {
             set: {

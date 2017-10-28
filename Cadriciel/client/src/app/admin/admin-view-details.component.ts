@@ -1,23 +1,22 @@
-import { Track } from './../track';
-import { ActivatedRoute } from '@angular/router';
+import { Track } from './../racing-game/track';
+import { TrackService } from './../racing-game/game-initialization/track.service';
 import { Http } from '@angular/http';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 const apiUrl = 'http://localhost:3000/api';
+
 @Component({
-    selector: 'app-track-detail',
-    templateUrl: './track-detail.component.html',
-    styleUrls: ['./track-detail.component.css']
+    selector: 'app-admin-view-details-component',
+    templateUrl: './admin-view-details.component.html',
+    styleUrls: ['./admin-view-details.component.css']
 })
-export class TrackDetailComponent implements OnInit {
+export class AdminViewDetailsComponent implements OnInit {
     public track: Track = new Track('', '', '', [], [], [], []);
 
-    constructor(
-        private http: Http,
-        private route: ActivatedRoute
-    ) { }
+    constructor(private route: ActivatedRoute, private http: Http, private trackService: TrackService) { }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         const trackName = this.route.snapshot.params['name'];
         const path = 'track';
 
@@ -40,20 +39,16 @@ export class TrackDetailComponent implements OnInit {
             (params) => {
                 this.http.get(`${apiUrl}/${path}/${params.name}`).toPromise()
                 .then(response => {
-                    try {
-                        const track = response.json();
-                        this.track = new Track(
-                            params.name,
-                            track.description,
-                            track.type,
-                            track.trackIntersections,
-                            track.puddles,
-                            track.potholes,
-                            track.boosters
-                        );
-                    } catch (error) {
-                        // Does nothing
-                    }
+                    const track = response.json();
+                    this.track = new Track(
+                        params.name,
+                        track.description,
+                        track.type,
+                        track.trackIntersections,
+                        track.puddles,
+                        track.potholes,
+                        track.boosters
+                    );
                 })
                 .catch(this.handleError);
             }
@@ -65,4 +60,11 @@ export class TrackDetailComponent implements OnInit {
         return Promise.reject(error.message || error);
     }
 
+    public async delete(): Promise<boolean> {
+        let response = false;
+        await this.trackService.deleteTrack(this.track).then(res => {
+            response = (res !== 'connectionError');
+        });
+        return response;
+    }
 }
