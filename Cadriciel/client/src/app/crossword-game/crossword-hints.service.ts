@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from './lexicon.service';
 import { CrosswordGridService } from './crossword-grid.service';
+import { CrosswordPointsService } from './crossword-points.service';
 
 import { Hint } from './hint';
 import { Word } from '../../../../commun/word';
@@ -12,7 +14,21 @@ export class CrosswordHintsService {
     public hints: Array<Hint>;
     public wordMap: Map<string, Word>;
 
-    constructor(private lexiconService: LexiconService, private gridService: CrosswordGridService) { }
+    constructor(
+        private lexiconService: LexiconService,
+        private gridService: CrosswordGridService,
+        private pointsService: CrosswordPointsService
+    ) {
+        this.pointsService.foundWordAlerts()
+            .subscribe((newlyFoundWord) => {
+                this.hints.find((value) => {
+                    return value.word === newlyFoundWord;
+                }).found = true;
+                if (newlyFoundWord === this.selectedWord) {
+                    this.unselectHint();
+                }
+            });
+    }
 
     public newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;

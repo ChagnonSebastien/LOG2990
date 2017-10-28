@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints.service';
 import { CrosswordGridService } from './crossword-grid.service';
+import { CrosswordPointsService } from './crossword-points.service';
 
 import { Word } from '../../../../commun/word';
 
@@ -15,7 +16,8 @@ export class CrosswordGameService {
     constructor(
         private crosswordService: CrosswordService,
         private hintsService: CrosswordHintsService,
-        private gridService: CrosswordGridService
+        private gridService: CrosswordGridService,
+        private pointsService: CrosswordPointsService
     ) { }
 
     // public methods
@@ -29,6 +31,7 @@ export class CrosswordGameService {
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.gridService.initializeGrid(grid, wordsWithIndex);
         this.hintsService.newGame(wordsWithIndex);
+        this.pointsService.newGame();
     }
 
     public insertLetter(charCode: number, i: number, j: number) {

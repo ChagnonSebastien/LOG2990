@@ -8,8 +8,8 @@
 </div>
 <div class="row">
   <div class="col-md-12" *ngFor="let hint of this.hintsService.hints">
-    <button class="btn btn-sm text-justify mb-2" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word }"
-      style="word-wrap: break-word; word-break: normal; white-space: normal" (click)="selectWord(hint.word); $event.stopPropagation()">
+    <button class="btn btn-sm text-justify mb-2" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word, 'btn-success': hint.found }"
+      style="word-wrap: break-word; word-break: normal; white-space: normal" (click)="selectWord(hint.word); $event.stopPropagation()" [disabled]="hint.found">
       <span *ngIf="!this.cheatMode">{{hint.definition}}</span>
       <span *ngIf="this.cheatMode">{{hint.word}}</span>
     </button>
