@@ -32,6 +32,10 @@ export class CrosswordHintsService {
         this.gridService.selectWord(this.wordMap.get(word));
     }
 
+    public unselectHint() {
+        this.selectedWord = undefined;
+    }
+
     private constructWordMap(wordsWithIndex: Array<Word>): Map<string, Word> {
         return wordsWithIndex.reduce((map, obj) => {
             map.set(obj.word, obj);

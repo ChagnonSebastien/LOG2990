@@ -46,11 +46,13 @@ export class CrosswordGameService {
     public clearSelectedWord(word: string) {
         const wordInfo = this.hintsService.getWordInfo(word);
         this.gridService.unselectWord(wordInfo);
+        this.hintsService.unselectHint();
     }
 
     public setSelectedWord(word: string) {
         const wordInfo = this.hintsService.getWordInfo(word);
         this.gridService.selectWord(wordInfo);
+        this.hintsService.selectWord(word);
     }
 
     private checkIfWordsFound(i: number, j: number) {

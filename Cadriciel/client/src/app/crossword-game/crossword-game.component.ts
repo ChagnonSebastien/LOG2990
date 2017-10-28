@@ -50,15 +50,6 @@ export class CrosswordGameComponent implements OnInit {
         }
     }
 
-    public selectWord(word: string) {
-        if (this.selectedWord) {
-            this.crosswordGameService.clearSelectedWord(this.selectedWord);
-        }
-        this.crosswordGameService.setSelectedWord(word);
-        this.selectedWord = word;
-        this.focusOnSelectedWord();
-    }
-
     public focusOnWord(word: string) {
         this.selectedWord = word;
         const wordInfo = this.hintsService.getWordInfo(word);
