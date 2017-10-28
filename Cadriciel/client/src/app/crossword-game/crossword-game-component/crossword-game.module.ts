@@ -17,6 +17,7 @@ import { CrosswordGameService } from '../crossword-game.service';
 import { CrosswordHintsService } from '../crossword-hints.service';
 import { KeyboardService } from '../keyboard.service';
 import { CrosswordGridService } from '../crossword-grid.service';
+import { CrosswordPointsService } from '../crossword-points.service';
 
 import { MultiplayerService } from '../services/crossword-multiplayer.service';
 import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-game-room.component';
@@ -48,7 +49,8 @@ import { CrosswordGameRoomComponent } from '../crossword-game-room/crossword-gam
         LexiconService,
         CrosswordGameService,
         CrosswordHintsService,
-        CrosswordGridService
+        CrosswordGridService,
+        CrosswordPointsService
     ]
 })
 export class CrosswordGameModule { }
