@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from './lexicon.service';
 import { CrosswordGridService } from './crossword-grid.service';

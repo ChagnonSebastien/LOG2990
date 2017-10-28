@@ -86,11 +86,6 @@ export class CrosswordGameComponent implements OnInit {
         return this.keyboardService.isTab(keyCode);
     }
 
-    private focusOnSelectedWord() {
-        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
-        this.focusOnSquare(wordInfo.i, wordInfo.j);
-    }
-
     private focusOnSquare(i: number, j: number) {
         this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
