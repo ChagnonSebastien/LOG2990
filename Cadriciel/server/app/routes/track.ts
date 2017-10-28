@@ -73,11 +73,28 @@ module Route {
             });
 
         }
+        
+        public updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
+             return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1)   
+        }
+
+        public updateBestTimes (arrayBestTimes: number[] = Array(5), newtime: number ) { 
+              arrayBestTimes.sort((a, b) => { 
+                  return a - b;   
+              })
+              return arrayBestTimes;
+        }
+
 
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
 
+            MongoClient.connect(url, (err, db) => {
+                if (err) {
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
+                } 
+            });
         }
-
+        
     }
 }
 
