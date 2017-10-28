@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12" *ngFor="let hint of this.hints">
+  <div class="col-md-12" *ngFor="let hint of this.hintsService.hints">
     <button class="btn btn-sm text-justify mb-2" [ngClass]="{ 'btn-primary': this.selectedWord === hint.word, 'btn-default': this.selectedWord !== hint.word, 'btn-success': this.foundWords.has(hint.word) }"
       style="word-wrap: break-word; word-break: normal; white-space: normal" (click)="this.selectWord(hint.word); $event.stopPropagation()" [disabled]="this.foundWords.has(hint.word)">
       <span *ngIf="!this.cheatMode">{{hint.definition}}</span>
