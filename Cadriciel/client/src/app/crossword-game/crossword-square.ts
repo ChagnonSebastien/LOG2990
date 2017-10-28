@@ -7,6 +7,7 @@ export class CrosswordSquare {
     public selected: boolean;
     public player1Selected: boolean;
     public player2Selected: boolean;
+    public words: Array<string>;
 
     constructor(character: string) {
         this.black = character === ' ' || character === '#';
@@ -17,6 +18,7 @@ export class CrosswordSquare {
         this.selected = false;
         this.player1Selected = false;
         this.player2Selected = false;
+        this.words = new Array<string>();
     }
 
     public letterFound(): boolean {

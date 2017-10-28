@@ -4,6 +4,8 @@ import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
 import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordGameService } from './crossword-game.service';
+import { CrosswordHintsService } from './crossword-hints.service';
+
 import { Hint } from './hint';
 
 @Component({
@@ -25,7 +27,8 @@ export class CrosswordGameComponent implements OnInit {
         private keyboardService: KeyboardService,
         private lexiconService: LexiconService,
         public crosswordGameService: CrosswordGameService,
-        private gridService: CrosswordGridService
+        private gridService: CrosswordGridService,
+        private hintsService: CrosswordHintsService
     ) {
         this.endGameEmitter = new EventEmitter<boolean>();
     }
@@ -34,8 +37,8 @@ export class CrosswordGameComponent implements OnInit {
         this.newGame();
     }
 
-    private newGame() {
-        this.crosswordGameService.newGame(this.level);
+    private async newGame() {
+        await this.crosswordGameService.newGame(this.level);
     }
 
     public endGame() {
@@ -63,13 +66,19 @@ export class CrosswordGameComponent implements OnInit {
         this.focusOnSelectedWord();
     }
 
+    public focusOnWord(word: string) {
+        this.selectedWord = word;
+        const wordInfo = this.hintsService.getWordInfo(word);
+        this.focusOnSquare(wordInfo.i, wordInfo.j);
+    }
+
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
-        if (this.keyboardService.isLetter(charCode) && this.crosswordGameService.getStatus()[i][j].selected) {
+        if (this.keyboardService.isLetter(charCode) && this.gridService.grid[i][j].selected) {
             this.crosswordGameService.insertLetter(charCode, i, j);
             this.focusOnNextLetter(i, j);
             this.disableEvent(event);
-        } else if (this.keyboardService.isBackspace(charCode) && this.crosswordGameService.getStatus()[i][j].selected) {
+        } else if (this.keyboardService.isBackspace(charCode) && this.gridService.grid[i][j].selected) {
             this.crosswordGameService.eraseLetter(i, j);
             this.focusOnPreviousLetter(i, j);
             this.disableEvent(event);
@@ -94,7 +103,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private focusOnSelectedWord() {
-        const wordInfo = this.crosswordGameService.wordMap.get(this.selectedWord);
+        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
         this.focusOnSquare(wordInfo.i, wordInfo.j);
     }
 
@@ -105,7 +114,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private focusOnNextLetter(i: number, j: number) {
-        const wordInfo = this.crosswordGameService.wordMap.get(this.selectedWord);
+        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
         if (wordInfo.horizontal) {
             j = j + 1 < wordInfo.j + wordInfo.word.length ? j + 1 : j;
         } else {
@@ -115,7 +124,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private focusOnPreviousLetter(i: number, j: number) {
-        const wordInfo = this.crosswordGameService.wordMap.get(this.selectedWord);
+        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
         if (wordInfo.horizontal) {
             j = j - 1 >= wordInfo.j ? j - 1 : j;
         } else {

@@ -10,7 +10,6 @@ import { Hint } from './hint';
     styleUrls: ['./crossword-hints.component.css']
 })
 export class CrosswordHintsComponent {
-    @Input() public selectedWord: string;
     @Output() private selectedWordChanged: EventEmitter<string> = new EventEmitter<string>();
     @Input() public hints: Array<Hint>;
     @Input() public foundWords: Set<string>;
@@ -21,7 +20,7 @@ export class CrosswordHintsComponent {
      }
 
     public selectWord(word: string) {
-        this.selectedWord = word;
+        this.hintsService.selectWord(word);
         this.selectedWordChanged.emit(word);
     }
 

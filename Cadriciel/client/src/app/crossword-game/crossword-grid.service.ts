@@ -10,13 +10,21 @@ export class CrosswordGridService {
 
     constructor() { }
 
-    public initializeGrid(grid: string[][]) {
+    public initializeGrid(grid: string[][], wordsWithIndex: Array<Word>) {
         this.size = grid.length;
         this.grid = grid.map((row) => {
             return row.map((square) => {
                 return new CrosswordSquare(square);
             });
         });
+
+        for (const word of wordsWithIndex) {
+            for (let k = 0; k < word.word.length; k++) {
+                const i = word.horizontal ? word.i : word.i + k;
+                const j = word.horizontal ? word.j + k : word.j;
+                this.grid[i][j].words.push(word.word);
+            }
+        }
     }
 
     public updateWordFoundStatus(word: Word) {
