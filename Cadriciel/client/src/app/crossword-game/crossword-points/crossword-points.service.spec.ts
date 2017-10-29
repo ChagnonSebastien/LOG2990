@@ -18,4 +18,20 @@ describe('#CrosswordPointsService', () => {
     it('should construct', () => {
         expect(pointsService).toBeDefined();
     });
+
+    describe('newGame()', () => {
+        it('should reinitialize a game', () => {
+            pointsService.newGame();
+            pointsService.addToFoundWords('hello');
+            expect(pointsService.found('hello')).toBeTruthy();
+            pointsService.newGame();
+            expect(pointsService.found('hello')).toBeFalsy();
+        });
+    });
+
+    xit('should add to found words and alert the found word', () => {
+        pointsService.newGame();
+        pointsService.addToFoundWords('hello');
+        expect(pointsService.found('hello')).toBeTruthy();
+    });
 });
