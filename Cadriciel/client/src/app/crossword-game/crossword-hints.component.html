@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12">
-    <button class="btn mb-3" [ngClass]="{ 'btn-success': !this.cheatMode, 'btn-danger': this.cheatMode }"(click)="this.toggleCheatMode()">
+    <button class="btn mb-3" [ngClass]="{ 'btn-warning': !this.cheatMode, 'btn-danger': this.cheatMode }"(click)="this.toggleCheatMode()">
       <span *ngIf="!this.cheatMode">Activate cheat mode (show words)</span>
       <span *ngIf="this.cheatMode">Deactivate cheat mode (hide words)</span>
     </button>
