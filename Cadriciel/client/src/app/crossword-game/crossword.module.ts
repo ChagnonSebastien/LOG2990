@@ -9,13 +9,13 @@ import { KeyboardService } from './keyboard.service';
 import { LexiconService } from './lexicon.service';
 import { CrosswordService } from './crossword.service';
 import { CrosswordGameService } from './crossword-game.service';
-import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordHintsService } from './crossword-hints.service';
-import { CrosswordPointsService } from './crossword-points.service';
+import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
+import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
+import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 
-import { CrosswordMenuComponent } from './crossword-menu.component';
+import { CrosswordMenuComponent } from './crossword-menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
-import { CrosswordHintsComponent } from './crossword-hints.component';
+import { CrosswordHintsComponent } from './crossword-hints/crossword-hints.component';
 
 @NgModule({
     imports: [

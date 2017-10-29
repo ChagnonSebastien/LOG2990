@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { CrosswordMenuComponent } from './crossword-menu.component';
+import { CrosswordMenuComponent } from './crossword-menu/crossword-menu.component';
 
 @NgModule({
     imports: [RouterModule.forChild([

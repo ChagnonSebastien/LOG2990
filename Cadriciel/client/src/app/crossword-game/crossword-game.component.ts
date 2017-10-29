@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
 import { KeyboardService } from './keyboard.service';
-import { CrosswordGridService } from './crossword-grid.service';
+import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordGameService } from './crossword-game.service';
-import { CrosswordHintsService } from './crossword-hints.service';
+import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 
 @Component({
     selector: 'app-crossword-game',

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { LexiconService } from './lexicon.service';
-import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordPointsService } from './crossword-points.service';
+import { LexiconService } from '../lexicon.service';
+import { CrosswordGridService } from '../crossword-grid/crossword-grid.service';
+import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
 
-import { Hint } from './hint';
-import { Word } from '../../../../commun/word';
+import { Hint } from '../shared-classes/hint';
+import { Word } from '../../../../../commun/word';
 
 @Injectable()
 export class CrosswordHintsService {

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { CrosswordService } from './crossword.service';
-import { CrosswordHintsService } from './crossword-hints.service';
-import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordPointsService } from './crossword-points.service';
+import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
+import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
+import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 
 import { Word } from '../../../../commun/word';
 
