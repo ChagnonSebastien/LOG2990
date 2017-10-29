@@ -32,7 +32,7 @@ export class CrosswordHintsService {
     public newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
         this.wordMap = this.constructWordMap(wordsWithIndex);
-        this.hints = this.initializeHints(wordsWithIndex);
+        this.initializeHints(wordsWithIndex);
     }
 
     public getWordInfo(word: string): Word {
@@ -58,14 +58,13 @@ export class CrosswordHintsService {
         }, new Map<string, Word>());
     }
 
-    private initializeHints(wordsWithIndex: Array<Word>): Array<Hint> {
-        const hints = new Array<Hint>();
-        for (const word of wordsWithIndex) {
-            this.lexiconService.getWordDefinition(word.word)
-                .then((definition) => {
-                    hints.push(new Hint(word.word, definition));
+    private initializeHints(wordsWithIndex: Array<Word>) {
+        this.hints = new Array<Hint>();
+        this.lexiconService.getWordDefinitions(wordsWithIndex.map(word => word.word))
+            .subscribe((definitions) => {
+                definitions.map((definition, i) => {
+                    this.hints.push(new Hint(wordsWithIndex[i].word, definition));
                 });
-        }
-        return hints;
+            });
     }
 }
