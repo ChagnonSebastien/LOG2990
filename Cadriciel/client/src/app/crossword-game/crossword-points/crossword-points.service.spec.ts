@@ -28,10 +28,4 @@ describe('#CrosswordPointsService', () => {
             expect(pointsService.found('hello')).toBeFalsy();
         });
     });
-
-    xit('should add to found words and alert the found word', () => {
-        pointsService.newGame();
-        pointsService.addToFoundWords('hello');
-        expect(pointsService.found('hello')).toBeTruthy();
-    });
 });
