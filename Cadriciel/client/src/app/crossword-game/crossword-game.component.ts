@@ -58,12 +58,16 @@ export class CrosswordGameComponent implements OnInit {
 
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
-        if (this.keyboardService.isLetter(charCode) && this.gridService.grid[i][j].selected) {
-            this.crosswordGameService.insertLetter(charCode, i, j);
+        if (this.keyboardService.isLetter(charCode)) {
+            if (this.gridService.grid[i][j].selected) {
+                this.crosswordGameService.insertLetter(charCode, i, j);
+            }
             this.focusOnNextLetter(i, j);
             this.disableEvent(event);
-        } else if (this.keyboardService.isBackspace(charCode) && this.gridService.grid[i][j].selected) {
-            this.crosswordGameService.eraseLetter(i, j);
+        } else if (this.keyboardService.isBackspace(charCode)) {
+            if (this.gridService.grid[i][j].selected) {
+                this.crosswordGameService.eraseLetter(i, j);
+            }
             this.focusOnPreviousLetter(i, j);
             this.disableEvent(event);
         } else if (this.keyboardService.isArrowKey(charCode)) {
