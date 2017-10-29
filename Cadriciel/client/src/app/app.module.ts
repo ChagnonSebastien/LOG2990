@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 
 /* Feature modules */
 import { CrosswordGameModule } from './crossword-game/crossword-game-component/crossword-game.module';
+import { CrosswordModule } from './crossword-game/crossword.module';
 import { HomeModule } from './home/home.module';
 import { RacingGameModule } from './racing-game/racing-game.module';
 import { AdminModule } from './admin/admin.module';
@@ -29,6 +30,7 @@ import { AppRoutingModule } from './app-routing.module';
         HttpModule,
         AppRoutingModule,
         CrosswordGameModule,
+        CrosswordModule,
         HomeModule,
         RacingGameModule,
         AdminModule
