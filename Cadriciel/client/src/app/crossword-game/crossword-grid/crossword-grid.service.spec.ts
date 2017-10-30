@@ -229,5 +229,26 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][8].found).toBeTruthy();
             expect(gridService.grid[0][9].found).toBeTruthy();
         });
+
+        it('should unselect the word when it becomes found', () => {
+            // select the word rat
+            gridService.grid[0][7].selected = true;
+            gridService.grid[0][8].selected = true;
+            gridService.grid[0][9].selected = true;
+
+            // rat not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            gridService.markWordAsFound(
+                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
+            );
+
+            // rat is unselected
+            expect(gridService.grid[0][7].selected).toBeFalsy();
+            expect(gridService.grid[0][8].selected).toBeFalsy();
+            expect(gridService.grid[0][9].selected).toBeFalsy();
+        });
     });
 });
