@@ -101,7 +101,23 @@ module Route {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
-                } 
+                } else {
+                    db.collection('track').findOne({id: req.params.update.name })
+                        .then((trackDB) => {
+                            tempRating = this.updateRating(req.body.numberOfTimesPlayed, trackDB.rating, req.body.rating );
+                            tempBestTimes = this.updateBestTimes(trackDB.bestTimes, req.body.t);
+                            tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
+
+                            db.collection('tracks').update(
+                                { id: req.params.update.name }, 
+                                { rating: tempRating,
+                                  bestTimes: tempBestTimes,
+                                  numberOfTimePlayed: tempNbOfTimesPlayed },
+                                { upsert: false
+                                });  
+                        })                
+                }
+                 
             });
         }
         
