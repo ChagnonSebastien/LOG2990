@@ -31,4 +31,11 @@ describe('#CrosswordPointsService', () => {
             expect(pointsService['foundWords'].has('hello')).toBeFalsy();
         });
     });
+
+    describe('addToFoundWords()', () => {
+        it('should add a word to foundWords', () => {
+            pointsService.addToFoundWords('hello');
+            expect(pointsService['foundWords'].has('hello')).toBeTruthy();
+        });
+    });
 });
