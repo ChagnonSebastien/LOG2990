@@ -55,5 +55,14 @@ describe('#CrosswordGridService', () => {
             gridService.initializeGrid(grid, wordsWithIndex);
             expect(gridService.grid).toBeDefined();
         });
+
+        it('should initialize the answers of the grid', () => {
+            gridService.initializeGrid(grid, wordsWithIndex);
+            gridService.grid.map((row, i) => {
+                row.map((square, j) => {
+                    expect(square.answer).toEqual(grid[i][j]);
+                });
+            });
+        });
     });
 });
