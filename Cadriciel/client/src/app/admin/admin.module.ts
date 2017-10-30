@@ -1,8 +1,6 @@
 import { AuthentificationComponent } from './authentification.component';
-import { AdminViewDetailsComponent } from './admin-view-details.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
-import { AdminViewComponent } from './admin-view.component';
 import { ObstacleService } from './../racing-game/draw-track/obstacle.service';
 import { RenderService } from './../racing-game/draw-track/render.service';
 import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
@@ -36,10 +34,8 @@ import { AdminRoutingModule } from './admin-routing.module';
     declarations: [
         AdminComponent,
         DrawTrackComponent,
-        AdminViewComponent,
         AdminViewSettingsComponent,
         AdminViewTracksComponent,
-        AdminViewDetailsComponent,
         AuthentificationComponent
     ],
     exports: [
