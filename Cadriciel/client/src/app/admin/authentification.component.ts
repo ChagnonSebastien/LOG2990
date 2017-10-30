@@ -4,25 +4,17 @@ import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../racing-game/game-initialization/user';
 
 @Component({
-    selector: 'app-admin-component',
-    templateUrl: './admin.component.html',
-    styleUrls: ['./admin.component.css']
+    selector: 'app-authentification-component',
+    templateUrl: './authentification.component.html',
+    styleUrls: ['./authentification.component.css']
 })
-export class AdminComponent implements OnInit {
-    @Input() public userType: User;
+export class AuthentificationComponent implements OnInit {
     public passwordCorrect: boolean;
-    public accountSettings: boolean;
-    public racingGameSettings: boolean;
-    public selectedTab = 'settings';
 
     constructor(private authenticationService: AuthenticationService) { }
 
     public ngOnInit(): void {
         this.passwordCorrect = false;
-    }
-
-    public onActivate(event) {
-        this.selectedTab = event.getRoute().snapshot.url.join('');
     }
 
     public async login(passwordInput: string): Promise<boolean> {

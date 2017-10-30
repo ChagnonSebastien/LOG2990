@@ -56,9 +56,9 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
 
     public ngOnInit() {
         this.trackService.clear();
-        if (this.route.snapshot.url[this.route.snapshot.url.length - 2].path === 'edit') {
-            this.name = this.route.snapshot.params['name'];
-            this.trackService.loadTrack(this.route.snapshot.params['name']).then(response => {
+        this.name = this.route.snapshot.params['name'];
+        if (this.name !== undefined) {
+            this.trackService.loadTrack(this.name).then(response => {
                 this.description = response.description;
                 this.difficulty = response.difficulty;
                 this.saveEnabled = true;
