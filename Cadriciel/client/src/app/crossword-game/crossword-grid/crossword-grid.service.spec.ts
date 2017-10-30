@@ -190,4 +190,23 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][9].selected).toBeFalsy();
         });
     });
+
+    describe('selectWord()', () => {
+        it('should select a word', () => {
+            gridService.initialize(grid, wordsWithIndex);
+
+            // rat unselected
+            expect(gridService.grid[0][7].selected).toBeFalsy();
+            expect(gridService.grid[0][8].selected).toBeFalsy();
+            expect(gridService.grid[0][9].selected).toBeFalsy();
+
+            gridService.selectWord(
+                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
+            );
+
+            expect(gridService.grid[0][7].selected).toBeTruthy();
+            expect(gridService.grid[0][8].selected).toBeTruthy();
+            expect(gridService.grid[0][9].selected).toBeTruthy();
+        });
+    });
 });
