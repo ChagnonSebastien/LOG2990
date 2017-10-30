@@ -1,13 +1,6 @@
 import { TrackService } from './../racing-game/game-initialization/track.service';
-import { Http } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
-import { Track } from './../racing-game/track';
-import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { User } from '../racing-game/game-initialization/user';
-
-const apiUrl = 'http://localhost:3000/api';
-const path = 'track';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-admin-view-tracks-component',
@@ -19,7 +12,7 @@ export class AdminViewTracksComponent implements OnInit {
     public trackName: string;
     public trackJustDeleted = false;
 
-    constructor(private route: ActivatedRoute, private http: Http, private trackService: TrackService) { }
+    constructor(private route: ActivatedRoute, private trackService: TrackService) { }
 
     public getRoute() {
         return this.route;
@@ -39,11 +32,6 @@ export class AdminViewTracksComponent implements OnInit {
         if (!this.trackJustDeleted) {
             this.trackName = undefined;
         }
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
     }
 
     public async delete(): Promise<boolean> {

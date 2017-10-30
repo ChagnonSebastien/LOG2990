@@ -1,7 +1,5 @@
 import { AuthenticationService } from './authentication.service';
-import { Component, OnInit, Input } from '@angular/core';
-
-import { User } from '../racing-game/game-initialization/user';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-authentification-component',
