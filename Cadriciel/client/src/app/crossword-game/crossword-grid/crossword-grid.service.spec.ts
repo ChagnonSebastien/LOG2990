@@ -250,5 +250,15 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][8].selected).toBeFalsy();
             expect(gridService.grid[0][9].selected).toBeFalsy();
         });
+
+        it('should add word to found words', () => {
+            expect(gridService['pointsService'].found('rat')).toBeFalsy();
+
+            gridService.markWordAsFound(
+                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
+            );
+
+            expect(gridService['pointsService'].found('rat')).toBeTruthy();
+        });
     });
 });
