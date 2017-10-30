@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,10 +10,14 @@ import { Component, OnInit } from '@angular/core';
 export class AdminViewSettingsComponent implements OnInit {
     public passwordChanged: boolean;
 
-    constructor(private authenticationService: AuthenticationService) { }
+    constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute) { }
 
     public ngOnInit(): void {
         this.passwordChanged = false;
+    }
+
+    public getRoute() {
+        return this.route;
     }
 
     public async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {

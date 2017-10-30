@@ -291,7 +291,7 @@ export class TrackValidationService {
         const angle2 = this.getAngle(line2);
         const rawAngleVariation = angle2 - angle1 + (Math.PI / 2);
         const angleVariation = (rawAngleVariation + (2 * Math.PI)) % (2 * Math.PI);
-        this.trackElements[index1].intersectionAngl = angleVariation;
+        this.trackElements[index1].intersectionAngl = angleVariation - Math.PI / 2;
     }
 
     public getAngle(line): number {
@@ -317,7 +317,8 @@ export class TrackValidationService {
     }
 
     private isFirstAngleValid(index: number) {
-        return this.trackElements[index].intersectionAngl <= Math.PI;
+        return Math.abs(this.trackElements[index].intersectionAngl) <= 3 * Math.PI / 4 ||
+            this.trackElements[index].intersectionAngl >= 5 * Math.PI / 4;;
     }
 
     private isSecondAngleValid(index: number) {
@@ -329,7 +330,8 @@ export class TrackValidationService {
             nextSegment = 0;
         }
 
-        return this.trackElements[nextSegment].intersectionAngl <= Math.PI;
+        return Math.abs(this.trackElements[nextSegment].intersectionAngl) <= 3 * Math.PI / 4 ||
+            this.trackElements[nextSegment].intersectionAngl >= 5 * Math.PI / 4;
     }
 
     public isAllValid() {

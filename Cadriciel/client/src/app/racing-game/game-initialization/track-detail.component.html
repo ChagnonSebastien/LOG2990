@@ -1,5 +1,5 @@
 
-<div class="track-detail">
+<div class="track-detail" *ngIf="track !== undefined">
   <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
     <label>Current name: </label>
@@ -29,6 +29,4 @@
       </ul>
     </label> 
   </div>
-    <button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
-    <button (click)="delete()" [routerLink]="['.']">Delete</button>
 </div>

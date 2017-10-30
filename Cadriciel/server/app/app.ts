@@ -120,7 +120,7 @@ export class Application {
         // use router middleware
         this.app.use('/api', router);
 
-        // Gestion des erreurs
+        // error management
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
             const err = new Error('Not Found');
             next(err);

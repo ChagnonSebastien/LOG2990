@@ -73,11 +73,54 @@ module Route {
             });
 
         }
-
-        public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
-
+        
+        public updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
+             return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1)   
         }
 
+        public updateBestTimes (arrayBestTimes: number[], newtime: number ) { 
+            const fifthBestTimes = 5;
+            arrayBestTimes.sort((a, b) => { 
+                  return a - b;
+            })
+              arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
+              for( let time = 0; time < arrayBestTimes.length - 1; time++) {
+                if(newtime < arrayBestTimes[time]){
+                    arrayBestTimes[time + 1] = arrayBestTimes[time];
+                    arrayBestTimes[time] = newtime;
+                    return arrayBestTimes;
+                }
+              }             
+        }
+
+        public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let tempRating: number;
+            let tempBestTimes: number[];
+            let tempNbOfTimesPlayed: number;
+
+            MongoClient.connect(url, (err, db) => {
+                if (err) {
+                    res.send(JSON.stringify({ 'data': 'connectionError' }));
+                } else {
+                    db.collection('track').findOne({id: req.params.update.name })
+                        .then((trackDB) => {
+                            tempRating = this.updateRating(req.body.numberOfTimesPlayed, trackDB.rating, req.body.rating );
+                            tempBestTimes = this.updateBestTimes(trackDB.bestTimes, req.body.t);
+                            tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
+
+                            db.collection('tracks').update(
+                                { id: req.params.update.name }, 
+                                { rating: tempRating,
+                                  bestTimes: tempBestTimes,
+                                  numberOfTimePlayed: tempNbOfTimesPlayed },
+                                { upsert: false
+                                });  
+                        })                
+                }
+                 
+            });
+        }
+        
     }
 }
 

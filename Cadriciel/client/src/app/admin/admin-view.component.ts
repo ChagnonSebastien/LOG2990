@@ -9,7 +9,7 @@ import { User } from '../racing-game/game-initialization/user';
 })
 export class AdminViewComponent implements OnInit {
     public userType: User = User.Administrator;
-    public selectedTab = '';
+    public selectedTab = 'settings';
 
     constructor() { }
 

@@ -1,4 +1,6 @@
+import { AuthentificationComponent } from './authentification.component';
 import { TrackDetailComponent } from './../racing-game/game-initialization/track-detail.component';
+import { AdminViewDetailsComponent } from './admin-view-details.component';
 import { AdminViewComponent } from './admin-view.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
@@ -10,18 +12,17 @@ import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.compone
 
 @NgModule({
     imports: [RouterModule.forChild([
-        { path: 'admin', component: AdminComponent, children: [
-            { path: '', redirectTo: 'view', pathMatch: 'full' },
+        { path: 'admin', component: AuthentificationComponent, children: [
             { path: 'tracks/new', component: DrawTrackComponent },
-            { path: 'tracks/edit/:name', component: DrawTrackComponent },
-            { path: 'view', component: AdminViewComponent, children: [
+            { path: '', component: AdminComponent, children: [
                 { path: '', redirectTo: 'settings', pathMatch: 'full' },
                 { path: 'settings', component: AdminViewSettingsComponent },
                 { path: 'tracks', component: AdminViewTracksComponent, children: [
-                    { path: ':name', component: TrackDetailComponent }
+                    { path: ':name', component: TrackDetailComponent}
                 ]}
-            ]}
-        ] },
+            ]},
+            { path: 'tracks/:name/edit', component: DrawTrackComponent }
+        ]}
     ])],
     exports: [RouterModule]
 })

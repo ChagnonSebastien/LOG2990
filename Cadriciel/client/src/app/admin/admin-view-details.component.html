@@ -1,0 +1,4 @@
+<app-track-detail></app-track-detail>
+
+<button [routerLink]="['/admin/tracks/edit', track.name]">Edit</button>
+<button (click)="delete()" [routerLink]="['/admin/view/tracks']">Delete</button>
