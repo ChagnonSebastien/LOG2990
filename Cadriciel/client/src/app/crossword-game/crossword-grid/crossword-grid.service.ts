@@ -25,7 +25,7 @@ export class CrosswordGridService {
     public insertLetter(letter: string, i: number, j: number) {
         // only insert when not found and not black
         if (!this.grid[i][j].found && !this.grid[i][j].black) {
-            this.grid[i][j].input = letter;
+            this.grid[i][j].input = letter.toLowerCase();
         }
     }
 

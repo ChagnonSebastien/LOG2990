@@ -115,5 +115,14 @@ describe('#CrosswordGridService', () => {
 
     describe('insertLetter()', () => {
 
+        beforeEach(() => {
+            gridService.initialize(grid, wordsWithIndex);
+        });
+
+        it('should insert a letter when the square is empty', () => {
+            expect(gridService.grid[0][0].empty).toBeTruthy();
+            gridService.insertLetter('A', 0, 0);
+            expect(gridService.grid[0][0].input).toEqual('a');
+        });
     });
 });
