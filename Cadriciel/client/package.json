@@ -7,6 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "coverage": "ng test --code-coverage --reporters=teamcity,coverage-istanbul",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
     "prepush": "npm run lint"
@@ -51,6 +52,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-teamcity-reporter": "^1.0.1",
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "^5.3.2",
