@@ -171,4 +171,23 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][0].input).toEqual('a');
         });
     });
+
+    describe('unselectWord()', () => {
+        it('should unselect a word', () => {
+            gridService.initialize(grid, wordsWithIndex);
+
+            // select the word rat
+            gridService.grid[0][7].selected = true;
+            gridService.grid[0][8].selected = true;
+            gridService.grid[0][9].selected = true;
+
+            gridService.unselectWord(
+                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
+            );
+
+            expect(gridService.grid[0][7].selected).toBeFalsy();
+            expect(gridService.grid[0][8].selected).toBeFalsy();
+            expect(gridService.grid[0][9].selected).toBeFalsy();
+        });
+    });
 });
