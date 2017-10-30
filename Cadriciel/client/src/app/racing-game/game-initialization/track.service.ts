@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {Track} from '../track';
 
 const apiUrl = 'http://localhost:3000/api';
 @Injectable()

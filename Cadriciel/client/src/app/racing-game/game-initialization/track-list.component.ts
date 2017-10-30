@@ -1,7 +1,6 @@
 import { Track } from './../track';
 import { Component, OnInit, Input } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { User } from './user';
 
 @Component({
     selector: 'app-track-list',
@@ -11,7 +10,7 @@ import { User } from './user';
 })
 export class TrackListComponent implements OnInit {
 
-    private selectedTrack: string;
+    public selectedTrack: string;
 
     @Input() set track(selectedTrack: string) {
         this.selectedTrack = selectedTrack;

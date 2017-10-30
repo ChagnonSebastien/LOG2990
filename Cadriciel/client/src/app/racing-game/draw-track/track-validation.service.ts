@@ -318,7 +318,7 @@ export class TrackValidationService {
 
     private isFirstAngleValid(index: number) {
         return Math.abs(this.trackElements[index].intersectionAngl) <= 3 * Math.PI / 4 ||
-            this.trackElements[index].intersectionAngl >= 5 * Math.PI / 4;;
+            this.trackElements[index].intersectionAngl >= 5 * Math.PI / 4;
     }
 
     private isSecondAngleValid(index: number) {

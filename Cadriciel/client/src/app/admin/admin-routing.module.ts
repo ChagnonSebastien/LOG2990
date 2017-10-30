@@ -1,7 +1,5 @@
 import { AuthentificationComponent } from './authentification.component';
 import { TrackDetailComponent } from './../racing-game/game-initialization/track-detail.component';
-import { AdminViewDetailsComponent } from './admin-view-details.component';
-import { AdminViewComponent } from './admin-view.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
 import { NgModule } from '@angular/core';
