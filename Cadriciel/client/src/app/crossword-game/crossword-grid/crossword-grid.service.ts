@@ -7,13 +7,11 @@ import { Word } from '../../../../../commun/word';
 
 @Injectable()
 export class CrosswordGridService {
-    public size: number;
     public grid: CrosswordSquare[][];
 
     constructor(private pointsService: CrosswordPointsService) { }
 
     public initializeGrid(grid: string[][], wordsWithIndex: Array<Word>) {
-        this.size = grid.length;
         this.grid = grid.map((row) => {
             return row.map((square) => {
                 return new CrosswordSquare(square);
