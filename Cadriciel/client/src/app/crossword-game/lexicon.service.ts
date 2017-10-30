@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 const APIURL = 'http://localhost:3000/api';
+
 @Injectable()
 export class LexiconService {
     constructor(private http: Http) { }
