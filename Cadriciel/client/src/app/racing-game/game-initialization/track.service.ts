@@ -8,10 +8,10 @@ const apiUrl = 'http://localhost:3000/api';
 export class TrackService {
     constructor(private http: Http) { }
 
-    public deleteTrack(track: Track): Promise<string> {
+    public deleteTrack(trackName: string): Promise<string> {
         const path = 'track';
         return this.http
-            .delete(`${apiUrl}/${path}/${track.name}`
+            .delete(`${apiUrl}/${path}/${trackName}`
         ).toPromise()
         .then(response => response.json().data)
         .catch(this.handleError);

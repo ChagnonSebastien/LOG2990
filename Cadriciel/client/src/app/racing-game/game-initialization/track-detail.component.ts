@@ -10,12 +10,16 @@ const apiUrl = 'http://localhost:3000/api';
     styleUrls: ['./track-detail.component.css']
 })
 export class TrackDetailComponent implements OnInit {
-    public track: Track = new Track('', '', '', [], [], [], []);
+    public track;
 
     constructor(
         private http: Http,
         private route: ActivatedRoute
     ) { }
+
+    public getRoute() {
+        return this.route;
+    }
 
     public ngOnInit() {
         const trackName = this.route.snapshot.params['name'];

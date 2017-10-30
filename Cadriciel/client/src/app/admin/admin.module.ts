@@ -1,3 +1,4 @@
+import { AuthentificationComponent } from './authentification.component';
 import { AdminViewDetailsComponent } from './admin-view-details.component';
 import { AdminViewTracksComponent } from './admin-view-tracks.component';
 import { AdminViewSettingsComponent } from './admin-view-settings.component';
@@ -38,7 +39,8 @@ import { AdminRoutingModule } from './admin-routing.module';
         AdminViewComponent,
         AdminViewSettingsComponent,
         AdminViewTracksComponent,
-        AdminViewDetailsComponent
+        AdminViewDetailsComponent,
+        AuthentificationComponent
     ],
     exports: [
         AdminComponent

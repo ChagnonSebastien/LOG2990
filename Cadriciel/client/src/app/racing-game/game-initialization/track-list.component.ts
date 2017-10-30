@@ -10,13 +10,11 @@ import { User } from './user';
     providers: []
 })
 export class TrackListComponent implements OnInit {
-    @Input() public userType: User;
-    public tracks: Track[];
-    public selectedTrack = '';
 
-    constructor(private http: Http) { }
+    private selectedTrack: string;
 
-    public ngOnInit() {
+    @Input() set track(selectedTrack: string) {
+        this.selectedTrack = selectedTrack;
         this.getTracks().subscribe(tracks => this.tracks = tracks.map((track) => {
             return new Track(
                 track._id,
@@ -30,9 +28,11 @@ export class TrackListComponent implements OnInit {
         }));
     }
 
+    public tracks: Track[];
 
-    public select(track) {
-        this.selectedTrack = track.name;
+    constructor(private http: Http) { }
+
+    public ngOnInit() {
     }
 
     public getTracks() {

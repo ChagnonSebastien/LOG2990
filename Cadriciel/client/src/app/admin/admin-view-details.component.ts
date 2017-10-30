@@ -62,7 +62,7 @@ export class AdminViewDetailsComponent implements OnInit {
 
     public async delete(): Promise<boolean> {
         let response = false;
-        await this.trackService.deleteTrack(this.track).then(res => {
+        await this.trackService.deleteTrack(this.track.name).then(res => {
             response = (res !== 'connectionError');
         });
         return response;
