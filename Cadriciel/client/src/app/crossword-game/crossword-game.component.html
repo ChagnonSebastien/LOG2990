@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <app-crossword-hints [hints]="this.hints" [foundWords]="this.crosswordGameService.foundWords" [selectedWord]="this.selectedWord" (selectedWordChanged)="this.selectWord($event)"></app-crossword-hints>
+        <app-crossword-hints (selectedWordChanged)="focusOnWord($event)"></app-crossword-hints>
       </div>
     </div>
   </div>

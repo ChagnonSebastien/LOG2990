@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn mb-3" [ngClass]="{ 'btn-warning': !this.cheatMode, 'btn-danger': this.cheatMode }"(click)="this.toggleCheatMode()">
+      <span *ngIf="!this.cheatMode">Activate cheat mode (show words)</span>
+      <span *ngIf="this.cheatMode">Deactivate cheat mode (hide words)</span>
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12" *ngFor="let hint of this.hintsService.hints">
+    <button class="btn btn-sm text-justify mb-2" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word, 'btn-success': hint.found }"
+      style="word-wrap: break-word; word-break: normal; white-space: normal" (click)="selectWord(hint.word); $event.stopPropagation()" [disabled]="hint.found">
+      <span *ngIf="!this.cheatMode">{{hint.definition}}</span>
+      <span *ngIf="this.cheatMode">{{hint.word}}</span>
+    </button>
+  </div>
+</div>

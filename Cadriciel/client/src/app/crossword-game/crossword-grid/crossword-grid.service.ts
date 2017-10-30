@@ -1,22 +1,32 @@
 import { Injectable } from '@angular/core';
 
-import { CrosswordSquare } from './crossword-square';
-import { Word } from '../../../../commun/word';
+import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
+
+import { CrosswordSquare } from '../shared-classes/crossword-square';
+import { Word } from '../../../../../commun/word';
 
 @Injectable()
 export class CrosswordGridService {
     public size: number;
     public grid: CrosswordSquare[][];
 
-    constructor() { }
+    constructor(private pointsService: CrosswordPointsService) { }
 
-    public initializeGrid(grid: string[][]) {
+    public initializeGrid(grid: string[][], wordsWithIndex: Array<Word>) {
         this.size = grid.length;
         this.grid = grid.map((row) => {
             return row.map((square) => {
                 return new CrosswordSquare(square);
             });
         });
+
+        for (const word of wordsWithIndex) {
+            for (let k = 0; k < word.word.length; k++) {
+                const i = word.horizontal ? word.i : word.i + k;
+                const j = word.horizontal ? word.j + k : word.j;
+                this.grid[i][j].words.push(word.word);
+            }
+        }
     }
 
     public updateWordFoundStatus(word: Word) {
@@ -55,6 +65,8 @@ export class CrosswordGridService {
 
     public markWordAsFound(word: Word) {
         this.forEachLetter(word, this.markSquareAsFound.bind(this));
+        this.unselectWord(word);
+        this.pointsService.addToFoundWords(word.word);
     }
 
     private forEachLetter(word: Word, callback) {
