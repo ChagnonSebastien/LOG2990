@@ -38,4 +38,11 @@ describe('#CrosswordPointsService', () => {
             expect(pointsService['foundWords'].has('hello')).toBeTruthy();
         });
     });
+
+    describe('found()', () => {
+        it('should give true when a found is marked as found', () => {
+            pointsService['foundWords'].add('hello');
+            expect(pointsService.found('hello')).toBeTruthy();
+        });
+    });
 });
