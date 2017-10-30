@@ -78,15 +78,25 @@ module Route {
              return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1)   
         }
 
-        public updateBestTimes (arrayBestTimes: number[] = Array(5), newtime: number ) { 
-              arrayBestTimes.sort((a, b) => { 
-                  return a - b;   
-              })
-              return arrayBestTimes;
+        public updateBestTimes (arrayBestTimes: number[], newtime: number ) { 
+            const fifthBestTimes = 5;
+            arrayBestTimes.sort((a, b) => { 
+                  return a - b;
+            })
+              arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
+              for( let time = 0; time < arrayBestTimes.length - 1; time++) {
+                if(newtime < arrayBestTimes[time]){
+                    arrayBestTimes[time + 1] = arrayBestTimes[time];
+                    arrayBestTimes[time] = newtime;
+                    return arrayBestTimes;
+                }
+              }             
         }
 
-
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
+            let tempRating: number;
+            let tempBestTimes: number[];
+            let tempNbOfTimesPlayed: number;
 
             MongoClient.connect(url, (err, db) => {
                 if (err) {
