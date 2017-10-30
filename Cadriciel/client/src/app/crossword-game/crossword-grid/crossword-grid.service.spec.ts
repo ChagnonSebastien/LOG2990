@@ -131,19 +131,43 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[1][0].input).toEqual('');
         });
 
-        it('should allow overwriting if the letter is not found', () => {
+        it('should overwrite if a word using this square is not found', () => {
             gridService.insertLetter('A', 0, 0);
             expect(gridService.grid[0][0].input).toEqual('a');
             gridService.insertLetter('B', 0, 0);
             expect(gridService.grid[0][0].input).toEqual('b');
         });
 
-        it('should not allow overwriting if the letter is found', () => {
+        it('should not overwrite if a word using this square is found', () => {
             gridService.insertLetter('A', 0, 0);
             expect(gridService.grid[0][0].input).toEqual('a');
 
             gridService.grid[0][0].found = true;
             gridService.insertLetter('B', 0, 0);
+            expect(gridService.grid[0][0].input).toEqual('a');
+        });
+    });
+
+    describe('eraseletter()', () => {
+
+        beforeEach(() => {
+            gridService.initialize(grid, wordsWithIndex);
+        });
+
+        it('should erase if no word using this square is found', () => {
+            gridService.grid[0][0].input = 'a';
+            expect(gridService.grid[0][0].input).toEqual('a');
+
+            gridService.eraseLetter(0, 0);
+            expect(gridService.grid[0][0].input).toEqual('');
+        });
+
+        it('should not erase if a word using this square is found', () => {
+            gridService.grid[0][0].input = 'a';
+            expect(gridService.grid[0][0].input).toEqual('a');
+
+            gridService.grid[0][0].found = true;
+            gridService.eraseLetter(0, 0);
             expect(gridService.grid[0][0].input).toEqual('a');
         });
     });
