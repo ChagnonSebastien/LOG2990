@@ -124,5 +124,11 @@ describe('#CrosswordGridService', () => {
             gridService.insertLetter('A', 0, 0);
             expect(gridService.grid[0][0].input).toEqual('a');
         });
+
+        it('should not insert a letter when the square is black', () => {
+            expect(gridService.grid[1][0].black).toBeTruthy();
+            gridService.insertLetter('A', 1, 0);
+            expect(gridService.grid[1][0].input).toEqual('');
+        });
     });
 });
