@@ -1,7 +1,7 @@
 import { AuthentificationComponent } from './authentification.component';
 import { TrackDetailComponent } from './../racing-game/game-initialization/track-detail.component';
-import { AdminViewTracksComponent } from './admin-view-tracks.component';
-import { AdminViewSettingsComponent } from './admin-view-settings.component';
+import { AdminTracksComponent } from './admin-tracks.component';
+import { AdminSettingsComponent } from './admin-settings.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -14,8 +14,8 @@ import { DrawTrackComponent } from '../racing-game/draw-track/draw-track.compone
             { path: 'tracks/new', component: DrawTrackComponent },
             { path: '', component: AdminComponent, children: [
                 { path: '', redirectTo: 'settings', pathMatch: 'full' },
-                { path: 'settings', component: AdminViewSettingsComponent },
-                { path: 'tracks', component: AdminViewTracksComponent, children: [
+                { path: 'settings', component: AdminSettingsComponent },
+                { path: 'tracks', component: AdminTracksComponent, children: [
                     { path: ':name', component: TrackDetailComponent}
                 ]}
             ]},

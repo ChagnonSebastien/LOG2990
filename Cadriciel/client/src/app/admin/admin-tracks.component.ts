@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-admin-view-tracks-component',
-    templateUrl: './admin-view-tracks.component.html',
-    styleUrls: ['./admin-view-tracks.component.css']
+    selector: 'app-admin-tracks-component',
+    templateUrl: './admin-tracks.component.html',
+    styles: ['#add-track { margin-top:40px; }']
 })
-export class AdminViewTracksComponent implements OnInit {
+export class AdminTracksComponent implements OnInit {
 
     public trackName: string;
     public trackJustDeleted = false;

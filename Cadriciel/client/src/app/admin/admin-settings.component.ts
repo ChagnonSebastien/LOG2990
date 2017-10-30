@@ -3,11 +3,10 @@ import { AuthenticationService } from './authentication.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-admin-view-settings-component',
-    templateUrl: './admin-view-settings.component.html',
-    styleUrls: ['./admin-view-settings.component.css']
+    selector: 'app-admin-settings-component',
+    templateUrl: './admin-settings.component.html'
 })
-export class AdminViewSettingsComponent implements OnInit {
+export class AdminSettingsComponent implements OnInit {
     public passwordChanged: boolean;
 
     constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute) { }
