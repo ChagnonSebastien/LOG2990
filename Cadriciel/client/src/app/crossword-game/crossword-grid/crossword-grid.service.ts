@@ -11,20 +11,9 @@ export class CrosswordGridService {
 
     constructor(private pointsService: CrosswordPointsService) { }
 
-    public initializeGrid(grid: string[][], wordsWithIndex: Array<Word>) {
-        this.grid = grid.map((row) => {
-            return row.map((square) => {
-                return new CrosswordSquare(square);
-            });
-        });
-
-        for (const word of wordsWithIndex) {
-            for (let k = 0; k < word.word.length; k++) {
-                const i = word.horizontal ? word.i : word.i + k;
-                const j = word.horizontal ? word.j + k : word.j;
-                this.grid[i][j].words.push(word.word);
-            }
-        }
+    public initialize(grid: string[][], wordsWithIndex: Array<Word>) {
+        this.initializeGrid(grid);
+        this.initializeWordsUsingSquare(wordsWithIndex);
     }
 
     public updateWordFoundStatus(word: Word) {
@@ -72,6 +61,24 @@ export class CrosswordGridService {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
             callback(i, j);
+        }
+    }
+
+    private initializeGrid(grid: string[][]) {
+        this.grid = grid.map((row) => {
+            return row.map((square) => {
+                return new CrosswordSquare(square);
+            });
+        });
+    }
+
+    private initializeWordsUsingSquare(wordsWithIndex: Array<Word>) {
+        for (const word of wordsWithIndex) {
+            for (let k = 0; k < word.word.length; k++) {
+                const i = word.horizontal ? word.i : word.i + k;
+                const j = word.horizontal ? word.j + k : word.j;
+                this.grid[i][j].words.push(word.word);
+            }
         }
     }
 

@@ -49,19 +49,35 @@ describe('#CrosswordGridService', () => {
         expect(gridService).toBeDefined();
     });
 
-    describe('initializeGrid()', () => {
+    describe('initialize()', () => {
         it('should initialize the grid of CrosswordSquares', () => {
             expect(gridService.grid).toBeUndefined();
-            gridService.initializeGrid(grid, wordsWithIndex);
+            gridService.initialize(grid, wordsWithIndex);
             expect(gridService.grid).toBeDefined();
         });
 
         it('should initialize the answers of the grid', () => {
-            gridService.initializeGrid(grid, wordsWithIndex);
+            gridService.initialize(grid, wordsWithIndex);
             gridService.grid.map((row, i) => {
                 row.map((square, j) => {
                     expect(square.answer).toEqual(grid[i][j]);
                 });
+            });
+        });
+
+        it('should initialize the words contributing to each index', () => {
+            gridService.initialize(grid, wordsWithIndex);
+
+            expect(gridService.grid[1][0].words.length).toEqual(0);
+
+            expect(gridService.grid[0][0].words.length).toEqual(1);
+            gridService.grid[0][0].words.map((word) => {
+                expect(word).toEqual('appeal');
+            });
+
+            expect(gridService.grid[0][9].words.length).toEqual(2);
+            gridService.grid[0][9].words.map((word) => {
+                expect(['rat', 'textbook']).toContain(word);
             });
         });
     });
