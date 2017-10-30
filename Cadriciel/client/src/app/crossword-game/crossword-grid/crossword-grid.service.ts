@@ -17,15 +17,9 @@ export class CrosswordGridService {
     }
 
     public updateWordFoundStatus(word: Word) {
-        for (let k = 0; k < word.word.length; k++) {
-            const i = word.horizontal ? word.i : word.i + k;
-            const j = word.horizontal ? word.j + k : word.j;
-            if (!this.grid[i][j].letterFound()) {
-                return; // word not found
-            }
+        if (this.wordFound(word)) {
+            this.markWordAsFound(word);
         }
-        // word is found
-        this.markWordAsFound(word);
     }
 
     public insertLetter(letter: string, i: number, j: number) {
@@ -80,6 +74,17 @@ export class CrosswordGridService {
                 this.grid[i][j].words.push(word.word);
             }
         }
+    }
+
+    private wordFound(word: Word): boolean {
+        for (let k = 0; k < word.word.length; k++) {
+            const i = word.horizontal ? word.i : word.i + k;
+            const j = word.horizontal ? word.j + k : word.j;
+            if (!this.grid[i][j].letterFound()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private unselectSquare(i: number, j: number) {
