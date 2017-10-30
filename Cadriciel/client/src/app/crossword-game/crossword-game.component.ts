@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChildren, Input, Output, EventEmitter } from '@angular/core';
-import { CrosswordService } from './crossword.service';
 import { KeyboardService } from './keyboard.service';
-import { LexiconService } from './lexicon.service';
-
-import { CrosswordGame } from './crossword-game';
-import { Hint } from './hint';
+import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
+import { CrosswordGameService } from './crossword-game.service';
+import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 
 @Component({
     selector: 'app-crossword-game',
@@ -16,15 +14,14 @@ export class CrosswordGameComponent implements OnInit {
     @Input() public mode: string;
     @Input() public level: string;
     @Output() public endGameEmitter: EventEmitter<boolean>;
-    public crossword: CrosswordGame;
     public selectedWord: string;
-    private hints: Array<Hint>;
     @ViewChildren('square') public squares;
 
     constructor(
-        private crosswordService: CrosswordService,
         private keyboardService: KeyboardService,
-        private lexiconService: LexiconService
+        public crosswordGameService: CrosswordGameService,
+        private gridService: CrosswordGridService,
+        private hintsService: CrosswordHintsService
     ) {
         this.endGameEmitter = new EventEmitter<boolean>();
     }
@@ -33,24 +30,8 @@ export class CrosswordGameComponent implements OnInit {
         this.newGame();
     }
 
-    private newGame() {
-        this.crosswordService.getCrossword(this.level).then((crossword) => {
-            this.crossword = new CrosswordGame(
-                crossword.crossword,
-                crossword.wordsWithIndex,
-                crossword.listOfWords
-            );
-            this.hints = new Array<Hint>();
-            for (const word of this.crossword.wordsWithIndex) {
-                this.lexiconService.getWordDefinition(word.word)
-                    .catch((err) => {
-                        this.handleError(err);
-                    })
-                    .then((definition) => {
-                        this.hints.push(new Hint(word.word, definition));
-                    });
-            }
-        });
+    private async newGame() {
+        await this.crosswordGameService.newGame(this.level);
     }
 
     public endGame() {
@@ -64,28 +45,29 @@ export class CrosswordGameComponent implements OnInit {
 
     public unselectWord() {
         if (this.selectedWord) {
-            this.crossword.clearSelectedWord(this.selectedWord);
+            this.crosswordGameService.clearSelectedWord(this.selectedWord);
             this.selectedWord = '';
         }
     }
 
-    public selectWord(word: string) {
-        if (this.selectedWord) {
-            this.crossword.clearSelectedWord(this.selectedWord);
-        }
-        this.crossword.setSelectedWord(word);
+    public focusOnWord(word: string) {
         this.selectedWord = word;
-        this.focusOnSelectedWord();
+        const wordInfo = this.hintsService.getWordInfo(word);
+        this.focusOnSquare(wordInfo.i, wordInfo.j);
     }
 
     public handleInput(event: KeyboardEvent, i: number, j: number): void {
         const charCode = event.which || event.keyCode;
-        if (this.keyboardService.isLetter(charCode) && this.crossword.getStatus()[i][j].selected) {
-            this.crossword.insertLetter(charCode, i, j);
+        if (this.keyboardService.isLetter(charCode)) {
+            if (this.gridService.grid[i][j].selected) {
+                this.crosswordGameService.insertLetter(charCode, i, j);
+            }
             this.focusOnNextLetter(i, j);
             this.disableEvent(event);
-        } else if (this.keyboardService.isBackspace(charCode) && this.crossword.getStatus()[i][j].selected) {
-            this.crossword.eraseLetter(i, j);
+        } else if (this.keyboardService.isBackspace(charCode)) {
+            if (this.gridService.grid[i][j].selected) {
+                this.crosswordGameService.eraseLetter(i, j);
+            }
             this.focusOnPreviousLetter(i, j);
             this.disableEvent(event);
         } else if (this.keyboardService.isArrowKey(charCode)) {
@@ -108,11 +90,6 @@ export class CrosswordGameComponent implements OnInit {
         return this.keyboardService.isTab(keyCode);
     }
 
-    private focusOnSelectedWord() {
-        const wordInfo = this.crossword.wordMap.get(this.selectedWord);
-        this.focusOnSquare(wordInfo.i, wordInfo.j);
-    }
-
     private focusOnSquare(i: number, j: number) {
         this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
@@ -120,7 +97,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private focusOnNextLetter(i: number, j: number) {
-        const wordInfo = this.crossword.wordMap.get(this.selectedWord);
+        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
         if (wordInfo.horizontal) {
             j = j + 1 < wordInfo.j + wordInfo.word.length ? j + 1 : j;
         } else {
@@ -130,17 +107,12 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private focusOnPreviousLetter(i: number, j: number) {
-        const wordInfo = this.crossword.wordMap.get(this.selectedWord);
+        const wordInfo = this.hintsService.getWordInfo(this.selectedWord);
         if (wordInfo.horizontal) {
             j = j - 1 >= wordInfo.j ? j - 1 : j;
         } else {
             i = i - 1 >= wordInfo.i ? i - 1 : i;
         }
         this.focusOnSquare(i, j);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
     }
 }
