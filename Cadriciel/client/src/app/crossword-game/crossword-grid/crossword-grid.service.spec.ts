@@ -130,5 +130,12 @@ describe('#CrosswordGridService', () => {
             gridService.insertLetter('A', 1, 0);
             expect(gridService.grid[1][0].input).toEqual('');
         });
+
+        it('should allow overwriting if the letter is not found', () => {
+            gridService.insertLetter('A', 0, 0);
+            expect(gridService.grid[0][0].input).toEqual('a');
+            gridService.insertLetter('B', 0, 0);
+            expect(gridService.grid[0][0].input).toEqual('b');
+        });
     });
 });
