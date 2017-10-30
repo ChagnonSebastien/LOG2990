@@ -1,6 +1,19 @@
 <div id="cloud-container">
     <div class="spacing"></div>
     <div class="container">
-        <app-track-list [track]="'s'"></app-track-list>
+        <h2 id="client-only">Track List</h2>
+        <div class="row">
+            <div class="col col-md-4">
+            <ul class="tracks" class="list-group" id="track-list">
+                <app-track-list [track]="trackName"></app-track-list>
+            </ul>
+            </div>
+            <div class="col">
+            <router-outlet (activate)="onActivate($event)" (deactivate)="onDeactivate($event)"></router-outlet>
+            <div *ngIf="trackName !== undefined">
+                <button [routerLink]="['/racing-game', trackName, 'play']">Play</button>
+            </div>
+            </div>
+        </div>
     </div>
 </div>
