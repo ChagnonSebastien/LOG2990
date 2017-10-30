@@ -29,7 +29,7 @@ export class CrosswordGameService {
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
-        this.gridService.initializeGrid(grid, wordsWithIndex);
+        this.gridService.initialize(grid, wordsWithIndex);
         this.hintsService.newGame(wordsWithIndex);
         this.pointsService.newGame();
     }
