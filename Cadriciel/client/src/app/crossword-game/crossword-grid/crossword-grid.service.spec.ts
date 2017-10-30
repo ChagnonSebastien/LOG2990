@@ -209,4 +209,25 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][9].selected).toBeTruthy();
         });
     });
+
+    describe('markWordAsFound()', () => {
+        beforeEach(() => {
+            gridService.initialize(grid, wordsWithIndex);
+        });
+
+        it('should mark a word as found', () => {
+            // rat not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            gridService.markWordAsFound(
+                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
+            );
+
+            expect(gridService.grid[0][7].found).toBeTruthy();
+            expect(gridService.grid[0][8].found).toBeTruthy();
+            expect(gridService.grid[0][9].found).toBeTruthy();
+        });
+    });
 });
