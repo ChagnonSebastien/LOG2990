@@ -49,4 +49,14 @@ describe('#CrosswordPointsService', () => {
             expect(pointsService.found('hello')).toBeFalsy();
         });
     });
+
+    describe('foundWordAlerts()', () => {
+        it('should alert when a found is found', (done) => {
+            pointsService.foundWordAlerts().subscribe((newlyFoundWord) => {
+                expect(newlyFoundWord).toBe('hello');
+                done();
+            });
+            pointsService['foundWordSubject'].next('hello');
+        });
+    });
 });

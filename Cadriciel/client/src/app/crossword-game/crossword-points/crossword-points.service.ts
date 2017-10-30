@@ -5,10 +5,10 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class CrosswordPointsService {
     private foundWords: Set<string>;
-    private foundWord: Subject<any>;
+    private foundWordSubject: Subject<any>;
 
     constructor() {
-        this.foundWord = new Subject();
+        this.foundWordSubject = new Subject();
         this.newGame();
     }
 
@@ -18,7 +18,7 @@ export class CrosswordPointsService {
 
     public addToFoundWords(word: string) {
         this.foundWords.add(word);
-        this.foundWord.next(word);
+        this.alertFoundWord(word);
     }
 
     public found(word: string): boolean {
@@ -26,6 +26,10 @@ export class CrosswordPointsService {
     }
 
     public foundWordAlerts(): Observable<any> {
-        return this.foundWord.asObservable();
+        return this.foundWordSubject.asObservable();
+    }
+
+    private alertFoundWord(word: string) {
+        this.foundWordSubject.next(word);
     }
 }
