@@ -9,6 +9,7 @@ export class CrosswordPointsService {
 
     constructor() {
         this.foundWord = new Subject();
+        this.newGame();
     }
 
     public newGame() {

@@ -21,11 +21,14 @@ describe('#CrosswordPointsService', () => {
 
     describe('newGame()', () => {
         it('should reinitialize a game', () => {
-            pointsService.newGame();
             pointsService.addToFoundWords('hello');
-            expect(pointsService.found('hello')).toBeTruthy();
+            // ['attributeName'] to access private attribute for testing purpose only
+            expect(pointsService['foundWords'].has('hello')).toBeTruthy();
+
+            // reinitialize
             pointsService.newGame();
-            expect(pointsService.found('hello')).toBeFalsy();
+            expect(pointsService['foundWords'].size).toBe(0);
+            expect(pointsService['foundWords'].has('hello')).toBeFalsy();
         });
     });
 });
