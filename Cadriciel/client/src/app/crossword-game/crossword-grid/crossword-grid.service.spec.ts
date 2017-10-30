@@ -50,35 +50,70 @@ describe('#CrosswordGridService', () => {
     });
 
     describe('initialize()', () => {
-        it('should initialize the grid of CrosswordSquares', () => {
-            expect(gridService.grid).toBeUndefined();
-            gridService.initialize(grid, wordsWithIndex);
-            expect(gridService.grid).toBeDefined();
+        describe('construction', () => {
+            it('should initialize the grid of CrosswordSquares', () => {
+                expect(gridService.grid).toBeUndefined();
+                gridService.initialize(grid, wordsWithIndex);
+                expect(gridService.grid).toBeDefined();
+            });
         });
 
-        it('should initialize the answers of the grid', () => {
-            gridService.initialize(grid, wordsWithIndex);
-            gridService.grid.map((row, i) => {
-                row.map((square, j) => {
-                    expect(square.answer).toEqual(grid[i][j]);
+        describe('behaviour', () => {
+            beforeEach(() => {
+                gridService.initialize(grid, wordsWithIndex);
+            });
+
+            it('should initialize the answers of the grid', () => {
+                gridService.grid.map((row, i) => {
+                    row.map((square, j) => {
+                        expect(square.answer).toEqual(grid[i][j]);
+                    });
                 });
             });
-        });
 
-        it('should initialize the words contributing to each index', () => {
-            gridService.initialize(grid, wordsWithIndex);
+            it('should initialize the words contributing to each index', () => {
+                expect(gridService.grid[1][0].words.length).toEqual(0);
 
-            expect(gridService.grid[1][0].words.length).toEqual(0);
+                expect(gridService.grid[0][0].words.length).toEqual(1);
+                gridService.grid[0][0].words.map((word) => {
+                    expect(word).toEqual('appeal');
+                });
 
-            expect(gridService.grid[0][0].words.length).toEqual(1);
-            gridService.grid[0][0].words.map((word) => {
-                expect(word).toEqual('appeal');
+                expect(gridService.grid[0][9].words.length).toEqual(2);
+                gridService.grid[0][9].words.map((word) => {
+                    expect(['rat', 'textbook']).toContain(word);
+                });
             });
 
-            expect(gridService.grid[0][9].words.length).toEqual(2);
-            gridService.grid[0][9].words.map((word) => {
-                expect(['rat', 'textbook']).toContain(word);
+            it('should identify empty squares', () => {
+                expect(gridService.grid[0][0].empty).toBeTruthy();
+                expect(gridService.grid[1][0].empty).toBeFalsy();
+            });
+
+            it('should identify black squares as # or " "', () => {
+                expect(gridService.grid[0][0].black).toBeFalsy();
+                expect(gridService.grid[1][0].black).toBeTruthy();
+                expect(gridService.grid[1][1].black).toBeTruthy();
+            });
+
+            it('should have no initial input on empty squares', () => {
+                expect(gridService.grid[0][0].empty).toBeTruthy();
+                expect(gridService.grid[0][0].input).toEqual('');
+            });
+
+            it('should not select anything at initialization', () => {
+                for (const row of gridService.grid) {
+                    for (const square of row) {
+                        expect(square.selected).toBeFalsy();
+                        expect(square.player1Selected).toBeFalsy();
+                        expect(square.player2Selected).toBeFalsy();
+                    }
+                }
             });
         });
+    });
+
+    describe('insertLetter()', () => {
+
     });
 });
