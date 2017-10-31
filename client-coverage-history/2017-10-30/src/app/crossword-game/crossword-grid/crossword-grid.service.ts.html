@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/crossword-game/crossword-grid/crossword-grid.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">src/app/crossword-game/crossword-grid</a> crossword-grid.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.96% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>49/57</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">59.26% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>16/27</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">88.89% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>16/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.19% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>46/54</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">180x</span>
+<span class="cline-any cline-yes">1800x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">216x</span>
+<span class="cline-any cline-yes">216x</span>
+<span class="cline-any cline-yes">1116x</span>
+<span class="cline-any cline-yes">1116x</span>
+<span class="cline-any cline-yes">1116x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@angular/core';
+&nbsp;
+import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
+&nbsp;
+import { CrosswordSquare } from '../shared-classes/crossword-square';
+import { Word } from '../../../../../commun/word';
+&nbsp;
+@Injectable()
+export class CrosswordGridService {
+    public grid: CrosswordSquare[][];
+&nbsp;
+    constructor(private pointsService: CrosswordPointsService<span class="branch-1 cbranch-no" title="branch not covered" >) { }</span>
+&nbsp;
+    public initialize(grid: string[][], wordsWithIndex: Array&lt;Word&gt;) {
+        this.initializeGrid(grid);
+        this.initializeWordsUsingSquare(wordsWithIndex);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public updateWordFoundStatus(</span>word: Word) {
+<span class="cstat-no" title="statement not covered" >        if (this.wordFound(word)) {</span>
+<span class="cstat-no" title="statement not covered" >            this.markWordAsFound(word);</span>
+        }
+    }
+&nbsp;
+    public insertLetter(letter: string, i: number, j: number) {
+        // only insert when not found and not black
+        if (!this.grid[i][j].found &amp;&amp; !this.grid[i][j].black) {
+            this.grid[i][j].input = letter.toLowerCase();
+        }
+    }
+&nbsp;
+    public eraseLetter(i: number, j: number) {
+        // only erase when not found and not black
+        if (!this.grid[i][j].found &amp;&amp; !this.grid[i][j].black) {
+            this.grid[i][j].input = '';
+        }
+    }
+&nbsp;
+    public unselectWord(word: Word) {
+        this.forEachLetter(word, this.unselectSquare.bind(this));
+    }
+&nbsp;
+    public selectWord(word: Word) {
+        this.forEachLetter(word, this.selectSquare.bind(this));
+    }
+&nbsp;
+    public markWordAsFound(word: Word) {
+        this.forEachLetter(word, this.markSquareAsFound.bind(this));
+        this.unselectWord(word);
+        this.pointsService.addToFoundWords(word.word);
+    }
+&nbsp;
+    private forEachLetter(word: Word, callback) {
+        for (let k = 0; k &lt; word.word.length; k++) {
+            const i = word.horizontal ? word.i : <span class="branch-1 cbranch-no" title="branch not covered" >word.i + k;</span>
+            const j = word.horizontal ? word.j + k : <span class="branch-1 cbranch-no" title="branch not covered" >word.j;</span>
+            callback(i, j);
+        }
+    }
+&nbsp;
+    private initializeGrid(grid: string[][]) {
+        this.grid = grid.map((row) =&gt; {
+            return row.map((square) =&gt; {
+                return new CrosswordSquare(square);
+            });
+        });
+    }
+&nbsp;
+    private initializeWordsUsingSquare(wordsWithIndex: Array&lt;Word&gt;) {
+        for (const word of wordsWithIndex) {
+            for (let k = 0; k &lt; word.word.length; k++) {
+                const i = word.horizontal ? word.i : word.i + k;
+                const j = word.horizontal ? word.j + k : word.j;
+                this.grid[i][j].words.push(word.word);
+            }
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private wordFound(</span>word: Word): boolean {
+<span class="cstat-no" title="statement not covered" >        for (let k = 0; k &lt; word.word.length; k++) {</span>
+            const i = <span class="cstat-no" title="statement not covered" >word.horizontal ? word.i : word.i + k;</span>
+            const j = <span class="cstat-no" title="statement not covered" >word.horizontal ? word.j + k : word.j;</span>
+<span class="cstat-no" title="statement not covered" >            if (!this.grid[i][j].letterFound()) {</span>
+<span class="cstat-no" title="statement not covered" >                return false;</span>
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return true;</span>
+    }
+&nbsp;
+    private unselectSquare(i: number, j: number) {
+        this.grid[i][j].selected = false;
+    }
+&nbsp;
+    private selectSquare(i: number, j: number) {
+        this.grid[i][j].selected = true;
+    }
+&nbsp;
+    private markSquareAsFound(i: number, j: number) {
+        this.grid[i][j].found = true;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 30 2017 16:43:31 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

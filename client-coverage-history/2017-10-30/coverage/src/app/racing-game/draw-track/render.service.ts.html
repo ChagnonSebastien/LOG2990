@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/racing-game/draw-track/render.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">src/app/racing-game/draw-track</a> render.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20.51% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>32/156</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">3.45% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/29</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>30/150</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './obstacle';
+import { TrackValidationService } from './track-validation.service';
+import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+&nbsp;
+const viewDepth = 10;
+&nbsp;
+<span class="fstat-no" title="function not covered" >@Injectable()</span>
+export class RenderService {
+&nbsp;
+    private container: HTMLElement;
+&nbsp;
+    private trackValidationService: TrackValidationService;
+&nbsp;
+    private obstacleService: ObstacleService;
+&nbsp;
+    private renderer: THREE.WebGLRenderer;
+&nbsp;
+    private camera: THREE.OrthographicCamera;
+&nbsp;
+    private scene: THREE.Scene;
+&nbsp;
+    private <span class="cstat-no" title="statement not covered" >intersections: THREE.Mesh[] = [];</span>
+&nbsp;
+    private firstPointHighlight: THREE.Mesh;
+&nbsp;
+    private <span class="cstat-no" title="statement not covered" >segments: THREE.Mesh[] = [];</span>
+&nbsp;
+    private <span class="cstat-no" title="statement not covered" >potholes: THREE.Mesh[] = this.newObstacles(0x000000);</span>
+&nbsp;
+    private <span class="cstat-no" title="statement not covered" >puddles: THREE.Mesh[] = this.newObstacles(0x0051a8);</span>
+&nbsp;
+    private <span class="cstat-no" title="statement not covered" >boosters: THREE.Mesh[] = this.newObstacles(0xffbb00);</span>
+&nbsp;
+    public <span class="cstat-no" title="statement not covered" >trackClosed = false;</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public initialise(</span>container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService) {
+<span class="cstat-no" title="statement not covered" >        this.container = container;</span>
+<span class="cstat-no" title="statement not covered" >        this.trackValidationService = trackValidationService;</span>
+<span class="cstat-no" title="statement not covered" >        this.obstacleService = obstacleService;</span>
+<span class="cstat-no" title="statement not covered" >        this.createScene();</span>
+<span class="cstat-no" title="statement not covered" >        this.startRenderingLoop();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public clear() {</span>
+<span class="cstat-no" title="statement not covered" >        this.intersections = [];</span>
+<span class="cstat-no" title="statement not covered" >        this.segments = [];</span>
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = false;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private createScene() {</span>
+<span class="cstat-no" title="statement not covered" >        this.scene = new THREE.Scene();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.camera = new THREE.OrthographicCamera(</span>
+            this.container.clientWidth / - 2,
+            this.container.clientWidth / 2,
+            this.container.clientHeight / 2,
+            this.container.clientHeight / - 2,
+            -viewDepth,
+            viewDepth
+        );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.intersections.push(this.newIntersection(new THREE.Vector2(0, 0)));</span>
+<span class="cstat-no" title="statement not covered" >        this.segments.push(this.newSegment());</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private startRenderingLoop() {</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer = new THREE.WebGLRenderer();</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer.setPixelRatio(devicePixelRatio);</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);</span>
+<span class="cstat-no" title="statement not covered" >        this.container.appendChild(this.renderer.domElement);</span>
+<span class="cstat-no" title="statement not covered" >        this.render();</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    private render() {</span></span>
+<span class="cstat-no" title="statement not covered" >        requestAnimationFrame(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" ></span>this.render())</span>;</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer.render(this.scene, this.camera);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private newIntersection(</span>position: THREE.Vector2) {
+        const geometry = <span class="cstat-no" title="statement not covered" >new THREE.CircleGeometry(10, 32);</span>
+        const material = <span class="cstat-no" title="statement not covered" >new THREE.MeshBasicMaterial({ color: 0xFFFFFF });</span>
+        const point = <span class="cstat-no" title="statement not covered" >new THREE.Mesh(geometry, material);</span>
+<span class="cstat-no" title="statement not covered" >        point.position.setX(position.x);</span>
+<span class="cstat-no" title="statement not covered" >        point.position.setY(position.y);</span>
+<span class="cstat-no" title="statement not covered" >        point.position.setZ(-3);</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.add(point);</span>
+<span class="cstat-no" title="statement not covered" >        return point;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private newSegment() {</span>
+        const geometry = <span class="cstat-no" title="statement not covered" >new THREE.PlaneGeometry(0, 20);</span>
+        const material = <span class="cstat-no" title="statement not covered" >new THREE.MeshBasicMaterial({ color: 0xBB1515 });</span>
+        const segment = <span class="cstat-no" title="statement not covered" >new THREE.Mesh(geometry, material);</span>
+<span class="cstat-no" title="statement not covered" >        segment.position.z = -4;</span>
+<span class="cstat-no" title="statement not covered" >        return segment;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private newObstacles(</span>color: number): THREE.Mesh[] {
+        const geometry = <span class="cstat-no" title="statement not covered" >new THREE.CircleGeometry(5, 16);</span>
+        const material = <span class="cstat-no" title="statement not covered" >new THREE.MeshBasicMaterial({ color });</span>
+        const point = <span class="cstat-no" title="statement not covered" >new THREE.Mesh(geometry, material);</span>
+<span class="cstat-no" title="statement not covered" >        point.position.setZ(1);</span>
+<span class="cstat-no" title="statement not covered" >        return [point, point.clone(), point.clone(), point.clone(), point.clone()];</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public updateIntersectionPosition(</span>index: number, position: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        if (index &gt;= this.intersections.length) {</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.intersections[index].position.set(position.x, position.y, this.intersections[index].position.z);</span>
+<span class="cstat-no" title="statement not covered" >        if (index === 0 &amp;&amp; this.trackClosed) {</span>
+<span class="cstat-no" title="statement not covered" >            this.firstPointHighlight.position.set(position.x, position.y, this.firstPointHighlight.position.z);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentPosition(index - 1 &gt; -1 ? index - 1 : this.intersections.length - 1);</span>
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentPosition(index);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentsValidity();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private updateSegmentPosition(</span>index: number) {
+        const fromPosition = <span class="cstat-no" title="statement not covered" >this.intersections[index].position;</span>
+        const toPosition = <span class="cstat-no" title="statement not covered" >this.intersections[index + 1 &lt; this.intersections.length ? index + 1 : 0].position;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);</span>
+<span class="cstat-no" title="statement not covered" >        this.segments[index].geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));</span>
+<span class="cstat-no" title="statement not covered" >        this.segments[index].position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;</span>
+<span class="cstat-no" title="statement not covered" >        this.segments[index].position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    private updateSegmentsValidity() {</span></span>
+<span class="cstat-no" title="statement not covered" >        this.segments.forEach(<span class="fstat-no" title="function not covered" >(</span>segment, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            segment.material = new THREE.MeshBasicMaterial(</span>
+                this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
+            );
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private getXYDistance(</span>vector1: THREE.Vector3, vector2: THREE.Vector3) {
+<span class="cstat-no" title="statement not covered" >        return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public addIntersection(</span>position: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        if (this.intersections.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >            this.addHighlight(position);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.intersections[this.intersections.length - 1].position.setZ(0);</span>
+<span class="cstat-no" title="statement not covered" >        this.intersections.push(this.newIntersection(position));</span>
+<span class="cstat-no" title="statement not covered" >        this.segments.splice(this.segments.length - 1, 0, this.newSegment());</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.add(this.segments[this.segments.length - 2]);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private addHighlight(</span>position: THREE.Vector2) {
+        const geometry = <span class="cstat-no" title="statement not covered" >new THREE.CircleGeometry(15, 32);</span>
+        const material = <span class="cstat-no" title="statement not covered" >new THREE.MeshBasicMaterial({ color: 0xF5CD30 });</span>
+<span class="cstat-no" title="statement not covered" >        this.firstPointHighlight = new THREE.Mesh(geometry, material);</span>
+<span class="cstat-no" title="statement not covered" >        this.firstPointHighlight.position.set(position.x, position.y, -1);</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.add(this.firstPointHighlight);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public removeIntersection() {</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.remove(this.intersections[this.intersections.length - 2]);</span>
+<span class="cstat-no" title="statement not covered" >        this.intersections.splice(this.intersections.length - 2, 1);</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.remove(this.segments[this.segments.length - 2]);</span>
+<span class="cstat-no" title="statement not covered" >        this.segments.splice(this.segments.length - 2, 1);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (this.intersections.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >            this.scene.remove(this.firstPointHighlight);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            this.updateSegmentPosition(this.segments.length - 2);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentsValidity();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public openTrack(</span>position: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = false;</span>
+<span class="cstat-no" title="statement not covered" >        this.intersections.push(this.newIntersection(position));</span>
+<span class="cstat-no" title="statement not covered" >        this.segments.push(this.newSegment());</span>
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentPosition(this.segments.length - 2);</span>
+<span class="cstat-no" title="statement not covered" >        this.updateSegmentsValidity();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public closeTrack() {</span>
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = true;</span>
+<span class="cstat-no" title="statement not covered" >        this.scene.remove(this.intersections.pop());</span>
+<span class="cstat-no" title="statement not covered" >        this.segments.pop();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public updateObstaclesPositions(</span>type: ObstacleType, obstacles: Obstacle[]) {
+<span class="cstat-no" title="statement not covered" >        switch (type) {</span>
+            case ObstacleType.Booster:
+<span class="cstat-no" title="statement not covered" >                this.updateObstaclesPositionsInList(obstacles, this.boosters);</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+&nbsp;
+            case ObstacleType.Pothole:
+<span class="cstat-no" title="statement not covered" >                this.updateObstaclesPositionsInList(obstacles, this.potholes);</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+&nbsp;
+            case ObstacleType.Puddle:
+<span class="cstat-no" title="statement not covered" >                this.updateObstaclesPositionsInList(obstacles, this.puddles);</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+&nbsp;
+            default:
+<span class="cstat-no" title="statement not covered" >                break;</span>
+        }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    private updateObstaclesPositionsInList(</span>obstacles: Obstacle[], meshList: THREE.Mesh[]) {</span>
+<span class="cstat-no" title="statement not covered" >        meshList.forEach(<span class="fstat-no" title="function not covered" >(</span>mesh, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (obstacles.length &lt;= index) {</span>
+<span class="cstat-no" title="statement not covered" >                this.scene.remove(mesh);</span>
+            } else {
+                const newPosition = <span class="cstat-no" title="statement not covered" >this.calculateObstaclePosition(obstacles[index]);</span>
+<span class="cstat-no" title="statement not covered" >                mesh.position.setX(newPosition.x);</span>
+<span class="cstat-no" title="statement not covered" >                mesh.position.setY(newPosition.y);</span>
+<span class="cstat-no" title="statement not covered" >                this.scene.add(mesh);</span>
+            }
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private calculateObstaclePosition(</span>obstacle: Obstacle): THREE.Vector2 {
+        const point1 = <span class="cstat-no" title="statement not covered" >this.intersections[obstacle.segment].position;</span>
+        const point2 = <span class="cstat-no" title="statement not covered" >this.intersections[obstacle.segment + 1 === this.intersections.length ? 0 : obstacle.segment + 1].position;</span>
+&nbsp;
+        const positionWithoutOffset = <span class="cstat-no" title="statement not covered" >this.getPositionWithoutOffset(point1, point2, obstacle.distance);</span>
+        const segmentAngle = <span class="cstat-no" title="statement not covered" >this.getAngle(point1, point2);</span>
+        const offsetAngle = <span class="cstat-no" title="statement not covered" >this.getOffsetAngle(segmentAngle, obstacle.offset);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return new THREE.Vector2(</span>
+            positionWithoutOffset.x + (10 * Math.abs(obstacle.offset) * Math.cos(offsetAngle)),
+            positionWithoutOffset.y + (10 * Math.abs(obstacle.offset) * Math.sin(offsetAngle))
+        );
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public getPositionWithoutOffset(</span>point1: THREE.Vector3, point2: THREE.Vector3, distance: number): THREE.Vector2 {
+        const x = <span class="cstat-no" title="statement not covered" >((point2.x - point1.x) * distance) + point1.x;</span>
+        const y = <span class="cstat-no" title="statement not covered" >((point2.y - point1.y) * distance) + point1.y;</span>
+<span class="cstat-no" title="statement not covered" >        return new THREE.Vector2(x, y);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public getAngle(</span>point1: THREE.Vector3, point2: THREE.Vector3): number {
+        const rawAngle = <span class="cstat-no" title="statement not covered" >Math.atan((point2.y - point1.y) / (point2.x - point1.x));</span>
+<span class="cstat-no" title="statement not covered" >        return (point2.x - point1.x &gt;= 0) ? rawAngle : rawAngle + Math.PI;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public getOffsetAngle(</span>angle: number, offset: number): number {
+<span class="cstat-no" title="statement not covered" >        return angle + (Math.PI / 2 * (offset &gt; 0 ? 1 : -1));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public onResize() {</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.left = this.container.clientWidth / -2;</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.right = this.container.clientWidth / 2;</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.top = this.container.clientHeight / 2;</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.bottom = this.container.clientHeight / - 2;</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.updateProjectionMatrix();</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 30 2017 16:56:20 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
