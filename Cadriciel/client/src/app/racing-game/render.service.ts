@@ -1,3 +1,4 @@
+import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -50,10 +51,10 @@ export class RenderService {
         this.scene.add(this.cube);
     }
 
-    private createScene() {
+    private createScene(track: Track) {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.terrainGeneration.populate(this.scene);
+        this.terrainGeneration.generate(this.scene, track);
         this.cameraService.initialiseCamera(this.container);
         this.camera = this.cameraService.getCamera();
     }
@@ -139,11 +140,11 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLElement, rotationX: number, rotationY: number) {
+    public initialize(container: HTMLElement, rotationX: number, rotationY: number, track: Track) {
         this.container = container;
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
-        this.createScene();
+        this.createScene(track);
         this.createCube();
         this.initStats();
         this.startRenderingLoop();

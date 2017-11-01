@@ -1,3 +1,4 @@
+import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
@@ -10,7 +11,7 @@ export class TerrainGenerationService {
 
     }
 
-    public populate(scene: THREE.Scene): void {
+    public generate(scene: THREE.Scene, track: Track): void {
 
     }
 
