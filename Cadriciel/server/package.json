@@ -7,6 +7,7 @@
     "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
     "lint": "tslint app/**/*.ts app/*.ts --force -t verbose",
     "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
+    "cover": "nyc mocha -r source-map-support/register -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
     "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts' 'app/**/crossword.service.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
@@ -72,11 +73,26 @@
     "karma-firefox-launcher": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.1",
+    "nyc": "^11.2.1",
     "remap-istanbul": "^0.8.4",
     "rimraf": "^2.5.4",
+    "source-map-support": "^0.5.0",
     "ts-node": "^3.3.0",
     "tslint": "^4.2.0",
     "tslint-eslint-rules": "^3.2.3",
     "typescript": "^2.4.2"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
   }
 }

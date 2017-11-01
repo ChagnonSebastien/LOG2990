@@ -10,6 +10,9 @@ export class CrosswordSquare {
     public words: Array<string>;
 
     constructor(character: string) {
+        if (character.length > 1) {
+            character = character.charAt(0);
+        }
         this.black = character === ' ' || character === '#';
         this.empty = !this.black;
         this.found = false;
@@ -22,6 +25,9 @@ export class CrosswordSquare {
     }
 
     public letterFound(): boolean {
+        if (this.black || !this.empty) {
+            return false;
+        }
         return this.answer.toLowerCase() === this.input.toLowerCase();
     }
 }

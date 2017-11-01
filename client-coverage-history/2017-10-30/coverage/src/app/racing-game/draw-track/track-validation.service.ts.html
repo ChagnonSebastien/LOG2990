@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/racing-game/draw-track/track-validation.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">src/app/racing-game/draw-track</a> track-validation.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.36% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>83/183</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20.83% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>20/96</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>16/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>81/180</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+&nbsp;
+@Injectable()
+export class TrackValidationService {
+    public trackElements: {
+        intersection: THREE.Vector2,
+        intersectionAngl: number,
+        segmentLength: number,
+        segmentIntersections: number[]
+    }[] = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
+&nbsp;
+    private trackClosed = false;
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public addIntersection(</span>intersection: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        this.trackElements.push(</span>
+            { intersection, intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }
+        );
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentLength(this.trackElements.length - 2);</span>
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentIntersections(this.trackElements.length - 2);</span>
+<span class="cstat-no" title="statement not covered" >        if (this.trackElements.length &gt; 2) {</span>
+<span class="cstat-no" title="statement not covered" >            this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public clear() {</span>
+<span class="cstat-no" title="statement not covered" >        this.trackElements = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];</span>
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = false;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public closeTrack() {</span>
+<span class="cstat-no" title="statement not covered" >        this.trackElements.pop();</span>
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = true;</span>
+<span class="cstat-no" title="statement not covered" >        this.checkPointAngle(0, this.trackElements.length - 1);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public openTrack(</span>position: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        this.trackClosed = false;</span>
+<span class="cstat-no" title="statement not covered" >        this.addIntersection(position);</span>
+<span class="cstat-no" title="statement not covered" >        this.updatePoint(this.trackElements.length - 1, position);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public updatePoint(</span>index: number, intersection: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        this.trackElements[index].intersection = intersection;</span>
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentLength(index);</span>
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentLength(index - 1 &lt; 0 ? this.trackElements.length - 1 : index - 1);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentIntersections(index);</span>
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentIntersections(index - 1 &lt; 0 ? this.trackElements.length - 1 : index - 1);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (this.trackElements.length &lt; 3) {</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.checkPointAngle(</span>
+            index - 1 &lt; 0 ? this.trackElements.length - 1 : index - 1,
+            (index - 2 + this.trackElements.length) % this.trackElements.length
+        );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.checkPointAngle(</span>
+            index,
+            index - 1 === -1 ? this.trackElements.length - 1 : index - 1
+        );
+<span class="cstat-no" title="statement not covered" >        if (this.distance(this.trackElements[0].intersection, this.trackElements[this.trackElements.length - 1].intersection) &lt; 25) {</span>
+<span class="cstat-no" title="statement not covered" >            this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, this.trackClosed ? index : index - 1);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            if (!this.trackClosed) {</span>
+<span class="cstat-no" title="statement not covered" >                this.trackElements[0].intersectionAngl = 0;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.checkPointAngle(index + 1 === this.trackElements.length ? 0 : index + 1, index);</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public removeIntersection(</span>mousePotition: THREE.Vector2) {
+<span class="cstat-no" title="statement not covered" >        this.trackElements.splice(this.trackElements.length - (this.trackClosed ? 1 : 2), 1);</span>
+<span class="cstat-no" title="statement not covered" >        this.trackElements.forEach(<span class="fstat-no" title="function not covered" >(</span>segment, index, segments) =&gt; {</span>
+            const removedPosition = <span class="cstat-no" title="statement not covered" >segment.segmentIntersections.indexOf(segments.length - 1);</span>
+<span class="cstat-no" title="statement not covered" >            if (-1 &lt; removedPosition) {</span>
+<span class="cstat-no" title="statement not covered" >                segment.segmentIntersections.splice(removedPosition, 1);</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        this.checkPointAngle(this.trackElements.length - 1, this.trackElements.length - 2);</span>
+<span class="cstat-no" title="statement not covered" >        this.checkPointAngle(this.trackElements.length - 2, this.trackElements.length - 3);</span>
+<span class="cstat-no" title="statement not covered" >        this.checkSegmentIntersections(this.trackElements.length - 2);</span>
+<span class="cstat-no" title="statement not covered" >        this.updatePoint(this.trackElements.length - 1, mousePotition);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public checkSegmentLength(</span>index: number) {
+        let line;
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            line = this.getLine(index);</span>
+        } catch (e) {
+<span class="cstat-no" title="statement not covered" >            this.trackElements[index].segmentLength = 0;</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        this.trackElements[index].segmentLength = this.distance(line.point1, line.point2);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    public checkSegmentIntersections(</span>index: number) {</span>
+        const service = <span class="cstat-no" title="statement not covered" >this;</span>
+<span class="cstat-no" title="statement not covered" >        this.trackElements.forEach(</span>
+<span class="fstat-no" title="function not covered" >            (</span>segment, i, segments) =&gt; {
+<span class="cstat-no" title="statement not covered" >                if ((Math.abs(index - i) &lt; 2 || Math.abs(index - i) === (segments.length - 1)) ||</span>
+                    (!service.trackClosed &amp;&amp; (i === segments.length - 1 || index === segments.length - 1))) {
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (i === 0 &amp;&amp; service.distance(segments[0].intersection, segments[index + 1].intersection) &lt; 25) {</span>
+<span class="cstat-no" title="statement not covered" >                    service.updateSegmentsValidity(25 + 1, i, index);</span>
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+&nbsp;
+                let line1;
+                let line2;
+<span class="cstat-no" title="statement not covered" >                try {</span>
+<span class="cstat-no" title="statement not covered" >                    line1 = service.getLine(index);</span>
+<span class="cstat-no" title="statement not covered" >                    line2 = service.getLine(i);</span>
+                } catch (e) {
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+                const intersection = <span class="cstat-no" title="statement not covered" >service.twoLineIntersection(this.getLineParameters(line1), this.getLineParameters(line2));</span>
+&nbsp;
+                let clampDistances: number[] = <span class="cstat-no" title="statement not covered" >[];</span>
+                const optimisedDistancesLine1: number[] = <span class="cstat-no" title="statement not covered" >service.checkForClamp(intersection, line1, line2);</span>
+<span class="cstat-no" title="statement not covered" >                clampDistances = clampDistances.concat(optimisedDistancesLine1);</span>
+                const optimisedDistancesLine2: number[] = <span class="cstat-no" title="statement not covered" >service.checkForClamp(intersection, line2, line1);</span>
+<span class="cstat-no" title="statement not covered" >                clampDistances = clampDistances.concat(optimisedDistancesLine2);</span>
+&nbsp;
+                const minimumSegmentsDistance = <span class="cstat-no" title="statement not covered" >clampDistances.length &gt; 0 ? service.minimum(clampDistances) : 0;</span>
+<span class="cstat-no" title="statement not covered" >                service.updateSegmentsValidity(minimumSegmentsDistance, i, index);</span>
+            }
+        );
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public getLine(</span>index) {
+        const point1 = <span class="cstat-no" title="statement not covered" >this.trackElements[index].intersection;</span>
+        const point2 = <span class="cstat-no" title="statement not covered" >this.trackElements[index + 1 === this.trackElements.length ? 0 : index + 1].intersection;</span>
+<span class="cstat-no" title="statement not covered" >        if (this.distance(point1, point2) === 0) {</span>
+<span class="cstat-no" title="statement not covered" >            throw new Error();</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return { point1, point2 };</span>
+    }
+&nbsp;
+    public twoLineIntersection(line1, line2): { x: number, y: number } {
+        if (line1.a === 0) {
+            const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return { x, y: this.solveLineEquationWithX(x, line1) };
+        } else {
+            const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return { x: this.solveLineEquationWithY(y, line1), y };
+        }
+    }
+&nbsp;
+    public checkForClamp(intersection, line1, line2): number[] {
+        const distance: number[] = [];
+&nbsp;
+        if (
+            Math.min(line1.point1.x, line1.point2.x) &gt; intersection.x ||
+            Math.max(line1.point1.x, line1.point2.x) &lt; intersection.x ||
+            Math.min(line1.point1.y, line1.point2.y) &gt; intersection.y ||
+            Math.max(line1.point1.y, line1.point2.y) &lt; intersection.y
+        ) {
+            const optimalPoint = { x: NaN, y: NaN };
+            optimalPoint.x = Math.abs(intersection.x - line1.point1.x) &lt; Math.abs(intersection.x - line1.point2.x) ?
+                line1.point1.x :
+<span class="branch-1 cbranch-no" title="branch not covered" >                line1.point2.x;</span>
+            optimalPoint.y = Math.abs(intersection.y - line1.point1.y) &lt; Math.abs(intersection.y - line1.point2.y) ?
+                line1.point1.y :
+<span class="branch-1 cbranch-no" title="branch not covered" >                line1.point2.y;</span>
+&nbsp;
+            distance.push(this.clampAndGetOptimalPoint(optimalPoint, line1, line2));
+        }
+        return distance;
+    }
+&nbsp;
+    public distanceToLine(point, line) {
+        return this.distance(point, this.getNearestPointOnLine(point, line));
+    }
+&nbsp;
+    public getNearestPointOnLine(point, line) {
+        const lineParameters = this.getLineParameters(line);
+        const permenticularParameters = {
+            a: lineParameters.b,
+            b: -lineParameters.a,
+            c: -((lineParameters.b * point.x) + (-lineParameters.a * point.y))
+        };
+&nbsp;
+        return this.twoLineIntersection(lineParameters, permenticularParameters);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public updateSegmentsValidity(</span>minimumSegmentsDistance: number, index1: number, index2: number) {
+<span class="cstat-no" title="statement not covered" >        if (minimumSegmentsDistance &lt; 25) {</span>
+<span class="cstat-no" title="statement not covered" >            if (-1 === this.trackElements[index2].segmentIntersections.indexOf(index1)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.trackElements[index2].segmentIntersections.push(index1);</span>
+<span class="cstat-no" title="statement not covered" >                this.trackElements[index1].segmentIntersections.push(index2);</span>
+            }
+        } else {
+            const arrayPosition1 = <span class="cstat-no" title="statement not covered" >this.trackElements[index2].segmentIntersections.indexOf(index1);</span>
+<span class="cstat-no" title="statement not covered" >            if (-1 &lt; arrayPosition1) {</span>
+<span class="cstat-no" title="statement not covered" >                this.trackElements[index2].segmentIntersections.splice(arrayPosition1, 1);</span>
+                const arrayPosition2 = <span class="cstat-no" title="statement not covered" >this.trackElements[index1].segmentIntersections.indexOf(index2);</span>
+<span class="cstat-no" title="statement not covered" >                this.trackElements[index1].segmentIntersections.splice(arrayPosition2, 1);</span>
+            }
+        }
+    }
+&nbsp;
+    public clampAndGetOptimalPoint(clampedPoint, line1, line2): number {
+        const optimalPoint = this.getNearestPointOnLine(clampedPoint, line2);
+        return this.findOptimalPoint(clampedPoint, line1, optimalPoint, line2);
+    }
+&nbsp;
+    public findOptimalPoint(clampedPoint, line1, optimalPoint, line2): number {
+        let distances: number[] = [];
+        if (
+            Math.min(line2.point1.x, line2.point2.x) &lt;= optimalPoint.x &amp;&amp;
+            Math.max(line2.point1.x, line2.point2.x) &gt;= optimalPoint.x &amp;&amp;
+            Math.min(line2.point1.y, line2.point2.y) &lt;= optimalPoint.y &amp;&amp;
+            Math.max(line2.point1.y, line2.point2.y) &gt;= optimalPoint.y
+        ) {
+            const clampToOptimalDistance = this.distance(clampedPoint, optimalPoint);
+            distances.push(clampToOptimalDistance);
+        } else {
+            const endToEndDistances = this.getAllEndToEndDistances(line1, line2);
+            distances = distances.concat(endToEndDistances);
+        }
+        return this.minimum(distances);
+    }
+&nbsp;
+    public solveLineEquationWithX(x, lineParameters): number {
+        return ((lineParameters.a * x) + lineParameters.c) / -lineParameters.b;
+    }
+&nbsp;
+    public solveLineEquationWithY(y, lineParameters): number {
+        return ((lineParameters.b * y) + lineParameters.c) / -lineParameters.a;
+    }
+&nbsp;
+    public minimum(array: number[]): number {
+        let minimum = array[0];
+        array.forEach(
+            (number) =&gt; {
+                if (number &lt; minimum) {
+                    minimum = number;
+                }
+            }
+        );
+        return minimum;
+    }
+&nbsp;
+    public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
+        return Math.sqrt(
+            Math.pow((point1.x - point2.x), 2) +
+            Math.pow((point1.y - point2.y), 2)
+        );
+    }
+&nbsp;
+    public getLineParameters(line): { a: number, b: number, c: number } {
+        const a = line.point1.y - line.point2.y;
+        const b = line.point2.x - line.point1.x;
+        const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);
+        return { a, b, c };
+    }
+&nbsp;
+    public getAllEndToEndDistances(line1, line2): number[] {
+        const distances: number[] = [];
+&nbsp;
+        distances.push(this.distance(line1.point1, line2.point1));
+        distances.push(this.distance(line1.point1, line2.point2));
+        distances.push(this.distance(line1.point2, line2.point1));
+        distances.push(this.distance(line1.point2, line2.point2));
+&nbsp;
+        return distances;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public checkPointAngle(</span>index1: number, index2: number) {
+<span class="cstat-no" title="statement not covered" >        if (!this.trackClosed &amp;&amp; (index2 === this.trackElements.length - 1 || index1 === this.trackElements.length - 1) ||</span>
+            index1 &lt; 0 || index2 &lt; 0) {
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+        let line1;
+        let line2;
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >            line1 = this.getLine(index1);</span>
+<span class="cstat-no" title="statement not covered" >            line2 = this.getLine(index2);</span>
+        } catch (e) {
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+        const angle1 = <span class="cstat-no" title="statement not covered" >this.getAngle(line1);</span>
+        const angle2 = <span class="cstat-no" title="statement not covered" >this.getAngle(line2);</span>
+        const rawAngleVariation = <span class="cstat-no" title="statement not covered" >angle2 - angle1 + (Math.PI / 2);</span>
+        const angleVariation = <span class="cstat-no" title="statement not covered" >(rawAngleVariation + (2 * Math.PI)) % (2 * Math.PI);</span>
+<span class="cstat-no" title="statement not covered" >        this.trackElements[index1].intersectionAngl = angleVariation - Math.PI / 2;</span>
+    }
+&nbsp;
+    public getAngle(line): number {
+        const rawAngle = Math.atan((line.point2.y - line.point1.y) / (line.point2.x - line.point1.x));
+        return (line.point2.x - line.point1.x &gt;= 0) ? rawAngle : rawAngle + Math.PI;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public isValid(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >        return (</span>
+            this.isLengthValid(index) &amp;&amp;
+            this.isSegmentsIntersectionValid(index) &amp;&amp;
+            this.isFirstAngleValid(index) &amp;&amp;
+            this.isSecondAngleValid(index)
+        );
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private isLengthValid(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >        return this.trackElements[index].segmentLength &gt;= 40;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private isSegmentsIntersectionValid(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >        return this.trackElements[index].segmentIntersections.length === 0;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private isFirstAngleValid(</span>index: number) {
+<span class="cstat-no" title="statement not covered" >        return Math.abs(this.trackElements[index].intersectionAngl) &lt;= 3 * Math.PI / 4 ||</span>
+            this.trackElements[index].intersectionAngl &gt;= 5 * Math.PI / 4;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private isSecondAngleValid(</span>index: number) {
+        let nextSegment = <span class="cstat-no" title="statement not covered" >index + 1 &lt; this.trackElements.length ? index + 1 : 0;</span>
+<span class="cstat-no" title="statement not covered" >        if (!this.trackClosed &amp;&amp; index === this.trackElements.length - 2) {</span>
+<span class="cstat-no" title="statement not covered" >            if (this.trackElements[index + 1].segmentLength &gt;= 25) {</span>
+<span class="cstat-no" title="statement not covered" >                return true;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            nextSegment = 0;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return Math.abs(this.trackElements[nextSegment].intersectionAngl) &lt;= 3 * Math.PI / 4 ||</span>
+            this.trackElements[nextSegment].intersectionAngl &gt;= 5 * Math.PI / 4;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public isAllValid() {</span>
+        let valid = <span class="cstat-no" title="statement not covered" >true;</span>
+<span class="cstat-no" title="statement not covered" >        for ( let i = 0; i &lt; this.trackElements.length; i++ ) {</span>
+<span class="cstat-no" title="statement not covered" >            valid = valid &amp;&amp; this.isValid(i);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return valid;</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 30 2017 16:56:20 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

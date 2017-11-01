@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/racing-game/render.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/app/racing-game</a> render.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">87.64% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>78/89</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">28.57% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">76.47% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>13/17</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">87.06% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>74/85</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+import Stats = require('stats.js');
+import { CameraService } from './camera.service';
+&nbsp;
+@Injectable()
+export class RenderService {
+&nbsp;
+    private container: HTMLElement;
+&nbsp;
+    private camera: THREE.PerspectiveCamera;
+&nbsp;
+    private stats: Stats;
+&nbsp;
+    private cube: THREE.Mesh;
+&nbsp;
+    private renderer: THREE.WebGLRenderer;
+&nbsp;
+    private scene: THREE.Scene;
+&nbsp;
+    public rotationSpeedX = 0.005;
+&nbsp;
+    public rotationSpeedY = 0.01;
+&nbsp;
+    public view;
+&nbsp;
+    public inc = -0.01;
+&nbsp;
+    constructor(private cameraService: CameraService<span class="branch-1 cbranch-no" title="branch not covered" >) {</span>
+    }
+&nbsp;
+    private animateCube() {
+        this.cube.rotation.x += this.rotationSpeedX;
+        this.cube.rotation.y += this.rotationSpeedY;
+        // this.cube.position.z += 5;
+    }
+&nbsp;
+    private createCube() {
+        const geometry = new THREE.BoxGeometry(20, 20, 20);
+&nbsp;
+        for (let i = 0; i &lt; geometry.faces.length; i += 2) {
+            const hex = Math.random() * 0xffffff;
+            geometry.faces[i].color.setHex(hex);
+            geometry.faces[i + 1].color.setHex(hex);
+        }
+&nbsp;
+        const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
+        this.cube = new THREE.Mesh(geometry, material);
+        this.scene.add(this.cube);
+    }
+&nbsp;
+    private createScene() {
+        this.scene = new THREE.Scene();
+        this.createSkyBox();
+        this.cameraService.initialiseCamera(this.container);
+        this.camera = this.cameraService.getCamera();
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private getAspectRatio() {</span>
+<span class="cstat-no" title="statement not covered" >        return this.container.clientWidth / this.container.clientHeight;</span>
+    }
+&nbsp;
+    public createSkyBox() {
+        const url = '../../assets/images/skybox/';
+        const images = [url + 'xpos.png', url + 'xneg.png',
+        url + 'ypos.png', url + 'yneg.png',
+        url + 'zpos.png', url + 'zneg.png'];
+        const textureSky = THREE.ImageUtils.loadTextureCube(images);
+        const shader = THREE.ShaderLib['cube'];
+        shader.uniforms['tCube'].value = textureSky;
+        const material = new THREE.ShaderMaterial({
+            fragmentShader: shader.fragmentShader,
+            vertexShader: shader.vertexShader,
+            uniforms: shader.uniforms,
+            depthWrite: false,
+            side: THREE.BackSide
+        });
+        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000), material );
+        material.needsUpdate = true;
+        this.scene.add( skyboxMesh );
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public eventsList(</span>event: any): void {
+<span class="cstat-no" title="statement not covered" >        this.cameraService.selectCamera(event);</span>
+<span class="cstat-no" title="statement not covered" >        this.zoomCamera(event);</span>
+<span class="cstat-no" title="statement not covered" >        this.updateCamera();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public zoomCamera(</span>event: any): void {
+        // 107 corresponding to '+' in ASCII
+        // 109 corresponding to '-' in ASCII
+<span class="cstat-no" title="statement not covered" >        if (event.keyCode === 107) {</span>
+<span class="cstat-no" title="statement not covered" >            this.view += this.inc;</span>
+        } else <span class="cstat-no" title="statement not covered" >if (event.keyCode === 109) {</span>
+<span class="cstat-no" title="statement not covered" >            this.view -= this.inc;</span>
+        }
+    }
+&nbsp;
+    public updateCamera(): void {
+        this.camera = this.cameraService.getCamera();
+    }
+&nbsp;
+    public cameraFollowingObject(object: any) {
+        this.cameraService.cameraOnMoveWithObject(object);
+        this.updateCamera();
+    }
+&nbsp;
+    private startRenderingLoop() {
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setPixelRatio(devicePixelRatio);
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        this.container.appendChild(this.renderer.domElement);
+        this.view = this.camera.zoom;
+        this.render();
+    }
+&nbsp;
+    private render() {
+        requestAnimationFrame(() =&gt; this.render());
+        this.animateCube();
+        this.camera.zoom = this.view;
+        this.camera.updateProjectionMatrix();
+        this.cameraFollowingObject(this.cube);
+        this.renderer.render(this.scene, this.camera);
+        this.stats.update();
+    }
+&nbsp;
+    private initStats() {
+        this.stats = new Stats();
+        this.stats.dom.style.position = 'absolute';
+        this.stats.dom.style.top = '64px';
+        this.container.appendChild(this.stats.dom);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    public onResize() {</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.aspect = this.getAspectRatio();</span>
+<span class="cstat-no" title="statement not covered" >        this.camera.updateProjectionMatrix();</span>
+<span class="cstat-no" title="statement not covered" >        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);</span>
+    }
+&nbsp;
+    public initialize(container: HTMLElement, rotationX: number, rotationY: number) {
+        this.container = container;
+        this.rotationSpeedX = rotationX;
+        this.rotationSpeedY = rotationY;
+        this.createScene();
+        this.createCube();
+        this.initStats();
+        this.startRenderingLoop();
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 30 2017 16:43:31 GMT-0400 (EDT)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
