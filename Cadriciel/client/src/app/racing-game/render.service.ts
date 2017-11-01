@@ -1,3 +1,4 @@
+import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
@@ -26,7 +27,7 @@ export class RenderService {
 
     public inc = -0.01;
 
-    constructor(private cameraService: CameraService) {
+    constructor(private cameraService: CameraService, private terrainGeneration: TerrainGenerationService) {
     }
 
     private animateCube() {
@@ -52,6 +53,7 @@ export class RenderService {
     private createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
+        this.terrainGeneration.populate(this.scene);
         this.cameraService.initialiseCamera(this.container);
         this.camera = this.cameraService.getCamera();
     }
