@@ -22,10 +22,6 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
-    public view;
-
-    public inc = -0.01;
-
     constructor(private cameraService: CameraService, private terrainGeneration: TerrainGenerationService) {
     }
 
@@ -52,6 +48,7 @@ export class RenderService {
     private createScene(track: Track) {
         this.scene = new THREE.Scene();
         this.createSkyBox();
+        this.createCube();
         this.terrainGeneration.generate(this.scene, track);
         this.cameraService.initializeCameras(this.container, this.cube);
     }
@@ -115,7 +112,6 @@ export class RenderService {
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
         this.createScene(track);
-        this.createCube();
         this.initStats();
         this.startRenderingLoop();
     }
