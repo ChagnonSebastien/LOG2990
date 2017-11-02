@@ -86,16 +86,6 @@ export class RenderService {
     public eventsList(event: any): void {
         this.cameraService.swapCamera(event);
         this.cameraService.zoomCamera(event);
-        this.updateCamera();
-    }
-
-    public updateCamera(): void {
-        this.camera = this.cameraService.getCamera();
-    }
-
-    public cameraFollowingObject(object: any) {
-        this.cameraService.cameraOnMoveWithObject(object);
-        this.updateCamera();
     }
 
     private startRenderingLoop() {
@@ -112,7 +102,7 @@ export class RenderService {
         this.animateCube();
         this.camera.zoom = this.view;
         this.camera.updateProjectionMatrix();
-        this.cameraFollowingObject(this.cube);
+        this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
