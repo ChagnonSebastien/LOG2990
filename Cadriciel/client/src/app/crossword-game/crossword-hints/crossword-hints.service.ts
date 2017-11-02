@@ -32,14 +32,21 @@ export class CrosswordHintsService {
     }
 
     public selectWord(word: string) {
+        const wordWithIndex = this.wordMap.get(word);
+        if (wordWithIndex === undefined) {
+            return;
+        }
         if (this.selectedWord) {
             this.gridService.unselectWord(this.wordMap.get(this.selectedWord));
         }
         this.selectedWord = word;
-        this.gridService.selectWord(this.wordMap.get(word));
+        this.gridService.selectWord(wordWithIndex);
     }
 
     public unselectHint() {
+        if (this.selectedWord) {
+            this.gridService.unselectWord(this.wordMap.get(this.selectedWord));
+        }
         this.selectedWord = undefined;
     }
 
