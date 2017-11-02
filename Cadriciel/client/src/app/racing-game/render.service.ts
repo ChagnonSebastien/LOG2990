@@ -26,6 +26,18 @@ export class RenderService {
 
     public inc = -0.01;
 
+    private cart: THREE.Mesh;
+
+
+    // added
+    private cameraZ = 400;
+
+    private fieldOfView = 70;
+
+    private nearClippingPane = 1;
+
+    private farClippingPane = 1000;
+
     constructor(private cameraService: CameraService) {
     }
 
@@ -49,11 +61,29 @@ export class RenderService {
         this.scene.add(this.cube);
     }
 
+
+
     private createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.cameraService.initialiseCamera(this.container);
-        this.camera = this.cameraService.getCamera();
+        //this.cameraService.initialiseCamera(this.container);
+        //this.camera = this.cameraService.getCamera();
+
+        /// added
+                const aspectRatio = this.getAspectRatio();
+        this.camera = new THREE.PerspectiveCamera(
+            this.fieldOfView,
+            aspectRatio,
+            this.nearClippingPane,
+            this.farClippingPane
+        );
+        this.camera.position.z = this.cameraZ;
+
+        this.scene.add(new THREE.AmbientLight(0xFFFFFF));
+        const light: THREE.SpotLight = new THREE.SpotLight(0xffffff);
+        light.position.set(100, 100, 100);
+        light.castShadow = true;
+        this.scene.add(light);
     }
 
     private getAspectRatio() {
@@ -81,28 +111,28 @@ export class RenderService {
     }
 
     public eventsList(event: any): void {
-        this.cameraService.selectCamera(event);
-        this.zoomCamera(event);
-        this.updateCamera();
+        //this.cameraService.selectCamera(event);
+        //this.zoomCamera(event);
+        //this.updateCamera();
     }
 
     public zoomCamera(event: any): void {
         // 107 corresponding to '+' in ASCII
         // 109 corresponding to '-' in ASCII
         if (event.keyCode === 107) {
-            this.view += this.inc;
+            //this.view += this.inc;
         } else if (event.keyCode === 109) {
-            this.view -= this.inc;
+            //this.view -= this.inc;
         }
     }
 
     public updateCamera(): void {
-        this.camera = this.cameraService.getCamera();
+        //this.camera = this.cameraService.getCamera();
     }
 
     public cameraFollowingObject(object: any) {
-        this.cameraService.cameraOnMoveWithObject(object);
-        this.updateCamera();
+        //this.cameraService.cameraOnMoveWithObject(object);
+        //this.updateCamera();
     }
 
     private startRenderingLoop() {
@@ -110,16 +140,18 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.view = this.camera.zoom;
+        //this.view = this.camera.zoom;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
-        this.animateCube();
-        this.camera.zoom = this.view;
+        //this.animateCube();
+        this.animatedCart();
+        //this.camera.zoom = this.view;
         this.camera.updateProjectionMatrix();
-        this.cameraFollowingObject(this.cube);
+        //this.cameraFollowingObject(this.cube);
+        this.cameraFollowingObject(this.cart);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
@@ -142,8 +174,50 @@ export class RenderService {
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
         this.createScene();
-        this.createCube();
+        //this.createCube();
+        this.createCart();
         this.initStats();
         this.startRenderingLoop();
+    }
+
+    /* CARTS */
+    private createCart() {
+        const service = this;
+        const loader = new THREE.ObjectLoader();
+        loader.load('/assets/cart.json', (object: THREE.Object3D) => {
+            console.log('z: ', object);
+            this.cart = <THREE.Mesh> object;
+            this.cart.position.setX(0);
+            this.cart.position.setY(0);
+            this.cart.position.setZ(0);
+            this.cart.scale.setX(50);
+            this.cart.scale.setY(50);
+            this.cart.scale.setZ(50);
+            console.log('z: ', this.cart);
+            service.scene.add(this.cart);
+        }, (object: any) => {
+            console.log('prog: ', object);
+        }, (object: any) => {
+            console.log('err: ', object);
+        });
+
+        //this.cart.rotation.x += 10;
+    }
+    //maybe unsued
+    private pinaCollada(modelname, scale) {
+        const loader = new THREE.ColladaLoader();
+        let localObject;
+        loader['options'].convertUpAxis = true;
+        loader.load( modelname + '.dae', function colladaReady( collada ) {
+            localObject = collada.scene;
+            localObject.scale.x = localObject.scale.y = localObject.scale.z = scale;
+            localObject.updateMatrix();
+        } );
+        return localObject;
+    }
+
+    private animatedCart() {
+        this.cart.rotation.x += this.rotationSpeedX;
+        this.cart.rotation.y += this.rotationSpeedY;
     }
 }
