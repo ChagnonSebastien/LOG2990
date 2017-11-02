@@ -10,6 +10,7 @@ export class CameraService {
     private camera;
 
     private fieldOfView = 70;
+enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
     private nearClippingPane = 1;
 
@@ -32,7 +33,7 @@ export class CameraService {
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
         this.perspectiveCamera = this.setPerspectiveCamera(container);
-        this.camera = this.setPerspectiveCamera(container);
+        this.currentView = View.PERSPECTIVE;
         this.defaultCamerasPosition();
     }
 
@@ -62,8 +63,8 @@ export class CameraService {
         return camera;
     }
 
-    public getCamera(): any {
-        return this.camera;
+    public getCamera(): THREE.Camera {
+        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
     private defaultCamerasPosition() {
@@ -73,9 +74,6 @@ export class CameraService {
         this.perspectiveCamera.position.x = CAMERA_POSITION.x;
         this.perspectiveCamera.position.y = CAMERA_POSITION.y;
         this.perspectiveCamera.position.z = CAMERA_POSITION.z;
-        this.camera.position.x = CAMERA_POSITION.x;
-        this.camera.position.y = CAMERA_POSITION.y;
-        this.camera.position.z = CAMERA_POSITION.z;
     }
 
     public getAspectRatio(width: number, height: number) {
@@ -99,12 +97,12 @@ export class CameraService {
     }
 
     public selectCamera(event: any): void {
-        // 67 corresponding to 'C' in ASCII
-        if (this.camera.isOrthographicCamera && event.keyCode === 67) {
-            this.camera = this.perspectiveCamera;
-        } else if (this.camera.isPerspectiveCamera && event.keyCode === 67) {
-            this.camera = this.orthographicCamera;
+        if (event.keyCode !== 67) { // 67 corresponding to 'C' in ASCII
+            return;
         }
+
+        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
+
     }
 
     public cameraOnMoveWithObject(object: any) {
@@ -114,11 +112,5 @@ export class CameraService {
         this.setOrthographicCamera(object);
         this.orthographicCamera.lookAt(object.position);
         this.orthographicCamera.updateProjectionMatrix();
-
-        if (this.camera.isOrthographicCamera) {
-            this.camera = this.orthographicCamera;
-        } else if (this.camera.isPerspectiveCamera) {
-            this.camera = this.perspectiveCamera;
-        }
     }
 }
