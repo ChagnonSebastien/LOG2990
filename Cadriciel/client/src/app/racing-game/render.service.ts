@@ -38,8 +38,11 @@ export class RenderService {
 
     private farClippingPane = 1000;
 
+
     constructor(private cameraService: CameraService) {
     }
+
+
 
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
@@ -66,19 +69,8 @@ export class RenderService {
     private createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        //this.cameraService.initialiseCamera(this.container);
-        //this.camera = this.cameraService.getCamera();
-
-        /// added
-                const aspectRatio = this.getAspectRatio();
-        this.camera = new THREE.PerspectiveCamera(
-            this.fieldOfView,
-            aspectRatio,
-            this.nearClippingPane,
-            this.farClippingPane
-        );
-        this.camera.position.z = this.cameraZ;
-
+        this.cameraService.initialiseCamera(this.container);
+        this.camera = this.cameraService.getCamera();
         this.scene.add(new THREE.AmbientLight(0xFFFFFF));
         const light: THREE.SpotLight = new THREE.SpotLight(0xffffff);
         light.position.set(100, 100, 100);
@@ -105,33 +97,33 @@ export class RenderService {
             depthWrite: false,
             side: THREE.BackSide
         });
-        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000), material );
+        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(1000, 1000, 1000), material);
         material.needsUpdate = true;
-        this.scene.add( skyboxMesh );
+        this.scene.add(skyboxMesh);
     }
 
     public eventsList(event: any): void {
-        //this.cameraService.selectCamera(event);
-        //this.zoomCamera(event);
-        //this.updateCamera();
+        this.cameraService.selectCamera(event);
+        this.zoomCamera(event);
+        this.updateCamera();
     }
 
     public zoomCamera(event: any): void {
         // 107 corresponding to '+' in ASCII
         // 109 corresponding to '-' in ASCII
-        if (event.keyCode === 107) {
-            //this.view += this.inc;
-        } else if (event.keyCode === 109) {
-            //this.view -= this.inc;
+        if (event.keyCode === 73) {
+            this.view += this.inc;
+        } else if (event.keyCode === 79) {
+            this.view -= this.inc;
         }
     }
 
     public updateCamera(): void {
-        //this.camera = this.cameraService.getCamera();
+        this.camera = this.cameraService.getCamera();
     }
 
     public cameraFollowingObject(object: any) {
-        //this.cameraService.cameraOnMoveWithObject(object);
+        this.cameraService.cameraOnMoveWithObject(object);
         //this.updateCamera();
     }
 
@@ -140,18 +132,18 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        //this.view = this.camera.zoom;
+        this.view = this.camera.zoom;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
-        //this.animateCube();
-        this.animatedCart();
-        //this.camera.zoom = this.view;
+        // this.animateCube();
+        //this.animatedCart();
+        this.camera.zoom = this.view;
         this.camera.updateProjectionMatrix();
-        //this.cameraFollowingObject(this.cube);
-        this.cameraFollowingObject(this.cart);
+        // this.cameraFollowingObject(this.cube);
+        //this.cameraFollowingObject(this.cart);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
@@ -174,7 +166,7 @@ export class RenderService {
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
         this.createScene();
-        //this.createCube();
+        // this.createCube();
         this.createCart();
         this.initStats();
         this.startRenderingLoop();
@@ -186,13 +178,14 @@ export class RenderService {
         const loader = new THREE.ObjectLoader();
         loader.load('/assets/cart.json', (object: THREE.Object3D) => {
             console.log('z: ', object);
-            this.cart = <THREE.Mesh> object;
+            this.cart = <THREE.Mesh>object;
             this.cart.position.setX(0);
             this.cart.position.setY(0);
             this.cart.position.setZ(0);
             this.cart.scale.setX(50);
             this.cart.scale.setY(50);
             this.cart.scale.setZ(50);
+            this.cart.rotation.y = 20.4;
             console.log('z: ', this.cart);
             service.scene.add(this.cart);
         }, (object: any) => {
@@ -201,20 +194,8 @@ export class RenderService {
             console.log('err: ', object);
         });
 
-        //this.cart.rotation.x += 10;
     }
-    //maybe unsued
-    private pinaCollada(modelname, scale) {
-        const loader = new THREE.ColladaLoader();
-        let localObject;
-        loader['options'].convertUpAxis = true;
-        loader.load( modelname + '.dae', function colladaReady( collada ) {
-            localObject = collada.scene;
-            localObject.scale.x = localObject.scale.y = localObject.scale.z = scale;
-            localObject.updateMatrix();
-        } );
-        return localObject;
-    }
+    // maybe unsued
 
     private animatedCart() {
         this.cart.rotation.x += this.rotationSpeedX;

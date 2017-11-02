@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 // standard position of camera
-const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
+const CAMERA_POSITION = new THREE.Vector3(0, 0, 400);
 const perchPosition = new THREE.Vector3(10, 50, -75);
 
 @Injectable()
