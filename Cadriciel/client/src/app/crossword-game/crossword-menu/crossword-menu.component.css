@@ -8,7 +8,7 @@
     z-index: -1;
     height: 100%;
     width: 100%;
-    
+    color: white;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -24,3 +24,19 @@
     font-size: 17pt;
     font-weight: bold;
 }
+
+.form .usernameInput {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    min-width: 150px;
+    
+  }
+ .usernameInput {
+    font-size: 200%;
+    letter-spacing: 3px;
+    color: white;
+  }

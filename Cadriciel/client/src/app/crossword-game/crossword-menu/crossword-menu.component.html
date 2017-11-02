@@ -5,6 +5,12 @@
       <div class="col-md-4">
       </div>
       <div class="col-md-8">
+          <div class="row mt-3 mb-3" >
+            <div class="form">
+                <h3> What's your nickname?</h3>
+                <input class="usernameInput" id = 'username'  type="text" maxlength="15" required />
+           </div>
+        </div>
         <div class="row mt-3 mb-3">
           <div class="col-md-12">
             <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': type === 'solo' }" (click)="setType('solo')">Solo</button>
@@ -24,7 +30,7 @@
             <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': level == 'hard'}" (click)="setLevel('hard')">Hard</button>
           </div>
         </div>
-        <div class="row mt-3 mb-3" *ngIf="type && mode && level">
+        <div class="row mt-3 mb-3" *ngIf="type && mode && level && this.validateUsername() ">
           <div class="col-md-12" (click)="startGame()">
             <button class="btn btn-success btn-lg btn-custom">
               Start game
