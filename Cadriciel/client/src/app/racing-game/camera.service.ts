@@ -80,27 +80,23 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    public cameraOnMoveWithObject(object: any) {
-        this.updatePerspectiveCameraPosition(object);
-        this.perspectiveCamera.lookAt(object.position);
-        this.perspectiveCamera.updateProjectionMatrix();
-        this.instansiateOrthographicCamera(object);
-        this.orthographicCamera.lookAt(object.position);
-        this.orthographicCamera.updateProjectionMatrix();
+    public cameraOnMoveWithObject() {
+        this.updatePerspectiveCameraPosition();
+        this.updateOrthographicCameraPosition();
     }
 
-    private updatePerspectiveCameraPosition(object: any) {
         this.perspectiveCamera.position.x = object.position.x + perchPosition.x;
         this.perspectiveCamera.position.y = object.position.y + perchPosition.y;
         this.perspectiveCamera.position.z = object.position.z + perchPosition.z;
         this.perspectiveCamera.updateProjectionMatrix();
+    private updatePerspectiveCameraPosition() {
     }
 
-    private updateOrthographicCameraPosition(object: any) {
         this.orthographicCamera.position.x = object.position.x;
         this.orthographicCamera.position.y = object.position.y;
         this.orthographicCamera.position.z = object.position.z + orthographicHeight;
         this.orthographicCamera.updateProjectionMatrix();
+    private updateOrthographicCameraPosition() {
     }
 
     public selectCamera(event: any): void {
