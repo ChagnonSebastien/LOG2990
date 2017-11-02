@@ -85,11 +85,24 @@ export class CameraService {
         this.updateOrthographicCameraPosition();
     }
 
-        this.perspectiveCamera.position.x = object.position.x + perchPosition.x;
-        this.perspectiveCamera.position.y = object.position.y + perchPosition.y;
-        this.perspectiveCamera.position.z = object.position.z + perchPosition.z;
-        this.perspectiveCamera.updateProjectionMatrix();
     private updatePerspectiveCameraPosition() {
+        const referencePosition = new THREE.Vector2(
+            this.perspectiveCamera.position.x - this.objectToFollow.position.x,
+            this.perspectiveCamera.position.z - this.objectToFollow.position.z
+        );
+
+        if ( referencePosition.length() > maximumPerspectiveDistance ) {
+            referencePosition.clampLength(0, maximumPerspectiveDistance);
+
+            this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;
+            this.perspectiveCamera.position.z = this.objectToFollow.position.z + referencePosition.y;
+        }
+
+        this.perspectiveCamera.lookAt(this.objectToFollow.position);
+    }
+
+    private distanceXZ(object1: THREE.Vector3, object2: THREE.Vector3): number {
+        return Math.sqrt(Math.pow(object2.x - object2.x, 2) + Math.pow(object2.z - object2.z, 2));
     }
 
     private updateOrthographicCameraPosition() {
