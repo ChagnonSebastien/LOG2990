@@ -2,25 +2,27 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 // standard position of camera
+const perspectiveHeight = 2;
+const orthographicHeight = 2;
+const maximumPerspectiveDistance = 4;
 const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
 const perchPosition = new THREE.Vector3(10, 50, -75);
 
-@Injectable()
-export class CameraService {
-    private camera;
+const fieldOfView = 70;
+const nearClippingPane = 1;
+const farClippingPane = 1000;
 
-    private fieldOfView = 70;
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
-    private nearClippingPane = 1;
+@Injectable()
+export class CameraService {
+    private sceneScale;
 
-    private farClippingPane = 1000;
+    private currentView;
 
     public perspectiveCamera;
 
     public orthographicCamera;
-
-    public container: HTMLElement;
 
     public offsetX = 5;
 
@@ -55,10 +57,10 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
         const aspectRatio = this.getAspectRatio(container.clientWidth,
             container.clientHeight);
         const camera = new THREE.PerspectiveCamera(
-            this.fieldOfView,
+            fieldOfView,
             aspectRatio,
-            this.nearClippingPane,
-            this.farClippingPane
+            nearClippingPane,
+            farClippingPane
         );
         return camera;
     }
