@@ -10,8 +10,6 @@ export class RenderService {
 
     private container: HTMLElement;
 
-    private camera: THREE.PerspectiveCamera;
-
     private stats: Stats;
 
     private cube: THREE.Mesh;
@@ -55,8 +53,7 @@ export class RenderService {
         this.scene = new THREE.Scene();
         this.createSkyBox();
         this.terrainGeneration.generate(this.scene, track);
-        this.cameraService.initialiseCamera(this.container);
-        this.camera = this.cameraService.getCamera();
+        this.cameraService.initializeCameras(this.container, this.cube);
     }
 
     private getAspectRatio() {
@@ -93,17 +90,14 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.view = this.camera.zoom;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
-        this.camera.zoom = this.view;
-        this.camera.updateProjectionMatrix();
         this.cameraService.cameraOnMoveWithObject();
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.cameraService.getCamera());
         this.stats.update();
     }
 
@@ -115,8 +109,7 @@ export class RenderService {
     }
 
     public onResize() {
-        this.camera.aspect = this.getAspectRatio();
-        this.camera.updateProjectionMatrix();
+        this.cameraService.getCamera().aspect = this.getAspectRatio();
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
