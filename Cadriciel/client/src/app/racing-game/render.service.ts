@@ -16,7 +16,7 @@ export class RenderService {
 
     private renderer: THREE.WebGLRenderer;
 
-    private scene: THREE.Scene;
+    public scene: THREE.Scene;
 
     public rotationSpeedX = 0.005;
 

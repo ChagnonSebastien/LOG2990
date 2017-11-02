@@ -10,6 +10,7 @@ import { RacingGameComponent } from './racing-game.component';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
+import { RacingGameService } from './racing-game.service';
 
 @NgModule({
     imports: [
@@ -26,6 +27,6 @@ import { TrackService } from './game-initialization/track.service';
     exports: [
         RacingGameComponent,
     ],
-    providers: [RenderService, CameraService, TrackService]
+    providers: [RenderService, CameraService, TrackService, RacingGameService]
 })
 export class RacingGameModule { }
