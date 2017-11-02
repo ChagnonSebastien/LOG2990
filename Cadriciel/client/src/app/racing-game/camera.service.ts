@@ -138,4 +138,15 @@ export class CameraService {
         this.orthographicCamera.zoom = this.zoomLevel;
         this.orthographicCamera.updateProjectionMatrix();
     }
+
+    public onResize(aspectRatio: number) {
+        this.perspectiveCamera.aspect = aspectRatio;
+        this.perspectiveCamera.updateProjectionMatrix();
+
+        this.orthographicCamera.left = this.sceneScale * orthographicFieldOfView / -2;
+        this.orthographicCamera.right = this.sceneScale * orthographicFieldOfView / 2;
+        this.orthographicCamera.top = this.sceneScale * orthographicFieldOfView / aspectRatio / 2;
+        this.orthographicCamera.bottom = this.sceneScale * orthographicFieldOfView / aspectRatio / -2;
+        this.orthographicCamera.updateProjectionMatrix();
+    }
 }

@@ -56,10 +56,6 @@ export class RenderService {
         this.cameraService.initializeCameras(this.container, this.cube);
     }
 
-    private getAspectRatio() {
-        return this.container.clientWidth / this.container.clientHeight;
-    }
-
     public createSkyBox() {
         const url = '../../assets/images/skybox/';
         const images = [url + 'xpos.png', url + 'xneg.png',
@@ -109,7 +105,8 @@ export class RenderService {
     }
 
     public onResize() {
-        this.cameraService.getCamera().aspect = this.getAspectRatio();
+        const aspectRatio = this.container.clientWidth / this.container.clientHeight;
+        this.cameraService.onResize(aspectRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
