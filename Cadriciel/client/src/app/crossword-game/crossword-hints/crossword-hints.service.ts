@@ -11,22 +11,14 @@ import { Word } from '../../../../../commun/word';
 export class CrosswordHintsService {
     public selectedWord: string;
     public hints: Array<Hint>;
-    public wordMap: Map<string, Word>;
+    private wordMap: Map<string, Word>;
 
     constructor(
         private lexiconService: LexiconService,
         private gridService: CrosswordGridService,
         private pointsService: CrosswordPointsService
     ) {
-        this.pointsService.foundWordAlerts()
-            .subscribe((newlyFoundWord) => {
-                this.hints.find((value) => {
-                    return value.word === newlyFoundWord;
-                }).found = true;
-                if (newlyFoundWord === this.selectedWord) {
-                    this.unselectHint();
-                }
-            });
+        this.subscribeToFoundWordAlerts();
     }
 
     public newGame(wordsWithIndex: Array<Word>) {
@@ -65,6 +57,18 @@ export class CrosswordHintsService {
                 definitions.map((definition, i) => {
                     this.hints.push(new Hint(wordsWithIndex[i].word, definition));
                 });
+            });
+    }
+
+    private subscribeToFoundWordAlerts() {
+        this.pointsService.foundWordAlerts()
+            .subscribe((newlyFoundWord) => {
+                this.hints.find((value) => {
+                    return value.word === newlyFoundWord;
+                }).found = true;
+                if (newlyFoundWord === this.selectedWord) {
+                    this.unselectHint();
+                }
             });
     }
 }
