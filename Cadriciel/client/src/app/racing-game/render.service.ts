@@ -84,19 +84,9 @@ export class RenderService {
     }
 
     public eventsList(event: any): void {
-        this.zoomCamera(event);
         this.cameraService.swapCamera(event);
+        this.cameraService.zoomCamera(event);
         this.updateCamera();
-    }
-
-    public zoomCamera(event: any): void {
-        // 107 corresponding to '+' in ASCII
-        // 109 corresponding to '-' in ASCII
-        if (event.keyCode === 107) {
-            this.view += this.inc;
-        } else if (event.keyCode === 109) {
-            this.view -= this.inc;
-        }
     }
 
     public updateCamera(): void {

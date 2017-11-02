@@ -2,19 +2,20 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 // standard position of camera
-const perspectiveHeight = 2;
-const orthographicHeight = 2;
-const maximumPerspectiveDistance = 4;
-const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
-const perchPosition = new THREE.Vector3(10, 50, -75);
 
+const orthographicHeight = 2;
 const orthographicFieldOfView = 10;
 const orthographicNearClippingPane = -1000;
 const orthographicFarClippingPane = 1000;
 
+const perspectiveHeight = 2;
+const maximumPerspectiveDistance = 4;
 const perspectiveFieldOfView = 70;
 const perspectiveNearClippingPane = 1;
 const perspectiveFarClippingPane = 1000;
+
+const initialZoomLevel = 1;
+const zoomChange = 1;
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
@@ -29,6 +30,8 @@ export class CameraService {
     private orthographicCamera: THREE.OrthographicCamera;
 
     private objectToFollow: THREE.Mesh;
+
+    private zoomLevel = initialZoomLevel;
 
     public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh): void {
         this.objectToFollow = objectToFollow;
@@ -118,5 +121,21 @@ export class CameraService {
         }
 
         this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
+    }
+
+    public zoomCamera(event: any): void {
+        // 107 corresponding to '+' in ASCII
+        // 109 corresponding to '-' in ASCII
+        if (event.keyCode === 107) {
+            this.zoomLevel -= zoomChange;
+        } else if (event.keyCode === 109) {
+            this.zoomLevel += zoomChange;
+        }
+
+        this.perspectiveCamera.zoom = this.zoomLevel;
+        this.perspectiveCamera.updateProjectionMatrix();
+
+        this.orthographicCamera.zoom = this.zoomLevel;
+        this.orthographicCamera.updateProjectionMatrix();
     }
 }
