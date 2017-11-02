@@ -117,7 +117,7 @@ module Route {
                                   numberOfTimesPlayed: tempNbOfTimesPlayed} },
                                 { upsert: false
                     });            
-                    res.send({ 'data': 'success' });                   
+                    res.send({ 'data': 'success' });// On doit plutôt retourner le track              
                 }
                  
             });
