@@ -92,11 +92,11 @@ export class CameraService {
     private updatePerspectiveCameraPosition() {
     }
 
-        this.orthographicCamera.position.x = object.position.x;
-        this.orthographicCamera.position.y = object.position.y;
-        this.orthographicCamera.position.z = object.position.z + orthographicHeight;
-        this.orthographicCamera.updateProjectionMatrix();
     private updateOrthographicCameraPosition() {
+        this.orthographicCamera.position.x = this.objectToFollow.position.x;
+        this.orthographicCamera.position.z = this.objectToFollow.position.z;
+
+        this.orthographicCamera.rotation.y = this.objectToFollow.rotation.y;
     }
 
     public selectCamera(event: any): void {
