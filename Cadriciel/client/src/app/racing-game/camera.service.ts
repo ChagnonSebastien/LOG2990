@@ -3,17 +3,17 @@ import * as THREE from 'three';
 
 // standard position of camera
 const perspectiveHeight = 2;
-const orthographicHeight = 0;
+const orthographicHeight = 2;
 const maximumPerspectiveDistance = 4;
 const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
 const perchPosition = new THREE.Vector3(10, 50, -75);
 
 const orthographicFieldOfView = 10;
-const orthographicNearClippingPane = 1;
+const orthographicNearClippingPane = -1000;
 const orthographicFarClippingPane = 1000;
 
 const perspectiveFieldOfView = 70;
-const perspectiveNearClippingPane = -1000;
+const perspectiveNearClippingPane = 1;
 const perspectiveFarClippingPane = 1000;
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
@@ -78,14 +78,23 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    private setPositionPerspectiveCamera(object: any) {
+    public cameraOnMoveWithObject(object: any) {
+        this.updatePerspectiveCameraPosition(object);
+        this.perspectiveCamera.lookAt(object.position);
+        this.perspectiveCamera.updateProjectionMatrix();
+        this.instansiateOrthographicCamera(object);
+        this.orthographicCamera.lookAt(object.position);
+        this.orthographicCamera.updateProjectionMatrix();
+    }
+
+    private updatePerspectiveCameraPosition(object: any) {
         this.perspectiveCamera.position.x = object.position.x + perchPosition.x;
         this.perspectiveCamera.position.y = object.position.y + perchPosition.y;
         this.perspectiveCamera.position.z = object.position.z + perchPosition.z;
         this.perspectiveCamera.updateProjectionMatrix();
     }
 
-    private setPositionOrthographicCamera(object: any) {
+    private updateOrthographicCameraPosition(object: any) {
         this.orthographicCamera.position.x = object.position.x;
         this.orthographicCamera.position.y = object.position.y;
         this.orthographicCamera.position.z = object.position.z + orthographicHeight;
@@ -98,14 +107,5 @@ export class CameraService {
         }
 
         this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
-    }
-
-    public cameraOnMoveWithObject(object: any) {
-        this.setPositionPerspectiveCamera(object);
-        this.perspectiveCamera.lookAt(object.position);
-        this.perspectiveCamera.updateProjectionMatrix();
-        this.instansiateOrthographicCamera(object);
-        this.orthographicCamera.lookAt(object.position);
-        this.orthographicCamera.updateProjectionMatrix();
     }
 }
