@@ -39,7 +39,7 @@ export class CameraService {
 
     public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
         const aspectRatio = this.getAspectRatio(container.clientWidth, container.clientHeight);
-        const camera = new THREE.OrthographicCamera(
+        return new THREE.OrthographicCamera(
             this.sceneScale * orthographicFieldOfView / -2,
             this.sceneScale * orthographicFieldOfView / 2,
             this.sceneScale * orthographicFieldOfView / aspectRatio / 2,
@@ -47,19 +47,16 @@ export class CameraService {
             orthographicNearClippingPane,
             orthographicFarClippingPane
         );
-        return camera;
     }
 
     public setPerspectiveCamera(container: HTMLElement): THREE.PerspectiveCamera {
-        const aspectRatio = this.getAspectRatio(container.clientWidth,
-            container.clientHeight);
-        const camera = new THREE.PerspectiveCamera(
+        const aspectRatio = this.getAspectRatio(container.clientWidth, container.clientHeight);
+        return new THREE.PerspectiveCamera(
             perspectiveFieldOfView,
             aspectRatio,
             perspectiveNearClippingPane,
             perspectiveFarClippingPane
         );
-        return camera;
     }
 
     public getCamera(): THREE.Camera {
