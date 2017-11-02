@@ -37,7 +37,7 @@ export class CameraService {
         this.orthographicCamera = this.setOrthographicCamera(aspectRatio);
         this.perspectiveCamera = this.setPerspectiveCamera(aspectRatio);
 
-        this.defaultCamerasPosition();
+        this.initializeCamerasPositions();
     }
 
     public setOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
@@ -60,17 +60,22 @@ export class CameraService {
         );
     }
 
-    public getCamera(): THREE.Camera {
-        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
+    private initializeCamerasPositions() {
+        this.perspectiveCamera.position.x = this.objectToFollow.position.x;
+        this.perspectiveCamera.position.y = this.objectToFollow.position.y;
+        this.perspectiveCamera.position.z = orthographicHeight;
+
+        this.orthographicCamera.position.x = this.objectToFollow.position.x + (
+            Math.cos(this.objectToFollow.rotation.z) * maximumPerspectiveDistance
+        );
+        this.orthographicCamera.position.y = this.objectToFollow.position.y + (
+            Math.sin(this.objectToFollow.rotation.z) * maximumPerspectiveDistance
+        );
+        this.orthographicCamera.position.z = perspectiveHeight;
     }
 
-    private defaultCamerasPosition() {
-        this.orthographicCamera.position.x = CAMERA_POSITION.x;
-        this.orthographicCamera.position.y = CAMERA_POSITION.y;
-        this.orthographicCamera.position.z = CAMERA_POSITION.z;
-        this.perspectiveCamera.position.x = CAMERA_POSITION.x;
-        this.perspectiveCamera.position.y = CAMERA_POSITION.y;
-        this.perspectiveCamera.position.z = CAMERA_POSITION.z;
+    public getCamera(): THREE.Camera {
+        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
     public setPositionPerspectiveCamera(object: any) {
