@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
 import { CrosswordGridService } from '../crossword-grid/crossword-grid.service';
@@ -10,6 +12,7 @@ import { Word } from '../../../../../commun/word';
 @Injectable()
 export class CrosswordHintsService {
     public selectedWord: string;
+    private selectedWordSubject: Subject<any>;
     public hints: Array<Hint>;
     private wordMap: Map<string, Word>;
 
@@ -19,6 +22,10 @@ export class CrosswordHintsService {
         private pointsService: CrosswordPointsService
     ) {
         this.subscribeToFoundWordAlerts();
+    }
+
+    public selectedWordAlerts(): Observable<any> {
+        return this.selectedWordSubject.asObservable();
     }
 
     public newGame(wordsWithIndex: Array<Word>) {
