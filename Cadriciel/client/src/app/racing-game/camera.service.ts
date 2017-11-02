@@ -22,7 +22,7 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 export class CameraService {
     private sceneScale: number;
 
-    private currentView: View;
+    private currentView = View.PERSPECTIVE;
 
     public perspectiveCamera: THREE.PerspectiveCamera;
 
@@ -30,15 +30,17 @@ export class CameraService {
 
     private objectToFollow: THREE.Mesh;
 
-    public initialiseCamera(container: HTMLElement): void {
-        this.orthographicCamera = this.setOrthographicCamera(container);
-        this.perspectiveCamera = this.setPerspectiveCamera(container);
-        this.currentView = View.PERSPECTIVE;
+    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh): void {
+        this.objectToFollow = objectToFollow;
+
+        const aspectRatio = container.clientWidth / container.clientHeight;
+        this.orthographicCamera = this.setOrthographicCamera(aspectRatio);
+        this.perspectiveCamera = this.setPerspectiveCamera(aspectRatio);
+
         this.defaultCamerasPosition();
     }
 
-    public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
-        const aspectRatio = this.getAspectRatio(container.clientWidth, container.clientHeight);
+    public setOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
         return new THREE.OrthographicCamera(
             this.sceneScale * orthographicFieldOfView / -2,
             this.sceneScale * orthographicFieldOfView / 2,
@@ -49,8 +51,7 @@ export class CameraService {
         );
     }
 
-    public setPerspectiveCamera(container: HTMLElement): THREE.PerspectiveCamera {
-        const aspectRatio = this.getAspectRatio(container.clientWidth, container.clientHeight);
+    public setPerspectiveCamera(aspectRatio: number): THREE.PerspectiveCamera {
         return new THREE.PerspectiveCamera(
             perspectiveFieldOfView,
             aspectRatio,
@@ -70,10 +71,6 @@ export class CameraService {
         this.perspectiveCamera.position.x = CAMERA_POSITION.x;
         this.perspectiveCamera.position.y = CAMERA_POSITION.y;
         this.perspectiveCamera.position.z = CAMERA_POSITION.z;
-    }
-
-    public getAspectRatio(width: number, height: number) {
-        return width / height;
     }
 
     public setPositionPerspectiveCamera(object: any) {
