@@ -44,9 +44,6 @@ export class CrosswordHintsService {
     }
 
     public unselectHint() {
-        if (this.selectedWord) {
-            this.gridService.unselectWord(this.wordMap.get(this.selectedWord));
-        }
         this.selectedWord = undefined;
     }
 

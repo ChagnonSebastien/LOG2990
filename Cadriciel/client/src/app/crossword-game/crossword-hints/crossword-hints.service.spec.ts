@@ -154,4 +154,11 @@ describe('#CrosswordHintsService', () => {
             expect(hintsService['gridService'].grid[0][2].selected).toBeTruthy();
         });
     });
+
+    describe('unselectHint()', () => {
+        it('should unselect the hint', () => {
+            hintsService.unselectHint();
+            expect(hintsService.selectedWord).toBeUndefined();
+        });
+    });
 });
