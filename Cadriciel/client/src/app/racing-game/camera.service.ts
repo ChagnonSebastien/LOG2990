@@ -112,7 +112,7 @@ export class CameraService {
         this.orthographicCamera.rotation.y = this.objectToFollow.rotation.y;
     }
 
-    public selectCamera(event: any): void {
+    public swapCamera(event: any): void {
         if (event.keyCode !== 67) { // 67 corresponding to 'C' in ASCII
             return;
         }

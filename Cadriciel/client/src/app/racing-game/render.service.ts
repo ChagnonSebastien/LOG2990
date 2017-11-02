@@ -84,8 +84,8 @@ export class RenderService {
     }
 
     public eventsList(event: any): void {
-        this.cameraService.selectCamera(event);
         this.zoomCamera(event);
+        this.cameraService.swapCamera(event);
         this.updateCamera();
     }
 
