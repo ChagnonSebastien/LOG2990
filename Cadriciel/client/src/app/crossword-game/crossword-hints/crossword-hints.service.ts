@@ -3,7 +3,6 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
-import { CrosswordGridService } from '../crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
 
 import { Hint } from '../shared-classes/hint';
@@ -18,9 +17,9 @@ export class CrosswordHintsService {
 
     constructor(
         private lexiconService: LexiconService,
-        private gridService: CrosswordGridService,
         private pointsService: CrosswordPointsService
     ) {
+        this.selectedWordSubject = new Subject();
         this.subscribeToFoundWordAlerts();
     }
 
@@ -40,14 +39,11 @@ export class CrosswordHintsService {
 
     public selectWord(word: string) {
         const wordWithIndex = this.wordMap.get(word);
-        if (wordWithIndex === undefined) {
+        if (wordWithIndex === undefined || this.selectedWord === word) {
             return;
         }
-        if (this.selectedWord) {
-            this.gridService.unselectWord(this.wordMap.get(this.selectedWord));
-        }
+        this.alertNewSelectedWord(wordWithIndex);
         this.selectedWord = word;
-        this.gridService.selectWord(wordWithIndex);
     }
 
     public unselectHint() {
@@ -69,6 +65,15 @@ export class CrosswordHintsService {
                     this.hints.push(new Hint(wordsWithIndex[i].word, definition));
                 });
             });
+    }
+
+    private alertNewSelectedWord(word: Word) {
+        this.selectedWordSubject.next(
+            {
+                'previous': this.selectedWord,
+                'current': word
+            }
+        );
     }
 
     private subscribeToFoundWordAlerts() {

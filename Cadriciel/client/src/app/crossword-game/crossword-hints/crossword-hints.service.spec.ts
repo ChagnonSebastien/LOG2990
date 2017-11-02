@@ -19,19 +19,6 @@ class MockLexiconService extends LexiconService {
     }
 }
 
-const grid: string[][] = [
-    ['h', 'u', 'h', '#', '#', 'a', 'l', 'o', 'u', 'd'],
-    ['u', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', 'o'],
-    ['m', ' ', '#', ' ', '#', '#', 's', 'l', 'o', 'w'],
-    ['#', ' ', 'o', ' ', 'd', ' ', 'w', ' ', ' ', 'n'],
-    ['#', 'e', 'x', 'p', 'o', 's', 'e', 'd', '#', 's'],
-    ['#', ' ', 'f', ' ', 'n', ' ', 'l', ' ', ' ', 't'],
-    ['c', ' ', 'o', ' ', 'n', ' ', 'l', ' ', ' ', 'a'],
-    ['a', ' ', 'r', ' ', 'a', ' ', 'i', ' ', ' ', 'i'],
-    ['s', 'a', 'd', '#', '#', ' ', 'n', ' ', ' ', 'r'],
-    ['h', ' ', '#', 'b', 'i', 'n', 'g', 'o', '#', 's']
-];
-
 const wordsWithIndex: Array<Word> = [
     { 'i': 0, 'j': 0, 'word': 'huh', 'horizontal': true },
     { 'i': 0, 'j': 9, 'word': 'downstairs', 'horizontal': false },
@@ -63,7 +50,6 @@ describe('#CrosswordHintsService', () => {
         });
         hintsService = TestBed.get(CrosswordHintsService);
         hintsService.newGame(wordsWithIndex);
-        hintsService['gridService'].initialize(grid, wordsWithIndex);
     });
 
     it('should construct', () => {
@@ -128,30 +114,14 @@ describe('#CrosswordHintsService', () => {
             expect(hintsService.selectedWord).toEqual('huh');
         });
 
-        it('should unselect the previously selected word in the grid if it exists in the hints', () => {
+        it('should notify when the selected word changes', (done) => {
+            hintsService.selectedWordAlerts().subscribe((hintChange) => {
+                expect(hintChange.previous).toBeUndefined();
+                expect(hintChange.current.word).toEqual('huh');
+                done();
+            });
+
             hintsService.selectWord('huh');
-            expect(hintsService.selectedWord).toEqual('huh');
-            expect(hintsService['gridService'].grid[0][0].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][1].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][2].selected).toBeTruthy();
-
-            hintsService.selectWord('hum');
-            expect(hintsService['gridService'].grid[0][0].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][1].selected).toBeFalsy();
-            expect(hintsService['gridService'].grid[0][2].selected).toBeFalsy();
-        });
-
-        it('should not unselect the previously selected word when the word is not in the hints', () => {
-            hintsService.selectWord('huh');
-            expect(hintsService.selectedWord).toEqual('huh');
-            expect(hintsService['gridService'].grid[0][0].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][1].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][2].selected).toBeTruthy();
-
-            hintsService.selectWord('thisdoesnotexist');
-            expect(hintsService['gridService'].grid[0][0].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][1].selected).toBeTruthy();
-            expect(hintsService['gridService'].grid[0][2].selected).toBeTruthy();
         });
     });
 
