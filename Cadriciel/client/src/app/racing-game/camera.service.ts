@@ -24,9 +24,9 @@ export class CameraService {
 
     private currentView = View.PERSPECTIVE;
 
-    public perspectiveCamera: THREE.PerspectiveCamera;
+    private perspectiveCamera: THREE.PerspectiveCamera;
 
-    public orthographicCamera: THREE.OrthographicCamera;
+    private orthographicCamera: THREE.OrthographicCamera;
 
     private objectToFollow: THREE.Mesh;
 
@@ -40,7 +40,7 @@ export class CameraService {
         this.initializeCamerasPositions();
     }
 
-    public instansiatePerspectiveCamera(aspectRatio: number): THREE.PerspectiveCamera {
+    private instansiatePerspectiveCamera(aspectRatio: number): THREE.PerspectiveCamera {
         return new THREE.PerspectiveCamera(
             perspectiveFieldOfView,
             aspectRatio,
@@ -49,7 +49,7 @@ export class CameraService {
         );
     }
 
-    public instansiateOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
+    private instansiateOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
         return new THREE.OrthographicCamera(
             this.sceneScale * orthographicFieldOfView / -2,
             this.sceneScale * orthographicFieldOfView / 2,
@@ -78,14 +78,14 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    public setPositionPerspectiveCamera(object: any) {
+    private setPositionPerspectiveCamera(object: any) {
         this.perspectiveCamera.position.x = object.position.x + perchPosition.x;
         this.perspectiveCamera.position.y = object.position.y + perchPosition.y;
         this.perspectiveCamera.position.z = object.position.z + perchPosition.z;
         this.perspectiveCamera.updateProjectionMatrix();
     }
 
-    public setPositionOrthographicCamera(object: any) {
+    private setPositionOrthographicCamera(object: any) {
         this.orthographicCamera.position.x = object.position.x;
         this.orthographicCamera.position.y = object.position.y;
         this.orthographicCamera.position.z = object.position.z + orthographicHeight;
@@ -104,7 +104,7 @@ export class CameraService {
         this.setPositionPerspectiveCamera(object);
         this.perspectiveCamera.lookAt(object.position);
         this.perspectiveCamera.updateProjectionMatrix();
-        this.setOrthographicCamera(object);
+        this.instansiateOrthographicCamera(object);
         this.orthographicCamera.lookAt(object.position);
         this.orthographicCamera.updateProjectionMatrix();
     }
