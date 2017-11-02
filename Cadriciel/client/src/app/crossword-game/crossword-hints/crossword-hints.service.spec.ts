@@ -63,14 +63,24 @@ describe('#CrosswordHintsService', () => {
             expect(hintsService.hints).toBeDefined();
 
             // wordMap initialized
-            for (const word of wordsWithIndex) {
-                expect(hintsService['wordMap'].get(word.word)).toBeDefined();
-                expect(hintsService['wordMap'].get(word.word).word).toEqual(word.word);
+            for (const wordWithIndex of wordsWithIndex) {
+                expect(hintsService['wordMap'].get(wordWithIndex.word)).toBeDefined();
+                expect(hintsService['wordMap'].get(wordWithIndex.word).word).toEqual(wordWithIndex.word);
             }
 
             // every word of wordsWithIndex is in hints
             for (const hint of hintsService.hints) {
                 expect(hintsService['wordMap'].get(hint.word)).toBeDefined();
+            }
+        });
+    });
+
+    describe('getWordInfo()', () => {
+        it('should return the word info of the word', () => {
+            hintsService.newGame(wordsWithIndex);
+
+            for (const wordWithIndex of wordsWithIndex) {
+                expect(hintsService.getWordInfo(wordWithIndex.word)).toEqual(wordWithIndex);
             }
         });
     });
