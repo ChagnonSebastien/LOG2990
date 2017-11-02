@@ -43,4 +43,16 @@ describe('Track', () => {
             });
     });
 
+    it('Should change track rating, numberOfTimesPlayed and bestTimes', (done) => {
+        chai.request(apiUrl)
+            .post('/track/Zig-Zag')
+            .send({ numberOfTimesPlayed: 1, rating: 5, time: 7 })
+            .end((err: any, res: any) => {
+             //   const track = JSON.parse(res.text);
+             //  assert(track.value.rating === 2.5);             
+                assert(JSON.parse(res.text).data === 'success');
+                done();
+            });
+    }).timeout(15000);
+
 });

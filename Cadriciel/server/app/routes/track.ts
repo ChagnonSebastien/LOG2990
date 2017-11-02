@@ -80,6 +80,7 @@ module Route {
 
         public updateBestTimes (arrayBestTimes: number[], newtime: number ) { 
             const fifthBestTimes = 5;
+        
             arrayBestTimes.sort((a, b) => { 
                   return a - b;
             })
@@ -97,25 +98,26 @@ module Route {
             let tempRating: number;
             let tempBestTimes: number[];
             let tempNbOfTimesPlayed: number;
-
+        
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
-                } else {
-                    db.collection('track').findOne({ _id: req.params.update.name })
+                } else {      
+                    db.collection('track').findOne({ _id: req.params.update._id })
                         .then((trackDB) => {
+                            
                             tempRating = this.updateRating(req.body.numberOfTimesPlayed, trackDB.rating, req.body.rating );
                             tempBestTimes = this.updateBestTimes(trackDB.bestTimes, req.body.time);
                             tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
-                            
-                            db.collection('tracks').update(
+                        });
+                    db.collection('tracks').update(
                                 { id: req.params.update.name }, 
-                                { rating: tempRating,
+                                { $set: { rating: tempRating,
                                   bestTimes: tempBestTimes,
-                                  numberOfTimePlayed: tempNbOfTimesPlayed },
+                                  numberOfTimesPlayed: tempNbOfTimesPlayed} },
                                 { upsert: false
-                                });  
-                        })                
+                    });            
+                    res.send({ 'data': 'success' });                   
                 }
                  
             });
