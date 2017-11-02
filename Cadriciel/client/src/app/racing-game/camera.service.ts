@@ -3,34 +3,32 @@ import * as THREE from 'three';
 
 // standard position of camera
 const perspectiveHeight = 2;
-const orthographicHeight = 2;
+const orthographicHeight = 0;
 const maximumPerspectiveDistance = 4;
 const CAMERA_POSITION = new THREE.Vector3(0, 0, 100);
 const perchPosition = new THREE.Vector3(10, 50, -75);
 
-const fieldOfView = 70;
-const nearClippingPane = 1;
-const farClippingPane = 1000;
+const orthographicFieldOfView = 10;
+const orthographicNearClippingPane = 1;
+const orthographicFarClippingPane = 1000;
+
+const perspectiveFieldOfView = 70;
+const perspectiveNearClippingPane = -1000;
+const perspectiveFarClippingPane = 1000;
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
 @Injectable()
 export class CameraService {
-    private sceneScale;
+    private sceneScale: number;
 
-    private currentView;
+    private currentView: View;
 
-    public perspectiveCamera;
+    public perspectiveCamera: THREE.PerspectiveCamera;
 
-    public orthographicCamera;
+    public orthographicCamera: THREE.OrthographicCamera;
 
-    public offsetX = 5;
-
-    public offsetY = 5;
-
-    public offsetZ = 5;
-
-    public viewSize = 100;
+    private objectToFollow: THREE.Mesh;
 
     public initialiseCamera(container: HTMLElement): void {
         this.orthographicCamera = this.setOrthographicCamera(container);
@@ -43,10 +41,10 @@ export class CameraService {
         const aspectRatio = this.getAspectRatio(container.clientWidth,
             container.clientHeight);
         const camera = new THREE.OrthographicCamera(
-            - aspectRatio * this.viewSize / 2,
-            aspectRatio * this.viewSize / 2,
-            aspectRatio * this.viewSize / 2,
-            - aspectRatio * this.viewSize / 2,
+            - aspectRatio * orthographicFieldOfView / 2,
+            aspectRatio * orthographicFieldOfView / 2,
+            aspectRatio * orthographicFieldOfView / 2,
+            - aspectRatio * orthographicFieldOfView / 2,
             -1000,
             1000
         );
@@ -57,10 +55,10 @@ export class CameraService {
         const aspectRatio = this.getAspectRatio(container.clientWidth,
             container.clientHeight);
         const camera = new THREE.PerspectiveCamera(
-            fieldOfView,
+            perspectiveFieldOfView,
             aspectRatio,
-            nearClippingPane,
-            farClippingPane
+            perspectiveNearClippingPane,
+            perspectiveFarClippingPane
         );
         return camera;
     }
@@ -92,9 +90,9 @@ export class CameraService {
     }
 
     public setPositionOrthographicCamera(object: any) {
-        this.orthographicCamera.position.x = object.position.x + this.offsetX;
-        this.orthographicCamera.position.y = object.position.y + this.offsetY;
-        this.orthographicCamera.position.z = object.position.z + this.offsetZ;
+        this.orthographicCamera.position.x = object.position.x;
+        this.orthographicCamera.position.y = object.position.y;
+        this.orthographicCamera.position.z = object.position.z + orthographicHeight;
         this.orthographicCamera.updateProjectionMatrix();
     }
 
@@ -104,7 +102,6 @@ export class CameraService {
         }
 
         this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
-
     }
 
     public cameraOnMoveWithObject(object: any) {
