@@ -124,7 +124,7 @@ export class RenderService {
 
     public cameraFollowingObject(object: any) {
         this.cameraService.cameraOnMoveWithObject(object);
-        //this.updateCamera();
+        // this.updateCamera();
     }
 
     private startRenderingLoop() {
@@ -139,11 +139,11 @@ export class RenderService {
     private render() {
         requestAnimationFrame(() => this.render());
         // this.animateCube();
-        //this.animatedCart();
+        // this.animatedCart();
         this.camera.zoom = this.view;
         this.camera.updateProjectionMatrix();
         // this.cameraFollowingObject(this.cube);
-        //this.cameraFollowingObject(this.cart);
+        // this.cameraFollowingObject(this.cart);
         this.renderer.render(this.scene, this.camera);
         this.stats.update();
     }
@@ -195,7 +195,6 @@ export class RenderService {
         });
 
     }
-    // maybe unsued
 
     private animatedCart() {
         this.cart.rotation.x += this.rotationSpeedX;
