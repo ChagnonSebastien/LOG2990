@@ -62,15 +62,25 @@ describe('#CrosswordHintsService', () => {
             expect(hintsService['wordMap']).toBeDefined();
             expect(hintsService.hints).toBeDefined();
 
-            // wordMap initialized
+
+        });
+
+        it('should construct a wordMap for O(1) access to info on a word', () => {
+            hintsService.newGame(wordsWithIndex);
+
             for (const wordWithIndex of wordsWithIndex) {
                 expect(hintsService['wordMap'].get(wordWithIndex.word)).toBeDefined();
                 expect(hintsService['wordMap'].get(wordWithIndex.word).word).toEqual(wordWithIndex.word);
             }
+        });
+
+        it('should create a hint for every word in wordsWithIndex with its definition', () => {
+            hintsService.newGame(wordsWithIndex);
 
             // every word of wordsWithIndex is in hints
             for (const hint of hintsService.hints) {
                 expect(hintsService['wordMap'].get(hint.word)).toBeDefined();
+                expect(hint.definition).toEqual(`Definition of ${hint.word}`);
             }
         });
     });
@@ -82,6 +92,12 @@ describe('#CrosswordHintsService', () => {
             for (const wordWithIndex of wordsWithIndex) {
                 expect(hintsService.getWordInfo(wordWithIndex.word)).toEqual(wordWithIndex);
             }
+        });
+    });
+
+    describe('selectWord()', () => {
+        it('should select the word given', () => {
+
         });
     });
 });
