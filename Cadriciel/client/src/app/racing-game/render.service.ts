@@ -49,13 +49,13 @@ export class RenderService {
     /*
         private createCube() {
             const geometry = new THREE.BoxGeometry(100, 100, 100);
-    
+
             for (let i = 0; i < geometry.faces.length; i += 2) {
                 const hex = Math.random() * 0xffffff;
                 geometry.faces[i].color.setHex(hex);
                 geometry.faces[i + 1].color.setHex(hex);
             }
-    
+
             const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
             this.cube = new THREE.Mesh(geometry, material);
             this.scene.add(this.cube);
