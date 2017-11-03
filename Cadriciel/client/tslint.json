@@ -80,8 +80,14 @@
       "check-else",
       "check-whitespace"
     ],
-    "cyclomatic-complexity": [ true, 20],
-    "max-classes-per-file": [true, 2],
+    "cyclomatic-complexity": [
+      true,
+      20
+    ],
+    "max-classes-per-file": [
+      true,
+      2
+    ],
     "no-unsafe-finally": true,
     "prefer-const": true,
     "quotemark": [
@@ -109,7 +115,10 @@
     ],
     "typeof-compare": true,
     "unified-signatures": true,
-    "variable-name": true,
+    "variable-name": [
+      true,
+      "allow-leading-underscore"
+    ],
     "whitespace": [
       true,
       "check-branch",
@@ -118,7 +127,6 @@
       "check-separator",
       "check-type"
     ],
-
     "directive-selector": [
       true,
       "attribute",
@@ -143,7 +151,6 @@
     "no-access-missing-member": true,
     "templates-use-public": true,
     "invoke-injectable": true,
-
     // rules added by Dylan
     "no-sparse-arrays": true,
     "no-irregular-whitespace": true
