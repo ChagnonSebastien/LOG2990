@@ -1,6 +1,6 @@
 <!--<h1><img class="brand-logo"  src="../../../assets/Logo_Racing.PNG"></h1>-->
 <ul class="tracks" class="list-group" id="track-list">
-  <li *ngFor="let track of tracks" [routerLink]="['./', track.name]" [class.selected]="track.name === selectedTrack" class="list-group-item">
-    <span class="badge"></span> {{track.name}}
+  <li *ngFor="let track of tracks" [routerLink]="['./', track]" [class.selected]="track === selectedTrack" class="list-group-item">
+    <span class="badge"></span> {{track}}
   </li>
 </ul>

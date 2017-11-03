@@ -37,7 +37,7 @@ export class AdminTracksComponent implements OnInit {
     public async delete(): Promise<boolean> {
         this.trackJustDeleted = true;
         let response = false;
-        await this.trackService.deleteTrack(this.trackName).then(res => {
+        await this.trackService.delete(this.trackName).then(res => {
             response = (res !== 'connectionError');
             this.trackName = undefined;
             this.trackJustDeleted = false;
