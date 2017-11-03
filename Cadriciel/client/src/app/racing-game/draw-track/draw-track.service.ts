@@ -5,10 +5,7 @@ import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import { Track } from '../track';
-import { Http } from '@angular/http';
 import * as THREE from 'three';
-
-const apiUrl = 'http://localhost:3000/api';
 
 @Injectable()
 export class DrawTrackService {
@@ -29,8 +26,7 @@ export class DrawTrackService {
         public renderService: RenderService,
         public trackValidationService: TrackValidationService,
         public obstacleService: ObstacleService,
-        private trackService: TrackService,
-        private http: Http
+        private trackService: TrackService
     ) { }
 
     public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {

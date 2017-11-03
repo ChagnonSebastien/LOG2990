@@ -1,10 +1,8 @@
 import { TrackService } from './track.service';
 import { Track } from './../track';
 import { ActivatedRoute } from '@angular/router';
-import { Http } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
 
-const apiUrl = 'http://localhost:3000/api';
 @Component({
     selector: 'app-track-detail',
     templateUrl: './track-detail.component.html',
@@ -14,7 +12,6 @@ export class TrackDetailComponent implements OnInit {
     public track;
 
     constructor(
-        private http: Http,
         private route: ActivatedRoute,
         private trackService: TrackService
     ) { }
