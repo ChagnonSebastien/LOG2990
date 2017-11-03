@@ -5,8 +5,7 @@ export class Game {
         mode: string = '';
         option: string = '';
         player1 : Player;
-        player2 : Player;
-        
+        player2 : Player;  
         crossword: string[][] = [[]];
         listOfWords: string[] = [];
                

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../../../../commun/crossword/game';
+import { Player } from '../../../../commun/crossword/player';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class GameManagerService {
 
         this.socket.on('gameCreated', data => {
             this.game = data;
+            console.log(data);
           });
 
         this.socket.on('player 2 joined your game', data => {
@@ -29,15 +31,18 @@ export class GameManagerService {
         return this.game;
     }
 
-    public createGame(type: string, difficulty: string, mode: string, username: string) {
-        this.socket.emit('createGame', type, difficulty, mode, username );
+    public createGame(type: string, difficulty: string, mode: string, player1: Player) {
+
+        this.socket.emit('createGame', type, difficulty, mode, player1 );
     }
 
     public joinGame(gameId: string, username: string) {
+
         this.socket.emit('joinGame', gameId, username);
     }
 
     public leaveGame(gameId: string, username: string) {
+
         this.socket.emit('leaveGame', gameId, username);
     }
 }

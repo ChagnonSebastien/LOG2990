@@ -8,10 +8,12 @@ export class PlayerManagerService {
     private readonly HOST_NAME = 'http://' + window.location.hostname;
     private readonly SERVER_PORT = ':3000';
     private player: Player;
+    private socket: SocketIOClient.Socket;
 
     constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce ) {
         this.player = this.playerHandlerService.requestPlayer();
-        this.player.setSocket(this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT));
+        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT)
+        this.player.setSocketID(this.socket.id);
     }
 
     public getPlayer(): Player {

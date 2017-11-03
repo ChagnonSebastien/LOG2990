@@ -4,14 +4,14 @@ export class Player {
     private usernameValid: boolean;
     private gameID: number;
     private score: number;
-    private socket: any;
+    private socketID: string;
 
     constructor() {
         this.username = '';
         this.usernameValid = false;
         this.gameID = -1;
         this.score = 0;
-        this.socket = null;
+        this.socketID = '';
     }
 
     public getUsername(): string {
@@ -30,8 +30,8 @@ export class Player {
         return this.score;
     }
 
-    public getSocket(): any{
-        return this.socket;
+    public getSocketID(): string{
+        return this.socketID;
     }
 
     public setUsername(name: string): void {
@@ -50,7 +50,7 @@ export class Player {
         this.score = score;
     }
 
-    public setSocket(socket: any): void {
-        this.socket = socket;
+    public setSocketID(socket: any): void {
+        this.socketID = socket;
     }
 }

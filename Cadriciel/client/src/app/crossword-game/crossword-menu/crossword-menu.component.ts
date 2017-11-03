@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
+import { GameManagerService } from '../crossword-game-manager.service';
 @Component({
     selector: 'app-crossword-menu',
     templateUrl: './crossword-menu.component.html',
@@ -13,9 +14,9 @@ export class CrosswordMenuComponent {
     public type: string;
     public mode: string;
     public level: string;
-    @Input() private username: string;
+    @Input() public username: string;
 
-    constructor(private playerManagerService: PlayerManagerService) {
+    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService ) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
@@ -32,9 +33,13 @@ export class CrosswordMenuComponent {
     }
 
     public startMultiplayerGame(): void {
-
+        console.log('here');
         if (this.validateUsername()) {
+            console.log('here');
             this.setPlayerUsername();
+            this.playerManagerService.getPlayer();
+            console.log('here');
+            this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }
     }
 
