@@ -12,7 +12,7 @@ export class PlayerManagerService {
 
     constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce ) {
         this.player = this.playerHandlerService.requestPlayer();
-        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT)
+        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
         this.player.setSocketID(this.socket.id);
     }
 

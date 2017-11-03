@@ -14,6 +14,7 @@ export class CrosswordMenuComponent {
     public type: string;
     public mode: string;
     public level: string;
+    public waitingForPlayer2: boolean;
     @Input() public username: string;
 
     constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService ) {
@@ -33,12 +34,12 @@ export class CrosswordMenuComponent {
     }
 
     public startMultiplayerGame(): void {
-        console.log('here');
+
         if (this.validateUsername()) {
-            console.log('here');
+
             this.setPlayerUsername();
             this.playerManagerService.getPlayer();
-            console.log('here');
+            this.waitingForPlayer2 = true;
             this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }
     }
