@@ -54,11 +54,21 @@ export class RenderService {
     private createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.scene.add(new THREE.AmbientLight(0xFFFFFF));
-        const light: THREE.SpotLight = new THREE.SpotLight(0xffffff);
-        light.position.set(100, 100, 100);
-        light.castShadow = true;
-        this.scene.add(light);
+        this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        const dirLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
+        dirLight.position.set( 200, 500, 100 );
+        dirLight.rotation.y = Math.PI / 4 ;
+        dirLight.rotation.x = Math.PI / 4 ;
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.near = 1;
+        dirLight.shadow.camera.far = 1000;
+        dirLight.shadow.camera.right = 1000;
+        dirLight.shadow.camera.left = - 1000;
+        dirLight.shadow.camera.top	= 1000;
+        dirLight.shadow.camera.bottom = - 1000;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        this.scene.add( dirLight );
         this.terrainGenerationService.generate(this.scene, null);
         // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
         // this.scene.add(vehicle);
@@ -94,7 +104,9 @@ export class RenderService {
     }
 
     private startRenderingLoop() {
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
@@ -105,6 +117,7 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
+        this.animatedCart();
         this.stats.update();
     }
 
@@ -140,12 +153,13 @@ export class RenderService {
             this.cart = <THREE.Mesh>object;
             this.cart.geometry.rotateY(Math.PI / 2);
             this.cart.position.setX(0);
-            this.cart.position.setY(0);
+            this.cart.position.setY(68);
             this.cart.position.setZ(0);
             this.cart.scale.setX(50);
             this.cart.scale.setY(50);
             this.cart.scale.setZ(50);
-            this.cart.rotation.y = Math.PI / 4;
+            this.cart.castShadow = true;
+            this.cart.receiveShadow = true;
             console.log('z: ', this.cart);
             service.scene.add(this.cart);
             this.cameraService.initializeCameras(this.container, this.cart, scale);
