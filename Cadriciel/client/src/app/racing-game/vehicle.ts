@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Subject } from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 
-const VEHICLE_ROTATION_Y = 20.4;
+
 export class Vehicle {
     public vehicle: THREE.Mesh;
     private vehicleSubject: Subject<any>;
