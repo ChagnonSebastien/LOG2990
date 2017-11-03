@@ -1,3 +1,4 @@
+import { TrackService } from './../game-initialization/track.service';
 import { ObstacleService } from './obstacle.service';
 import { ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
@@ -8,7 +9,6 @@ import { Headers, Http } from '@angular/http';
 import * as THREE from 'three';
 
 const apiUrl = 'http://localhost:3000/api';
-const headers = new Headers({ 'Content-Type': 'application/json' });
 
 @Injectable()
 export class DrawTrackService {
@@ -29,6 +29,7 @@ export class DrawTrackService {
         public renderService: RenderService,
         public trackValidationService: TrackValidationService,
         public obstacleService: ObstacleService,
+        private trackService: TrackService,
         private http: Http
     ) { }
 
@@ -212,14 +213,8 @@ export class DrawTrackService {
             this.obstacleService.getObstacles(ObstacleType.Pothole),
             this.obstacleService.getObstacles(ObstacleType.Booster)
         );
-        const path = 'tracks';
-        return this.http
-            .post(`${apiUrl}/${path}`,
-            JSON.stringify(trackToSave),
-            { headers: headers}
-        ).toPromise()
-        .then(response => response.json().data)
-        .catch(this.handleError);
+
+        return this.trackService.save(trackToSave);
     }
 
     private handleError(error: any): Promise<any> {
