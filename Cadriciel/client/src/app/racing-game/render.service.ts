@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 
+const scale = 100;
+
 @Injectable()
 export class RenderService {
 
@@ -47,7 +49,7 @@ export class RenderService {
         this.createSkyBox();
         this.createCube();
         this.terrainGeneration.generate(this.scene, track);
-        this.cameraService.initializeCameras(this.container, this.cube, 100);
+        this.cameraService.initializeCameras(this.container, this.cube, scale);
     }
 
     public createSkyBox() {
