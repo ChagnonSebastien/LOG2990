@@ -104,20 +104,23 @@ module Route {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {      
-                    db.collection('track').findOne({ _id: req.params.update._id })
+                    console.log(req.params.id);
+                    db.collection('tracks').findOne({ _id: req.params.id })
                         .then((trackDB) => {
-                            
+                            console.log(trackDB);
                             tempRating = this.updateRating(req.body.numberOfTimesPlayed, trackDB.rating, req.body.rating );
                             tempBestTimes = this.updateBestTimes(trackDB.bestTimes, req.body.time);
                             tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
+
+                            db.collection('tracks').update(
+                                        { id: req.params.id }, 
+                                        { $set: { rating: tempRating,
+                                        bestTimes: tempBestTimes,
+                                        numberOfTimesPlayed: tempNbOfTimesPlayed} },
+                                        { upsert: false
+                            });  
+                                      
                         });
-                    db.collection('tracks').update(
-                                { id: req.params.update.name }, 
-                                { $set: { rating: tempRating,
-                                  bestTimes: tempBestTimes,
-                                  numberOfTimesPlayed: tempNbOfTimesPlayed} },
-                                { upsert: false
-                    });            
                     res.send({ 'data': 'success' });// On doit plutôt retourner le track              
                 }
                  

@@ -109,7 +109,7 @@ export class Application {
         router.get('/track/:id', track.getTrack.bind(track.getTrack));
         router.post('/tracks', track.addTrack.bind(track.addTrack));
         router.delete('/track/:id', track.deleteTrack.bind(track.deleteTrack));
-        router.post('/track/:update', track.endGameUpdate.bind(track.endGameUpdate));
+        router.post('/track/update/:id', track.endGameUpdate.bind(track.endGameUpdate));
 
         // crossword api path
         router.get('/crossword/:collection/:level', serverStoredCrosswords.getCrossword.bind(serverStoredCrosswords.getCrossword));
