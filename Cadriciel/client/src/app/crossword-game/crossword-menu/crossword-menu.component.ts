@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 @Component({
     selector: 'app-crossword-menu',
@@ -13,11 +13,13 @@ export class CrosswordMenuComponent {
     public type: string;
     public mode: string;
     public level: string;
+    @Input() private username: string;
 
     constructor(private playerManagerService: PlayerManagerService) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
+        this.username = '';
     }
 
     public startGame() {
@@ -40,7 +42,7 @@ export class CrosswordMenuComponent {
         this.playerManagerService.getPlayer().setUsername(this.getUsername());
     }
     public getUsername(): string {
-        return (<HTMLInputElement>document.getElementById('username')).value;
+        return this.username;
     }
 
     public validateUsername() {
