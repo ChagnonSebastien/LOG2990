@@ -23,6 +23,12 @@ export class TerrainGenerationService {
         url + 'zpos.png', url + 'zneg.png'];
         this.textureSky = THREE.ImageUtils.loadTextureCube(images);
         scene.add(this.generateTable(track));
+
+        this.generateIntersections(track).concat(this.generateSegments(track)).forEach(instersection => {
+            scene.add(instersection);
+        });
+    }
+
     private generateTable(track: Track): THREE.Mesh {
         const maximumX = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.x));
         const minimumX = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.x));
@@ -64,4 +70,23 @@ export class TerrainGenerationService {
             return segmentMesh;
         });
     }
+
+    private getDistance(fromPosition: THREE.Vector2, toPosition: THREE.Vector2) {
+        return Math.sqrt(Math.pow(fromPosition.x - toPosition.x, 2) + Math.pow(fromPosition.y - toPosition.y, 2));
+    }
+
+    private generateIntersections(track: Track): THREE.Mesh[] {
+        const geometry = new THREE.CircleGeometry(this.scale * 10, 32);
+        geometry.rotateX(Math.PI / -2);
+        const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
+
+        return track.trackIntersections.map(intersection => {
+            const intersectionMesh = new THREE.Mesh(geometry, material);
+            intersectionMesh.position.x = intersection.x * this.scale;
+            intersectionMesh.position.z = intersection.y * this.scale;
+            intersectionMesh.position.y = 1;
+            return intersectionMesh;
+        });
+    }
+
 }
