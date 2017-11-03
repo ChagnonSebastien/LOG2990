@@ -1,21 +1,12 @@
 import { Track } from './../track';
 import { TrackService } from './../game-initialization/track.service';
 import { Obstacle, ObstacleType } from './obstacle';
-import { MockBackend } from '@angular/http/testing';
-import { async, fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { ObstacleService } from './obstacle.service';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
-import {
-    HttpModule,
-    Response,
-    RequestOptions,
-    BaseRequestOptions,
-    ResponseOptions,
-    ConnectionBackend
-} from '@angular/http';
-import { ReflectiveInjector } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import * as THREE from 'three';
 
 class MockTrackService extends TrackService {
