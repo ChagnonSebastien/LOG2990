@@ -1,3 +1,4 @@
+import { TerrainGenerationService } from './terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -26,6 +27,11 @@ import { TrackService } from './game-initialization/track.service';
     exports: [
         RacingGameComponent,
     ],
-    providers: [RenderService, CameraService, TrackService]
+    providers: [
+        RenderService,
+        CameraService,
+        TrackService,
+        TerrainGenerationService
+    ]
 })
 export class RacingGameModule { }

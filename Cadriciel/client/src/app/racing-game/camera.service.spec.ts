@@ -10,11 +10,4 @@ describe('test drawTrackService', function () {
         expect(cameraService).toBeTruthy();
         done();
     });
-
-    it('calculate ratio of window', done => {
-        const number1 = 10;
-        const number2 = 10;
-        expect(cameraService.getAspectRatio(number1, number2)).toEqual(1);
-        done();
-    });
 });
