@@ -16,8 +16,6 @@ export class TerrainGenerationService {
         table.position.set(0, 0, 100);
         table.rotateX(Math.PI);
         scene.add(table);
-        scene.add(new THREE.AmbientLight(0xfff));
-        console.log(2);
     }
 
 }

@@ -103,9 +103,6 @@ export class CameraService {
         }
 
         this.perspectiveCamera.lookAt(this.objectToFollow.position);
-
-        console.log('camera: ', this.perspectiveCamera.position);
-        console.log('cart: ', this.objectToFollow.position);
     }
 
     private updateOrthographicCameraPosition() {
