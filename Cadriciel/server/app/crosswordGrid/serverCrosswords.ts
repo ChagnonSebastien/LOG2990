@@ -4,7 +4,8 @@ import { CrosswordGenerator } from '../crossword-generator';
 const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
-const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+// const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 const crosswordSize = 10;
 const maxCrosswordPerLevel = 5;
 
