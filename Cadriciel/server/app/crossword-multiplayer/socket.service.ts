@@ -33,10 +33,10 @@ export class SocketManager {
             });
 
             
-            socket.on('i selected a word hint', () => {
+            socket.on('found a word', () => {
                 //this.sio.to(socketId).emit('opponent selected a grid sqaure', indexes);
             });
-            socket.on('i found a word', () => {
+            socket.on('selected a hint', () => {
                 //this.sio.to(socketId).emit('opponent found a word', indexes);
             });
             socket.on('joinGame', (gameId: string, username: string) => {
