@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 const apiUrl = 'http://localhost:3000/api';
 const headers = new Headers({ 'Content-Type': 'application/json' });
+const getPath = 'track';
 const savePath = 'track';
 const deletePath = 'track';
 
@@ -23,6 +24,24 @@ export class TrackService {
         return this.http
             .delete(`${apiUrl}/${deletePath}/${trackName}`).toPromise()
             .then(response => response.json().data)
+            .catch(this.handleError);
+    }
+
+    public get(trackName: string): Promise<Track> {
+        return this.http
+            .get(`${apiUrl}/${getPath}/${trackName}`).toPromise()
+            .then(response => {
+                const track = response.json();
+                return new Track(
+                    trackName,
+                    track.description,
+                    track.type,
+                    track.trackIntersections,
+                    track.puddles,
+                    track.potholes,
+                    track.boosters
+                );
+            })
             .catch(this.handleError);
     }
 

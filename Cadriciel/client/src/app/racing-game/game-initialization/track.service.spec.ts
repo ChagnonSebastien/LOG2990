@@ -24,10 +24,6 @@ describe('TrackService', () => {
         this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
     }));
 
-  //  it('should be created', inject([TrackService], (service: TrackService) => {
-   //     expect(service).toBeTruthy();
-  //  }));
-
     it('should not deleted track', fakeAsync(() => {
         track = new Track('name', 'dest', 'easy', [], [], [], [] );
         let result: String;
