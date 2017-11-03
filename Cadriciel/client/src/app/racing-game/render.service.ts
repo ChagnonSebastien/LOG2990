@@ -30,16 +30,6 @@ export class RenderService {
     private cart: THREE.Mesh;
 
 
-    // added
-    private cameraZ = 400;
-
-    private fieldOfView = 70;
-
-    private nearClippingPane = 1;
-
-    private farClippingPane = 1000;
-
-
     constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService) {
     }
 

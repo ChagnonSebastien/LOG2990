@@ -9,7 +9,7 @@ export class RacingGameService {
 
     public initializeVehicle(): Vehicle {
         this.vehicle = new Vehicle();
-        console.log("finished creating vehicle");
+        console.log('finished creating vehicle');
         return this.vehicle;
     }
 
