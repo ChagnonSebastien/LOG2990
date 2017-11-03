@@ -27,6 +27,12 @@ export class SocketManager {
                 socket.emit('sent all games', this.gameManager.getGames());
 
             });
+
+            socket.on('joinGame', (gameId: string, player: Player) => {
+                socket.emit('player 2 joined', this.gameManager.joinGame(gameId, player));
+            });
+
+            
             socket.on('i selected a word hint', () => {
                 //this.sio.to(socketId).emit('opponent selected a grid sqaure', indexes);
             });

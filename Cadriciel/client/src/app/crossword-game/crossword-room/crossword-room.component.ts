@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {GameManagerService} from '../crossword-game-manager.service';
+import { PlayerManagerService } from '../crossword-player-manager.service';
 import { Game } from '../../../../../commun/crossword/game';
 
 @Component({
@@ -10,9 +11,11 @@ import { Game } from '../../../../../commun/crossword/game';
 export class CrosswordRoomComponent implements OnInit {
 
   public games: Game[] = [];
-  @Input() public username: string;
+  public username: string;
 
-  constructor(private gameManagerService: GameManagerService) { }
+  constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) { 
+    this.username = '';
+  }
 
   public ngOnInit() {
     this.gameManagerService.getGames().then(games => {
@@ -21,7 +24,12 @@ export class CrosswordRoomComponent implements OnInit {
   }
 
   public joinGame(gameId: string) {
-    this.gameManagerService.joinGame(gameId, this.username);
+    this.setPlayerUsername();
+    this.gameManagerService.joinGame(gameId, this.playerManagerService.getPlayer());
   }
+
+  public setPlayerUsername(): void {
+    this.playerManagerService.getPlayer().setUsername(this.username);
+}
 
 }

@@ -38,6 +38,12 @@ export class GameManager {
         return await game;
     }
 
+    public joinGame(gameId: string, player: Player): Game {
+        const game = this.findGameById(gameId);
+        game.player2 = player;
+        return game;
+    }
+
     public findGameById(id: string): Game {
         for (let i = 0; i < this.games.length; i++) {
             if (this.games[i].id === id) {

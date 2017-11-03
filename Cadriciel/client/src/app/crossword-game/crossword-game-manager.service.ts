@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Game } from '../../../../commun/crossword/game';
 import { Player } from '../../../../commun/crossword/player';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
@@ -9,22 +11,23 @@ export class GameManagerService {
     private readonly HOST_NAME = 'http://' + window.location.hostname;
     private readonly SERVER_PORT = ':3000';
     private socket: SocketIOClient.Socket;
+    private playerTwoSubject: Subject<any>;
 
     constructor(private socketHandlerSerivce: SocketHandlerSerivce) {
         this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
 
         this.socket.on('gameCreated', data => {
             this.game = data;
-            console.log(data);
         });
 
-        this.socket.on('player 2 joined your game', data => {
+        this.socket.on('player 2 joined', data => {
             this.game = data;
+            this.playerTwoSubject.next('player 2 joined');
         });
+    }
 
-        this.socket.on('you joined another game', data => {
-            this.game = data;
-        });
+    public playerTwoAlerts() {
+        return this.playerTwoSubject.asObservable();
     }
 
     public getGame(): Game {
@@ -42,8 +45,8 @@ export class GameManagerService {
         this.socket.emit('createGame', type, difficulty, mode, player1);
     }
 
-    public joinGame(gameId: string, username: string) {
-        this.socket.emit('joinGame', gameId, username);
+    public joinGame(gameId: string, player: Player) {
+        this.socket.emit('joinGame', gameId, player);
     }
 
     public leaveGame(gameId: string, username: string) {

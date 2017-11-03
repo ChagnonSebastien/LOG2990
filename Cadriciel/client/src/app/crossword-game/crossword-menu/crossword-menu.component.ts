@@ -15,7 +15,7 @@ export class CrosswordMenuComponent {
     public mode: string;
     public level: string;
     public waitingForPlayer2: boolean;
-    @Input() public username: string;
+    public username: string;
 
     constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService ) {
         this.type = 'solo';
