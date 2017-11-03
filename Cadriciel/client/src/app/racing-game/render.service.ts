@@ -19,15 +19,12 @@ export class RenderService {
 
     public scene: THREE.Scene;
 
-    public rotationSpeedY = 0.01;
 
-    public view;
-
-    public inc = -0.01;
-
-
-    constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService,
-        private terrainGenerationService: TerrainGenerationService) {
+    constructor(
+        private cameraService: CameraService,
+        private racingGameSerive: RacingGameService,
+        private terrainGenerationService: TerrainGenerationService
+    ) {
         this.reactToVehicleAlert();
     }
 
@@ -118,9 +115,8 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLElement, rotationX: number, rotationY: number, track: Track) {
+    public initialize(container: HTMLElement, track: Track) {
         this.container = container;
-        this.rotationSpeedY = rotationY;
         this.createScene();
         // this.createCube();
         this.initStats();

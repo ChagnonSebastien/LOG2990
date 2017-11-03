@@ -22,12 +22,6 @@ export class RacingGameComponent implements AfterViewInit {
     @ViewChild('container')
     private containerRef: ElementRef;
 
-    @Input()
-    public rotationSpeedX = 0.005;
-
-    @Input()
-    public rotationSpeedY = 0.005;
-
     @HostListener('window:resize', ['$event'])
     public onResize() {
         this.renderService.onResize();
@@ -38,6 +32,6 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY, null);
+        this.renderService.initialize(this.container, null);
     }
 }
