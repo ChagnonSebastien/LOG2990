@@ -31,6 +31,13 @@ export class GameManagerService {
         return this.game;
     }
 
+    public getGames(): Promise<Game[]> {
+        this.socket.emit('getGames');
+        const gamesPromise = new Promise<Game[]>(
+        (res, rej) => this.socket.on('sent all games', data => res(data)));
+        return gamesPromise;
+    }
+
     public createGame(type: string, difficulty: string, mode: string, player1: Player) {
         this.socket.emit('createGame', type, difficulty, mode, player1);
     }

@@ -1,0 +1,27 @@
+<div class = "container"> 
+  <div class="form">
+    <h3> What's your nickname?</h3>
+    <input class="usernameInput" id='username' type="text" maxlength="15" [(ngModel)]="this.username" />
+  </div>
+  <table class="multiplayer-table">
+    <tbody>
+        <tr>
+            <th class="hidden-xs">Player-Host</th>
+            <th>Difficulty</th>
+            <th>Mode</th>
+            <th class="hidden-xs">Status</th>
+            <th>Action</th>
+          </tr>
+          <tr *ngFor="let game of this.games">
+            <td> {{game.player1.username}}</td>
+            <td> {{game.difficulty}}</td>
+            <td> {{game.mode}}</td>
+            <td *ngIf ="game.username2!=''"> FULL</td>
+            <td *ngIf="game.username2==''"> Looking for player 2</td>
+            <td >
+                <button (click)="joinGame(game.id)"  class="btn"  [disabled]="game.username2!=''">Join </button>
+            </td>
+          </tr> 
+    </tbody>
+  </table>
+</div>

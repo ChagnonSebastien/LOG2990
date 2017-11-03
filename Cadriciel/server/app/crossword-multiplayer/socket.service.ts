@@ -24,8 +24,7 @@ export class SocketManager {
     });
 
       socket.on('getGames', () => {
-
-          socket.emit('all games', this.gameManager.getGames());
+          socket.emit('sent all games', this.gameManager.getGames());
 
      });
       socket.on('i selected a word hint', () => {
