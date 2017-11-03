@@ -14,9 +14,25 @@ export class PlayerManagerService {
         this.player = this.playerHandlerService.requestPlayer();
         this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
         this.player.setSocketID(this.socket.id);
+
+        this.socket.on('opponent found word', data => {
+
+        });
+
+        this.socket.on('selected hint', data => {
+
+        });
     }
 
     public getPlayer(): Player {
         return this.player;
+    }
+
+    public emitWordFound(word: string) {
+        this.socket.emit('found of word', word, this.socket.id);
+    }
+
+    public emitHintSelected(hint: string) {
+        this.socket.emit('selected a word', hint, this.socket.id);
     }
 }

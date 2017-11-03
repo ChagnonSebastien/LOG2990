@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
+import { RacingGameService } from './racing-game.service';
 
 const scale = 100;
 
@@ -20,15 +21,28 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
-    private cart: THREE.Mesh;
+    public view;
 
-    constructor(
-        private cameraService: CameraService,
-        private terrainGenerationService: TerrainGenerationService
-    ) {
+    public inc = -0.01;
+
+
+    constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService,
+        private terrainGenerationService: TerrainGenerationService) {
+        this.reactToVehicleAlert();
     }
 
+    private reactToVehicleAlert() {
+        this.racingGameSerive.vehicleAlerts().subscribe((vehicle) => {
+            console.log('MY VEHICLE', vehicle);
+            this.scene.add(vehicle);
+            this.cameraService.initializeCameras(this.container, vehicle, scale);
+            this.startRenderingLoop();
+        });
+    }
+
+
     private createScene() {
+        console.log('create scene');
         this.scene = new THREE.Scene();
         this.createSkyBox();
         this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
@@ -47,8 +61,6 @@ export class RenderService {
         dirLight.shadow.mapSize.height = 2048;
         this.scene.add( dirLight );
         this.terrainGenerationService.generate(this.scene, null);
-        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
-        // this.scene.add(vehicle);
     }
 
     public createSkyBox() {
@@ -66,7 +78,7 @@ export class RenderService {
             depthWrite: false,
             side: THREE.BackSide
         });
-        const skyboxMesh = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000), material );
+        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(10000, 10000, 10000), material);
         material.needsUpdate = true;
         this.scene.add(skyboxMesh);
     }
@@ -90,7 +102,6 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
-        this.animatedCart();
         this.stats.update();
     }
 
@@ -112,39 +123,7 @@ export class RenderService {
         this.rotationSpeedY = rotationY;
         this.createScene();
         // this.createCube();
-        this.createCart();
-
         this.initStats();
     }
 
-    /* CARTS */
-   private createCart() {
-        const service = this;
-        const loader = new THREE.ObjectLoader();
-        loader.load('/assets/cart.json', (object: THREE.Object3D) => {
-            console.log('z: ', object);
-            this.cart = <THREE.Mesh>object;
-            this.cart.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
-            this.cart.position.set(0, 30, 0);
-            this.cart.scale.set(22, 22, 22);
-            this.cart.castShadow = true;
-            this.cart.receiveShadow = true;
-            console.log('z: ', this.cart);
-            service.scene.add(this.cart);
-            this.cameraService.initializeCameras(this.container, this.cart, scale);
-            this.startRenderingLoop();
-        }, (object: any) => {
-            console.log('prog: ', object);
-        }, (object: any) => {
-            console.log('err: ', object);
-        });
-
-        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
-        // this.scene.add(vehicle);
-
-    }
-
-    private animatedCart() {
-        this.cart.rotation.y += this.rotationSpeedY;
-    }
 }
