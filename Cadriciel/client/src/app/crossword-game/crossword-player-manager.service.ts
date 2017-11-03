@@ -11,7 +11,7 @@ export class PlayerManagerService {
 
     constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce ) {
         this.player = playerHandlerService.requestPlayer();
-        this.player.setSocket(socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT));
+        this.player.setsocketId(socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT));
     }
 
     public getPlayer(): Player {
