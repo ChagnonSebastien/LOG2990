@@ -1,5 +1,6 @@
 import * as mongodb from 'mongodb';
-const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+// const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
+const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 const MongoClient = mongodb.MongoClient;
 let connection: mongodb.Db = null;
 

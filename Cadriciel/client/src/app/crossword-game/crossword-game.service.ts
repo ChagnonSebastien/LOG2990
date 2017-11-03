@@ -18,7 +18,9 @@ export class CrosswordGameService {
         private hintsService: CrosswordHintsService,
         private gridService: CrosswordGridService,
         private pointsService: CrosswordPointsService
-    ) { }
+    ) {
+        this.subscribeToHintSelectedChanges();
+    }
 
     // public methods
 
@@ -52,16 +54,26 @@ export class CrosswordGameService {
         this.hintsService.unselectHint();
     }
 
-    public setSelectedWord(word: string) {
-        const wordInfo = this.hintsService.getWordInfo(word);
-        this.gridService.selectWord(wordInfo);
-        this.hintsService.selectWord(word);
-    }
-
     private checkIfWordsFound(i: number, j: number) {
         for (const word of this.gridService.grid[i][j].words) {
             const wordInfo = this.hintsService.getWordInfo(word);
             this.gridService.updateWordFoundStatus(wordInfo);
         }
+    }
+
+    private subscribeToHintSelectedChanges() {
+        this.hintsService.selectedWordAlerts()
+            .subscribe((hintChange) => {
+                this.selectWordOnGrid(hintChange);
+            });
+    }
+
+    private selectWordOnGrid(hintChange: { 'previous': string, 'current': Word }) {
+        if (hintChange.previous) {
+            this.gridService.unselectWord(
+                this.hintsService.getWordInfo(hintChange.previous)
+            );
+        }
+        this.gridService.selectWord(hintChange.current);
     }
 }

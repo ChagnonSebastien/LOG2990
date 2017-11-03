@@ -20,12 +20,13 @@ export class Vehicle {
         await loader.load('/assets/cart.json', (object: THREE.Object3D) => {
             console.log('z: ', object);
             this.vehicle = <THREE.Mesh>object;
+            this.vehicle.geometry.rotateY(Math.PI / 2);
             this.vehicle.position.setX(0);
-            this.vehicle.position.setY(0);
+            this.vehicle.position.setY(30);
             this.vehicle.position.setZ(0);
-            this.vehicle.scale.setX(50);
-            this.vehicle.scale.setY(50);
-            this.vehicle.scale.setZ(50);
+            this.vehicle.scale.setX(22);
+            this.vehicle.scale.setY(22);
+            this.vehicle.scale.setZ(22);
             this.vehicle.rotation.y = VEHICLE_ROTATION_Y;
             console.log('z: ', this.vehicle);
             this.vehicleSubject.next('created');

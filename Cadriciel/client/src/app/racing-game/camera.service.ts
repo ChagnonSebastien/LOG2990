@@ -2,123 +2,149 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 // standard position of camera
-const CAMERA_POSITION = new THREE.Vector3(0, 0, 400);
-const perchPosition = new THREE.Vector3(10, 50, -75);
+
+const orthographicHeight = 10;
+const orthographicFieldOfView = 10;
+const orthographicNearClippingPane = 0;
+const orthographicFarClippingPane = 2000;
+
+const perspectiveHeight = 2;
+const maximumPerspectiveDistance = 4;
+const perspectiveFieldOfView = 70;
+const perspectiveNearClippingPane = 0.01;
+const perspectiveFarClippingPane = 4000;
+
+const initialZoomLevel = 1;
+const zoomChange = 0.05;
+
+enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
 @Injectable()
 export class CameraService {
-    private camera;
+    private sceneScale: number;
 
-    private fieldOfView = 70;
+    private currentView = View.PERSPECTIVE;
 
-    private nearClippingPane = 1;
+    private perspectiveCamera: THREE.PerspectiveCamera;
 
-    private farClippingPane = 1000;
+    private orthographicCamera: THREE.OrthographicCamera;
 
-    public perspectiveCamera;
+    private objectToFollow: THREE.Mesh;
 
-    public orthographicCamera;
+    private zoomLevel = initialZoomLevel;
 
-    public container: HTMLElement;
+    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
+        this.objectToFollow = objectToFollow;
+        this.sceneScale = sceneScale;
 
-    public offsetX = 5;
+        const aspectRatio = container.clientWidth / container.clientHeight;
+        this.perspectiveCamera = this.instansiatePerspectiveCamera(aspectRatio);
+        this.orthographicCamera = this.instansiateOrthographicCamera(aspectRatio);
 
-    public offsetY = 5;
-
-    public offsetZ = 5;
-
-    public viewSize = 100;
-
-    public initialiseCamera(container: HTMLElement): void {
-        this.orthographicCamera = this.setOrthographicCamera(container);
-        this.perspectiveCamera = this.setPerspectiveCamera(container);
-        this.camera = this.setPerspectiveCamera(container);
-        this.defaultCamerasPosition();
+        this.initializeCamerasPositions();
     }
 
-    public setOrthographicCamera(container: HTMLElement): THREE.OrthographicCamera {
-        const aspectRatio = this.getAspectRatio(container.clientWidth,
-            container.clientHeight);
-        const camera = new THREE.OrthographicCamera(
-            - aspectRatio * this.viewSize / 2,
-            aspectRatio * this.viewSize / 2,
-            aspectRatio * this.viewSize / 2,
-            - aspectRatio * this.viewSize / 2,
-            -1000,
-            1000
-        );
-        return camera;
-    }
-
-    public setPerspectiveCamera(container: HTMLElement): THREE.PerspectiveCamera {
-        const aspectRatio = this.getAspectRatio(container.clientWidth,
-            container.clientHeight);
-        const camera = new THREE.PerspectiveCamera(
-            this.fieldOfView,
+    private instansiatePerspectiveCamera(aspectRatio: number): THREE.PerspectiveCamera {
+        return new THREE.PerspectiveCamera(
+            perspectiveFieldOfView,
             aspectRatio,
-            this.nearClippingPane,
-            this.farClippingPane
+            perspectiveNearClippingPane * this.sceneScale,
+            perspectiveFarClippingPane * this.sceneScale
         );
-        return camera;
     }
 
-    public getCamera(): any {
-        return this.camera;
+    private instansiateOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
+        const orthographicCamera = new THREE.OrthographicCamera(
+            this.sceneScale * orthographicFieldOfView / -2,
+            this.sceneScale * orthographicFieldOfView / 2,
+            this.sceneScale * orthographicFieldOfView / aspectRatio / 2,
+            this.sceneScale * orthographicFieldOfView / aspectRatio / -2,
+            orthographicNearClippingPane * this.sceneScale,
+            orthographicFarClippingPane * this.sceneScale
+        );
+        orthographicCamera.rotation.x = Math.PI / -2;
+        return orthographicCamera;
     }
 
-    private defaultCamerasPosition() {
-        this.orthographicCamera.position.x = CAMERA_POSITION.x;
-        this.orthographicCamera.position.y = CAMERA_POSITION.y;
-        this.orthographicCamera.position.z = CAMERA_POSITION.z;
-        this.perspectiveCamera.position.x = CAMERA_POSITION.x;
-        this.perspectiveCamera.position.y = CAMERA_POSITION.y;
-        this.perspectiveCamera.position.z = CAMERA_POSITION.z;
-        this.camera.position.x = CAMERA_POSITION.x;
-        this.camera.position.y = CAMERA_POSITION.y;
-        this.camera.position.z = CAMERA_POSITION.z;
+    private initializeCamerasPositions() {
+        this.orthographicCamera.position.x = this.objectToFollow.position.x;
+        this.orthographicCamera.position.y = orthographicHeight * this.sceneScale;
+        this.orthographicCamera.position.z = this.objectToFollow.position.z;
+
+        this.perspectiveCamera.position.x = this.objectToFollow.position.x + (
+            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+        );
+        this.perspectiveCamera.position.y = perspectiveHeight * this.sceneScale;
+        this.perspectiveCamera.position.z = this.objectToFollow.position.z + (
+            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+        );
     }
 
-    public getAspectRatio(width: number, height: number) {
-        if (height !== 0) {
-            return width / height;
+    public getCamera(): THREE.Camera {
+        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
+    }
+
+    public cameraOnMoveWithObject() {
+        this.updatePerspectiveCameraPosition();
+        this.updateOrthographicCameraPosition();
+    }
+
+    private updatePerspectiveCameraPosition() {
+        const referencePosition = new THREE.Vector2(
+            this.perspectiveCamera.position.x - this.objectToFollow.position.x,
+            this.perspectiveCamera.position.z - this.objectToFollow.position.z
+        );
+
+        if ( referencePosition.length() > maximumPerspectiveDistance * this.sceneScale ) {
+            referencePosition.clampLength(0, maximumPerspectiveDistance * this.sceneScale);
+
+            this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;
+            this.perspectiveCamera.position.z = this.objectToFollow.position.z + referencePosition.y;
         }
+
+        this.perspectiveCamera.lookAt(this.objectToFollow.position);
     }
 
-    public setPositionPerspectiveCamera(object: any) {
-        this.perspectiveCamera.position.x = object.position.x + perchPosition.x;
-        this.perspectiveCamera.position.y = object.position.y + perchPosition.y;
-        this.perspectiveCamera.position.z = object.position.z + perchPosition.z;
+    private updateOrthographicCameraPosition() {
+        this.orthographicCamera.position.x = this.objectToFollow.position.x;
+        this.orthographicCamera.position.z = this.objectToFollow.position.z;
+
+        this.orthographicCamera.rotation.z = this.objectToFollow.rotation.y;
+        this.perspectiveCamera.lookAt(this.objectToFollow.position);
+    }
+
+    public swapCamera(event: any): void {
+        if (event.keyCode !== 67) { // 67 corresponding to 'C' in ASCII
+            return;
+        }
+
+        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
+    }
+
+    public zoomCamera(event: any): void {
+        // 107 corresponding to '+' in ASCII
+        // 109 corresponding to '-' in ASCII
+        if (event.keyCode === 107) {
+            this.zoomLevel += zoomChange;
+        } else if (event.keyCode === 109) {
+            this.zoomLevel -= zoomChange;
+        }
+
+        this.perspectiveCamera.zoom = this.zoomLevel;
         this.perspectiveCamera.updateProjectionMatrix();
-    }
 
-    public setPositionOrthographicCamera(object: any) {
-        this.orthographicCamera.position.x = object.position.x + this.offsetX;
-        this.orthographicCamera.position.y = object.position.y + this.offsetY;
-        this.orthographicCamera.position.z = object.position.z + this.offsetZ;
+        this.orthographicCamera.zoom = this.zoomLevel;
         this.orthographicCamera.updateProjectionMatrix();
     }
 
-    public selectCamera(event: any): void {
-        // 67 corresponding to 'C' in ASCII
-        if (this.camera.isOrthographicCamera && event.keyCode === 67) {
-            this.camera = this.perspectiveCamera;
-        } else if (this.camera.isPerspectiveCamera && event.keyCode === 67) {
-            this.camera = this.orthographicCamera;
-        }
-    }
-
-    public cameraOnMoveWithObject(object: any) {
-        this.setPositionPerspectiveCamera(object);
-        this.perspectiveCamera.lookAt(object.position);
+    public onResize(aspectRatio: number) {
+        this.perspectiveCamera.aspect = aspectRatio;
         this.perspectiveCamera.updateProjectionMatrix();
-        this.setOrthographicCamera(object);
-        this.orthographicCamera.lookAt(object.position);
-        this.orthographicCamera.updateProjectionMatrix();
 
-        if (this.camera.isOrthographicCamera) {
-            this.camera = this.orthographicCamera;
-        } else if (this.camera.isPerspectiveCamera) {
-            this.camera = this.perspectiveCamera;
-        }
+        this.orthographicCamera.left = this.sceneScale * orthographicFieldOfView / -2;
+        this.orthographicCamera.right = this.sceneScale * orthographicFieldOfView / 2;
+        this.orthographicCamera.top = this.sceneScale * orthographicFieldOfView / aspectRatio / 2;
+        this.orthographicCamera.bottom = this.sceneScale * orthographicFieldOfView / aspectRatio / -2;
+        this.orthographicCamera.updateProjectionMatrix();
     }
 }
