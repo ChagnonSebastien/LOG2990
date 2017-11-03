@@ -31,8 +31,15 @@ export class RenderService {
 
 
     constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService) {
+        this.reactToVehicleAlert();
     }
 
+    private reactToVehicleAlert() {
+        this.racingGameSerive.vehicleAlerts().subscribe((vehicle) => {
+            console.log('MY VEHICLE', vehicle);
+                this.scene.add(vehicle);
+            });
+    }
 
 
     private animateCube() {
@@ -167,7 +174,7 @@ export class RenderService {
 
     /* CARTS */
    private createCart() {
-        const service = this;
+        /*const service = this;
         const loader = new THREE.ObjectLoader();
         loader.load('/assets/cart.json', (object: THREE.Object3D) => {
             console.log('z: ', object);
@@ -185,10 +192,10 @@ export class RenderService {
             console.log('prog: ', object);
         }, (object: any) => {
             console.log('err: ', object);
-        });
+        });*/
 
-        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
-        // this.scene.add(vehicle);
+        //const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
+        //this.scene.add(this.racingGameSerive.vehicle.vehicle);
 
     }
 

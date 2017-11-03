@@ -8,7 +8,7 @@ import { RacingGameService } from './racing-game.service';
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RenderService, CameraService]
+    providers: [RenderService, CameraService, RacingGameService]
 })
 export class RacingGameComponent implements AfterViewInit {
 
@@ -38,6 +38,7 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        console.log('nhafterinit');
         this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
     }
 }
