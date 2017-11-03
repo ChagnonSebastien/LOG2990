@@ -35,14 +35,14 @@
     text-align: center;
     min-width: 150px;
     
-  }
- .usernameInput {
+}
+.usernameInput {
     font-size: 200%;
     letter-spacing: 3px;
     color: white;
-  }
+}
 
-  .loader {
+.loader {
     left: 50%;
     top: 30%;
     z-index: 1;
@@ -54,21 +54,21 @@
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
    
-  }
+}
   
-  @keyframes spin {
+@keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
   
-  .loadingText{
+.loadingText{
     padding-top: 10px; 
-  }
+}
 
-  .vertical-center {
+.vertical-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
   
     display: flex;
     align-items: center;
-  }
+}
