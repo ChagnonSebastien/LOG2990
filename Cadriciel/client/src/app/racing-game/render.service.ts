@@ -22,6 +22,10 @@ export class RenderService {
 
     public rotationSpeedY = 0.01;
 
+    public view;
+
+    public inc = -0.01;
+
     constructor(private cameraService: CameraService, private terrainGeneration: TerrainGenerationService) {
     }
 
