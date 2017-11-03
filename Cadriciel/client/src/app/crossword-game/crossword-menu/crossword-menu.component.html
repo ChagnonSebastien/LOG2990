@@ -4,9 +4,12 @@
     <div class="row">
       <div class="col-md-4">
       </div>
-      <div class="mx-auto vertical-center" *ngIf="waitingForPlayer2">
+      <div class="align-middle" *ngIf="waitingForPlayer2">
+        <div class="align-middle">
+          <div class="loader">
+          </div>
+        </div>
         <div>
-          <div class="loader"></div>
           <h2 class="loadingText"> Waiting for player 2...</h2>
         </div>
       </div>
@@ -49,6 +52,11 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" *ngIf="joiningGame && !creatingGame">
+        <app-crossword-room></app-crossword-room>
       </div>
     </div>
   </div>
