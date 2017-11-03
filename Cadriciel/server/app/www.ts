@@ -8,7 +8,7 @@
 import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
-import { SocketManager } from './socket.service';
+import { SocketManager } from './crossword-multiplayer/socket.service';
 const db = require('./db-connection');
 
 // start app after database is connected

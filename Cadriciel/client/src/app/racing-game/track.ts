@@ -21,6 +21,7 @@ export class Track {
         potholes: Obstacle[],
         boosters: Obstacle[]
     ) {
+        alert('CREATED TRACK');
         this.name = name;
         this.description = description;
         this.type = type;
