@@ -27,8 +27,6 @@ export class RenderService {
 
     public inc = -0.01;
 
-    private cart: THREE.Mesh;
-
 
     constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService) {
         this.reactToVehicleAlert();
@@ -74,8 +72,6 @@ export class RenderService {
         light.position.set(100, 100, 100);
         light.castShadow = true;
         this.scene.add(light);
-        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
-        // this.scene.add(vehicle);
     }
 
     private getAspectRatio() {
@@ -166,41 +162,7 @@ export class RenderService {
         this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
         this.createScene();
-        // this.createCube();
-        this.createCart();
         this.initStats();
         this.startRenderingLoop();
-    }
-
-    /* CARTS */
-   private createCart() {
-        /*const service = this;
-        const loader = new THREE.ObjectLoader();
-        loader.load('/assets/cart.json', (object: THREE.Object3D) => {
-            console.log('z: ', object);
-            this.cart = <THREE.Mesh>object;
-            this.cart.position.setX(0);
-            this.cart.position.setY(0);
-            this.cart.position.setZ(0);
-            this.cart.scale.setX(50);
-            this.cart.scale.setY(50);
-            this.cart.scale.setZ(50);
-            this.cart.rotation.y = 20.4;
-            console.log('z: ', this.cart);
-            service.scene.add(this.cart);
-        }, (object: any) => {
-            console.log('prog: ', object);
-        }, (object: any) => {
-            console.log('err: ', object);
-        });*/
-
-        //const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
-        //this.scene.add(this.racingGameSerive.vehicle.vehicle);
-
-    }
-
-    private animatedCart() {
-        this.cart.rotation.x += this.rotationSpeedX;
-        this.cart.rotation.y += this.rotationSpeedY;
     }
 }

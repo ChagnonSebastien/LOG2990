@@ -9,16 +9,13 @@ export class RacingGameService {
 
     constructor() {
         this.vehicleSubject = new Subject();
-        this.vehicle = new Vehicle();        
+        this.vehicle = new Vehicle();
         this.alertWhenVehicleIsInitialized();
-        console.log('constructo racinggame');
         this.initializeVehicle();
     }
 
     public async initializeVehicle() {
         this.vehicle.createVehicle();
-        // this.alertVehicle();
-        console.log("racing-game.initvehicle");
     }
 
     public vehicleAlerts(): Observable<any> {

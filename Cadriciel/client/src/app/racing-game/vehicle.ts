@@ -9,8 +9,6 @@ export class Vehicle {
 
     constructor() {
         this.vehicleSubject = new Subject();
-        //alert('HELLO WORLD');
-        // this.createVehicle();
     }
 
     public vehicleAlert(): Observable<any> {
@@ -20,7 +18,6 @@ export class Vehicle {
     public async createVehicle() {
         const loader = new THREE.ObjectLoader();
         await loader.load('/assets/cart.json', (object: THREE.Object3D) => {
-            console.log('finished loading vehicle');
             console.log('z: ', object);
             this.vehicle = <THREE.Mesh>object;
             this.vehicle.position.setX(0);

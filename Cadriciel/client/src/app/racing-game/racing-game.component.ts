@@ -38,7 +38,6 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        console.log('nhafterinit');
         this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
     }
 }
