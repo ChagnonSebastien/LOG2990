@@ -14,6 +14,7 @@ export class RacingGameService {
 
     constructor() {
         this.vehicleSubject = new Subject();
+        this.opponentsSubject = new Subject();
         this.mainVehicle = new Vehicle();
         this.opponentsVehicles = [];
         this.numberOfVehiclesInitialized = 0;
@@ -26,13 +27,13 @@ export class RacingGameService {
     }
 
     public async initializeVehicle() {
-
         this.mainVehicle.createVehicle(300, 30, 0);
     }
 
     private initializeOpponentsVehicles() {
-        console.log('opnnents initializing');
-        this.opponentsVehicles[0].createVehicle(200, 30, 0);
+        this.opponentsVehicles[0].createVehicle(300, 30, 200);
+        this.opponentsVehicles[1].createVehicle(0, 30, 0);
+        this.opponentsVehicles[2].createVehicle(0, 30, 200);
     }
 
     public vehicleAlerts(): Observable<any> {
@@ -40,7 +41,6 @@ export class RacingGameService {
     }
 
     public opponentsAlerts(): Observable<any> {
-        console.log('second vehicle init');
         return this.opponentsSubject.asObservable();
     }
 
@@ -49,7 +49,6 @@ export class RacingGameService {
     }
 
     private alertOpponentsVehicles() {
-        console.log('ALERT OPPONENTS VEHICLES');
         this.opponentsSubject.next(this.opponentsVehicles);
     }
 
@@ -58,16 +57,17 @@ export class RacingGameService {
             this.numberOfVehiclesInitialized++;
             if (this.numberOfVehiclesInitialized === 1) {
                 this.alertVehicle();
-            } else if (this.numberOfVehiclesInitialized === 2) {
-                this.alertOpponentsVehicles();
             }
         });
+
+        for (let i = 0; i < numberOfOpponents; i++) {
+            this.opponentsVehicles[i].vehicleAlert().subscribe((result) => {
+                this.numberOfVehiclesInitialized++;
+                console.log(this.opponentsVehicles);
+                if (this.numberOfVehiclesInitialized === 4) {
+                    this.alertOpponentsVehicles();
+                }
+            });
+        }
     }
-
-    private alertWhenOpponentsAreInitialized() {
-
-    }
-
-
-
 }

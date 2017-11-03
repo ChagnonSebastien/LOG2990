@@ -28,18 +28,25 @@ export class RenderService {
 
     constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService,
         private terrainGenerationService: TerrainGenerationService) {
-        this.reactToVehicleAlert();
+        this.reactToMainVehicleAlert();
+        this.reactToOpponentsVehiclesAlert();
     }
 
-    private reactToVehicleAlert() {
+    private reactToMainVehicleAlert() {
         this.racingGameSerive.vehicleAlerts().subscribe((vehicle) => {
-            console.log('MY VEHICLE', vehicle);
             this.scene.add(vehicle);
             this.cameraService.initializeCameras(this.container, vehicle, scale);
             this.startRenderingLoop();
         });
     }
 
+    private reactToOpponentsVehiclesAlert() {
+        this.racingGameSerive.opponentsAlerts().subscribe((opponents) => {
+            for (let i = 0; i < this.racingGameSerive.numberOfVehiclesInitialized - 1; i++) {
+                this.scene.add(opponents[i].vehicle);
+            }
+        });
+    }
 
     private createScene() {
         console.log('create scene');

@@ -28,9 +28,9 @@ export class Vehicle {
             this.vehicle.scale.setY(22);
             this.vehicle.scale.setZ(22);
             this.vehicle.castShadow = true;
+            this.vehicleSubject.next('created');
             console.log('x: ', x);
             console.log('z: ', this.vehicle);
-            this.vehicleSubject.next('created');
         }, (object: any) => {
             console.log('prog: ', object);
         }, (object: any) => {
