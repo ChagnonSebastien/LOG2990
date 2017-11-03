@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
-import { RacingGameService } from './racing-game.service';
 
 @Component({
     moduleId: module.id,
@@ -12,7 +11,7 @@ import { RacingGameService } from './racing-game.service';
 })
 export class RacingGameComponent implements AfterViewInit {
 
-    constructor(private renderService: RenderService, private racingGameService: RacingGameService) {
+    constructor(private renderService: RenderService) {
     }
 
     private get container(): HTMLElement {

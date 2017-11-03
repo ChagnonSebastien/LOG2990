@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { RacingGameService } from './racing-game.service';
 
 const scale = 100;
 
@@ -14,8 +13,6 @@ export class RenderService {
     private container: HTMLElement;
 
     private stats: Stats;
-
-    private cube: THREE.Mesh;
 
     private renderer: THREE.WebGLRenderer;
 
@@ -27,28 +24,8 @@ export class RenderService {
 
     constructor(
         private cameraService: CameraService,
-        private racingGameSerive: RacingGameService,
         private terrainGenerationService: TerrainGenerationService
     ) {
-    }
-
-    private animateCube() {
-        this.cube.rotation.y += this.rotationSpeedY;
-        // this.cube.position.z += 5;
-    }
-
-    private createCube() {
-        const geometry = new THREE.BoxGeometry(100, 100, 100);
-
-        for (let i = 0; i < geometry.faces.length; i += 2) {
-            const hex = Math.random() * 0xffffff;
-            geometry.faces[i].color.setHex(hex);
-            geometry.faces[i + 1].color.setHex(hex);
-        }
-
-        const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
-        this.cube = new THREE.Mesh(geometry, material);
-        this.scene.add(this.cube);
     }
 
     private createScene() {
@@ -72,10 +49,6 @@ export class RenderService {
         this.terrainGenerationService.generate(this.scene, null);
         // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
         // this.scene.add(vehicle);
-    }
-
-    private getAspectRatio() {
-        return this.container.clientWidth / this.container.clientHeight;
     }
 
     public createSkyBox() {
