@@ -26,7 +26,16 @@ export class RenderService {
 
     public inc = -0.01;
 
+    public deltaX = 0.5;
+
+    public deltaY = 0.5;
+
     constructor(private cameraService: CameraService) {
+    }
+
+    private movingFoward(object: any) {
+        object.position.x += this.deltaX; // formules à revoir
+        object.position.y += this.deltaY;
     }
 
     private animateCube() {
