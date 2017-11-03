@@ -18,21 +18,18 @@ export class RenderService {
 
     private scene: THREE.Scene;
 
-    public rotationSpeedX = 0.005;
-
     public rotationSpeedY = 0.01;
 
     constructor(private cameraService: CameraService, private terrainGeneration: TerrainGenerationService) {
     }
 
     private animateCube() {
-        this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
         // this.cube.position.z += 5;
     }
 
     private createCube() {
-        const geometry = new THREE.BoxGeometry(20, 20, 20);
+        const geometry = new THREE.BoxGeometry(100, 100, 100);
 
         for (let i = 0; i < geometry.faces.length; i += 2) {
             const hex = Math.random() * 0xffffff;
@@ -50,7 +47,7 @@ export class RenderService {
         this.createSkyBox();
         this.createCube();
         this.terrainGeneration.generate(this.scene, track);
-        this.cameraService.initializeCameras(this.container, this.cube);
+        this.cameraService.initializeCameras(this.container, this.cube, 100);
     }
 
     public createSkyBox() {
@@ -68,7 +65,7 @@ export class RenderService {
             depthWrite: false,
             side: THREE.BackSide
         });
-        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000), material );
+        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000), material );
         material.needsUpdate = true;
         this.scene.add( skyboxMesh );
     }
@@ -109,7 +106,6 @@ export class RenderService {
 
     public initialize(container: HTMLElement, rotationX: number, rotationY: number, track: Track) {
         this.container = container;
-        this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
         this.createScene(track);
         this.initStats();
