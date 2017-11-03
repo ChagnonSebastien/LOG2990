@@ -18,7 +18,7 @@ module Route {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     db.collection('tracks').find().toArray().then((tracks) => {
-                        res.send(JSON.stringify(tracks));
+                        res.send(JSON.stringify(tracks.map(track => track._id)));
                     });
                 }
             });
@@ -74,7 +74,7 @@ module Route {
             });
 
         }
-        
+
         public updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
              return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);  
         }
