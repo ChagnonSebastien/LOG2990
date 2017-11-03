@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { TrackService } from './game-initialization/track.service';
+import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { RacingGameService } from './racing-game.service';
@@ -10,9 +12,13 @@ import { RacingGameService } from './racing-game.service';
     styleUrls: ['./racing-game.component.css'],
     providers: [RenderService, CameraService, RacingGameService]
 })
-export class RacingGameComponent implements AfterViewInit {
+export class RacingGameComponent implements AfterViewInit, OnInit {
 
-    constructor(private renderService: RenderService) {
+    constructor(
+        private renderService: RenderService,
+        private route: ActivatedRoute,
+        private trackService: TrackService
+    ) {
     }
 
     private get container(): HTMLElement {
@@ -29,6 +35,13 @@ export class RacingGameComponent implements AfterViewInit {
 
     public eventsListen(event: any): void {
         this.renderService.eventsList(event);
+    }
+
+    public ngOnInit() {
+        const trackName = this.route.snapshot.params['name'];
+        this.trackService.get(trackName).then(track =>  {
+            this.renderService.loadTrack(track);
+        });
     }
 
     public ngAfterViewInit() {
