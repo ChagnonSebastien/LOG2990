@@ -39,13 +39,13 @@ export class RenderService {
             });
     }
 
-
+/*
     private animateCube() {
         this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
         // this.cube.position.z += 5;
-    }
-
+    }*\
+/*
     private createCube() {
         const geometry = new THREE.BoxGeometry(20, 20, 20);
 
@@ -58,7 +58,7 @@ export class RenderService {
         const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
         this.cube = new THREE.Mesh(geometry, material);
         this.scene.add(this.cube);
-    }
+    }*/
 
 
 

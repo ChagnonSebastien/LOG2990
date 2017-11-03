@@ -12,7 +12,7 @@ import { RacingGameService } from './racing-game.service';
 })
 export class RacingGameComponent implements AfterViewInit {
 
-    constructor(private renderService: RenderService, private racingGameService: RacingGameService) {
+    constructor(private renderService: RenderService) {
     }
 
     private get container(): HTMLElement {
