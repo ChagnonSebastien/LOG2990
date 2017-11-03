@@ -151,13 +151,9 @@ export class RenderService {
         loader.load('/assets/cart.json', (object: THREE.Object3D) => {
             console.log('z: ', object);
             this.cart = <THREE.Mesh>object;
-            this.cart.geometry.rotateY(Math.PI / 2);
-            this.cart.position.setX(0);
-            this.cart.position.setY(68);
-            this.cart.position.setZ(0);
-            this.cart.scale.setX(50);
-            this.cart.scale.setY(50);
-            this.cart.scale.setZ(50);
+            this.cart.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
+            this.cart.position.set(0, 30, 0);
+            this.cart.scale.set(22, 22, 22);
             this.cart.castShadow = true;
             this.cart.receiveShadow = true;
             console.log('z: ', this.cart);
