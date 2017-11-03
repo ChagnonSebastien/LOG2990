@@ -12,6 +12,10 @@ export class TrackListComponent implements OnInit {
 
     public selectedTrack: string;
 
+    public tracks: Track[];
+
+    constructor(private http: Http) { }
+
     @Input() set track(selectedTrack: string) {
         this.selectedTrack = selectedTrack;
         this.getTracks().subscribe(tracks => this.tracks = tracks.map((track) => {
@@ -26,10 +30,6 @@ export class TrackListComponent implements OnInit {
             );
         }));
     }
-
-    public tracks: Track[];
-
-    constructor(private http: Http) { }
 
     public ngOnInit() {
     }

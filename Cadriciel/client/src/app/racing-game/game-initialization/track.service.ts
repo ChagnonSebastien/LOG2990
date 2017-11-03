@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 const apiUrl = 'http://localhost:3000/api';
 const headers = new Headers({ 'Content-Type': 'application/json' });
 const getPath = 'track';
+const getAllPath = 'tracks';
 const savePath = 'track';
 const deletePath = 'track';
 
@@ -41,6 +42,15 @@ export class TrackService {
                     track.potholes,
                     track.boosters
                 );
+            })
+            .catch(this.handleError);
+    }
+
+    public getAll(): Promise<string[]> {
+        return this.http
+            .get(`${apiUrl}/${getAllPath}`).toPromise()
+            .then(response => {
+                return response.json();
             })
             .catch(this.handleError);
     }
