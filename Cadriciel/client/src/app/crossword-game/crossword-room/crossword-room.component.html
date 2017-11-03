@@ -21,10 +21,10 @@
         <td> {{game.player1.username}}</td>
         <td> {{game.difficulty}}</td>
         <td> {{game.mode}}</td>
-        <td *ngIf="game.username2!=''"> FULL</td>
-        <td *ngIf="game.username2==''"> Looking for player 2</td>
+        <td *ngIf="game.username2==''"> FULL</td>
+        <td *ngIf="game.username2!=''"> Looking for player 2</td>
         <td>
-          <button (click)="joinGame(game.id)" class="btn" [disabled]="game.username2!=''">Join </button>
+          <button (click)="joinGame(game.id)" class="btn" [disabled]="game.username2==''">Join </button>
         </td>
       </tr>
     </tbody>
