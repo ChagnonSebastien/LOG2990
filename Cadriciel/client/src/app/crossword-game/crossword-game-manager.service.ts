@@ -26,7 +26,7 @@ export class GameManagerService {
         });
     }
 
-    public playerTwoAlerts() {
+    public playerTwoAlerts(): Observable<any> {
         return this.playerTwoSubject.asObservable();
     }
 

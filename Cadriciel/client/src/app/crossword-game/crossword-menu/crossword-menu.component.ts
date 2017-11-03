@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 import { GameManagerService } from '../crossword-game-manager.service';
 @Component({
@@ -25,9 +25,9 @@ export class CrosswordMenuComponent {
     }
 
     public startGame() {
-
         if (this.type === 'multiplayer') {
             this.startMultiplayerGame();
+            this.startGameOnPlayer2Joined();
         } else {
             this.gameInProgress = true;
         }
