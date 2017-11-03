@@ -45,4 +45,23 @@ export class TerrainGenerationService {
         return table;
     }
 
+    private generateSegments(track: Track): THREE.Mesh[] {
+        const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
+
+        return track.trackIntersections.map((intersection, index, array) => {
+            const fromPosition = intersection;
+            const toPosition = array[index + 1 < array.length ? index + 1 : 0];
+
+            const geometry = new THREE.PlaneGeometry(this.scale * this.getDistance(fromPosition, toPosition), this.scale * 20);
+            geometry.rotateX(Math.PI / -2);
+
+            const segmentMesh = new THREE.Mesh(geometry, material);
+
+            segmentMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
+            segmentMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
+            segmentMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
+            segmentMesh.position.y = 1;
+            return segmentMesh;
+        });
+    }
 }
