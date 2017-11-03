@@ -12,6 +12,7 @@ import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
 import { RacingGameService } from './racing-game.service';
+import { CommandsService } from './commands.service';
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { RacingGameService } from './racing-game.service';
         CameraService,
         TrackService,
         RacingGameService,
-        TerrainGenerationService
+        TerrainGenerationService,
+        CommandsService
     ]
 })
 export class RacingGameModule { }
