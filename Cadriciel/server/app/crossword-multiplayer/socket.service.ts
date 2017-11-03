@@ -29,7 +29,9 @@ export class SocketManager {
             });
 
             socket.on('joinGame', (gameId: string, player: Player) => {
-                socket.emit('player 2 joined', this.gameManager.joinGame(gameId, player));
+              this.sio.to(player.getSocketID()).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
+              const player1SocketID: string = this.gameManager.findGameById(gameId).player1.getSocketID();
+              this.sio.to(player1SocketID).emit('player 2 joined', this.gameManager.findGameById(gameId));
             });
 
             

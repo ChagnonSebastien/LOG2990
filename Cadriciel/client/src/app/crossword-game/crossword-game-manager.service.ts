@@ -11,19 +11,22 @@ export class GameManagerService {
     private readonly HOST_NAME = 'http://' + window.location.hostname;
     private readonly SERVER_PORT = ':3000';
     private socket: SocketIOClient.Socket;
-    private playerTwoSubject: Subject<any> ;
+    private playerTwoSubject: Subject<any>;
 
     constructor(private socketHandlerSerivce: SocketHandlerSerivce) {
         this.playerTwoSubject = new Subject();
-        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
+        this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
+            this.socket = socket;
 
-        this.socket.on('gameCreated', data => {
-            this.game = data;
-        });
+            this.socket.on('gameCreated', data => {
+                this.game = data;
+            });
 
-        this.socket.on('player 2 joined', data => {
-            this.game = data;
-            this.playerTwoSubject.next('player 2 joined');
+            this.socket.on('player 2 joined', data => {
+                this.game = data;
+                console.log(data);
+                this.playerTwoSubject.next('player 2 joined');
+            });
         });
     }
 
@@ -38,7 +41,7 @@ export class GameManagerService {
     public getGames(): Promise<Game[]> {
         this.socket.emit('getGames');
         const gamesPromise = new Promise<Game[]>(
-        (res, rej) => this.socket.on('sent all games', data => res(data)));
+            (res, rej) => this.socket.on('sent all games', data => res(data)));
         return gamesPromise;
     }
 

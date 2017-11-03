@@ -90,6 +90,7 @@ export class CrosswordMenuComponent {
     private startGameOnPlayer2Joined() {
         this.gameManagerService.playerTwoAlerts()
             .subscribe((result) => {
+                console.log(result);
                 this.waitingForPlayer2 = false;
                 this.gameInProgress = true;
             });

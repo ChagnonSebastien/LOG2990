@@ -6,12 +6,12 @@ export class SocketHandlerSerivce {
     constructor() { }
     private activeSocket: SocketIOClient.Socket;
 
-    public requestSocket(server: string): any {
+    public requestSocket(server: string): Promise<SocketIOClient.Socket> {
 
             if (this.activeSocket === undefined) {
                 this.activeSocket = io.connect(server);
             }
-                return this.activeSocket;
+                return Promise.resolve(this.activeSocket);
             }
 
     public disconnectSocket(): void {
