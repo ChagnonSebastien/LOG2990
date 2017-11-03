@@ -11,9 +11,10 @@ export class GameManagerService {
     private readonly HOST_NAME = 'http://' + window.location.hostname;
     private readonly SERVER_PORT = ':3000';
     private socket: SocketIOClient.Socket;
-    private playerTwoSubject: Subject<any> = new Subject<any>();
+    private playerTwoSubject: Subject<any> ;
 
     constructor(private socketHandlerSerivce: SocketHandlerSerivce) {
+        this.playerTwoSubject = new Subject();
         this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
 
         this.socket.on('gameCreated', data => {
