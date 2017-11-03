@@ -34,10 +34,7 @@ export class DrawTrackService {
     ) { }
 
     public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
-        const path = 'track';
-        return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
-        .then(response => {
-            const track = response.json();
+        return this.trackService.get(name).then(track => {
             this.loadIntersection(track.trackIntersections);
             this.obstacleService.loadObstacles(ObstacleType.Booster, track.boosters);
             this.obstacleService.loadObstacles(ObstacleType.Pothole, track.potholes);
