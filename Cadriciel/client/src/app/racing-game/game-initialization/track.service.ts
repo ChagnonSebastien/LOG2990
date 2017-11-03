@@ -1,19 +1,20 @@
+import { Track } from './../track';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 const apiUrl = 'http://localhost:3000/api';
+const headers = new Headers({ 'Content-Type': 'application/json' });
+const deletePath = 'track';
 @Injectable()
 export class TrackService {
     constructor(private http: Http) { }
 
-    public deleteTrack(trackName: string): Promise<string> {
-        const path = 'track';
+    public delete(trackName: string): Promise<string> {
         return this.http
-            .delete(`${apiUrl}/${path}/${trackName}`
-        ).toPromise()
-        .then(response => response.json().data)
-        .catch(this.handleError);
+            .delete(`${apiUrl}/${deletePath}/${trackName}`).toPromise()
+            .then(response => response.json().data)
+            .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {

@@ -31,7 +31,7 @@ describe('TrackService', () => {
     it('should not deleted track', fakeAsync(() => {
         track = new Track('name', 'dest', 'easy', [], [], [], [] );
         let result: String;
-        this.trackService.deleteTrack(track).then((forDelete: String) => result = forDelete);
+        this.trackService.delete(track).then((forDelete: String) => result = forDelete);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
             body: JSON.stringify({ data: 'connectionError' }),
         })));
