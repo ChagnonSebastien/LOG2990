@@ -36,7 +36,6 @@ export class CrosswordMenuComponent {
     public startMultiplayerGame(): void {
 
         if (this.validateUsername()) {
-
             this.setPlayerUsername();
             this.playerManagerService.getPlayer();
             this.waitingForPlayer2 = true;
