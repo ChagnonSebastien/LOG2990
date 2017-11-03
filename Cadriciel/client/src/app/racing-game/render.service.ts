@@ -1,14 +1,16 @@
+import { Track } from './track';
+import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 
+const scale = 100;
+
 @Injectable()
 export class RenderService {
 
     private container: HTMLElement;
-
-    private camera: THREE.PerspectiveCamera;
 
     private stats: Stats;
 
@@ -18,25 +20,18 @@ export class RenderService {
 
     private scene: THREE.Scene;
 
-    public rotationSpeedX = 0.005;
-
     public rotationSpeedY = 0.01;
 
-    public view;
-
-    public inc = -0.01;
-
-    constructor(private cameraService: CameraService) {
+    constructor(private cameraService: CameraService, private terrainGeneration: TerrainGenerationService) {
     }
 
     private animateCube() {
-        this.cube.rotation.x += this.rotationSpeedX;
         this.cube.rotation.y += this.rotationSpeedY;
         // this.cube.position.z += 5;
     }
 
     private createCube() {
-        const geometry = new THREE.BoxGeometry(20, 20, 20);
+        const geometry = new THREE.BoxGeometry(100, 100, 100);
 
         for (let i = 0; i < geometry.faces.length; i += 2) {
             const hex = Math.random() * 0xffffff;
@@ -49,15 +44,12 @@ export class RenderService {
         this.scene.add(this.cube);
     }
 
-    private createScene() {
+    private createScene(track: Track) {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.cameraService.initialiseCamera(this.container);
-        this.camera = this.cameraService.getCamera();
-    }
-
-    private getAspectRatio() {
-        return this.container.clientWidth / this.container.clientHeight;
+        this.createCube();
+        this.terrainGeneration.generate(this.scene, track);
+        this.cameraService.initializeCameras(this.container, this.cube, scale);
     }
 
     public createSkyBox() {
@@ -75,34 +67,14 @@ export class RenderService {
             depthWrite: false,
             side: THREE.BackSide
         });
-        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000), material );
+        const skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000), material );
         material.needsUpdate = true;
         this.scene.add( skyboxMesh );
     }
 
     public eventsList(event: any): void {
-        this.cameraService.selectCamera(event);
-        this.zoomCamera(event);
-        this.updateCamera();
-    }
-
-    public zoomCamera(event: any): void {
-        // 107 corresponding to '+' in ASCII
-        // 109 corresponding to '-' in ASCII
-        if (event.keyCode === 107) {
-            this.view += this.inc;
-        } else if (event.keyCode === 109) {
-            this.view -= this.inc;
-        }
-    }
-
-    public updateCamera(): void {
-        this.camera = this.cameraService.getCamera();
-    }
-
-    public cameraFollowingObject(object: any) {
-        this.cameraService.cameraOnMoveWithObject(object);
-        this.updateCamera();
+        this.cameraService.swapCamera(event);
+        this.cameraService.zoomCamera(event);
     }
 
     private startRenderingLoop() {
@@ -110,17 +82,14 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.view = this.camera.zoom;
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.animateCube();
-        this.camera.zoom = this.view;
-        this.camera.updateProjectionMatrix();
-        this.cameraFollowingObject(this.cube);
-        this.renderer.render(this.scene, this.camera);
+        this.cameraService.cameraOnMoveWithObject();
+        this.renderer.render(this.scene, this.cameraService.getCamera());
         this.stats.update();
     }
 
@@ -132,17 +101,15 @@ export class RenderService {
     }
 
     public onResize() {
-        this.camera.aspect = this.getAspectRatio();
-        this.camera.updateProjectionMatrix();
+        const aspectRatio = this.container.clientWidth / this.container.clientHeight;
+        this.cameraService.onResize(aspectRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLElement, rotationX: number, rotationY: number) {
+    public initialize(container: HTMLElement, rotationX: number, rotationY: number, track: Track) {
         this.container = container;
-        this.rotationSpeedX = rotationX;
         this.rotationSpeedY = rotationY;
-        this.createScene();
-        this.createCube();
+        this.createScene(track);
         this.initStats();
         this.startRenderingLoop();
     }

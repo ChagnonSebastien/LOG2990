@@ -4,7 +4,7 @@ import { CrosswordDB } from './crosswordDB';
 
 const chai = require('chai');
 const expect = chai.expect;
-const collection = 'crosswords_tests';
+const collection = 'crosswords';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
@@ -35,22 +35,21 @@ describe('Server Crosswords', () => {
             assert(data);
             done();
         });
-    }).timeout(5000);
+    }).timeout(50000);
 
     it('Should generate a new normal crossword', (done) => {
-        serverCrosswords.setCollection(collection);
         serverCrosswords.generateCrossword('normal').then(function (data) {
             assert(data);
             done();
         });
-    }).timeout(5000);
+    }).timeout(50000);
 
     it('Should generate a new hard crossword', (done) => {
         serverCrosswords.generateCrossword('hard').then(function (data) {
             assert(data);
             done();
         });
-    }).timeout(5000);
+    }).timeout(50000);
 
     it('Should save on server according to difficulties', (done) => {
         serverCrosswords.getCrosswordsFromDB().then(function (data) {
