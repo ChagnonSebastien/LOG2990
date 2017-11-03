@@ -11,12 +11,6 @@ export class CrosswordService {
     public getCrossword(level: string) {
         return this.http.get(`${apiUrl}/${collection}/${level}`)
             .toPromise()
-            .catch(err => this.handleError(err))
             .then(crossword => crossword.json());
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
     }
 }

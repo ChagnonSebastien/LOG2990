@@ -15,7 +15,7 @@ export class SocketManager {
 
   public handleSockets(): void {
     this.sio.on('connection', (socket) => {
-
+/*
       socket.on('createGame', (difficulty: string, mode: string, username: string) => {
         this.serverCrosswords.getCrossword(difficulty.toLowerCase()).then(crossword => {
           const game: Game = {
@@ -52,19 +52,19 @@ export class SocketManager {
           socket.emit('player 2 joined a game', currentGame);
           this.sio.to(currentGame.socketId1).emit('player 2 joined your game', currentGame);
         }
-      });
+      });*/
     });
 
   }
 
-  public findGameIndexById(id: string): number {
+ /* public findGameIndexById(id: string): number {
     for (let i = 0; i < this.gamesList.length; i++) {
       if (this.gamesList[i].id === id) {
         return i;
       }
     }
     return -1;
-  }
+  }*/
 }
 
 /***********************************************************
