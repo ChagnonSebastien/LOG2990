@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
+import { RacingGameService } from './racing-game.service';
 
 @Injectable()
 export class RenderService {
@@ -39,7 +40,7 @@ export class RenderService {
     private farClippingPane = 1000;
 
 
-    constructor(private cameraService: CameraService) {
+    constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService) {
     }
 
 
@@ -76,6 +77,8 @@ export class RenderService {
         light.position.set(100, 100, 100);
         light.castShadow = true;
         this.scene.add(light);
+        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
+        // this.scene.add(vehicle);
     }
 
     private getAspectRatio() {
@@ -173,7 +176,7 @@ export class RenderService {
     }
 
     /* CARTS */
-    private createCart() {
+   private createCart() {
         const service = this;
         const loader = new THREE.ObjectLoader();
         loader.load('/assets/cart.json', (object: THREE.Object3D) => {
@@ -193,6 +196,9 @@ export class RenderService {
         }, (object: any) => {
             console.log('err: ', object);
         });
+
+        // const vehicle = this.racingGameSerive.initializeVehicle().vehicle;
+        // this.scene.add(vehicle);
 
     }
 

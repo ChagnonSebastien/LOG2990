@@ -4,8 +4,12 @@ const VEHICLE_ROTATION_Y = 20.4;
 export class Vehicle {
     public vehicle: THREE.Mesh;
 
+    constructor() {
+        alert('HELLO WORLD');
+        this.createVehicle();
+    }
+
     public createVehicle() {
-        const service = this;
         const loader = new THREE.ObjectLoader();
         loader.load('/assets/cart.json', (object: THREE.Object3D) => {
             console.log('z: ', object);
@@ -23,5 +27,6 @@ export class Vehicle {
         }, (object: any) => {
             console.log('err: ', object);
         });
+
     }
 }
