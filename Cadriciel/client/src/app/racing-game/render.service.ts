@@ -15,8 +15,6 @@ export class RenderService {
 
     private stats: Stats;
 
-    private cube: THREE.Mesh;
-
     private renderer: THREE.WebGLRenderer;
 
     public scene: THREE.Scene;
@@ -42,39 +40,27 @@ export class RenderService {
         });
     }
 
-    private animateCube() {
-        this.cube.rotation.y += this.rotationSpeedY;
-        // this.cube.position.z += 5;
-    }
-    /*
-        private createCube() {
-            const geometry = new THREE.BoxGeometry(100, 100, 100);
-
-            for (let i = 0; i < geometry.faces.length; i += 2) {
-                const hex = Math.random() * 0xffffff;
-                geometry.faces[i].color.setHex(hex);
-                geometry.faces[i + 1].color.setHex(hex);
-            }
-
-            const material = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5 });
-            this.cube = new THREE.Mesh(geometry, material);
-            this.scene.add(this.cube);
-        }*/
 
     private createScene() {
         console.log('create scene');
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.scene.add(new THREE.AmbientLight(0xFFFFFF));
-        const light: THREE.SpotLight = new THREE.SpotLight(0xffffff);
-        light.position.set(100, 100, 100);
-        light.castShadow = true;
-        this.scene.add(light);
+        this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        const dirLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
+        dirLight.position.set( 200, 500, 100 );
+        dirLight.rotation.y = Math.PI / 4 ;
+        dirLight.rotation.x = Math.PI / 4 ;
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.near = 1;
+        dirLight.shadow.camera.far = 1000;
+        dirLight.shadow.camera.right = 1000;
+        dirLight.shadow.camera.left = - 1000;
+        dirLight.shadow.camera.top	= 1000;
+        dirLight.shadow.camera.bottom = - 1000;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        this.scene.add( dirLight );
         this.terrainGenerationService.generate(this.scene, null);
-    }
-
-    private getAspectRatio() {
-        return this.container.clientWidth / this.container.clientHeight;
     }
 
     public createSkyBox() {
@@ -103,7 +89,9 @@ export class RenderService {
     }
 
     private startRenderingLoop() {
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
@@ -137,4 +125,5 @@ export class RenderService {
         // this.createCube();
         this.initStats();
     }
+
 }
