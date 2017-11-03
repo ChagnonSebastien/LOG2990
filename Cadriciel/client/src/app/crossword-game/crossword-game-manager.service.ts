@@ -10,7 +10,7 @@ export class GameManagerService {
     private socket: SocketIOClient.Socket;
 
     constructor( private socketHandlerSerivce: SocketHandlerSerivce ) {
-        this.socket = socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
+        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
 
         this.socket.on('gameCreated', data => {
             this.game = data;

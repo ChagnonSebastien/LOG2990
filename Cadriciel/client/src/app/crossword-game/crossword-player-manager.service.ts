@@ -10,8 +10,8 @@ export class PlayerManagerService {
     private player: Player;
 
     constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce ) {
-        this.player = playerHandlerService.requestPlayer();
-        this.player.setSocket(socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT));
+        this.player = this.playerHandlerService.requestPlayer();
+        this.player.setSocket(this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT));
     }
 
     public getPlayer(): Player {

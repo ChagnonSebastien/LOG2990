@@ -8,6 +8,8 @@ import { PlayerManagerService } from '../crossword-player-manager.service';
 export class CrosswordMenuComponent {
     public gameInProgress: boolean;
     public multiplayerGameInProgress: boolean;
+    public creatingGame: boolean;
+    public joiningGame: boolean;
     public type: string;
     public mode: string;
     public level: string;
@@ -18,7 +20,8 @@ export class CrosswordMenuComponent {
         this.level = 'normal';
     }
 
-    public startGame(type: string, mode: string, level: string) {
+    public startGame() {
+
         if (this.type === 'multiplayer') {
             this.startMultiplayerGame();
         } else {
