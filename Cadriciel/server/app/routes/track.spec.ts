@@ -46,10 +46,10 @@ describe('Track', () => {
     it('Should change track rating, numberOfTimesPlayed and bestTimes', (done) => {
         chai.request(apiUrl)
             .post('/track/update/TokyoCircuit')
-            .send({ numberOfTimesPlayed: 1, rating: 5, time: 7 })
+            .send({ numberOfTimesPlayed: 1, rating: 5, time: 10 })
             .end((err: any, res: any) => {
              //   const track = JSON.parse(res.text);
-             //  assert(track.value.rating === 2.5);             
+             //  assert(track.value.rating === 2.5);
                 assert(JSON.parse(res.text).data === 'success');
                 done();
             });

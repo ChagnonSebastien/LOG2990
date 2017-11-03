@@ -4,6 +4,8 @@ import * as express from 'express';
 
 import * as mongodb from 'mongodb';
 
+import { UpdateTrack } from '../updatetrack';
+
 const MongoClient = mongodb.MongoClient;
 // const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
@@ -74,59 +76,37 @@ module Route {
             });
 
         }
-        
-        public updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
-             return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);  
-        }
-
-        public updateBestTimes (arrayBestTimes: number[], newtime: number ) { 
-            const fifthBestTimes = 5;
-        
-            arrayBestTimes.sort((a, b) => { 
-                  return a - b;
-            })
-              arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
-              for( let time = 0; time < arrayBestTimes.length - 1; time++) {
-                if(newtime < arrayBestTimes[time]){
-                    arrayBestTimes[time + 1] = arrayBestTimes[time];
-                    arrayBestTimes[time] = newtime;
-                    return arrayBestTimes;
-                }
-              }             
-        }
-
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
             let tempRating: number;
             let tempBestTimes: number[];
             let tempNbOfTimesPlayed: number;
-        
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
-                } else {      
-                    console.log(req.params.id);
+                } else {
                     db.collection('tracks').findOne({ _id: req.params.id })
                         .then((trackDB) => {
-                            console.log(trackDB);
-                            tempRating = this.updateRating(req.body.numberOfTimesPlayed, trackDB.rating, req.body.rating );
-                            tempBestTimes = this.updateBestTimes(trackDB.bestTimes, req.body.time);
+                            tempRating = UpdateTrack.updateRating( req.body.numberOfTimesPlayed,
+                                                                   trackDB.rating,
+                                                                   req.body.rating
+                            );
+                            tempBestTimes = UpdateTrack.updateBestTimes(trackDB.bestTimes, req.body.time);
                             tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
 
                             db.collection('tracks').update(
-                                        { id: req.params.id }, 
+                                        { _id: req.params.id },
                                         { $set: { rating: tempRating,
                                         bestTimes: tempBestTimes,
                                         numberOfTimesPlayed: tempNbOfTimesPlayed} },
                                         { upsert: false
-                            });  
-                                      
+                            });
                         });
-                    res.send({ 'data': 'success' });// On doit plutôt retourner le track              
+                    res.send({ 'data': 'success' }); // On doit plutôt retourner le track
                 }
-                 
+
             });
         }
-        
+
     }
 }
 
