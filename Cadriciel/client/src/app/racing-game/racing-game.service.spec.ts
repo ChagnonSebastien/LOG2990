@@ -25,5 +25,11 @@ describe('RacingGameService', () => {
         });
     });
 
+    it('should be alerted when all the opponents vehicles are initialized', () => {
+        racingGameService.opponentsAlerts().subscribe((vehicle) => {
+            expect(vehicle).toBeTruthy();
+        });
+    });
+
 });
 
