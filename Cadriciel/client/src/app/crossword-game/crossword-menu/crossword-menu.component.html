@@ -54,10 +54,12 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12" *ngIf="joiningGame && !creatingGame">
+        <app-crossword-room></app-crossword-room>
+      </div>
+    </div>
   </div>
-</div>
-<div *ngIf="joiningGame && !creatingGame">
-  <app-crossword-room></app-crossword-room>
 </div>
 <div *ngIf="gameInProgress">
   <app-crossword-game [type]="type" [mode]="mode" [level]="level" (endGameEmitter)="gameInProgress = false"></app-crossword-game>

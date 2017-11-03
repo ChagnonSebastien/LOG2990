@@ -13,15 +13,3 @@
     letter-spacing: 3px;
     color: white;
 }
-
-.multiplayer-table {
-    min-width: 100%;
-    min-height: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.spacing {
-    height: 180px;
-}
