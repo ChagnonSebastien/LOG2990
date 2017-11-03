@@ -17,7 +17,7 @@ export class CrosswordMenuComponent {
     public waitingForPlayer2: boolean;
     public username: string;
 
-    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService ) {
+    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
@@ -85,5 +85,13 @@ export class CrosswordMenuComponent {
     private validLevel(level: string) {
         const validLevels = new Set<string>(['easy', 'normal', 'hard']);
         return validLevels.has(level);
+    }
+
+    private startGameOnPlayer2Joined() {
+        this.gameManagerService.playerTwoAlerts()
+            .subscribe((result) => {
+                this.waitingForPlayer2 = false;
+                this.gameInProgress = true;
+            });
     }
 }
