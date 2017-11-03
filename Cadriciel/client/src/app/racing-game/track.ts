@@ -4,7 +4,7 @@ export class Track {
     public name: string;
     public description = '';
     public type: string;
-    public trackIntersections: { x: number, y: number }[] = [];
+    public trackIntersections: THREE.Vector2[] = [];
     public numberOfTimesPlayed: number;
     public bestTimes: number[] = [];
     public rating: number;
@@ -16,11 +16,12 @@ export class Track {
         name: string,
         description: string,
         type: string,
-        intersections: { x: number, y: number }[],
+        intersections: THREE.Vector2[],
         puddles: Obstacle[],
         potholes: Obstacle[],
         boosters: Obstacle[]
     ) {
+        alert('CREATED TRACK');
         this.name = name;
         this.description = description;
         this.type = type;

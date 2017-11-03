@@ -1,14 +1,11 @@
+import { TrackService } from './../game-initialization/track.service';
 import { ObstacleService } from './obstacle.service';
 import { ObstacleType } from './obstacle';
 import { RenderService } from './render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import { Track } from '../track';
-import { Headers, Http } from '@angular/http';
 import * as THREE from 'three';
-
-const apiUrl = 'http://localhost:3000/api';
-const headers = new Headers({ 'Content-Type': 'application/json' });
 
 @Injectable()
 export class DrawTrackService {
@@ -29,14 +26,11 @@ export class DrawTrackService {
         public renderService: RenderService,
         public trackValidationService: TrackValidationService,
         public obstacleService: ObstacleService,
-        private http: Http
+        private trackService: TrackService
     ) { }
 
     public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
-        const path = 'track';
-        return this.http.get(`${apiUrl}/${path}/${name}`).toPromise()
-        .then(response => {
-            const track = response.json();
+        return this.trackService.get(name).then(track => {
             this.loadIntersection(track.trackIntersections);
             this.obstacleService.loadObstacles(ObstacleType.Booster, track.boosters);
             this.obstacleService.loadObstacles(ObstacleType.Pothole, track.potholes);
@@ -212,14 +206,8 @@ export class DrawTrackService {
             this.obstacleService.getObstacles(ObstacleType.Pothole),
             this.obstacleService.getObstacles(ObstacleType.Booster)
         );
-        const path = 'tracks';
-        return this.http
-            .post(`${apiUrl}/${path}`,
-            JSON.stringify(trackToSave),
-            { headers: headers}
-        ).toPromise()
-        .then(response => response.json().data)
-        .catch(this.handleError);
+
+        return this.trackService.save(trackToSave);
     }
 
     private handleError(error: any): Promise<any> {

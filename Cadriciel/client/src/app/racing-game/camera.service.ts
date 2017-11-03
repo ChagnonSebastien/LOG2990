@@ -72,11 +72,11 @@ export class CameraService {
         this.orthographicCamera.position.z = this.objectToFollow.position.z;
 
         this.perspectiveCamera.position.x = this.objectToFollow.position.x + (
-            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
         );
         this.perspectiveCamera.position.y = perspectiveHeight * this.sceneScale;
         this.perspectiveCamera.position.z = this.objectToFollow.position.z + (
-            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
         );
     }
 
