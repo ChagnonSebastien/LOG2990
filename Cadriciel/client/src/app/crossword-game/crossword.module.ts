@@ -16,6 +16,8 @@ import { SocketHandlerSerivce } from './crossword-socket-handler.service';
 import { PlayerHandlerService } from './crossword-player-handler.service';
 import { PlayerManagerService } from './crossword-player-manager.service';
 import { GameManagerService } from './crossword-game-manager.service';
+import { GameManagerServicePlayer1 } from './crossword-game-manager-player1.service';
+import { GameManagerServicePlayer2 } from './crossword-game-manager-player2.service';
 
 import { CrosswordMenuComponent } from './crossword-menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
@@ -50,6 +52,8 @@ import { CrosswordRoomComponent } from './crossword-room/crossword-room.componen
         PlayerHandlerService,
         PlayerManagerService,
         GameManagerService,
+        GameManagerServicePlayer1,
+        GameManagerServicePlayer2
 
     ]
 })
