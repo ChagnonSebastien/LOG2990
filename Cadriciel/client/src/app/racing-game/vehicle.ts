@@ -1,18 +1,10 @@
 import * as THREE from 'three';
-import { Subject } from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
 
 
 export class Vehicle {
     public vehicle: THREE.Mesh;
-    private vehicleSubject: Subject<any>;
 
     constructor() {
-        this.vehicleSubject = new Subject();
-    }
-
-    public vehicleAlert(): Observable<any> {
-        return this.vehicleSubject.asObservable();
     }
 
     public create3DVehicle(x: number, y: number, z: number): Promise<Vehicle> {
@@ -28,7 +20,6 @@ export class Vehicle {
             this.vehicle.scale.setY(22);
             this.vehicle.scale.setZ(22);
             this.vehicle.castShadow = true;
-            this.vehicleSubject.next('created');
             resolve(this);
             }, (object: any) => {
                 console.log('prog: ', object);

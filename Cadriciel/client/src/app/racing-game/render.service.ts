@@ -44,7 +44,6 @@ export class RenderService {
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
         this.scene.add( dirLight );
-        console.log('SCENE CREATED');
     }
 
     public createSkyBox() {
