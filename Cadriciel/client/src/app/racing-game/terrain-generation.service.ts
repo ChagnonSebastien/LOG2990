@@ -7,8 +7,6 @@ const trackRadius = 10;
 @Injectable()
 export class TerrainGenerationService {
 
-    private track: Track;
-
     private textureSky: any;
 
     private scale: number;
