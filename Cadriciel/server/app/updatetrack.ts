@@ -4,7 +4,7 @@ export module UpdateTrack {
         return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);
     }
 
-   export function updateBestTimes (arrayBestTimes: number[], newtime: number ) {
+   export function updateBestTimes (arrayBestTimes: number[], newtime: number ): number[] {
         const fifthBestTimes = 5;
        if (arrayBestTimes.length !== fifthBestTimes ) {
            arrayBestTimes.push(newtime);
