@@ -29,8 +29,7 @@ export class GameManager {
                 option: type,
                 player1: player1,
                 player2: null,
-                crossword: crossword.crossword,
-                listOfWords: crossword.listOfWords
+                crossword: crossword
             };
             this.idCounter++;
             this.games.push(game);
