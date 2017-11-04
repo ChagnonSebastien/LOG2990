@@ -40,11 +40,7 @@ export class MultiplayerService {
             this.opponentActiveIndexes = data;
           });
           this.socket.on('opponent found a word', data => {
-             /* data.forEach(index => {
-                 if (this.opponentCorrectIndexes.indexOf(index) === -1) {
-                 this.opponentCorrectIndexes.push(index);
-                 }
-              });*/
+             
               this.opponentCorrectIndexes = data;
           });
     }

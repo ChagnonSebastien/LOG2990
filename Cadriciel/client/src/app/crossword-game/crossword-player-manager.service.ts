@@ -12,11 +12,33 @@ export class PlayerManagerService {
 
     constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce) {
         this.player = this.playerHandlerService.requestPlayer();
-        this.socket = this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT);
-        this.player.setSocketID(this.socket.id);
+        this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
+            this.socket = socket;
+
+            this.socket.on('connect', data => {
+                console.log(socket.id);
+                this.player.setSocketID(this.socket.id);
+            });
+
+            this.socket.on('opponent found word', data => {
+
+            });
+
+            this.socket.on('selected hint', data => {
+
+            });
+        });
     }
 
     public getPlayer(): Player {
         return this.player;
+    }
+
+    public emitWordFound(word: string) {
+        this.socket.emit('found of word', word, this.player.getSocketID());
+    }
+
+    public emitHintSelected(hint: string) {
+        this.socket.emit('selected a word', hint, this.player.getSocketID());
     }
 }

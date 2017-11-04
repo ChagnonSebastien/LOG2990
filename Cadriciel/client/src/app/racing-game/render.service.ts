@@ -19,30 +19,32 @@ export class RenderService {
 
     public scene: THREE.Scene;
 
-    public rotationSpeedY = 0.01;
-
-    public view;
-
-    public inc = -0.01;
-
-
-    constructor(private cameraService: CameraService, private racingGameSerive: RacingGameService,
-        private terrainGenerationService: TerrainGenerationService) {
-        this.reactToVehicleAlert();
+    constructor(
+        private cameraService: CameraService,
+        private racingGameSerive: RacingGameService,
+        private terrainGenerationService: TerrainGenerationService
+    ) {
+        this.reactToMainVehicleAlert();
+        this.reactToOpponentsVehiclesAlert();
     }
 
-    private reactToVehicleAlert() {
+    private reactToMainVehicleAlert() {
         this.racingGameSerive.vehicleAlerts().subscribe((vehicle) => {
-            console.log('MY VEHICLE', vehicle);
             this.scene.add(vehicle);
             this.cameraService.initializeCameras(this.container, vehicle, scale);
             this.startRenderingLoop();
         });
     }
 
+    private reactToOpponentsVehiclesAlert() {
+        this.racingGameSerive.opponentsAlerts().subscribe((opponents) => {
+            for (let i = 0; i < this.racingGameSerive.numberOfVehiclesInitialized - 1; i++) {
+                this.scene.add(opponents[i].vehicle);
+            }
+        });
+    }
 
     private createScene() {
-        console.log('create scene');
         this.scene = new THREE.Scene();
         this.createSkyBox();
         this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
@@ -60,7 +62,6 @@ export class RenderService {
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
         this.scene.add( dirLight );
-        this.terrainGenerationService.generate(this.scene, null);
     }
 
     public createSkyBox() {
@@ -81,6 +82,10 @@ export class RenderService {
         const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(10000, 10000, 10000), material);
         material.needsUpdate = true;
         this.scene.add(skyboxMesh);
+    }
+
+    public loadTrack(track) {
+        this.terrainGenerationService.generate(this.scene, track, 25);
     }
 
     public eventsList(event: any): void {
@@ -118,9 +123,8 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLElement, rotationX: number, rotationY: number, track: Track) {
+    public initialize(container: HTMLElement, track: Track) {
         this.container = container;
-        this.rotationSpeedY = rotationY;
         this.createScene();
         // this.createCube();
         this.initStats();

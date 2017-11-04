@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 import { GameManagerService } from '../crossword-game-manager.service';
 @Component({
@@ -15,9 +15,9 @@ export class CrosswordMenuComponent {
     public mode: string;
     public level: string;
     public waitingForPlayer2: boolean;
-    @Input() public username: string;
+    public username: string;
 
-    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService ) {
+    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
@@ -25,9 +25,9 @@ export class CrosswordMenuComponent {
     }
 
     public startGame() {
-
         if (this.type === 'multiplayer') {
             this.startMultiplayerGame();
+            this.startGameOnPlayer2Joined();
         } else {
             this.gameInProgress = true;
         }
@@ -36,9 +36,7 @@ export class CrosswordMenuComponent {
     public startMultiplayerGame(): void {
 
         if (this.validateUsername()) {
-
             this.setPlayerUsername();
-            this.playerManagerService.getPlayer();
             this.waitingForPlayer2 = true;
             this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }
@@ -86,5 +84,14 @@ export class CrosswordMenuComponent {
     private validLevel(level: string) {
         const validLevels = new Set<string>(['easy', 'normal', 'hard']);
         return validLevels.has(level);
+    }
+
+    private startGameOnPlayer2Joined() {
+        this.gameManagerService.playerTwoAlerts()
+            .subscribe((result) => {
+                console.log(result);
+                this.waitingForPlayer2 = false;
+                this.gameInProgress = true;
+            });
     }
 }

@@ -6,6 +6,7 @@ import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 
 import { Word } from '../../../../commun/word';
+import { CrosswordDB } from '../../../../server/app/crosswordGrid/crosswordDB';
 
 @Injectable()
 export class CrosswordGameService {
@@ -28,6 +29,10 @@ export class CrosswordGameService {
         await this.crosswordService.getCrossword(level).then((crossword) => {
             this.constructGame(crossword.crossword, crossword.wordsWithIndex, crossword.listOfWords);
         });
+    }
+
+    public newMultiplayerGame(crosswordDB: CrosswordDB) {
+        this.constructGame(crosswordDB.crossword, crosswordDB.wordsWithIndex, crosswordDB.listOfWords);
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
