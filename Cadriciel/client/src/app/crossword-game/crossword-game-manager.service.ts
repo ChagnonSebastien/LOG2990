@@ -18,14 +18,8 @@ export class GameManagerService {
         this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
             this.socket = socket;
 
-            this.socket.on('gameCreated', data => {
-                this.game = data;
-                console.log(data);
-            });
-
             this.socket.on('player 2 joined', data => {
                 this.game = data;
-                console.log(data);
                 this.playerTwoSubject.next('player 2 joined');
             });
         });
