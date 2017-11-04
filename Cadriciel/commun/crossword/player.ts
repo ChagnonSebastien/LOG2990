@@ -31,7 +31,6 @@ export class Player {
     }
 
     public getSocketID(): string{
-        console.log("we are getting");
         return this.socketID;
     }
 
@@ -52,7 +51,6 @@ export class Player {
     }
 
     public setSocketID(socket: string): void {
-        console.log("we are setting");
         this.socketID = socket;
     }
 }
