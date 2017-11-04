@@ -115,10 +115,10 @@ export class RenderService {
     }
 
     public async addVehicles(): Promise<void> {
-        const mainVehicle = await this.racingGameSerive.initializeVehicleTest();
+        const mainVehicle = await this.racingGameSerive.initializeMainVehicle();
         this.scene.add(mainVehicle.vehicle);
         this.cameraService.initializeCameras(this.container, mainVehicle.vehicle, scale);
-        const opponentsVehicles = await this.racingGameSerive.initializeOpponentsVehiclesTest();
+        const opponentsVehicles = await this.racingGameSerive.initializeOpponentsVehicles();
 
         for (let i = 0; i < opponentsVehicles.length; i++) {
             this.scene.add(opponentsVehicles[i].vehicle);
