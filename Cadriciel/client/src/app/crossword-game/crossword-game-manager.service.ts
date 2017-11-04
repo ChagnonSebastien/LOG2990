@@ -20,6 +20,7 @@ export class GameManagerService {
 
             this.socket.on('gameCreated', data => {
                 this.game = data;
+                console.log(data);
             });
 
             this.socket.on('player 2 joined', data => {

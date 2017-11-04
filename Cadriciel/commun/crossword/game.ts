@@ -1,13 +1,13 @@
 import {Player} from './player'
 export class Game {
-        id: string = '';
-        difficulty: string = '';
-        mode: string = '';
-        option: string = '';
-        player1 : Player;
-        player2 : Player;  
-        crossword: string[][] = [[]];
-        listOfWords: string[] = [];
+        public id: string = '';
+        public difficulty: string = '';
+        public mode: string = '';
+        public option: string = '';
+        public player1 : Player;
+        public player2 : Player;  
+        public crossword: string[][] = [[]];
+        public listOfWords: string[] = [];
                
             constructor(id: string, difficulty: string, mode: string, player1: Player, player2: Player, crossword: string[][], listOfWords: [string] ) {
                 this.id = id;

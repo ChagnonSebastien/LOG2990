@@ -1,10 +1,10 @@
 
 export class Player {
-    private username: string;
-    private usernameValid: boolean;
-    private gameID: number;
-    private score: number;
-    private socketID: string;
+    public username: string;
+    public usernameValid: boolean;
+    public gameID: number;
+    public score: number;
+    public socketID: string;
 
     constructor() {
         this.username = '';
@@ -31,6 +31,7 @@ export class Player {
     }
 
     public getSocketID(): string{
+        console.log("we are getting");
         return this.socketID;
     }
 
@@ -50,7 +51,8 @@ export class Player {
         this.score = score;
     }
 
-    public setSocketID(socket: any): void {
+    public setSocketID(socket: string): void {
+        console.log("we are setting");
         this.socketID = socket;
     }
 }

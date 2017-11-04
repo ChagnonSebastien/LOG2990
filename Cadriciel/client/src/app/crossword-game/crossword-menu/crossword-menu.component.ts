@@ -37,7 +37,6 @@ export class CrosswordMenuComponent {
 
         if (this.validateUsername()) {
             this.setPlayerUsername();
-            this.playerManagerService.getPlayer();
             this.waitingForPlayer2 = true;
             this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }

@@ -14,7 +14,11 @@ export class PlayerManagerService {
         this.player = this.playerHandlerService.requestPlayer();
         this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
             this.socket = socket;
-            this.player.setSocketID(this.socket.id);
+
+            this.socket.on('connect', data => {
+                console.log(socket.id);
+                this.player.setSocketID(this.socket.id);
+            });
 
             this.socket.on('opponent found word', data => {
 
