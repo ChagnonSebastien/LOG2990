@@ -29,7 +29,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     public ngOnInit() {
-        if (this.gameManagerService.getGame().option === 'solo') {
+        if (this.type === 'solo') {
             this.newGame();
         } else {
             this.newMultiplayerGame();

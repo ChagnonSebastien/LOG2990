@@ -8,15 +8,21 @@ export class SocketHandlerSerivce {
 
     public requestSocket(server: string): Promise<SocketIOClient.Socket> {
 
-            if (this.activeSocket === undefined) {
-                this.activeSocket = io.connect(server);
-            }
-                return Promise.resolve(this.activeSocket);
-            }
+        if (this.activeSocket === undefined) {
+            this.activeSocket = io.connect(server);
+        }
+        return Promise.resolve(this.activeSocket);
+    }
 
     public disconnectSocket(): void {
-         this.activeSocket.disconnect();
-         this.activeSocket = undefined;
-     }
+        if (this.activeSocket !== undefined) {
+            this.activeSocket.disconnect();
+            this.activeSocket = undefined;
+        }
+    }
+
+    public connectionStatus(): boolean {
+        return this.activeSocket !== undefined;
+    }
 
 }

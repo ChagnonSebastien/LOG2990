@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameManagerService } from '../crossword-game-manager.service';
 import { PlayerManagerService } from '../crossword-player-manager.service';
-import { Game } from '../../../../../commun/crossword/game';
 
 @Component({
   selector: 'app-crossword-room',
