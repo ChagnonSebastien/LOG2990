@@ -25,6 +25,10 @@ export class RacingGameService {
         for (let i = 0; i < numberOfOpponents; i++) {
             this.opponentsVehicles[i] = new Vehicle();
         }
+
+        for (let i = 0; i < numberOfOpponents; i++) {
+            this.opponentsVehiclesTest[i] = new Vehicle();
+        }
         this.alertWhenVehicleIsInitialized();
         this.initializeVehicle();
         this.initializeOpponentsVehicles();
@@ -53,7 +57,9 @@ export class RacingGameService {
         await this.opponentsVehiclesTest[1].create3DVehicle(150, 30, 0);
         await this.opponentsVehiclesTest[2].create3DVehicle(150, 30, 200);
 
-        return Promise.resolve(this.opponentsVehicles);
+        return new Promise<Array<Vehicle>>(resolve => {
+            resolve(this.opponentsVehiclesTest);
+        });
     }
 
     public vehicleAlerts(): Observable<any> {

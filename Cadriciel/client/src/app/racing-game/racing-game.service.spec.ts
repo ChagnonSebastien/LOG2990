@@ -38,5 +38,12 @@ describe('RacingGameService', () => {
         });
     });
 
+    it('PROMISE: should initialize opponents vehicles(3)', (done) => {
+        racingGameService.initializeOpponentsVehiclesTest().then(function(data) {
+            expect(data).toBeDefined();
+            done();
+        });
+    });
+
 });
 

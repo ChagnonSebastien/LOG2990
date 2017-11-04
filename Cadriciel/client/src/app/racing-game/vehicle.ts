@@ -19,7 +19,6 @@ export class Vehicle {
         const loader = new THREE.ObjectLoader();
         return new Promise<Vehicle>(resolve => {
             loader.load('/assets/cart.json', (object: THREE.Object3D) => {
-            //console.log('z: ', object);
             this.vehicle = <THREE.Mesh>object;
             this.vehicle.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
             this.vehicle.position.setX(x);
@@ -31,12 +30,10 @@ export class Vehicle {
             this.vehicle.castShadow = true;
             this.vehicleSubject.next('created');
             resolve(this);
-            //console.log('x: ', x);
-            //console.log('z: ', this.vehicle);
             }, (object: any) => {
-                //console.log('prog: ', object);
+                console.log('prog: ', object);
             }, (object: any) => {
-                //console.log('err: ', object);
+                console.log('err: ', object);
             });
         });
     }
