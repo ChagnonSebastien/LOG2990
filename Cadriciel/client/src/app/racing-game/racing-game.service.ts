@@ -8,6 +8,8 @@ const numberOfOpponents = 3;
 export class RacingGameService {
     public mainVehicle: Vehicle;
     public opponentsVehicles: Array<Vehicle>;
+    public mainVehicleTest: Vehicle;
+    public opponentsVehiclesTest: Array<Vehicle>;
     private vehicleSubject: Subject<any>;
     private opponentsSubject: Subject<any>;
     public numberOfVehiclesInitialized: number;
@@ -27,13 +29,21 @@ export class RacingGameService {
     }
 
     public async initializeVehicle() {
-        this.mainVehicle.createVehicle(-150, 30, 0);
+        this.mainVehicle.create3DVehicle(-150, 30, 0);
+    }
+
+    public initializeVehicleTest(): Promise<Vehicle> {
+        return new Promise<Vehicle>(resolve => {
+            this.mainVehicle.create3DVehicle(-150, 30, 0).then((vehicle) => {
+                resolve(vehicle);
+            });
+        });
     }
 
     private initializeOpponentsVehicles() {
-        this.opponentsVehicles[0].createVehicle(-150, 30, 200);
-        this.opponentsVehicles[1].createVehicle(150, 30, 0);
-        this.opponentsVehicles[2].createVehicle(150, 30, 200);
+        this.opponentsVehicles[0].create3DVehicle(-150, 30, 200);
+        this.opponentsVehicles[1].create3DVehicle(150, 30, 0);
+        this.opponentsVehicles[2].create3DVehicle(150, 30, 200);
     }
 
     public vehicleAlerts(): Observable<any> {
