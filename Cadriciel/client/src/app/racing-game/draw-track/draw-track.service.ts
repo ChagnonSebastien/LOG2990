@@ -31,7 +31,7 @@ export class DrawTrackService {
 
     public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
         return this.trackService.get(name).then(track => {
-            this.loadIntersection(track.trackIntersections);
+            this.loadIntersection(track.trackIntersections.map(intersection => new THREE.Vector2(intersection.x, -intersection.y)));
             this.obstacleService.loadObstacles(ObstacleType.Booster, track.boosters);
             this.obstacleService.loadObstacles(ObstacleType.Pothole, track.potholes);
             this.obstacleService.loadObstacles(ObstacleType.Puddle, track.puddles);
@@ -201,7 +201,7 @@ export class DrawTrackService {
             name,
             description,
             difficulty,
-            this.intersections,
+            this.intersections.map(intersection => new THREE.Vector2(intersection.x, -intersection.y)),
             this.obstacleService.getObstacles(ObstacleType.Puddle),
             this.obstacleService.getObstacles(ObstacleType.Pothole),
             this.obstacleService.getObstacles(ObstacleType.Booster)
