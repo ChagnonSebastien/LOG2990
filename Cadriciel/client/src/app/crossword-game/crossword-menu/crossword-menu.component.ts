@@ -90,8 +90,13 @@ export class CrosswordMenuComponent {
         this.gameManagerService.playerTwoAlerts()
             .subscribe((result) => {
                 console.log(result);
-                this.waitingForPlayer2 = false;
-                this.gameInProgress = true;
+                this.setStartBooleans();
             });
+    }
+
+    public setStartBooleans() {
+        this.waitingForPlayer2 = false;
+        this.joiningGame = false;
+        this.gameInProgress = true;
     }
 }

@@ -15,11 +15,13 @@ export class GameManagerService {
 
     constructor(private socketHandlerSerivce: SocketHandlerSerivce) {
         this.playerTwoSubject = new Subject();
+        this.game = new Game();
         this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
             this.socket = socket;
 
             this.socket.on('player 2 joined', data => {
                 this.game = data;
+                console.log(data);
                 this.playerTwoSubject.next('player 2 joined');
             });
         });
@@ -33,10 +35,12 @@ export class GameManagerService {
         return this.game;
     }
 
-    public getGames(): Promise<{id: string, playerHost: string, difficulty: string, mode: string, username2: string}[]> {
+    public getGames(): Promise<{ id: string, playerHost: string, difficulty: string, mode: string, username2: string }[]> {
         this.socket.emit('getGames');
-        const gamesPromise = new Promise<{id: string, playerHost: string, difficulty: string,
-             mode: string, username2: string}[]>(
+        const gamesPromise = new Promise<{
+            id: string, playerHost: string, difficulty: string,
+            mode: string, username2: string
+        }[]>(
             (res, rej) => this.socket.on('sent all games', data => res(data)));
         return gamesPromise;
     }

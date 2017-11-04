@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { GameManagerService } from '../crossword-game-manager.service';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 
@@ -11,6 +11,8 @@ export class CrosswordRoomComponent implements OnInit {
 
   public username: string;
   public gamesListInfo: {id: string, playerHost: string, difficulty: string, mode: string, username2: string}[] = [];
+  @Output()
+  private startGameEmitter: EventEmitter<any> = new EventEmitter();
   constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) {
     this.username = '';
   }
@@ -18,6 +20,7 @@ export class CrosswordRoomComponent implements OnInit {
   public ngOnInit() {
     this.gameManagerService.getGames().then(games => {
       this.gamesListInfo = games;
+      this.startGameOnPlayer2Joined();
     });
   }
 
@@ -29,5 +32,13 @@ export class CrosswordRoomComponent implements OnInit {
   public setPlayerUsername(): void {
     this.playerManagerService.getPlayer().setUsername(this.username);
   }
+
+  private startGameOnPlayer2Joined() {
+    this.gameManagerService.playerTwoAlerts()
+        .subscribe((result) => {
+            console.log(result);
+            this.startGameEmitter.emit();
+        });
+}
 
 }
