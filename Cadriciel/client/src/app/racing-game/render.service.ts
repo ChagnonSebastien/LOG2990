@@ -24,24 +24,6 @@ export class RenderService {
         private racingGameSerive: RacingGameService,
         private terrainGenerationService: TerrainGenerationService
     ) {
-        this.reactToMainVehicleAlert();
-        this.reactToOpponentsVehiclesAlert();
-    }
-
-    private reactToMainVehicleAlert() {
-        this.racingGameSerive.vehicleAlerts().subscribe((vehicle) => {
-            this.scene.add(vehicle);
-            this.cameraService.initializeCameras(this.container, vehicle, scale);
-            this.startRenderingLoop();
-        });
-    }
-
-    private reactToOpponentsVehiclesAlert() {
-        this.racingGameSerive.opponentsAlerts().subscribe((opponents) => {
-            for (let i = 0; i < this.racingGameSerive.numberOfVehiclesInitialized - 1; i++) {
-                this.scene.add(opponents[i].vehicle);
-            }
-        });
     }
 
     private createScene() {
@@ -62,6 +44,7 @@ export class RenderService {
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
         this.scene.add( dirLight );
+        console.log('SCENE CREATED');
     }
 
     public createSkyBox() {
@@ -123,11 +106,27 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public initialize(container: HTMLElement, track: Track) {
+    public async initialize(container: HTMLElement, track: Track) {
         this.container = container;
         this.createScene();
-        // this.createCube();
+        await this.addVehicles();
         this.initStats();
+        this.startRenderingLoop();
+    }
+
+    public async addVehicles(): Promise<void> {
+        const mainVehicle = await this.racingGameSerive.initializeVehicleTest();
+        this.scene.add(mainVehicle.vehicle);
+        this.cameraService.initializeCameras(this.container, mainVehicle.vehicle, scale);
+        const opponentsVehicles = await this.racingGameSerive.initializeOpponentsVehiclesTest();
+
+        for (let i = 0; i < opponentsVehicles.length; i++) {
+            this.scene.add(opponentsVehicles[i].vehicle);
+        }
+
+        return new Promise<void>(resolve => {
+            resolve();
+        });
     }
 
 }
