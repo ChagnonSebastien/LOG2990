@@ -21,7 +21,7 @@ export class RenderService {
 
     constructor(
         private cameraService: CameraService,
-        private racingGameSerive: RacingGameService,
+        private racingGameService: RacingGameService,
         private terrainGenerationService: TerrainGenerationService
     ) {
     }
@@ -114,10 +114,10 @@ export class RenderService {
     }
 
     public async addVehicles(): Promise<void> {
-        const mainVehicle = await this.racingGameSerive.initializeMainVehicle();
+        const mainVehicle = await this.racingGameService.initializeMainVehicle();
         this.scene.add(mainVehicle.vehicle);
         this.cameraService.initializeCameras(this.container, mainVehicle.vehicle, scale);
-        const opponentsVehicles = await this.racingGameSerive.initializeOpponentsVehicles();
+        const opponentsVehicles = await this.racingGameService.initializeOpponentsVehicles();
 
         for (let i = 0; i < opponentsVehicles.length; i++) {
             this.scene.add(opponentsVehicles[i].vehicle);
