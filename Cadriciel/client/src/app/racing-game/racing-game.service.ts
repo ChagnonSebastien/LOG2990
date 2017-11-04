@@ -27,13 +27,13 @@ export class RacingGameService {
     }
 
     public async initializeVehicle() {
-        this.mainVehicle.createVehicle(300, 30, 0);
+        this.mainVehicle.createVehicle(-150, 30, 0);
     }
 
     private initializeOpponentsVehicles() {
-        this.opponentsVehicles[0].createVehicle(300, 30, 200);
-        this.opponentsVehicles[1].createVehicle(0, 30, 0);
-        this.opponentsVehicles[2].createVehicle(0, 30, 200);
+        this.opponentsVehicles[0].createVehicle(-150, 30, 200);
+        this.opponentsVehicles[1].createVehicle(150, 30, 0);
+        this.opponentsVehicles[2].createVehicle(150, 30, 200);
     }
 
     public vehicleAlerts(): Observable<any> {
@@ -63,7 +63,6 @@ export class RacingGameService {
         for (let i = 0; i < numberOfOpponents; i++) {
             this.opponentsVehicles[i].vehicleAlert().subscribe((result) => {
                 this.numberOfVehiclesInitialized++;
-                console.log(this.opponentsVehicles);
                 if (this.numberOfVehiclesInitialized === 4) {
                     this.alertOpponentsVehicles();
                 }

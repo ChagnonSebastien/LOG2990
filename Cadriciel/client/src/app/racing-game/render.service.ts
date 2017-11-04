@@ -45,7 +45,6 @@ export class RenderService {
     }
 
     private createScene() {
-        console.log('create scene');
         this.scene = new THREE.Scene();
         this.createSkyBox();
         this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
@@ -86,7 +85,7 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, track, 1);
+        this.terrainGenerationService.generate(this.scene, track, 25);
     }
 
     public eventsList(event: any): void {
