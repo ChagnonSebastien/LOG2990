@@ -15,8 +15,15 @@ export class GameManager {
         this.serverCrosswords.setCollection('crosswords');
     }
 
-    public getGames(): Game[] {
-        return this.games;
+    public getGames(): { id: string, playerHost: string, difficulty: string, mode: string, username2: string }[] {
+        const gamesInfo: { id: string, playerHost: string, difficulty: string, mode: string, username2: string }[] = [];
+        this.games.forEach((game, index) => {
+            gamesInfo.push({
+                id: game.id, playerHost: game.player1.username,
+                difficulty: game.difficulty, mode: game.mode, username2: game.player2.username
+            });
+        });
+        return gamesInfo;
     }
 
     public async createGame(type: string, difficulty: string, mode: string, player1: Player): Promise<Game> {
@@ -28,7 +35,7 @@ export class GameManager {
                 mode: mode,
                 option: type,
                 player1: player1,
-                player2: null,
+                player2: new Player(),
                 crossword: crossword
             };
             this.idCounter++;

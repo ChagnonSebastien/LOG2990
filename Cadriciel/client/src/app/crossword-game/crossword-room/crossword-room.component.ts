@@ -10,16 +10,15 @@ import { Game } from '../../../../../commun/crossword/game';
 })
 export class CrosswordRoomComponent implements OnInit {
 
-  public games: Game[] = [];
   public username: string;
-
+  public gamesListInfo: {id: string, playerHost: string, difficulty: string, mode: string, username2: string}[] = [];
   constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) {
     this.username = '';
   }
 
   public ngOnInit() {
     this.gameManagerService.getGames().then(games => {
-      this.games = games;
+      this.gamesListInfo = games;
     });
   }
 

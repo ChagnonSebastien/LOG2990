@@ -17,12 +17,12 @@
           <th class="hidden-xs">Status</th>
           <th>Action</th>
         </tr>
-        <tr *ngFor="let game of this.games">
-          <td> {{game.player1.username}}</td>
+        <tr *ngFor="let game of this.gamesListInfo">
+          <td> {{game.username1}}</td>
           <td> {{game.difficulty}}</td>
           <td> {{game.mode}}</td>
-          <td *ngIf="game.player2"> FULL</td>
-          <td *ngIf="!game.player2"> Looking for player 2</td>
+          <td *ngIf="game.username2!==''"> FULL</td>
+          <td *ngIf="game.username2==''"> Looking for player 2</td>
           <td>
             <button (click)="joinGame(game.id)" class="btn" [disabled]="game.player2 || username===''">Join </button>
           </td>

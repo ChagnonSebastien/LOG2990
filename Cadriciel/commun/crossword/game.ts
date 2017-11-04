@@ -9,11 +9,13 @@ export class Game {
         public player2 : Player;  
         public crossword: CrosswordDB;
                
-            constructor(id: string, difficulty: string, mode: string, player1: Player, player2: Player, crossword: CrosswordDB ) {
-                this.id = id;
-                this.difficulty = difficulty;
-                this.player1 = player1;
-                this.player2 =  player2;
-                this.crossword = crossword;
+            constructor( ) {
+                this.id = '';
+                this.difficulty = '';
+                this.mode = '';
+                this.option = '';
+                this.player1 = new Player();
+                this.player2 =  new Player();
+                
             }      
         }
