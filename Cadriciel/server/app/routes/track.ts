@@ -76,30 +76,6 @@ module Route {
             });
 
         }
-<<<<<<< HEAD
-=======
-
-        public updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
-             return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);  
-        }
-
-        public updateBestTimes (arrayBestTimes: number[], newtime: number ) { 
-            const fifthBestTimes = 5;
-        
-            arrayBestTimes.sort((a, b) => { 
-                  return a - b;
-            })
-              arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
-              for( let time = 0; time < arrayBestTimes.length - 1; time++) {
-                if(newtime < arrayBestTimes[time]){
-                    arrayBestTimes[time + 1] = arrayBestTimes[time];
-                    arrayBestTimes[time] = newtime;
-                    return arrayBestTimes;
-                }
-              }             
-        }
-
->>>>>>> d2c99c57f4fa7ed95d74362147e51f907b7405db
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
             let tempRating: number;
             let tempBestTimes: number[];
@@ -110,9 +86,9 @@ module Route {
                 } else {
                     db.collection('tracks').findOne({ _id: req.params.id })
                         .then((trackDB) => {
-                            tempRating = UpdateTrack.updateRating( req.body.numberOfTimesPlayed,
-                                                                   trackDB.rating,
-                                                                   req.body.rating
+                            tempRating = UpdateTrack.updateRating(req.body.numberOfTimesPlayed,
+                                                                  trackDB.rating,
+                                                                  req.body.rating
                             );
                             tempBestTimes = UpdateTrack.updateBestTimes(trackDB.bestTimes, req.body.time);
                             tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
@@ -124,8 +100,8 @@ module Route {
                                         numberOfTimesPlayed: tempNbOfTimesPlayed} },
                                         { upsert: false
                             });
+                            res.send({ 'data': 'success' });
                         });
-                    res.send({ 'data': 'success' }); // On doit plutôt retourner le track
                 }
 
             });
