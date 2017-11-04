@@ -26,6 +26,7 @@ export class TerrainGenerationService {
         this.textureSky = THREE.ImageUtils.loadTextureCube(images);
 
         scene.add(this.generateTable(track));
+        scene.add(this.generateRaceStartPlaid(track));
 
         this.generateIntersections(track).concat(this.generateSegments(track)).forEach(instersection => {
             scene.add(instersection);
@@ -90,6 +91,23 @@ export class TerrainGenerationService {
             intersectionMesh.position.y = 1;
             return intersectionMesh;
         });
+    }
+
+    private generateRaceStartPlaid(track: Track): THREE.Mesh {
+        const geometry = new THREE.PlaneGeometry(this.scale * trackRadius * 2 / 20 * 3, this.scale * trackRadius * 2);
+        geometry.rotateX(Math.PI / -2);
+        const m = THREE.ImageUtils.loadTexture('assets/plaid_start_v2.jpg');
+        const material = new THREE.MeshStandardMaterial({map: m, metalness: 0, roughness: 0, envMap: this.textureSky});
+        const plaidMesh = new THREE.Mesh(geometry, material);
+
+        const fromPosition = track.trackIntersections[0];
+        const toPosition = track.trackIntersections[1];
+        plaidMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
+        plaidMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
+        plaidMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
+        plaidMesh.position.y = 2;
+
+        return plaidMesh;
     }
 
 }
