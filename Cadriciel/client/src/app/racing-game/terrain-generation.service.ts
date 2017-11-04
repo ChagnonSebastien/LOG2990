@@ -2,6 +2,8 @@ import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
+const trackRadius = 10;
+
 @Injectable()
 export class TerrainGenerationService {
 
@@ -22,6 +24,7 @@ export class TerrainGenerationService {
         url + 'ypos.png', url + 'yneg.png',
         url + 'zpos.png', url + 'zneg.png'];
         this.textureSky = THREE.ImageUtils.loadTextureCube(images);
+
         scene.add(this.generateTable(track));
 
         this.generateIntersections(track).concat(this.generateSegments(track)).forEach(instersection => {
@@ -37,8 +40,8 @@ export class TerrainGenerationService {
 
         const tableMaterial = new THREE.MeshStandardMaterial ( {color: 0xF0F0F0, roughness: 0, metalness: 0, envMap: this.textureSky} );
         const tableGeometry = new THREE.PlaneGeometry(
-            (this.scale * (maximumX - minimumX)) + (this.scale * 40 * 3),
-            (this.scale * (maximumY - minimumY)) + (this.scale * 40 * 3),
+            (this.scale * (maximumX - minimumX)) + (this.scale * trackRadius * 10),
+            (this.scale * (maximumY - minimumY)) + (this.scale * trackRadius * 10),
             1,
             1
         );
@@ -58,7 +61,7 @@ export class TerrainGenerationService {
             const fromPosition = intersection;
             const toPosition = array[index + 1 < array.length ? index + 1 : 0];
 
-            const geometry = new THREE.PlaneGeometry(this.scale * this.getDistance(fromPosition, toPosition), this.scale * 20);
+            const geometry = new THREE.PlaneGeometry(this.scale * this.getDistance(fromPosition, toPosition), this.scale * trackRadius * 2);
             geometry.rotateX(Math.PI / -2);
 
             const segmentMesh = new THREE.Mesh(geometry, material);
@@ -76,7 +79,7 @@ export class TerrainGenerationService {
     }
 
     private generateIntersections(track: Track): THREE.Mesh[] {
-        const geometry = new THREE.CircleGeometry(this.scale * 10, 32);
+        const geometry = new THREE.CircleGeometry(this.scale * trackRadius, 32);
         geometry.rotateX(Math.PI / -2);
         const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
 
