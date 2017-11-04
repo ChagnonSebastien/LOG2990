@@ -31,6 +31,12 @@ export class TerrainGenerationService {
         this.generateIntersections(track).concat(this.generateSegments(track)).forEach(instersection => {
             scene.add(instersection);
         });
+
+        this.generateCones(track).then(cones => {
+            cones.forEach(cone => {
+                scene.add(cone);
+            });
+        });
     }
 
     private generateTable(track: Track): THREE.Mesh {
@@ -108,6 +114,38 @@ export class TerrainGenerationService {
         plaidMesh.position.y = 2;
 
         return plaidMesh;
+    }
+
+    private generateCones(track): Promise<THREE.Mesh[]> {
+        const maximumX = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.x));
+        const minimumX = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.x));
+        const maximumY = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.y));
+        const minimumY = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.y));
+
+        const service = this;
+        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
+            function loadDone(cone) {
+                cone.scale.set(20 * service.scale, 20 * service.scale, 20 * service.scale);
+                const cones: THREE.Mesh[] = [];
+                for (let i = 0; i < 10; i++) {
+                    const newCone = <THREE.Mesh> cone.clone();
+                    newCone.rotateY(Math.random() * Math.PI);
+                    newCone.position.x = service.scale * ((Math.random() * (Math.abs(maximumX) + Math.abs(minimumX))) + minimumX);
+                    newCone.position.z = service.scale * ((Math.random() * (Math.abs(maximumY) + Math.abs(minimumY))) + minimumY);
+                    cones.push(newCone);
+                }
+                resolve(cones);
+            }
+            new THREE.ObjectLoader().load('/assets/cone.json', loadDone,
+            (object: any) => {
+                console.log('prog: ', object);
+            },
+            (object: any) => {
+                console.log('err: ', object);
+            });
+        });
+
+        return loaderPromise;
     }
 
 }
