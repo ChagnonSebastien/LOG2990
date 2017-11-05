@@ -25,6 +25,7 @@ export class GameManagerService {
             });
 
             this.socket.on('game created', data => {
+                console.log(data);
                 this.game.id = data;
             });
         });
