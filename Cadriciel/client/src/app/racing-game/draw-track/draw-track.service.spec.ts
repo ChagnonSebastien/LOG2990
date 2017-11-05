@@ -39,10 +39,23 @@ describe('DrawTrackService', function () {
             ]
         });
         drawTrackService = TestBed.get(DrawTrackService);
+        drawTrackService.initialise(document.createElement('div'));
     });
 
     it('should be created', () => {
         expect(drawTrackService).toBeTruthy();
+    });
+
+    describe('initialise', function () {
+
+        it('should prepare it\'s RenderService', () => {
+            expect(drawTrackService['renderService']['obstacleService'] === drawTrackService['obstacleService']).toBeTruthy();
+            expect(drawTrackService['renderService']['trackValidationService'] === drawTrackService['trackValidationService']).toBeTruthy();
+        });
+
+        it('should prepare it\'s ObstacleService', () => {
+            expect(drawTrackService['obstacleService']['track'] === drawTrackService['intersections']).toBeTruthy();
+        });
     });
 
     it('should be able to definie if loop is closed', () => {
