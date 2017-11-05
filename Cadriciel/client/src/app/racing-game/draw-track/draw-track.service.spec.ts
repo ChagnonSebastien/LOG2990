@@ -346,4 +346,34 @@ describe('DrawTrackService', function () {
         expect(drawTrackService.onResize()).toBeTruthy();
     }));
 
+    describe('clear()', function () {
+
+        beforeAll(() => {
+            drawTrackService.clear();
+        });
+
+        it('should remove all intersections but the active one', () => {
+            expect(drawTrackService['intersections'].length).toEqual(1);
+        });
+
+        it('should reopen the track', () => {
+            expect(drawTrackService['trackClosed']).toBeFalsy();
+        });
+
+        it('should reset the mouse position', () => {
+            expect(drawTrackService['mousePosition'].x).toEqual(0);
+            expect(drawTrackService['mousePosition'].y).toEqual(0);
+        });
+
+        it('should remove all obstacles', () => {
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(0);
+        });
+
+        it('should clear the track validation service', () => {
+            expect(drawTrackService['trackValidationService']['trackElements'].length).toEqual(1);
+        });
+    });
+
 });
