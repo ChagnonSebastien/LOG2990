@@ -296,6 +296,16 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('removeIntersection() pt3', function () {
+
+        it('should remove all obstacles if re-opening the track', () => {
+            drawTrackService.removeIntersection();
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(0);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
