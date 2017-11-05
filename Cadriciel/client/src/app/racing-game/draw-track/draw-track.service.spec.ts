@@ -315,6 +315,16 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('randomizeAllPositions() pt2', function () {
+
+        it('should not do anything id the track is opened', () => {
+            drawTrackService.randomizeAllPositions(ObstacleType.Pothole);
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(0);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
