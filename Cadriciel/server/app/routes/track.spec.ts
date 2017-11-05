@@ -8,7 +8,7 @@ describe('Track', () => {
 
     it('Should create a new track in the database', (done) => {
         chai.request(apiUrl)
-            .post('/tracks')
+            .post('/track')
             .send({
                 name: 'testfrsdt',
                 description: 'this is a test',
@@ -33,6 +33,16 @@ describe('Track', () => {
             });
     });
 
+    it('Should change track rating, numberOfTimesPlayed and bestTimes', (done) => {
+        chai.request(apiUrl)
+            .post('/track/update/testfrsdt')
+            .send({ numberOfTimesPlayed: 1, rating: 5, time: 7 })
+            .end((err: any, res: any) => {
+                assert(JSON.parse(res.text).data === 'success');
+                done();
+            });
+    });
+
     it('Should delete the previously created track', (done) => {
         chai.request(apiUrl)
             .delete('/track/testfrsdt')
@@ -42,15 +52,5 @@ describe('Track', () => {
                 done();
             });
     });
-
-    it('Should change track rating, numberOfTimesPlayed and bestTimes', (done) => {
-        chai.request(apiUrl)
-            .post('/track/update/TokyoCircuit')
-            .send({ numberOfTimesPlayed: 1, rating: 5, time: 10 })
-            .end((err: any, res: any) => {
-                assert(JSON.parse(res.text).data === 'success');
-                done();
-            });
-    }).timeout(15000);
 
 });
