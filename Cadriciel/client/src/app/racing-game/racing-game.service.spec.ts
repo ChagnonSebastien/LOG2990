@@ -19,15 +19,17 @@ describe('RacingGameService', () => {
         expect(service).toBeTruthy();
     }));
 
-    it('should be alerted when main vehicle is initialized', () => {
-        racingGameService.vehicleAlerts().subscribe((vehicle) => {
-            expect(vehicle).toBeTruthy();
+    it('Should initialize main 3D vehicle', (done) => {
+        racingGameService.initializeMainVehicle().then(function(data) {
+            expect(data).toBeDefined();
+            done();
         });
     });
 
-    it('should be alerted when all the opponents vehicles are initialized', () => {
-        racingGameService.opponentsAlerts().subscribe((vehicle) => {
-            expect(vehicle).toBeTruthy();
+    it('Should initialize opponents 3D vehicles(3)', (done) => {
+        racingGameService.initializeOpponentsVehicles().then(function(data) {
+            expect(data).toBeDefined();
+            done();
         });
     });
 
