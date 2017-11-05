@@ -13,28 +13,28 @@ class MockTrackService extends TrackService {
     public save(track: Track): Promise<string> {
         return Promise.resolve('success');
     }
+
 }
 
-const renderServiceStub = {};
-const trackValidationServiceStub = {};
-const obstacleServiceStub = {
-    getObstacles(type: ObstacleType): Obstacle[] {
-        return [];
+class MockRenderService extends RenderService {
+    public initialise(container, trackValidationService, obstacleService) {
+        this['trackValidationService'] = trackValidationService;
+        this['obstacleService'] = obstacleService;
     }
-};
+}
 
 let drawTrackService;
 
 describe('DrawTrackService', function () {
 
-    beforeEach(() => {
+    beforeAll(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule],
             providers: [
                 DrawTrackService,
-                { provide: TrackValidationService, useValue: trackValidationServiceStub },
-                { provide: RenderService, useValue: renderServiceStub },
-                { provide: ObstacleService, useValue: obstacleServiceStub },
+                TrackValidationService,
+                ObstacleService,
+                { provide: RenderService, useClass: MockRenderService },
                 { provide: TrackService, useClass: MockTrackService },
             ]
         });
