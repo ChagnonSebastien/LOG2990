@@ -286,6 +286,16 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('randomizeAllPositions()', function () {
+
+        it('should randomize the position of all obstacles of any type', () => {
+            const previousPothole: Obstacle = drawTrackService['obstacleService']['potholes'][0];
+            drawTrackService.randomizeAllPositions(ObstacleType.Pothole);
+            expect(drawTrackService['obstacleService']['boosters'][0].distance === previousPothole.distance).toBeFalsy();
+            expect(drawTrackService['obstacleService']['boosters'][0].offset === previousPothole.offset).toBeFalsy();
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
