@@ -376,4 +376,31 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('loadTrack()', function () {
+
+        beforeAll(async(done) => {
+            await drawTrackService.loadTrack();
+            done();
+        });
+
+        it('should add the given intersections', () => {
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            expect(drawTrackService['intersections'][0].x).toEqual(0);
+            expect(drawTrackService['intersections'][0].y).toEqual(0);
+            expect(drawTrackService['intersections'][1].x).toEqual(100);
+            expect(drawTrackService['intersections'][1].y).toEqual(-100);
+            expect(drawTrackService['intersections'][2].x).toEqual(0);
+            expect(drawTrackService['intersections'][2].y).toEqual(-200);
+        });
+
+        it('should close the track', () => {
+            expect(drawTrackService['trackClosed']).toBeTruthy();
+        });
+
+        it('should add the correct obstacles', () => {
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(1);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(3);
+        });
+    });
 });
