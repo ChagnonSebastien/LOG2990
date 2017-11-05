@@ -210,6 +210,101 @@ describe('#CrosswordGridService', () => {
         });
     });
 
+    describe('updateWordFoundStatus()', () => {
+        beforeEach(() => {
+            gridService.initialize(grid, wordsWithIndex);
+        });
+
+        it('should mark word as found once all inputs match the answer', () => {
+            const rat = wordsWithIndex[4];
+            // word 'rat' not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            // found 1 letter
+            gridService.grid[0][7].input = gridService.grid[0][7].answer;
+            gridService.updateWordFoundStatus(rat);
+            // word 'rat' not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            // found 2 letters
+            gridService.grid[0][8].input = gridService.grid[0][8].answer;
+            gridService.updateWordFoundStatus(rat);
+            // word 'rat' not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            // found all letters
+            gridService.grid[0][9].input = gridService.grid[0][9].answer;
+            gridService.updateWordFoundStatus(rat);
+            // word 'rat' found
+            expect(gridService.grid[0][7].found).toBeTruthy();
+            expect(gridService.grid[0][8].found).toBeTruthy();
+            expect(gridService.grid[0][9].found).toBeTruthy();
+        });
+
+        it('should unselect word once it is found', () => {
+            const rat = wordsWithIndex[4];
+
+            // select the word rat
+            gridService.grid[0][7].selected = true;
+            gridService.grid[0][8].selected = true;
+            gridService.grid[0][9].selected = true;
+
+            // word 'rat' not found
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            // word 'rat selected
+            expect(gridService.grid[0][7].selected).toBeTruthy();
+            expect(gridService.grid[0][8].selected).toBeTruthy();
+            expect(gridService.grid[0][9].selected).toBeTruthy();
+
+            // input correct letters
+            gridService.grid[0][7].input = gridService.grid[0][7].answer;
+            gridService.grid[0][8].input = gridService.grid[0][8].answer;
+            gridService.grid[0][9].input = gridService.grid[0][9].answer;
+            gridService.updateWordFoundStatus(rat);
+
+            // word 'rat' found
+            expect(gridService.grid[0][7].found).toBeTruthy();
+            expect(gridService.grid[0][8].found).toBeTruthy();
+            expect(gridService.grid[0][9].found).toBeTruthy();
+
+            // word 'rat' unselected
+            expect(gridService.grid[0][7].selected).toBeFalsy();
+            expect(gridService.grid[0][8].selected).toBeFalsy();
+            expect(gridService.grid[0][9].selected).toBeFalsy();
+        });
+
+        it('should add word to found words when it is found', () => {
+            const rat = wordsWithIndex[4];
+
+            // word 'rat' not found
+            expect(gridService['pointsService'].found('rat')).toBeFalsy();
+            expect(gridService.grid[0][7].found).toBeFalsy();
+            expect(gridService.grid[0][8].found).toBeFalsy();
+            expect(gridService.grid[0][9].found).toBeFalsy();
+
+            // input correct letters
+            gridService.grid[0][7].input = gridService.grid[0][7].answer;
+            gridService.grid[0][8].input = gridService.grid[0][8].answer;
+            gridService.grid[0][9].input = gridService.grid[0][9].answer;
+            gridService.updateWordFoundStatus(rat);
+
+            // word 'rat' found
+            expect(gridService['pointsService'].found('rat')).toBeTruthy();
+            expect(gridService.grid[0][7].found).toBeTruthy();
+            expect(gridService.grid[0][8].found).toBeTruthy();
+            expect(gridService.grid[0][9].found).toBeTruthy();
+        });
+    });
+
     describe('markWordAsFound()', () => {
         beforeEach(() => {
             gridService.initialize(grid, wordsWithIndex);
