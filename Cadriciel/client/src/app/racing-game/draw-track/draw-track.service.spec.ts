@@ -98,7 +98,28 @@ describe('DrawTrackService', function () {
         });
     });
 
-    describe('saveTrack', function () {
+    describe('updateRealMousePosition()', function () {
+
+        it('should update the last intersection\'s position', () => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(123, 3456);
+            drawTrackService.updateRealMousePosition();
+            expect(drawTrackService['intersections'][1].x).toEqual(123);
+            expect(drawTrackService['intersections'][1].y).toEqual(3456);
+        });
+
+        it('should detect if the mouse is not above any point', () => {
+            expect(drawTrackService['pointMouseHoversOn']).toEqual(-1);
+        });
+
+        it('should detect if the mouse is above a point', () => {
+            drawTrackService.addIntersection();
+            drawTrackService['mousePosition'] = new THREE.Vector2(-1, 9);
+            drawTrackService.updateRealMousePosition();
+            expect(drawTrackService['pointMouseHoversOn']).toEqual(0);
+        });
+    });
+
+    describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
 
