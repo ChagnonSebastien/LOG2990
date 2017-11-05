@@ -18,7 +18,6 @@ export module UpdateTrack {
             arrayBestTimes.sort((a, b) => {
                     return a - b;
             });
-            console.log( 'sort de updateBestTimes', arrayBestTimes);
             arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
             if (newtime < arrayBestTimes[arrayBestTimes.length - 1]) {
                 arrayBestTimes[arrayBestTimes.length - 1] = newtime;
