@@ -119,6 +119,29 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('addIntersection() pt2', function () {
+
+        it('should not add a new intersection nor close the track if the mouse is on the first point and there are 1 or 2 points', () => {
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            drawTrackService.addIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            expect(drawTrackService['trackClosed']).toBeFalsy();
+        });
+
+        it('should not add a point above any other point', () => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(34, 56);
+            drawTrackService.updateRealMousePosition();
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            drawTrackService.addIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(4);
+            drawTrackService['mousePosition'] = new THREE.Vector2(123, 3456);
+            drawTrackService.updateRealMousePosition();
+            expect(drawTrackService['intersections'].length).toEqual(4);
+            drawTrackService.addIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(4);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
