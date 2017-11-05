@@ -51,24 +51,14 @@ describe('DrawTrackService', function () {
         expect(drawTrackService.isFinished()).toEqual(false);
     });
 
-    it('should be able to calculate distance between two points', () => {
-        const vector1 = new THREE.Vector2(1, 1);
-        const vector2 = new THREE.Vector2(1, 2);
-        expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
+    describe('saveTrack', function () {
+        it('should be able to post to the server a track and receive a response', fakeAsync(() => {
+            let result: String;
+
+            drawTrackService.saveTrack('name', 'description', 'difficulty')
+                .then((serverResponse: String) => result = serverResponse);
+            tick();
+            expect(result).toBe('success');
+        }));
     });
-
-    it('should be able to calculates the relative position', () => {
-        const vector1 = new THREE.Vector2(1, 1);
-        const vector2 = new THREE.Vector2(1, 2);
-        expect(drawTrackService.getXYDistance(vector1, vector2)).toEqual(1);
-    });
-
-    it('should be able to post to the server a track and receive a response', fakeAsync(() => {
-        let result: String;
-
-        drawTrackService.saveTrack('name', 'description', 'difficulty')
-            .then((serverResponse: String) => result = serverResponse);
-        tick();
-        expect(result).toBe('success');
-    }));
 });
