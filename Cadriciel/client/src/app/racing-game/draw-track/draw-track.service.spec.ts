@@ -340,4 +340,10 @@ describe('DrawTrackService', function () {
             expect(result).toBe('success');
         }));
     });
+
+    it('onResize() should pass call the RenderService', fakeAsync(() => {
+        drawTrackService.onResize();
+        expect(drawTrackService.onResize()).toBeTruthy();
+    }));
+
 });

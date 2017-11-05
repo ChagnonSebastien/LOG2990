@@ -192,7 +192,7 @@ export class DrawTrackService {
     }
 
     public onResize() {
-        this.renderService.onResize();
+        return this.renderService.onResize();
     }
 
     public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
