@@ -208,6 +208,18 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('isFinished()', function () {
+
+        it('should be able to return if loop is open', () => {
+            expect(drawTrackService.isFinished()).toBeFalsy();
+        });
+
+        it('should be able to return if loop is closed', () => {
+            drawTrackService.addIntersection();
+            expect(drawTrackService.isFinished()).toBeTruthy();
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
