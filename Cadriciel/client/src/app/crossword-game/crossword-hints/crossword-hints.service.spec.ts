@@ -56,6 +56,20 @@ describe('#CrosswordHintsService', () => {
         expect(hintsService).toBeDefined();
     });
 
+    it('should mark a hint as found when alerted by the CrosswordPointsService', async () => {
+        await hintsService.newGame(wordsWithIndex);
+        expect(hintsService.hints[0].found).toBeFalsy();
+        hintsService['pointsService']['foundWordSubject'].next('huh');
+        expect(hintsService.hints[0].found).toBeTruthy();
+    });
+
+    it('should unselect a hint when it is alerted as found by the CrosswordPointsService', async () => {
+        hintsService.selectWord('huh');
+        expect(hintsService.selectedWord).toEqual('huh');
+        hintsService['pointsService']['foundWordSubject'].next('huh');
+        expect(hintsService.selectedWord).toBeUndefined();
+    });
+
     describe('newGame()', () => {
         it('should initialize a new game', () => {
             hintsService.newGame(wordsWithIndex);
@@ -75,8 +89,8 @@ describe('#CrosswordHintsService', () => {
             }
         });
 
-        it('should create a hint for every word in wordsWithIndex with its definition', () => {
-            hintsService.newGame(wordsWithIndex);
+        it('should create a hint for every word in wordsWithIndex with its definition', async () => {
+            await hintsService.newGame(wordsWithIndex);
 
             // every word of wordsWithIndex is in hints
             for (const hint of hintsService.hints) {
