@@ -198,6 +198,16 @@ describe('DrawTrackService', function () {
 
     });
 
+    describe('removeIntersection() pt2', function () {
+
+        it('should reopen the track if it was closed and re-add the active point', () => {
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            drawTrackService.removeIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(4);
+            expect(drawTrackService['trackClosed']).toBeFalsy();
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
