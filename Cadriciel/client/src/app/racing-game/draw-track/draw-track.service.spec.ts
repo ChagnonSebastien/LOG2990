@@ -326,6 +326,11 @@ describe('DrawTrackService', function () {
     });
 
     describe('saveTrack()', function () {
+
+        beforeAll(() => {
+            drawTrackService.addIntersection();
+        });
+
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
 
