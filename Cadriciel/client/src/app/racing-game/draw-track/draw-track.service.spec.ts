@@ -14,6 +14,21 @@ class MockTrackService extends TrackService {
         return Promise.resolve('success');
     }
 
+    public get(trackName: string): Promise<Track> {
+        return Promise.resolve( new Track(
+            'name',
+            'description',
+            'type',
+            [new THREE.Vector2(0, 0), new THREE.Vector2(100, 100), new THREE.Vector2(0, 200)],
+            [new Obstacle(ObstacleType.Puddle, 1, 0.4, 0.3)],
+            [],
+            [
+                new Obstacle(ObstacleType.Booster, 2, 0.3, 0.9),
+                new Obstacle(ObstacleType.Booster, 1, 0.2, 0.7),
+                new Obstacle(ObstacleType.Booster, 2, 0.1, 0.3)
+            ]
+        ));
+    }
 }
 
 class MockRenderService extends RenderService {
@@ -21,6 +36,13 @@ class MockRenderService extends RenderService {
         this['trackValidationService'] = trackValidationService;
         this['obstacleService'] = obstacleService;
     }
+
+    public addIntersection(mousePosition) {}
+    public closeTrack() {}
+    public removeIntersection() {}
+    public openTrack(mousePosition) {}
+    public updateObstaclesPositions() {}
+    public onResize() { return true; }
 }
 
 let drawTrackService;
@@ -46,7 +68,7 @@ describe('DrawTrackService', function () {
         expect(drawTrackService).toBeTruthy();
     });
 
-    describe('initialise', function () {
+    describe('initialise()', function () {
 
         it('should prepare it\'s RenderService', () => {
             expect(drawTrackService['renderService']['obstacleService'] === drawTrackService['obstacleService']).toBeTruthy();
