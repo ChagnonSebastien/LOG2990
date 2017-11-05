@@ -32,7 +32,6 @@ export class CrosswordGameComponent implements OnInit {
         if (this.gameManagerServicePlayer1.getGame().option === 'solo') {
             this.newGame();
         } else {
-            console.log('good');
             this.newMultiplayerGame();
         }
     }

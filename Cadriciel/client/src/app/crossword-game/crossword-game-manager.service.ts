@@ -20,12 +20,10 @@ export class GameManagerService {
 
             this.socket.on('player 2 joined', data => {
                 this.game = data;
-                console.log(data);
                 this.playerTwoSubject.next('player 2 joined');
             });
 
             this.socket.on('game created', data => {
-                console.log(data);
                 this.game.id = data;
             });
         });
