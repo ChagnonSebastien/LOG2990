@@ -306,6 +306,15 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('addObstacle() pt2', function () {
+
+        it('should not add an obstacle if the track is opened', () => {
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            drawTrackService.addObstacle(ObstacleType.Pothole);
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
