@@ -142,6 +142,28 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('removeIntersection()', function () {
+
+        it('should remove the last intersection', () => {
+            expect(drawTrackService['intersections'].length).toEqual(4);
+            drawTrackService.removeIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(3);
+        });
+
+        it('should leave the active point at the mouse position', () => {
+            drawTrackService.removeIntersection();
+            drawTrackService.removeIntersection();
+            expect(drawTrackService['intersections'][0].x).toEqual(123);
+            expect(drawTrackService['intersections'][0].y).toEqual(3456);
+        });
+
+        it('should not remove any point if there is only the active point', () => {
+            expect(drawTrackService['intersections'].length).toEqual(1);
+            drawTrackService.removeIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(1);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
