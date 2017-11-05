@@ -164,6 +164,29 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('updateRealMousePosition() pt2', function () {
+
+        beforeAll(() => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(0, 0);
+            drawTrackService.updateRealMousePosition();
+            drawTrackService.addIntersection();
+            drawTrackService['mousePosition'] = new THREE.Vector2(200, 200);
+            drawTrackService.updateRealMousePosition();
+            drawTrackService.addIntersection();
+            drawTrackService['mousePosition'] = new THREE.Vector2(0, 200);
+            drawTrackService.updateRealMousePosition();
+            drawTrackService.addIntersection();
+        });
+
+        it('should snap to the first point when there are more than 2 points', () => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(4, 4);
+            drawTrackService.updateRealMousePosition();
+            expect(drawTrackService['mousePosition'].x).toEqual(0);
+            expect(drawTrackService['mousePosition'].y).toEqual(0);
+        });
+
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
