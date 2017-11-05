@@ -268,6 +268,24 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('addObstacle()', function () {
+
+        it('should add an obstacle of a any type', () => {
+            drawTrackService.addObstacle(ObstacleType.Booster);
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(1);
+            drawTrackService.addObstacle(ObstacleType.Pothole);
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(1);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(0);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(1);
+            drawTrackService.addObstacle(ObstacleType.Puddle);
+            expect(drawTrackService['obstacleService']['potholes'].length).toEqual(1);
+            expect(drawTrackService['obstacleService']['puddles'].length).toEqual(1);
+            expect(drawTrackService['obstacleService']['boosters'].length).toEqual(1);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
