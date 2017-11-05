@@ -8,6 +8,7 @@ export class GameManagerServicePlayer1 extends GameManagerService  {
     public socket: SocketIOClient.Socket;
     constructor(protected socketHandlerSerivce: SocketHandlerSerivce) {
         super(socketHandlerSerivce);
+
     }
 
     public createGame(type: string, difficulty: string, mode: string, player1: Player) {

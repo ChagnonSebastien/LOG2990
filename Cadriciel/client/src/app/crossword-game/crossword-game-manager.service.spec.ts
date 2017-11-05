@@ -1,8 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { GameManagerService } from './crossword-game-manager.service';
 import { GameManagerServicePlayer1 } from './crossword-game-manager-player1.service';
 import { GameManagerServicePlayer2 } from './crossword-game-manager-player2.service';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
+import { Player } from '../../../../commun/crossword/player';
 import * as io from 'socket.io-client';
 
 let gameManagerService1: GameManagerServicePlayer1;
@@ -49,5 +50,28 @@ describe('GameManagerService', () => {
     it('client 1 and 2 should have different connections', () => {
         expect(gameManagerService1.socket.id === gameManagerService2.socket.id).toBeFalsy();
     });
+
+    /*it('client should be able to create a multiplayer game', (done) => {
+        const player1 = new Player();
+        player1.socketID = gameManagerService1.socket.id;
+        gameManagerService1.createGame('multiplayer', 'easy', 'classic', player1);
+        setTimeout(function () {
+            expect(gameManagerService1.getGame().id === '-1').toBeFalsy();
+            done();
+        }, 2000);
+    });*/
+
+   /* it('client 2 should be able to join created game', (done) => {
+        const player1 = new Player();
+        player1.socketID = gameManagerService1.socket.id;
+        gameManagerService1.createGame('multiplayer', 'easy', 'classic', player1);
+        setTimeout(function () {
+            const player2 = new Player();
+            player2.socketID = gameManagerService2.socket.id;
+            gameManagerService2.joinGame(gameManagerService1.getGame().id, player2);
+            expect(gameManagerService1.getGame().option).toEqual('multiplayer');
+            done();
+        }, 1000);
+    });*/
 
 });

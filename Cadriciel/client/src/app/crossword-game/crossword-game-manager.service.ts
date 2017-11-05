@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Game } from '../../../../commun/crossword/game';
-import { Player } from '../../../../commun/crossword/player';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
 
 @Injectable()
@@ -23,6 +22,10 @@ export class GameManagerService {
                 this.game = data;
                 console.log(data);
                 this.playerTwoSubject.next('player 2 joined');
+            });
+
+            this.socket.on('game created', data => {
+                this.game.id = data;
             });
         });
     }

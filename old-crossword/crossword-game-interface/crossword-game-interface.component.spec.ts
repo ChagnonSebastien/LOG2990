@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ServiceFixture, TestBed } from '@angular/core/testing';
 import { CrosswordGameInterfaceComponent } from './crossword-game-interface.component';
 import { HttpModule } from '@angular/http';
 import {OldLexiconService} from '../services/lexicon.service';

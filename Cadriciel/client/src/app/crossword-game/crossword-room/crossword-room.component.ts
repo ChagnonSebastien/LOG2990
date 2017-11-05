@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { GameManagerService } from '../crossword-game-manager.service';
 import { GameManagerServicePlayer2 } from '../crossword-game-manager-player2.service';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 

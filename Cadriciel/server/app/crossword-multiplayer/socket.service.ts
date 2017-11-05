@@ -19,7 +19,7 @@ export class SocketManager {
             socket.on('createGame', (type: string, difficulty: string, mode: string, player1: Player) => {
 
                 this.gameManager.createGame(type, difficulty, mode, player1).then(game => {
-                    socket.emit('gameCreated', game);
+                    socket.emit('gameCreated', game.id);
                 });
             });
             socket.on('getGames', () => {

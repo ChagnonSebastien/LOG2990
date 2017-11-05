@@ -10,7 +10,7 @@ export class Game {
         public crossword: CrosswordDB;
                
             constructor( ) {
-                this.id = '';
+                this.id = '-1';
                 this.difficulty = '';
                 this.mode = '';
                 this.option = 'solo';
