@@ -39,8 +39,7 @@ export class DrawTrackService {
             this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
             this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
             return {description: track.description, difficulty: track.type};
-        })
-        .catch(this.handleError);
+        });
     }
 
     private loadIntersection(trackIntersections: THREE.Vector2[]) {
@@ -208,10 +207,5 @@ export class DrawTrackService {
         );
 
         return this.trackService.save(trackToSave);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
     }
 }
