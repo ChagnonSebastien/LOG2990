@@ -187,6 +187,17 @@ describe('DrawTrackService', function () {
 
     });
 
+    describe('addIntersection() pt3', function () {
+
+        it('should close the track and remove the moving point if the mouse is on the first point and there are more than 2 points', () => {
+            expect(drawTrackService['intersections'].length).toEqual(4);
+            drawTrackService.addIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(3);
+            expect(drawTrackService['trackClosed']).toBeTruthy();
+        });
+
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
