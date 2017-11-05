@@ -245,6 +245,29 @@ describe('DrawTrackService', function () {
         });
     });
 
+    describe('endDrag()', function () {
+
+        it('should remove the dragged point from it\'s dragged point variable', () => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(0, 0);
+            drawTrackService.updateRealMousePosition();
+            drawTrackService.endDrag();
+            expect(drawTrackService['currentlyDraggedIntersection']).toEqual(-1);
+        });
+
+        it('should stop dragging the point whan the mouse moves', () => {
+            drawTrackService['mousePosition'] = new THREE.Vector2(100, 12222);
+            drawTrackService.updateRealMousePosition();
+            drawTrackService.startDrag();
+            expect(drawTrackService['intersections'][0].x).toEqual(0);
+            expect(drawTrackService['intersections'][0].y).toEqual(0);
+        });
+
+        it('should do nothing if no point is beoing dragged', () => {
+            drawTrackService.endDrag();
+            expect(drawTrackService['currentlyDraggedIntersection']).toEqual(-1);
+        });
+    });
+
     describe('saveTrack()', function () {
         it('should be able to post to the server a track and receive a response', fakeAsync(() => {
             let result: String;
