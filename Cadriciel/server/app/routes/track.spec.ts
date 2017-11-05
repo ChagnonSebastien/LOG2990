@@ -48,8 +48,6 @@ describe('Track', () => {
             .post('/track/update/TokyoCircuit')
             .send({ numberOfTimesPlayed: 1, rating: 5, time: 10 })
             .end((err: any, res: any) => {
-             //   const track = JSON.parse(res.text);
-             //  assert(track.value.rating === 2);
                 assert(JSON.parse(res.text).data === 'success');
                 done();
             });

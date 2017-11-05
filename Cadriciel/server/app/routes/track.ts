@@ -52,7 +52,6 @@ module Route {
         }
 
         public addTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
-
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
@@ -77,13 +76,13 @@ module Route {
 
         }
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
-            let tempRating: number;
+ /*           let tempRating: number;
             let tempBestTimes: number[];
-            let tempNbOfTimesPlayed: number;
+            let tempNbOfTimesPlayed: number; */
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
-                } else {
+                } /*else {
                     db.collection('tracks').findOne({ _id: req.params.id })
                         .then((trackDB) => {
                             tempRating = UpdateTrack.updateRating(req.body.numberOfTimesPlayed,
@@ -103,7 +102,7 @@ module Route {
                             res.send({ 'data': 'success' });
                         });
                 }
-
+*/
             });
         }
 
