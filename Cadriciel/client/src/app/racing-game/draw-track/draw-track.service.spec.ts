@@ -80,10 +80,22 @@ describe('DrawTrackService', function () {
         });
     });
 
-    it('should be able to definie if loop is closed', () => {
-        drawTrackService['trackClosed'] = false;
-        expect((drawTrackService as any).isFinished()).toEqual(false);
-        expect(drawTrackService.isFinished()).toEqual(false);
+    describe('addIntersection()', function () {
+
+        it('should add a new intersection', () => {
+            drawTrackService.addIntersection();
+            expect(drawTrackService['intersections'].length).toEqual(2);
+        });
+
+        it('the new intersection should be at the mouse position', () => {
+            expect(drawTrackService['intersections'][0].x).toEqual(0);
+            expect(drawTrackService['intersections'][0].y).toEqual(0);
+        });
+
+        it('the new last point should be at the mouse position', () => {
+            expect(drawTrackService['intersections'][1].x).toEqual(0);
+            expect(drawTrackService['intersections'][1].y).toEqual(0);
+        });
     });
 
     describe('saveTrack', function () {
