@@ -9,15 +9,18 @@ import { CountdownService } from './countdown.service';
     providers: [CountdownService]
 })
 export class CountdownComponent {
-    public countdown: Observable<number>;
-    public count: number;
+    private countdown: Observable<number>;
+    private count: number;
+    private countdownStarted: boolean;
 
     constructor(private countdownService: CountdownService) {
-        this.count = 60;
+        this.count = 10;
+        this.countdownStarted = false;
     }
 
-    public startCountdown(event: any) {
-        if (event.keyCode === 32) {
+    private startCountdown(event: any) {
+        if (event.keyCode === 32 && this.countdownStarted === false) {
+            this.countdownStarted = true;
             this.countdown = this.countdownService.startCountdown(this.countdown, this.count);
         }
     }
