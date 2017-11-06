@@ -1,8 +1,10 @@
+import { element } from 'protractor';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 const trackRadius = 10;
+const coneRadius = 20;
 
 @Injectable()
 export class TerrainGenerationService {
@@ -13,7 +15,7 @@ export class TerrainGenerationService {
 
     private textureSky: THREE.Texture;
 
-    private decorElements: {object: THREE.Mesh, radius: number}[];
+    private decorElements: {object: THREE.Mesh, radius: number}[] = [];
 
     constructor() {
 
@@ -127,22 +129,18 @@ export class TerrainGenerationService {
     }
 
     private generateCones(): Promise<THREE.Mesh[]> {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-
         const service = this;
         const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
             function loadDone(cone) {
-                cone.scale.set(20 * service.scale, 20 * service.scale, 20 * service.scale);
+                cone.scale.set(coneRadius * service.scale, coneRadius * service.scale, coneRadius * service.scale);
                 const cones: THREE.Mesh[] = [];
                 for (let i = 0; i < 10; i++) {
                     const newCone = <THREE.Mesh> cone.clone();
                     newCone.rotateY(Math.random() * Math.PI);
-                    newCone.position.x = service.scale * ((Math.random() * (Math.abs(maximumX) + Math.abs(minimumX))) + minimumX);
-                    newCone.position.z = service.scale * ((Math.random() * (Math.abs(maximumY) + Math.abs(minimumY))) + minimumY);
+                    const newPosition = service.getFreePropSpot(coneRadius);
+                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
                     cones.push(newCone);
+                    service.decorElements.push( {object: cone, radius: coneRadius} );
                 }
                 resolve(cones);
             }
@@ -151,6 +149,24 @@ export class TerrainGenerationService {
         });
 
         return loaderPromise;
+    }
+
+    private getFreePropSpot(requiredRadius: number) {
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+        let point;
+        let x = 100;
+        do {
+            point = new THREE.Vector2(
+                minimumX + (Math.random() * (maximumX - minimumX)),
+                minimumY + (Math.random() * (maximumY - minimumY))
+            );
+            x--;
+        } while (this.availableRadius(point) < requiredRadius && x > 0);
+
+        return point;
     }
 
     private availableRadius(point: THREE.Vector2): number {
