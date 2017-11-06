@@ -3,7 +3,7 @@ import { KeyboardService } from './keyboard.service';
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordGameService } from './crossword-game.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
-import { GameManagerService } from './crossword-game-manager.service';
+import { GameManagerServicePlayer1 } from './crossword-game-manager-player1.service';
 
 @Component({
     selector: 'app-crossword-game',
@@ -23,13 +23,13 @@ export class CrosswordGameComponent implements OnInit {
         public crosswordGameService: CrosswordGameService,
         private gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
-        private gameManagerService: GameManagerService
+        private gameManagerServicePlayer1: GameManagerServicePlayer1
     ) {
         this.endGameEmitter = new EventEmitter<boolean>();
     }
 
     public ngOnInit() {
-        if (this.type === 'solo') {
+        if (this.gameManagerServicePlayer1.getGame().option === 'solo') {
             this.newGame();
         } else {
             this.newMultiplayerGame();
@@ -41,7 +41,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     private newMultiplayerGame() {
-        this.crosswordGameService.newMultiplayerGame(this.gameManagerService.getGame().crossword);
+        this.crosswordGameService.newMultiplayerGame(this.gameManagerServicePlayer1.getGame().crossword);
     }
 
     public endGame() {

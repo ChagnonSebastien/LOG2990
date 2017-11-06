@@ -1,5 +1,6 @@
 import { Game } from '../../../commun/crossword/Game';
 import { Player } from '../../../commun/crossword/player';
+import { ClientGameInfo } from '../../../commun/crossword/clientGameInfo';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 export class GameManager {
@@ -16,12 +17,11 @@ export class GameManager {
     }
 
     public getGames(): { id: string, playerHost: string, difficulty: string, mode: string, username2: string }[] {
-        const gamesInfo: { id: string, playerHost: string, difficulty: string, mode: string, username2: string }[] = [];
+        const gamesInfo: ClientGameInfo[] = [];
         this.games.forEach((game, index) => {
-            gamesInfo.push({
-                id: game.id, playerHost: game.player1.username,
-                difficulty: game.difficulty, mode: game.mode, username2: game.player2.username
-            });
+            const gameInfo = new ClientGameInfo(game.id, game.player1.username, game.difficulty,
+                game.mode, game.option, game.player2.username);
+            gamesInfo.push(gameInfo);
         });
         return gamesInfo;
     }

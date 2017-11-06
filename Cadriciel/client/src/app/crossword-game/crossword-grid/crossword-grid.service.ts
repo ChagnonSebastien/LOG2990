@@ -44,7 +44,7 @@ export class CrosswordGridService {
         this.forEachLetter(word, this.selectSquare.bind(this));
     }
 
-    public markWordAsFound(word: Word) {
+    private markWordAsFound(word: Word) {
         this.forEachLetter(word, this.markSquareAsFound.bind(this));
         this.unselectWord(word);
         this.pointsService.addToFoundWords(word.word);

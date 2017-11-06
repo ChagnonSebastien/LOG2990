@@ -19,7 +19,8 @@ export class SocketManager {
             socket.on('createGame', (type: string, difficulty: string, mode: string, player1: Player) => {
 
                 this.gameManager.createGame(type, difficulty, mode, player1).then(game => {
-                    socket.emit('gameCreated', game);
+                    socket.join(game.id);
+                    this.sio.sockets.in(game.id).emit('game created', game.id);
                 });
             });
             socket.on('getGames', () => {
@@ -27,9 +28,8 @@ export class SocketManager {
             });
 
             socket.on('joinGame', (gameId: string, player: Player) => {
-                this.sio.to(player.socketID).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
-                const player1SocketID: string = this.gameManager.findGameById(gameId).player1.socketID;
-                this.sio.to(player1SocketID).emit('player 2 joined', this.gameManager.findGameById(gameId));
+                socket.join(gameId);
+                this.sio.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
             });
 
             socket.on('found a word', () => {

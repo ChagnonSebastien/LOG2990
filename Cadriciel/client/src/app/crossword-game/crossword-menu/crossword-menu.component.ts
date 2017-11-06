@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
-import { GameManagerService } from '../crossword-game-manager.service';
+import { GameManagerServicePlayer1 } from '../crossword-game-manager-player1.service';
+
 @Component({
     selector: 'app-crossword-menu',
     templateUrl: './crossword-menu.component.html',
@@ -17,7 +18,8 @@ export class CrosswordMenuComponent {
     public waitingForPlayer2: boolean;
     public username: string;
 
-    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService) {
+    constructor(private playerManagerService: PlayerManagerService,
+        private gameManagerServicePlayer1: GameManagerServicePlayer1) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
@@ -38,7 +40,7 @@ export class CrosswordMenuComponent {
         if (this.validateUsername()) {
             this.setPlayerUsername();
             this.waitingForPlayer2 = true;
-            this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
+            this.gameManagerServicePlayer1.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }
     }
 
@@ -87,11 +89,16 @@ export class CrosswordMenuComponent {
     }
 
     private startGameOnPlayer2Joined() {
-        this.gameManagerService.playerTwoAlerts()
+        this.gameManagerServicePlayer1.playerTwoAlerts()
             .subscribe((result) => {
                 console.log(result);
-                this.waitingForPlayer2 = false;
-                this.gameInProgress = true;
+                this.setStartBooleans();
             });
+    }
+
+    public setStartBooleans() {
+        this.waitingForPlayer2 = false;
+        this.joiningGame = false;
+        this.gameInProgress = true;
     }
 }

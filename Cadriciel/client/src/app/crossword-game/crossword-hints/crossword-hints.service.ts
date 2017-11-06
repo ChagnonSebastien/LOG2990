@@ -59,12 +59,13 @@ export class CrosswordHintsService {
 
     private initializeHints(wordsWithIndex: Array<Word>) {
         this.hints = new Array<Hint>();
-        this.lexiconService.getWordDefinitions(wordsWithIndex.map(word => word.word))
-            .subscribe((definitions) => {
-                definitions.map((definition, i) => {
-                    this.hints.push(new Hint(wordsWithIndex[i].word, definition));
-                });
+        this.lexiconService.getWordDefinitions(
+            wordsWithIndex.map(wordWithIndex => wordWithIndex.word)
+        ).subscribe((definitions) => {
+            definitions.map((definition, i) => {
+                this.hints.push(new Hint(wordsWithIndex[i].word, definition));
             });
+        });
     }
 
     private alertNewSelectedWord(word: Word) {
@@ -79,9 +80,10 @@ export class CrosswordHintsService {
     private subscribeToFoundWordAlerts() {
         this.pointsService.foundWordAlerts()
             .subscribe((newlyFoundWord) => {
-                this.hints.find((value) => {
-                    return value.word === newlyFoundWord;
+                this.hints.find((hint) => {
+                    return hint.word === newlyFoundWord;
                 }).found = true;
+
                 if (newlyFoundWord === this.selectedWord) {
                     this.unselectHint();
                 }

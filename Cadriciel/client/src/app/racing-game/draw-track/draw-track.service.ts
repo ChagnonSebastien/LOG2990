@@ -12,20 +12,20 @@ export class DrawTrackService {
 
     private container: HTMLElement;
 
-    public mousePosition: THREE.Vector2 = new THREE.Vector2();
+    private mousePosition: THREE.Vector2 = new THREE.Vector2();
 
-    public pointMouseHoversOn = -1;
+    private pointMouseHoversOn = -1;
 
-    public trackClosed = false;
+    private trackClosed = false;
 
-    public intersections: THREE.Vector2[] = [new THREE.Vector2(0, 0)];
+    private intersections: THREE.Vector2[] = [new THREE.Vector2(0, 0)];
 
     private currentlyDraggedIntersection = -1;
 
     constructor(
-        public renderService: RenderService,
-        public trackValidationService: TrackValidationService,
-        public obstacleService: ObstacleService,
+        private renderService: RenderService,
+        private trackValidationService: TrackValidationService,
+        private obstacleService: ObstacleService,
         private trackService: TrackService
     ) { }
 
@@ -39,8 +39,18 @@ export class DrawTrackService {
             this.renderService.updateObstaclesPositions(ObstacleType.Pothole, this.obstacleService.getObstacles(ObstacleType.Pothole));
             this.renderService.updateObstaclesPositions(ObstacleType.Puddle, this.obstacleService.getObstacles(ObstacleType.Puddle));
             return {description: track.description, difficulty: track.type};
-        })
-        .catch(this.handleError);
+        });
+    }
+
+    private loadIntersection(trackIntersections: THREE.Vector2[]) {
+        trackIntersections.forEach(intersection => {
+            this.mousePosition = new THREE.Vector2(intersection.x, intersection.y);
+            this.updateRealMousePosition();
+            this.addIntersection();
+        });
+        this.mousePosition = new THREE.Vector2(trackIntersections[0].x, trackIntersections[0].y);
+        this.updateRealMousePosition();
+        this.addIntersection();
     }
 
     public clear() {
@@ -52,17 +62,6 @@ export class DrawTrackService {
             this.trackValidationService.clear();
             this.renderService.clear();
         }
-    }
-
-    public loadIntersection(trackIntersections: THREE.Vector2[]) {
-        trackIntersections.forEach(intersection => {
-            this.mousePosition = new THREE.Vector2(intersection.x, intersection.y);
-            this.updateRealMousePosition();
-            this.addIntersection();
-        });
-        this.mousePosition = new THREE.Vector2(trackIntersections[0].x, trackIntersections[0].y);
-        this.updateRealMousePosition();
-        this.addIntersection();
     }
 
     public initialise(container: HTMLElement) {
@@ -118,7 +117,7 @@ export class DrawTrackService {
         return index;
     }
 
-    public getXYDistance(vector1: THREE.Vector2, vector2: THREE.Vector2) {
+    private getXYDistance(vector1: THREE.Vector2, vector2: THREE.Vector2) {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
@@ -193,7 +192,7 @@ export class DrawTrackService {
     }
 
     public onResize() {
-        this.renderService.onResize();
+        return this.renderService.onResize();
     }
 
     public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
@@ -208,10 +207,5 @@ export class DrawTrackService {
         );
 
         return this.trackService.save(trackToSave);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
     }
 }
