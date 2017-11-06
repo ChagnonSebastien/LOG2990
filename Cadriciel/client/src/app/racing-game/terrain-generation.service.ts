@@ -152,4 +152,47 @@ export class TerrainGenerationService {
 
         return loaderPromise;
     }
+
+    public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
+        return Math.sqrt(
+            Math.pow((point1.x - point2.x), 2) +
+            Math.pow((point1.y - point2.y), 2)
+        );
+    }
+
+    private getNearestPointOnLine(point, line) {
+        const lineParameters = this.getLineParameters(line);
+        const permenticularParameters = {
+            a: lineParameters.b,
+            b: -lineParameters.a,
+            c: -((lineParameters.b * point.x) + (-lineParameters.a * point.y))
+        };
+
+        return this.twoLineIntersection(lineParameters, permenticularParameters);
+    }
+
+    private getLineParameters(line): { a: number, b: number, c: number } {
+        const a = line.point1.y - line.point2.y;
+        const b = line.point2.x - line.point1.x;
+        const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);
+        return { a, b, c };
+    }
+
+    private twoLineIntersection(line1, line2): { x: number, y: number } {
+        if (line1.a === 0) {
+            const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return { x, y: this.solveLineEquationWithX(x, line1) };
+        } else {
+            const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
+            return { x: this.solveLineEquationWithY(y, line1), y };
+        }
+    }
+
+    private solveLineEquationWithX(x, lineParameters): number {
+        return ((lineParameters.a * x) + lineParameters.c) / -lineParameters.b;
+    }
+
+    private solveLineEquationWithY(y, lineParameters): number {
+        return ((lineParameters.b * y) + lineParameters.c) / -lineParameters.a;
+    }
 }
