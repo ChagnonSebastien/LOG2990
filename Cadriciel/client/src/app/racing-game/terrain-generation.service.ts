@@ -52,6 +52,12 @@ export class TerrainGenerationService {
                 scene.add(cone);
             });
         });
+
+        this.generateDylanElectionPanels().then(cones => {
+            cones.forEach(cone => {
+                scene.add(cone);
+            });
+        });
     }
 
     private generateTable(): THREE.Mesh {
@@ -175,6 +181,29 @@ export class TerrainGenerationService {
             }
 
             new THREE.ObjectLoader().load('/assets/votonsmichel.json', loadDone);
+        });
+
+        return loaderPromise;
+    }
+
+    private generateDylanElectionPanels(): Promise<THREE.Mesh[]> {
+        const service = this;
+        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
+            function loadDone(cone) {
+                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
+                const cones: THREE.Mesh[] = [];
+                for (let i = 0; i < 15; i++) {
+                    const newCone = <THREE.Mesh> cone.clone();
+                    newCone.rotateY(Math.random() * Math.PI);
+                    const newPosition = service.getFreePropSpot(votePanelRadius);
+                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
+                    cones.push(newCone);
+                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
+                }
+                resolve(cones);
+            }
+
+            new THREE.ObjectLoader().load('/assets/votonsdylan.json', loadDone);
         });
 
         return loaderPromise;
