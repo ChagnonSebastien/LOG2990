@@ -19,6 +19,8 @@ export class RenderService {
 
     public scene: THREE.Scene;
 
+    private textureSky: THREE.Texture;
+
     constructor(
         private cameraService: CameraService,
         private racingGameService: RacingGameService,
@@ -51,9 +53,9 @@ export class RenderService {
         const images = [url + 'xpos.png', url + 'xneg.png',
         url + 'ypos.png', url + 'yneg.png',
         url + 'zpos.png', url + 'zneg.png'];
-        const textureSky = THREE.ImageUtils.loadTextureCube(images);
+        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
         const shader = THREE.ShaderLib['cube'];
-        shader.uniforms['tCube'].value = textureSky;
+        shader.uniforms['tCube'].value = this.textureSky;
         const material = new THREE.ShaderMaterial({
             fragmentShader: shader.fragmentShader,
             vertexShader: shader.vertexShader,
@@ -67,7 +69,7 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, track, 25);
+        this.terrainGenerationService.generate(this.scene, 25, track, this.textureSky);
     }
 
     public eventsList(event: any): void {
