@@ -58,4 +58,13 @@ export class GameManager {
         }
         return null;
     }
+
+    public findGameIdBySocketId(id: string): string {
+        for (let i = 0; i < this.games.length; i++) {
+            if (this.games[i].player1.socketID === id || this.games[i].player2.socketID === id) {
+                return this.games[i].id;
+            }
+        }
+        return '-1';
+    }
 }

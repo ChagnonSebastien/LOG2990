@@ -45,7 +45,7 @@ export class CrosswordGameComponent implements OnInit {
     }
 
     public endGame() {
-        this.endGameEmitter.emit(true);
+        this.gameManagerServicePlayer1.leaveGame();
     }
 
     private disableEvent(event: any): void {

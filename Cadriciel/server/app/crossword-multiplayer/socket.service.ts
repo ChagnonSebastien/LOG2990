@@ -32,6 +32,13 @@ export class SocketManager {
                 this.sio.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
             });
 
+            socket.on('disconnect', () => {
+                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA1");
+                // socket.broadcast.to(socket.rooms[0]).emit('opponent left');
+                const room: string  = this.gameManager.findGameIdBySocketId(socket.id);
+                this.sio.sockets.in(room).emit('opponent left');
+            });
+
             socket.on('found a word', () => {
                 // send found word
             });
