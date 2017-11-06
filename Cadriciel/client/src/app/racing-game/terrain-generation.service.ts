@@ -4,6 +4,7 @@ import * as THREE from 'three';
 
 const trackRadius = 10;
 const coneRadius = 20;
+const votePanelRadius = 4;
 
 @Injectable()
 export class TerrainGenerationService {
@@ -41,6 +42,12 @@ export class TerrainGenerationService {
         });
 
         this.generateCones().then(cones => {
+            cones.forEach(cone => {
+                scene.add(cone);
+            });
+        });
+
+        this.generateMichelElectionPanels().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
@@ -145,6 +152,29 @@ export class TerrainGenerationService {
             }
 
             new THREE.ObjectLoader().load('/assets/cone.json', loadDone);
+        });
+
+        return loaderPromise;
+    }
+
+    private generateMichelElectionPanels(): Promise<THREE.Mesh[]> {
+        const service = this;
+        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
+            function loadDone(cone) {
+                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
+                const cones: THREE.Mesh[] = [];
+                for (let i = 0; i < 15; i++) {
+                    const newCone = <THREE.Mesh> cone.clone();
+                    newCone.rotateY(Math.random() * Math.PI);
+                    const newPosition = service.getFreePropSpot(votePanelRadius);
+                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
+                    cones.push(newCone);
+                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
+                }
+                resolve(cones);
+            }
+
+            new THREE.ObjectLoader().load('/assets/votonsmichel.json', loadDone);
         });
 
         return loaderPromise;
