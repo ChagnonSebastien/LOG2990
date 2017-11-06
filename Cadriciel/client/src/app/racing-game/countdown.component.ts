@@ -1,24 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { CountdownService } from './countdown.service';
+
 @Component({
     selector: 'app-countdown',
     templateUrl: './countdown.component.html',
     styleUrls: ['./countdown.component.css'],
-    providers: []
+    providers: [CountdownService]
 })
 export class CountdownComponent {
     public countdown: Observable<number>;
     public count: number;
 
-    constructor() {
+    constructor(private countdownService: CountdownService) {
         this.count = 60;
-        this.startCountdown();
     }
 
-    public startCountdown() {
-        this.countdown = Observable.timer(0, 1000)
-            .take(this.count)
-            .map(() => --this.count);
+    public startCountdown(event: any) {
+        if (event.keyCode === 32) {
+            this.countdown = this.countdownService.startCountdown(this.countdown, this.count);
+        }
     }
 
+    @HostListener('window:keydown', ['$event'])
+    public onStartRace() {
+        this.startCountdown(event);
+    }
 }
