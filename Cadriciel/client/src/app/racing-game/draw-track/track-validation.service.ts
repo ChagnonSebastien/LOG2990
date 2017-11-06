@@ -174,10 +174,6 @@ export class TrackValidationService {
         return distance;
     }
 
-    public distanceToLine(point, line) {
-        return this.distance(point, this.getNearestPointOnLine(point, line));
-    }
-
     public getNearestPointOnLine(point, line) {
         const lineParameters = this.getLineParameters(line);
         const permenticularParameters = {
