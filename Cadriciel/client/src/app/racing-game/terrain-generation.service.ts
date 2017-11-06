@@ -153,6 +153,24 @@ export class TerrainGenerationService {
         return loaderPromise;
     }
 
+    private availableRadius(point: THREE.Vector2): number {
+        const minimumDistanceToTrack = Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
+            const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
+            return this.distanceFromPointToLine(point, line) - trackRadius;
+        }));
+
+        const minimumDistanceToObject = Math.min.apply(null, this.decorElements.map( element => {
+            return this.distance(
+                new THREE.Vector2(
+                    element.object.position.x / this.scale,
+                    element.object.position.z / this.scale
+                ), point
+            ) - element.radius;
+        }));
+
+        return Math.min(minimumDistanceToObject, minimumDistanceToTrack);
+    }
+
     private distanceFromPointToLine(point, line): number {
         const optimalPoint = this.getNearestPointOnLine(point, line);
 
