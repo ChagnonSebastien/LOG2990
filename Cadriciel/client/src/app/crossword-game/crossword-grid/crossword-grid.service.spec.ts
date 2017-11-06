@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
 
 let gridService: CrosswordGridService;
 
@@ -38,7 +37,6 @@ describe('#CrosswordGridService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                CrosswordPointsService,
                 CrosswordGridService
             ]
         });
@@ -280,28 +278,6 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][7].selected).toBeFalsy();
             expect(gridService.grid[0][8].selected).toBeFalsy();
             expect(gridService.grid[0][9].selected).toBeFalsy();
-        });
-
-        it('should add word to found words when it is found', () => {
-            const rat = wordsWithIndex[4];
-
-            // word 'rat' not found
-            expect(gridService['pointsService'].found('rat')).toBeFalsy();
-            expect(gridService.grid[0][7].found).toBeFalsy();
-            expect(gridService.grid[0][8].found).toBeFalsy();
-            expect(gridService.grid[0][9].found).toBeFalsy();
-
-            // input correct letters
-            gridService.grid[0][7].input = gridService.grid[0][7].answer;
-            gridService.grid[0][8].input = gridService.grid[0][8].answer;
-            gridService.grid[0][9].input = gridService.grid[0][9].answer;
-            gridService.updateWordFoundStatus(rat);
-
-            // word 'rat' found
-            expect(gridService['pointsService'].found('rat')).toBeTruthy();
-            expect(gridService.grid[0][7].found).toBeTruthy();
-            expect(gridService.grid[0][8].found).toBeTruthy();
-            expect(gridService.grid[0][9].found).toBeTruthy();
         });
     });
 });

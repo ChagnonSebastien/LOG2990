@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
-
 import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Word } from '../../../../../commun/word';
 
@@ -9,7 +7,7 @@ import { Word } from '../../../../../commun/word';
 export class CrosswordGridService {
     public grid: CrosswordSquare[][];
 
-    constructor(private pointsService: CrosswordPointsService) { }
+    constructor() { }
 
     public initialize(grid: string[][], wordsWithIndex: Array<Word>) {
         this.initializeGrid(grid);
@@ -47,7 +45,6 @@ export class CrosswordGridService {
     private markWordAsFound(word: Word) {
         this.forEachLetter(word, this.markSquareAsFound.bind(this));
         this.unselectWord(word);
-        this.pointsService.addToFoundWords(word.word);
     }
 
     private forEachLetter(word: Word, callback) {
