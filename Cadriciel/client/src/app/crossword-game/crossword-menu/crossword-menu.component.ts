@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
-import { GameManagerService } from '../crossword-game-manager.service';
 import { GameManagerServicePlayer1 } from '../crossword-game-manager-player1.service';
-import { GameManagerServicePlayer2 } from '../crossword-game-manager-player2.service';
+
 @Component({
     selector: 'app-crossword-menu',
     templateUrl: './crossword-menu.component.html',
@@ -20,7 +19,7 @@ export class CrosswordMenuComponent {
     public username: string;
 
     constructor(private playerManagerService: PlayerManagerService,
-        private gameManagerServicePlayer1: GameManagerServicePlayer1, private gameManagerServicePlayer2: GameManagerServicePlayer2) {
+        private gameManagerServicePlayer1: GameManagerServicePlayer1) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
