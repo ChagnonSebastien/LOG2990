@@ -7,41 +7,50 @@ const trackRadius = 10;
 @Injectable()
 export class TerrainGenerationService {
 
-    private textureSky: any;
+    private track: Track;
 
     private scale: number;
+
+    private textureSky: THREE.Texture;
+
+    private decorElements: {object: THREE.Mesh, radius: number}[];
 
     constructor() {
 
     }
 
-    public generate(scene: THREE.Scene, track: Track, scale: number): void {
+    public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
+        this.track = track;
         this.scale = scale;
-        const url = '../../assets/images/skybox/';
-        const images = [url + 'xpos.png', url + 'xneg.png',
-        url + 'ypos.png', url + 'yneg.png',
-        url + 'zpos.png', url + 'zneg.png'];
-        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
+        this.textureSky = textureSky;
 
-        scene.add(this.generateTable(track));
-        scene.add(this.generateRaceStartPlaid(track));
+        this.addObjectsInScene(scene);
+    }
 
-        this.generateIntersections(track).concat(this.generateSegments(track)).forEach(instersection => {
+    private addObjectsInScene(scene: THREE.Scene) {
+        scene.add(this.generateTable());
+        scene.add(this.generateRaceStartPlaid());
+
+        this.generateIntersections().forEach(instersection => {
             scene.add(instersection);
         });
 
-        this.generateCones(track).then(cones => {
+        this.generateSegments().forEach(instersection => {
+            scene.add(instersection);
+        });
+
+        this.generateCones().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
         });
     }
 
-    private generateTable(track: Track): THREE.Mesh {
-        const maximumX = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.y));
+    private generateTable(): THREE.Mesh {
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
 
         const tableMaterial = new THREE.MeshStandardMaterial ( {color: 0xF0F0F0, roughness: 0, metalness: 0, envMap: this.textureSky} );
         const tableGeometry = new THREE.PlaneGeometry(
@@ -59,14 +68,17 @@ export class TerrainGenerationService {
         return table;
     }
 
-    private generateSegments(track: Track): THREE.Mesh[] {
+    private generateSegments(): THREE.Mesh[] {
         const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
 
-        return track.trackIntersections.map((intersection, index, array) => {
+        return this.track.trackIntersections.map((intersection, index, array) => {
             const fromPosition = intersection;
             const toPosition = array[index + 1 < array.length ? index + 1 : 0];
 
-            const geometry = new THREE.PlaneGeometry(this.scale * this.getDistance(fromPosition, toPosition), this.scale * trackRadius * 2);
+            const geometry = new THREE.PlaneGeometry(
+                this.scale * this.getDistance(fromPosition, toPosition),
+                this.scale * trackRadius * 2
+            );
             geometry.rotateX(Math.PI / -2);
 
             const segmentMesh = new THREE.Mesh(geometry, material);
@@ -83,12 +95,12 @@ export class TerrainGenerationService {
         return Math.sqrt(Math.pow(fromPosition.x - toPosition.x, 2) + Math.pow(fromPosition.y - toPosition.y, 2));
     }
 
-    private generateIntersections(track: Track): THREE.Mesh[] {
+    private generateIntersections(): THREE.Mesh[] {
         const geometry = new THREE.CircleGeometry(this.scale * trackRadius, 32);
         geometry.rotateX(Math.PI / -2);
         const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
 
-        return track.trackIntersections.map(intersection => {
+        return this.track.trackIntersections.map(intersection => {
             const intersectionMesh = new THREE.Mesh(geometry, material);
             intersectionMesh.position.x = intersection.x * this.scale;
             intersectionMesh.position.z = intersection.y * this.scale;
@@ -97,15 +109,15 @@ export class TerrainGenerationService {
         });
     }
 
-    private generateRaceStartPlaid(track: Track): THREE.Mesh {
+    private generateRaceStartPlaid(): THREE.Mesh {
         const geometry = new THREE.PlaneGeometry(this.scale * trackRadius * 2 / 20 * 3, this.scale * trackRadius * 2);
         geometry.rotateX(Math.PI / -2);
-        const m = THREE.ImageUtils.loadTexture('assets/plaid_start_v2.jpg');
-        const material = new THREE.MeshStandardMaterial({map: m, metalness: 0, roughness: 0, envMap: this.textureSky});
+        const texture = THREE.ImageUtils.loadTexture('assets/plaid_start_v2.jpg');
+        const material = new THREE.MeshStandardMaterial({map: texture, metalness: 0, roughness: 0, envMap: this.textureSky});
         const plaidMesh = new THREE.Mesh(geometry, material);
 
-        const fromPosition = track.trackIntersections[0];
-        const toPosition = track.trackIntersections[1];
+        const fromPosition = this.track.trackIntersections[0];
+        const toPosition = this.track.trackIntersections[1];
         plaidMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         plaidMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
         plaidMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
@@ -114,11 +126,11 @@ export class TerrainGenerationService {
         return plaidMesh;
     }
 
-    private generateCones(track): Promise<THREE.Mesh[]> {
-        const maximumX = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, track.trackIntersections.map(intersection => intersection.y));
+    private generateCones(): Promise<THREE.Mesh[]> {
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
 
         const service = this;
         const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
@@ -134,6 +146,7 @@ export class TerrainGenerationService {
                 }
                 resolve(cones);
             }
+
             new THREE.ObjectLoader().load('/assets/cone.json', loadDone,
             (object: any) => {
                 console.log('prog: ', object);
@@ -144,6 +157,10 @@ export class TerrainGenerationService {
         });
 
         return loaderPromise;
+    }
+
+    private findFreePosition() {
+
     }
 
 }
