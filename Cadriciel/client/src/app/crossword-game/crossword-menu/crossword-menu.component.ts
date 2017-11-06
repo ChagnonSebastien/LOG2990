@@ -29,7 +29,6 @@ export class CrosswordMenuComponent {
         if (this.type === 'multiplayer') {
             this.startMultiplayerGame();
             this.startGameOnPlayer2Joined();
-            this.endGameOnOpponentLeft();
         } else {
             this.gameInProgress = true;
         }
@@ -97,17 +96,7 @@ export class CrosswordMenuComponent {
     private startGameOnPlayer2Joined() {
         this.gameManagerService.playerTwoAlerts()
             .subscribe((result) => {
-                console.log(result);
                 this.setStartBooleans();
             });
     }
-
-    private endGameOnOpponentLeft() {
-        this.gameManagerService.leaveGameAlerts()
-            .subscribe((result) => {
-                console.log(result);
-                this.gameInProgress = false;
-            });
-    }
-
 }

@@ -55,8 +55,7 @@ export class GameManagerService {
     }
     public leaveGame() {
         this.socket.emit('leaveGame', this.game.id);
-        this.endGameSubject.next('opponent left');
-        console.log('reaching');
+        this.endGameSubject.next('leave game');
     }
 
     public getGames(): Promise<ClientGameInfo[]> {

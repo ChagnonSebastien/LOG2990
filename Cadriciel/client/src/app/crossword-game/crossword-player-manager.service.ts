@@ -21,11 +21,11 @@ export class PlayerManagerService {
             });
 
             this.socket.on('opponent found word', data => {
-
+                // call a service that handles the opponent found words
             });
 
             this.socket.on('selected hint', data => {
-
+                // call a service that handles the opponent selected hints
             });
         });
     }
@@ -35,10 +35,12 @@ export class PlayerManagerService {
     }
 
     public emitWordFound(word: string) {
+        // another service calls it to emit found word
         this.socket.emit('found of word', word, this.player.getSocketID());
     }
 
     public emitHintSelected(hint: string) {
+        //another service calls it to emit hint selection 
         this.socket.emit('selected a word', hint, this.player.getSocketID());
     }
 }

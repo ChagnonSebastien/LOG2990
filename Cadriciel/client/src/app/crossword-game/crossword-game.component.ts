@@ -26,6 +26,7 @@ export class CrosswordGameComponent implements OnInit {
         private gameManagerService: GameManagerService
     ) {
         this.endGameEmitter = new EventEmitter<boolean>();
+        this.endGameOnOpponentLeft();
     }
 
     public ngOnInit() {
@@ -125,4 +126,12 @@ export class CrosswordGameComponent implements OnInit {
         }
         this.focusOnSquare(i, j);
     }
+
+    private endGameOnOpponentLeft() {
+        this.gameManagerService.leaveGameAlerts()
+            .subscribe((result) => {
+                this.endGameEmitter.emit(true);
+            });
+    }
 }
+

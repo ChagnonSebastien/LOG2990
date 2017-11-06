@@ -12,10 +12,11 @@ export class CrosswordRoomComponent implements OnInit {
 
   public username: string;
   public gamesListInfo: ClientGameInfo[] = [];
-  @Output()
-  private startGameEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() private startGameEmitter: EventEmitter<any>;
+  @Output() private endGameEmitter: EventEmitter<any>;
   constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) {
     this.username = '';
+    this.startGameEmitter = new EventEmitter();
   }
 
   public ngOnInit() {
@@ -37,9 +38,7 @@ export class CrosswordRoomComponent implements OnInit {
   private startGameOnPlayer2Joined() {
     this.gameManagerService.playerTwoAlerts()
       .subscribe((result) => {
-        console.log(result);
         this.startGameEmitter.emit();
       });
   }
-
 }
