@@ -4,9 +4,8 @@ import { Observable } from 'rxjs/Observable';
 describe('test CountdownService', function () {
     const countdownService = new CountdownService();
 
-    it('construction test', done => {
-        expect(countdownService).toBeTruthy();
-        done();
+    it('construction test', () => {
+        expect(countdownService).toBeDefined();
     });
 
     it('starts countdown', () => {
