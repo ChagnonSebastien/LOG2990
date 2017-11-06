@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CountdownService } from './countdown.service';
 
@@ -9,7 +9,7 @@ import { CountdownService } from './countdown.service';
     providers: [CountdownService]
 })
 export class CountdownComponent {
-    private countdown: Observable<number>;
+    public countdown: Observable<number>;
     private count: number;
     private countdownStarted: boolean;
 
