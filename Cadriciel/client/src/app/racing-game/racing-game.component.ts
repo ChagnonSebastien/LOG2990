@@ -4,13 +4,14 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit }
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { RacingGameService } from './racing-game.service';
+import { CountdownService } from './countdown.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RenderService, CameraService, RacingGameService]
+    providers: [RenderService, CameraService, RacingGameService, CountdownService]
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
@@ -46,5 +47,9 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
 
     public ngAfterViewInit() {
         this.renderService.initialize(this.container, null);
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    public onStartRace() {
     }
 }
