@@ -147,20 +147,9 @@ export class TerrainGenerationService {
                 resolve(cones);
             }
 
-            new THREE.ObjectLoader().load('/assets/cone.json', loadDone,
-            (object: any) => {
-                console.log('prog: ', object);
-            },
-            (object: any) => {
-                console.log('err: ', object);
-            });
+            new THREE.ObjectLoader().load('/assets/cone.json', loadDone);
         });
 
         return loaderPromise;
     }
-
-    private findFreePosition() {
-
-    }
-
 }
