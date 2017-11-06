@@ -153,6 +153,19 @@ export class TerrainGenerationService {
         return loaderPromise;
     }
 
+    private distanceFromPointToLine(point, line): number {
+        const optimalPoint = this.getNearestPointOnLine(point, line);
+
+        if (
+            Math.min(line.point1.x, line.point2.x) <= optimalPoint.x &&
+            Math.max(line.point1.x, line.point2.x) >= optimalPoint.x
+        ) {
+            return this.distance(point, optimalPoint);
+        } else {
+            return Math.min(this.distance(point, line.point1), this.distance(point, line.point2));
+        }
+    }
+
     public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
         return Math.sqrt(
             Math.pow((point1.x - point2.x), 2) +
