@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { GameManagerServicePlayer2 } from '../crossword-game-manager-player2.service';
+import { GameManagerService } from '../crossword-game-manager.service';
 import { PlayerManagerService } from '../crossword-player-manager.service';
 import { ClientGameInfo } from '../../../../../commun/crossword/clientGameInfo';
 
@@ -14,12 +14,12 @@ export class CrosswordRoomComponent implements OnInit {
   public gamesListInfo: ClientGameInfo[] = [];
   @Output()
   private startGameEmitter: EventEmitter<any> = new EventEmitter();
-  constructor(private gameManagerServicePlayer2: GameManagerServicePlayer2, private playerManagerService: PlayerManagerService) {
+  constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) {
     this.username = '';
   }
 
   public ngOnInit() {
-    this.gameManagerServicePlayer2.getGames().then(games => {
+    this.gameManagerService.getGames().then(games => {
       this.gamesListInfo = games;
       this.startGameOnPlayer2Joined();
     });
@@ -27,7 +27,7 @@ export class CrosswordRoomComponent implements OnInit {
 
   public joinGame(gameId: string) {
     this.setPlayerUsername();
-    this.gameManagerServicePlayer2.joinGame(gameId, this.playerManagerService.getPlayer());
+    this.gameManagerService.joinGame(gameId, this.playerManagerService.getPlayer());
   }
 
   public setPlayerUsername(): void {
@@ -35,7 +35,7 @@ export class CrosswordRoomComponent implements OnInit {
   }
 
   private startGameOnPlayer2Joined() {
-    this.gameManagerServicePlayer2.playerTwoAlerts()
+    this.gameManagerService.playerTwoAlerts()
       .subscribe((result) => {
         console.log(result);
         this.startGameEmitter.emit();

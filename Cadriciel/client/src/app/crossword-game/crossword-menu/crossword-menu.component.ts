@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
-import { GameManagerServicePlayer1 } from '../crossword-game-manager-player1.service';
+import { GameManagerService } from '../crossword-game-manager.service';
 
 @Component({
     selector: 'app-crossword-menu',
@@ -18,8 +18,7 @@ export class CrosswordMenuComponent {
     public waitingForPlayer2: boolean;
     public username: string;
 
-    constructor(private playerManagerService: PlayerManagerService,
-        private gameManagerServicePlayer1: GameManagerServicePlayer1) {
+    constructor(private playerManagerService: PlayerManagerService, private gameManagerService: GameManagerService) {
         this.type = 'solo';
         this.mode = 'classic';
         this.level = 'normal';
@@ -41,7 +40,7 @@ export class CrosswordMenuComponent {
         if (this.validateUsername()) {
             this.setPlayerUsername();
             this.waitingForPlayer2 = true;
-            this.gameManagerServicePlayer1.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
+            this.gameManagerService.createGame(this.type, this.level, this.mode, this.playerManagerService.getPlayer());
         }
     }
 
@@ -74,6 +73,12 @@ export class CrosswordMenuComponent {
         }
     }
 
+    public setStartBooleans() {
+        this.waitingForPlayer2 = false;
+        this.joiningGame = false;
+        this.gameInProgress = true;
+    }
+
     private validType(type: string) {
         const validTypes = new Set<string>(['solo', 'multiplayer']);
         return validTypes.has(type);
@@ -90,7 +95,7 @@ export class CrosswordMenuComponent {
     }
 
     private startGameOnPlayer2Joined() {
-        this.gameManagerServicePlayer1.playerTwoAlerts()
+        this.gameManagerService.playerTwoAlerts()
             .subscribe((result) => {
                 console.log(result);
                 this.setStartBooleans();
@@ -98,16 +103,11 @@ export class CrosswordMenuComponent {
     }
 
     private endGameOnOpponentLeft() {
-        this.gameManagerServicePlayer1.leaveGameAlerts()
+        this.gameManagerService.leaveGameAlerts()
             .subscribe((result) => {
                 console.log(result);
                 this.gameInProgress = false;
             });
     }
 
-    public setStartBooleans() {
-        this.waitingForPlayer2 = false;
-        this.joiningGame = false;
-        this.gameInProgress = true;
-    }
 }

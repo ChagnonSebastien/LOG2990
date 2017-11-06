@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Game } from '../../../../commun/crossword/game';
+import { Player } from '../../../../commun/crossword/player';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
+import { ClientGameInfo } from '../../../../commun/crossword/clientGameInfo';
 
 @Injectable()
 export class GameManagerService {
@@ -48,10 +50,24 @@ export class GameManagerService {
         return this.game;
     }
 
+    public createGame(type: string, difficulty: string, mode: string, player1: Player) {
+        this.socket.emit('createGame', type, difficulty, mode, player1);
+    }
     public leaveGame() {
         this.socket.emit('leaveGame', this.game.id);
         this.endGameSubject.next('opponent left');
         console.log('reaching');
+    }
+
+    public getGames(): Promise<ClientGameInfo[]> {
+        this.socket.emit('getGames');
+        const gamesPromise = new Promise<ClientGameInfo[]>(
+            (res, rej) => this.socket.on('sent all games', data => res(data)));
+        return gamesPromise;
+    }
+
+    public joinGame(gameId: string, player: Player) {
+        this.socket.emit('joinGame', gameId, player);
     }
 
     public connectionStatus() {
