@@ -3,8 +3,6 @@ import { Observable } from 'rxjs/Rx';
 import { HttpModule } from '@angular/http';
 
 import { CrosswordHintsService } from './crossword-hints.service';
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
-import { CrosswordGridService } from '../crossword-grid/crossword-grid.service';
 import { LexiconService } from '../lexicon.service';
 
 import { Word } from '../../../../../commun/word';
@@ -43,8 +41,6 @@ describe('#CrosswordHintsService', () => {
             imports: [HttpModule],
             providers: [
                 CrosswordHintsService,
-                CrosswordPointsService,
-                CrosswordGridService,
                 { provide: LexiconService, useClass: MockLexiconService }
             ]
         });
@@ -54,20 +50,6 @@ describe('#CrosswordHintsService', () => {
 
     it('should construct', () => {
         expect(hintsService).toBeDefined();
-    });
-
-    it('should mark a hint as found when alerted by the CrosswordPointsService', async () => {
-        await hintsService.newGame(wordsWithIndex);
-        expect(hintsService.hints[0].found).toBeFalsy();
-        hintsService['pointsService']['foundWordSubject'].next('huh');
-        expect(hintsService.hints[0].found).toBeTruthy();
-    });
-
-    it('should unselect a hint when it is alerted as found by the CrosswordPointsService', async () => {
-        hintsService.selectWord('huh');
-        expect(hintsService.selectedWord).toEqual('huh');
-        hintsService['pointsService']['foundWordSubject'].next('huh');
-        expect(hintsService.selectedWord).toBeUndefined();
     });
 
     describe('newGame()', () => {

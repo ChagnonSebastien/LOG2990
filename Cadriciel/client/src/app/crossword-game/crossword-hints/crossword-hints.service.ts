@@ -3,7 +3,6 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
@@ -17,10 +16,8 @@ export class CrosswordHintsService {
 
     constructor(
         private lexiconService: LexiconService,
-        private pointsService: CrosswordPointsService
     ) {
         this.selectedWordSubject = new Subject();
-        this.subscribeToFoundWordAlerts();
     }
 
     public selectedWordAlerts(): Observable<any> {
@@ -75,18 +72,5 @@ export class CrosswordHintsService {
                 'current': word
             }
         );
-    }
-
-    private subscribeToFoundWordAlerts() {
-        this.pointsService.foundWordAlerts()
-            .subscribe((newlyFoundWord) => {
-                this.hints.find((hint) => {
-                    return hint.word === newlyFoundWord;
-                }).found = true;
-
-                if (newlyFoundWord === this.selectedWord) {
-                    this.unselectHint();
-                }
-            });
     }
 }
