@@ -14,7 +14,7 @@ export class CountdownComponent {
     private countdownStarted: boolean;
 
     constructor(private countdownService: CountdownService) {
-        this.count = 10;
+        this.count = 6;
         this.countdownStarted = false;
     }
 

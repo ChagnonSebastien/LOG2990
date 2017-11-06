@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingGameService } from './racing-game.service';
-import { CountdownService } from './countdown.service';
 
 const scale = 100;
 
@@ -24,7 +23,6 @@ export class RenderService {
         private cameraService: CameraService,
         private racingGameService: RacingGameService,
         private terrainGenerationService: TerrainGenerationService,
-        private countdownService: CountdownService
     ) {
     }
 
