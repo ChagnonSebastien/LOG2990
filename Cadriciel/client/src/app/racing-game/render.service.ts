@@ -21,6 +21,8 @@ export class RenderService {
 
     private textureSky: THREE.Texture;
 
+    private mainVehicle: THREE.Mesh;
+
     constructor(
         private cameraService: CameraService,
         private racingGameService: RacingGameService,
@@ -111,14 +113,15 @@ export class RenderService {
         this.container = container;
         this.createScene();
         await this.addVehicles();
+        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
         this.initStats();
         this.startRenderingLoop();
     }
 
     public async addVehicles(): Promise<void> {
         const mainVehicle = await this.racingGameService.initializeMainVehicle();
-        this.scene.add(mainVehicle.vehicle);
-        this.cameraService.initializeCameras(this.container, mainVehicle.vehicle, scale);
+        this.mainVehicle = mainVehicle.vehicle;
+        this.scene.add(this.mainVehicle);
         const opponentsVehicles = await this.racingGameService.initializeOpponentsVehicles();
 
         for (let i = 0; i < opponentsVehicles.length; i++) {
