@@ -1,4 +1,3 @@
-import { element } from 'protractor';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
