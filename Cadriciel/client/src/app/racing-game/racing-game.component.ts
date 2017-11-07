@@ -4,7 +4,6 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit }
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
-import { VehicleService } from './vehicle.service';
 
 @Component({
     moduleId: module.id,
