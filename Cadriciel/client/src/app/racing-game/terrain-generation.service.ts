@@ -31,7 +31,10 @@ export class TerrainGenerationService {
     }
 
     private addObjectsInScene(scene: THREE.Scene) {
-        scene.add(this.generateTable());
+
+        this.generateTable().forEach(triangle => {
+            scene.add(triangle);
+        });
         scene.add(this.generateRaceStartPlaid());
 
         this.generateIntersections().forEach(instersection => {
@@ -61,11 +64,12 @@ export class TerrainGenerationService {
         });
     }
 
-    private generateTable(): THREE.Mesh {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+    private generateTable(): THREE.Mesh[] {
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + this.scale * 2;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - this.scale * 2;
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + this.scale * 2;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - this.scale * 2;
+        console.log(maximumX, minimumX, maximumY, minimumY);
 
         const tableMaterial = new THREE.MeshStandardMaterial ( {color: 0xF0F0F0, roughness: 0, metalness: 0, envMap: this.textureSky} );
         const tableGeometry = new THREE.PlaneGeometry(
@@ -74,12 +78,42 @@ export class TerrainGenerationService {
             1,
             1
         );
+
+        const table: THREE.Mesh[] = [];
+        const normal = new THREE.Vector3( 0, 1, 0 );
+        for (let i = minimumX; i < maximumX; i += 5) {
+            const geometry = new THREE.Geometry();
+
+            for (let j = minimumY; j < maximumY; j += 5) {
+                const availableRadius1 = this.availableRadius(new THREE.Vector2(i, j));
+                const availableRadius2 = this.availableRadius(new THREE.Vector2(i + 5, j));
+                geometry.vertices.push(
+                    new THREE.Vector3( i * this.scale, availableRadius1 > 5 ? 10 * (availableRadius1 - 5) : 0, j * this.scale ),
+                    new THREE.Vector3( (i + 5) * this.scale, availableRadius2 > 5 ? 10 * (availableRadius2 - 5) : 0, j * this.scale)
+                );
+            }
+
+            for (let j = 0; j < (maximumY - minimumY) / 5 - 1; j++) {
+                geometry.faces.push(
+                    new THREE.Face3( (2 * j) + 0, (2 * j) + 1, (2 * j) + 2, normal),
+                    new THREE.Face3( (2 * j) + 1, (2 * j) + 2, (2 * j) + 3, normal)
+                );
+            }
+            console.log(geometry);
+            const material = new THREE.MeshBasicMaterial( { color: 0xffffff * Math.random()  } );
+            material.side = THREE.BackSide;
+            const mesh = new THREE.Mesh( geometry, material );
+            mesh.drawMode = THREE.TriangleStripDrawMode;
+            table.push(mesh);
+        }
+
+/*
         tableGeometry.rotateX(Math.PI / -2);
         const table = new THREE.Mesh(tableGeometry, tableMaterial);
 
         table.position.x = minimumX + ((maximumX - minimumX) / 2);
         table.position.z = minimumY + ((maximumY - minimumY) / 2);
-        table.receiveShadow = true;
+        table.receiveShadow = true;*/
         return table;
     }
 
