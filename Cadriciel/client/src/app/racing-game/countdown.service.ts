@@ -6,6 +6,7 @@ import * as THREE from 'three';
 export class CountdownService {
     private audio: HTMLAudioElement;
     public countdown: THREE.Mesh;
+    private font: THREE.Font;
 
     constructor() {
         this.audio = new Audio('../../assets/countdown.mp3');
@@ -13,10 +14,12 @@ export class CountdownService {
     }
 
     public startCountdown(countdown: Observable<number>, count: number): Observable<number> {
+        console.log(this);
         this.startAudio();
         countdown = Observable.timer(0, 1000)
             .take(count)
             .map(() => --count);
+        this.updateCountdown(count);
         return countdown;
     }
 
@@ -26,7 +29,7 @@ export class CountdownService {
 
     public async createCountdown(): Promise<void> {
         await this.create3DCountdown();
-
+        console.log(this.font);
         return new Promise<void>(resolve => {
             resolve();
         });
@@ -37,6 +40,8 @@ export class CountdownService {
         let textGeometry: THREE.TextGeometry;
         return new Promise<THREE.Mesh>(resolve => {
             loader.load('../../assets/font_samuel_regular.json', function(font) {
+                this.font = font;
+                console.log('font: ', this.font);
                 textGeometry = new THREE.TextGeometry('5', {
                     font: font,
                     size: 50,
@@ -57,5 +62,27 @@ export class CountdownService {
                 resolve(this.countdown);
             }.bind(this));
         });
+    }
+
+    private updateCountdown(count: number) {
+        const countText = count.toString();
+        console.log(this.font);
+        const textGeometry = new THREE.TextGeometry(countText, {
+                    font: this.font,
+                    size: 50,
+                    height: 0,
+                    curveSegments: 5,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 1
+        });
+        console.log(textGeometry);/*
+        const material = new THREE.MeshPhongMaterial({
+                    color: 0xffff00
+        });
+        //this.countdown = new THREE.Mesh(textGeometry, material);
+        this.countdown.position.setX(-165);
+        this.countdown.position.setY(165);
+        this.countdown.position.setZ(250);*/
     }
 }

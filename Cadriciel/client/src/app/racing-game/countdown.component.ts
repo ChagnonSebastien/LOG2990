@@ -6,7 +6,7 @@ import { CountdownService } from './countdown.service';
     selector: 'app-countdown',
     templateUrl: './countdown.component.html',
     styleUrls: ['./countdown.component.css'],
-    providers: [CountdownService]
+    providers: []
 })
 export class CountdownComponent {
     public countdown: Observable<number>;

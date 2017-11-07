@@ -11,7 +11,7 @@ import { VehicleService } from './vehicle.service';
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RacingGameService, RenderService, TrackService, VehicleService, CountdownService]
+    providers: []
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
