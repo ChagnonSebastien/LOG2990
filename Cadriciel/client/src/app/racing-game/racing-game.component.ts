@@ -4,6 +4,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit }
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
+import { CommandsService } from './commands.service';
 
 @Component({
     moduleId: module.id,
@@ -19,7 +20,8 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
         private racingGameService: RacingGameService,
         private renderService: RenderService,
         private trackService: TrackService,
-        private countdownService: CountdownService
+        private countdownService: CountdownService,
+        private commandsService: CommandsService
     ) {
     }
 
@@ -36,7 +38,7 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
     }
 
     public eventsListen(event: any): void {
-        this.renderService.eventsList(event);
+        this.commandsService.sendKeyDownEvent(event);
     }
 
     public ngOnInit() {
