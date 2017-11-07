@@ -1,3 +1,4 @@
+import { ImprovedNoise } from './perlin_noise.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -38,7 +39,8 @@ import { CommandsService } from './commands.service';
         TrackService,
         RacingGameService,
         TerrainGenerationService,
-        CommandsService
+        CommandsService,
+        ImprovedNoise
     ]
 })
 export class RacingGameModule { }
