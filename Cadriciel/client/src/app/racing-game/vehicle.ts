@@ -19,8 +19,8 @@ export class Vehicle {
                 this.vehicle.rotateY(Math.PI / 2 - Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
                 this.vehicle.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * scale;
                 this.vehicle.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * scale;
-                this.vehicle.position.y = 20;
-                this.vehicle.scale.set(22, 22, 22);
+                this.vehicle.position.y = (scale * 20 / 25) + 3;
+                this.vehicle.scale.set(scale * 22 / 25, scale * 22 / 25, scale * 22 / 25);
                 this.vehicle.castShadow = true;
                 resolve(this);
             });
