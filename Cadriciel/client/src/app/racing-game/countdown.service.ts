@@ -7,19 +7,23 @@ export class CountdownService {
     private audio: HTMLAudioElement;
     public countdown: THREE.Mesh;
     private font: THREE.Font;
+    private count: number;
 
     constructor() {
         this.audio = new Audio('../../assets/countdown.mp3');
         this.audio.load();
+        this.count = 6;
     }
 
     public startCountdown(countdown: Observable<number>, count: number): Observable<number> {
         console.log(this);
         this.startAudio();
         countdown = Observable.timer(0, 1000)
-            .take(count)
-            .map(() => --count);
-        this.updateCountdown(count);
+            .take(this.count)
+            .map(() => --this.count);
+        countdown.subscribe(x => {
+            this.updateCountdown(x);
+        });
         return countdown;
     }
 
@@ -42,7 +46,7 @@ export class CountdownService {
             loader.load('../../assets/font_samuel_regular.json', function(font) {
                 this.font = font;
                 console.log('font: ', this.font);
-                textGeometry = new THREE.TextGeometry('5', {
+                textGeometry = new THREE.TextGeometry((this.count - 1).toString(), {
                     font: font,
                     size: 50,
                     height: 0,
@@ -65,6 +69,7 @@ export class CountdownService {
     }
 
     private updateCountdown(count: number) {
+        console.log('countdown updated to: ', count);
         const countText = count.toString();
         console.log(this.font);
         const textGeometry = new THREE.TextGeometry(countText, {
@@ -76,13 +81,14 @@ export class CountdownService {
                     bevelThickness: 10,
                     bevelSize: 1
         });
-        console.log(textGeometry);/*
+        console.log(textGeometry);
         const material = new THREE.MeshPhongMaterial({
                     color: 0xffff00
         });
+        this.countdown.geometry = textGeometry;
         //this.countdown = new THREE.Mesh(textGeometry, material);
         this.countdown.position.setX(-165);
         this.countdown.position.setY(165);
-        this.countdown.position.setZ(250);*/
+        this.countdown.position.setZ(250);
     }
 }

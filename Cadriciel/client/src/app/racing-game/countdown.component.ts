@@ -21,7 +21,7 @@ export class CountdownComponent {
     private startCountdown(event: any) {
         if (event.keyCode === 32 && this.countdownStarted === false) {
             this.countdownStarted = true;
-            this.countdown = this.countdownService.startCountdown(this.countdown, this.count);
+            this.countdownService.startCountdown(this.countdown, this.count);
         }
     }
 
