@@ -3,7 +3,6 @@ import { Player } from '../../../commun/crossword/player';
 import { GameManager } from './gameManager.service';
 
 describe('Game Manager', () => {
-    const chai = require('chai');
     const gameManager: GameManager = new GameManager;
     let createdGameId: string;
 
@@ -22,13 +21,19 @@ describe('Game Manager', () => {
         const player: Player = new Player();
         player.username = 'tester';
         expect(gameManager.joinGame(createdGameId, player).player2.username).to.equal('tester');
+        expect(player.gameID).to.equal(createdGameId);
     });
 
-    /* it('Should change password when walleandtomato is entered', (done) => {
- 
+     it('Should be able to get game by id', () => {
+        expect(gameManager.findGameById(createdGameId).id).to.equal(createdGameId);
      });
- 
-     it('Should not change password when a password other than walleandtomato is entered', (done) => {
- 
-     });*/
+
+     it('Should be able to get created games info', () => {
+        expect(gameManager.getGames().length).to.greaterThan(0);
+     });
+
+     it('Should be be able to delete a created game', () => {
+        gameManager.deleteGame(createdGameId);
+        expect(gameManager.getGames().length).to.equal(0);
+     });
 });
