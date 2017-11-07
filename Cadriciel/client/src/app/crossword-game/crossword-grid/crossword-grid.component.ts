@@ -13,7 +13,6 @@ import { Word } from '../../../../../commun/word';
     styleUrls: ['./crossword-grid.component.css']
 })
 export class CrosswordGridComponent {
-    private selectedWord: string;
     @ViewChildren('square') public squares;
 
     constructor(
@@ -28,7 +27,6 @@ export class CrosswordGridComponent {
         this.listenForArrowKeys();
     }
 
-    // handlers
     private listenForWordSelections() {
         this.hintsService.selectedWordAlerts()
             .subscribe((wordSelection) => {
@@ -57,7 +55,6 @@ export class CrosswordGridComponent {
             });
     }
 
-    // focus
     private focusOnWord(wordWithIndex: Word) {
         this.focusOnSquare(wordWithIndex.i, wordWithIndex.j);
     }
