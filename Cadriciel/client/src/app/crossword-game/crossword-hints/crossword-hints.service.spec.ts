@@ -85,7 +85,7 @@ describe('#CrosswordHintsService', () => {
     describe('getWordInfo()', () => {
         it('should return the word info of the word', () => {
             for (const wordWithIndex of wordsWithIndex) {
-                expect(hintsService.getWordInfo(wordWithIndex.word)).toEqual(wordWithIndex);
+                expect(hintsService.getWordWithIndex(wordWithIndex.word)).toEqual(wordWithIndex);
             }
         });
     });

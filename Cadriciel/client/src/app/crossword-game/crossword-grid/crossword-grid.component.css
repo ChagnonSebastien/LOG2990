@@ -1,0 +1,71 @@
+.square {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.black {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.empty {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid #007bff;
+}
+
+.found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: #007bff;
+    color: white;
+}
+
+.selected {
+    border: 3px solid #007bff !important;
+}
+
+@media (max-width: 1200px) {
+    .square {
+        width: 40px;
+        height: 40px;
+    }
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid #007bff;
+    }
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
+}
+
+@media (max-width: 992px) {
+    .square {
+        width: 30px;
+        height: 30px;
+    }
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid #007bff;
+    }
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: green;
+        color: white;
+    }
+}

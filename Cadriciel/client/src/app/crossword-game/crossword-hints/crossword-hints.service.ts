@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
+import { CrosswordWordsService } from '../crossword-words.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
@@ -10,12 +11,12 @@ import { Word } from '../../../../../commun/word';
 @Injectable()
 export class CrosswordHintsService {
     public selectedWord: string;
-    private selectedWordSubject: Subject<any>;
     public hints: Array<Hint>;
-    private wordMap: Map<string, Word>;
+    private selectedWordSubject: Subject<any>;
 
     constructor(
         private lexiconService: LexiconService,
+        private wordsService: CrosswordWordsService
     ) {
         this.selectedWordSubject = new Subject();
     }
@@ -26,16 +27,11 @@ export class CrosswordHintsService {
 
     public newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
-        this.wordMap = this.constructWordMap(wordsWithIndex);
         this.initializeHints(wordsWithIndex);
     }
 
-    public getWordInfo(word: string): Word {
-        return this.wordMap.get(word);
-    }
-
     public selectWord(word: string) {
-        const wordWithIndex = this.wordMap.get(word);
+        const wordWithIndex = this.wordsService.getWordWithIndex(word);
         if (wordWithIndex === undefined || this.selectedWord === word) {
             return;
         }
@@ -45,13 +41,6 @@ export class CrosswordHintsService {
 
     public unselectHint() {
         this.selectedWord = undefined;
-    }
-
-    private constructWordMap(wordsWithIndex: Array<Word>): Map<string, Word> {
-        return wordsWithIndex.reduce((map, obj) => {
-            map.set(obj.word, obj);
-            return map;
-        }, new Map<string, Word>());
     }
 
     private initializeHints(wordsWithIndex: Array<Word>) {

@@ -1,3 +1,5 @@
+import { Word } from '../../../../../commun/word';
+
 export class CrosswordSquare {
     public black: boolean;
     public empty: boolean;
@@ -7,7 +9,7 @@ export class CrosswordSquare {
     public selected: boolean;
     public player1Selected: boolean;
     public player2Selected: boolean;
-    public words: Array<string>;
+    public words: Array<Word>;
 
     constructor(character: string) {
         if (character.length > 1) {
@@ -21,7 +23,7 @@ export class CrosswordSquare {
         this.selected = false;
         this.player1Selected = false;
         this.player2Selected = false;
-        this.words = new Array<string>();
+        this.words = new Array<Word>();
     }
 
     public letterFound(): boolean {

@@ -4,6 +4,7 @@ import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
+import { CrosswordWordsService } from './crossword-words.service';
 
 import { Word } from '../../../../commun/word';
 import { CrosswordDB } from '../../../../server/app/crosswordGrid/crosswordDB';
@@ -18,9 +19,10 @@ export class CrosswordGameService {
         private crosswordService: CrosswordService,
         private hintsService: CrosswordHintsService,
         private gridService: CrosswordGridService,
-        private pointsService: CrosswordPointsService
+        private pointsService: CrosswordPointsService,
+        private wordsService: CrosswordWordsService
     ) {
-        this.subscribeToHintSelectedChanges();
+        this.handleWordSelection();
     }
 
     // public methods
@@ -36,49 +38,21 @@ export class CrosswordGameService {
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
-        this.gridService.initialize(grid, wordsWithIndex);
+        this.wordsService.newGame(wordsWithIndex);
+        this.gridService.newGame(grid, wordsWithIndex);
         this.hintsService.newGame(wordsWithIndex);
         this.pointsService.newGame();
     }
 
-    public insertLetter(charCode: number, i: number, j: number) {
-        const letter = String.fromCharCode(charCode).toLowerCase();
-        this.gridService.insertLetter(letter, i, j);
-        if (this.gridService.grid[i][j].letterFound()) {
-            this.checkIfWordsFound(i, j);
-        }
-    }
-
-    public eraseLetter(i: number, j: number) {
-        this.gridService.eraseLetter(i, j);
-    }
-
-    public clearSelectedWord(word: string) {
-        const wordInfo = this.hintsService.getWordInfo(word);
-        this.gridService.unselectWord(wordInfo);
-        this.hintsService.unselectHint();
-    }
-
-    private checkIfWordsFound(i: number, j: number) {
-        for (const word of this.gridService.grid[i][j].words) {
-            const wordInfo = this.hintsService.getWordInfo(word);
-            this.gridService.updateWordFoundStatus(wordInfo);
-        }
-    }
-
-    private subscribeToHintSelectedChanges() {
+    private handleWordSelection() {
         this.hintsService.selectedWordAlerts()
-            .subscribe((hintChange) => {
-                this.selectWordOnGrid(hintChange);
+            .subscribe((wordSelection) => {
+                if (wordSelection.previous) {
+                    const wordWithIndex = this.wordsService
+                        .getWordWithIndex(wordSelection.previous);
+                    this.gridService.unselectWord(wordWithIndex);
+                }
+                this.gridService.selectWord(wordSelection.current);
             });
-    }
-
-    private selectWordOnGrid(hintChange: { 'previous': string, 'current': Word }) {
-        if (hintChange.previous) {
-            this.gridService.unselectWord(
-                this.hintsService.getWordInfo(hintChange.previous)
-            );
-        }
-        this.gridService.selectWord(hintChange.current);
     }
 }
