@@ -4,6 +4,7 @@ import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
+import { CrosswordFoundWordsService } from './crossword-found-words.service';
 import { CrosswordWordsService } from './crossword-words.service';
 
 import { Word } from '../../../../commun/word';
@@ -22,7 +23,8 @@ export class CrosswordGameService {
         private pointsService: CrosswordPointsService,
         private wordsService: CrosswordWordsService
     ) {
-        this.handleWordSelection();
+        this.listenForWordSelections();
+        this.listenForWordFoundAlerts();
     }
 
     // public methods
@@ -44,7 +46,7 @@ export class CrosswordGameService {
         this.pointsService.newGame();
     }
 
-    private handleWordSelection() {
+    private listenForWordSelections() {
         this.hintsService.selectedWordAlerts()
             .subscribe((wordSelection) => {
                 if (wordSelection.previous) {
@@ -53,6 +55,14 @@ export class CrosswordGameService {
                     this.gridService.unselectWord(wordWithIndex);
                 }
                 this.gridService.selectWord(wordSelection.current);
+            });
+    }
+
+    private listenForWordFoundAlerts() {
+        this.gridService.wordFoundAlerts()
+            .subscribe((foundWord) => {
+                this.hintsService.markHintAsFound(foundWord.word);
+                this.pointsService.addToFoundWords(foundWord.word);
             });
     }
 }

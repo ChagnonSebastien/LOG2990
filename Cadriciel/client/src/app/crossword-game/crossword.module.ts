@@ -12,6 +12,7 @@ import { CrosswordGameService } from './crossword-game.service';
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
+import { CrosswordFoundWordsService } from './crossword-found-words.service';
 import { CrosswordWordsService } from './crossword-words.service';
 import { SocketHandlerSerivce } from './crossword-socket-handler.service';
 import { PlayerHandlerService } from './crossword-player-handler.service';
@@ -49,6 +50,7 @@ import { CrosswordRoomComponent } from './crossword-room/crossword-room.componen
         CrosswordGameService,
         CrosswordHintsService,
         CrosswordPointsService,
+        CrosswordFoundWordsService,
         CrosswordWordsService,
         SocketHandlerSerivce,
         PlayerHandlerService,
