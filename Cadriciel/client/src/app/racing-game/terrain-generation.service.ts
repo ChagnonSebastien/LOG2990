@@ -65,66 +65,46 @@ export class TerrainGenerationService {
     }
 
     private generateTable(): THREE.Mesh[] {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + this.scale * 2;
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - this.scale * 2;
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + this.scale * 2;
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - this.scale * 2;
-        console.log(maximumX, minimumX, maximumY, minimumY);
-
-        const tableMaterial = new THREE.MeshStandardMaterial ( {color: 0xF0F0F0, roughness: 0, metalness: 0, envMap: this.textureSky} );
-        const tableGeometry = new THREE.PlaneGeometry(
-            (this.scale * (maximumX - minimumX)) + (this.scale * trackRadius * 10),
-            (this.scale * (maximumY - minimumY)) + (this.scale * trackRadius * 10),
-            1,
-            1
-        );
-
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 500;
         const table: THREE.Mesh[] = [];
-        const normal = new THREE.Vector3( 0, 1, 0 );
+
         for (let i = minimumX; i < maximumX; i += 5) {
-            const geometry = new THREE.Geometry();
-
-            for (let j = minimumY; j < maximumY; j += 5) {
-                const availableRadius1 = this.availableRadius(new THREE.Vector2(i, j));
-                const availableRadius2 = this.availableRadius(new THREE.Vector2(i + 5, j));
-                geometry.vertices.push(
-                    new THREE.Vector3(
-                        i * this.scale,
-                        availableRadius1 > 0 ?
-                        this.sigmoid(1, (availableRadius1 - 60) / 4) * availableRadius1 * this.scale * this.sigmoid(0.5, 6 - availableRadius1 / 2) : 0,
-                        j * this.scale
-                    ),
-                    new THREE.Vector3(
-                        (i + 5) * this.scale,
-                        availableRadius2 > 5 ?
-                        this.sigmoid(1, (availableRadius2 - 60) / 4) * availableRadius2 * this.scale * this.sigmoid(0.5, 6 - availableRadius2 / 2) : 0,
-                        j * this.scale
-                    )
-                );
-            }
-
-            for (let j = 0; j < (maximumY - minimumY) / 5 - 1; j++) {
-                geometry.faces.push(
-                    new THREE.Face3( (2 * j) + 0, (2 * j) + 1, (2 * j) + 2, normal),
-                    new THREE.Face3( (2 * j) + 1, (2 * j) + 2, (2 * j) + 3, normal)
-                );
-            }
-            console.log(geometry);
             const material = new THREE.MeshBasicMaterial( { color: 0xffffff * Math.random()  } );
             material.side = THREE.BackSide;
-            const mesh = new THREE.Mesh( geometry, material );
+            const mesh = new THREE.Mesh( this.generateTriangleStrip(i), material );
             mesh.drawMode = THREE.TriangleStripDrawMode;
             table.push(mesh);
         }
 
-/*
-        tableGeometry.rotateX(Math.PI / -2);
-        const table = new THREE.Mesh(tableGeometry, tableMaterial);
-
-        table.position.x = minimumX + ((maximumX - minimumX) / 2);
-        table.position.z = minimumY + ((maximumY - minimumY) / 2);
-        table.receiveShadow = true;*/
         return table;
+    }
+
+    private generateTriangleStrip(i: number): THREE.Geometry {
+        const geometry = new THREE.Geometry();
+
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
+        for (let j = minimumY; j < maximumY; j += 5) {
+            geometry.vertices.push(
+                new THREE.Vector3(i, this.heightAtPoint(i, j), j).multiplyScalar(this.scale),
+                new THREE.Vector3((i + 5), this.heightAtPoint(i + 5, j), j).multiplyScalar(this.scale)
+            );
+        }
+
+        for (let j = 0; j < (maximumY - minimumY) / 5 - 1; j++) {
+            geometry.faces.push(
+                new THREE.Face3( (2 * j) + 0, (2 * j) + 1, (2 * j) + 2),
+                new THREE.Face3( (2 * j) + 1, (2 * j) + 2, (2 * j) + 3)
+            );
+        }
+        return geometry;
+    }
+
+    private heightAtPoint(x: number, y: number) {
+        const availableRadius = this.availableRadius(new THREE.Vector2(x, y));
+        return availableRadius > 0 ?
+            this.sigmoid(1, (availableRadius - 60) / 4) * availableRadius * this.sigmoid(0.5, 6 - availableRadius / 2) : 0;
     }
 
     private sigmoid(L: number, x: number) {
