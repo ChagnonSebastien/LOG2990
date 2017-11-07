@@ -9,12 +9,12 @@ describe('Game Manager', () => {
 
     it('Create a game', (done) => {
         const player: Player = new Player();
-        gameManager.createGame('multiplayer', 'easy', 'dynamic', player ).then(game => {
-           expect(game.difficulty).to.equal('easy');
-           expect(game.mode).to.equal('dynamic');
-           expect(game.option).to.equal('multiplayer');
-           createdGameId = game.id;
-           done();
+        gameManager.createGame('multiplayer', 'easy', 'dynamic', player).then(game => {
+            expect(game.difficulty).to.equal('easy');
+            expect(game.mode).to.equal('dynamic');
+            expect(game.option).to.equal('multiplayer');
+            createdGameId = game.id;
+            done();
         });
     });
 
@@ -24,11 +24,11 @@ describe('Game Manager', () => {
         expect(gameManager.joinGame(createdGameId, player).player2.username).to.equal('tester');
     });
 
-   /* it('Should change password when walleandtomato is entered', (done) => {
-
-    });
-
-    it('Should not change password when a password other than walleandtomato is entered', (done) => {
-
-    });*/
+    /* it('Should change password when walleandtomato is entered', (done) => {
+ 
+     });
+ 
+     it('Should not change password when a password other than walleandtomato is entered', (done) => {
+ 
+     });*/
 });

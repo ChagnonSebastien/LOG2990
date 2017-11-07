@@ -2,14 +2,14 @@
 export class Player {
     public username: string;
     public usernameValid: boolean;
-    public gameID: number;
+    public gameID: string;
     public score: number;
     public socketID: string;
 
     constructor() {
         this.username = '';
         this.usernameValid = false;
-        this.gameID = -1;
+        this.gameID = '-1';
         this.score = 0;
         this.socketID = '';
     }
@@ -22,7 +22,7 @@ export class Player {
         return this.usernameValid;
     }
 
-    public getGameID(): number {
+    public getGameID(): string {
         return this.gameID;
     }
 
@@ -42,7 +42,7 @@ export class Player {
         this.usernameValid = nameValid;
     }
 
-    public setGameID(gameID: number): void {
+    public setGameID(gameID: string): void {
         this.gameID = gameID;
     }
 

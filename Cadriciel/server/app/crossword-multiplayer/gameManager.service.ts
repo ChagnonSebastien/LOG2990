@@ -39,6 +39,7 @@ export class GameManager {
             };
             this.idCounter++;
             this.games.set(game.id, game);
+            game.player1.gameID = game.id;
         });
         return await game;
     }
@@ -49,6 +50,7 @@ export class GameManager {
 
     public joinGame(gameId: string, player: Player): Game {
         const game = this.findGameById(gameId);
+        player.gameID = gameId;
         game.player2 = player;
         return game;
     }
