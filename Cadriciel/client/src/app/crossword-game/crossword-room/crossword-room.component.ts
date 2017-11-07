@@ -22,7 +22,6 @@ export class CrosswordRoomComponent implements OnInit {
   public ngOnInit() {
     this.multiplayerService.getGames().then(games => {
       this.gamesListInfo = games;
-      this.startGameOnPlayer2Joined();
     });
   }
 
@@ -33,12 +32,5 @@ export class CrosswordRoomComponent implements OnInit {
 
   public setPlayerUsername(): void {
     this.playerManagerService.getPlayer().setUsername(this.username);
-  }
-
-  private startGameOnPlayer2Joined() {
-    this.multiplayerService.playerTwoAlerts()
-      .subscribe((result) => {
-        this.startGameEmitter.emit();
-      });
   }
 }

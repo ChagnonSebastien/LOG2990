@@ -14,8 +14,8 @@ import { CrosswordHintsService } from './crossword-hints/crossword-hints.service
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 import { CrosswordConfigurationService } from './crossword-menu/crossword-configuration.service';
 import { CrosswordWordsService } from './crossword-words.service';
-import { SocketHandlerSerivce } from './crossword-socket-handler.service';
-import { PlayerHandlerService } from './crossword-player-handler.service';
+import { CrosswordSocketService } from './crossword-socket.service';
+import { CrosswordPlayerService } from './crossword-player.service';
 import { PlayerManagerService } from './crossword-player-manager.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 
@@ -52,8 +52,8 @@ import { CrosswordRoomComponent } from './crossword-room/crossword-room.componen
         CrosswordPointsService,
         CrosswordConfigurationService,
         CrosswordWordsService,
-        SocketHandlerSerivce,
-        PlayerHandlerService,
+        CrosswordSocketService,
+        CrosswordPlayerService,
         PlayerManagerService,
         CrosswordMultiplayerService
     ]

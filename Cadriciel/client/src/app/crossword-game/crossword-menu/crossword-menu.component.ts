@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PlayerManagerService } from '../crossword-player-manager.service';
-import { GameManagerService } from '../crossword-game-manager.service';
 import { CrosswordConfigurationService } from './crossword-configuration.service';
 
 @Component({

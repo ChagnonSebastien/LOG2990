@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SocketHandlerSerivce } from './crossword-socket-handler.service';
+import { CrosswordSocketService } from './crossword-socket.service';
 
-let socketHandlerSerivce: SocketHandlerSerivce;
+let socketHandlerSerivce: CrosswordSocketService;
 describe('SocketHandlerService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                SocketHandlerSerivce
+                CrosswordSocketService
             ]
         });
-        socketHandlerSerivce = TestBed.get(SocketHandlerSerivce);
+        socketHandlerSerivce = TestBed.get(CrosswordSocketService);
     });
 
     it('should be created', () => {
@@ -29,7 +29,7 @@ describe('SocketHandlerService', () => {
         const SERVER_PORT = ':3000';
         socketHandlerSerivce.requestSocket(HOST_NAME + SERVER_PORT);
         socketHandlerSerivce.disconnectSocket();
-        expect(socketHandlerSerivce.connectionStatus()).toBeFalsy();
+        expect(socketHandlerSerivce.connected()).toBeFalsy();
     });
 
 });

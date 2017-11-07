@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 @Injectable()
-export class SocketHandlerSerivce {
+export class CrosswordSocketService {
     constructor() { }
     private activeSocket: SocketIOClient.Socket;
 
@@ -21,7 +21,7 @@ export class SocketHandlerSerivce {
         }
     }
 
-    public connectionStatus(): boolean {
+    public connected(): boolean {
         return this.activeSocket !== undefined;
     }
 

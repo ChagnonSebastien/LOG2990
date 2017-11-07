@@ -1,6 +1,6 @@
-import { Word } from '../../../commun/word';
+import { Word } from '../word';
 
-export class CrosswordDB {
+export class Crossword {
     public id: string;
     public difficulty: string;
     public listOfWords: Array<string>;

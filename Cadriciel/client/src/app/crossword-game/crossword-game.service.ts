@@ -5,33 +5,35 @@ import { CrosswordHintsService } from './crossword-hints/crossword-hints.service
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 import { CrosswordWordsService } from './crossword-words.service';
+import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 
 import { Word } from '../../../../commun/word';
-import { CrosswordDB } from '../../../../server/app/crosswordGrid/crosswordDB';
 
 @Injectable()
 export class CrosswordGameService {
-    // public attributes
-
-    // private attributes
+    private multiplayerMode: boolean;
 
     constructor(
         private crosswordService: CrosswordService,
         private hintsService: CrosswordHintsService,
         private gridService: CrosswordGridService,
         private pointsService: CrosswordPointsService,
-        private wordsService: CrosswordWordsService
+        private wordsService: CrosswordWordsService,
+        private multiplayerService: CrosswordMultiplayerService
     ) {
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
     }
 
-    // public methods
-
-    public async newGame(level: string) {
+    public async newSoloGame(level: string) {
+        this.multiplayerMode = false;
         await this.crosswordService.getCrossword(level).then((crossword) => {
             this.constructGame(crossword.crossword, crossword.wordsWithIndex, crossword.listOfWords);
         });
+    }
+
+    public async newMultiplayerGame(level: string) {
+        this.multiplayerMode = true;
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {

@@ -3,7 +3,7 @@ import { Player } from '../../../../commun/crossword/player';
 
 
 @Injectable()
-export class PlayerHandlerService {
+export class CrosswordPlayerService {
     constructor() { }
     private activePlayer: Player;
 

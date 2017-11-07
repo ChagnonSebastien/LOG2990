@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player } from '../../../../commun/crossword/player';
-import { PlayerHandlerService } from './crossword-player-handler.service';
-import { SocketHandlerSerivce } from './crossword-socket-handler.service';
+import { CrosswordPlayerService } from './crossword-player.service';
+import { CrosswordSocketService } from './crossword-socket.service';
 
 @Injectable()
 export class PlayerManagerService {
@@ -10,7 +10,7 @@ export class PlayerManagerService {
     private player: Player;
     private socket: SocketIOClient.Socket;
 
-    constructor(private playerHandlerService: PlayerHandlerService, private socketHandlerSerivce: SocketHandlerSerivce) {
+    constructor(private playerHandlerService: CrosswordPlayerService, private socketHandlerSerivce: CrosswordSocketService) {
         this.player = this.playerHandlerService.requestPlayer();
         this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
             this.socket = socket;

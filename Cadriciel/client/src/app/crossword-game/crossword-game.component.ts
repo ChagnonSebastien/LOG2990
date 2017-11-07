@@ -26,7 +26,7 @@ export class CrosswordGameComponent {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
                 if (configuration.type === 'solo') {
-                    await this.crosswordGameService.newGame(configuration.level);
+                    await this.crosswordGameService.newSoloGame(configuration.level);
                     this.gameInProgress = true;
                 }
             });
