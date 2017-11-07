@@ -5,7 +5,7 @@ import * as THREE from 'three';
 @Injectable()
 export class CountdownService {
     private audio: HTMLAudioElement;
-    private countdown: THREE.Mesh;
+    public countdown: THREE.Mesh;
 
     constructor() {
         this.audio = new Audio('../../assets/countdown.mp3');
@@ -24,26 +24,38 @@ export class CountdownService {
         this.audio.play();
     }
 
-    public async create3DCountdown(): Promise<THREE.Mesh> {
+    public async createCountdown(): Promise<void> {
+        this.countdown = await this.create3DCountdown();
+
+        return new Promise<void>(resolve => {
+            resolve();
+        });
+    }
+
+    private async create3DCountdown(): Promise<THREE.Mesh> {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
-        await loader.load('../../assets/font_samuel_regular.json', function(font) {
-             textGeometry = new THREE.TextGeometry('COUNTDOWN', {
-                font: font,
-                size: 80,
-                height: 5,
-                curveSegments: 12,
-                bevelEnabled: true,
-                bevelThickness: 10,
-                bevelSize: 8
-            });
-        });
-        const material = new THREE.MeshPhongMaterial({
-            color: 0x000000
-        });
-        this.countdown = new THREE.Mesh(textGeometry, material);
         return new Promise<THREE.Mesh>(resolve => {
-            resolve(this.countdown);
+            loader.load('../../assets/font_samuel_regular.json', function(font) {
+                textGeometry = new THREE.TextGeometry('5', {
+                    font: font,
+                    size: 50,
+                    height: 0,
+                    curveSegments: 5,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 1
+                });
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0xffff00
+                });
+                const countdown = new THREE.Mesh(textGeometry, material);
+                countdown.position.setX(-165);
+                countdown.position.setY(165);
+                countdown.position.setZ(250);
+                console.log('countdownMesh', countdown);
+                resolve(countdown);
+            });
         });
     }
 }

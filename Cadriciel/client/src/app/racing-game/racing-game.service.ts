@@ -1,3 +1,4 @@
+import { CountdownService } from './countdown.service';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import { RenderService } from './render.service';
@@ -9,7 +10,7 @@ export class RacingGameService {
     private mainVehicle: Vehicle;
     private opponentsVehicles: Array<Vehicle>;
 
-    constructor(private renderService: RenderService, private vehicleService: VehicleService) {
+    constructor(private renderService: RenderService, private vehicleService: VehicleService, private countdownService: CountdownService) {
         this.mainVehicle = new Vehicle();
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
@@ -21,6 +22,7 @@ export class RacingGameService {
         this.renderService.initialize(container);
         await this.addVehicles();
         this.renderService.setCameraOnMainVehicle();
+        await this.startCoundown();
         this.renderService.startRenderingLoop();
     }
 
@@ -37,6 +39,11 @@ export class RacingGameService {
         return new Promise<void>(resolve => {
             resolve();
         });
+    }
+
+    private async startCoundown() {
+        await this.countdownService.createCountdown();
+        this.renderService.scene.add(this.countdownService.countdown);
     }
 
 }

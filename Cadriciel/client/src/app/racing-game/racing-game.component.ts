@@ -1,3 +1,4 @@
+import { CountdownService } from './countdown.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
@@ -10,7 +11,7 @@ import { VehicleService } from './vehicle.service';
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RacingGameService, RenderService, TrackService, VehicleService]
+    providers: [RacingGameService, RenderService, TrackService, VehicleService, CountdownService]
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
