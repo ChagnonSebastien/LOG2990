@@ -66,13 +66,16 @@ export class TerrainGenerationService {
     private generateTable(): THREE.Mesh[] {
         const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
         const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 500;
+        const texture = THREE.ImageUtils.loadTexture('assets/GroundForest003_COL_VAR1_HIRES.jpg');
+        const material = new THREE.MeshStandardMaterial( { map: texture, metalness: 0, roughness: 1, envMap: this.textureSky } );
+        material.side = THREE.BackSide;
         const table: THREE.Mesh[] = [];
 
         for (let i = minimumX; i < maximumX; i += 5) {
-            const material = new THREE.MeshBasicMaterial( { color: 0xffffff * Math.random()  } );
-            material.side = THREE.BackSide;
             const mesh = new THREE.Mesh( this.generateTriangleStrip(i), material );
             mesh.drawMode = THREE.TriangleStripDrawMode;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
             table.push(mesh);
         }
 
@@ -96,7 +99,10 @@ export class TerrainGenerationService {
                 new THREE.Face3( (2 * j) + 0, (2 * j) + 1, (2 * j) + 2),
                 new THREE.Face3( (2 * j) + 1, (2 * j) + 2, (2 * j) + 3)
             );
+            geometry.faceVertexUvs[0][2 * j] = [new THREE.Vector2(0, 0), new THREE.Vector2(0, 1), new THREE.Vector2(1, 0)];
+            geometry.faceVertexUvs[0][(2 * j) + 1] = [new THREE.Vector2(0, 1), new THREE.Vector2(1, 0), new THREE.Vector2(1, 1)];
         }
+
         return geometry;
     }
 
@@ -129,6 +135,8 @@ export class TerrainGenerationService {
             segmentMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
             segmentMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
             segmentMesh.position.y = 2;
+            segmentMesh.castShadow = true;
+            segmentMesh.receiveShadow = true;
             return segmentMesh;
         });
     }
@@ -147,6 +155,8 @@ export class TerrainGenerationService {
             intersectionMesh.position.x = intersection.x * this.scale;
             intersectionMesh.position.z = intersection.y * this.scale;
             intersectionMesh.position.y = 2;
+            intersectionMesh.castShadow = true;
+            intersectionMesh.receiveShadow = true;
             return intersectionMesh;
         });
     }
