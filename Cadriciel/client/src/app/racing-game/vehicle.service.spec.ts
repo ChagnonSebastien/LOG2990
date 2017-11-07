@@ -8,10 +8,10 @@ describe('VehicleService', () => {
         TestBed.configureTestingModule({
             providers: [VehicleService]
         });
-        vehicleService = TestBed.get(vehicleService);
+        vehicleService = TestBed.get(VehicleService);
     });
 
-    it('should be created', inject([vehicleService], (service: VehicleService) => {
+    it('should be created', inject([VehicleService], (service: VehicleService) => {
         expect(service).toBeTruthy();
     }));
 

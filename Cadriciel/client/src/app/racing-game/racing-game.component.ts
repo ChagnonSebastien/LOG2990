@@ -3,13 +3,14 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit }
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
+import { VehicleService } from './vehicle.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RacingGameService, RenderService, TrackService]
+    providers: [RacingGameService, RenderService, TrackService, VehicleService]
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
