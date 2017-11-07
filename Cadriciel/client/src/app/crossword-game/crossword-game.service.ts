@@ -4,7 +4,6 @@ import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
 import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
-import { CrosswordFoundWordsService } from './crossword-found-words.service';
 import { CrosswordWordsService } from './crossword-words.service';
 
 import { Word } from '../../../../commun/word';

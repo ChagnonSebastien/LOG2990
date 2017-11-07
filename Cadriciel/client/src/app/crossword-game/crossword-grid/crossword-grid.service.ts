@@ -57,7 +57,6 @@ export class CrosswordGridService {
     }
 
     public insertLetter(letter: string, i: number, j: number) {
-        const square = this.grid[i][j];
         if (this.canInsertOrErase(i, j)) {
             this.grid[i][j].input = letter;
         }
