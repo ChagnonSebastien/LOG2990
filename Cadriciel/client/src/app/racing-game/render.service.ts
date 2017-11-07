@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { RacingGameService } from './racing-game.service';
 
 const scale = 100;
 
@@ -21,11 +20,10 @@ export class RenderService {
 
     private textureSky: THREE.Texture;
 
-    private mainVehicle: THREE.Mesh;
+    public mainVehicle: THREE.Mesh;
 
     constructor(
         private cameraService: CameraService,
-        private racingGameService: RacingGameService,
         private terrainGenerationService: TerrainGenerationService,
     ) {
     }
@@ -79,7 +77,7 @@ export class RenderService {
         this.cameraService.zoomCamera(event);
     }
 
-    private startRenderingLoop() {
+    public startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -109,28 +107,14 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track) {
+    public async initialize(container: HTMLElement) {
         this.container = container;
         this.createScene();
-        await this.addVehicles();
-        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
         this.initStats();
-        this.startRenderingLoop();
     }
 
-    public async addVehicles(): Promise<void> {
-        const mainVehicle = await this.racingGameService.initializeMainVehicle();
-        this.mainVehicle = mainVehicle.vehicle;
-        this.scene.add(this.mainVehicle);
-        const opponentsVehicles = await this.racingGameService.initializeOpponentsVehicles();
-
-        for (let i = 0; i < opponentsVehicles.length; i++) {
-            this.scene.add(opponentsVehicles[i].vehicle);
-        }
-
-        return new Promise<void>(resolve => {
-            resolve();
-        });
+    public setCameraOnMainVehicle() {
+        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
     }
 
 }
