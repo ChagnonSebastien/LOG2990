@@ -20,7 +20,7 @@ export class CountdownService {
         return countdown;
     }
 
-    public startAudio() {
+    private startAudio() {
         this.audio.play();
     }
 
@@ -53,7 +53,6 @@ export class CountdownService {
                 countdown.position.setX(-165);
                 countdown.position.setY(165);
                 countdown.position.setZ(250);
-                console.log('countdownMesh', countdown);
                 resolve(countdown);
             });
         });

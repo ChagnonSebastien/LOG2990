@@ -14,4 +14,11 @@ describe('test CountdownService', function () {
         countdown = countdownService.startCountdown(countdown, count);
         expect(countdown !== null).toBeTruthy();
     });
+
+    it('create 3D countdown', (done) => {
+        countdownService.createCountdown().then(result => {
+            expect(countdownService.countdown).toBeDefined();
+            done();
+        });
+    });
 });
