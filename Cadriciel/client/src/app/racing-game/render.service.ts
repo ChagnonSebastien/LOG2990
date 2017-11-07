@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
+import { CommandsService } from './commands.service';
+import { Subscription } from 'rxjs/Subscription';
 
 const scale = 100;
 
@@ -21,10 +23,22 @@ export class RenderService {
 
     public mainVehicle: THREE.Mesh;
 
+    private subscription: Subscription;
+
+    private events: any;
+
+    private isPressed: boolean;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
+        private commandsService: CommandsService
     ) {
+        this.subscription = this.commandsService.getKeyDownEvent()
+        .subscribe(event => {
+            this.events = event;
+            this.isPressed = true;
+        });
     }
 
     private createScene() {

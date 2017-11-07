@@ -15,4 +15,8 @@ export class CommandsService {
     public sendKeyDownEvent(event: any) {
             this.subject.next(event);
     }
+
+    public getKeyDownEvent(): Observable<any> {
+        return this.subject.asObservable();
+    }
 }
