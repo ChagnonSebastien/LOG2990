@@ -1,22 +1,23 @@
-import { TrackService } from './game-initialization/track.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
-import { RenderService } from './render.service';
-import { CameraService } from './camera.service';
 import { RacingGameService } from './racing-game.service';
+import { RenderService } from './render.service';
+import { TrackService } from './game-initialization/track.service';
+import { VehicleService } from './vehicle.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RenderService, CameraService, RacingGameService]
+    providers: [RacingGameService, RenderService, TrackService, VehicleService]
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
     constructor(
-        private renderService: RenderService,
         private route: ActivatedRoute,
+        private racingGameService: RacingGameService,
+        private renderService: RenderService,
         private trackService: TrackService
     ) {
     }
@@ -39,12 +40,13 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
 
     public ngOnInit() {
         const trackName = this.route.snapshot.params['name'];
-        this.trackService.get(trackName).then(track =>  {
+        this.trackService.get(trackName).then(track => {
             this.renderService.loadTrack(track);
         });
     }
 
     public ngAfterViewInit() {
-        this.renderService.initialize(this.container, null);
+        this.racingGameService.initializeRender(this.container);
     }
+
 }

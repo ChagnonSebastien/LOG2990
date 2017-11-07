@@ -254,29 +254,6 @@ describe('TrackValidationService', () => {
             }));
     });
 
-    describe('The \'distanceToLine\' method', () => {
-        it('for a line in the x axis',
-            inject([TrackValidationService], (service: TrackValidationService) => {
-                const point = { x: 0, y: 0 };
-                const line = { point1: { x: 6, y: 8 }, point2: { x: 20, y: 8 } };
-                expect(service.distanceToLine(point, line)).toEqual(8);
-            }));
-
-        it('for a line in the y axis',
-            inject([TrackValidationService], (service: TrackValidationService) => {
-                const point = { x: 2, y: 12370 };
-                const line = { point1: { x: -1, y: 4 }, point2: { x: -1, y: 8 } };
-                expect(service.distanceToLine(point, line)).toEqual(3);
-            }));
-
-        it('for an angular line',
-            inject([TrackValidationService], (service: TrackValidationService) => {
-                const point = { x: 10, y: 5 };
-                const line = { point1: { x: 6, y: 8 }, point2: { x: 9, y: 12 } };
-                expect(service.distanceToLine(point, line)).toEqual(5);
-            }));
-    });
-
     describe('The \'twoLineIntersection\' method', () => {
         it('a line in a straight axis and the other in an angular axis',
             inject([TrackValidationService], (service: TrackValidationService) => {
