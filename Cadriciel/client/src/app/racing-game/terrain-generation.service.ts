@@ -40,9 +40,9 @@ export class TerrainGenerationService {
             scene.add(instersection);
         });
 
-        this.generateSegments().forEach(instersection => {
-            scene.add(instersection);
-        });
+        // this.generateSegments().forEach(instersection => {
+        //     scene.add(instersection);
+        // });
 
         this.generateCones().then(cones => {
             cones.forEach(cone => {
@@ -64,7 +64,7 @@ export class TerrainGenerationService {
     }
 
     private generateTable(): THREE.Mesh[] {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
+        /*const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
         const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 500;
         const texture = THREE.ImageUtils.loadTexture('assets/GroundForest003_COL_VAR1_HIRES.jpg');
         const material = new THREE.MeshStandardMaterial( { map: texture, metalness: 0, roughness: 1, envMap: this.textureSky } );
@@ -79,7 +79,81 @@ export class TerrainGenerationService {
             table.push(mesh);
         }
 
-        return table;
+        return table;*/
+
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
+        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
+        const mapWidth = 2 * extreme;
+
+        // texture used to generate "bumpiness"
+        const pixelWidth = 256;
+        const dummyRGB = new Uint8Array(3 * pixelWidth * pixelWidth);
+        for (let i = 0; i < pixelWidth; i++) {
+          // RGB from 0 to 255
+            for (let j = 0; j < pixelWidth; j++) {
+                dummyRGB[3 * i * pixelWidth + 3 * j] =
+                dummyRGB[3 * i * pixelWidth + 3 * j + 1] =
+                dummyRGB[3 * i * pixelWidth + 3 * j + 2] =
+                this.heightAtPoint(j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)) + 64;
+            }
+        }
+
+        const dummyDataTex = new THREE.DataTexture( dummyRGB, pixelWidth, pixelWidth, THREE.RGBFormat );
+        dummyDataTex.needsUpdate = true;
+
+
+        const bumpTexture = THREE.ImageUtils.loadTexture( 'assets/heightmap.png' );
+        bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
+        // magnitude of normal displacement
+        const bumpScale   = 255 * this.scale;
+
+        const oceanTexture = THREE.ImageUtils.loadTexture( 'assets/dirt-512.jpg' );
+        oceanTexture.wrapS = oceanTexture.wrapT = THREE.RepeatWrapping;
+
+        const sandyTexture = THREE.ImageUtils.loadTexture( 'assets/sand-512.jpg' );
+        sandyTexture.wrapS = sandyTexture.wrapT = THREE.RepeatWrapping;
+
+        const grassTexture = THREE.ImageUtils.loadTexture( 'assets/grass-512.jpg' );
+        grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+
+        const rockyTexture = THREE.ImageUtils.loadTexture( 'assets/rock-512.jpg' );
+        rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping;
+
+        const snowyTexture = THREE.ImageUtils.loadTexture( 'assets/snow-512.jpg' );
+        snowyTexture.wrapS = snowyTexture.wrapT = THREE.RepeatWrapping;
+
+
+        // use "this." to create global object
+        const customUniforms = {
+        bumpTexture:	{ type: 't', value: dummyDataTex },
+        bumpScale:	    { type: 'f', value: bumpScale },
+        oceanTexture:	{ type: 't', value: oceanTexture },
+        sandyTexture:	{ type: 't', value: sandyTexture },
+        grassTexture:	{ type: 't', value: grassTexture },
+        rockyTexture:	{ type: 't', value: rockyTexture },
+        snowyTexture:	{ type: 't', value: snowyTexture },
+        };
+
+        // create custom material from the shader code above
+        //   that is within specially labelled script tags
+        console.log(document);
+        const customMaterial = new THREE.ShaderMaterial(
+        {
+        uniforms: customUniforms,
+        vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+        // side: THREE.DoubleSide
+        }   );
+
+        const planeGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, pixelWidth, pixelWidth );
+        const plane = new THREE.Mesh(	planeGeo, customMaterial );
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = -64 * this.scale;
+        return [plane];
+
     }
 
     private generateTriangleStrip(i: number): THREE.Geometry {
@@ -109,7 +183,7 @@ export class TerrainGenerationService {
     private heightAtPoint(x: number, y: number) {
         const availableRadius = this.availableRadius(new THREE.Vector2(x, y));
         return availableRadius > 0 ?
-            this.sigmoid(1, (availableRadius - 60) / 4) * availableRadius * this.sigmoid(0.5, 6 - availableRadius / 2) : 0;
+            this.sigmoid(1, (availableRadius - 60) / 4) * availableRadius * this.sigmoid(0.5, trackRadius - 3 - availableRadius / 2) : 0;
     }
 
     private sigmoid(L: number, x: number) {
@@ -260,7 +334,7 @@ export class TerrainGenerationService {
                 minimumY + (Math.random() * (maximumY - minimumY))
             );
             x--;
-        } while (this.availableRadius(point) < requiredRadius && x > 0);
+        } while (this.availableRadius(point) - trackRadius < requiredRadius && x > 0);
 
         return point;
     }
@@ -268,7 +342,7 @@ export class TerrainGenerationService {
     private availableRadius(point: THREE.Vector2): number {
         const minimumDistanceToTrack = Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return this.distanceFromPointToLine(point, line) - trackRadius;
+            return this.distanceFromPointToLine(point, line);
         }));
 
         const minimumDistanceToObject = Math.min.apply(null, this.decorElements.map( element => {
