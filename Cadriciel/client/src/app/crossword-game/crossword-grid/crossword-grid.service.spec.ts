@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
 
 let gridService: CrosswordGridService;
 
@@ -38,7 +37,6 @@ describe('#CrosswordGridService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                CrosswordPointsService,
                 CrosswordGridService
             ]
         });
@@ -53,14 +51,14 @@ describe('#CrosswordGridService', () => {
         describe('construction', () => {
             it('should initialize the grid of CrosswordSquares', () => {
                 expect(gridService.grid).toBeUndefined();
-                gridService.initialize(grid, wordsWithIndex);
+                gridService.newGame(grid, wordsWithIndex);
                 expect(gridService.grid).toBeDefined();
             });
         });
 
         describe('behaviour', () => {
             beforeEach(() => {
-                gridService.initialize(grid, wordsWithIndex);
+                gridService.newGame(grid, wordsWithIndex);
             });
 
             it('should initialize the answers of the grid', () => {
@@ -116,7 +114,7 @@ describe('#CrosswordGridService', () => {
     describe('insertLetter()', () => {
 
         beforeEach(() => {
-            gridService.initialize(grid, wordsWithIndex);
+            gridService.newGame(grid, wordsWithIndex);
         });
 
         it('should insert a letter when the square is empty', () => {
@@ -151,7 +149,7 @@ describe('#CrosswordGridService', () => {
     describe('eraseletter()', () => {
 
         beforeEach(() => {
-            gridService.initialize(grid, wordsWithIndex);
+            gridService.newGame(grid, wordsWithIndex);
         });
 
         it('should erase if no word using this square is found', () => {
@@ -174,7 +172,7 @@ describe('#CrosswordGridService', () => {
 
     describe('unselectWord()', () => {
         it('should unselect a word', () => {
-            gridService.initialize(grid, wordsWithIndex);
+            gridService.newGame(grid, wordsWithIndex);
 
             // select the word rat
             gridService.grid[0][7].selected = true;
@@ -193,7 +191,7 @@ describe('#CrosswordGridService', () => {
 
     describe('selectWord()', () => {
         it('should select a word', () => {
-            gridService.initialize(grid, wordsWithIndex);
+            gridService.newGame(grid, wordsWithIndex);
 
             // rat unselected
             expect(gridService.grid[0][7].selected).toBeFalsy();
@@ -212,7 +210,7 @@ describe('#CrosswordGridService', () => {
 
     describe('updateWordFoundStatus()', () => {
         beforeEach(() => {
-            gridService.initialize(grid, wordsWithIndex);
+            gridService.newGame(grid, wordsWithIndex);
         });
 
         it('should mark word as found once all inputs match the answer', () => {
@@ -280,28 +278,6 @@ describe('#CrosswordGridService', () => {
             expect(gridService.grid[0][7].selected).toBeFalsy();
             expect(gridService.grid[0][8].selected).toBeFalsy();
             expect(gridService.grid[0][9].selected).toBeFalsy();
-        });
-
-        it('should add word to found words when it is found', () => {
-            const rat = wordsWithIndex[4];
-
-            // word 'rat' not found
-            expect(gridService['pointsService'].found('rat')).toBeFalsy();
-            expect(gridService.grid[0][7].found).toBeFalsy();
-            expect(gridService.grid[0][8].found).toBeFalsy();
-            expect(gridService.grid[0][9].found).toBeFalsy();
-
-            // input correct letters
-            gridService.grid[0][7].input = gridService.grid[0][7].answer;
-            gridService.grid[0][8].input = gridService.grid[0][8].answer;
-            gridService.grid[0][9].input = gridService.grid[0][9].answer;
-            gridService.updateWordFoundStatus(rat);
-
-            // word 'rat' found
-            expect(gridService['pointsService'].found('rat')).toBeTruthy();
-            expect(gridService.grid[0][7].found).toBeTruthy();
-            expect(gridService.grid[0][8].found).toBeTruthy();
-            expect(gridService.grid[0][9].found).toBeTruthy();
         });
     });
 });

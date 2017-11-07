@@ -3,7 +3,8 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
-import { CrosswordPointsService } from '../crossword-points/crossword-points.service';
+import { CrosswordWordsService } from '../crossword-words.service';
+import { CrosswordFoundWordsService } from '../crossword-found-words.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
@@ -11,16 +12,15 @@ import { Word } from '../../../../../commun/word';
 @Injectable()
 export class CrosswordHintsService {
     public selectedWord: string;
-    private selectedWordSubject: Subject<any>;
     public hints: Array<Hint>;
-    private wordMap: Map<string, Word>;
+    private selectedWordSubject: Subject<any>;
 
     constructor(
         private lexiconService: LexiconService,
-        private pointsService: CrosswordPointsService
+        private wordsService: CrosswordWordsService,
+        public foundWordsService: CrosswordFoundWordsService
     ) {
         this.selectedWordSubject = new Subject();
-        this.subscribeToFoundWordAlerts();
     }
 
     public selectedWordAlerts(): Observable<any> {
@@ -29,16 +29,11 @@ export class CrosswordHintsService {
 
     public newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
-        this.wordMap = this.constructWordMap(wordsWithIndex);
         this.initializeHints(wordsWithIndex);
     }
 
-    public getWordInfo(word: string): Word {
-        return this.wordMap.get(word);
-    }
-
     public selectWord(word: string) {
-        const wordWithIndex = this.wordMap.get(word);
+        const wordWithIndex = this.wordsService.getWordWithIndex(word);
         if (wordWithIndex === undefined || this.selectedWord === word) {
             return;
         }
@@ -50,11 +45,10 @@ export class CrosswordHintsService {
         this.selectedWord = undefined;
     }
 
-    private constructWordMap(wordsWithIndex: Array<Word>): Map<string, Word> {
-        return wordsWithIndex.reduce((map, obj) => {
-            map.set(obj.word, obj);
-            return map;
-        }, new Map<string, Word>());
+    public markHintAsFound(word: string) {
+        this.hints.find((hint) => {
+            return hint.word === word;
+        }).found = true;
     }
 
     private initializeHints(wordsWithIndex: Array<Word>) {
@@ -75,18 +69,5 @@ export class CrosswordHintsService {
                 'current': word
             }
         );
-    }
-
-    private subscribeToFoundWordAlerts() {
-        this.pointsService.foundWordAlerts()
-            .subscribe((newlyFoundWord) => {
-                this.hints.find((hint) => {
-                    return hint.word === newlyFoundWord;
-                }).found = true;
-
-                if (newlyFoundWord === this.selectedWord) {
-                    this.unselectHint();
-                }
-            });
     }
 }
