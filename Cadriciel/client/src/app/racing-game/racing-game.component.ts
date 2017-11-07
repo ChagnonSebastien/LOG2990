@@ -12,7 +12,7 @@ import { VehicleService } from './vehicle.service';
     styleUrls: ['./racing-game.component.css'],
     providers: [RacingGameService, RenderService, TrackService, VehicleService]
 })
-export class RacingGameComponent implements AfterViewInit, OnInit {
+export class RacingGameComponent implements AfterViewInit {
 
     constructor(
         private route: ActivatedRoute,
@@ -38,15 +38,11 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
         this.renderService.eventsList(event);
     }
 
-    public ngOnInit() {
+    public ngAfterViewInit() {
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
-            this.renderService.loadTrack(track);
+            this.racingGameService.initializeRender(this.container, track);
         });
-    }
-
-    public ngAfterViewInit() {
-        this.racingGameService.initializeRender(this.container);
     }
 
 }
