@@ -8,22 +8,24 @@ export class CountdownService {
     public countdownMesh: THREE.Mesh;
     private font: THREE.Font;
     private count: number;
+    public countdownStarted: boolean;
+    private timer: Observable<number>;
 
     constructor() {
         this.audio = new Audio('../../assets/countdown.mp3');
         this.audio.load();
         this.count = 6;
+        this.countdownStarted = false;
     }
 
-    public startCountdown(countdown: Observable<number>): Observable<number> {
+    public startCountdown() {
         this.startAudio();
-        countdown = Observable.timer(0, 1000)
+        this.timer = Observable.timer(0, 1000)
             .take(this.count)
             .map(() => --this.count);
-        countdown.subscribe(x => {
+        this.timer.subscribe(x => {
             this.updateCountdown(x);
         });
-        return countdown;
     }
 
     private startAudio() {

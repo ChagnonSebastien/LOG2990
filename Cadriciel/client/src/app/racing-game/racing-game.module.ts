@@ -9,7 +9,6 @@ import { HttpModule } from '@angular/http';
 import { GameInitializationModule } from './game-initialization/game-initialization.module';
 
 import { RacingGameComponent } from './racing-game.component';
-import { CountdownComponent } from './countdown.component';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
@@ -28,11 +27,9 @@ import { VehicleService } from './vehicle.service';
     ],
     declarations: [
         RacingGameComponent,
-        CountdownComponent,
     ],
     exports: [
         RacingGameComponent,
-        CountdownComponent,
     ],
     providers: [
         RenderService,

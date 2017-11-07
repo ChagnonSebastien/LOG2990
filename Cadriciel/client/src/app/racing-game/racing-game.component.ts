@@ -19,7 +19,8 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
         private route: ActivatedRoute,
         private racingGameService: RacingGameService,
         private renderService: RenderService,
-        private trackService: TrackService
+        private trackService: TrackService,
+        private countdownService: CountdownService
     ) {
     }
 
@@ -48,6 +49,18 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
 
     public ngAfterViewInit() {
         this.racingGameService.initializeRender(this.container);
+    }
+
+    private startCountdown(event: any) {
+        if (event.keyCode === 32 && this.countdownService.countdownStarted === false) {
+            this.countdownService.countdownStarted = true;
+            this.countdownService.startCountdown();
+        }
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    public onStartRace() {
+        this.startCountdown(event);
     }
 
 }
