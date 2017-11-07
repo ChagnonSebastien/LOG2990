@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { LexiconService } from '../lexicon.service';
 import { CrosswordWordsService } from '../crossword-words.service';
-import { CrosswordFoundWordsService } from '../crossword-found-words.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
@@ -18,7 +17,6 @@ export class CrosswordHintsService {
     constructor(
         private lexiconService: LexiconService,
         private wordsService: CrosswordWordsService,
-        public foundWordsService: CrosswordFoundWordsService
     ) {
         this.selectedWordSubject = new Subject();
     }

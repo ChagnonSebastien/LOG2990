@@ -56,13 +56,13 @@ export class CrosswordGridService {
         }
     }
 
-    public insertLetter(letter: string, i: number, j: number) {
+    private insertLetter(letter: string, i: number, j: number) {
         if (this.canInsertOrErase(i, j)) {
             this.grid[i][j].input = letter;
         }
     }
 
-    public eraseLetter(i: number, j: number) {
+    private eraseLetter(i: number, j: number) {
         if (this.canInsertOrErase(i, j)) {
             this.grid[i][j].input = '';
         }
