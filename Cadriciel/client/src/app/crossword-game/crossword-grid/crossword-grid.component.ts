@@ -1,4 +1,5 @@
 import { Component, ViewChildren } from '@angular/core';
+import { WordUtilities } from '../word-utilities';
 
 import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordHintsService } from '../crossword-hints/crossword-hints.service';
@@ -55,10 +56,6 @@ export class CrosswordGridComponent {
             });
     }
 
-    private focusOnWord(wordWithIndex: Word) {
-        this.focusOnSquare(wordWithIndex.i, wordWithIndex.j);
-    }
-
     private handleArrows(keyCode: number, i: number, j: number) {
         if (this.keyboardService.isLeftArrow(keyCode)
             || this.keyboardService.isUpArrow(keyCode)) {
@@ -68,6 +65,10 @@ export class CrosswordGridComponent {
         }
     }
 
+    private focusOnWord(wordWithIndex: Word) {
+        this.focusOnSquare(wordWithIndex.i, wordWithIndex.j);
+    }
+
     private focusOnSquare(i: number, j: number) {
         this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
@@ -75,23 +76,25 @@ export class CrosswordGridComponent {
     }
 
     private focusOnNextLetter(i: number, j: number) {
-        const selectedWordWithIndex = this.wordsService
+        const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
-        if (selectedWordWithIndex.horizontal) {
-            j = j + 1 < selectedWordWithIndex.j + selectedWordWithIndex.word.length ? j + 1 : j;
+
+        if (wordInfo.horizontal) {
+            j = WordUtilities.endOfWord(wordInfo, i, j) ? j : j + 1;
         } else {
-            i = i + 1 < selectedWordWithIndex.i + selectedWordWithIndex.word.length ? i + 1 : i;
+            i = WordUtilities.endOfWord(wordInfo, i, j) ? i : i + 1;
         }
         this.focusOnSquare(i, j);
     }
 
     private focusOnPreviousLetter(i: number, j: number) {
-        const selectedWordWithIndex = this.wordsService
+        const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
-        if (selectedWordWithIndex.horizontal) {
-            j = j - 1 >= selectedWordWithIndex.j ? j - 1 : j;
+
+        if (wordInfo.horizontal) {
+            j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
         } else {
-            i = i - 1 >= selectedWordWithIndex.i ? i - 1 : i;
+            i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
         }
         this.focusOnSquare(i, j);
     }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import { WordUtilities } from '../word-utilities';
 
 import { KeyboardService } from '../keyboard.service';
 
@@ -74,24 +75,16 @@ export class CrosswordGridService {
     }
 
     public unselectWord(word: Word) {
-        this.forEachLetter(word, this.unselectSquare.bind(this));
+        WordUtilities.forEachLetter(word, this.unselectSquare.bind(this));
     }
 
     public selectWord(word: Word) {
-        this.forEachLetter(word, this.selectSquare.bind(this));
+        WordUtilities.forEachLetter(word, this.selectSquare.bind(this));
     }
 
     private markWordAsFound(word: Word) {
-        this.forEachLetter(word, this.markSquareAsFound.bind(this));
+        WordUtilities.forEachLetter(word, this.markSquareAsFound.bind(this));
         this.unselectWord(word);
-    }
-
-    private forEachLetter(word: Word, callback) {
-        for (let k = 0; k < word.word.length; k++) {
-            const i = word.horizontal ? word.i : word.i + k;
-            const j = word.horizontal ? word.j + k : word.j;
-            callback(i, j);
-        }
     }
 
     private initializeGrid(grid: string[][]) {
