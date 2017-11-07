@@ -1,19 +1,23 @@
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
+import { RenderService } from './render.service';
+import { TrackService } from './game-initialization/track.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-racing-game',
     templateUrl: './racing-game.component.html',
     styleUrls: ['./racing-game.component.css'],
-    providers: [RacingGameService]
+    providers: [RacingGameService, RenderService, TrackService]
 })
 export class RacingGameComponent implements AfterViewInit, OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private racingGameService: RacingGameService
+        private racingGameService: RacingGameService,
+        private renderService: RenderService,
+        private trackService: TrackService
     ) {
     }
 
@@ -26,22 +30,22 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
 
     @HostListener('window:resize', ['$event'])
     public onResize() {
-        this.racingGameService.onResize();
+        this.renderService.onResize();
     }
 
     public eventsListen(event: any): void {
-        this.racingGameService.eventsList(event);
+        this.renderService.eventsList(event);
     }
 
     public ngOnInit() {
-        this.racingGameService.onInit(this.route.snapshot.params['name']);
+        const trackName = this.route.snapshot.params['name'];
+        this.trackService.get(trackName).then(track => {
+            this.renderService.loadTrack(track);
+        });
     }
 
     public ngAfterViewInit() {
         this.racingGameService.initializeRender(this.container);
     }
 
-    @HostListener('window:keydown', ['$event'])
-    public onStartRace() {
-    }
 }
