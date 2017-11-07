@@ -25,7 +25,7 @@ export class CountdownService {
     }
 
     public async createCountdown(): Promise<void> {
-        this.countdown = await this.create3DCountdown();
+        await this.create3DCountdown();
 
         return new Promise<void>(resolve => {
             resolve();
@@ -49,12 +49,13 @@ export class CountdownService {
                 const material = new THREE.MeshPhongMaterial({
                     color: 0xffff00
                 });
-                const countdown = new THREE.Mesh(textGeometry, material);
-                countdown.position.setX(-165);
-                countdown.position.setY(165);
-                countdown.position.setZ(250);
-                resolve(countdown);
-            });
+                this.countdown = new THREE.Mesh(textGeometry, material);
+                this.countdown.position.setX(-165);
+                this.countdown.position.setY(165);
+                this.countdown.position.setZ(250);
+                console.log(this.countdown);
+                resolve(this.countdown);
+            }.bind(this));
         });
     }
 }
