@@ -1,6 +1,5 @@
 import { CountdownService } from './countdown.service';
 import { Injectable } from '@angular/core';
-import { Vehicle } from './vehicle';
 import { RenderService } from './render.service';
 import { VehicleService } from './vehicle.service';
 
