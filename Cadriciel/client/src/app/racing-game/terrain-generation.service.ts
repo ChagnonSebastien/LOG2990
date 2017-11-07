@@ -1,4 +1,3 @@
-import { ImprovedNoise } from './perlin_noise.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -18,7 +17,7 @@ export class TerrainGenerationService {
 
     private decorElements: {object: THREE.Mesh, radius: number}[] = [];
 
-    constructor(private perlin: ImprovedNoise) {
+    constructor() {
 
     }
 

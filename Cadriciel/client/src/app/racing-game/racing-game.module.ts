@@ -41,7 +41,6 @@ import { VehicleService } from './vehicle.service';
         RacingGameService,
         TerrainGenerationService,
         CommandsService,
-        ImprovedNoise,
         VehicleService
     ]
 })
