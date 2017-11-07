@@ -34,10 +34,6 @@ export class CrosswordGameService {
         });
     }
 
-    public newMultiplayerGame(crosswordDB: CrosswordDB) {
-        this.constructGame(crosswordDB.crossword, crosswordDB.wordsWithIndex, crosswordDB.listOfWords);
-    }
-
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {
         this.wordsService.newGame(wordsWithIndex);
         this.gridService.newGame(grid, wordsWithIndex);

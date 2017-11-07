@@ -7,7 +7,7 @@ import { SocketHandlerSerivce } from './crossword-socket-handler.service';
 import { ClientGameInfo } from '../../../../commun/crossword/clientGameInfo';
 
 @Injectable()
-export class GameManagerService {
+export class CrosswordMultiplayerService {
     public socket: SocketIOClient.Socket;
     protected game: Game;
     protected readonly HOST_NAME = 'http://' + window.location.hostname;
