@@ -135,7 +135,7 @@ export class TerrainGenerationService {
             segmentMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
             segmentMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
             segmentMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-            segmentMesh.position.y = 1;
+            segmentMesh.position.y = 2;
             return segmentMesh;
         });
     }
@@ -153,7 +153,7 @@ export class TerrainGenerationService {
             const intersectionMesh = new THREE.Mesh(geometry, material);
             intersectionMesh.position.x = intersection.x * this.scale;
             intersectionMesh.position.z = intersection.y * this.scale;
-            intersectionMesh.position.y = 1;
+            intersectionMesh.position.y = 2;
             return intersectionMesh;
         });
     }
@@ -170,7 +170,7 @@ export class TerrainGenerationService {
         plaidMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         plaidMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
         plaidMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-        plaidMesh.position.y = 2;
+        plaidMesh.position.y = 3;
 
         return plaidMesh;
     }
