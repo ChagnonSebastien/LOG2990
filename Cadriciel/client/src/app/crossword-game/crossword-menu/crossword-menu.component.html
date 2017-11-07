@@ -1,66 +1,28 @@
-<div id="cloud-container" *ngIf="!gameInProgress">
-  <div class="spacing-100"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-      </div>
-      <div class="align-middle" *ngIf="waitingForPlayer2">
-        <div class="align-middle">
-          <div class="loader">
-          </div>
-        </div>
-        <div>
-          <h2 class="loadingText"> Waiting for player 2...</h2>
-        </div>
-      </div>
-      <div *ngIf="!waitingForPlayer2">
-        <div class="row mt-3 mb-3">
-          <button class="btn btn-default btn-lg btn-custom" (click)="this.creatingGame=true; this.joiningGame=false">Create a game</button>
-          <button class="btn btn-default btn-lg btn-custom" (click)="this.joiningGame=true; this.creatingGame=false">Join a online game</button>
-        </div>
-        <div *ngIf="creatingGame">
-          <div class="row mt-3 mb-3">
-            <div class="form">
-              <h3> What's your nickname?</h3>
-              <input class="usernameInput" id='username' type="text" maxlength="15" [(ngModel)]="this.username" />
-            </div>
-          </div>
-          <div class="row mt-3 mb-3">
-            <div class="col-md-12">
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': type === 'solo' }" (click)="setType('solo')">Solo</button>
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': type === 'multiplayer' }" (click)="setType('multiplayer')">Multiplayer</button>
-            </div>
-          </div>
-          <div class="row mt-3 mb-3">
-            <div class="col-md-12">
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': mode == 'classic'}" (click)="setMode('classic')">Classic</button>
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': mode == 'dynamic'}" (click)="setMode('dynamic')">Dynamic</button>
-            </div>
-          </div>
-          <div class="row mt-3 mb-3">
-            <div class="col-md-12">
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': level == 'easy'}" (click)="setLevel('easy')">Easy</button>
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': level == 'normal'}" (click)="setLevel('normal')">Normal</button>
-              <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': level == 'hard'}" (click)="setLevel('hard')">Hard</button>
-            </div>
-          </div>
-          <div class="row mt-3 mb-3" *ngIf="type && mode && level && this.validateUsername() ">
-            <div class="col-md-12">
-              <button class="btn btn-success btn-lg btn-custom" (click)="startGame()">
-                Start game
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12" *ngIf="joiningGame && !creatingGame">
-        <app-crossword-room (startGameEmitter)="setStartBooleans()"></app-crossword-room>
-      </div>
+<div class="container mt-5">
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': configurationService.type === 'solo' }" (click)="configurationService.setType('solo')">Solo</button>
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': configurationService.type === 'multiplayer' }" (click)="configurationService.setType('multiplayer')">Multiplayer</button>
     </div>
   </div>
-</div>
-<div *ngIf="gameInProgress">
-  <app-crossword-game [type]="type" [mode]="mode" [level]="level" (endGameEmitter)="gameInProgress = false"></app-crossword-game>
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': configurationService.mode == 'classic'}" (click)="configurationService.setMode('classic')">Classic</button>
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{ 'btn-primary': configurationService.mode == 'dynamic'}" (click)="configurationService.setMode('dynamic')">Dynamic</button>
+    </div>
+  </div>
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': configurationService.level == 'easy'}" (click)="configurationService.setLevel('easy')">Easy</button>
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': configurationService.level == 'normal'}" (click)="configurationService.setLevel('normal')">Normal</button>
+      <button class="btn btn-default btn-lg btn-custom" [ngClass]="{'btn-primary': configurationService.level == 'hard'}" (click)="configurationService.setLevel('hard')">Hard</button>
+    </div>
+  </div>
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <button class="btn btn-success btn-lg btn-custom" (click)="configurationService.startGame()">
+        Start game
+      </button>
+    </div>
+  </div>
 </div>
