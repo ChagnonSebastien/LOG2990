@@ -7,15 +7,8 @@ import { VehicleService } from './vehicle.service';
 const numberOfOpponents = 3;
 @Injectable()
 export class RacingGameService {
-    private mainVehicle: Vehicle;
-    private opponentsVehicles: Array<Vehicle>;
 
     constructor(private renderService: RenderService, private vehicleService: VehicleService, private countdownService: CountdownService) {
-        this.mainVehicle = new Vehicle();
-        this.opponentsVehicles = [];
-        for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle();
-        }
     }
 
     public async initializeRender(container: HTMLElement) {
