@@ -88,8 +88,18 @@ export class TerrainGenerationService {
                 const availableRadius1 = this.availableRadius(new THREE.Vector2(i, j));
                 const availableRadius2 = this.availableRadius(new THREE.Vector2(i + 5, j));
                 geometry.vertices.push(
-                    new THREE.Vector3( i * this.scale, availableRadius1 > 5 ? 10 * (availableRadius1 - 5) : 0, j * this.scale ),
-                    new THREE.Vector3( (i + 5) * this.scale, availableRadius2 > 5 ? 10 * (availableRadius2 - 5) : 0, j * this.scale)
+                    new THREE.Vector3(
+                        i * this.scale,
+                        availableRadius1 > 0 ?
+                        this.sigmoid(1, (availableRadius1 - 60) / 4) * availableRadius1 * this.scale * this.sigmoid(0.5, 6 - availableRadius1 / 2) : 0,
+                        j * this.scale
+                    ),
+                    new THREE.Vector3(
+                        (i + 5) * this.scale,
+                        availableRadius2 > 5 ?
+                        this.sigmoid(1, (availableRadius2 - 60) / 4) * availableRadius2 * this.scale * this.sigmoid(0.5, 6 - availableRadius2 / 2) : 0,
+                        j * this.scale
+                    )
                 );
             }
 
@@ -115,6 +125,10 @@ export class TerrainGenerationService {
         table.position.z = minimumY + ((maximumY - minimumY) / 2);
         table.receiveShadow = true;*/
         return table;
+    }
+
+    private sigmoid(L: number, x: number) {
+        return L / (1 + Math.pow(Math.E, x));
     }
 
     private generateSegments(): THREE.Mesh[] {
