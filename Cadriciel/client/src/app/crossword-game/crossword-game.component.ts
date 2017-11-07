@@ -18,6 +18,10 @@ export class CrosswordGameComponent {
         this.listenForStartGame();
     }
 
+    public endGame() {
+        this.gameInProgress = false;
+    }
+
     private listenForStartGame() {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
