@@ -27,7 +27,7 @@ export class RenderService {
 
     private events: any;
 
-    private isPressed: boolean;
+    private keyIsDown: boolean;
 
     constructor(
         private cameraService: CameraService,
@@ -37,7 +37,7 @@ export class RenderService {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.events = event;
-            this.isPressed = true;
+            this.keyIsDown = true;
         });
     }
 
@@ -85,9 +85,12 @@ export class RenderService {
         this.terrainGenerationService.generate(this.scene, 25, track, this.textureSky);
     }
 
-    public eventsList(event: any): void {
-        this.cameraService.swapCamera(event);
-        this.cameraService.zoomCamera(event);
+    public eventsList(): void {
+        if ( this.keyIsDown) {
+            this.cameraService.swapCamera(this.events);
+            this.cameraService.zoomCamera(this.events);
+            this.keyIsDown = false;
+        }
     }
 
     public startRenderingLoop() {
@@ -104,6 +107,7 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
+        this.eventsList();
         this.stats.update();
     }
 

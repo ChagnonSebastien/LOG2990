@@ -37,7 +37,6 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
     }
 
     public eventsListen(event: any): void {
-        this.renderService.eventsList(event);
         this.commandsService.sendKeyDownEvent(event);
     }
 
