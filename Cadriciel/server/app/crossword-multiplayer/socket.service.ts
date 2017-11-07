@@ -33,10 +33,16 @@ export class SocketManager {
             });
 
             socket.on('disconnect', () => {
-                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA1");
-                // socket.broadcast.to(socket.rooms[0]).emit('opponent left');
-                const room: string  = this.gameManager.findGameIdBySocketId(socket.id);
-                this.sio.sockets.in(room).emit('opponent left');
+                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
+                if (room !== '-1') {
+                    this.sio.sockets.in(room).emit('opponent left');
+                }
+            });
+
+            socket.on('leaveGame', (gameId: string) => {
+                socket.leave(gameId);
+                this.sio.sockets.in(gameId).emit('opponent left');
+                this.gameManager.deleteGame(gameId);
             });
 
             socket.on('found a word', () => {

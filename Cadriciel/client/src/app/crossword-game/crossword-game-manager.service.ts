@@ -9,13 +9,13 @@ import { ClientGameInfo } from '../../../../commun/crossword/clientGameInfo';
 @Injectable()
 export class GameManagerService {
     public socket: SocketIOClient.Socket;
-    protected game: Game;
-    protected readonly HOST_NAME = 'http://' + window.location.hostname;
-    protected readonly SERVER_PORT = ':3000';
-    protected playerTwoSubject: Subject<any>;
-    protected endGameSubject: Subject<any>;
+    private game: Game;
+    private readonly HOST_NAME = 'http://' + window.location.hostname;
+    private readonly SERVER_PORT = ':3000';
+    private playerTwoSubject: Subject<any>;
+    private endGameSubject: Subject<any>;
 
-    constructor(protected socketHandlerSerivce: SocketHandlerSerivce) {
+    constructor(private socketHandlerSerivce: SocketHandlerSerivce) {
         this.playerTwoSubject = new Subject();
         this.endGameSubject = new Subject();
         this.game = new Game();

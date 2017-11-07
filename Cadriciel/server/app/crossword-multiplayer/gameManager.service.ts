@@ -4,13 +4,12 @@ import { ClientGameInfo } from '../../../commun/crossword/clientGameInfo';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 export class GameManager {
-
-    private games: Game[];
+    private games: Map<string, Game>;
     private idCounter: number;
     private serverCrosswords: ServerCrosswords;
 
     constructor() {
-        this.games = [];
+        this.games = new Map<string, Game>();
         this.idCounter = 0;
         this.serverCrosswords = ServerCrosswords.getInstance();
         this.serverCrosswords.setCollection('crosswords');
@@ -18,7 +17,7 @@ export class GameManager {
 
     public getGames(): { id: string, playerHost: string, difficulty: string, mode: string, username2: string }[] {
         const gamesInfo: ClientGameInfo[] = [];
-        this.games.forEach((game, index) => {
+        this.games.forEach((game, key) => {
             const gameInfo = new ClientGameInfo(game.id, game.player1.username, game.difficulty,
                 game.mode, game.option, game.player2.username);
             gamesInfo.push(gameInfo);
@@ -39,9 +38,13 @@ export class GameManager {
                 crossword: crossword
             };
             this.idCounter++;
-            this.games.push(game);
+            this.games.set(game.id, game);
         });
         return await game;
+    }
+
+    public deleteGame(gameId: string): void {
+        this.games.delete(gameId);
     }
 
     public joinGame(gameId: string, player: Player): Game {
@@ -50,19 +53,14 @@ export class GameManager {
         return game;
     }
 
-    public findGameById(id: string): Game {
-        for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].id === id) {
-                return this.games[i];
-            }
-        }
-        return null;
+    public findGameById(gameId: string): Game {
+        return this.games.get(gameId);
     }
 
     public findGameIdBySocketId(id: string): string {
-        for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].player1.socketID === id || this.games[i].player2.socketID === id) {
-                return this.games[i].id;
+        for (const game of this.games.values()) {
+            if (game.player1.socketID === id || game.player2.socketID === id) {
+                return game.id;
             }
         }
         return '-1';

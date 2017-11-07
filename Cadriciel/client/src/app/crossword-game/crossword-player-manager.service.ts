@@ -40,7 +40,7 @@ export class PlayerManagerService {
     }
 
     public emitHintSelected(hint: string) {
-        //another service calls it to emit hint selection 
+        // another service calls it to emit hint selection
         this.socket.emit('selected a word', hint, this.player.getSocketID());
     }
 }
