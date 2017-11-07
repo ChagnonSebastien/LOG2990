@@ -17,9 +17,8 @@ describe('test CountdownService', function () {
     });
 
     it('starts countdown', () => {
-        let countdown: Observable<number> = null;
-        countdown = countdownService.startCountdown(countdown);
-        expect(countdown !== null).toBeTruthy();
+        countdownService.startCountdown();
+        expect(countdownService['timer']).toBeDefined();
         expect(countdownService['count'] !== 6);
     });
 });
