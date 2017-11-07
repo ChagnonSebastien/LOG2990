@@ -2,6 +2,6 @@
     <div *ngFor="let square of row; let j = index">
       <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': gridService.grid[i][j].black, 'empty': gridService.grid[i][j].empty, 'found': gridService.grid[i][j].found, 'selected': gridService.grid[i][j].selected }"
         type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="gridService.grid[i][j].black || gridService.grid[i][j].found || !gridService.grid[i][j].selected"
-        (keydown)="handleInput($event, i, j)" [(ngModel)]="gridService.grid[i][j].input" #square>
+        (keydown)="keyboardService.handleInput($event, i, j)" [(ngModel)]="gridService.grid[i][j].input" #square>
     </div>
   </div>

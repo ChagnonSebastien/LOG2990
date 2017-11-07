@@ -30,12 +30,19 @@ export class KeyboardService {
     public handleInput(event: KeyboardEvent, i: number, j: number) {
         const charCode = event.which || event.keyCode;
         const letter = String.fromCharCode(charCode).toLowerCase();
+
         if (this.isLetter(charCode)) {
-            this.letterInputSubject.next({ letter: letter, i: i, j: j });
+            this.letterInputSubject.next(
+                { letter: letter, i: i, j: j }
+            );
         } else if (this.isBackspace(charCode)) {
-            this.backspaceSubject.next({ i: i, j: j });
+            this.backspaceSubject.next(
+                { i: i, j: j }
+            );
         } else if (this.isArrowKey(charCode)) {
-            this.arrowSubject.next(({ charCode: charCode, i: i, j: j }));
+            this.arrowSubject.next(
+                { charCode: charCode, i: i, j: j }
+            );
         }
         this.disableEvent(event);
     }
@@ -59,6 +66,19 @@ export class KeyboardService {
 
     public isArrowKey(keyCode: number) {
         return keyCode >= 37 && keyCode <= 40;
+    }
+
+    private whichArrow(arrowCode: number) {
+        switch (arrowCode) {
+            case 37:
+                return 'left';
+            case 38:
+                return 'up';
+            case 39:
+                return 'right';
+            case 40:
+                return 'down';
+        }
     }
 
     public isLeftArrow(keyCode: number) {

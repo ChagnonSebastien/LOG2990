@@ -128,7 +128,9 @@ export class CrosswordGridService {
     }
 
     private selectSquare(i: number, j: number) {
-        this.grid[i][j].selected = true;
+        if (!this.grid[i][j].found) {
+            this.grid[i][j].selected = true;
+        }
     }
 
     private markSquareAsFound(i: number, j: number) {
