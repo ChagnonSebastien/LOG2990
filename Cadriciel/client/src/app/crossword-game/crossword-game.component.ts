@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CrosswordGameService } from './crossword-game.service';
 import { CrosswordConfigurationService } from './crossword-menu/crossword-configuration.service';
+import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 
 @Component({
     selector: 'app-crossword-game',
@@ -9,17 +10,22 @@ import { CrosswordConfigurationService } from './crossword-menu/crossword-config
 })
 export class CrosswordGameComponent {
     public gameInProgress: boolean;
+    public gameCompleted: boolean;
 
     constructor(
         public crosswordGameService: CrosswordGameService,
-        private configurationService: CrosswordConfigurationService
+        private configurationService: CrosswordConfigurationService,
+        private pointsService: CrosswordPointsService
     ) {
         this.gameInProgress = false;
+        this.gameCompleted = false;
         this.listenForStartGame();
+        this.listenForGameCompletion();
     }
 
     public endGame() {
         this.gameInProgress = false;
+        this.gameCompleted = false;
     }
 
     private listenForStartGame() {
@@ -36,6 +42,13 @@ export class CrosswordGameComponent {
         this.crosswordGameService.gameStartAlerts()
             .subscribe((start) => {
                 this.gameInProgress = true;
+            });
+    }
+
+    private listenForGameCompletion() {
+        this.pointsService.gameCompletedAlerts()
+            .subscribe((end: boolean) => {
+                this.gameCompleted = end;
             });
     }
 }

@@ -24,6 +24,7 @@ import { CrosswordHintsComponent } from './crossword-hints/crossword-hints.compo
 import { CrosswordGridComponent } from './crossword-grid/crossword-grid.component';
 import { CrosswordLobbyComponent } from './crossword-lobby/crossword-lobby.component';
 import { CrosswordPointsComponent } from './crossword-points/crossword-points.component';
+import { CrosswordEndGameComponent } from './crossword-end-game.component';
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { CrosswordPointsComponent } from './crossword-points/crossword-points.co
         CrosswordHintsComponent,
         CrosswordGridComponent,
         CrosswordLobbyComponent,
-        CrosswordPointsComponent
+        CrosswordPointsComponent,
+        CrosswordEndGameComponent
     ],
     exports: [
 

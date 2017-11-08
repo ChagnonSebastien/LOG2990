@@ -20,6 +20,11 @@
             <app-crossword-points></app-crossword-points>
           </div>
         </div>
+        <div *ngIf="gameCompleted" class="row">
+          <div class="col-md-12">
+            <app-crossword-end-game></app-crossword-end-game>
+          </div>
+        </div>
       </div>
     </div>
     <div class="container">
