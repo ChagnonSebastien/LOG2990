@@ -45,4 +45,10 @@ export class Vehicle {
 
         return angle;
     }
+
+    private calculateBeta(carPosition: VehiclesPosition, trackCenterAngle: number): number {
+        const beta = 45 - trackCenterAngle + ((carPosition - 1) * 90);
+
+        return beta;
+    }
 }
