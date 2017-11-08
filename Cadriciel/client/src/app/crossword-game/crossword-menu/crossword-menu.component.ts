@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+
 import { CrosswordConfigurationService } from './crossword-configuration.service';
+import { CrosswordPlayerService } from '../crossword-player.service';
 
 @Component({
     selector: 'app-crossword-menu',
@@ -7,5 +9,8 @@ import { CrosswordConfigurationService } from './crossword-configuration.service
     styleUrls: ['./crossword-menu.component.css'],
 })
 export class CrosswordMenuComponent {
-    constructor(private configurationService: CrosswordConfigurationService) { }
+    constructor(
+        private configurationService: CrosswordConfigurationService,
+        private playerService: CrosswordPlayerService
+    ) { }
 }

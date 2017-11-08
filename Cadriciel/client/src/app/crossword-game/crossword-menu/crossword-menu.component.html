@@ -20,6 +20,12 @@
   </div>
   <div class="row mt-3 mb-3">
     <div class="col-md-12">
+      <span class="text-white mr-2 ml-2">Username: </span>
+      <input class="form-control mr-2 ml-2" [(ngModel)]="playerService.username">
+    </div>
+  </div>
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
       <button class="btn btn-success btn-lg btn-custom" (click)="configurationService.startGame()">
         Start game
       </button>
