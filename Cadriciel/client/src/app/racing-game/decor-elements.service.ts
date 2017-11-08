@@ -16,6 +16,11 @@ const panelRadius = 3;
 const dylanPanelAmount = 'votonsdylan.json';
 const michelPanelAmount = 'votonsmichel.json';
 
+const treeMinimumHeight = 0;
+const treeMaximumHeight = 12;
+const treeRarity = 0.1;
+const treePath = 'tree.json';
+
 @Injectable()
 export class DecorElementsService {
 
@@ -25,17 +30,39 @@ export class DecorElementsService {
 
     private scale: number;
 
+    private treesPositions: THREE.Vector3[] = [];
+
     constructor(private lineCalculationService: LineCalculationService) {
     }
 
-    public placeDecor(scene: THREE.Scene, scale: number, track: Track): void {
+    public initialize(scene: THREE.Scene, scale: number, track: Track): void {
         this.scene = scene;
         this.track = track;
         this.scale = scale;
+    }
 
+    public placeDecor(): void {
         this.placeDecorElement(coneAmount, coneRadius, conePath);
         this.placeDecorElement(panelAmount, panelRadius, dylanPanelAmount);
         this.placeDecorElement(panelAmount, panelRadius, michelPanelAmount);
+    }
+
+    public addTree(x, y, z): void {
+        if (y > treeMinimumHeight && y < treeMaximumHeight && Math.random() < treeRarity) {
+            this.treesPositions.push( new THREE.Vector3(x, y, z));
+        }
+    }
+
+    public placeTrees(): void {
+        this.loadMesh(treePath).then( tree => {
+            tree.scale.set(this.scale, this.scale, this.scale);
+            this.treesPositions.forEach(position => {
+                const treeClone = tree.clone();
+                treeClone.position.set(position.x * this.scale, position.y * this.scale, position.z * this.scale);
+                treeClone.rotateY(Math.PI * 2 * Math.random());
+                this.scene.add(treeClone);
+            });
+        });
     }
 
     private loadMesh(path: string): Promise<THREE.Mesh> {

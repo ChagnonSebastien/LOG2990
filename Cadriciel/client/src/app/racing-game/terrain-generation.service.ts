@@ -1,3 +1,4 @@
+import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
 import { Track } from './track';
@@ -10,7 +11,11 @@ const maximumSlope = 2;
 @Injectable()
 export class TerrainGenerationService {
 
+    private scene: THREE.Scene;
+
     private track: Track;
+
+    private mapWidth: number;
 
     private trees: THREE.Vector3[] = [];
 
@@ -39,6 +44,7 @@ export class TerrainGenerationService {
         this.addObjectsInScene(scene);
         console.log('generate method end');
     }
+        this.decorElementsService.initialize(scene, scale, track);
 
     private addObjectsInScene(scene: THREE.Scene) {
 
@@ -48,6 +54,8 @@ export class TerrainGenerationService {
         });
         console.log('plaid');
         scene.add(this.generateRaceStartPlaid());
+        this.decorElementsService.placeDecor();
+        this.decorElementsService.placeTrees();
 
         console.log('intersection');
         this.generateIntersections().forEach(instersection => {
