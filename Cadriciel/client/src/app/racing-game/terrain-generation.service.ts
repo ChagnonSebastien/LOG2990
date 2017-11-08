@@ -25,6 +25,7 @@ export class TerrainGenerationService {
     private heightMapSteps = 10;
 
     constructor() {
+        console.log('constroctor begin');
         for (let i = 0; i < Math.pow(2, this.heightMapSteps); i++) {
             this.heightMap.push([]);
         }
@@ -35,6 +36,7 @@ export class TerrainGenerationService {
         this.heightMap[width][width] = Math.random() * 128;
 
         let stepSize = width;
+        console.log('terrain generation begin');
         while (stepSize > 1) {
             for (let i = 0; i < width / stepSize; i++) {
                 for (let j = 0; j < width / stepSize; j++) {
@@ -52,6 +54,7 @@ export class TerrainGenerationService {
                 }
             }
         }
+        console.log('terrain generation end, constroctor end');
     }
 
     private diamondStep(x, y, stepSize) {
@@ -106,40 +109,49 @@ export class TerrainGenerationService {
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
+        console.log('generate method begin');
         this.track = track;
         this.scale = scale;
         this.textureSky = textureSky;
 
         this.addObjectsInScene(scene);
+        console.log('generate method end');
     }
 
     private addObjectsInScene(scene: THREE.Scene) {
 
+        console.log('table');
         this.generateTable(scene).forEach(triangle => {
             scene.add(triangle);
         });
+        console.log('plaid');
         scene.add(this.generateRaceStartPlaid());
 
+        console.log('intersection');
         this.generateIntersections().forEach(instersection => {
             scene.add(instersection);
         });
 
+        console.log('segemnt');
         this.generateSegments().forEach(instersection => {
             scene.add(instersection);
         });
 
+        console.log('cone');
         this.generateCones().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
         });
 
+        console.log('michel');
         this.generateMichelElectionPanels().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
         });
 
+        console.log('dylan');
         this.generateDylanElectionPanels().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
