@@ -41,8 +41,10 @@ export class CrosswordGridService {
     }
 
     private checkIfWordsFound(i: number, j: number) {
-        for (const word of this.grid[i][j].words) {
-            this.updateWordFoundStatus(word);
+        if (this.canInsertOrErase(i, j)) {
+            for (const word of this.grid[i][j].words) {
+                this.updateWordFoundStatus(word);
+            }
         }
     }
 
@@ -152,18 +154,14 @@ export class CrosswordGridService {
     }
 
     private markSquareAsFound(i: number, j: number) {
-        if (!this.grid[i][j].opponentFound) {
-            this.grid[i][j].found = true;
-        }
+        this.grid[i][j].found = true;
         this.grid[i][j].selected = false;
         this.grid[i][j].opponentSelected = false;
     }
 
     private markSquareAsFoundByOpponent(i: number, j: number) {
-        if (!this.grid[i][j].found) {
-            this.grid[i][j].opponentFound = true;
-            this.grid[i][j].input = this.grid[i][j].answer;
-        }
+        this.grid[i][j].opponentFound = true;
+        this.grid[i][j].input = this.grid[i][j].answer;
         this.grid[i][j].selected = false;
         this.grid[i][j].opponentSelected = false;
     }

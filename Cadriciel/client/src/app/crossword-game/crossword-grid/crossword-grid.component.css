@@ -33,6 +33,25 @@
     color: white;
 }
 
+.both-found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    color: white;
+
+    background: rgb(183, 0, 255);
+    /* For browsers that do not support gradients */
+    /* Safari 5.1 to 6.0 */
+    background: -webkit-repeating-linear-gradient(-90deg, red, blue);
+    /* Opera 11.1 to 12.0 */
+    background: -o-repeating-linear-gradient(-90deg, red, blue);
+    /* Firefox 3.6 to 15 */
+    background: -moz-repeating-linear-gradient(-90deg, red, blue);
+    /* Standard syntax */
+    background: repeating-linear-gradient(-90deg, red, blue);
+}
+
 .selected {
     border: 3px solid #007bff !important;
 }
