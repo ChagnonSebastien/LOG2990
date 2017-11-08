@@ -5,6 +5,7 @@ import * as THREE from 'three';
 const trackRadius = 10;
 const coneRadius = 20;
 const votePanelRadius = 4;
+const maximumSlope = 2;
 
 @Injectable()
 export class TerrainGenerationService {
@@ -17,8 +18,84 @@ export class TerrainGenerationService {
 
     private decorElements: {object: THREE.Mesh, radius: number}[] = [];
 
-    constructor() {
+    private heightMap: number[][] = [[]];
 
+    private heightMapSteps = 10;
+
+    constructor() {
+        for (let i = 0; i < Math.pow(2, this.heightMapSteps); i++) {
+            this.heightMap.push([]);
+        }
+        const width = Math.pow(2, this.heightMapSteps);
+        this.heightMap[0][0] = Math.random() * 128;
+        this.heightMap[0][width] = Math.random() * 128;
+        this.heightMap[width][0] = Math.random() * 128;
+        this.heightMap[width][width] = Math.random() * 128;
+
+        let stepSize = width;
+        while (stepSize > 1) {
+            for (let i = 0; i < width / stepSize; i++) {
+                for (let j = 0; j < width / stepSize; j++) {
+                    this.diamondStep(i * stepSize, j * stepSize, stepSize);
+                }
+            }
+
+            stepSize /= 2;
+
+            for (let i = 0; i <= width / stepSize; i ++) {
+                for (let j = 0; j <= width / stepSize; j ++) {
+                    if ((i + j) % 2 === 1) {
+                        this.squareStep(i * stepSize, j * stepSize, stepSize);
+                    }
+                }
+            }
+        }
+    }
+
+    private diamondStep(x, y, stepSize) {
+        const minimumValue = Math.min(
+            this.heightMap[x][y],
+            this.heightMap[x + stepSize][y],
+            this.heightMap[x][y + stepSize],
+            this.heightMap[x + stepSize][y + stepSize]
+        );
+        const maximumValue = Math.max(
+            this.heightMap[x][y],
+            this.heightMap[x + stepSize][y],
+            this.heightMap[x][y + stepSize],
+            this.heightMap[x + stepSize][y + stepSize]
+        );
+
+        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
+        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
+
+        let randomValue = Math.random();
+        if (randomValue < 0.5) {
+            randomValue = Math.random();
+        }
+
+        this.heightMap[x + stepSize / 2][y + stepSize / 2] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
+    }
+
+    private squareStep(x, y, stepSize) {
+        const width = Math.pow(2, this.heightMapSteps);
+        const minimumValue = Math.min(
+            x + stepSize > width ? Infinity : this.heightMap[x + stepSize][y],
+            y + stepSize > width ? Infinity : this.heightMap[x][y + stepSize],
+            x - stepSize < 0 ? Infinity : this.heightMap[x - stepSize][y],
+            y - stepSize < 0 ? Infinity : this.heightMap[x][y - stepSize]
+        );
+        const maximumValue = Math.max(
+            x + stepSize > width ? -Infinity : this.heightMap[x + stepSize][y],
+            y + stepSize > width ? -Infinity : this.heightMap[x][y + stepSize],
+            x - stepSize < 0 ? -Infinity : this.heightMap[x - stepSize][y],
+            y - stepSize < 0 ? -Infinity : this.heightMap[x][y - stepSize]
+        );
+
+        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
+        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
+
+        this.heightMap[x][y] = minimumRandomValue + Math.random() * (maximumRandomValue - minimumRandomValue);
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
