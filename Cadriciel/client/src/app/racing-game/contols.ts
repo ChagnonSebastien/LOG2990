@@ -13,19 +13,19 @@ export class Controls {
 
     public accelerate (object: any) {
         this.speed += this.acceleration;
-        object.translateZ(this.speed);
+        object.translateZ(-this.speed);
     }
 
     public brake (object: any) {
         this.speed -= this.acceleration;
-        object.translateZ(this.speed);
+        object.translateZ(-this.speed);
     }
 
     public leftRotation(object: any) {
-        object.rotation.y(this.rotationAngle);
+        object.rotation.y = this.rotationAngle;
     }
 
     public rightRotation(object: any) {
-        object.rotation.y(-this.rotationAngle);
+        object.rotation.y = -this.rotationAngle;
     }
 }
