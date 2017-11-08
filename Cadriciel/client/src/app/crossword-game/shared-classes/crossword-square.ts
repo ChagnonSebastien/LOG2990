@@ -4,6 +4,7 @@ export class CrosswordSquare {
     public black: boolean;
     public empty: boolean;
     public found: boolean;
+    public opponentFound: boolean;
     public answer: string;
     public input: string;
     public selected: boolean;
@@ -17,6 +18,7 @@ export class CrosswordSquare {
         this.black = character === ' ' || character === '#';
         this.empty = !this.black;
         this.found = false;
+        this.opponentFound = false;
         this.answer = character;
         this.input = '';
         this.selected = false;

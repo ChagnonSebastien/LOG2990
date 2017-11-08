@@ -24,6 +24,15 @@
     color: white;
 }
 
+.opponent-found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: #dc3545;
+    color: white;
+}
+
 .selected {
     border: 3px solid #007bff !important;
 }
@@ -62,6 +71,15 @@
         background: #007bff;
         color: white;
     }
+
+    .opponent-found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: #dc3545;
+        color: white;
+    }
 }
 
 @media (max-width: 992px) {
@@ -81,6 +99,15 @@
         font-size: 1.5em;
         border: 1px solid white;
         background: #007bff;
+        color: white;
+    }
+
+    .opponent-found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: #dc3545;
         color: white;
     }
 }

@@ -46,9 +46,20 @@ export class CrosswordHintsService {
     }
 
     public markHintAsFound(word: string) {
+        this.opponentSelectedWord = undefined;
         this.hints.find((hint) => {
             return hint.word === word;
         }).found = true;
+    }
+
+    public markHintAsFoundByOpponent(word: string) {
+        this.opponentSelectedWord = undefined;
+        if (this.selectedWord === word) {
+            this.unselectHint();
+        }
+        this.hints.find((hint) => {
+            return hint.word === word;
+        }).opponentFound = true;
     }
 
     private initializeHints(wordsWithIndex: Array<Word>) {

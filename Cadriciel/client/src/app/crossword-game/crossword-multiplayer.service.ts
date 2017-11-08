@@ -15,6 +15,7 @@ export class CrosswordMultiplayerService {
     public games: Array<CrosswordGameInfo>;
     private gameStartSubject: Subject<any>;
     private opponentHintSelection: Subject<any>;
+    private opponentFoundWord: Subject<any>;
 
     constructor(
         private socketService: CrosswordSocketService,
@@ -22,11 +23,13 @@ export class CrosswordMultiplayerService {
     ) {
         this.gameStartSubject = new Subject();
         this.opponentHintSelection = new Subject();
+        this.opponentFoundWord = new Subject();
         this.getGames();
         setInterval(this.getGames.bind(this), 1000);
         this.listenForActiveGames();
         this.listenForGameStart();
         this.listenForOpponentHintSelections();
+        this.listenForOpponentFoundWords();
     }
 
     public gameStartAlerts(): Observable<any> {
@@ -35,6 +38,10 @@ export class CrosswordMultiplayerService {
 
     public opponentHintSelectionAlerts(): Observable<any> {
         return this.opponentHintSelection.asObservable();
+    }
+
+    public opponentFoundWordAlerts(): Observable<any> {
+        return this.opponentFoundWord.asObservable();
     }
 
     public createGame(difficulty: string, mode: string) {
@@ -53,10 +60,14 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.emit('get games');
     }
 
-    public selectHint(
+    public emitSelectHint(
         hintSelection: { 'previous': string, 'current': Word }
     ) {
         this.socketService.socket.emit('selected hint', hintSelection);
+    }
+
+    public emitFoundWord(word: Word) {
+        this.socketService.socket.emit('found word', word);
     }
 
     private listenForActiveGames() {
@@ -76,6 +87,13 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.on('opponent selected a hint', (hintSelection) => {
             console.log('OPPONENT SELECTED', hintSelection);
             this.opponentHintSelection.next(hintSelection);
+        });
+    }
+
+    private listenForOpponentFoundWords() {
+        this.socketService.socket.on('opponent found a word', (foundWord) => {
+            console.log('OPPONENT FOUND', foundWord);
+            this.opponentFoundWord.next(foundWord);
         });
     }
 

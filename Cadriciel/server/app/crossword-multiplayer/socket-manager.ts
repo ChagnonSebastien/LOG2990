@@ -48,6 +48,17 @@ export class SocketManager {
                 }
             });
 
+            socket.on('found word', (foundWord) => {
+                for (const roomId in socket.rooms) {
+                    if (socket.rooms.hasOwnProperty(roomId)) {
+                        if (roomId !== socket.id) {
+                            socket.broadcast.to(roomId)
+                                .emit('opponent found a word', foundWord);
+                        }
+                    }
+                }
+            });
+
             /*socket.on('joinGame', (gameId: string, player: Player) => {
                 socket.join(gameId);
                 this.io.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));

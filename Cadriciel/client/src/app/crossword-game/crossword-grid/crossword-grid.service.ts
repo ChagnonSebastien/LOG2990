@@ -74,7 +74,7 @@ export class CrosswordGridService {
 
     private canInsertOrErase(i: number, j: number): boolean {
         const square = this.grid[i][j];
-        return !square.found && !square.black && square.selected;
+        return !square.found && !square.opponentFound && !square.black && square.selected;
     }
 
     public unselectWord(word: Word) {
@@ -91,6 +91,10 @@ export class CrosswordGridService {
 
     public selectWordOpponent(word: Word) {
         WordUtilities.forEachLetter(word, this.selectSquareOpponent.bind(this));
+    }
+
+    public markWordAsFoundByOpponent(word: Word) {
+        WordUtilities.forEachLetter(word, this.markSquareAsFoundByOpponent.bind(this));
     }
 
     private markWordAsFound(word: Word) {
@@ -148,6 +152,19 @@ export class CrosswordGridService {
     }
 
     private markSquareAsFound(i: number, j: number) {
-        this.grid[i][j].found = true;
+        if (!this.grid[i][j].opponentFound) {
+            this.grid[i][j].found = true;
+        }
+        this.grid[i][j].selected = false;
+        this.grid[i][j].opponentSelected = false;
+    }
+
+    private markSquareAsFoundByOpponent(i: number, j: number) {
+        if (!this.grid[i][j].found) {
+            this.grid[i][j].opponentFound = true;
+            this.grid[i][j].input = this.grid[i][j].answer;
+        }
+        this.grid[i][j].selected = false;
+        this.grid[i][j].opponentSelected = false;
     }
 }
