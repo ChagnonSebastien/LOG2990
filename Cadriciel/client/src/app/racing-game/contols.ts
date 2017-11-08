@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 export class Controls {
     private speed: number;
 
@@ -24,10 +22,10 @@ export class Controls {
     }
 
     public leftRotation(object: any) {
-        object.rotate.x(this.rotationAngle);
+        object.rotation.y(this.rotationAngle);
     }
 
     public rightRotation(object: any) {
-        object.rotate.x(-this.rotationAngle);
+        object.rotation.y(-this.rotationAngle);
     }
 }
