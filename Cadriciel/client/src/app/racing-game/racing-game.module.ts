@@ -1,3 +1,4 @@
+import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
 import { CountdownService } from './countdown.service';
 import { TerrainGenerationService } from './terrain-generation.service';
@@ -41,7 +42,8 @@ import { VehicleService } from './vehicle.service';
         CommandsService,
         VehicleService,
         CountdownService,
-        DecorElementsService
+        DecorElementsService,
+        LineCalculationService
     ]
 })
 export class RacingGameModule { }
