@@ -28,10 +28,10 @@ export class CrosswordGameService {
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
         this.listenForMultiplayerGameStart();
+        this.listenForOpponentWordSelections();
     }
 
     public async newSoloGame(level: string) {
-        this.multiplayerMode = false;
         await this.crosswordService.getCrossword(level).then((crossword) => {
             this.constructGame(crossword.crossword, crossword.wordsWithIndex, crossword.listOfWords);
         });
@@ -56,6 +56,10 @@ export class CrosswordGameService {
     private listenForWordSelections() {
         this.hintsService.selectedWordAlerts()
             .subscribe((wordSelection) => {
+                if (this.multiplayerMode) {
+                    this.multiplayerService.selectHint(wordSelection);
+                }
+
                 if (wordSelection.previous) {
                     const wordWithIndex = this.wordsService
                         .getWordWithIndex(wordSelection.previous);
@@ -81,8 +85,16 @@ export class CrosswordGameService {
                     game.crossword.wordsWithIndex,
                     game.crossword.listOfWords
                 );
-                console.log()
                 this.gameStartSubject.next(true);
+                this.multiplayerMode = true;
+            });
+    }
+
+    private listenForOpponentWordSelections() {
+        this.multiplayerService.opponentHintSelectionAlerts()
+            .subscribe((hintSelection) => {
+                console.log('GAME SERVICE CAPTURED OPPONENT SELECTION', hintSelection);
+                this.hintsService.opponentSelectedWord = hintSelection.current.word;
             });
     }
 }

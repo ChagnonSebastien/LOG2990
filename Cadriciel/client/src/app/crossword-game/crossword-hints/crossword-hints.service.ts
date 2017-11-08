@@ -11,6 +11,7 @@ import { Word } from '../../../../../commun/word';
 @Injectable()
 export class CrosswordHintsService {
     public selectedWord: string;
+    public opponentSelectedWord: string;
     public hints: Array<Hint>;
     private selectedWordSubject: Subject<any>;
 
@@ -27,6 +28,7 @@ export class CrosswordHintsService {
 
     public newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
+        this.opponentSelectedWord = undefined;
         this.initializeHints(wordsWithIndex);
     }
 

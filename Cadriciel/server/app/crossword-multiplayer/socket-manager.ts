@@ -37,6 +37,17 @@ export class SocketManager {
                 this.io.sockets.in(gameId).emit('game started', game);
             });
 
+            socket.on('selected hint', (hintSelection) => {
+                for (const roomId in socket.rooms) {
+                    if (socket.rooms.hasOwnProperty(roomId)) {
+                        if (roomId !== socket.id) {
+                            socket.broadcast.to(roomId)
+                                .emit('opponent selected a hint', hintSelection);
+                        }
+                    }
+                }
+            });
+
             /*socket.on('joinGame', (gameId: string, player: Player) => {
                 socket.join(gameId);
                 this.io.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));

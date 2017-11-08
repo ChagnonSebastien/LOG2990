@@ -8,25 +8,33 @@ import { CrosswordPlayerService } from './crossword-player.service';
 import { Player } from '../../../../commun/crossword/player';
 import { CrosswordGameInfo } from '../../../../commun/crossword/crossword-game-info';
 import { MultiplayerCrosswordGame } from '../../../../commun/crossword/multiplayer-crossword-game';
+import { Word } from '../../../../commun/word';
 
 @Injectable()
 export class CrosswordMultiplayerService {
     public games: Array<CrosswordGameInfo>;
-    public gameStartSubject: Subject<any>;
+    private gameStartSubject: Subject<any>;
+    private opponentHintSelection: Subject<any>;
 
     constructor(
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
         this.gameStartSubject = new Subject();
+        this.opponentHintSelection = new Subject();
         this.getGames();
         setInterval(this.getGames.bind(this), 1000);
         this.listenForActiveGames();
         this.listenForGameStart();
+        this.listenForOpponentHintSelections();
     }
 
     public gameStartAlerts(): Observable<any> {
         return this.gameStartSubject.asObservable();
+    }
+
+    public opponentHintSelectionAlerts(): Observable<any> {
+        return this.opponentHintSelection.asObservable();
     }
 
     public createGame(difficulty: string, mode: string) {
@@ -45,6 +53,12 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.emit('get games');
     }
 
+    public selectHint(
+        hintSelection: { 'previous': string, 'current': Word }
+    ) {
+        this.socketService.socket.emit('selected hint', hintSelection);
+    }
+
     private listenForActiveGames() {
         this.socketService.socket.on('sent all games', (games) => {
             this.games = games;
@@ -55,6 +69,13 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.on('game started', (game) => {
             console.log('GAME STARTED', game);
             this.gameStartSubject.next(game);
+        });
+    }
+
+    private listenForOpponentHintSelections() {
+        this.socketService.socket.on('opponent selected a hint', (hintSelection) => {
+            console.log('OPPONENT SELECTED', hintSelection);
+            this.opponentHintSelection.next(hintSelection);
         });
     }
 
