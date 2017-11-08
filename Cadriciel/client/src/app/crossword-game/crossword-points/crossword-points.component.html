@@ -1,0 +1,15 @@
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="text-white">
+        Found words:
+        <span class="btn btn-primary">You
+          <span class="badge badge-light">{{pointsService.foundWords.size}}</span>
+        </span>
+        <span *ngIf="configurationService.isMultiplayer()" class="btn btn-danger">Opponent
+          <span class="badge badge-light">{{pointsService.opponentFoundWords.size}}</span>
+        </span>
+      </h3>
+    </div>
+  </div>
+</div>

@@ -14,13 +14,20 @@
       <button class="btn btn-danger" (click)="endGame()">
         End game
       </button>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <app-crossword-points></app-crossword-points>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mt-3 mb-3">
           <app-crossword-grid></app-crossword-grid>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 mt-3 mb-3">
           <app-crossword-hints></app-crossword-hints>
         </div>
       </div>

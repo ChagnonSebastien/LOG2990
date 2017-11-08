@@ -113,12 +113,7 @@ export class CrosswordGameService {
                 console.log('OPPONENT FOUND A WORD', foundWord);
                 this.hintsService.markHintAsFoundByOpponent(foundWord.word);
                 this.gridService.markWordAsFoundByOpponent(foundWord);
-                /* if (foundWord.word === this.hintsService.selectedWord) {
-                    this.hintsService.unselectHint();
-                }
-                this.hintsService.opponentSelectedWord = undefined;
-                this.hintsService.markHintAsFoundByOpponent(foundWord.word);
-                this.gridService.markWordAsFoundByOpponent(foundWord);*/
+                this.pointsService.addToOpponentFoundWords(foundWord.word);
             });
     }
 }

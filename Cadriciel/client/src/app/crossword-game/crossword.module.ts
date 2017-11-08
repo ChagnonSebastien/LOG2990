@@ -23,6 +23,7 @@ import { CrosswordGameComponent } from './crossword-game.component';
 import { CrosswordHintsComponent } from './crossword-hints/crossword-hints.component';
 import { CrosswordGridComponent } from './crossword-grid/crossword-grid.component';
 import { CrosswordLobbyComponent } from './crossword-lobby/crossword-lobby.component';
+import { CrosswordPointsComponent } from './crossword-points/crossword-points.component';
 
 @NgModule({
     imports: [
@@ -36,7 +37,8 @@ import { CrosswordLobbyComponent } from './crossword-lobby/crossword-lobby.compo
         CrosswordGameComponent,
         CrosswordHintsComponent,
         CrosswordGridComponent,
-        CrosswordLobbyComponent
+        CrosswordLobbyComponent,
+        CrosswordPointsComponent
     ],
     exports: [
 

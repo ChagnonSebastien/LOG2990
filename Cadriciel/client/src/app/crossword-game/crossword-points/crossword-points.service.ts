@@ -1,35 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+
+import { CrosswordWordsService } from '../crossword-words.service';
 
 @Injectable()
 export class CrosswordPointsService {
-    private foundWords: Set<string>;
-    private foundWordSubject: Subject<any>;
+    public foundWords: Set<string>;
+    public opponentFoundWords: Set<string>;
 
-    constructor() {
-        this.foundWordSubject = new Subject();
+    constructor(private wordsService: CrosswordWordsService) {
         this.newGame();
     }
 
     public newGame() {
         this.foundWords = new Set<string>();
+        this.opponentFoundWords = new Set<string>();
     }
 
     public addToFoundWords(word: string) {
-        this.foundWords.add(word);
-        this.alertFoundWord(word);
+        if (this.wordsService.hintExists(word) && !this.opponentFoundWords.has(word)) {
+            this.foundWords.add(word);
+        }
     }
 
-    public found(word: string): boolean {
-        return this.foundWords.has(word);
-    }
-
-    public foundWordAlerts(): Observable<any> {
-        return this.foundWordSubject.asObservable();
-    }
-
-    private alertFoundWord(word: string) {
-        this.foundWordSubject.next(word);
+    public addToOpponentFoundWords(word: string) {
+        if (this.wordsService.hintExists(word) && !this.foundWords.has(word)) {
+            this.opponentFoundWords.add(word);
+        }
     }
 }

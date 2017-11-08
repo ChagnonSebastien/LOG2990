@@ -16,6 +16,10 @@ export class CrosswordWordsService {
         return this.wordMap.get(word);
     }
 
+    public hintExists(word: string): boolean {
+        return this.wordMap.get(word) !== undefined;
+    }
+
     private constructWordMap(wordsWithIndex: Array<Word>): Map<string, Word> {
         return wordsWithIndex.reduce((map, obj) => {
             map.set(obj.word, obj);
