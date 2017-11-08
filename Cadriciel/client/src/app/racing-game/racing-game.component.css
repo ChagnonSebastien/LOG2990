@@ -5,8 +5,3 @@
   align-items: stretch;
   align-content: flex-start;
 }
-
-#countdown {
-  margin-top: -500px;
-  margin-left: 50px;
-}

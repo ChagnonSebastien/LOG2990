@@ -6,12 +6,19 @@ describe('test CountdownService', function () {
 
     it('construction test', () => {
         expect(countdownService).toBeDefined();
+        expect(countdownService['count'] === 6);
+    });
+
+    it('create 3D countdown', (done) => {
+        countdownService.createCountdown().then(result => {
+            expect(countdownService.countdownMesh).toBeDefined();
+            done();
+        });
     });
 
     it('starts countdown', () => {
-        let countdown: Observable<number> = null;
-        const count = 60;
-        countdown = countdownService.startCountdown(countdown, count);
-        expect(countdown !== null).toBeTruthy();
+        countdownService.startCountdown();
+        expect(countdownService['timer']).toBeDefined();
+        expect(countdownService['count'] !== 6);
     });
 });
