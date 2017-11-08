@@ -1,3 +1,4 @@
+import { CountdownService } from './countdown.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,6 +14,7 @@ import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
 import { RacingGameService } from './racing-game.service';
 import { CommandsService } from './commands.service';
+import { VehicleService } from './vehicle.service';
 
 @NgModule({
     imports: [
@@ -35,7 +37,9 @@ import { CommandsService } from './commands.service';
         TrackService,
         RacingGameService,
         TerrainGenerationService,
-        CommandsService
+        CommandsService,
+        VehicleService,
+        CountdownService
     ]
 })
 export class RacingGameModule { }

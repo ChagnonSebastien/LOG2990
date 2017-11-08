@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { GameManagerService } from '../crossword-game-manager.service';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { GameManagerServicePlayer2 } from '../crossword-game-manager-player2.service';
 import { PlayerManagerService } from '../crossword-player-manager.service';
+import { ClientGameInfo } from '../../../../../commun/crossword/clientGameInfo';
 
 @Component({
   selector: 'app-crossword-room',
@@ -10,24 +11,35 @@ import { PlayerManagerService } from '../crossword-player-manager.service';
 export class CrosswordRoomComponent implements OnInit {
 
   public username: string;
-  public gamesListInfo: {id: string, playerHost: string, difficulty: string, mode: string, username2: string}[] = [];
-  constructor(private gameManagerService: GameManagerService, private playerManagerService: PlayerManagerService) {
+  public gamesListInfo: ClientGameInfo[] = [];
+  @Output()
+  private startGameEmitter: EventEmitter<any> = new EventEmitter();
+  constructor(private gameManagerServicePlayer2: GameManagerServicePlayer2, private playerManagerService: PlayerManagerService) {
     this.username = '';
   }
 
   public ngOnInit() {
-    this.gameManagerService.getGames().then(games => {
+    this.gameManagerServicePlayer2.getGames().then(games => {
       this.gamesListInfo = games;
+      this.startGameOnPlayer2Joined();
     });
   }
 
   public joinGame(gameId: string) {
     this.setPlayerUsername();
-    this.gameManagerService.joinGame(gameId, this.playerManagerService.getPlayer());
+    this.gameManagerServicePlayer2.joinGame(gameId, this.playerManagerService.getPlayer());
   }
 
   public setPlayerUsername(): void {
     this.playerManagerService.getPlayer().setUsername(this.username);
+  }
+
+  private startGameOnPlayer2Joined() {
+    this.gameManagerServicePlayer2.playerTwoAlerts()
+      .subscribe((result) => {
+        console.log(result);
+        this.startGameEmitter.emit();
+      });
   }
 
 }

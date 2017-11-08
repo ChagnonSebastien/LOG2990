@@ -1,10 +1,10 @@
-import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { RacingGameService } from './racing-game.service';
+import { CommandsService } from './commands.service';
+import { Subscription } from 'rxjs/Subscription';
 
 const scale = 100;
 
@@ -19,11 +19,26 @@ export class RenderService {
 
     public scene: THREE.Scene;
 
+    private textureSky: THREE.Texture;
+
+    public mainVehicle: THREE.Mesh;
+
+    private subscription: Subscription;
+
+    private events: any;
+
+    private keyIsDown: boolean;
+
     constructor(
         private cameraService: CameraService,
-        private racingGameService: RacingGameService,
-        private terrainGenerationService: TerrainGenerationService
+        private terrainGenerationService: TerrainGenerationService,
+        private commandsService: CommandsService
     ) {
+        this.subscription = this.commandsService.getKeyDownEvent()
+        .subscribe(event => {
+            this.events = event;
+            this.keyIsDown = true;
+        });
     }
 
     private createScene() {
@@ -51,9 +66,9 @@ export class RenderService {
         const images = [url + 'xpos.png', url + 'xneg.png',
         url + 'ypos.png', url + 'yneg.png',
         url + 'zpos.png', url + 'zneg.png'];
-        const textureSky = THREE.ImageUtils.loadTextureCube(images);
+        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
         const shader = THREE.ShaderLib['cube'];
-        shader.uniforms['tCube'].value = textureSky;
+        shader.uniforms['tCube'].value = this.textureSky;
         const material = new THREE.ShaderMaterial({
             fragmentShader: shader.fragmentShader,
             vertexShader: shader.vertexShader,
@@ -67,15 +82,18 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, track, 25);
+        this.terrainGenerationService.generate(this.scene, 25, track, this.textureSky);
     }
 
-    public eventsList(event: any): void {
-        this.cameraService.swapCamera(event);
-        this.cameraService.zoomCamera(event);
+    public eventsList(): void {
+        if ( this.keyIsDown) {
+            this.cameraService.swapCamera(this.events);
+            this.cameraService.zoomCamera(this.events);
+            this.keyIsDown = false;
+        }
     }
 
-    private startRenderingLoop() {
+    public startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -89,6 +107,7 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
+        this.eventsList();
         this.stats.update();
     }
 
@@ -105,27 +124,14 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track) {
+    public async initialize(container: HTMLElement) {
         this.container = container;
         this.createScene();
-        await this.addVehicles();
         this.initStats();
-        this.startRenderingLoop();
     }
 
-    public async addVehicles(): Promise<void> {
-        const mainVehicle = await this.racingGameService.initializeMainVehicle();
-        this.scene.add(mainVehicle.vehicle);
-        this.cameraService.initializeCameras(this.container, mainVehicle.vehicle, scale);
-        const opponentsVehicles = await this.racingGameService.initializeOpponentsVehicles();
-
-        for (let i = 0; i < opponentsVehicles.length; i++) {
-            this.scene.add(opponentsVehicles[i].vehicle);
-        }
-
-        return new Promise<void>(resolve => {
-            resolve();
-        });
+    public setCameraOnMainVehicle() {
+        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
     }
 
 }
