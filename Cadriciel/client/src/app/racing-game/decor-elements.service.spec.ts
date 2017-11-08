@@ -1,17 +1,16 @@
 import { DecorElementsService } from './decor-elements.service';
-import { TerrainGenerationService } from './terrain-generation.service';
 import { TestBed } from '@angular/core/testing';
 
-let terrainGenerationService;
+let decorElementsService;
 
-describe('TerrainGenerationService', function () {
+describe('DecorElementsService', function () {
 
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [TerrainGenerationService, DecorElementsService]
+            providers: [DecorElementsService]
         });
-        terrainGenerationService = TestBed.get(TerrainGenerationService);
+        decorElementsService = TestBed.get(DecorElementsService);
         /*terrainGenerationService.generate(
             new THREE.Scene,
             25,
@@ -32,6 +31,6 @@ describe('TerrainGenerationService', function () {
     });
 
     it('should be created', () => {
-        expect(terrainGenerationService).toBeTruthy();
+        expect(decorElementsService).toBeTruthy();
     });
 });

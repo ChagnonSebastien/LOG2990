@@ -1,3 +1,4 @@
+import { DecorElementsService } from './decor-elements.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -22,7 +23,7 @@ export class TerrainGenerationService {
 
     private heightMapSteps = 10;
 
-    constructor() {
+    constructor(private decorElementsService: DecorElementsService) {
         console.log('constroctor begin');
         for (let i = 0; i < Math.pow(2, this.heightMapSteps); i++) {
             this.heightMap.push([]);
