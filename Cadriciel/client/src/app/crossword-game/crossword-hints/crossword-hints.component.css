@@ -3,3 +3,16 @@
     word-break: normal;
     white-space: normal;
 }
+
+.gradient {
+    background: red;
+    /* For browsers that do not support gradients */
+    /* Safari 5.1 to 6.0 */
+    background: -webkit-repeating-linear-gradient(red, blue);
+    /* Opera 11.1 to 12.0 */
+    background: -o-repeating-linear-gradient(red, blue);
+    /* Firefox 3.6 to 15 */
+    background: -moz-repeating-linear-gradient(red, blue);
+    /* Standard syntax */
+    background: repeating-linear-gradient(red, blue);
+}
