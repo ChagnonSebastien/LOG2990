@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 const trackRadius = 10;
-const coneRadius = 20;
-const votePanelRadius = 4;
+const coneRadius = 1;
+const votePanelRadius = 3;
 const maximumSlope = 2;
 
 @Injectable()
@@ -17,8 +17,6 @@ export class TerrainGenerationService {
     private scale: number;
 
     private textureSky: THREE.Texture;
-
-    private decorElements: {object: THREE.Mesh, radius: number}[] = [];
 
     private heightMap: number[][] = [[]];
 
@@ -341,15 +339,17 @@ export class TerrainGenerationService {
         const service = this;
         const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
             function loadDone(cone) {
-                cone.scale.set(coneRadius * service.scale, coneRadius * service.scale, coneRadius * service.scale);
+                cone.scale.set(service.scale, service.scale, service.scale);
                 const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 100; i++) {
+                    let newPosition: { position: THREE.Vector2, rotation: number };
+                    do {
+                        newPosition = service.getFreePropSpot(coneRadius);
+                    } while (service.availableRadius(newPosition.position) < 1);
                     const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(coneRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
+                    newCone.rotateY(newPosition.rotation);
+                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
                     cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: coneRadius} );
                 }
                 resolve(cones);
             }
@@ -364,15 +364,17 @@ export class TerrainGenerationService {
         const service = this;
         const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
             function loadDone(cone) {
-                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
+                cone.scale.set(service.scale, service.scale, service.scale);
                 const cones: THREE.Mesh[] = [];
                 for (let i = 0; i < 15; i++) {
+                    let newPosition: { position: THREE.Vector2, rotation: number };
+                    do {
+                        newPosition = service.getFreePropSpot(votePanelRadius);
+                    } while (service.availableRadius(newPosition.position) < 1);
                     const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(votePanelRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
+                    newCone.rotateY(newPosition.rotation);
+                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
                     cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
                 }
                 resolve(cones);
             }
@@ -387,15 +389,17 @@ export class TerrainGenerationService {
         const service = this;
         const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
             function loadDone(cone) {
-                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
+                cone.scale.set(service.scale, service.scale, service.scale);
                 const cones: THREE.Mesh[] = [];
                 for (let i = 0; i < 15; i++) {
+                    let newPosition: { position: THREE.Vector2, rotation: number };
+                    do {
+                        newPosition = service.getFreePropSpot(votePanelRadius);
+                    } while (service.availableRadius(newPosition.position) < 1);
                     const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(votePanelRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
+                    newCone.rotateY(newPosition.rotation);
+                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
                     cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
                 }
                 resolve(cones);
             }
@@ -406,22 +410,16 @@ export class TerrainGenerationService {
         return loaderPromise;
     }
 
-    private getFreePropSpot(requiredRadius: number) {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        let point;
-        let x = 100;
-        do {
-            point = new THREE.Vector2(
-                minimumX + (Math.random() * (maximumX - minimumX)),
-                minimumY + (Math.random() * (maximumY - minimumY))
-            );
-            x--;
-        } while (this.availableRadius(point) - trackRadius < requiredRadius && x > 0);
+    private getFreePropSpot(requiredRadius: number): { position: THREE.Vector2, rotation: number } {
+        const segment = Math.floor(Math.random() * this.track.trackIntersections.length);
+        const line = new THREE.Vector2().subVectors(this.track.trackIntersections[
+            segment + 1 === this.track.trackIntersections.length ? 0 : segment + 1
+        ], this.track.trackIntersections[segment]);
+        const lineAngle = Math.atan(line.x / line.y) + Math.PI / 2;
 
-        return point;
+        const randomPosition = line.multiplyScalar(Math.random()).add(this.track.trackIntersections[segment]);
+        const randomOffset = new THREE.Vector2(Math.sin(lineAngle), Math.cos(lineAngle)).multiplyScalar(trackRadius + requiredRadius);
+        return { position: randomPosition.add(randomOffset.multiplyScalar(Math.random() < 0.5 ? 1 : -1)), rotation: lineAngle};
     }
 
     private availableRadius(point: THREE.Vector2): number {
@@ -430,19 +428,10 @@ export class TerrainGenerationService {
             return this.distanceFromPointToLine(point, line) - trackRadius;
         }));
 
-        const minimumDistanceToObject = Math.min.apply(null, this.decorElements.map( element => {
-            return this.distance(
-                new THREE.Vector2(
-                    element.object.position.x / this.scale,
-                    element.object.position.z / this.scale
-                ), point
-            ) - element.radius;
-        }));
-
-        return Math.min(minimumDistanceToObject, minimumDistanceToTrack);
+        return minimumDistanceToTrack;
     }
 
-    private distanceFromPointToLine(point, line): number {
+    private distanceFromPointToLine(point: THREE.Vector2, line: {point1: THREE.Vector2, point2: THREE.Vector2}): number {
         const optimalPoint = this.getNearestPointOnLine(point, line);
 
         if (
@@ -455,14 +444,14 @@ export class TerrainGenerationService {
         }
     }
 
-    public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
+    public distance(point1: THREE.Vector2, point2: THREE.Vector2): number {
         return Math.sqrt(
             Math.pow((point1.x - point2.x), 2) +
             Math.pow((point1.y - point2.y), 2)
         );
     }
 
-    private getNearestPointOnLine(point, line) {
+    private getNearestPointOnLine(point: THREE.Vector2, line: {point1: THREE.Vector2, point2: THREE.Vector2}) {
         const lineParameters = this.getLineParameters(line);
         const permenticularParameters = {
             a: lineParameters.b,
@@ -480,13 +469,13 @@ export class TerrainGenerationService {
         return { a, b, c };
     }
 
-    private twoLineIntersection(line1, line2): { x: number, y: number } {
+    private twoLineIntersection(line1, line2): THREE.Vector2 {
         if (line1.a === 0) {
             const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return { x, y: this.solveLineEquationWithX(x, line1) };
+            return new THREE.Vector2(x, this.solveLineEquationWithX(x, line1));
         } else {
             const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return { x: this.solveLineEquationWithY(y, line1), y };
+            return new THREE.Vector2(this.solveLineEquationWithY(y, line1), y);
         }
     }
 
