@@ -29,6 +29,14 @@ export class SocketManager {
                 socket.emit('sent all games', this.gameManager.getGames());
             });
 
+            socket.on('join game', (gameId: string, challengerUsername: string) => {
+                console.log(`${challengerUsername} has joined game ${gameId}`);
+                socket.join(gameId);
+                const game = this.gameManager.getGame(gameId);
+                game.challengerUsername = challengerUsername;
+                this.io.sockets.in(gameId).emit('game started', game);
+            });
+
             /*socket.on('joinGame', (gameId: string, player: Player) => {
                 socket.join(gameId);
                 this.io.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));

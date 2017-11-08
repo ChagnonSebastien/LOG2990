@@ -39,6 +39,10 @@ export class CrosswordGameManager {
         return game;
     }
 
+    public getGame(id: string): MultiplayerCrosswordGame {
+        return this.gamesMap.get(id);
+    }
+
     /*public joinGame(gameId: string, player: Player): MultiplayerCrosswordGame {
         const game = this.findGameById(gameId);
         game.player2 = player;

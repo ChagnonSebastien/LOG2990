@@ -53,6 +53,7 @@ export class CrosswordMultiplayerService {
 
     private listenForGameStart() {
         this.socketService.socket.on('game started', (game) => {
+            console.log('GAME STARTED', game);
             this.gameStartSubject.next(game);
         });
     }
