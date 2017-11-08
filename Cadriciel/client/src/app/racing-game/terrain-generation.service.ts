@@ -259,8 +259,16 @@ export class TerrainGenerationService {
 
     private heightAtPoint(x: number, y: number) {
         const availableRadius = this.availableRadius(new THREE.Vector2(x, y));
-        return availableRadius > 0 ?
-            this.sigmoid(1, (availableRadius - 60) / 4) * availableRadius * this.sigmoid(0.5, trackRadius - 3 - availableRadius / 2) : 0;
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
+        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
+        return availableRadius < trackRadius / 2 ? 0 : ((this.heightMap[
+            Math.floor((x + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
+        ][
+            Math.floor((y + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
+        ] - 64) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3));
     }
 
     private sigmoid(L: number, x: number) {
@@ -419,7 +427,7 @@ export class TerrainGenerationService {
     private availableRadius(point: THREE.Vector2): number {
         const minimumDistanceToTrack = Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return this.distanceFromPointToLine(point, line);
+            return this.distanceFromPointToLine(point, line) - trackRadius;
         }));
 
         const minimumDistanceToObject = Math.min.apply(null, this.decorElements.map( element => {
