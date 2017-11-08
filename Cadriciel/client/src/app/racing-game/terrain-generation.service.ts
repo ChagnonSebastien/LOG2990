@@ -113,6 +113,7 @@ export class TerrainGenerationService {
         this.scale = scale;
         this.textureSky = textureSky;
 
+        this.decorElementsService.placeDecor(scene, scale, track);
         this.addObjectsInScene(scene);
         console.log('generate method end');
     }
@@ -134,13 +135,6 @@ export class TerrainGenerationService {
         console.log('segemnt');
         this.generateSegments().forEach(instersection => {
             scene.add(instersection);
-        });
-
-        console.log('cone');
-        this.generateCones().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
         });
 
         console.log('michel');
@@ -336,30 +330,6 @@ export class TerrainGenerationService {
         return plaidMesh;
     }
 
-    private generateCones(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(service.scale, service.scale, service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 100; i++) {
-                    let newPosition: { position: THREE.Vector2, rotation: number };
-                    do {
-                        newPosition = service.getFreePropSpot(coneRadius);
-                    } while (service.availableRadius(newPosition.position) < 1);
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(newPosition.rotation);
-                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
-                    cones.push(newCone);
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/cone.json', loadDone);
-        });
-
-        return loaderPromise;
-    }
 
     private generateMichelElectionPanels(): Promise<THREE.Mesh[]> {
         const service = this;
