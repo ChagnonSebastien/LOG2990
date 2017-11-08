@@ -9,6 +9,7 @@ import { CrosswordPointsService } from './crossword-points/crossword-points.serv
 import { CrosswordWordsService } from './crossword-words.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 import { CrosswordCountdownService } from './crossword-countdown.service';
+import { CrosswordCheatService } from './crossword-cheat.service';
 
 import { Word } from '../../../../commun/word';
 
@@ -24,7 +25,8 @@ export class CrosswordGameService {
         private pointsService: CrosswordPointsService,
         private wordsService: CrosswordWordsService,
         private multiplayerService: CrosswordMultiplayerService,
-        private countdownService: CrosswordCountdownService
+        private countdownService: CrosswordCountdownService,
+        private cheatService: CrosswordCheatService
     ) {
         this.gameStartSubject = new Subject();
         this.listenForWordSelections();
@@ -33,6 +35,7 @@ export class CrosswordGameService {
         this.listenForOpponentWordSelections();
         this.listenForOpponentFoundWords();
         this.listenForCountdownReachedZero();
+        this.listenForCheatModeCountdownChanges();
     }
 
     public async newSoloGame(level: string) {
@@ -126,5 +129,16 @@ export class CrosswordGameService {
             .subscribe((zero) => {
                 console.log('COUNTDOWN REACHED ZERO');
             });
+    }
+
+    private listenForCheatModeCountdownChanges() {
+        this.cheatService.initialCountdownChangedAlerts()
+        .subscribe((newCountdown) => {
+            console.log('NEW COUNTDOWN', newCountdown);
+            this.countdownService.stopCountdown();
+            this.countdownService.initialCount = newCountdown;
+            this.countdownService.resetCountdown();
+            this.countdownService.startCountdown();
+        });
     }
 }

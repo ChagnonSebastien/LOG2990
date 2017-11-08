@@ -10,25 +10,30 @@
     </div>
   </div>
   <div *ngIf="gameInProgress">
-    <div class="spacing">
-      <button class="btn btn-danger" (click)="endGame()">
-        End game
-      </button>
-      <div class="container">
-        <div *ngIf="configurationService.isMultiplayer()"class="row">
-          <div class="col-md-12">
-            <app-crossword-points></app-crossword-points>
+    <button class="btn btn-danger" (click)="endGame()">
+      End game
+    </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div *ngIf="configurationService.isMultiplayer()" class="row">
+            <div class="col-md-12">
+              <app-crossword-points></app-crossword-points>
+            </div>
           </div>
-        </div>
-        <div *ngIf="!gameCompleted && configurationService.isDynamic()" class="row">
+          <div *ngIf="!gameCompleted && configurationService.isDynamic()" class="row">
             <div class="col-md-12">
               <app-crossword-countdown></app-crossword-countdown>
             </div>
           </div>
-        <div *ngIf="gameCompleted" class="row">
-          <div class="col-md-12">
-            <app-crossword-end-game></app-crossword-end-game>
+          <div *ngIf="gameCompleted" class="row">
+            <div class="col-md-12">
+              <app-crossword-end-game></app-crossword-end-game>
+            </div>
           </div>
+        </div>
+        <div class="col-md-6">
+          <app-crossword-cheat></app-crossword-cheat>
         </div>
       </div>
     </div>

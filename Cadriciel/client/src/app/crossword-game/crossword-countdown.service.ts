@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { CrosswordConfigurationService } from './crossword-menu/crossword-configuration.service';
+import { CrosswordCheatService } from './crossword-cheat.service';
 
 @Injectable()
 export class CrosswordCountdownService {
@@ -11,13 +12,16 @@ export class CrosswordCountdownService {
     private countdownId: number;
     private countdownReachedZero: Subject<any>;
 
-    constructor(private configurationService: CrosswordConfigurationService) {
+    constructor(
+        private configurationService: CrosswordConfigurationService,
+        private cheatService: CrosswordCheatService
+    ) {
         this.countdownReachedZero = new Subject();
     }
 
     public newGame() {
         if (this.configurationService.isDynamic()) {
-            this.initialCount = 10;
+            this.initialCount = this.cheatService.initialCountdown;
             this.resetCountdown();
             this.startCountdown();
         }

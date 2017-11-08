@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CrosswordHintsService } from './crossword-hints.service';
+import { CrosswordCheatService } from '../crossword-cheat.service';
 
 @Component({
     selector: 'app-crossword-hints',
@@ -8,13 +9,8 @@ import { CrosswordHintsService } from './crossword-hints.service';
     styleUrls: ['./crossword-hints.component.css']
 })
 export class CrosswordHintsComponent {
-    public cheatMode: boolean;
-
-    constructor(public hintsService: CrosswordHintsService) {
-        this.cheatMode = false;
-     }
-
-    public toggleCheatMode() {
-        this.cheatMode = !this.cheatMode;
-    }
+    constructor(
+        public hintsService: CrosswordHintsService,
+        public cheatService: CrosswordCheatService
+    ) { }
 }

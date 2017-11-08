@@ -18,6 +18,7 @@ import { CrosswordSocketService } from './crossword-socket.service';
 import { CrosswordPlayerService } from './crossword-player.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 import { CrosswordCountdownService } from './crossword-countdown.service';
+import { CrosswordCheatService } from './crossword-cheat.service';
 
 import { CrosswordMenuComponent } from './crossword-menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
@@ -27,6 +28,7 @@ import { CrosswordLobbyComponent } from './crossword-lobby/crossword-lobby.compo
 import { CrosswordPointsComponent } from './crossword-points/crossword-points.component';
 import { CrosswordEndGameComponent } from './crossword-end-game.component';
 import { CrosswordCountdownComponent } from './crossword-countdown.component';
+import { CrosswordCheatComponent } from './crossword-cheat.component';
 
 @NgModule({
     imports: [
@@ -43,7 +45,8 @@ import { CrosswordCountdownComponent } from './crossword-countdown.component';
         CrosswordLobbyComponent,
         CrosswordPointsComponent,
         CrosswordEndGameComponent,
-        CrosswordCountdownComponent
+        CrosswordCountdownComponent,
+        CrosswordCheatComponent
     ],
     exports: [
 
@@ -61,7 +64,8 @@ import { CrosswordCountdownComponent } from './crossword-countdown.component';
         CrosswordSocketService,
         CrosswordPlayerService,
         CrosswordMultiplayerService,
-        CrosswordCountdownService
+        CrosswordCountdownService,
+        CrosswordCheatService
     ]
 })
 export class CrosswordModule { }

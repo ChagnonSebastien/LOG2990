@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3 class="text-white">Cheat Mode</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn mb-3" [ngClass]="{ 'btn-warning': !cheatService.cheatMode, 'btn-danger': cheatService.cheatMode }" (click)="cheatService.toggleCheatMode()">
+      <span *ngIf="!cheatService.cheatMode">Show words</span>
+      <span *ngIf="cheatService.cheatMode">Hide words</span>
+    </button>
+  </div>
+</div>
+<div *ngIf="configurationService.isDynamic()" class="row">
+  <div class="col-md-4">
+    <input class="form-control" type="number" maxlength="15" ng-pattern="/^[0-9]*$/" ng-pattern-restrict #initialCountdown>
+  </div>
+  <div class="col-md-8">
+    <button (click)="cheatService.setInitialCountdown(initialCountdown.value); initialCountdown.value=''"class="btn btn-warning mb-3">Set initial countdown</button>
+  </div>
+</div>
