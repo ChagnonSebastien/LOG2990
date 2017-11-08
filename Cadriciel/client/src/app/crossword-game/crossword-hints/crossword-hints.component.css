@@ -5,7 +5,7 @@
 }
 
 .red-and-blue {
-    background: red;
+    background: rgb(183, 0, 255);
     /* For browsers that do not support gradients */
     /* Safari 5.1 to 6.0 */
     background: -webkit-repeating-linear-gradient(red, blue);

@@ -14,7 +14,7 @@
           <td> {{game.difficulty}}</td>
           <td> {{game.mode}}</td>
           <td>
-            <button (click)="multiplayerService.joinGame(game.id)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }" [disabled]="game.challengerUsername !== '' || playerService.username === ''">
+            <button (click)="multiplayerService.joinGame(game.id); copyJoinedGameConfiguration(game.difficulty, game.mode)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }" [disabled]="game.challengerUsername !== '' || playerService.username === ''">
               Play
             </button>
           </td>

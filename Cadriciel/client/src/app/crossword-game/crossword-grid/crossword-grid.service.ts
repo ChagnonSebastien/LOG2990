@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { WordUtilities } from '../word-utilities';
 
 import { KeyboardService } from '../keyboard.service';
+import { CrosswordConfigurationService } from '../crossword-menu/crossword-configuration.service';
 
 import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Word } from '../../../../../commun/word';
@@ -13,7 +14,10 @@ export class CrosswordGridService {
     public grid: CrosswordSquare[][];
     private wordFoundSubject: Subject<any>;
 
-    constructor(private keyboardService: KeyboardService) {
+    constructor(
+        private keyboardService: KeyboardService,
+        private configurationService: CrosswordConfigurationService
+    ) {
         this.wordFoundSubject = new Subject();
         this.listenForLetterInputs();
         this.listenForBackspaces();
@@ -77,8 +81,16 @@ export class CrosswordGridService {
         WordUtilities.forEachLetter(word, this.unselectSquare.bind(this));
     }
 
+    public unselectWordOpponent(word: Word) {
+        WordUtilities.forEachLetter(word, this.unselectSquareOpponent.bind(this));
+    }
+
     public selectWord(word: Word) {
         WordUtilities.forEachLetter(word, this.selectSquare.bind(this));
+    }
+
+    public selectWordOpponent(word: Word) {
+        WordUtilities.forEachLetter(word, this.selectSquareOpponent.bind(this));
     }
 
     private markWordAsFound(word: Word) {
@@ -119,9 +131,19 @@ export class CrosswordGridService {
         this.grid[i][j].selected = false;
     }
 
+    private unselectSquareOpponent(i: number, j: number) {
+        this.grid[i][j].opponentSelected = false;
+    }
+
     private selectSquare(i: number, j: number) {
         if (!this.grid[i][j].found) {
             this.grid[i][j].selected = true;
+        }
+    }
+
+    private selectSquareOpponent(i: number, j: number) {
+        if (!this.grid[i][j].found) {
+            this.grid[i][j].opponentSelected = true;
         }
     }
 

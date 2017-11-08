@@ -95,6 +95,11 @@ export class CrosswordGameService {
             .subscribe((hintSelection) => {
                 console.log('GAME SERVICE CAPTURED OPPONENT SELECTION', hintSelection);
                 this.hintsService.opponentSelectedWord = hintSelection.current.word;
+                if (hintSelection.previous) {
+                    const previous = this.wordsService.getWordWithIndex(hintSelection.previous);
+                    this.gridService.unselectWordOpponent(previous);
+                }
+                this.gridService.selectWordOpponent(hintSelection.current);
             });
     }
 }

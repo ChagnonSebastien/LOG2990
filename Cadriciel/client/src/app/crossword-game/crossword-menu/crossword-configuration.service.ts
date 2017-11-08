@@ -28,6 +28,10 @@ export class CrosswordConfigurationService {
         });
     }
 
+    public isMultiplayer(): boolean {
+        return this.type === 'multiplayer';
+    }
+
     public setType(type: string): void {
         if (this.validType(type)) {
             this.type = type;

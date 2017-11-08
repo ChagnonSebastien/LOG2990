@@ -7,8 +7,7 @@ export class CrosswordSquare {
     public answer: string;
     public input: string;
     public selected: boolean;
-    public player1Selected: boolean;
-    public player2Selected: boolean;
+    public opponentSelected: boolean;
     public words: Array<Word>;
 
     constructor(character: string) {
@@ -21,8 +20,7 @@ export class CrosswordSquare {
         this.answer = character;
         this.input = '';
         this.selected = false;
-        this.player1Selected = false;
-        this.player2Selected = false;
+        this.opponentSelected = false;
         this.words = new Array<Word>();
     }
 

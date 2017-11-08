@@ -12,7 +12,7 @@
     text-transform: uppercase;
     text-align: center;
     font-size: 2em;
-    border: 1px solid #007bff;
+    border: 1px solid black;
 }
 
 .found {
@@ -28,6 +28,21 @@
     border: 3px solid #007bff !important;
 }
 
+.selected-multiplayer {
+    border: 3px solid #007bff !important;
+    background: #73bbff !important;
+}
+
+.selected-multiplayer-opponent {
+    border: 3px solid #dc3545 !important;
+    background: #ff7f7f !important;
+}
+
+.selected-multiplayer-both {
+    border: 3px dashed #007bff !important;
+    background: rgb(214, 117, 255) !important;
+}
+
 @media (max-width: 1200px) {
     .square {
         width: 40px;
@@ -37,14 +52,14 @@
         text-transform: uppercase;
         text-align: center;
         font-size: 1.7em;
-        border: 1px solid #007bff;
+        border: 1px solid black;
     }
     .found {
         text-transform: uppercase;
         text-align: center;
         font-size: 1.7em;
         border: 1px solid white;
-        background: green;
+        background: #007bff;
         color: white;
     }
 }
@@ -58,14 +73,14 @@
         text-transform: uppercase;
         text-align: center;
         font-size: 1.5em;
-        border: 1px solid #007bff;
+        border: 1px solid black;
     }
     .found {
         text-transform: uppercase;
         text-align: center;
         font-size: 1.5em;
         border: 1px solid white;
-        background: green;
+        background: #007bff;
         color: white;
     }
 }

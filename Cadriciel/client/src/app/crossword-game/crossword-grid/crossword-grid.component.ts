@@ -5,6 +5,7 @@ import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordHintsService } from '../crossword-hints/crossword-hints.service';
 import { CrosswordWordsService } from '../crossword-words.service';
 import { KeyboardService } from '../keyboard.service';
+import { CrosswordConfigurationService } from '../crossword-menu/crossword-configuration.service';
 
 import { Word } from '../../../../../commun/word';
 
@@ -20,7 +21,8 @@ export class CrosswordGridComponent {
         public gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
         private wordsService: CrosswordWordsService,
-        private keyboardService: KeyboardService
+        private keyboardService: KeyboardService,
+        public configurationService: CrosswordConfigurationService
     ) {
         this.listenForWordSelections();
         this.listenForLetterInputs();
