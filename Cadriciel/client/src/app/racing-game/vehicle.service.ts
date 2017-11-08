@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
+import { CommandsService } from './commands.service';
+import { Subscription } from 'rxjs/Subscription';
 
 const numberOfOpponents = 3;
 
@@ -7,13 +9,21 @@ const numberOfOpponents = 3;
 export class VehicleService {
     public mainVehicle: Vehicle;
     public opponentsVehicles: Array<Vehicle>;
+    private subscription: Subscription;
+    private event: any;
+    private keyIsDown: boolean;
 
-    constructor() {
+    constructor(private commandsService: CommandsService) {
         this.mainVehicle = new Vehicle();
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
             this.opponentsVehicles[i] = new Vehicle();
         }
+        this.subscription = this.commandsService.getKeyDownEvent()
+        .subscribe(event => {
+            this.event = event;
+            this.keyIsDown = true;
+        });
     }
 
     public initializeMainVehicle(): Promise<Vehicle> {
@@ -33,4 +43,5 @@ export class VehicleService {
             resolve(this.opponentsVehicles);
         });
     }
+
 }
