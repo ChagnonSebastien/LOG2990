@@ -12,6 +12,8 @@ export class TerrainGenerationService {
 
     private track: Track;
 
+    private trees: THREE.Vector3[] = [];
+
     private scale: number;
 
     private textureSky: THREE.Texture;
@@ -145,23 +147,18 @@ export class TerrainGenerationService {
         });
     }
 
-    private generateTable(): THREE.Mesh[] {
-        /*const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 500;
-        const texture = THREE.ImageUtils.loadTexture('assets/GroundForest003_COL_VAR1_HIRES.jpg');
-        const material = new THREE.MeshStandardMaterial( { map: texture, metalness: 0, roughness: 1, envMap: this.textureSky } );
-        material.side = THREE.BackSide;
-        const table: THREE.Mesh[] = [];
+    private addTrees(scene: THREE.Scene) {
 
-        for (let i = minimumX; i < maximumX; i += 5) {
-            const mesh = new THREE.Mesh( this.generateTriangleStrip(i), material );
-            mesh.drawMode = THREE.TriangleStripDrawMode;
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            table.push(mesh);
-        }
-
-        return table;*/
+        new THREE.ObjectLoader().load('/assets/tree.json', treeMesh => {
+            treeMesh.scale.set(this.scale, this.scale, this.scale);
+            this.trees.forEach(position => {
+                const tree = treeMesh.clone();
+                tree.position.set(position.x * this.scale, position.y * this.scale, position.z * this.scale);
+                tree.rotateY(Math.PI * 2 * Math.random());
+                scene.add(tree);
+            });
+        });
+    }
 
     private generateTable(scene: THREE.Scene): THREE.Mesh[] {
         const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
@@ -171,15 +168,19 @@ export class TerrainGenerationService {
         const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
         const mapWidth = 2 * extreme;
 
-        // texture used to generate "bumpiness"
-        const pixelWidth = 512;
+        const pixelWidth = 256;
         const dummyRGB = new Uint8Array(3 * pixelWidth * pixelWidth);
         for (let i = 0; i < pixelWidth; i++) {
-          // RGB from 0 to 255
             for (let j = 0; j < pixelWidth; j++) {
                 const height = this.heightAtPoint(
                     j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)
                 ) + 64;
+
+                if (height > 64 && height < 76 && Math.random() < 0.1) {
+                    this.trees.push( new THREE.Vector3(
+                        j / pixelWidth * mapWidth - mapWidth / 2, height - 64, -(i / pixelWidth * mapWidth - mapWidth / 2)
+                    ));
+                }
 
                 dummyRGB[3 * i * pixelWidth + 3 * j] =
                 dummyRGB[3 * i * pixelWidth + 3 * j + 1] =
@@ -239,6 +240,7 @@ export class TerrainGenerationService {
         water.rotation.x = -Math.PI / 2;
         water.position.y = -5;
 
+        this.addTrees(scene);
         return [plane, water];
 
     }
