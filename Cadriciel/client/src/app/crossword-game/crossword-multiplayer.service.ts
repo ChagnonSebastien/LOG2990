@@ -12,20 +12,32 @@ import { MultiplayerCrosswordGame } from '../../../../commun/crossword/multiplay
 @Injectable()
 export class CrosswordMultiplayerService {
     public games: Array<CrosswordGameInfo>;
-    public game: MultiplayerCrosswordGame;
+    public gameStartSubject: Subject<any>;
 
     constructor(
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
+        this.gameStartSubject = new Subject();
         this.getGames();
         setInterval(this.getGames.bind(this), 1000);
         this.listenForActiveGames();
+        this.listenForGameStart();
+    }
+
+    public gameStartAlerts(): Observable<any> {
+        return this.gameStartSubject.asObservable();
     }
 
     public createGame(difficulty: string, mode: string) {
         this.socketService.socket.emit(
             'create game', difficulty, mode, this.playerService.username
+        );
+    }
+
+    public joinGame(gameId: string) {
+        this.socketService.socket.emit(
+            'join game', gameId, this.playerService.username
         );
     }
 
@@ -36,6 +48,12 @@ export class CrosswordMultiplayerService {
     private listenForActiveGames() {
         this.socketService.socket.on('sent all games', (games) => {
             this.games = games;
+        });
+    }
+
+    private listenForGameStart() {
+        this.socketService.socket.on('game started', (game) => {
+            this.gameStartSubject.next(game);
         });
     }
 
