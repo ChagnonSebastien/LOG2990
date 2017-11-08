@@ -73,8 +73,8 @@ module Route {
                     res.send({ 'data': 'success' });
                 }
             });
-
         }
+
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
             let tempRating: number;
             let tempBestTimes: number[];

@@ -7,7 +7,7 @@ export module UpdateTrack {
    export function updateBestTimes (arrayBestTimes: number[], newtime: number ): number[] {
         const fifthBestTimes = 5;
         let counterIndex = 0;
-       if (arrayBestTimes.length < fifthBestTimes ) {
+        if (arrayBestTimes.length < fifthBestTimes ) {
             arrayBestTimes.push(newtime);
             arrayBestTimes.sort((a, b) => {
                 return a - b;

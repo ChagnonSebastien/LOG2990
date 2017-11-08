@@ -34,6 +34,7 @@ describe('UpdateTrack', () => {
             expect(newArray[3]).to.equal(7);
             expect(newArray[4]).to.equal(9);
         });
+
         it('should insert 2 to index 0 in the array whose lengh is 5', () => {
             const newArray = UpdateTrack.updateBestTimes(arrayBeyondFive, 2);
             expect(newArray.length).to.equal(5);
