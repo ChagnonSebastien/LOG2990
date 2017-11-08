@@ -13,13 +13,16 @@
     <label>Current type: </label>
     <label class="detailColor">{{track.type}}</label>
     <br>
+
     <label>Rating: </label>
     <label *ngIf="track.rating === -1" class="detailColor">N/A</label>
     <label *ngIf="track.rating !== -1" class="detailColor">{{track.rating}}</label>
     <br>
+
     <label>Number of times played: </label>
     <label class="detailColor">{{track.numberOfTimesPlayed}}</label>
     <br>
+
     <label>Best times:</label>
     <label>
       <ul id="ulOneLine">
@@ -27,6 +30,14 @@
             {{bestTime}}
         </li>
       </ul>
-    </label> 
+    </label>
+    
+
   </div>
+  <br>
+  <label>
+      <div>
+        <img class="imag" src="./assets/noir.jpg">
+      </div>
+    </label>
 </div>
