@@ -1,3 +1,4 @@
+import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 
@@ -16,18 +17,18 @@ export class VehicleService {
         }
     }
 
-    public initializeMainVehicle(): Promise<Vehicle> {
+    public initializeMainVehicle(track: Track, scale: number): Promise<Vehicle> {
         return new Promise<Vehicle>(resolve => {
-            this.mainVehicle.create3DVehicle(-150, 30, 0).then((vehicle) => {
+            this.mainVehicle.create3DVehicle(track, scale).then((vehicle) => {
                 resolve(vehicle);
             });
         });
     }
 
-    public async initializeOpponentsVehicles(): Promise<Array<Vehicle>> {
-        await this.opponentsVehicles[0].create3DVehicle(-150, 30, 200);
-        await this.opponentsVehicles[1].create3DVehicle(150, 30, 0);
-        await this.opponentsVehicles[2].create3DVehicle(150, 30, 200);
+    public async initializeOpponentsVehicles(track: Track, scale: number): Promise<Array<Vehicle>> {
+        await this.opponentsVehicles[0].create3DVehicle(track, scale);
+        await this.opponentsVehicles[1].create3DVehicle(track, scale);
+        await this.opponentsVehicles[2].create3DVehicle(track, scale);
 
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);

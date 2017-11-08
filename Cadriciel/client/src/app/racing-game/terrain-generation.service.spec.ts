@@ -1,8 +1,5 @@
-import { Obstacle, ObstacleType } from './draw-track/obstacle';
-import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { TestBed } from '@angular/core/testing';
-import * as THREE from 'three';
 
 let terrainGenerationService;
 
@@ -14,7 +11,7 @@ describe('TerrainGenerationService', function () {
             providers: [TerrainGenerationService]
         });
         terrainGenerationService = TestBed.get(TerrainGenerationService);
-        terrainGenerationService.generate(
+        /*terrainGenerationService.generate(
             new THREE.Scene,
             25,
             new Track(
@@ -30,7 +27,7 @@ describe('TerrainGenerationService', function () {
                     new Obstacle(ObstacleType.Booster, 2, 0.1, 0.3)
                 ]
             ),
-            new THREE.Texture());
+            new THREE.Texture());*/
     });
 
     it('should be created', () => {

@@ -5,6 +5,7 @@ import * as THREE from 'three';
 const trackRadius = 10;
 const coneRadius = 20;
 const votePanelRadius = 4;
+const maximumSlope = 2;
 
 @Injectable()
 export class TerrainGenerationService {
@@ -17,8 +18,89 @@ export class TerrainGenerationService {
 
     private decorElements: {object: THREE.Mesh, radius: number}[] = [];
 
-    constructor() {
+    private heightMap: number[][] = [[]];
 
+    private heightMapSteps = 10;
+
+    constructor() {
+        for (let i = 0; i < Math.pow(2, this.heightMapSteps); i++) {
+            this.heightMap.push([]);
+        }
+        const width = Math.pow(2, this.heightMapSteps);
+        this.heightMap[0][0] = Math.random() * 128;
+        this.heightMap[0][width] = Math.random() * 128;
+        this.heightMap[width][0] = Math.random() * 128;
+        this.heightMap[width][width] = Math.random() * 128;
+
+        let stepSize = width;
+        while (stepSize > 1) {
+            for (let i = 0; i < width / stepSize; i++) {
+                for (let j = 0; j < width / stepSize; j++) {
+                    this.diamondStep(i * stepSize, j * stepSize, stepSize);
+                }
+            }
+
+            stepSize /= 2;
+
+            for (let i = 0; i <= width / stepSize; i ++) {
+                for (let j = 0; j <= width / stepSize; j ++) {
+                    if ((i + j) % 2 === 1) {
+                        this.squareStep(i * stepSize, j * stepSize, stepSize);
+                    }
+                }
+            }
+        }
+    }
+
+    private diamondStep(x, y, stepSize) {
+        const minimumValue = Math.min(
+            this.heightMap[x][y],
+            this.heightMap[x + stepSize][y],
+            this.heightMap[x][y + stepSize],
+            this.heightMap[x + stepSize][y + stepSize]
+        );
+        const maximumValue = Math.max(
+            this.heightMap[x][y],
+            this.heightMap[x + stepSize][y],
+            this.heightMap[x][y + stepSize],
+            this.heightMap[x + stepSize][y + stepSize]
+        );
+
+        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
+        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
+
+        let randomValue = Math.random();
+        if (randomValue < 0.5) {
+            randomValue = Math.random();
+        }
+
+        this.heightMap[x + stepSize / 2][y + stepSize / 2] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
+    }
+
+    private squareStep(x, y, stepSize) {
+        const width = Math.pow(2, this.heightMapSteps);
+        const minimumValue = Math.min(
+            x + stepSize > width ? Infinity : this.heightMap[x + stepSize][y],
+            y + stepSize > width ? Infinity : this.heightMap[x][y + stepSize],
+            x - stepSize < 0 ? Infinity : this.heightMap[x - stepSize][y],
+            y - stepSize < 0 ? Infinity : this.heightMap[x][y - stepSize]
+        );
+        const maximumValue = Math.max(
+            x + stepSize > width ? -Infinity : this.heightMap[x + stepSize][y],
+            y + stepSize > width ? -Infinity : this.heightMap[x][y + stepSize],
+            x - stepSize < 0 ? -Infinity : this.heightMap[x - stepSize][y],
+            y - stepSize < 0 ? -Infinity : this.heightMap[x][y - stepSize]
+        );
+
+        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
+        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
+
+        let randomValue = Math.random();
+        if (randomValue < 0.5) {
+            randomValue = Math.random();
+        }
+
+        this.heightMap[x][y] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
@@ -30,7 +112,10 @@ export class TerrainGenerationService {
     }
 
     private addObjectsInScene(scene: THREE.Scene) {
-        scene.add(this.generateTable());
+
+        this.generateTable().forEach(triangle => {
+            scene.add(triangle);
+        });
         scene.add(this.generateRaceStartPlaid());
 
         this.generateIntersections().forEach(instersection => {
@@ -60,26 +145,125 @@ export class TerrainGenerationService {
         });
     }
 
-    private generateTable(): THREE.Mesh {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
+    private generateTable(): THREE.Mesh[] {
+        /*const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 500;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 500;
+        const texture = THREE.ImageUtils.loadTexture('assets/GroundForest003_COL_VAR1_HIRES.jpg');
+        const material = new THREE.MeshStandardMaterial( { map: texture, metalness: 0, roughness: 1, envMap: this.textureSky } );
+        material.side = THREE.BackSide;
+        const table: THREE.Mesh[] = [];
 
-        const tableMaterial = new THREE.MeshStandardMaterial ( {color: 0xF0F0F0, roughness: 0, metalness: 0, envMap: this.textureSky} );
-        const tableGeometry = new THREE.PlaneGeometry(
-            (this.scale * (maximumX - minimumX)) + (this.scale * trackRadius * 10),
-            (this.scale * (maximumY - minimumY)) + (this.scale * trackRadius * 10),
-            1,
-            1
-        );
-        tableGeometry.rotateX(Math.PI / -2);
-        const table = new THREE.Mesh(tableGeometry, tableMaterial);
+        for (let i = minimumX; i < maximumX; i += 5) {
+            const mesh = new THREE.Mesh( this.generateTriangleStrip(i), material );
+            mesh.drawMode = THREE.TriangleStripDrawMode;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            table.push(mesh);
+        }
 
-        table.position.x = minimumX + ((maximumX - minimumX) / 2);
-        table.position.z = minimumY + ((maximumY - minimumY) / 2);
-        table.receiveShadow = true;
-        return table;
+        return table;*/
+
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
+        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
+        const mapWidth = 2 * extreme;
+
+        // texture used to generate "bumpiness"
+        const pixelWidth = 512;
+        const dummyRGB = new Uint8Array(3 * pixelWidth * pixelWidth);
+        for (let i = 0; i < pixelWidth; i++) {
+          // RGB from 0 to 255
+            for (let j = 0; j < pixelWidth; j++) {
+                dummyRGB[3 * i * pixelWidth + 3 * j] =
+                dummyRGB[3 * i * pixelWidth + 3 * j + 1] =
+                dummyRGB[3 * i * pixelWidth + 3 * j + 2] =
+                this.heightAtPoint(j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)) + 64;
+            }
+        }
+
+        const dummyDataTex = new THREE.DataTexture( dummyRGB, pixelWidth, pixelWidth, THREE.RGBFormat );
+        dummyDataTex.needsUpdate = true;
+
+
+        const bumpTexture = THREE.ImageUtils.loadTexture( 'assets/heightmap.png' );
+        bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
+        // magnitude of normal displacement
+        const bumpScale   = 255 * this.scale;
+
+        const oceanTexture = THREE.ImageUtils.loadTexture( 'assets/dirt-512.jpg' );
+        oceanTexture.wrapS = oceanTexture.wrapT = THREE.RepeatWrapping;
+
+        const sandyTexture = THREE.ImageUtils.loadTexture( 'assets/sand-512.jpg' );
+        sandyTexture.wrapS = sandyTexture.wrapT = THREE.RepeatWrapping;
+
+        const grassTexture = THREE.ImageUtils.loadTexture( 'assets/grass-512.jpg' );
+        grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+
+        const rockyTexture = THREE.ImageUtils.loadTexture( 'assets/rock-512.jpg' );
+        rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping;
+
+        const snowyTexture = THREE.ImageUtils.loadTexture( 'assets/snow-512.jpg' );
+        snowyTexture.wrapS = snowyTexture.wrapT = THREE.RepeatWrapping;
+
+
+        // use "this." to create global object
+        const customUniforms = {
+        bumpTexture:	{ type: 't', value: dummyDataTex },
+        bumpScale:	    { type: 'f', value: bumpScale },
+        oceanTexture:	{ type: 't', value: oceanTexture },
+        sandyTexture:	{ type: 't', value: sandyTexture },
+        grassTexture:	{ type: 't', value: grassTexture },
+        rockyTexture:	{ type: 't', value: rockyTexture },
+        snowyTexture:	{ type: 't', value: snowyTexture },
+        };
+
+        // create custom material from the shader code above
+        //   that is within specially labelled script tags
+        console.log(document);
+        const customMaterial = new THREE.ShaderMaterial(
+        {
+        uniforms: customUniforms,
+        vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+        // side: THREE.DoubleSide
+        }   );
+
+        const planeGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, pixelWidth, pixelWidth );
+        const plane = new THREE.Mesh(	planeGeo, customMaterial );
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = -64 * this.scale;
+
+        const waterGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, 1, 1 );
+        const waterTex = THREE.ImageUtils.loadTexture( 'assets/water512.jpg' );
+        waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
+        waterTex.repeat.set( 5 , 5 );
+        const waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent: true, opacity: 0.40} );
+        const water = new THREE.Mesh(	waterGeo, waterMat );
+        water.rotation.x = -Math.PI / 2;
+        water.position.y = -5;
+
+        return [plane, water];
+
+    }
+
+    private heightAtPoint(x: number, y: number) {
+        const availableRadius = this.availableRadius(new THREE.Vector2(x, y));
+        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
+        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
+        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
+        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
+        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
+        return availableRadius < trackRadius / 2 ? 0 : ((this.heightMap[
+            Math.floor((x + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
+        ][
+            Math.floor((y + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
+        ] - 64) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3));
+    }
+
+    private sigmoid(L: number, x: number) {
+        return L / (1 + Math.pow(Math.E, x));
     }
 
     private generateSegments(): THREE.Mesh[] {
@@ -100,7 +284,9 @@ export class TerrainGenerationService {
             segmentMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
             segmentMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
             segmentMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-            segmentMesh.position.y = 1;
+            segmentMesh.position.y = 2;
+            segmentMesh.castShadow = true;
+            segmentMesh.receiveShadow = true;
             return segmentMesh;
         });
     }
@@ -118,7 +304,9 @@ export class TerrainGenerationService {
             const intersectionMesh = new THREE.Mesh(geometry, material);
             intersectionMesh.position.x = intersection.x * this.scale;
             intersectionMesh.position.z = intersection.y * this.scale;
-            intersectionMesh.position.y = 1;
+            intersectionMesh.position.y = 2;
+            intersectionMesh.castShadow = true;
+            intersectionMesh.receiveShadow = true;
             return intersectionMesh;
         });
     }
@@ -135,7 +323,7 @@ export class TerrainGenerationService {
         plaidMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         plaidMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
         plaidMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-        plaidMesh.position.y = 2;
+        plaidMesh.position.y = 3;
 
         return plaidMesh;
     }
@@ -222,7 +410,7 @@ export class TerrainGenerationService {
                 minimumY + (Math.random() * (maximumY - minimumY))
             );
             x--;
-        } while (this.availableRadius(point) < requiredRadius && x > 0);
+        } while (this.availableRadius(point) - trackRadius < requiredRadius && x > 0);
 
         return point;
     }

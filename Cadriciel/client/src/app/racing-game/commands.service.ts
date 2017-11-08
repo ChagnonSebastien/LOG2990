@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 // tslint:disable-next-line:no-unused-variable
 enum Commands {
@@ -8,12 +10,13 @@ enum Commands {
 
 @Injectable()
 export class CommandsService {
+    private subject = new Subject();
 
-    public keyDownEvent(event) {
-
+    public sendKeyDownEvent(event: any) {
+            this.subject.next(event);
     }
 
-    public keyUpEvent(event) {
-
+    public getKeyDownEvent(): Observable<any> {
+        return this.subject.asObservable();
     }
 }

@@ -1,13 +1,16 @@
+import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-
-const scale = 100;
+import { CommandsService } from './commands.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class RenderService {
+
+    private scale: number;
 
     private container: HTMLElement;
 
@@ -21,10 +24,22 @@ export class RenderService {
 
     public mainVehicle: THREE.Mesh;
 
+    private subscription: Subscription;
+
+    private events: any;
+
+    private keyIsDown: boolean;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
+        private commandsService: CommandsService
     ) {
+        this.subscription = this.commandsService.getKeyDownEvent()
+        .subscribe(event => {
+            this.events = event;
+            this.keyIsDown = true;
+        });
     }
 
     private createScene() {
@@ -68,12 +83,15 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, 25, track, this.textureSky);
+        this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
     }
 
-    public eventsList(event: any): void {
-        this.cameraService.swapCamera(event);
-        this.cameraService.zoomCamera(event);
+    public eventsList(): void {
+        if ( this.keyIsDown) {
+            this.cameraService.swapCamera(this.events);
+            this.cameraService.zoomCamera(this.events);
+            this.keyIsDown = false;
+        }
     }
 
     public startRenderingLoop() {
@@ -90,6 +108,7 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
+        this.eventsList();
         this.stats.update();
     }
 
@@ -106,14 +125,16 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement) {
+    public async initialize(container: HTMLElement, track: Track, scale: number) {
+        this.scale = scale;
         this.container = container;
         this.createScene();
         this.initStats();
+        this.loadTrack(track);
     }
 
     public setCameraOnMainVehicle() {
-        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
+        this.cameraService.initializeCameras(this.container, this.mainVehicle, this.scale * 4);
     }
 
 }

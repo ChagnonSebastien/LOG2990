@@ -74,7 +74,7 @@ export class CameraService {
         this.perspectiveCamera.position.x = this.objectToFollow.position.x + (
             Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
         );
-        this.perspectiveCamera.position.y = perspectiveHeight * this.sceneScale;
+        this.perspectiveCamera.position.y = this.objectToFollow.position.y + perspectiveHeight * this.sceneScale;
         this.perspectiveCamera.position.z = this.objectToFollow.position.z + (
             Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
         );

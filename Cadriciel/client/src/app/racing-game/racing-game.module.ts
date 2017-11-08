@@ -1,3 +1,4 @@
+import { CountdownService } from './countdown.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,7 +9,6 @@ import { HttpModule } from '@angular/http';
 import { GameInitializationModule } from './game-initialization/game-initialization.module';
 
 import { RacingGameComponent } from './racing-game.component';
-import { CountdownComponent } from './countdown.component';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
@@ -27,11 +27,9 @@ import { VehicleService } from './vehicle.service';
     ],
     declarations: [
         RacingGameComponent,
-        CountdownComponent,
     ],
     exports: [
         RacingGameComponent,
-        CountdownComponent,
     ],
     providers: [
         RenderService,
@@ -41,6 +39,7 @@ import { VehicleService } from './vehicle.service';
         TerrainGenerationService,
         CommandsService,
         VehicleService,
+        CountdownService
     ]
 })
 export class RacingGameModule { }
