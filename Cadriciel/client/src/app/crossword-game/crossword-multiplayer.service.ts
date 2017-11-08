@@ -1,20 +1,44 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { MultiplayerCrosswordGame } from '../../../../commun/crossword/multiplayer-crossword-game';
-import { Player } from '../../../../commun/crossword/player';
+
 import { CrosswordSocketService } from './crossword-socket.service';
-import { ClientGameInfo } from '../../../../commun/crossword/clientGameInfo';
+import { CrosswordPlayerService } from './crossword-player.service';
+
+import { Player } from '../../../../commun/crossword/player';
+import { CrosswordGameInfo } from '../../../../commun/crossword/crossword-game-info';
+import { MultiplayerCrosswordGame } from '../../../../commun/crossword/multiplayer-crossword-game';
 
 @Injectable()
 export class CrosswordMultiplayerService {
-    public socket: SocketIOClient.Socket;
+    public games: Array<CrosswordGameInfo>;
     public game: MultiplayerCrosswordGame;
-    protected readonly HOST_NAME = `http://${window.location.hostname}`;
-    protected readonly SERVER_PORT = '3000';
 
-    constructor(protected socketService: CrosswordSocketService) {
-        this.socketService.requestSocket(`${this.HOST_NAME}/${this.SERVER_PORT}`).then(socket => {
+    constructor(
+        private socketService: CrosswordSocketService,
+        private playerService: CrosswordPlayerService
+    ) {
+        this.listenForActiveGames();
+    }
+
+    public createGame(difficulty: string, mode: string) {
+        this.socketService.socket.emit(
+            'create game', difficulty, mode, this.playerService.username
+        );
+    }
+
+    public getGames() {
+        this.socketService.socket.emit('get games');
+    }
+
+    private listenForActiveGames() {
+        this.socketService.socket.on('sent all games', (games) => {
+            this.games = games;
+        });
+    }
+
+    /*constructor(private socketService: CrosswordSocketService) {
+        this.socketService.requestSocket().then(socket => {
             this.socket = socket;
 
             this.socket.on('player 2 joined', data => {
@@ -56,5 +80,5 @@ export class CrosswordMultiplayerService {
 
     public connectionStatus() {
         return this.socket !== undefined;
-    }
+    }*/
 }

@@ -11,8 +11,8 @@ export class PlayerManagerService {
     private socket: SocketIOClient.Socket;
 
     constructor(private playerHandlerService: CrosswordPlayerService, private socketHandlerSerivce: CrosswordSocketService) {
-        this.player = this.playerHandlerService.requestPlayer();
-        this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
+        // this.player = this.playerHandlerService.requestPlayer();
+        /*this.socketHandlerSerivce.requestSocket(this.HOST_NAME + this.SERVER_PORT).then(socket => {
             this.socket = socket;
 
             this.socket.on('connect', data => {
@@ -27,10 +27,10 @@ export class PlayerManagerService {
             this.socket.on('selected hint', data => {
                 // call a service that handles the opponent selected hints
             });
-        });
+        });*/
     }
 
-    public getPlayer(): Player {
+    /*public getPlayer(): Player {
         return this.player;
     }
 
@@ -40,7 +40,7 @@ export class PlayerManagerService {
     }
 
     public emitHintSelected(hint: string) {
-        //another service calls it to emit hint selection 
+        // another service calls it to emit hint selection 
         this.socket.emit('selected a word', hint, this.player.getSocketID());
-    }
+    }*/
 }

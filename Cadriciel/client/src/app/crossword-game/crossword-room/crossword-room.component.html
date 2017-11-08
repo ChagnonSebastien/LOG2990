@@ -1,23 +1,15 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
-      <h3 class="text-white">What's your nickname?</h3>
-      <div class="form">
-        <input class="usernameInput" id='username' type="text" maxlength="15" [(ngModel)]="this.username" />
-      </div>
-    </div>
-  </div><br>
-  <div class="row">
     <table class="text-white table table-responsive">
       <tbody>
         <tr>
-          <th class="hidden-xs">Player-Host</th>
+          <th>Player-Host</th>
           <th>Difficulty</th>
           <th>Mode</th>
-          <th class="hidden-xs">Status</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
-        <tr *ngFor="let game of this.gamesListInfo">
+        <tr *ngFor="let game of multiplayerService.games">
           <td> {{game.playerHost}}</td>
           <td> {{game.difficulty}}</td>
           <td> {{game.mode}}</td>
