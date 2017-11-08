@@ -113,7 +113,7 @@ export class TerrainGenerationService {
 
     private addObjectsInScene(scene: THREE.Scene) {
 
-        this.generateTable().forEach(triangle => {
+        this.generateTable(scene).forEach(triangle => {
             scene.add(triangle);
         });
         scene.add(this.generateRaceStartPlaid());
@@ -163,6 +163,7 @@ export class TerrainGenerationService {
 
         return table;*/
 
+    private generateTable(scene: THREE.Scene): THREE.Mesh[] {
         const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
         const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
         const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
@@ -176,20 +177,21 @@ export class TerrainGenerationService {
         for (let i = 0; i < pixelWidth; i++) {
           // RGB from 0 to 255
             for (let j = 0; j < pixelWidth; j++) {
+                const height = this.heightAtPoint(
+                    j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)
+                ) + 64;
+
                 dummyRGB[3 * i * pixelWidth + 3 * j] =
                 dummyRGB[3 * i * pixelWidth + 3 * j + 1] =
                 dummyRGB[3 * i * pixelWidth + 3 * j + 2] =
-                this.heightAtPoint(j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)) + 64;
+                height;
             }
         }
 
-        const dummyDataTex = new THREE.DataTexture( dummyRGB, pixelWidth, pixelWidth, THREE.RGBFormat );
-        dummyDataTex.needsUpdate = true;
-
-
-        const bumpTexture = THREE.ImageUtils.loadTexture( 'assets/heightmap.png' );
+        const bumpTexture = new THREE.DataTexture( dummyRGB, pixelWidth, pixelWidth, THREE.RGBFormat );
         bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-        // magnitude of normal displacement
+        bumpTexture.needsUpdate = true;
+
         const bumpScale   = 255 * this.scale;
 
         const oceanTexture = THREE.ImageUtils.loadTexture( 'assets/dirt-512.jpg' );
@@ -207,28 +209,21 @@ export class TerrainGenerationService {
         const snowyTexture = THREE.ImageUtils.loadTexture( 'assets/snow-512.jpg' );
         snowyTexture.wrapS = snowyTexture.wrapT = THREE.RepeatWrapping;
 
-
-        // use "this." to create global object
         const customUniforms = {
-        bumpTexture:	{ type: 't', value: dummyDataTex },
-        bumpScale:	    { type: 'f', value: bumpScale },
-        oceanTexture:	{ type: 't', value: oceanTexture },
-        sandyTexture:	{ type: 't', value: sandyTexture },
-        grassTexture:	{ type: 't', value: grassTexture },
-        rockyTexture:	{ type: 't', value: rockyTexture },
-        snowyTexture:	{ type: 't', value: snowyTexture },
+            bumpTexture:	{ type: 't', value: bumpTexture },
+            bumpScale:	    { type: 'f', value: bumpScale },
+            oceanTexture:	{ type: 't', value: oceanTexture },
+            sandyTexture:	{ type: 't', value: sandyTexture },
+            grassTexture:	{ type: 't', value: grassTexture },
+            rockyTexture:	{ type: 't', value: rockyTexture },
+            snowyTexture:	{ type: 't', value: snowyTexture },
         };
 
-        // create custom material from the shader code above
-        //   that is within specially labelled script tags
-        console.log(document);
-        const customMaterial = new THREE.ShaderMaterial(
-        {
-        uniforms: customUniforms,
-        vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-        fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-        // side: THREE.DoubleSide
-        }   );
+        const customMaterial = new THREE.ShaderMaterial({
+            uniforms: customUniforms,
+            vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+        });
 
         const planeGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, pixelWidth, pixelWidth );
         const plane = new THREE.Mesh(	planeGeo, customMaterial );
