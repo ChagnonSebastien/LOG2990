@@ -56,8 +56,8 @@
             vec4 water = (smoothstep(0.00, 0.01, vAmount) - smoothstep(0.24, 0.25, vAmount)) * texture2D( oceanTexture, vUV * 40.0 );
             vec4 sandy = (smoothstep(0.24, 0.25, vAmount) - smoothstep(0.25, 0.26, vAmount)) * texture2D( sandyTexture, vUV * 40.0 );
             vec4 grass = (smoothstep(0.25, 0.26, vAmount) - smoothstep(0.27, 0.30, vAmount)) * texture2D( grassTexture, vUV * 80.0 );
-            vec4 rocky = (smoothstep(0.28, 0.31, vAmount) - smoothstep(0.40, 0.70, vAmount)) * texture2D( rockyTexture, vUV * 80.0 );
-            vec4 snowy = (smoothstep(0.50, 0.65, vAmount))                                   * texture2D( snowyTexture, vUV * 40.0 );
+            vec4 rocky = (smoothstep(0.25, 0.34, vAmount) - smoothstep(0.30, 0.45, vAmount)) * texture2D( rockyTexture, vUV * 80.0 );
+            vec4 snowy = (smoothstep(0.34, 0.41, vAmount))                                   * texture2D( snowyTexture, vUV * 40.0 );
             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + water + sandy + grass + rocky + snowy; //, 1.0);
         }  
         </script>

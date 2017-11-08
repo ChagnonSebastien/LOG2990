@@ -117,11 +117,11 @@ export class TerrainGenerationService {
             scene.add(instersection);
         });
 
-        // this.generateSegments().forEach(instersection => {
-        //     scene.add(instersection);
-        // });
+        this.generateSegments().forEach(instersection => {
+            scene.add(instersection);
+        });
 
-        this.generateCones().then(cones => {
+        /*this.generateCones().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
@@ -137,7 +137,7 @@ export class TerrainGenerationService {
             cones.forEach(cone => {
                 scene.add(cone);
             });
-        });
+        });*/
     }
 
     private generateTable(): THREE.Mesh[] {
@@ -166,7 +166,7 @@ export class TerrainGenerationService {
         const mapWidth = 2 * extreme;
 
         // texture used to generate "bumpiness"
-        const pixelWidth = 256;
+        const pixelWidth = 512;
         const dummyRGB = new Uint8Array(3 * pixelWidth * pixelWidth);
         for (let i = 0; i < pixelWidth; i++) {
           // RGB from 0 to 255
