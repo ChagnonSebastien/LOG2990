@@ -1,5 +1,4 @@
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
-import { Player } from '../../../commun/crossword/player';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 export class CrosswordGameManager {
@@ -9,7 +8,8 @@ export class CrosswordGameManager {
     private serverCrosswords: ServerCrosswords;
 
     constructor() {
-        this.games = [];
+        this.games = new Array<MultiplayerCrosswordGame>();
+        this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
         this.idCounter = 0;
         this.serverCrosswords = ServerCrosswords.getInstance();
         this.serverCrosswords.setCollection('crosswords');
@@ -21,17 +21,17 @@ export class CrosswordGameManager {
                 id: game.id,
                 difficulty: game.difficulty,
                 mode: game.mode,
-                player1: game.player1.username,
-                player2: game.player2
+                hostUsername: game.hostUsername,
+                challengerUsername: game.challengerUsername
             };
         });
     }
 
-    public async createGame(type: string, difficulty: string, mode: string, hostPlayer: Player): Promise<MultiplayerCrosswordGame> {
+    public async createGame(difficulty: string, mode: string, hostUsername: string): Promise<MultiplayerCrosswordGame> {
         let game: MultiplayerCrosswordGame;
         await this.serverCrosswords.getCrossword(difficulty).then((crossword) => {
             game = new MultiplayerCrosswordGame(
-                this.generateGameId(), difficulty, mode, hostPlayer, crossword
+                this.generateGameId(), difficulty, mode, hostUsername, crossword
             );
             this.games.push(game);
             this.gamesMap.set(game.id, game);
@@ -39,7 +39,7 @@ export class CrosswordGameManager {
         return game;
     }
 
-    public joinGame(gameId: string, player: Player): MultiplayerCrosswordGame {
+    /*public joinGame(gameId: string, player: Player): MultiplayerCrosswordGame {
         const game = this.findGameById(gameId);
         game.player2 = player;
         return game;
@@ -61,7 +61,7 @@ export class CrosswordGameManager {
             }
         }
         return '-1';
-    }
+    }*/
 
     private generateGameId(): string {
         return (this.idCounter++).toString();

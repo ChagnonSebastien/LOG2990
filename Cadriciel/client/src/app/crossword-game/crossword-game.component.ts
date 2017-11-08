@@ -28,6 +28,8 @@ export class CrosswordGameComponent {
                 if (configuration.type === 'solo') {
                     await this.crosswordGameService.newSoloGame(configuration.level);
                     this.gameInProgress = true;
+                } else if (configuration.type === 'multiplayer') {
+                    await this.crosswordGameService.newMultiplayerGame(configuration.level, configuration.mode);
                 }
             });
     }

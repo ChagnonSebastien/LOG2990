@@ -16,14 +16,13 @@ import { CrosswordConfigurationService } from './crossword-menu/crossword-config
 import { CrosswordWordsService } from './crossword-words.service';
 import { CrosswordSocketService } from './crossword-socket.service';
 import { CrosswordPlayerService } from './crossword-player.service';
-import { PlayerManagerService } from './crossword-player-manager.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 
 import { CrosswordMenuComponent } from './crossword-menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
 import { CrosswordHintsComponent } from './crossword-hints/crossword-hints.component';
 import { CrosswordGridComponent } from './crossword-grid/crossword-grid.component';
-import { CrosswordRoomComponent } from './crossword-room/crossword-room.component';
+import { CrosswordLobbyComponent } from './crossword-lobby/crossword-lobby.component';
 
 @NgModule({
     imports: [
@@ -37,7 +36,7 @@ import { CrosswordRoomComponent } from './crossword-room/crossword-room.componen
         CrosswordGameComponent,
         CrosswordHintsComponent,
         CrosswordGridComponent,
-        CrosswordRoomComponent
+        CrosswordLobbyComponent
     ],
     exports: [
 
@@ -54,7 +53,6 @@ import { CrosswordRoomComponent } from './crossword-room/crossword-room.componen
         CrosswordWordsService,
         CrosswordSocketService,
         CrosswordPlayerService,
-        PlayerManagerService,
         CrosswordMultiplayerService
     ]
 })

@@ -1,42 +1,43 @@
-import { Player } from '../../../commun/crossword/player';
 import { CrosswordGameManager } from './crossword-games-manager';
 import * as io from 'socket.io';
 import * as http from 'http';
 
 export class SocketManager {
-    private sio: SocketIO.Server;
+    private io: SocketIO.Server;
     private gameManager: CrosswordGameManager;
 
-
     constructor(server: http.Server) {
-        this.sio = io.listen(server);
+        this.io = io.listen(server);
         this.gameManager = new CrosswordGameManager();
     }
 
-    public handleSockets(): void {
-        this.sio.on('connection', (socket) => {
+    public handleSocketRequests(): void {
+        this.io.on('connect', (socket) => {
+            console.log('SOCKET CONNECTED', socket.id);
 
-            socket.on('createGame', (type: string, difficulty: string, mode: string, player1: Player) => {
-                this.gameManager.createGame(type, difficulty, mode, player1)
+            socket.on('create game', (difficulty, mode, hostUsername) => {
+                this.gameManager.createGame(difficulty, mode, hostUsername)
                     .then((game) => {
+                        console.log('GAME CREATED');
                         socket.join(game.id);
-                        this.sio.sockets.in(game.id).emit('game created', game.id);
+                        this.io.sockets.in(game.id).emit('game created', game.id);
                     });
             });
 
-            socket.on('getGames', () => {
+            socket.on('get games', () => {
+                console.log('SENT GAMES');
                 socket.emit('sent all games', this.gameManager.getGames());
             });
 
-            socket.on('joinGame', (gameId: string, player: Player) => {
+            /*socket.on('joinGame', (gameId: string, player: Player) => {
                 socket.join(gameId);
-                this.sio.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
+                this.io.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
             });
 
             socket.on('disconnect', () => {
                 // socket.broadcast.to(socket.rooms[0]).emit('opponent left');
                 const room: string = this.gameManager.findGameIdBySocketId(socket.id);
-                this.sio.sockets.in(room).emit('opponent left');
+                this.io.sockets.in(room).emit('opponent left');
             });
 
             socket.on('found a word', () => {
@@ -44,7 +45,7 @@ export class SocketManager {
             });
             socket.on('selected a hint', () => {
                 // send foud hint
-            });
+            });*/
 
         });
 

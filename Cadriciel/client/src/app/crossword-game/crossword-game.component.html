@@ -1,6 +1,13 @@
 <div class="crossword-page" id="cloud-container">
   <div *ngIf="!gameInProgress">
-    <app-crossword-menu></app-crossword-menu>
+    <div class="row">
+      <div class="col-md-5">
+        <app-crossword-menu></app-crossword-menu>
+      </div>
+      <div class="col-md-7">
+        <app-crossword-lobby></app-crossword-lobby>
+      </div>
+    </div>
   </div>
   <div *ngIf="gameInProgress">
     <div class="spacing">

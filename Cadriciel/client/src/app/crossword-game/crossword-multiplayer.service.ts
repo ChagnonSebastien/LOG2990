@@ -18,6 +18,7 @@ export class CrosswordMultiplayerService {
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
+        setInterval(this.getGames.bind(this), 500);
         this.listenForActiveGames();
     }
 

@@ -8,7 +8,5 @@ import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
     styleUrls: ['./crossword-lobby.component.css']
 })
 export class CrosswordLobbyComponent {
-    constructor(private multiplayerService: CrosswordMultiplayerService) {
-
-    }
+    constructor(private multiplayerService: CrosswordMultiplayerService) { }
 }

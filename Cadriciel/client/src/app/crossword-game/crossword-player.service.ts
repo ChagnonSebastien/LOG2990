@@ -6,5 +6,7 @@ import { Player } from '../../../../commun/crossword/player';
 export class CrosswordPlayerService {
     public username: string;
 
-    constructor() { }
+    constructor() {
+        this.username = 'Eric';
+    }
 }

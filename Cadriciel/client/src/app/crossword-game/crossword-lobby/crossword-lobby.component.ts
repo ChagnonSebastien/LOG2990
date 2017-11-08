@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CrosswordMultiplayerService } from '../crossword-multiplayer.service';
 
 @Component({
-    selector: 'app-crossword-room',
-    templateUrl: './crossword-room.component.html',
-    styleUrls: ['./crossword-room.component.css']
+    selector: 'app-crossword-lobby',
+    templateUrl: './crossword-lobby.component.html',
+    styleUrls: ['./crossword-lobby.component.css']
 })
-export class CrosswordRoomComponent {
+export class CrosswordLobbyComponent {
     constructor(public multiplayerService: CrosswordMultiplayerService) { }
 }

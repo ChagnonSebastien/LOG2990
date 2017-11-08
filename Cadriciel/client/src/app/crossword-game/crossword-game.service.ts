@@ -32,8 +32,9 @@ export class CrosswordGameService {
         });
     }
 
-    public async newMultiplayerGame(level: string) {
+    public async newMultiplayerGame(level: string, mode: string) {
         this.multiplayerMode = true;
+        this.multiplayerService.createGame(level, mode);
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>) {

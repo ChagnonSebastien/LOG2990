@@ -5,15 +5,22 @@ export class MultiplayerCrosswordGame {
     public id: string;
     public difficulty: string;
     public mode: string;
-    public player1: Player;
-    public player2: Player;
+    public hostUsername: string;
+    public challengerUsername: string;
     public crossword: Crossword;
 
     constructor(
         id: string,
         difficulty: string,
         mode: string,
-        player1: Player,
+        hostUsername: string,
         crossword: Crossword
-    ) { }
+    ) { 
+        this.id = id;
+        this.difficulty = difficulty;
+        this.mode = mode;
+        this.hostUsername = hostUsername;
+        this.challengerUsername = '';
+        this.crossword = crossword;
+    }
 }
