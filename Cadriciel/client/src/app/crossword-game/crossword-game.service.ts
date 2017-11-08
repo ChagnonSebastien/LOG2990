@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 import { CrosswordService } from './crossword.service';
 import { CrosswordHintsService } from './crossword-hints/crossword-hints.service';
@@ -12,6 +14,7 @@ import { Word } from '../../../../commun/word';
 @Injectable()
 export class CrosswordGameService {
     private multiplayerMode: boolean;
+    private gameStartSubject: Subject<any>;
 
     constructor(
         private crosswordService: CrosswordService,
@@ -21,8 +24,10 @@ export class CrosswordGameService {
         private wordsService: CrosswordWordsService,
         private multiplayerService: CrosswordMultiplayerService
     ) {
+        this.gameStartSubject = new Subject();
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
+        this.listenForMultiplayerGameStart();
     }
 
     public async newSoloGame(level: string) {
@@ -44,6 +49,10 @@ export class CrosswordGameService {
         this.pointsService.newGame();
     }
 
+    public gameStartAlerts(): Observable<any> {
+        return this.gameStartSubject.asObservable();
+    }
+
     private listenForWordSelections() {
         this.hintsService.selectedWordAlerts()
             .subscribe((wordSelection) => {
@@ -61,6 +70,19 @@ export class CrosswordGameService {
             .subscribe((foundWord) => {
                 this.hintsService.markHintAsFound(foundWord.word);
                 this.pointsService.addToFoundWords(foundWord.word);
+            });
+    }
+
+    private listenForMultiplayerGameStart() {
+        this.multiplayerService.gameStartAlerts()
+            .subscribe((game) => {
+                this.constructGame(
+                    game.crossword.crossword,
+                    game.crossword.wordsWithIndex,
+                    game.crossword.listOfWords
+                );
+                console.log()
+                this.gameStartSubject.next(true);
             });
     }
 }

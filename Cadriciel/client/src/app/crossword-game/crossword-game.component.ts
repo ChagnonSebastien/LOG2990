@@ -32,6 +32,11 @@ export class CrosswordGameComponent {
                     await this.crosswordGameService.newMultiplayerGame(configuration.level, configuration.mode);
                 }
             });
+
+        this.crosswordGameService.gameStartAlerts()
+            .subscribe((start) => {
+                this.gameInProgress = true;
+            });
     }
 }
 
