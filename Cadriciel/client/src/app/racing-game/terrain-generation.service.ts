@@ -229,7 +229,17 @@ export class TerrainGenerationService {
         const plane = new THREE.Mesh(	planeGeo, customMaterial );
         plane.rotation.x = -Math.PI / 2;
         plane.position.y = -64 * this.scale;
-        return [plane];
+
+        const waterGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, 1, 1 );
+        const waterTex = THREE.ImageUtils.loadTexture( 'assets/water512.jpg' );
+        waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
+        waterTex.repeat.set( 5 , 5 );
+        const waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent: true, opacity: 0.40} );
+        const water = new THREE.Mesh(	planeGeo, waterMat );
+        water.rotation.x = -Math.PI / 2;
+        water.position.y = -5;
+
+        return [plane, water];
 
     }
 
