@@ -1,3 +1,4 @@
+import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { TestBed } from '@angular/core/testing';
@@ -9,7 +10,7 @@ describe('TerrainGenerationService', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [TerrainGenerationService, DecorElementsService]
+            providers: [TerrainGenerationService, DecorElementsService, LineCalculationService]
         });
         terrainGenerationService = TestBed.get(TerrainGenerationService);
         /*terrainGenerationService.generate(
