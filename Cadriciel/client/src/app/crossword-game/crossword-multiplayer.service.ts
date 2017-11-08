@@ -16,6 +16,7 @@ export class CrosswordMultiplayerService {
     private gameStartSubject: Subject<any>;
     private opponentHintSelection: Subject<any>;
     private opponentFoundWord: Subject<any>;
+    private opponentUnselection: Subject<any>;
 
     constructor(
         private socketService: CrosswordSocketService,
@@ -24,12 +25,14 @@ export class CrosswordMultiplayerService {
         this.gameStartSubject = new Subject();
         this.opponentHintSelection = new Subject();
         this.opponentFoundWord = new Subject();
+        this.opponentUnselection = new Subject();
         this.getGames();
         setInterval(this.getGames.bind(this), 1000);
         this.listenForActiveGames();
         this.listenForGameStart();
         this.listenForOpponentHintSelections();
         this.listenForOpponentFoundWords();
+        this.listenForOpponentUnselectAll();
     }
 
     public gameStartAlerts(): Observable<any> {
@@ -42,6 +45,10 @@ export class CrosswordMultiplayerService {
 
     public opponentFoundWordAlerts(): Observable<any> {
         return this.opponentFoundWord.asObservable();
+    }
+
+    public opponentUnselectedAllAlerts(): Observable<any> {
+        return this.opponentUnselection.asObservable();
     }
 
     public createGame(difficulty: string, mode: string) {
@@ -70,6 +77,10 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.emit('found word', word);
     }
 
+    public emitUnselectAll() {
+        this.socketService.socket.emit('unselect all');
+    }
+
     private listenForActiveGames() {
         this.socketService.socket.on('sent all games', (games) => {
             this.games = games;
@@ -94,6 +105,12 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.on('opponent found a word', (foundWord) => {
             console.log('OPPONENT FOUND', foundWord);
             this.opponentFoundWord.next(foundWord);
+        });
+    }
+
+    private listenForOpponentUnselectAll() {
+        this.socketService.socket.on('opponent unselected all', () => {
+            this.opponentUnselection.next(true);
         });
     }
 

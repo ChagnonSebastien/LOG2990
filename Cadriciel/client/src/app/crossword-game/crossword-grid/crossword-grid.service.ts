@@ -79,12 +79,20 @@ export class CrosswordGridService {
         return !square.found && !square.opponentFound && !square.black && square.selected;
     }
 
-    public unselectWord(word: Word) {
-        WordUtilities.forEachLetter(word, this.unselectSquare.bind(this));
+    public unselectWord() {
+        for (const row of this.grid) {
+            for (const square of row) {
+                square.selected = false;
+            }
+        }
     }
 
-    public unselectWordOpponent(word: Word) {
-        WordUtilities.forEachLetter(word, this.unselectSquareOpponent.bind(this));
+    public unselectWordOpponent() {
+        for (const row of this.grid) {
+            for (const square of row) {
+                square.opponentSelected = false;
+            }
+        }
     }
 
     public selectWord(word: Word) {
@@ -101,7 +109,7 @@ export class CrosswordGridService {
 
     private markWordAsFound(word: Word) {
         WordUtilities.forEachLetter(word, this.markSquareAsFound.bind(this));
-        this.unselectWord(word);
+        this.unselectWord();
     }
 
     private initializeGrid(grid: string[][]) {
@@ -131,14 +139,6 @@ export class CrosswordGridService {
             }
         }
         return true;
-    }
-
-    private unselectSquare(i: number, j: number) {
-        this.grid[i][j].selected = false;
-    }
-
-    private unselectSquareOpponent(i: number, j: number) {
-        this.grid[i][j].opponentSelected = false;
     }
 
     private selectSquare(i: number, j: number) {

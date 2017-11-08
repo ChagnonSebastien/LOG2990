@@ -10,11 +10,14 @@ import { CrosswordWordsService } from './crossword-words.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
 import { CrosswordCountdownService } from './crossword-countdown.service';
 import { CrosswordCheatService } from './crossword-cheat.service';
+import { CrosswordConfigurationService } from './crossword-menu/crossword-configuration.service';
 
 import { Word } from '../../../../commun/word';
 
 @Injectable()
 export class CrosswordGameService {
+    public gameInProgress: boolean;
+    public gameCompleted: boolean;
     private multiplayerMode: boolean;
     private gameStartSubject: Subject<any>;
 
@@ -26,9 +29,13 @@ export class CrosswordGameService {
         private wordsService: CrosswordWordsService,
         private multiplayerService: CrosswordMultiplayerService,
         private countdownService: CrosswordCountdownService,
-        private cheatService: CrosswordCheatService
+        private cheatService: CrosswordCheatService,
+        private configurationService: CrosswordConfigurationService
     ) {
+        this.gameInProgress = false;
+        this.gameCompleted = false;
         this.gameStartSubject = new Subject();
+        this.listenForStartGame();
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
         this.listenForMultiplayerGameStart();
@@ -36,12 +43,19 @@ export class CrosswordGameService {
         this.listenForOpponentFoundWords();
         this.listenForCountdownReachedZero();
         this.listenForCheatModeCountdownChanges();
+        this.listenForOpponentDeselectedAll();
+        this.listenForGameCompletion();
     }
 
     public async newSoloGame(level: string) {
         await this.crosswordService.getCrossword(level).then((crossword) => {
             this.constructGame(crossword.crossword, crossword.wordsWithIndex, crossword.listOfWords);
         });
+    }
+
+    public endGame() {
+        this.gameInProgress = false;
+        this.gameCompleted = false;
     }
 
     public async newMultiplayerGame(level: string, mode: string) {
@@ -57,6 +71,33 @@ export class CrosswordGameService {
         this.countdownService.newGame();
     }
 
+    public unselectAll() {
+        if (this.gameInProgress) {
+            this.hintsService.unselectHint();
+            this.gridService.unselectWord();
+            this.multiplayerService.emitUnselectAll();
+        }
+    }
+
+    private listenForStartGame() {
+        this.configurationService.startGameAlerts()
+            .subscribe(async (configuration) => {
+                if (configuration.type === 'solo') {
+                    await this.newSoloGame(configuration.level);
+                    this.gameInProgress = true;
+                } else if (configuration.type === 'multiplayer') {
+                    await this.newMultiplayerGame(configuration.level, configuration.mode);
+                }
+            });
+    }
+
+    private listenForGameCompletion() {
+        this.pointsService.gameCompletedAlerts()
+            .subscribe((end: boolean) => {
+                this.gameCompleted = end;
+            });
+    }
+
     public gameStartAlerts(): Observable<any> {
         return this.gameStartSubject.asObservable();
     }
@@ -68,11 +109,7 @@ export class CrosswordGameService {
                     this.multiplayerService.emitSelectHint(hintSelection);
                 }
 
-                if (hintSelection.previous) {
-                    const wordWithIndex = this.wordsService
-                        .getWordWithIndex(hintSelection.previous);
-                    this.gridService.unselectWord(wordWithIndex);
-                }
+                this.gridService.unselectWord();
                 this.gridService.selectWord(hintSelection.current);
             });
     }
@@ -96,7 +133,7 @@ export class CrosswordGameService {
                     game.crossword.wordsWithIndex,
                     game.crossword.listOfWords
                 );
-                this.gameStartSubject.next(true);
+                this.gameInProgress = true;
                 this.multiplayerMode = true;
             });
     }
@@ -106,10 +143,7 @@ export class CrosswordGameService {
             .subscribe((hintSelection) => {
                 console.log('GAME SERVICE CAPTURED OPPONENT SELECTION', hintSelection);
                 this.hintsService.opponentSelectedWord = hintSelection.current.word;
-                if (hintSelection.previous) {
-                    const previous = this.wordsService.getWordWithIndex(hintSelection.previous);
-                    this.gridService.unselectWordOpponent(previous);
-                }
+                this.gridService.unselectWordOpponent();
                 this.gridService.selectWordOpponent(hintSelection.current);
             });
     }
@@ -133,12 +167,22 @@ export class CrosswordGameService {
 
     private listenForCheatModeCountdownChanges() {
         this.cheatService.initialCountdownChangedAlerts()
-        .subscribe((newCountdown) => {
-            console.log('NEW COUNTDOWN', newCountdown);
-            this.countdownService.stopCountdown();
-            this.countdownService.initialCount = newCountdown;
-            this.countdownService.resetCountdown();
-            this.countdownService.startCountdown();
-        });
+            .subscribe((newCountdown) => {
+                console.log('NEW COUNTDOWN', newCountdown);
+                this.countdownService.stopCountdown();
+                this.countdownService.initialCount = newCountdown;
+                this.countdownService.resetCountdown();
+                this.countdownService.startCountdown();
+            });
+    }
+
+    private listenForOpponentDeselectedAll() {
+        this.multiplayerService.opponentUnselectedAllAlerts()
+            .subscribe((unselect) => {
+                if (this.gameInProgress) {
+                    this.hintsService.opponentSelectedWord = undefined;
+                    this.gridService.unselectWordOpponent();
+                }
+            });
     }
 }
