@@ -1,6 +1,6 @@
 import { CountdownService } from './countdown.service';
 import { ActivatedRoute } from '@angular/router';
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
@@ -13,7 +13,7 @@ import { CommandsService } from './commands.service';
     styleUrls: ['./racing-game.component.css'],
     providers: []
 })
-export class RacingGameComponent implements AfterViewInit, OnInit {
+export class RacingGameComponent implements AfterViewInit {
 
     constructor(
         private route: ActivatedRoute,
@@ -41,15 +41,11 @@ export class RacingGameComponent implements AfterViewInit, OnInit {
         this.commandsService.sendKeyDownEvent(event);
     }
 
-    public ngOnInit() {
+    public ngAfterViewInit() {
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
-            this.renderService.loadTrack(track);
+            this.racingGameService.initializeRender(this.container, track);
         });
-    }
-
-    public ngAfterViewInit() {
-        this.racingGameService.initializeRender(this.container);
     }
 
     private startCountdown(event: any) {

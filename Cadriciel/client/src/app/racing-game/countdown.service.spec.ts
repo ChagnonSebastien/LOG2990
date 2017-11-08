@@ -1,5 +1,4 @@
 import { CountdownService } from './countdown.service';
-import { Observable } from 'rxjs/Observable';
 
 describe('test CountdownService', function () {
     const countdownService = new CountdownService();
