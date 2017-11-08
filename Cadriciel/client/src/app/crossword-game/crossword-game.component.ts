@@ -14,7 +14,7 @@ export class CrosswordGameComponent {
 
     constructor(
         public crosswordGameService: CrosswordGameService,
-        private configurationService: CrosswordConfigurationService,
+        public configurationService: CrosswordConfigurationService,
         private pointsService: CrosswordPointsService
     ) {
         this.gameInProgress = false;

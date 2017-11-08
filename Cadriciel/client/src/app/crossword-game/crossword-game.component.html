@@ -15,11 +15,16 @@
         End game
       </button>
       <div class="container">
-        <div class="row">
+        <div *ngIf="configurationService.isMultiplayer()"class="row">
           <div class="col-md-12">
             <app-crossword-points></app-crossword-points>
           </div>
         </div>
+        <div *ngIf="!gameCompleted && configurationService.isDynamic()" class="row">
+            <div class="col-md-12">
+              <app-crossword-countdown></app-crossword-countdown>
+            </div>
+          </div>
         <div *ngIf="gameCompleted" class="row">
           <div class="col-md-12">
             <app-crossword-end-game></app-crossword-end-game>

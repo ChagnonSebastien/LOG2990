@@ -8,6 +8,7 @@ import { CrosswordGridService } from './crossword-grid/crossword-grid.service';
 import { CrosswordPointsService } from './crossword-points/crossword-points.service';
 import { CrosswordWordsService } from './crossword-words.service';
 import { CrosswordMultiplayerService } from './crossword-multiplayer.service';
+import { CrosswordCountdownService } from './crossword-countdown.service';
 
 import { Word } from '../../../../commun/word';
 
@@ -22,7 +23,8 @@ export class CrosswordGameService {
         private gridService: CrosswordGridService,
         private pointsService: CrosswordPointsService,
         private wordsService: CrosswordWordsService,
-        private multiplayerService: CrosswordMultiplayerService
+        private multiplayerService: CrosswordMultiplayerService,
+        private countdownService: CrosswordCountdownService
     ) {
         this.gameStartSubject = new Subject();
         this.listenForWordSelections();
@@ -30,6 +32,7 @@ export class CrosswordGameService {
         this.listenForMultiplayerGameStart();
         this.listenForOpponentWordSelections();
         this.listenForOpponentFoundWords();
+        this.listenForCountdownReachedZero();
     }
 
     public async newSoloGame(level: string) {
@@ -48,6 +51,7 @@ export class CrosswordGameService {
         this.gridService.newGame(grid, wordsWithIndex);
         this.hintsService.newGame(wordsWithIndex);
         this.pointsService.newGame();
+        this.countdownService.newGame();
     }
 
     public gameStartAlerts(): Observable<any> {
@@ -114,6 +118,13 @@ export class CrosswordGameService {
                 this.hintsService.markHintAsFoundByOpponent(foundWord.word);
                 this.gridService.markWordAsFoundByOpponent(foundWord);
                 this.pointsService.addToOpponentFoundWords(foundWord.word);
+            });
+    }
+
+    private listenForCountdownReachedZero() {
+        this.countdownService.countdownReachedZeroAlerts()
+            .subscribe((zero) => {
+                console.log('COUNTDOWN REACHED ZERO');
             });
     }
 }

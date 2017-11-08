@@ -32,6 +32,10 @@ export class CrosswordConfigurationService {
         return this.type === 'multiplayer';
     }
 
+    public isDynamic(): boolean {
+        return this.mode === 'dynamic';
+    }
+
     public setType(type: string): void {
         if (this.validType(type)) {
             this.type = type;
