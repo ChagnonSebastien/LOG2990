@@ -136,20 +136,6 @@ export class TerrainGenerationService {
         this.generateSegments().forEach(instersection => {
             scene.add(instersection);
         });
-
-        console.log('michel');
-        this.generateMichelElectionPanels().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
-        });
-
-        console.log('dylan');
-        this.generateDylanElectionPanels().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
-        });
     }
 
     private addTrees(scene: THREE.Scene) {
@@ -328,57 +314,6 @@ export class TerrainGenerationService {
         plaidMesh.position.y = 3;
 
         return plaidMesh;
-    }
-
-
-    private generateMichelElectionPanels(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(service.scale, service.scale, service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 15; i++) {
-                    let newPosition: { position: THREE.Vector2, rotation: number };
-                    do {
-                        newPosition = service.getFreePropSpot(votePanelRadius);
-                    } while (service.availableRadius(newPosition.position) < 1);
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(newPosition.rotation);
-                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
-                    cones.push(newCone);
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/votonsmichel.json', loadDone);
-        });
-
-        return loaderPromise;
-    }
-
-    private generateDylanElectionPanels(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(service.scale, service.scale, service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 15; i++) {
-                    let newPosition: { position: THREE.Vector2, rotation: number };
-                    do {
-                        newPosition = service.getFreePropSpot(votePanelRadius);
-                    } while (service.availableRadius(newPosition.position) < 1);
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(newPosition.rotation);
-                    newCone.position.set(newPosition.position.x * service.scale, 0, newPosition.position.y * service.scale);
-                    cones.push(newCone);
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/votonsdylan.json', loadDone);
-        });
-
-        return loaderPromise;
     }
 
     private getFreePropSpot(requiredRadius: number): { position: THREE.Vector2, rotation: number } {

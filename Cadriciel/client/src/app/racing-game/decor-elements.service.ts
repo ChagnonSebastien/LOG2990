@@ -10,6 +10,11 @@ const coneAmount = 100;
 const coneRadius = 1;
 const conePath = 'cone.json';
 
+const panelAmount = 10;
+const panelRadius = 3;
+const dylanPanelAmount = 'votonsdylan.json';
+const michelPanelAmount = 'votonsmichel.json';
+
 @Injectable()
 export class DecorElementsService {
 
@@ -28,6 +33,8 @@ export class DecorElementsService {
         this.scale = scale;
 
         this.placeDecorElement(coneAmount, coneRadius, conePath);
+        this.placeDecorElement(panelAmount, panelRadius, dylanPanelAmount);
+        this.placeDecorElement(panelAmount, panelRadius, michelPanelAmount);
     }
 
     private loadMesh(path: string): Promise<THREE.Mesh> {
