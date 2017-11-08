@@ -18,7 +18,7 @@
     <script src="https://use.fontawesome.com/9bc0d53025.js"></script>
   </head>
   <body>
-      <script id="vertexShader" type="x-shader/x-vertex">
+    <script id="vertexShader" type="x-shader/x-vertex">
         uniform sampler2D bumpTexture;
         uniform float bumpScale;
         
@@ -37,10 +37,9 @@
             
             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
         }
-        </script>
-        
-        <!-- fragment shader a.k.a. pixel shader -->
-        <script id="fragmentShader" type="x-shader/x-vertex"> 
+      </script>
+
+      <script id="fragmentShader" type="x-shader/x-vertex"> 
         uniform sampler2D oceanTexture;
         uniform sampler2D sandyTexture;
         uniform sampler2D grassTexture;
@@ -60,7 +59,7 @@
             vec4 snowy = (smoothstep(0.34, 0.41, vAmount))                                   * texture2D( snowyTexture, vUV * 40.0 );
             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0) + water + sandy + grass + rocky + snowy; //, 1.0);
         }  
-        </script>
+      </script>
     <app-root></app-root>
   </body>
 </html>

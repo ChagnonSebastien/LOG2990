@@ -95,7 +95,12 @@ export class TerrainGenerationService {
         const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
         const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
 
-        this.heightMap[x][y] = minimumRandomValue + Math.random() * (maximumRandomValue - minimumRandomValue);
+        let randomValue = Math.random();
+        if (randomValue < 0.5) {
+            randomValue = Math.random();
+        }
+
+        this.heightMap[x][y] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
@@ -121,7 +126,7 @@ export class TerrainGenerationService {
             scene.add(instersection);
         });
 
-        /*this.generateCones().then(cones => {
+        this.generateCones().then(cones => {
             cones.forEach(cone => {
                 scene.add(cone);
             });
@@ -137,7 +142,7 @@ export class TerrainGenerationService {
             cones.forEach(cone => {
                 scene.add(cone);
             });
-        });*/
+        });
     }
 
     private generateTable(): THREE.Mesh[] {
@@ -235,36 +240,12 @@ export class TerrainGenerationService {
         waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
         waterTex.repeat.set( 5 , 5 );
         const waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent: true, opacity: 0.40} );
-        const water = new THREE.Mesh(	planeGeo, waterMat );
+        const water = new THREE.Mesh(	waterGeo, waterMat );
         water.rotation.x = -Math.PI / 2;
         water.position.y = -5;
 
         return [plane, water];
 
-    }
-
-    private generateTriangleStrip(i: number): THREE.Geometry {
-        const geometry = new THREE.Geometry();
-
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
-        for (let j = minimumY; j < maximumY; j += 5) {
-            geometry.vertices.push(
-                new THREE.Vector3(i, this.heightAtPoint(i, j), j).multiplyScalar(this.scale),
-                new THREE.Vector3((i + 5), this.heightAtPoint(i + 5, j), j).multiplyScalar(this.scale)
-            );
-        }
-
-        for (let j = 0; j < (maximumY - minimumY) / 5 - 1; j++) {
-            geometry.faces.push(
-                new THREE.Face3( (2 * j) + 0, (2 * j) + 1, (2 * j) + 2),
-                new THREE.Face3( (2 * j) + 1, (2 * j) + 2, (2 * j) + 3)
-            );
-            geometry.faceVertexUvs[0][2 * j] = [new THREE.Vector2(0, 0), new THREE.Vector2(0, 1), new THREE.Vector2(1, 0)];
-            geometry.faceVertexUvs[0][(2 * j) + 1] = [new THREE.Vector2(0, 1), new THREE.Vector2(1, 0), new THREE.Vector2(1, 1)];
-        }
-
-        return geometry;
     }
 
     private heightAtPoint(x: number, y: number) {
