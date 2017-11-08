@@ -8,7 +8,7 @@
 </div>
 <div class="row">
   <div class="col-md-12" *ngFor="let hint of hintsService.hints">
-    <button class="btn btn-sm text-justify mb-2 hint" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word, 'btn-danger': hintsService.opponentSelectedWord === hint.word, 'gradient': this.hintsService.selectedWord === hint.word && hintsService.opponentSelectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word, 'btn-success': hint.found }"
+    <button class="btn btn-sm text-justify mb-2 hint" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word, 'btn-danger': hintsService.opponentSelectedWord === hint.word, 'red-and-blue': this.hintsService.selectedWord === hint.word && hintsService.opponentSelectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word, 'btn-success': hint.found }"
       (click)="hintsService.selectWord(hint.word); $event.stopPropagation()" [disabled]="hint.found">
       <span *ngIf="!cheatMode">{{hint.definition}}</span>
       <span *ngIf="cheatMode">{{hint.word}}</span>
