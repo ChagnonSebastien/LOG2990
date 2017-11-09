@@ -4,7 +4,7 @@ import { WordUtilities } from '../utilities/word-utilities';
 import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordHintsService } from '../hints/crossword-hints.service';
 import { CrosswordWordsService } from '../words/crossword-words.service';
-import { KeyboardService } from '../keyboard/keyboard.service';
+import { CrosswordKeyboardService } from '../keyboard/crossword-keyboard.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 import { Word } from '../../../../../commun/word';
@@ -21,7 +21,7 @@ export class CrosswordGridComponent {
         public gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
         private wordsService: CrosswordWordsService,
-        private keyboardService: KeyboardService,
+        private keyboardService: CrosswordKeyboardService,
         public configurationService: CrosswordConfigurationService
     ) {
         this.listenForWordSelections();
@@ -77,27 +77,34 @@ export class CrosswordGridComponent {
         }).nativeElement.focus();
     }
 
-    private focusOnNextLetter(i: number, j: number) {
+    private focusOnNextLetter(i: number, j: number): boolean {
+        if (this.hintsService.selectedWord === undefined) {
+            return false;
+        }
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
-
         if (wordInfo.horizontal) {
             j = WordUtilities.endOfWord(wordInfo, i, j) ? j : j + 1;
         } else {
             i = WordUtilities.endOfWord(wordInfo, i, j) ? i : i + 1;
         }
         this.focusOnSquare(i, j);
+        return true;
     }
 
-    private focusOnPreviousLetter(i: number, j: number) {
+    private focusOnPreviousLetter(i: number, j: number): boolean {
+        if (this.hintsService.selectedWord === undefined) {
+            return false;
+        }
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
 
-        if (wordInfo.horizontal) {
+        if (wordInfo !== undefined || wordInfo.horizontal) {
             j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
         } else {
             i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
         }
         this.focusOnSquare(i, j);
+        return true;
     }
 }

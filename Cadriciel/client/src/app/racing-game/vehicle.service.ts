@@ -1,3 +1,4 @@
+import { VehicleColor } from './vehicle-color';
 import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
@@ -5,13 +6,6 @@ import { Vehicle } from './vehicle';
 import { CommandsService } from './commands.service';
 
 const numberOfOpponents = 3;
-
-export enum VehiclesPosition {
-    first = 1,
-    second = 2,
-    third = 3,
-    fourth = 4,
-}
 
 @Injectable()
 export class VehicleService {
@@ -29,7 +23,7 @@ export class VehicleService {
     public initializeMainVehicle(track: Track, scale: number): Promise<Vehicle> {
         return new Promise<Vehicle>(resolve => {
             this.mainVehicle.create3DVehicle(
-                track, scale, VehiclesPosition.first, new HumanController(this.commandsService)
+                track, scale, VehicleColor.red, new HumanController(this.commandsService)
             ).then((vehicle) => {
                 resolve(vehicle);
             });
@@ -37,9 +31,9 @@ export class VehicleService {
     }
 
     public async initializeOpponentsVehicles(track: Track, scale: number): Promise<Array<Vehicle>> {
-        await this.opponentsVehicles[0].create3DVehicle(track, scale, VehiclesPosition.second, new HumanController(this.commandsService));
-        await this.opponentsVehicles[1].create3DVehicle(track, scale, VehiclesPosition.third, new HumanController(this.commandsService));
-        await this.opponentsVehicles[2].create3DVehicle(track, scale, VehiclesPosition.fourth, new HumanController(this.commandsService));
+        await this.opponentsVehicles[0].create3DVehicle(track, scale, VehicleColor.blue, new HumanController(this.commandsService));
+        await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green, new HumanController(this.commandsService));
+        await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow, new HumanController(this.commandsService));
 
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);

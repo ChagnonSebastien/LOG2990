@@ -26,10 +26,10 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public newGame(wordsWithIndex: Array<Word>): void {
+    public async newGame(wordsWithIndex: Array<Word>): Promise<boolean> {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
-        this.initializeHints(wordsWithIndex);
+        return this.initializeHints(wordsWithIndex);
     }
 
     public selectWord(word: string): boolean {
@@ -46,32 +46,50 @@ export class CrosswordHintsService {
         this.selectedWord = undefined;
     }
 
-    public markHintAsFound(word: string) {
-        this.opponentSelectedWord = undefined;
-        this.hints.find((hint) => {
-            return hint.word === word;
-        }).found = true;
-    }
-
-    public markHintAsFoundByOpponent(word: string) {
-        this.opponentSelectedWord = undefined;
-        if (this.selectedWord === word) {
-            this.unselectHint();
+    public markHintAsFound(word: string): boolean {
+        if (this.selectedWord === word && this.wordsService.hintExists(word)) {
+            const foundHint = this.hints.find((hint) => {
+                return hint.word === word;
+            });
+            if (foundHint !== undefined) {
+                this.unselectHint();
+                this.opponentSelectedWord = undefined;
+                foundHint.found = true;
+                return true;
+            }
         }
-        this.hints.find((hint) => {
-            return hint.word === word;
-        }).opponentFound = true;
+        return false;
     }
 
-    private initializeHints(wordsWithIndex: Array<Word>) {
+    public markHintAsFoundByOpponent(word: string): boolean {
+        if (this.wordsService.hintExists(word)) {
+            const foundHint = this.hints.find((hint) => {
+                return hint.word === word;
+            });
+            if (foundHint !== undefined) {
+                if (this.selectedWord === word) {
+                    this.unselectHint();
+                }
+                this.opponentSelectedWord = undefined;
+                foundHint.opponentFound = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private async initializeHints(wordsWithIndex: Array<Word>): Promise<boolean> {
         this.hints = new Array<Hint>();
-        this.lexiconService.getWordDefinitions(
+        let result: boolean;
+        await this.lexiconService.getWordDefinitions(
             wordsWithIndex.map(wordWithIndex => wordWithIndex.word)
         ).subscribe((definitions) => {
             definitions.map((definition, i) => {
                 this.hints.push(new Hint(wordsWithIndex[i].word, definition));
             });
+            result = true;
         });
+        return result;
     }
 
     private alertNewSelectedWord(word: Word) {
