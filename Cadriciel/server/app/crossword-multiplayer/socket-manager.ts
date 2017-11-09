@@ -33,7 +33,7 @@ export class SocketManager {
                 console.log(`${challengerUsername} has joined game ${gameId}`);
                 socket.join(gameId);
                 const game = this.gameManager.getGame(gameId);
-                game.challengerUsername = challengerUsername;
+                this.gameManager.joinGame(gameId, challengerUsername);
                 this.io.sockets.in(gameId).emit('game started', game);
                 if (game.mode === 'dynamic') {
                     game.countdown.countdownAlerts().subscribe((count: number) => {

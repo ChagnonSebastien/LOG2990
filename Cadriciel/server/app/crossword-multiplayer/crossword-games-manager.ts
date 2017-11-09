@@ -43,13 +43,12 @@ export class CrosswordGameManager {
         return this.gamesMap.get(id);
     }
 
-    /*public joinGame(gameId: string, player: Player): MultiplayerCrosswordGame {
-        const game = this.findGameById(gameId);
-        game.player2 = player;
-        return game;
+    public joinGame(gameId: string, challengerUsername: string): void {
+        const game = this.getGame(gameId);
+        game.challengerUsername = challengerUsername;
     }
 
-    public findGameById(id: string): MultiplayerCrosswordGame {
+   /* public findGameById(id: string): MultiplayerCrosswordGame {
         for (let i = 0; i < this.games.length; i++) {
             if (this.games[i].id === id) {
                 return this.games[i];
