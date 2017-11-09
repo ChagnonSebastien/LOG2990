@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
-import { KeyboardService } from '../keyboard/keyboard.service';
+import { CrosswordKeyboardService } from '../keyboard/crossword-keyboard.service';
 
 let gridService: CrosswordGridService;
 
@@ -39,7 +39,7 @@ describe('#CrosswordGridService', () => {
         TestBed.configureTestingModule({
             providers: [
                 CrosswordGridService,
-                KeyboardService
+                CrosswordKeyboardService
             ]
         });
         gridService = TestBed.get(CrosswordGridService);
