@@ -19,7 +19,7 @@ export class RacingGameService {
         this.renderService.initialize(container, track, scale);
         await this.addVehicles();
         this.renderService.setCameraOnMainVehicle();
-        await this.startCoundown();
+        await this.createCoundown();
         this.renderService.startRenderingLoop();
     }
 
@@ -38,7 +38,7 @@ export class RacingGameService {
         });
     }
 
-    private async startCoundown() {
+    private async createCoundown() {
         await this.countdownService.createCountdown(this.track, scale);
         this.renderService.scene.add(this.countdownService.countdownMesh);
     }
