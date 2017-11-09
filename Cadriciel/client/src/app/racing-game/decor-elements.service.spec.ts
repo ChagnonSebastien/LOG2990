@@ -1,7 +1,7 @@
 import { Track } from './track';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';
 
 let decorElementsService: DecorElementsService;
