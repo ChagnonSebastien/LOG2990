@@ -1,3 +1,4 @@
+import { Obstacle } from './draw-track/obstacle';
 import { LineCalculationService } from './line-calculation.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
@@ -21,6 +22,10 @@ const treeMaximumHeight = 12;
 const treeRarity = 0.1;
 const treePath = 'tree.json';
 
+const boosterPath = 'booster.json';
+const potholePath = 'pothole.json';
+const puddlePath = 'puddle.json';
+
 @Injectable()
 export class DecorElementsService {
 
@@ -39,6 +44,37 @@ export class DecorElementsService {
         this.scene = scene;
         this.track = track;
         this.scale = scale;
+    }
+
+    public placeObstacles(): void {
+        this.placeObstacleType(this.track.boosters, boosterPath);
+        this.placeObstacleType(this.track.potholes, potholePath);
+        this.placeObstacleType(this.track.puddles, puddlePath);
+    }
+
+    public placeObstacleType(obstacles: Obstacle[], path: string): void {
+        this.loadMesh(path).then( obstacleMesh => {
+            obstacleMesh.scale.set(this.scale, this.scale, this.scale);
+            obstacles.forEach(obstacle => {
+                const obstacleClone = obstacleMesh.clone();
+
+                const segment = new THREE.Vector2().subVectors(this.track.trackIntersections[
+                    obstacle.segment + 1 === this.track.trackIntersections.length ? 0 : obstacle.segment + 1
+                ], this.track.trackIntersections[obstacle.segment]);
+                const obstaclePosition = new THREE.Vector2().addVectors(
+                    this.track.trackIntersections[obstacle.segment], segment.multiplyScalar(obstacle.distance));
+
+                const lineAngle = Math.atan(segment.x / segment.y) + Math.PI / 2;
+                const randomOffset = new THREE.Vector2(
+                    Math.sin(lineAngle), Math.cos(lineAngle)).multiplyScalar(trackRadius * obstacle.offset);
+
+                obstacleClone.position.set(
+                    (obstaclePosition.x + randomOffset.x) * this.scale, 2, (obstaclePosition.y + randomOffset.y) * this.scale);
+
+                obstacleClone.rotateY(Math.PI * 2 * Math.random());
+                this.scene.add(obstacleClone);
+            });
+        });
     }
 
     public placeDecor(): void {
