@@ -26,19 +26,20 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public newGame(wordsWithIndex: Array<Word>) {
+    public newGame(wordsWithIndex: Array<Word>): void {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
         this.initializeHints(wordsWithIndex);
     }
 
-    public selectWord(word: string) {
+    public selectWord(word: string): boolean {
         const wordWithIndex = this.wordsService.getWordWithIndex(word);
         if (wordWithIndex === undefined || this.selectedWord === word) {
-            return;
+            return false;
         }
         this.alertNewSelectedWord(wordWithIndex);
         this.selectedWord = word;
+        return true;
     }
 
     public unselectHint() {

@@ -48,20 +48,20 @@ describe('#CrosswordCountdownService', () => {
         });
     });
 
-    describe('endGame()', () => {
+    describe('stopCountdown()', () => {
         it('should return true when a game is in progress', () => {
             expect(countdownService.newGame()).toBeTruthy();
-            expect(countdownService.endGame()).toBeTruthy();
+            expect(countdownService.stopCountdown()).toBeTruthy();
         });
 
         it('should return false when a game is not in progress', () => {
-            expect(countdownService.endGame()).toBeFalsy();
+            expect(countdownService.stopCountdown()).toBeFalsy();
         });
 
         it('should stop the countdown', () => {
             expect(countdownService.newGame()).toBeTruthy();
             expect(countdownService['countdownId']).toBeDefined();
-            expect(countdownService.endGame()).toBeTruthy();
+            expect(countdownService.stopCountdown()).toBeTruthy();
             expect(countdownService['countdownId']).toBeUndefined();
         });
     });

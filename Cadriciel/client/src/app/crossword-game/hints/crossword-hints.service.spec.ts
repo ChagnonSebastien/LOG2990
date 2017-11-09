@@ -60,7 +60,30 @@ describe('#CrosswordHintsService', () => {
 
             // initialize attributes
             expect(hintsService.selectedWord).toBeUndefined();
+            expect(hintsService.opponentSelectedWord).toBeUndefined();
             expect(hintsService.hints).toBeDefined();
+        });
+    });
+
+    describe('selectWord()', () => {
+        beforeEach(() => {
+            hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+        });
+
+        it('should select a word that exists in the crossword', () => {
+            expect(hintsService.selectWord('huh')).toBeTruthy();
+            expect(hintsService.selectedWord).toEqual('huh');
+        });
+
+        it('should not select a word that does not exist in the crossword', () => {
+            expect(hintsService.selectWord('idontexist')).toBeFalsy();
+            expect(hintsService.selectedWord).toBeUndefined();
+        });
+
+        it('should not select a word that is already being selected', () => {
+            expect(hintsService.selectWord('huh')).toBeTruthy();
+            expect(hintsService.selectWord('huh')).toBeFalsy();
         });
     });
 
