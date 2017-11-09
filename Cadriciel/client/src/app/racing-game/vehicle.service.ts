@@ -40,7 +40,7 @@ export class VehicleService {
         });
     }
 
-    public engineVehicle() {
+    public moveVehicle() {
         this.mainVehicle.move();
         this.opponentsVehicles.forEach(vehicle => vehicle.move());
     }

@@ -33,7 +33,7 @@ export class RenderService {
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         private commandsService: CommandsService,
-        private vehicule: VehicleService
+        private vehiculeService: VehicleService
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
@@ -43,7 +43,7 @@ export class RenderService {
     }
 
     public animateVehicule() {
-        this.vehicule.engineVehicle();
+        this.vehiculeService.moveVehicle();
     }
 
     private createScene() {
