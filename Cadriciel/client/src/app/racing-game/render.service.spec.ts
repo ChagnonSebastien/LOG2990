@@ -1,5 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
-import * as THREE from 'three';
+import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TerrainGenerationService } from './terrain-generation.service';
@@ -8,7 +7,6 @@ import { VehicleService } from './vehicle.service';
 import { DecorElementsService } from './decor-elements.service';
 import { LineCalculationService } from './line-calculation.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
-import { Track } from './track';
 
 let renderService: RenderService;
 

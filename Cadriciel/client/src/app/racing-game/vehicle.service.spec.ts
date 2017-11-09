@@ -1,7 +1,7 @@
 import { CommandsService } from './commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';
 
 let vehicleService: VehicleService;

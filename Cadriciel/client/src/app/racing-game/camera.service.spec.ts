@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { CameraService } from './camera.service';
-const jasmine = require('jasmine');
 
 let cameraService: CameraService;
 
