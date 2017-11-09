@@ -22,9 +22,9 @@ describe('CrosswordChecker', () => {
         });
 
         it('should return false when i is between 0 and 9', () => {
-            assert(CrosswordService.indexesOutOfBounds(0, 0, 10) === true);
-            assert(CrosswordService.indexesOutOfBounds(4, 4, 10) === true);
-            assert(CrosswordService.indexesOutOfBounds(9, 9, 10) === true);
+            assert(CrosswordService.indexesOutOfBounds(0, 0, 10) === false);
+            assert(CrosswordService.indexesOutOfBounds(4, 4, 10) === false);
+            assert(CrosswordService.indexesOutOfBounds(9, 9, 10) === false);
         });
     });
 
