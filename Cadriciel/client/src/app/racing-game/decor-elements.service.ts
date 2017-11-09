@@ -106,7 +106,8 @@ export class DecorElementsService {
     private availableRadius(point: THREE.Vector2): number {
         return Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return this.lineCalculationService.getNearestPointOnLineWithClamping(point, line) - trackRadius;
+            const nearestPoint = this.lineCalculationService.getNearestPointOnLineWithClamping(point, line);
+            return this.lineCalculationService.distance(nearestPoint, point) - trackRadius;
         }));
     }
 }
