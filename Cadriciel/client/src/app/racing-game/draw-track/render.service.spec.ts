@@ -10,7 +10,7 @@ const viewDepth = 10;
 
 let renderService: RenderService;
 
-fdescribe('Draw Track Render', () => {
+describe('Draw Track Render', () => {
 
       beforeEach(() => {
         TestBed.resetTestingModule();
