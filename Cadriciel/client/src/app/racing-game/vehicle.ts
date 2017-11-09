@@ -5,6 +5,12 @@ import * as THREE from 'three';
 const distanceBetweenCars = 5;
 const startOffset = 0.75;
 
+const assetsPath = '/assets';
+const redCarPath = 'red_cart.json';
+const greenCarPath = 'green_cart.json';
+const blueCarPath = 'blue_cart.json';
+const yellowCarPath = 'yellow_cart.json';
+
 export class Vehicle {
     public vehicle: THREE.Mesh;
 
@@ -17,18 +23,30 @@ export class Vehicle {
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
         return new Promise<Vehicle>(resolve => {
-            loader.load('/assets/cart.json', (object: THREE.Object3D) => {
+            loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
-                this.vehicle.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
                 this.vehicle.rotateY(trackAngle);
                 this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
-                this.vehicle.position.y = (scale * 20 / 25) + 3;
-                this.vehicle.scale.set(scale * 22 / 25, scale * 22 / 25, scale * 22 / 25);
+                this.vehicle.position.y = 3;
+                this.vehicle.scale.set(scale, scale, scale);
                 this.vehicle.castShadow = true;
                 resolve(this);
             });
         });
+    }
+
+    private getCartPath(carPosition: VehiclesPosition) {
+        switch (carPosition) {
+            case VehiclesPosition.first:
+            return redCarPath;
+            case VehiclesPosition.second:
+            return blueCarPath;
+            case VehiclesPosition.third:
+            return greenCarPath;
+            case VehiclesPosition.fourth:
+            return yellowCarPath;
+        }
     }
 
     private getCenterOfTrack(track: Track): THREE.Vector2 {
