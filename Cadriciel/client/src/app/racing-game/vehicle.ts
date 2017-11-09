@@ -13,13 +13,16 @@ export class Vehicle {
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
+        const beta = this.calculateBeta(carPosition, trackAngle);
         return new Promise<Vehicle>(resolve => {
             loader.load('/assets/cart.json', (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
                 this.vehicle.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
                 this.vehicle.rotateY(trackAngle);
-                this.vehicle.position.x = (trackCenter.x + Math.floor((carPosition/3))*10) * scale;
-                this.vehicle.position.z = (trackCenter.y + (carPosition % 2)*10) * scale;
+                //this.vehicle.position.x = (trackCenter.x + Math.floor((carPosition/3))*10) * scale;
+                //this.vehicle.position.z = (trackCenter.y + (carPosition % 2)*10) * scale;
+                this.vehicle.position.x = (trackCenter.x)*scale;
+                this.vehicle.position.y = (trackCenter.y)*scale;
                 this.vehicle.position.y = (scale * 20 / 25) + 3;
                 this.vehicle.scale.set(scale * 22 / 25, scale * 22 / 25, scale * 22 / 25);
                 this.vehicle.castShadow = true;
