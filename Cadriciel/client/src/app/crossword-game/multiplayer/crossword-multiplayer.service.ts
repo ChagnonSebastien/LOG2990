@@ -15,7 +15,7 @@ export class CrosswordMultiplayerService {
     private opponentHintSelection: Subject<any>;
     private opponentFoundWord: Subject<any>;
     private opponentUnselection: Subject<any>;
-    private serverClock: Subject<any>;
+    private serverClock: Subject<number>;
 
     constructor(
         private socketService: CrosswordSocketService,

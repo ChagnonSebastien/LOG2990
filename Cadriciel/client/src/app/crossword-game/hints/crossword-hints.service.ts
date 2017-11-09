@@ -53,7 +53,9 @@ export class CrosswordHintsService {
             });
             if (foundHint !== undefined) {
                 this.unselectHint();
-                this.opponentSelectedWord = undefined;
+                if (this.opponentSelectedWord === foundHint.word) {
+                    this.opponentSelectedWord = undefined;
+                }
                 foundHint.found = true;
                 return true;
             }
