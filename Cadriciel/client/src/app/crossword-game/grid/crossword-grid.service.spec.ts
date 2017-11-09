@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
 import { KeyboardService } from '../keyboard/keyboard.service';
-import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 let gridService: CrosswordGridService;
 
@@ -384,8 +383,6 @@ describe('#CrosswordGridService', () => {
         });
 
         it('should not mark word as found when not selecting the word', () => {
-            const rat = wordsWithIndex[4];
-
             // rat unselected
             expect(gridService.grid[0][7].selected).toBeFalsy();
             expect(gridService.grid[0][8].selected).toBeFalsy();

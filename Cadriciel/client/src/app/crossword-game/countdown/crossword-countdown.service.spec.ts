@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordCountdownService } from './crossword-countdown.service';
-import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
-import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 
 import { GameConfiguration } from '../game-configuration';
 
