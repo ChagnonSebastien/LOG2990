@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
-import { CrosswordDB } from '../crosswordGrid/crosswordDB';
+import { Crossword } from '../../../commun/crossword/crossword';
 
 module Route {
 
@@ -23,7 +23,7 @@ module Route {
         public getMutatedCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
             const level = req.body.level;
             const listOfIndex = req.body.wordsWithIndex;
-            let mutatedCrossword = new CrosswordDB();
+            let mutatedCrossword = new Crossword();
             mutatedCrossword.difficulty = level;
             mutatedCrossword.wordsWithIndex = listOfIndex;
             this.serverCrosswords = ServerCrosswords.getInstance();

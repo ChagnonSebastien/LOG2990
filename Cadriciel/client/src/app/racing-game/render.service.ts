@@ -1,3 +1,4 @@
+import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
@@ -7,10 +8,10 @@ import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
 
-const scale = 100;
-
 @Injectable()
 export class RenderService {
+
+    private scale: number;
 
     private container: HTMLElement;
 
@@ -88,7 +89,7 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, 25, track, this.textureSky);
+        this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
     }
 
     public eventsList(): void {
@@ -131,14 +132,16 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement) {
+    public async initialize(container: HTMLElement, track: Track, scale: number) {
+        this.scale = scale;
         this.container = container;
         this.createScene();
         this.initStats();
+        this.loadTrack(track);
     }
 
     public setCameraOnMainVehicle() {
-        this.cameraService.initializeCameras(this.container, this.mainVehicle, scale);
+        this.cameraService.initializeCameras(this.container, this.mainVehicle, this.scale * 4);
     }
 
 }
