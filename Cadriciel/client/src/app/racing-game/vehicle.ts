@@ -1,6 +1,7 @@
 import { Track } from './track';
 import { VehiclesPosition } from './vehicle.service';
 import * as THREE from 'three';
+import {Controller} from './controller';
 
 const distanceBetweenCars = 5;
 const startOffset = 0.75;
@@ -12,12 +13,23 @@ const blueCarPath = 'blue_cart.json';
 const yellowCarPath = 'yellow_cart.json';
 
 export class Vehicle {
-    public vehicle: THREE.Mesh;
+    private vehicle: THREE.Mesh;
+
+    private controler: Controller;
 
     constructor() {
     }
 
-    public create3DVehicle(track: Track, scale: number, carPosition: VehiclesPosition): Promise<Vehicle> {
+    public getVehicle(): THREE.Mesh {
+        return this.vehicle;
+    }
+
+    public move() {
+        this.controler.move(this.vehicle);
+    }
+
+    public create3DVehicle(track: Track, scale: number, carPosition: VehiclesPosition, controller: Controller): Promise<Vehicle> {
+        this.controler = controller;
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);

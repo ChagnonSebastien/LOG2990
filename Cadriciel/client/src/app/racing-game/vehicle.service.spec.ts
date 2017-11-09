@@ -4,7 +4,7 @@ import { VehicleService } from './vehicle.service';
 import { TestBed, inject } from '@angular/core/testing';
 import * as THREE from 'three';
 
-let vehicleService;
+let vehicleService: VehicleService;
 const track = new Track('name', 'description', 'type', [
     new THREE.Vector2(0, 0),
     new THREE.Vector2(100, 0),
