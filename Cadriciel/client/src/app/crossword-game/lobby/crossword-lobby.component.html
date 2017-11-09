@@ -16,7 +16,7 @@
             <td> {{game.mode}}</td>
             <td>
               <button (click)="lobbyService.joinGame(game.id); copyJoinedGameConfiguration(game.difficulty, game.mode)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }"
-                [disabled]="game.challengerUsername !== '' || playerService.username === ''">
+                [disabled]="!lobbyService.canJoinGame(game.id)">
                 Play
               </button>
             </td>

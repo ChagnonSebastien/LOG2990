@@ -31,15 +31,17 @@ export class SocketManager {
 
             socket.on('join game', (gameId: string, challengerUsername: string) => {
                 console.log(`${challengerUsername} has joined game ${gameId}`);
-                socket.join(gameId);
                 const game = this.gameManager.getGame(gameId);
-                game.challengerUsername = challengerUsername;
-                this.io.sockets.in(gameId).emit('game started', game);
-                if (game.mode === 'dynamic') {
-                    game.countdown.countdownAlerts().subscribe((count: number) => {
-                        this.io.sockets.in(gameId).emit('current countdown', count);
-                    });
-                    game.countdown.startCountdown();
+                if (game !== undefined) {
+                    socket.join(gameId);
+                    game.challengerUsername = challengerUsername;
+                    this.io.sockets.in(gameId).emit('game started', game);
+                    if (game.mode === 'dynamic') {
+                        game.countdown.countdownAlerts().subscribe((count: number) => {
+                            this.io.sockets.in(gameId).emit('current countdown', count);
+                        });
+                        game.countdown.startCountdown();
+                    }
                 }
             });
 

@@ -8,28 +8,54 @@ import { CrosswordGameInfo } from '../../../../../commun/crossword/crossword-gam
 @Injectable()
 export class CrosswordLobbyService {
     public games: Array<CrosswordGameInfo>;
+    private gamesMap: Map<string, CrosswordGameInfo>;
 
     constructor(
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
         this.listenForActiveGames();
+        this.getGames();
         setInterval(this.getGames.bind(this), 1000);
     }
 
-    private getGames() {
+    public joinGame(gameId: string): boolean {
+        if (this.canJoinGame(gameId)) {
+            this.socketService.socket.emit(
+                'join game', gameId, this.playerService.username
+            );
+            return true;
+        }
+        return false;
+    }
+
+    public canJoinGame(gameId: string): boolean {
+        if (this.playerService.username === '' || this.gamesMap === undefined) {
+            return false;
+        }
+        const game = this.gamesMap.get(gameId);
+        if (game !== undefined) {
+            return game.challengerUsername === '';
+        }
+
+        return false;
+    }
+
+    private getGames(): void {
         this.socketService.socket.emit('get games');
     }
 
-    private listenForActiveGames() {
+    private listenForActiveGames(): void {
         this.socketService.socket.on('sent all games', (games) => {
             this.games = games;
+            this.gamesMap = this.constructGameMap(games);
         });
     }
 
-    public joinGame(gameId: string) {
-        this.socketService.socket.emit(
-            'join game', gameId, this.playerService.username
-        );
+    private constructGameMap(games: Array<CrosswordGameInfo>): Map<string, CrosswordGameInfo> {
+        return games.reduce((map, game) => {
+            map.set(game.id, game);
+            return map;
+        }, new Map<string, CrosswordGameInfo>());
     }
 }
