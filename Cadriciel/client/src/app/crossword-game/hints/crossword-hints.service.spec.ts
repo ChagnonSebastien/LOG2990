@@ -35,7 +35,7 @@ const wordsWithIndex: Array<Word> = [
 
 let hintsService: CrosswordHintsService;
 
-fdescribe('#CrosswordHintsService', () => {
+describe('#CrosswordHintsService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
