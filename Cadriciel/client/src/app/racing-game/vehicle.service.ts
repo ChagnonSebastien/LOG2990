@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Controls } from './controls';
 
 const numberOfOpponents = 3;
+enum MOVE_STATE { MOVE_FORWARD, BRAKE }
+enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
 
 @Injectable()
 export class VehicleService {
@@ -13,6 +15,8 @@ export class VehicleService {
     private subscription: Subscription;
     private event: any;
     private control: Controls;
+    private moveState: MOVE_STATE;
+    private turnState: TURN_STATE;
 
     constructor(private commandsService: CommandsService) {
         this.mainVehicle = new Vehicle();
@@ -24,10 +28,12 @@ export class VehicleService {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.event = event;
+            this.moveVehicle();
         });
         this.subscription = this.commandsService.getKeyUpEvent()
         .subscribe(event => {
             this.event = event;
+            this.stopVehicle();
         });
     }
 
@@ -47,5 +53,49 @@ export class VehicleService {
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);
         });
+    }
+
+    public moveVehicle() {
+        if (this.event.keyCode === 38) {
+            this.moveState = MOVE_STATE.MOVE_FORWARD;
+        }
+        if (this.event.keyCode === 37) {
+            this.turnState = TURN_STATE.TURN_LEFT;
+        }
+        if (this.event.keyCode === 39) {
+            this.turnState = TURN_STATE.TURN_RIGHT;
+        }
+    }
+
+    public stopVehicle() {
+        if (this.event.keyCode === 38) {
+            this.moveState = MOVE_STATE.BRAKE;
+        }
+
+        if (this.event.keyCode === 37 || this.event.keyCode === 39 ) {
+            this.turnState = TURN_STATE.DO_NOTHING;
+        }
+    }
+
+    public engineVehicle() {
+        if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
+            this.control.accelerate(this.mainVehicle.vehicle);
+        }
+
+        if (this.moveState === MOVE_STATE.BRAKE) {
+            this.control.brake(this.mainVehicle.vehicle);
+        }
+
+        if (this.turnState === TURN_STATE.TURN_RIGHT) {
+            this.control.rightRotation(this.mainVehicle.vehicle);
+        }
+
+        if (this.turnState === TURN_STATE.TURN_LEFT) {
+            this.control.leftRotation(this.mainVehicle.vehicle);
+        }
+
+        if (this.turnState === TURN_STATE.DO_NOTHING) {
+            // nothing
+        }
     }
 }
