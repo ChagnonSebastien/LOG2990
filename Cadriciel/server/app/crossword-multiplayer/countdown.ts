@@ -35,6 +35,7 @@ export class Countdown {
 
     public resetCountdown() {
         this.count = this.initialCount;
+        this.countdownSubject.next(this.count);
     }
 
     private decrementCounter() {

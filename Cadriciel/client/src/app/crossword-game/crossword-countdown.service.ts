@@ -23,7 +23,9 @@ export class CrosswordCountdownService {
         if (this.configurationService.isDynamic()) {
             this.initialCount = this.cheatService.initialCountdown;
             this.resetCountdown();
-            this.startCountdown();
+            if (this.countdownId === undefined) {
+                this.startCountdown();
+            }
         }
     }
 
@@ -38,6 +40,7 @@ export class CrosswordCountdownService {
     public stopCountdown() {
         if (this.countdownId !== undefined) {
             clearInterval(this.countdownId);
+            this.countdownId = undefined;
         }
     }
 

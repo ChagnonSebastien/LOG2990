@@ -174,10 +174,10 @@ export class CrosswordGameService {
             .subscribe((newCountdown) => {
                 console.log('NEW COUNTDOWN', newCountdown);
                 if (!this.multiplayerMode) {
-                    this.countdownService.stopCountdown();
                     this.countdownService.initialCount = newCountdown;
                     this.countdownService.resetCountdown();
-                    this.countdownService.startCountdown();
+                } else {
+                    this.multiplayerService.emitNewCountdown(newCountdown);
                 }
             });
     }

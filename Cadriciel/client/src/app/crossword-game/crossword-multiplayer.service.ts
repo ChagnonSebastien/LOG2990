@@ -88,6 +88,10 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.emit('unselect all');
     }
 
+    public emitNewCountdown(newCountdown: number) {
+        this.socketService.socket.emit('new countdown', newCountdown);
+    }
+
     private listenForActiveGames() {
         this.socketService.socket.on('sent all games', (games) => {
             this.games = games;
