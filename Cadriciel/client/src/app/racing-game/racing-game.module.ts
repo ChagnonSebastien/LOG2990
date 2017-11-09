@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
@@ -45,7 +46,8 @@ import { VehicleService } from './vehicle.service';
         CountdownService,
         DecorElementsService,
         LineCalculationService,
-        DiamondSquareAlgorithmService
+        DiamondSquareAlgorithmService,
+        ObstacleService
     ]
 })
 export class RacingGameModule { }

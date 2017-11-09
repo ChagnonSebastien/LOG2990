@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { CommandsService } from './commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
@@ -14,7 +15,7 @@ const track = new Track('name', 'description', 'type', [
 describe('VehicleService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [VehicleService, CommandsService]
+            providers: [VehicleService, CommandsService, ObstacleService]
         });
         vehicleService = TestBed.get(VehicleService);
     });

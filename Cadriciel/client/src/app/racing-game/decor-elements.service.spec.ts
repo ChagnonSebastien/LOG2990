@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { Track } from './track';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
@@ -12,7 +13,7 @@ describe('DecorElementsService', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [DecorElementsService, LineCalculationService]
+            providers: [DecorElementsService, LineCalculationService, ObstacleService]
         });
         decorElementsService = TestBed.get(DecorElementsService);
         decorElementsService.initialize(new THREE.Scene, 1, new Track(
