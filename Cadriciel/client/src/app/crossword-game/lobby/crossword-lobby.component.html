@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row mt-5">
+    <h1 class="text-white">Live Games</h1>
+    <table class="text-white table table-responsive">
+      <tbody>
+        <tr>
+          <th>Host</th>
+          <th>Difficulty</th>
+          <th>Mode</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let game of multiplayerService.games">
+          <td> {{game.hostUsername}}</td>
+          <td> {{game.difficulty}}</td>
+          <td> {{game.mode}}</td>
+          <td>
+            <button (click)="multiplayerService.joinGame(game.id); copyJoinedGameConfiguration(game.difficulty, game.mode)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }" [disabled]="game.challengerUsername !== '' || playerService.username === ''">
+              Play
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

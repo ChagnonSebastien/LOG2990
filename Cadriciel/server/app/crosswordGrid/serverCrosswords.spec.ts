@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import { ServerCrosswords } from './serverCrosswords';
-import { CrosswordDB } from './crosswordDB';
+import { Crossword } from '../../../commun/crossword/crossword';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -8,7 +8,7 @@ const collection = 'crosswords';
 
 describe('Server Crosswords', () => {
     const serverCrosswords = ServerCrosswords.getInstance();
-    let crosswordsList: Array<CrosswordDB> = [];
+    let crosswordsList: Array<Crossword> = [];
 
     beforeEach(() => {
         serverCrosswords.setCollection(collection);
@@ -56,7 +56,7 @@ describe('Server Crosswords', () => {
             crosswordsList = data;
             serverCrosswords.storeServerCrosswords(crosswordsList).then(function (stored) {
                 serverCrosswords.getCrosswordsFromDB().then(function (c) {
-                    const storedCrosswords: Array<CrosswordDB> = c;
+                    const storedCrosswords: Array<Crossword> = c;
                     assert(crosswordsList.length === storedCrosswords.length);
                     assert(serverCrosswords.easyCrosswords.length === 5);
                     assert(serverCrosswords.normalCrosswords.length === 5);

@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-md-12" *ngFor="let hint of hintsService.hints">
+    <button class="btn btn-sm text-justify mb-2 hint" [ngClass]="{ 'btn-primary': this.hintsService.selectedWord === hint.word || hint.found, 'btn-danger': hintsService.opponentSelectedWord === hint.word || hint.opponentFound, 'red-and-blue': this.hintsService.selectedWord === hint.word && hintsService.opponentSelectedWord === hint.word, 'btn-default': hintsService.selectedWord !== hint.word }"
+      (click)="hintsService.selectWord(hint.word); $event.stopPropagation()" [disabled]="hint.found || hint.opponentFound">
+      <span *ngIf="!cheatService.cheatMode">{{hint.definition}}</span>
+      <span *ngIf="cheatService.cheatMode">{{hint.word}}</span>
+    </button>
+  </div>
+</div>

@@ -1,13 +1,15 @@
+import { Word } from '../../../../../commun/word';
+
 export class CrosswordSquare {
     public black: boolean;
     public empty: boolean;
     public found: boolean;
+    public opponentFound: boolean;
     public answer: string;
     public input: string;
     public selected: boolean;
-    public player1Selected: boolean;
-    public player2Selected: boolean;
-    public words: Array<string>;
+    public opponentSelected: boolean;
+    public words: Array<Word>;
 
     constructor(character: string) {
         if (character.length > 1) {
@@ -16,12 +18,12 @@ export class CrosswordSquare {
         this.black = character === ' ' || character === '#';
         this.empty = !this.black;
         this.found = false;
+        this.opponentFound = false;
         this.answer = character;
         this.input = '';
         this.selected = false;
-        this.player1Selected = false;
-        this.player2Selected = false;
-        this.words = new Array<string>();
+        this.opponentSelected = false;
+        this.words = new Array<Word>();
     }
 
     public letterFound(): boolean {

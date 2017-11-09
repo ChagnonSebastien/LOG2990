@@ -1,5 +1,5 @@
 import * as mongodb from 'mongodb';
-import { CrosswordDB } from './crosswordDB';
+import { Crossword } from '../../../commun/crossword/crossword';
 import { CrosswordGenerator } from '../crossword-generator';
 const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
@@ -13,14 +13,14 @@ export class ServerCrosswords {
     private static instance: ServerCrosswords;
     public collection: string;
     private crosswordGenerator: CrosswordGenerator;
-    public mutatedGrid: CrosswordDB;
-    public easyCrosswords: Array<CrosswordDB> = [];
-    public normalCrosswords: Array<CrosswordDB> = [];
-    public hardCrosswords: Array<CrosswordDB> = [];
+    public mutatedGrid: Crossword;
+    public easyCrosswords: Array<Crossword> = [];
+    public normalCrosswords: Array<Crossword> = [];
+    public hardCrosswords: Array<Crossword> = [];
 
 
     private constructor() {
-        this.mutatedGrid = new CrosswordDB();
+        this.mutatedGrid = new Crossword();
         this.crosswordGenerator = new CrosswordGenerator(crosswordSize);
     }
 
@@ -36,10 +36,10 @@ export class ServerCrosswords {
     }
 
     // get all the crosswords from the database
-    public getCrosswordsFromDB(): Promise<Array<CrosswordDB>> {
-        let crosswordsList: Array<CrosswordDB>;
+    public getCrosswordsFromDB(): Promise<Array<Crossword>> {
+        let crosswordsList: Array<Crossword>;
 
-        return new Promise<Array<CrosswordDB>>(resolve => {
+        return new Promise<Array<Crossword>>(resolve => {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
                     crosswordsList = [];
@@ -55,7 +55,7 @@ export class ServerCrosswords {
     }
 
     // delete crossword from database
-    public async deleteCrossword(crossword: CrosswordDB): Promise<boolean> {
+    public async deleteCrossword(crossword: Crossword): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
@@ -96,7 +96,7 @@ export class ServerCrosswords {
         }
     }
 
-    public async storeServerCrosswords(crosswords: Array<CrosswordDB>): Promise<boolean> {
+    public async storeServerCrosswords(crosswords: Array<Crossword>): Promise<boolean> {
         for (const element of crosswords) {
             if (element.difficulty === 'hard' && this.hardCrosswords.length < maxCrosswordPerLevel) {
                 this.hardCrosswords.push(element);
@@ -119,7 +119,7 @@ export class ServerCrosswords {
     }
 
     public async initializeServerCrossword(): Promise<boolean> {
-        const crosswords: Array<CrosswordDB> = await this.getCrosswordsFromDB();
+        const crosswords: Array<Crossword> = await this.getCrosswordsFromDB();
         const stored: boolean = await this.storeServerCrosswords(crosswords);
 
         return stored;
@@ -152,9 +152,9 @@ export class ServerCrosswords {
         }
     }
 
-    public async getCrossword(level: string): Promise<CrosswordDB> {
-        let crossword: CrosswordDB;
-        return new Promise<CrosswordDB>(resolve => {
+    public async getCrossword(level: string): Promise<Crossword> {
+        let crossword: Crossword;
+        return new Promise<Crossword>(resolve => {
             this.generateCrossword(level).then((data) => {
                 this.storeOneServerCrossword(level).then((stored) => {
                     if (level === 'easy') {
@@ -170,7 +170,7 @@ export class ServerCrosswords {
         });
     }
 
-    public mutate(crossword: CrosswordDB) {
+    public mutate(crossword: Crossword) {
         this.mutatedGrid.crossword = this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
         this.mutatedGrid.difficulty = crossword.difficulty;
         this.mutatedGrid.listOfWords = Array.from(this.crosswordGenerator.words);

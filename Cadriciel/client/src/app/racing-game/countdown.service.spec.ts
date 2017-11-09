@@ -1,4 +1,12 @@
 import { CountdownService } from './countdown.service';
+import { Track } from './track';
+import * as THREE from 'three';
+
+const track = new Track('name', 'description', 'type', [
+    new THREE.Vector2(0, 0),
+    new THREE.Vector2(100, 0),
+    new THREE.Vector2(100, 100)
+], [], [], []);
 
 describe('test CountdownService', function () {
     const countdownService = new CountdownService();
@@ -9,8 +17,10 @@ describe('test CountdownService', function () {
     });
 
     it('create 3D countdown', (done) => {
-        countdownService.createCountdown().then(result => {
+        countdownService.createCountdown(track, 1).then(result => {
             expect(countdownService.countdownMesh).toBeDefined();
+            expect(countdownService.countdownMesh.position.x).toEqual(50);
+            expect(countdownService.countdownMesh.position.y).toEqual(3.8);
             done();
         });
     });
