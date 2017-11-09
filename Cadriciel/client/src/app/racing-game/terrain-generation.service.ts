@@ -21,7 +21,6 @@ const trackHeight = 64;
 const heightMapPixelWidth = 256;
 const heightMapStrength = 255;
 const trackRadius = 10;
-const maximumSlope = 2;
 
 @Injectable()
 export class TerrainGenerationService {
@@ -31,8 +30,6 @@ export class TerrainGenerationService {
     private track: Track;
 
     private mapWidth: number;
-
-    private trees: THREE.Vector3[] = [];
 
     private scale: number;
 
@@ -45,7 +42,7 @@ export class TerrainGenerationService {
         private lineCalculationService: LineCalculationService,
         private diamondSquareAlgorithmService: DiamondSquareAlgorithmService
     ) {
-        this.heightTable = diamondSquareAlgorithmService.generate(this.heightMapSteps);
+        this.heightTable = this.diamondSquareAlgorithmService.generate(this.heightMapSteps);
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {

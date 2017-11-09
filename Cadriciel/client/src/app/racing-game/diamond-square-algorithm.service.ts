@@ -1,25 +1,5 @@
-import { LineCalculationService } from './line-calculation.service';
-import { DecorElementsService } from './decor-elements.service';
-import { Track } from './track';
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
 
-const assetsPath = '/assets';
-
-const startPlaidPath = 'plaid_start_v2.jpg';
-const oceanTexturePath = 'dirt-512.jpg';
-const sandyTexturePath = 'sand-512.jpg';
-const grassyTexturePath = 'grass-512.jpg';
-const rockyTexturePath = 'rock-512.jpg';
-const snowyTexturePath = 'snow-512.jpg';
-const waterTexturePath = 'water512.jpg';
-
-const trackColor = 0x000000;
-const trackRoughness = 0;
-const trackHeight = 64;
-const heightMapPixelWidth = 256;
-const heightMapStrength = 255;
-const trackRadius = 10;
 const maximumSlope = 2;
 
 @Injectable()
