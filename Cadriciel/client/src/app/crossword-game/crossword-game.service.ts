@@ -120,6 +120,8 @@ export class CrosswordGameService {
             .subscribe((foundWord) => {
                 if (this.multiplayerMode) {
                     this.multiplayerService.emitFoundWord(foundWord);
+                } else if (this.configurationService.isDynamic()) {
+                    this.countdownService.resetCountdown();
                 }
                 this.hintsService.markHintAsFound(foundWord.word);
                 this.pointsService.addToFoundWords(foundWord.word);
