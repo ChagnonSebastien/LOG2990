@@ -6,14 +6,12 @@ import { Controls } from './controls';
 
 const numberOfOpponents = 3;
 
-
 @Injectable()
 export class VehicleService {
     public mainVehicle: Vehicle;
     public opponentsVehicles: Array<Vehicle>;
     private subscription: Subscription;
     private event: any;
-    private keyIsDown: boolean;
     private control: Controls;
 
     constructor(private commandsService: CommandsService) {
@@ -24,6 +22,10 @@ export class VehicleService {
             this.opponentsVehicles[i] = new Vehicle();
         }
         this.subscription = this.commandsService.getKeyDownEvent()
+        .subscribe(event => {
+            this.event = event;
+        });
+        this.subscription = this.commandsService.getKeyUpEvent()
         .subscribe(event => {
             this.event = event;
         });
