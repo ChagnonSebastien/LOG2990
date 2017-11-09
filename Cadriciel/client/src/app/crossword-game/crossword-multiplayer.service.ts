@@ -17,6 +17,7 @@ export class CrosswordMultiplayerService {
     private opponentHintSelection: Subject<any>;
     private opponentFoundWord: Subject<any>;
     private opponentUnselection: Subject<any>;
+    private serverClock: Subject<any>;
 
     constructor(
         private socketService: CrosswordSocketService,
@@ -26,6 +27,7 @@ export class CrosswordMultiplayerService {
         this.opponentHintSelection = new Subject();
         this.opponentFoundWord = new Subject();
         this.opponentUnselection = new Subject();
+        this.serverClock = new Subject();
         this.getGames();
         setInterval(this.getGames.bind(this), 1000);
         this.listenForActiveGames();
@@ -33,6 +35,7 @@ export class CrosswordMultiplayerService {
         this.listenForOpponentHintSelections();
         this.listenForOpponentFoundWords();
         this.listenForOpponentUnselectAll();
+        this.listenForServerCountdown();
     }
 
     public gameStartAlerts(): Observable<any> {
@@ -49,6 +52,10 @@ export class CrosswordMultiplayerService {
 
     public opponentUnselectedAllAlerts(): Observable<any> {
         return this.opponentUnselection.asObservable();
+    }
+
+    public serverClockAlerts(): Observable<any> {
+        return this.serverClock.asObservable();
     }
 
     public createGame(difficulty: string, mode: string) {
@@ -111,6 +118,12 @@ export class CrosswordMultiplayerService {
     private listenForOpponentUnselectAll() {
         this.socketService.socket.on('opponent unselected all', () => {
             this.opponentUnselection.next(true);
+        });
+    }
+
+    private listenForServerCountdown() {
+        this.socketService.socket.on('current countdown', (count: number) => {
+            this.serverClock.next(count);
         });
     }
 

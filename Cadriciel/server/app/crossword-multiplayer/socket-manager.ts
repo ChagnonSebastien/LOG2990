@@ -35,6 +35,12 @@ export class SocketManager {
                 const game = this.gameManager.getGame(gameId);
                 game.challengerUsername = challengerUsername;
                 this.io.sockets.in(gameId).emit('game started', game);
+                if (game.mode === 'dynamic') {
+                    game.countdown.countdownAlerts().subscribe((count: number) => {
+                        this.io.sockets.in(gameId).emit('current countdown', count);
+                    });
+                    game.countdown.startCountdown();
+                }
             });
 
             socket.on('selected hint', (hintSelection) => {
@@ -91,7 +97,6 @@ export class SocketManager {
         });
 
     }
-
 }
 
 

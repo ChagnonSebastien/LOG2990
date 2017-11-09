@@ -45,6 +45,7 @@ export class CrosswordGameService {
         this.listenForCheatModeCountdownChanges();
         this.listenForOpponentDeselectedAll();
         this.listenForGameCompletion();
+        this.listenForServerClock();
     }
 
     public async newSoloGame(level: string) {
@@ -133,6 +134,7 @@ export class CrosswordGameService {
                     game.crossword.wordsWithIndex,
                     game.crossword.listOfWords
                 );
+                this.countdownService.stopCountdown();
                 this.gameInProgress = true;
                 this.multiplayerMode = true;
             });
@@ -169,10 +171,12 @@ export class CrosswordGameService {
         this.cheatService.initialCountdownChangedAlerts()
             .subscribe((newCountdown) => {
                 console.log('NEW COUNTDOWN', newCountdown);
-                this.countdownService.stopCountdown();
-                this.countdownService.initialCount = newCountdown;
-                this.countdownService.resetCountdown();
-                this.countdownService.startCountdown();
+                if (!this.multiplayerMode) {
+                    this.countdownService.stopCountdown();
+                    this.countdownService.initialCount = newCountdown;
+                    this.countdownService.resetCountdown();
+                    this.countdownService.startCountdown();
+                }
             });
     }
 
@@ -183,6 +187,13 @@ export class CrosswordGameService {
                     this.hintsService.opponentSelectedWord = undefined;
                     this.gridService.unselectWordOpponent();
                 }
+            });
+    }
+
+    private listenForServerClock() {
+        this.multiplayerService.serverClockAlerts()
+            .subscribe((count) => {
+                this.countdownService.count = count;
             });
     }
 }

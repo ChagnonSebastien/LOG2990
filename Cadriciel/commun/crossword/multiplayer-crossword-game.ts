@@ -1,5 +1,6 @@
 import { Player } from './player';
 import { Crossword } from './crossword';
+import { Countdown } from '../../server/app/crossword-multiplayer/countdown';
 
 export class MultiplayerCrosswordGame {
     public id: string;
@@ -8,6 +9,7 @@ export class MultiplayerCrosswordGame {
     public hostUsername: string;
     public challengerUsername: string;
     public crossword: Crossword;
+    public countdown: Countdown;
 
     constructor(
         id: string,
@@ -22,5 +24,6 @@ export class MultiplayerCrosswordGame {
         this.hostUsername = hostUsername;
         this.challengerUsername = '';
         this.crossword = crossword;
+        this.countdown = new Countdown();
     }
 }
