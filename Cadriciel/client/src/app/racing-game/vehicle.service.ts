@@ -56,23 +56,23 @@ export class VehicleService {
     }
 
     public moveVehicle() {
-        if (this.event.keyCode === 38) {
+        if (this.event.keyCode === 87) {
             this.moveState = MOVE_STATE.MOVE_FORWARD;
         }
-        if (this.event.keyCode === 37) {
+        if (this.event.keyCode === 65) {
             this.turnState = TURN_STATE.TURN_LEFT;
         }
-        if (this.event.keyCode === 39) {
+        if (this.event.keyCode === 68) {
             this.turnState = TURN_STATE.TURN_RIGHT;
         }
     }
 
     public stopVehicle() {
-        if (this.event.keyCode === 38) {
+        if (this.event.keyCode === 87) {
             this.moveState = MOVE_STATE.BRAKE;
         }
 
-        if (this.event.keyCode === 37 || this.event.keyCode === 39 ) {
+        if (this.event.keyCode === 65 || this.event.keyCode === 68 ) {
             this.turnState = TURN_STATE.DO_NOTHING;
         }
     }

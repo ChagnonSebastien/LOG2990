@@ -26,7 +26,7 @@ export class RenderService {
 
     private subscription: Subscription;
 
-    private events: any;
+    private event: any;
 
     private keyPressed = false;
 
@@ -38,7 +38,7 @@ export class RenderService {
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
-            this.events = event;
+            this.event = event;
             this.keyPressed = true;
         });
     }
@@ -93,8 +93,8 @@ export class RenderService {
 
     public eventsList(): void {
         if (this.keyPressed) {
-            this.cameraService.swapCamera(this.events);
-            this.cameraService.zoomCamera(this.events);
+            this.cameraService.swapCamera(this.event);
+            this.cameraService.zoomCamera(this.event);
             this.keyPressed = false;
         }
     }
