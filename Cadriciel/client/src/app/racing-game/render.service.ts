@@ -13,7 +13,7 @@ export class RenderService {
 
     private scale: number;
 
-    private container: HTMLElement;
+    public container: HTMLElement;
 
     private stats: Stats;
 
@@ -22,8 +22,6 @@ export class RenderService {
     public scene: THREE.Scene;
 
     private textureSky: THREE.Texture;
-
-    public mainVehicle: THREE.Mesh;
 
     private subscription: Subscription;
 
@@ -138,10 +136,6 @@ export class RenderService {
         this.createScene();
         this.initStats();
         this.loadTrack(track);
-    }
-
-    public setCameraOnMainVehicle() {
-        this.cameraService.initializeCameras(this.container, this.mainVehicle, this.scale * 4);
     }
 
 }

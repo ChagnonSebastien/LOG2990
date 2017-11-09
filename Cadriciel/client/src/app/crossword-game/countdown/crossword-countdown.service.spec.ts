@@ -6,7 +6,7 @@ import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 
 let countdownService: CrosswordCountdownService;
 
-fdescribe('#CrosswordCountdownService', () => {
+describe('#CrosswordCountdownService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
