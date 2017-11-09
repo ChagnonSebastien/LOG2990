@@ -130,7 +130,7 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track, scale: number) {
+    public async initialize(container: HTMLElement, track: Track, scale: number): Promise<void> {
         this.scale = scale;
         this.container = container;
         this.createScene();

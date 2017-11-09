@@ -16,7 +16,7 @@ export class RacingGameService {
                 private countdownService: CountdownService, private cameraService: CameraService) {
     }
 
-    public async initializeRender(container: HTMLElement, track: Track) {
+    public async initializeRender(container: HTMLElement, track: Track): Promise<void> {
         this.track = track;
         this.renderService.initialize(container, track, scale);
         await this.addVehicles();
