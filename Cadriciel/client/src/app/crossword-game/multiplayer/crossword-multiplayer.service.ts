@@ -10,7 +10,6 @@ import { Word } from '../../../../../commun/word';
 
 @Injectable()
 export class CrosswordMultiplayerService {
-    public games: Array<CrosswordGameInfo>;
     private gameStartSubject: Subject<any>;
     private opponentHintSelection: Subject<any>;
     private opponentFoundWord: Subject<any>;
@@ -21,14 +20,19 @@ export class CrosswordMultiplayerService {
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
+        this.initializeObservableSubjects();
+        this.listenToSocketRequests();
+    }
+
+    private initializeObservableSubjects(): void {
         this.gameStartSubject = new Subject();
         this.opponentHintSelection = new Subject();
         this.opponentFoundWord = new Subject();
         this.opponentUnselection = new Subject();
         this.serverClock = new Subject();
-        this.getGames();
-        setInterval(this.getGames.bind(this), 1000);
-        this.listenForActiveGames();
+    }
+
+    private listenToSocketRequests(): void {
         this.listenForGameStart();
         this.listenForOpponentHintSelections();
         this.listenForOpponentFoundWords();
@@ -62,16 +66,6 @@ export class CrosswordMultiplayerService {
         );
     }
 
-    public joinGame(gameId: string) {
-        this.socketService.socket.emit(
-            'join game', gameId, this.playerService.username
-        );
-    }
-
-    public getGames() {
-        this.socketService.socket.emit('get games');
-    }
-
     public emitSelectHint(
         hintSelection: { 'previous': string, 'current': Word }
     ) {
@@ -88,12 +82,6 @@ export class CrosswordMultiplayerService {
 
     public emitNewCountdown(newCountdown: number) {
         this.socketService.socket.emit('new countdown', newCountdown);
-    }
-
-    private listenForActiveGames() {
-        this.socketService.socket.on('sent all games', (games) => {
-            this.games = games;
-        });
     }
 
     private listenForGameStart() {

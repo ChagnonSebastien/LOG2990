@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
+import { CrosswordLobbyService } from './crossword-lobby.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
-import { CrosswordMultiplayerService } from '../multiplayer/crossword-multiplayer.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { CrosswordConfigurationService } from '../configuration/crossword-config
 })
 export class CrosswordLobbyComponent {
     constructor(
-        public multiplayerService: CrosswordMultiplayerService,
+        public lobbyService: CrosswordLobbyService,
         public playerService: CrosswordPlayerService,
         private configurationService: CrosswordConfigurationService
     ) { }
