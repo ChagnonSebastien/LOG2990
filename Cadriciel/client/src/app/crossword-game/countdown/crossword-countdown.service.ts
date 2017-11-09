@@ -21,8 +21,13 @@ export class CrosswordCountdownService {
         return this.resetCountdown() && this.startCountdown();
     }
 
-    public endGame(): boolean {
-        return this.stopCountdown();
+    public stopCountdown(): boolean {
+        if (this.countdownStarted()) {
+            clearInterval(this.countdownId);
+            this.countdownId = undefined;
+            return true;
+        }
+        return false;
     }
 
     public countdownReachedZeroAlerts(): Observable<any> {
@@ -40,15 +45,6 @@ export class CrosswordCountdownService {
     private startCountdown(): boolean {
         if (!this.countdownStarted()) {
             this.countdownId = setInterval(this.decrementCounter.bind(this), 1000);
-            return true;
-        }
-        return false;
-    }
-
-    private stopCountdown(): boolean {
-        if (this.countdownStarted()) {
-            clearInterval(this.countdownId);
-            this.countdownId = undefined;
             return true;
         }
         return false;
