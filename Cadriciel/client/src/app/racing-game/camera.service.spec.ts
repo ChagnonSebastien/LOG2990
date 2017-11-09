@@ -3,7 +3,7 @@ import { CameraService } from './camera.service';
 
 let cameraService: CameraService;
 
-describe('CameraService', function () {
+fdescribe('CameraService', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
@@ -15,5 +15,14 @@ describe('CameraService', function () {
     it('should be created', done => {
         expect(cameraService).toBeTruthy();
         done();
+    });
+
+    /*
+    public getCamera(): THREE.Camera {
+        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
+    } */
+    it('Returns camera', () => {
+        const camera = cameraService.getCamera();
+        expect(camera).toBeDefined();
     });
 });
