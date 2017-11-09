@@ -16,7 +16,7 @@ describe('Vehicle', () => {
     });
 
     it('should return Promise<vehicle> when 3D vehicle created', (done) => {
-        vehicle.create3DVehicle(track, 1).then(function(vehicle3D) {
+        vehicle.create3DVehicle(track, 1, 1).then(function(vehicle3D) {
             expect(vehicle3D).toBeDefined();
             done();
         });
