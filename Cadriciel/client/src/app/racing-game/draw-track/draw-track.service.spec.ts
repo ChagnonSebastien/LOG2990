@@ -50,6 +50,7 @@ let drawTrackService;
 describe('DrawTrackService', function () {
 
     beforeAll(() => {
+        TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             imports: [HttpModule],
             providers: [
