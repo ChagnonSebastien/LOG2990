@@ -27,7 +27,7 @@ export class VehicleService {
 
     constructor(private commandsService: CommandsService) {
         this.mainVehicle = new Vehicle();
-        this.control = new Controls(0, 0.02, Math.PI / 50);
+        this.control = new Controls(0, 0.1, Math.PI / 100);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
             this.opponentsVehicles[i] = new Vehicle();

@@ -18,7 +18,7 @@ export class Controls {
 
     public brake (object: any) {
         if (this.speed > 0) {
-            this.speed -= (this.acceleration * 3);
+            this.speed -= (this.acceleration * 1.5);
             object.translateZ(-this.speed);
         } else {
             this.speed = 0;
