@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { CrosswordRoutingModule } from './crossword-routing.module';
 
-import { KeyboardService } from './keyboard/keyboard.service';
+import { CrosswordKeyboardService } from './keyboard/crossword-keyboard.service';
 import { LexiconService } from './lexicon/lexicon.service';
 import { CrosswordService } from './crossword/crossword.service';
 import { CrosswordGameManagerService } from './game-manager/crossword-game-manager.service';
@@ -53,7 +53,7 @@ import { CrosswordCheatComponent } from './cheat/crossword-cheat.component';
 
     ],
     providers: [
-        KeyboardService,
+        CrosswordKeyboardService,
         LexiconService,
         CrosswordService,
         CrosswordGridService,

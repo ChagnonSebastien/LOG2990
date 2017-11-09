@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
-export class KeyboardService {
+export class CrosswordKeyboardService {
     private letterInputSubject: Subject<any>;
     private backspaceSubject: Subject<any>;
     private arrowSubject: Subject<any>;

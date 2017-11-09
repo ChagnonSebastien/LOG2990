@@ -4,7 +4,7 @@ import { WordUtilities } from '../utilities/word-utilities';
 import { CrosswordGridService } from './crossword-grid.service';
 import { CrosswordHintsService } from '../hints/crossword-hints.service';
 import { CrosswordWordsService } from '../words/crossword-words.service';
-import { KeyboardService } from '../keyboard/keyboard.service';
+import { CrosswordKeyboardService } from '../keyboard/crossword-keyboard.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 import { Word } from '../../../../../commun/word';
@@ -21,7 +21,7 @@ export class CrosswordGridComponent {
         public gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
         private wordsService: CrosswordWordsService,
-        private keyboardService: KeyboardService,
+        private keyboardService: CrosswordKeyboardService,
         public configurationService: CrosswordConfigurationService
     ) {
         this.listenForWordSelections();
