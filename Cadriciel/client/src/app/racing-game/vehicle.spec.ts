@@ -16,10 +16,10 @@ describe('Vehicle', () => {
     });
 
     it('should return Promise<vehicle> when 3D vehicle created', (done) => {
-        vehicle.create3DVehicle(track, 1, 1).then(function(vehicle3D) {
+        vehicle.create3DVehicle(track, 1, 1, null).then(function(vehicle3D) {
             expect(vehicle3D).toBeDefined();
-            expect(vehicle3D.vehicle.position.x).toEqual(37.5 + Math.cos(Math.PI / 4) * 5);
-            expect(vehicle3D.vehicle.position.y).toEqual(3.8);
+            expect(vehicle3D.getVehicle().position.x).toEqual(37.5 + Math.cos(Math.PI / 4) * 5);
+            expect(vehicle3D.getVehicle().position.y).toEqual(3);
             done();
         });
     });
