@@ -77,6 +77,29 @@ describe('Server Crosswords', () => {
         });
     }).timeout(8000);
 
+    it('Should return a crossword of level easy, new crossword replaces it and a crossword is generated to store in db', (done) => {
+        serverCrosswords.getCrossword('easy').then(function (data) {
+            assert(data.difficulty === 'easy');
+            assert(serverCrosswords.easyCrosswords.length === 5);
+            done();
+        });
+    }).timeout(10000);
+
+    it('Should return a crossword of level hard, new crossword replaces it and a crossword is generated to store in db', (done) => {
+        serverCrosswords.getCrossword('hard').then(function (data) {
+            assert(data.difficulty === 'hard');
+            assert(serverCrosswords.hardCrosswords.length === 5);
+            done();
+        });
+    }).timeout(10000);
+
+    it('Should return a crossword of level normal, new crossword replaces it and a crossword is generated to store in db', (done) => {
+        serverCrosswords.getCrossword('normal').then(function (data) {
+            assert(data.difficulty === 'normal');
+            assert(serverCrosswords.normalCrosswords.length === 5);
+            done();
+        });
+    }).timeout(10000);
 
     it('Store an easy crossword on server', (done) => {
         serverCrosswords.storeOneServerCrossword('easy').then(function (data) {
@@ -102,29 +125,7 @@ describe('Server Crosswords', () => {
         });
     });
 
-    it('Should return a crossword of level easy', (done) => {
-        serverCrosswords.getCrossword('easy').then(function (data) {
-            assert(data.difficulty === 'easy');
-            assert(serverCrosswords.easyCrosswords.length === 6);
-            done();
-        });
-    }).timeout(10000);
 
-    it('Should return a crossword of level hard', (done) => {
-        serverCrosswords.getCrossword('hard').then(function (data) {
-            assert(data.difficulty === 'hard');
-            assert(serverCrosswords.hardCrosswords.length === 6);
-            done();
-        });
-    }).timeout(10000);
-
-    it('Should return a crossword of level normal', (done) => {
-        serverCrosswords.getCrossword('normal').then(function (data) {
-            assert(data.difficulty === 'normal');
-            assert(serverCrosswords.normalCrosswords.length === 6);
-            done();
-        });
-    }).timeout(10000);
 
     it('Should mutate grid', () => {
         serverCrosswords.mutate(serverCrosswords.easyCrosswords[0]);
