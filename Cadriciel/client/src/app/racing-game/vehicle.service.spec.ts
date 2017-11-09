@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { CommandsService } from './commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
@@ -15,7 +16,7 @@ describe('VehicleService', () => {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [VehicleService, CommandsService]
+            providers: [VehicleService, CommandsService, ObstacleService]
         });
         vehicleService = TestBed.get(VehicleService);
     });

@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { VehicleColor } from './vehicle-color';
 import { HumanController } from './human-controller';
 import { Track } from './track';
@@ -12,11 +13,11 @@ export class VehicleService {
     public mainVehicle: Vehicle;
     public opponentsVehicles: Array<Vehicle>;
 
-    constructor(private commandsService: CommandsService) {
-        this.mainVehicle = new Vehicle();
+    constructor(private commandsService: CommandsService, private obstacleService: ObstacleService) {
+        this.mainVehicle = new Vehicle(this.obstacleService);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle();
+            this.opponentsVehicles[i] = new Vehicle(this.obstacleService);
         }
     }
 
@@ -42,6 +43,6 @@ export class VehicleService {
 
     public moveVehicle() {
         this.mainVehicle.move();
-        this.opponentsVehicles.forEach(vehicle => vehicle.move());
+        // this.opponentsVehicles.forEach(vehicle => vehicle.move());
     }
 }

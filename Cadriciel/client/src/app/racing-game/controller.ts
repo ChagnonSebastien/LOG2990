@@ -1,3 +1,4 @@
+import { ObstacleType } from './draw-track/obstacle';
 import * as THREE from 'three';
 
 const acceleration = 0.1;
@@ -13,8 +14,11 @@ export abstract class Controller {
 
     protected turnState: TURN_STATE;
 
+    private obstacleEffect: {type: ObstacleType, timeLeft: number};
+
     constructor() {
         this.speed = 0;
+        this.obstacleEffect = {type: null, timeLeft: 0};
     }
 
     public move(vehicle: THREE.Mesh) {
