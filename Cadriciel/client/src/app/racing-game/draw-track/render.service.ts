@@ -35,6 +35,15 @@ export class RenderService {
 
     public trackClosed = false;
 
+    constructor() {
+        this.intersections = [];
+        this.segments = [];
+        this.potholes = this.newObstacles(0x000000);
+        this.puddles = this.newObstacles(0x0051a8);
+        this.boosters = this.newObstacles(0xffbb00);
+        this.trackClosed = false;
+    }
+
     public initialise(container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService) {
         this.container = container;
         this.trackValidationService = trackValidationService;
