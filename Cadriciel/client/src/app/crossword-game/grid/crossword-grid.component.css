@@ -1,0 +1,132 @@
+.square {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.black {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.empty {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid black;
+}
+
+.found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: #007bff;
+    color: white;
+}
+
+.opponent-found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    background: #dc3545;
+    color: white;
+}
+
+.both-found {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2em;
+    border: 1px solid white;
+    color: white;
+
+    background: rgb(183, 0, 255);
+    /* For browsers that do not support gradients */
+    /* Safari 5.1 to 6.0 */
+    background: -webkit-repeating-linear-gradient(-90deg, red, blue);
+    /* Opera 11.1 to 12.0 */
+    background: -o-repeating-linear-gradient(-90deg, red, blue);
+    /* Firefox 3.6 to 15 */
+    background: -moz-repeating-linear-gradient(-90deg, red, blue);
+    /* Standard syntax */
+    background: repeating-linear-gradient(-90deg, red, blue);
+}
+
+.selected {
+    border: 3px solid #007bff !important;
+}
+
+.selected-multiplayer {
+    border: 3px solid #007bff !important;
+    background: #73bbff !important;
+}
+
+.selected-multiplayer-opponent {
+    border: 3px solid #dc3545 !important;
+    background: #ff7f7f !important;
+}
+
+.selected-multiplayer-both {
+    border: 3px dashed #007bff !important;
+    background: rgb(214, 117, 255) !important;
+}
+
+@media (max-width: 1200px) {
+    .square {
+        width: 40px;
+        height: 40px;
+    }
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid black;
+    }
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: #007bff;
+        color: white;
+    }
+
+    .opponent-found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.7em;
+        border: 1px solid white;
+        background: #dc3545;
+        color: white;
+    }
+}
+
+@media (max-width: 992px) {
+    .square {
+        width: 30px;
+        height: 30px;
+    }
+    .empty {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid black;
+    }
+    .found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: #007bff;
+        color: white;
+    }
+
+    .opponent-found {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid white;
+        background: #dc3545;
+        color: white;
+    }
+}
