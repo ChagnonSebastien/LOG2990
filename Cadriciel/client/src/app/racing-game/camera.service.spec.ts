@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { CameraService } from './camera.service';
+const jasmine = require('jasmine');
 
 let cameraService: CameraService;
 
-fdescribe('CameraService', function () {
+describe('CameraService', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
@@ -15,14 +16,5 @@ fdescribe('CameraService', function () {
     it('should be created', done => {
         expect(cameraService).toBeTruthy();
         done();
-    });
-
-    /*
-    public getCamera(): THREE.Camera {
-        return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
-    } */
-    it('Returns camera', () => {
-        const camera = cameraService.getCamera();
-        expect(camera).toBeDefined();
     });
 });
