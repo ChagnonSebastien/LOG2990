@@ -58,6 +58,10 @@ export class SocketManager {
                 for (const roomId in socket.rooms) {
                     if (socket.rooms.hasOwnProperty(roomId)) {
                         if (roomId !== socket.id) {
+                            const game = this.gameManager.getGame(roomId);
+                            if (game.mode === 'dynamic') {
+                                game.countdown.resetCountdown();
+                            }
                             socket.broadcast.to(roomId)
                                 .emit('opponent found a word', foundWord);
                         }
