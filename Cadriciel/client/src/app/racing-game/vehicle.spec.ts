@@ -1,4 +1,3 @@
-import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Vehicle } from './vehicle';
 import * as THREE from 'three';

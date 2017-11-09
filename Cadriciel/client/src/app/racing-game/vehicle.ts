@@ -1,5 +1,5 @@
 import { Track } from './track';
-import { VehiclesPosition } from './vehicle.service';
+import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import {Controller} from './controller';
 
@@ -28,7 +28,7 @@ export class Vehicle {
         this.controler.move(this.vehicle);
     }
 
-    public create3DVehicle(track: Track, scale: number, carPosition: VehiclesPosition, controller: Controller): Promise<Vehicle> {
+    public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
         this.controler = controller;
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
@@ -48,15 +48,15 @@ export class Vehicle {
         });
     }
 
-    private getCartPath(carPosition: VehiclesPosition) {
+    private getCartPath(carPosition: VehicleColor) {
         switch (carPosition) {
-            case VehiclesPosition.first:
+            case VehicleColor.red:
             return redCarPath;
-            case VehiclesPosition.second:
+            case VehicleColor.blue:
             return blueCarPath;
-            case VehiclesPosition.third:
+            case VehicleColor.green:
             return greenCarPath;
-            case VehiclesPosition.fourth:
+            case VehicleColor.yellow:
             return yellowCarPath;
         }
     }
@@ -79,9 +79,7 @@ export class Vehicle {
         return angle;
     }
 
-    private calculateBeta(carPosition: VehiclesPosition, trackCenterAngle: number): number {
-        const beta = Math.PI / 4 - trackCenterAngle + ((carPosition - 1) * (Math.PI / 2));
-
-        return beta;
+    private calculateBeta(vehicleColor: VehicleColor, trackCenterAngle: number): number {
+        return Math.PI / 4 - trackCenterAngle + ((vehicleColor - 1) * (Math.PI / 2));
     }
 }
