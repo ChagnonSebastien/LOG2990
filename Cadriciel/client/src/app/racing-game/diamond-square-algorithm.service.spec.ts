@@ -38,7 +38,7 @@ describe('DiamondSquareAlgorithmService', () => {
             }
         });
 
-        it ('should not have a slope more than 2 more than 0.01%', function() {
+        it ('should not have a slope more than 2 more than 0.1%', function() {
             let total = 0;
             let mistakes = 0;
             for (let i = 0; i < heightTable.length - 1; i++) {
@@ -49,7 +49,7 @@ describe('DiamondSquareAlgorithmService', () => {
                     total++;
                 }
             }
-            expect(mistakes / total).toBeLessThanOrEqual(0.0001);
+            expect(mistakes / total).toBeLessThanOrEqual(0.001);
         });
     });
 

@@ -122,11 +122,11 @@ export class CameraService {
     }
 
     public zoomCamera(event: any): void {
-        // 107 corresponding to '+' in ASCII
-        // 109 corresponding to '-' in ASCII
-        if (event.keyCode === 107) {
+        // 187 corresponding to '+' in ASCII
+        // 189 corresponding to '-' in ASCII
+        if (event.keyCode === 187) {
             this.zoomLevel += zoomChange;
-        } else if (event.keyCode === 109) {
+        } else if (event.keyCode === 189) {
             this.zoomLevel -= zoomChange;
         }
 

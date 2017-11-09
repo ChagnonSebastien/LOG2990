@@ -37,8 +37,12 @@ export class RacingGameComponent implements AfterViewInit {
         this.renderService.onResize();
     }
 
-    public eventsListen(event: any): void {
+    public eventsDownListen(event: any): void {
         this.commandsService.sendKeyDownEvent(event);
+    }
+
+    public eventsUpListen(event: any): void {
+        this.commandsService.sentKeyUpEvent(event);
     }
 
     public ngAfterViewInit() {

@@ -6,6 +6,7 @@ import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
+import { VehicleService } from './vehicle.service';
 
 @Injectable()
 export class RenderService {
@@ -26,20 +27,25 @@ export class RenderService {
 
     private subscription: Subscription;
 
-    private events: any;
+    private event: any;
 
-    private keyIsDown: boolean;
+    private keyPressed = false;
 
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private commandsService: CommandsService
+        private commandsService: CommandsService,
+        private vehicule: VehicleService
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
-            this.events = event;
-            this.keyIsDown = true;
+            this.event = event;
+            this.keyPressed = true;
         });
+    }
+
+    public animateVehicule() {
+        this.vehicule.engineVehicle();
     }
 
     private createScene() {
@@ -87,10 +93,10 @@ export class RenderService {
     }
 
     public eventsList(): void {
-        if ( this.keyIsDown) {
-            this.cameraService.swapCamera(this.events);
-            this.cameraService.zoomCamera(this.events);
-            this.keyIsDown = false;
+        if (this.keyPressed) {
+            this.cameraService.swapCamera(this.event);
+            this.cameraService.zoomCamera(this.event);
+            this.keyPressed = false;
         }
     }
 
@@ -109,6 +115,7 @@ export class RenderService {
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
         this.eventsList();
+        this.animateVehicule();
         this.stats.update();
     }
 

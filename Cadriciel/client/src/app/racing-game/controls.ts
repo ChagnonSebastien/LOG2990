@@ -1,9 +1,9 @@
 export class Controls {
-    private speed: number;
+    public speed: number;
 
-    private acceleration: number;
+    public acceleration: number;
 
-    private rotationAngle: number;
+    public rotationAngle: number;
 
     constructor(speed: number, acceleration: number, angle: number) {
         this.speed = speed;
@@ -13,19 +13,24 @@ export class Controls {
 
     public accelerate (object: any) {
         this.speed += this.acceleration;
-        object.translateZ(this.speed);
+        object.translateZ(-this.speed);
     }
 
     public brake (object: any) {
-        this.speed -= this.acceleration;
-        object.translateZ(this.speed);
+        if (this.speed > 0) {
+            this.speed -= (this.acceleration * 3);
+            object.translateZ(-this.speed);
+        } else {
+            this.speed = 0;
+        }
     }
 
     public leftRotation(object: any) {
-        object.rotation.y(this.rotationAngle);
+        object.rotation.y += this.rotationAngle;
     }
 
     public rightRotation(object: any) {
-        object.rotation.y(-this.rotationAngle);
+        object.rotation.y -= this.rotationAngle;
     }
+
 }
