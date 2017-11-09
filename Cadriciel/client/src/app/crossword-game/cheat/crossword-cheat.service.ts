@@ -18,15 +18,18 @@ export class CrosswordCheatService {
         return this.initialCountdownChanges.asObservable();
     }
 
-    public toggleCheatMode() {
+    public toggleCheatMode(): boolean {
         this.cheatMode = !this.cheatMode;
+        return this.cheatMode;
     }
 
-    public setInitialCountdown(initialCountdown: number) {
+    public setInitialCountdown(initialCountdown: number): boolean {
         if (initialCountdown > 0 && !this.isDecimal(initialCountdown)) {
             this.initialCountdown = initialCountdown;
             this.initialCountdownChanges.next(initialCountdown);
+            return true;
         }
+        return false;
     }
 
     private isDecimal(n: number) {
