@@ -41,7 +41,8 @@ export class Track {
     public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService) {
         return Math.min.apply(null, this.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return lineCalculationService.getNearestPointOnLineWithClamping(point, line) - trackRadius;
+            const nearestPoint = lineCalculationService.getNearestPointOnLineWithClamping(point, line);
+            return lineCalculationService.distance(point, nearestPoint) - trackRadius;
         }));
     }
 
