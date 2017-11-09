@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Controls } from './controls';
 
 const numberOfOpponents = 3;
+
 
 @Injectable()
 export class VehicleService {
@@ -12,9 +14,11 @@ export class VehicleService {
     private subscription: Subscription;
     private event: any;
     private keyIsDown: boolean;
+    private control: Controls;
 
     constructor(private commandsService: CommandsService) {
         this.mainVehicle = new Vehicle();
+        this.control = new Controls(0, 0.02, Math.PI / 50);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
             this.opponentsVehicles[i] = new Vehicle();
@@ -22,7 +26,6 @@ export class VehicleService {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.event = event;
-            this.keyIsDown = true;
         });
     }
 
@@ -43,5 +46,4 @@ export class VehicleService {
             resolve(this.opponentsVehicles);
         });
     }
-
 }

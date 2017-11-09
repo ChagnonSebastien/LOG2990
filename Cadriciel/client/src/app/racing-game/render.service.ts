@@ -32,7 +32,7 @@ export class RenderService {
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private commandsService: CommandsService
+        private commandsService: CommandsService,
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
