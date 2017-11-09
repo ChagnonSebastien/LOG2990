@@ -34,7 +34,7 @@ const wordsWithIndex = [
     { 'i': 2, 'j': 0, 'word': 'staff', 'horizontal': false }
 ];
 
-fdescribe('#CrosswordGridService', () => {
+describe('#CrosswordGridService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
