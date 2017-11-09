@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
+import { KeyboardService } from '../keyboard/keyboard.service';
+import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 let gridService: CrosswordGridService;
 
@@ -37,7 +39,9 @@ describe('#CrosswordGridService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                CrosswordGridService
+                CrosswordGridService,
+                KeyboardService,
+                CrosswordConfigurationService
             ]
         });
         gridService = TestBed.get(CrosswordGridService);
@@ -74,12 +78,12 @@ describe('#CrosswordGridService', () => {
 
                 expect(gridService.grid[0][0].words.length).toEqual(1);
                 gridService.grid[0][0].words.map((word) => {
-                    expect(word).toEqual('appeal');
+                    expect(word.word).toEqual('appeal');
                 });
 
                 expect(gridService.grid[0][9].words.length).toEqual(2);
                 gridService.grid[0][9].words.map((word) => {
-                    expect(['rat', 'textbook']).toContain(word);
+                    expect(['rat', 'textbook']).toContain(word.word);
                 });
             });
 
@@ -103,70 +107,9 @@ describe('#CrosswordGridService', () => {
                 for (const row of gridService.grid) {
                     for (const square of row) {
                         expect(square.selected).toBeFalsy();
-                        expect(square.player1Selected).toBeFalsy();
-                        expect(square.player2Selected).toBeFalsy();
                     }
                 }
             });
-        });
-    });
-
-    describe('insertLetter()', () => {
-
-        beforeEach(() => {
-            gridService.newGame(grid, wordsWithIndex);
-        });
-
-        it('should insert a letter when the square is empty', () => {
-            expect(gridService.grid[0][0].empty).toBeTruthy();
-            gridService.insertLetter('A', 0, 0);
-            expect(gridService.grid[0][0].input).toEqual('a');
-        });
-
-        it('should not insert a letter when the square is black', () => {
-            expect(gridService.grid[1][0].black).toBeTruthy();
-            gridService.insertLetter('A', 1, 0);
-            expect(gridService.grid[1][0].input).toEqual('');
-        });
-
-        it('should overwrite if a word using this square is not found', () => {
-            gridService.insertLetter('A', 0, 0);
-            expect(gridService.grid[0][0].input).toEqual('a');
-            gridService.insertLetter('B', 0, 0);
-            expect(gridService.grid[0][0].input).toEqual('b');
-        });
-
-        it('should not overwrite if a word using this square is found', () => {
-            gridService.insertLetter('A', 0, 0);
-            expect(gridService.grid[0][0].input).toEqual('a');
-
-            gridService.grid[0][0].found = true;
-            gridService.insertLetter('B', 0, 0);
-            expect(gridService.grid[0][0].input).toEqual('a');
-        });
-    });
-
-    describe('eraseletter()', () => {
-
-        beforeEach(() => {
-            gridService.newGame(grid, wordsWithIndex);
-        });
-
-        it('should erase if no word using this square is found', () => {
-            gridService.grid[0][0].input = 'a';
-            expect(gridService.grid[0][0].input).toEqual('a');
-
-            gridService.eraseLetter(0, 0);
-            expect(gridService.grid[0][0].input).toEqual('');
-        });
-
-        it('should not erase if a word using this square is found', () => {
-            gridService.grid[0][0].input = 'a';
-            expect(gridService.grid[0][0].input).toEqual('a');
-
-            gridService.grid[0][0].found = true;
-            gridService.eraseLetter(0, 0);
-            expect(gridService.grid[0][0].input).toEqual('a');
         });
     });
 
@@ -179,9 +122,7 @@ describe('#CrosswordGridService', () => {
             gridService.grid[0][8].selected = true;
             gridService.grid[0][9].selected = true;
 
-            gridService.unselectWord(
-                { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
-            );
+            gridService.unselectWord();
 
             expect(gridService.grid[0][7].selected).toBeFalsy();
             expect(gridService.grid[0][8].selected).toBeFalsy();

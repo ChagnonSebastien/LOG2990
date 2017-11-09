@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { CrosswordHintsService } from './crossword-hints.service';
 import { LexiconService } from '../lexicon/lexicon.service';
+import { CrosswordWordsService } from '../words/crossword-words.service';
 
 import { Word } from '../../../../../commun/word';
 
@@ -41,6 +42,7 @@ describe('#CrosswordHintsService', () => {
             imports: [HttpModule],
             providers: [
                 CrosswordHintsService,
+                CrosswordWordsService,
                 { provide: LexiconService, useClass: MockLexiconService }
             ]
         });
@@ -58,66 +60,7 @@ describe('#CrosswordHintsService', () => {
 
             // initialize attributes
             expect(hintsService.selectedWord).toBeUndefined();
-            expect(hintsService['wordMap']).toBeDefined();
             expect(hintsService.hints).toBeDefined();
-        });
-
-        it('should construct a wordMap for O(1) access to info on a word', () => {
-            hintsService.newGame(wordsWithIndex);
-
-            for (const wordWithIndex of wordsWithIndex) {
-                expect(hintsService['wordMap'].get(wordWithIndex.word)).toBeDefined();
-                expect(hintsService['wordMap'].get(wordWithIndex.word).word).toEqual(wordWithIndex.word);
-            }
-        });
-
-        it('should create a hint for every word in wordsWithIndex with its definition', async () => {
-            await hintsService.newGame(wordsWithIndex);
-
-            // every word of wordsWithIndex is in hints
-            for (const hint of hintsService.hints) {
-                expect(hintsService['wordMap'].get(hint.word)).toBeDefined();
-                expect(hint.definition).toEqual(`Definition of ${hint.word}`);
-            }
-        });
-    });
-
-    describe('getWordInfo()', () => {
-        it('should return the word info of the word', () => {
-            for (const wordWithIndex of wordsWithIndex) {
-                expect(hintsService.getWordWithIndex(wordWithIndex.word)).toEqual(wordWithIndex);
-            }
-        });
-    });
-
-    describe('selectWord()', () => {
-        it('should select the word given if it exists in the hints', () => {
-            expect(hintsService.selectedWord).toBeUndefined();
-            hintsService.selectWord('huh');
-            expect(hintsService.selectedWord).toEqual('huh');
-        });
-
-        it('should not select a word that does not exist in the hints', () => {
-            // undefined selected word stays undefined
-            expect(hintsService.selectedWord).toBeUndefined();
-            hintsService.selectWord('thisdoesnotexist');
-            expect(hintsService.selectedWord).toBeUndefined();
-
-            // selected word stays the same
-            hintsService.selectWord('huh');
-            expect(hintsService.selectedWord).toEqual('huh');
-            hintsService.selectWord('whyareyoutryingagain');
-            expect(hintsService.selectedWord).toEqual('huh');
-        });
-
-        it('should notify when the selected word changes', (done) => {
-            hintsService.selectedWordAlerts().subscribe((hintChange) => {
-                expect(hintChange.previous).toBeUndefined();
-                expect(hintChange.current.word).toEqual('huh');
-                done();
-            });
-
-            hintsService.selectWord('huh');
         });
     });
 
