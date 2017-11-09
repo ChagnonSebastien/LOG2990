@@ -1,23 +1,50 @@
-<div class="crossword-page" id="cloud-container" (click)="this.unselectWord()">
-  <div class="spacing">
-    <button class="btn btn-danger" (click)="endGame()">
+<div class="crossword-page" id="cloud-container" (click)="crosswordGameService.unselectAll()">
+  <div *ngIf="!crosswordGameService.gameInProgress">
+    <div class="row">
+      <div class="col-md-5">
+        <app-crossword-menu></app-crossword-menu>
+      </div>
+      <div class="col-md-7">
+        <app-crossword-lobby></app-crossword-lobby>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="crosswordGameService.gameInProgress">
+    <button class="btn btn-danger" (click)="crosswordGameService.endGame()">
       End game
     </button>
-    <!--<div class="btn btn-lg btn-warning float-right">{{crossword.timer}}</div>-->
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="row" *ngFor="let row of this.gridService.grid; let i = index">
-          <div *ngFor="let square of row; let j = index">
-            <input id="{{i}}_{{j}}" class="square" [ngClass]="{ 'black': this.gridService.grid[i][j].black, 'empty': this.gridService.grid[i][j].empty, 'found': this.gridService.grid[i][j].found, 'selected': this.gridService.grid[i][j].selected }"
-              type="text" maxLength="1" pattern="[a-zA-Z]" ng-pattern-restrict [readonly]="this.gridService.grid[i][j].black || this.gridService.grid[i][j].found || !this.gridService.grid[i][j].selected"
-              (keydown)="handleInput($event, i, j)" [(ngModel)]="this.gridService.grid[i][j].input" #square>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div *ngIf="configurationService.isMultiplayer()" class="row">
+            <div class="col-md-12">
+              <app-crossword-points></app-crossword-points>
+            </div>
+          </div>
+          <div *ngIf="!crosswordGameService.gameCompleted && configurationService.isDynamic()" class="row">
+            <div class="col-md-12">
+              <app-crossword-countdown></app-crossword-countdown>
+            </div>
+          </div>
+          <div *ngIf="crosswordGameService.gameCompleted" class="row">
+            <div class="col-md-12">
+              <app-crossword-end-game></app-crossword-end-game>
+            </div>
           </div>
         </div>
+        <div class="col-md-6">
+          <app-crossword-cheat></app-crossword-cheat>
+        </div>
       </div>
-      <div class="col-md-6">
-        <app-crossword-hints (selectedWordChanged)="focusOnWord($event)"></app-crossword-hints>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mt-3 mb-3">
+          <app-crossword-grid></app-crossword-grid>
+        </div>
+        <div class="col-md-6 mt-3 mb-3">
+          <app-crossword-hints></app-crossword-hints>
+        </div>
       </div>
     </div>
   </div>
