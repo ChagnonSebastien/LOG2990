@@ -2,6 +2,8 @@ import { Track } from './track';
 import { VehiclesPosition } from './vehicle.service';
 import * as THREE from 'three';
 
+const distanceBetweenCars = 5;
+const startOffset = 0.75;
 
 export class Vehicle {
     public vehicle: THREE.Mesh;
@@ -19,10 +21,8 @@ export class Vehicle {
                 this.vehicle = <THREE.Mesh>object;
                 this.vehicle.geometry.rotateY(Math.PI / 2); // So that the front of the cart is oriented correctly in the scene
                 this.vehicle.rotateY(trackAngle);
-                //this.vehicle.position.x = (trackCenter.x + Math.floor((carPosition/3))*10) * scale;
-                //this.vehicle.position.z = (trackCenter.y + (carPosition % 2)*10) * scale;
-                this.vehicle.position.x = (trackCenter.x)*scale;
-                this.vehicle.position.y = (trackCenter.y)*scale;
+                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
+                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.y = (scale * 20 / 25) + 3;
                 this.vehicle.scale.set(scale * 22 / 25, scale * 22 / 25, scale * 22 / 25);
                 this.vehicle.castShadow = true;
@@ -34,8 +34,8 @@ export class Vehicle {
     private getCenterOfTrack(track: Track): THREE.Vector2 {
         const fromPosition = track.trackIntersections[0];
         const toPosition = track.trackIntersections[1];
-        const xCenter = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
-        const yCenter = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
+        const xCenter = ((toPosition.x - fromPosition.x) / 2) * startOffset + fromPosition.x;
+        const yCenter = ((toPosition.y - fromPosition.y) / 2) * startOffset + fromPosition.y;
         const center = new THREE.Vector2(xCenter, yCenter);
 
         return center;
@@ -50,7 +50,7 @@ export class Vehicle {
     }
 
     private calculateBeta(carPosition: VehiclesPosition, trackCenterAngle: number): number {
-        const beta = 45 - trackCenterAngle + ((carPosition - 1) * 90);
+        const beta = Math.PI / 4 - trackCenterAngle + ((carPosition - 1) * (Math.PI / 2));
 
         return beta;
     }
