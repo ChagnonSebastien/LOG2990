@@ -1,3 +1,4 @@
+import { CameraService } from './camera.service';
 import { Track } from './track';
 import { CountdownService } from './countdown.service';
 import { Injectable } from '@angular/core';
@@ -11,14 +12,15 @@ const scale = 25;
 export class RacingGameService {
     private track: Track;
 
-    constructor(private renderService: RenderService, private vehicleService: VehicleService, private countdownService: CountdownService) {
+    constructor(private renderService: RenderService, private vehicleService: VehicleService,
+                private countdownService: CountdownService, private cameraService: CameraService) {
     }
 
     public async initializeRender(container: HTMLElement, track: Track) {
         this.track = track;
         this.renderService.initialize(container, track, scale);
         await this.addVehicles();
-        this.renderService.setCameraOnMainVehicle();
+        this.cameraService.initializeCameras(this.renderService.container, this.vehicleService.mainVehicle.vehicle, scale * 4);
         await this.createCoundown();
         this.renderService.startRenderingLoop();
     }
@@ -26,7 +28,6 @@ export class RacingGameService {
     private async addVehicles(): Promise<void> {
         await this.vehicleService.initializeMainVehicle(this.track, scale);
         await this.vehicleService.initializeOpponentsVehicles(this.track, scale);
-        this.renderService.mainVehicle = this.vehicleService.mainVehicle.vehicle;
         this.renderService.scene.add(this.vehicleService.mainVehicle.vehicle);
 
         for (let i = 0; i < numberOfOpponents; i++) {
