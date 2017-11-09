@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { LexiconReader } from '../lexicon-reader';
 
+const lexiconFilePath = '../server/lexicon/englishWords.txt';
 module Route {
 
     export class Lexicon {
@@ -15,7 +16,6 @@ module Route {
         public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
             const lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             lexicon = lexiconReader.readWords(lexiconFilePath);
             res.send(lexicon);
         }
@@ -23,7 +23,6 @@ module Route {
         public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction) {
             const wordLength: number = +req.params.wordLength;
             const lexiconReader = new LexiconReader();
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
             const wordsOfLength: string[] = lexiconReader.readWordsOfLength(words, wordLength);
             res.send(wordsOfLength);
@@ -33,7 +32,6 @@ module Route {
             const charWanted = req.params.char;
             const position = Number(req.params.position);
             const lexiconReader = new LexiconReader();
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
             const wordsWithChar = lexiconReader.getWordsWithChar(words, charWanted, position);
             res.send(wordsWithChar);
@@ -42,7 +40,6 @@ module Route {
         public getWordsMatchingPattern(req: express.Request, res: express.Response, next: express.NextFunction) {
             const pattern = req.params.word;
             const lexiconReader = new LexiconReader();
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
             const wordsWithChar = lexiconReader.getWordsMatchingPattern(words, pattern);
             res.send(wordsWithChar);
@@ -50,7 +47,6 @@ module Route {
 
         public async getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             const lexiconReader = new LexiconReader();
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
             lexiconReader.getUncommonWords(words).then((uncommonWords) => {
@@ -60,7 +56,6 @@ module Route {
 
         public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
             const lexiconReader = new LexiconReader();
-            const lexiconFilePath = '../server/lexicon/englishWords.txt';
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
             lexiconReader.getCommonWords(words).then((commonWords) => {
