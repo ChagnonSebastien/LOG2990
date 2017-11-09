@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CrosswordGridService } from './crossword-grid.service';
-import { CrosswordKeyboardService } from '../keyboard/keyboard.service';
+import { CrosswordKeyboardService } from '../keyboard/crossword-keyboard.service';
 
 let gridService: CrosswordGridService;
 

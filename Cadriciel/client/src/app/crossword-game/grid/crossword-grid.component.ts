@@ -77,27 +77,34 @@ export class CrosswordGridComponent {
         }).nativeElement.focus();
     }
 
-    private focusOnNextLetter(i: number, j: number) {
+    private focusOnNextLetter(i: number, j: number): boolean {
+        if (this.hintsService.selectedWord === undefined) {
+            return false;
+        }
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
-
         if (wordInfo.horizontal) {
             j = WordUtilities.endOfWord(wordInfo, i, j) ? j : j + 1;
         } else {
             i = WordUtilities.endOfWord(wordInfo, i, j) ? i : i + 1;
         }
         this.focusOnSquare(i, j);
+        return true;
     }
 
-    private focusOnPreviousLetter(i: number, j: number) {
+    private focusOnPreviousLetter(i: number, j: number): boolean {
+        if (this.hintsService.selectedWord === undefined) {
+            return false;
+        }
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
 
-        if (wordInfo.horizontal) {
+        if (wordInfo !== undefined || wordInfo.horizontal) {
             j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
         } else {
             i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
         }
         this.focusOnSquare(i, j);
+        return true;
     }
 }
