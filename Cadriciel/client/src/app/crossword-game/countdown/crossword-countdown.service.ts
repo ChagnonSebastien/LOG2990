@@ -19,14 +19,16 @@ export class CrosswordCountdownService {
         this.countdownReachedZero = new Subject();
     }
 
-    public newGame() {
+    public newGame(): boolean {
         if (this.configurationService.isDynamic()) {
             this.initialCount = this.cheatService.initialCountdown;
             this.resetCountdown();
             if (this.countdownId === undefined) {
                 this.startCountdown();
             }
+            return true;
         }
+        return false;
     }
 
     public countdownReachedZeroAlerts(): Observable<any> {

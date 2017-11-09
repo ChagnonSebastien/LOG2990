@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
+import { GameConfiguration } from '../game-configuration';
+
 @Injectable()
 export class CrosswordCheatService {
     public cheatMode: boolean;
@@ -11,7 +13,7 @@ export class CrosswordCheatService {
     constructor() {
         this.initialCountdownChanges = new Subject();
         this.cheatMode = false;
-        this.initialCountdown = 30;
+        this.initialCountdown = GameConfiguration.INITIAL_COUNTDOWN_VALUE;
     }
 
     public initialCountdownChangedAlerts(): Observable<any> {
