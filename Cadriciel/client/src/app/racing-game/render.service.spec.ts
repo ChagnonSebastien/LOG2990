@@ -12,7 +12,7 @@ import { Track } from './track';
 
 let renderService: RenderService;
 
-fdescribe('Render', () => {
+describe('Render', () => {
 
       beforeEach(() => {
         TestBed.resetTestingModule();

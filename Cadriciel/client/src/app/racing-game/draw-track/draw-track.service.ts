@@ -12,22 +12,28 @@ export class DrawTrackService {
 
     private container: HTMLElement;
 
-    private mousePosition: THREE.Vector2 = new THREE.Vector2();
+    private mousePosition: THREE.Vector2;
 
-    private pointMouseHoversOn = -1;
+    private pointMouseHoversOn: number;
 
-    private trackClosed = false;
+    private trackClosed: boolean;
 
-    private intersections: THREE.Vector2[] = [new THREE.Vector2(0, 0)];
+    private intersections: THREE.Vector2[];
 
-    private currentlyDraggedIntersection = -1;
+    private currentlyDraggedIntersection: number;
 
     constructor(
         private renderService: RenderService,
         private trackValidationService: TrackValidationService,
         private obstacleService: ObstacleService,
         private trackService: TrackService
-    ) { }
+    ) {
+        this.mousePosition = new THREE.Vector2();
+        this.pointMouseHoversOn = -1;
+        this.trackClosed = false;
+        this.intersections = [new THREE.Vector2(0, 0)];
+        this.currentlyDraggedIntersection = -1;
+    }
 
     public async loadTrack(name: string): Promise<{description: string, difficulty: string}> {
         return this.trackService.get(name).then(track => {
@@ -94,7 +100,7 @@ export class DrawTrackService {
         }
     }
 
-    private getRelativeMousePosition(clientX: number, clientY: number) {
+    private getRelativeMousePosition(clientX: number, clientY: number): THREE.Vector2 {
         const relativePosition = new THREE.Vector2();
         relativePosition.x = clientX - this.container.clientWidth / 2 - this.container.offsetLeft;
         relativePosition.y = this.container.clientHeight / 2 + this.container.offsetTop - clientY;
@@ -117,7 +123,7 @@ export class DrawTrackService {
         return index;
     }
 
-    private getXYDistance(vector1: THREE.Vector2, vector2: THREE.Vector2) {
+    private getXYDistance(vector1: THREE.Vector2, vector2: THREE.Vector2): number {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
@@ -169,7 +175,7 @@ export class DrawTrackService {
         }
     }
 
-    public isFinished() {
+    public isFinished(): boolean {
         return this.trackClosed && this.trackValidationService.isAllValid();
     }
 
@@ -192,7 +198,7 @@ export class DrawTrackService {
     }
 
     public onResize() {
-        return this.renderService.onResize();
+        this.renderService.onResize();
     }
 
     public saveTrack(name: string, description: string, difficulty: string): Promise<string> {
