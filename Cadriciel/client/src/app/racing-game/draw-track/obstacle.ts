@@ -1,7 +1,7 @@
 export enum ObstacleType {
-    Pothole,
-    Puddle,
-    Booster,
+    Pothole = 1.75,
+    Puddle = 3,
+    Booster = 2.75,
 }
 
 export class Obstacle {

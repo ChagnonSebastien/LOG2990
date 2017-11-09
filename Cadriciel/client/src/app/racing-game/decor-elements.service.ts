@@ -1,4 +1,5 @@
-import { Obstacle } from './draw-track/obstacle';
+import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { LineCalculationService } from './line-calculation.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
@@ -37,7 +38,7 @@ export class DecorElementsService {
 
     private treesPositions: THREE.Vector3[] = [];
 
-    constructor(private lineCalculationService: LineCalculationService) {
+    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstacleService) {
     }
 
     public initialize(scene: THREE.Scene, scale: number, track: Track): void {
@@ -47,29 +48,18 @@ export class DecorElementsService {
     }
 
     public placeObstacles(): void {
-        this.placeObstacleType(this.track.boosters, boosterPath);
-        this.placeObstacleType(this.track.potholes, potholePath);
-        this.placeObstacleType(this.track.puddles, puddlePath);
+        this.placeObstacleType(ObstacleType.Booster, this.track.boosters, boosterPath);
+        this.placeObstacleType(ObstacleType.Pothole, this.track.potholes, potholePath);
+        this.placeObstacleType(ObstacleType.Puddle, this.track.puddles, puddlePath);
     }
 
-    public placeObstacleType(obstacles: Obstacle[], path: string): void {
+    public placeObstacleType(type: ObstacleType, obstacles: Obstacle[], path: string): void {
         this.loadMesh(path).then( obstacleMesh => {
             obstacleMesh.scale.set(this.scale, this.scale, this.scale);
-            obstacles.forEach(obstacle => {
+            this.obstacleService.getObstacles(type).forEach(obstaclePosition => {
                 const obstacleClone = obstacleMesh.clone();
-
-                const segment = new THREE.Vector2().subVectors(this.track.trackIntersections[
-                    obstacle.segment + 1 === this.track.trackIntersections.length ? 0 : obstacle.segment + 1
-                ], this.track.trackIntersections[obstacle.segment]);
-                const obstaclePosition = new THREE.Vector2().addVectors(
-                    this.track.trackIntersections[obstacle.segment], segment.multiplyScalar(obstacle.distance));
-
-                const lineAngle = Math.atan(segment.x / segment.y) + Math.PI / 2;
-                const randomOffset = new THREE.Vector2(
-                    Math.sin(lineAngle), Math.cos(lineAngle)).multiplyScalar(trackRadius * obstacle.offset);
-
                 obstacleClone.position.set(
-                    (obstaclePosition.x + randomOffset.x) * this.scale, 2, (obstaclePosition.y + randomOffset.y) * this.scale);
+                    (obstaclePosition.x) * this.scale, 2, (obstaclePosition.y) * this.scale);
 
                 obstacleClone.rotateY(Math.PI * 2 * Math.random());
                 this.scene.add(obstacleClone);

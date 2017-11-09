@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { Track } from './track';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
@@ -17,7 +18,13 @@ describe('TerrainGenerationService', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [TerrainGenerationService, DecorElementsService, LineCalculationService, DiamondSquareAlgorithmService]
+            providers: [
+                TerrainGenerationService,
+                DecorElementsService,
+                LineCalculationService,
+                DiamondSquareAlgorithmService,
+                ObstacleService
+            ]
         });
         terrainGenerationService = TestBed.get(TerrainGenerationService);
     });

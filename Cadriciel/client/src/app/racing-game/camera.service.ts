@@ -23,7 +23,7 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 export class CameraService {
     private sceneScale: number;
 
-    private currentView = View.PERSPECTIVE;
+    private currentView: View;
 
     private perspectiveCamera: THREE.PerspectiveCamera;
 
@@ -31,7 +31,12 @@ export class CameraService {
 
     private objectToFollow: THREE.Mesh;
 
-    private zoomLevel = initialZoomLevel;
+    private zoomLevel: number;
+
+    constructor() {
+        this.currentView = View.PERSPECTIVE;
+        this.zoomLevel = initialZoomLevel;
+    }
 
     public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
         this.objectToFollow = objectToFollow;
