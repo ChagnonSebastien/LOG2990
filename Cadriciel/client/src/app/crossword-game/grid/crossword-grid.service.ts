@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { WordUtilities } from '../utilities/word-utilities';
 
 import { KeyboardService } from '../keyboard/keyboard.service';
-import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Word } from '../../../../../commun/word';
@@ -15,8 +14,7 @@ export class CrosswordGridService {
     private wordFoundSubject: Subject<any>;
 
     constructor(
-        private keyboardService: KeyboardService,
-        private configurationService: CrosswordConfigurationService
+        private keyboardService: KeyboardService
     ) {
         this.wordFoundSubject = new Subject();
         this.listenForLetterInputs();

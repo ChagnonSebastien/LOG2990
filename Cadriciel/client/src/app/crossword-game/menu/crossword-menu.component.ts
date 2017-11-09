@@ -10,7 +10,7 @@ import { CrosswordPlayerService } from '../player/crossword-player.service';
 })
 export class CrosswordMenuComponent {
     constructor(
-        private configurationService: CrosswordConfigurationService,
-        private playerService: CrosswordPlayerService
+        public configurationService: CrosswordConfigurationService,
+        public playerService: CrosswordPlayerService
     ) { }
 }

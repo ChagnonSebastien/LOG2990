@@ -5,9 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { CrosswordSocketService } from '../socket/crossword-socket.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
 
-import { Player } from '../../../../../commun/crossword/player';
 import { CrosswordGameInfo } from '../../../../../commun/crossword/crossword-game-info';
-import { MultiplayerCrosswordGame } from '../../../../../commun/crossword/multiplayer-crossword-game';
 import { Word } from '../../../../../commun/word';
 
 @Injectable()
@@ -130,49 +128,4 @@ export class CrosswordMultiplayerService {
             this.serverClock.next(count);
         });
     }
-
-    /*constructor(private socketService: CrosswordSocketService) {
-        this.socketService.requestSocket().then(socket => {
-            this.socket = socket;
-
-            this.socket.on('player 2 joined', data => {
-                this.game = data;
-            });
-
-            this.socket.on('game created', data => {
-                this.game.id = data;
-            });
-
-            this.socket.on('opponent left', data => {
-                alert('Your opponent left the game');
-                this.leaveGame();
-            });
-        });
-    }
-
-    public getGame(): MultiplayerCrosswordGame {
-        return this.game;
-    }
-
-    public createGame(type: string, difficulty: string, mode: string, player1: Player) {
-        this.socket.emit('createGame', type, difficulty, mode, player1);
-    }
-    public leaveGame() {
-        this.socket.emit('leaveGame', this.game.id);
-    }
-
-    public getGames(): Promise<ClientGameInfo[]> {
-        this.socket.emit('getGames');
-        const gamesPromise = new Promise<ClientGameInfo[]>(
-            (res, rej) => this.socket.on('sent all games', data => res(data)));
-        return gamesPromise;
-    }
-
-    public joinGame(gameId: string, player: Player) {
-        this.socket.emit('joinGame', gameId, player);
-    }
-
-    public connectionStatus() {
-        return this.socket !== undefined;
-    }*/
 }

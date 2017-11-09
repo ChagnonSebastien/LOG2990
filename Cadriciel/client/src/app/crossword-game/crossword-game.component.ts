@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { CrosswordGameManagerService } from './game-manager/crossword-game-manager.service';
 import { CrosswordConfigurationService } from './configuration/crossword-configuration.service';
-import { CrosswordPointsService } from './points/crossword-points.service';
 
 @Component({
     selector: 'app-crossword-game',
