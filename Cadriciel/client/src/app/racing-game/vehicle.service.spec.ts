@@ -1,3 +1,4 @@
+import { CommandsService } from './commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
 import { TestBed, inject } from '@angular/core/testing';
@@ -13,7 +14,7 @@ const track = new Track('name', 'description', 'type', [
 describe('VehicleService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [VehicleService]
+            providers: [VehicleService, CommandsService]
         });
         vehicleService = TestBed.get(VehicleService);
     });
