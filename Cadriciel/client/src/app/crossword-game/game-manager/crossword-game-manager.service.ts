@@ -15,7 +15,7 @@ import { CrosswordConfigurationService } from '../configuration/crossword-config
 import { Word } from '../../../../../commun/word';
 
 @Injectable()
-export class CrosswordGameService {
+export class CrosswordGameManagerService {
     public gameInProgress: boolean;
     public gameCompleted: boolean;
     private multiplayerMode: boolean;

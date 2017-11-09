@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
-import { CrosswordGameService } from '../game-manager/crossword-game.service';
+import { CrosswordGameManagerService } from '../game-manager/crossword-game-manager.service';
 
 @Component({
     selector: 'app-crossword-end-game',
@@ -11,6 +11,6 @@ import { CrosswordGameService } from '../game-manager/crossword-game.service';
 export class CrosswordEndGameComponent {
     constructor(
         public configurationService: CrosswordConfigurationService,
-        public gameService: CrosswordGameService
+        public gameService: CrosswordGameManagerService
     ) { }
 }

@@ -8,7 +8,7 @@ import { CrosswordRoutingModule } from './crossword-routing.module';
 import { KeyboardService } from './keyboard/keyboard.service';
 import { LexiconService } from './lexicon/lexicon.service';
 import { CrosswordService } from './crossword/crossword.service';
-import { CrosswordGameService } from './game-manager/crossword-game.service';
+import { CrosswordGameManagerService } from './game-manager/crossword-game-manager.service';
 import { CrosswordGridService } from './grid/crossword-grid.service';
 import { CrosswordHintsService } from './hints/crossword-hints.service';
 import { CrosswordPointsService } from './points/crossword-points.service';
@@ -22,7 +22,7 @@ import { CrosswordCheatService } from './cheat/crossword-cheat.service';
 import { CrosswordMutationService } from './mutation/crossword-mutation.service';
 
 import { CrosswordMenuComponent } from './menu/crossword-menu.component';
-import { CrosswordGameComponent } from './game-manager/crossword-game.component';
+import { CrosswordGameComponent } from './crossword-game.component';
 import { CrosswordHintsComponent } from './hints/crossword-hints.component';
 import { CrosswordGridComponent } from './grid/crossword-grid.component';
 import { CrosswordLobbyComponent } from './lobby/crossword-lobby.component';
@@ -57,7 +57,7 @@ import { CrosswordCheatComponent } from './cheat/crossword-cheat.component';
         LexiconService,
         CrosswordService,
         CrosswordGridService,
-        CrosswordGameService,
+        CrosswordGameManagerService,
         CrosswordHintsService,
         CrosswordPointsService,
         CrosswordConfigurationService,

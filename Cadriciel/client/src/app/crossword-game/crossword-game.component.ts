@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CrosswordGameService } from './crossword-game.service';
-import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
-import { CrosswordPointsService } from '../points/crossword-points.service';
+import { CrosswordGameManagerService } from './game-manager/crossword-game-manager.service';
+import { CrosswordConfigurationService } from './configuration/crossword-configuration.service';
+import { CrosswordPointsService } from './points/crossword-points.service';
 
 @Component({
     selector: 'app-crossword-game',
@@ -10,7 +10,7 @@ import { CrosswordPointsService } from '../points/crossword-points.service';
 })
 export class CrosswordGameComponent {
     constructor(
-        public crosswordGameService: CrosswordGameService,
+        public crosswordGameService: CrosswordGameManagerService,
         public configurationService: CrosswordConfigurationService,
     ) { }
 }
