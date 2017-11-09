@@ -8,7 +8,7 @@ import { GameConfiguration } from '../game-configuration';
 
 let countdownService: CrosswordCountdownService;
 
-fdescribe('#CrosswordCountdownService', () => {
+describe('#CrosswordCountdownService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
