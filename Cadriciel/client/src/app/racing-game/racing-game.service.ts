@@ -39,7 +39,7 @@ export class RacingGameService {
     }
 
     private async startCoundown() {
-        await this.countdownService.createCountdown();
+        await this.countdownService.createCountdown(this.track, scale);
         this.renderService.scene.add(this.countdownService.countdownMesh);
     }
 
