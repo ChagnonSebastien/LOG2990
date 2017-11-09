@@ -188,7 +188,7 @@ describe('#CrosswordGridService', () => {
             gridService.grid[0][8].found = true;
             gridService.grid[0][9].found = true;
 
-            gridService.selectWordOpponent(
+            gridService.selectWord(
                 { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
             );
 
@@ -210,7 +210,7 @@ describe('#CrosswordGridService', () => {
             gridService.grid[0][8].opponentFound = true;
             gridService.grid[0][9].opponentFound = true;
 
-            gridService.selectWordOpponent(
+            gridService.selectWord(
                 { 'i': 0, 'j': 7, 'word': 'rat', 'horizontal': true }
             );
 
