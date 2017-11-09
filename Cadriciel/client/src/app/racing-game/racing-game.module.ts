@@ -1,3 +1,6 @@
+import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
+import { LineCalculationService } from './line-calculation.service';
+import { DecorElementsService } from './decor-elements.service';
 import { CountdownService } from './countdown.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
@@ -39,7 +42,10 @@ import { VehicleService } from './vehicle.service';
         TerrainGenerationService,
         CommandsService,
         VehicleService,
-        CountdownService
+        CountdownService,
+        DecorElementsService,
+        LineCalculationService,
+        DiamondSquareAlgorithmService
     ]
 })
 export class RacingGameModule { }

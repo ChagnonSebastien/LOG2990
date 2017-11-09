@@ -1,500 +1,214 @@
+import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
+import { LineCalculationService } from './line-calculation.service';
+import { DecorElementsService } from './decor-elements.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
+const assetsPath = '/assets';
+
+const startPlaidPath = 'plaid_start_v2.jpg';
+const oceanTexturePath = 'dirt-512.jpg';
+const sandyTexturePath = 'sand-512.jpg';
+const grassyTexturePath = 'grass-512.jpg';
+const rockyTexturePath = 'rock-512.jpg';
+const snowyTexturePath = 'snow-512.jpg';
+const waterTexturePath = 'water512.jpg';
+
+const trackColor = 0x000000;
+const trackRoughness = 0;
+const trackHeight = 64;
+const heightMapPixelWidth = 256;
+const heightMapStrength = 255;
 const trackRadius = 10;
-const coneRadius = 20;
-const votePanelRadius = 4;
-const maximumSlope = 2;
 
 @Injectable()
 export class TerrainGenerationService {
 
+    private scene: THREE.Scene;
+
     private track: Track;
 
-    private trees: THREE.Vector3[] = [];
+    private mapWidth: number;
 
     private scale: number;
 
-    private textureSky: THREE.Texture;
-
-    private decorElements: {object: THREE.Mesh, radius: number}[] = [];
-
-    private heightMap: number[][] = [[]];
+    private heightTable: number[][];
 
     private heightMapSteps = 10;
 
-    constructor() {
-        console.log('constroctor begin');
-        for (let i = 0; i < Math.pow(2, this.heightMapSteps); i++) {
-            this.heightMap.push([]);
-        }
-        const width = Math.pow(2, this.heightMapSteps);
-        this.heightMap[0][0] = Math.random() * 128;
-        this.heightMap[0][width] = Math.random() * 128;
-        this.heightMap[width][0] = Math.random() * 128;
-        this.heightMap[width][width] = Math.random() * 128;
-
-        let stepSize = width;
-        console.log('terrain generation begin');
-        while (stepSize > 1) {
-            for (let i = 0; i < width / stepSize; i++) {
-                for (let j = 0; j < width / stepSize; j++) {
-                    this.diamondStep(i * stepSize, j * stepSize, stepSize);
-                }
-            }
-
-            stepSize /= 2;
-
-            for (let i = 0; i <= width / stepSize; i ++) {
-                for (let j = 0; j <= width / stepSize; j ++) {
-                    if ((i + j) % 2 === 1) {
-                        this.squareStep(i * stepSize, j * stepSize, stepSize);
-                    }
-                }
-            }
-        }
-        console.log('terrain generation end, constroctor end');
-    }
-
-    private diamondStep(x, y, stepSize) {
-        const minimumValue = Math.min(
-            this.heightMap[x][y],
-            this.heightMap[x + stepSize][y],
-            this.heightMap[x][y + stepSize],
-            this.heightMap[x + stepSize][y + stepSize]
-        );
-        const maximumValue = Math.max(
-            this.heightMap[x][y],
-            this.heightMap[x + stepSize][y],
-            this.heightMap[x][y + stepSize],
-            this.heightMap[x + stepSize][y + stepSize]
-        );
-
-        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
-        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
-
-        let randomValue = Math.random();
-        if (randomValue < 0.5) {
-            randomValue = Math.random();
-        }
-
-        this.heightMap[x + stepSize / 2][y + stepSize / 2] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
-    }
-
-    private squareStep(x, y, stepSize) {
-        const width = Math.pow(2, this.heightMapSteps);
-        const minimumValue = Math.min(
-            x + stepSize > width ? Infinity : this.heightMap[x + stepSize][y],
-            y + stepSize > width ? Infinity : this.heightMap[x][y + stepSize],
-            x - stepSize < 0 ? Infinity : this.heightMap[x - stepSize][y],
-            y - stepSize < 0 ? Infinity : this.heightMap[x][y - stepSize]
-        );
-        const maximumValue = Math.max(
-            x + stepSize > width ? -Infinity : this.heightMap[x + stepSize][y],
-            y + stepSize > width ? -Infinity : this.heightMap[x][y + stepSize],
-            x - stepSize < 0 ? -Infinity : this.heightMap[x - stepSize][y],
-            y - stepSize < 0 ? -Infinity : this.heightMap[x][y - stepSize]
-        );
-
-        const maximumRandomValue = Math.min(minimumValue + (maximumSlope * stepSize / 2), 128);
-        const minimumRandomValue = Math.max(maximumValue - (maximumSlope * stepSize / 2), 0);
-
-        let randomValue = Math.random();
-        if (randomValue < 0.5) {
-            randomValue = Math.random();
-        }
-
-        this.heightMap[x][y] = minimumRandomValue + randomValue * (maximumRandomValue - minimumRandomValue);
+    constructor(
+        private decorElementsService: DecorElementsService,
+        private lineCalculationService: LineCalculationService,
+        private diamondSquareAlgorithmService: DiamondSquareAlgorithmService
+    ) {
+        this.heightTable = this.diamondSquareAlgorithmService.generate(this.heightMapSteps);
     }
 
     public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
-        console.log('generate method begin');
+        this.scene = scene;
         this.track = track;
         this.scale = scale;
-        this.textureSky = textureSky;
 
-        this.addObjectsInScene(scene);
-        console.log('generate method end');
-    }
+        this.decorElementsService.initialize(scene, scale, track);
 
-    private addObjectsInScene(scene: THREE.Scene) {
-
-        console.log('table');
-        this.generateTable(scene).forEach(triangle => {
-            scene.add(triangle);
-        });
-        console.log('plaid');
-        scene.add(this.generateRaceStartPlaid());
-
-        console.log('intersection');
-        this.generateIntersections().forEach(instersection => {
-            scene.add(instersection);
-        });
-
-        console.log('segemnt');
-        this.generateSegments().forEach(instersection => {
-            scene.add(instersection);
-        });
-
-        console.log('cone');
-        this.generateCones().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
-        });
-
-        console.log('michel');
-        this.generateMichelElectionPanels().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
-        });
-
-        console.log('dylan');
-        this.generateDylanElectionPanels().then(cones => {
-            cones.forEach(cone => {
-                scene.add(cone);
-            });
-        });
-    }
-
-    private addTrees(scene: THREE.Scene) {
-
-        new THREE.ObjectLoader().load('/assets/tree.json', treeMesh => {
-            treeMesh.scale.set(this.scale, this.scale, this.scale);
-            this.trees.forEach(position => {
-                const tree = treeMesh.clone();
-                tree.position.set(position.x * this.scale, position.y * this.scale, position.z * this.scale);
-                tree.rotateY(Math.PI * 2 * Math.random());
-                scene.add(tree);
-            });
-        });
-    }
-
-    private generateTable(scene: THREE.Scene): THREE.Mesh[] {
         const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
         const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
         const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
         const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
-        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
-        const mapWidth = 2 * extreme;
+        this.mapWidth = 2 * Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
 
-        const pixelWidth = 256;
-        const dummyRGB = new Uint8Array(3 * pixelWidth * pixelWidth);
-        for (let i = 0; i < pixelWidth; i++) {
-            for (let j = 0; j < pixelWidth; j++) {
-                const height = this.heightAtPoint(
-                    j / pixelWidth * mapWidth - mapWidth / 2, -(i / pixelWidth * mapWidth - mapWidth / 2)
-                ) + 64;
+        this.addObjectsInScene(textureSky);
+        this.decorElementsService.placeDecor();
+        this.decorElementsService.placeTrees();
+    }
 
-                if (height > 64 && height < 76 && Math.random() < 0.1) {
-                    this.trees.push( new THREE.Vector3(
-                        j / pixelWidth * mapWidth - mapWidth / 2, height - 64, -(i / pixelWidth * mapWidth - mapWidth / 2)
-                    ));
-                }
+    private addObjectsInScene(textureSky: THREE.Texture) {
 
-                dummyRGB[3 * i * pixelWidth + 3 * j] =
-                dummyRGB[3 * i * pixelWidth + 3 * j + 1] =
-                dummyRGB[3 * i * pixelWidth + 3 * j + 2] =
-                height;
+        this.scene.add(this.generateTerrain());
+        this.scene.add(this.generateWater());
+        this.scene.add(this.generateRaceStartPlaid());
+
+        this.generateIntersections(textureSky).forEach(instersection => {
+            this.scene.add(instersection);
+        });
+
+        this.generateSegments(textureSky).forEach(instersection => {
+            this.scene.add(instersection);
+        });
+    }
+
+    private generateHeightMap(): THREE.DataTexture {
+        const imageBufferRGB = new Uint8Array(3 * heightMapPixelWidth * heightMapPixelWidth);
+
+        for (let i = 0; i < heightMapPixelWidth; i++) {
+            for (let j = 0; j < heightMapPixelWidth; j++) {
+
+                // Converts i and j pixel from height map to track absolute position
+                const x = j / heightMapPixelWidth * this.mapWidth - this.mapWidth / 2;
+                const z = -(i / heightMapPixelWidth * this.mapWidth - this.mapWidth / 2);
+
+                const height = this.heightAtPoint(x, z);
+                this.decorElementsService.addTree( x, height, z );
+
+                imageBufferRGB[(3 * i * heightMapPixelWidth) + (3 * j)] =      // Red
+                imageBufferRGB[(3 * i * heightMapPixelWidth) + (3 * j) + 1] =  // Green
+                imageBufferRGB[(3 * i * heightMapPixelWidth) + (3 * j) + 2] =  // Blue
+                height + trackHeight; // Because the height map only takes positive values
             }
         }
 
-        const bumpTexture = new THREE.DataTexture( dummyRGB, pixelWidth, pixelWidth, THREE.RGBFormat );
-        bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping;
-        bumpTexture.needsUpdate = true;
+        return new THREE.DataTexture( imageBufferRGB, heightMapPixelWidth, heightMapPixelWidth, THREE.RGBFormat );
+    }
 
-        const bumpScale   = 255 * this.scale;
+    private loadTexture(path: string): THREE.Texture {
+        const texture = THREE.ImageUtils.loadTexture( `${assetsPath}/${path}` );
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        return texture;
+    }
 
-        const oceanTexture = THREE.ImageUtils.loadTexture( 'assets/dirt-512.jpg' );
-        oceanTexture.wrapS = oceanTexture.wrapT = THREE.RepeatWrapping;
-
-        const sandyTexture = THREE.ImageUtils.loadTexture( 'assets/sand-512.jpg' );
-        sandyTexture.wrapS = sandyTexture.wrapT = THREE.RepeatWrapping;
-
-        const grassTexture = THREE.ImageUtils.loadTexture( 'assets/grass-512.jpg' );
-        grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
-
-        const rockyTexture = THREE.ImageUtils.loadTexture( 'assets/rock-512.jpg' );
-        rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping;
-
-        const snowyTexture = THREE.ImageUtils.loadTexture( 'assets/snow-512.jpg' );
-        snowyTexture.wrapS = snowyTexture.wrapT = THREE.RepeatWrapping;
+    private generateTerrain(): THREE.Mesh {
+        const heightMap = this.generateHeightMap();
+        heightMap.wrapS = heightMap.wrapT = THREE.RepeatWrapping;
+        heightMap.needsUpdate = true;
 
         const customUniforms = {
-            bumpTexture:	{ type: 't', value: bumpTexture },
-            bumpScale:	    { type: 'f', value: bumpScale },
-            oceanTexture:	{ type: 't', value: oceanTexture },
-            sandyTexture:	{ type: 't', value: sandyTexture },
-            grassTexture:	{ type: 't', value: grassTexture },
-            rockyTexture:	{ type: 't', value: rockyTexture },
-            snowyTexture:	{ type: 't', value: snowyTexture },
+            bumpTexture:	{ type: 't', value: heightMap },
+            bumpScale:	    { type: 'f', value: heightMapStrength * this.scale },
+            oceanTexture:	{ type: 't', value: this.loadTexture(oceanTexturePath) },
+            sandyTexture:	{ type: 't', value: this.loadTexture(sandyTexturePath) },
+            grassTexture:	{ type: 't', value: this.loadTexture(grassyTexturePath) },
+            rockyTexture:	{ type: 't', value: this.loadTexture(rockyTexturePath) },
+            snowyTexture:	{ type: 't', value: this.loadTexture(snowyTexturePath) },
         };
 
-        const customMaterial = new THREE.ShaderMaterial({
+        const terrainMaterial = new THREE.ShaderMaterial({
             uniforms: customUniforms,
             vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
             fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
         });
 
-        const planeGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, pixelWidth, pixelWidth );
-        const plane = new THREE.Mesh(	planeGeo, customMaterial );
-        plane.rotation.x = -Math.PI / 2;
-        plane.position.y = -64 * this.scale;
+        const terrainGeometry = new THREE.PlaneGeometry(
+            this.mapWidth * this.scale, this.mapWidth * this.scale, heightMapPixelWidth, heightMapPixelWidth);
+        const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
+        terrain.rotation.x = -Math.PI / 2;
+        terrain.position.y = -trackHeight * this.scale;
 
-        const waterGeo = new THREE.PlaneGeometry( mapWidth * this.scale, mapWidth * this.scale, 1, 1 );
-        const waterTex = THREE.ImageUtils.loadTexture( 'assets/water512.jpg' );
-        waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
-        waterTex.repeat.set( 5 , 5 );
-        const waterMat = new THREE.MeshBasicMaterial( {map: waterTex, transparent: true, opacity: 0.40} );
-        const water = new THREE.Mesh(	waterGeo, waterMat );
+        return terrain;
+
+    }
+
+    private generateWater(): THREE.Mesh {
+        const waterGeometry = new THREE.PlaneGeometry(this.mapWidth * this.scale, this.mapWidth * this.scale, 1, 1);
+        const waterTexture = this.loadTexture(waterTexturePath);
+        waterTexture.repeat.set( 20 , 20 );
+        const waterMat = new THREE.MeshBasicMaterial({map: waterTexture, transparent: true, opacity: 0.40});
+        const water = new THREE.Mesh(waterGeometry, waterMat);
         water.rotation.x = -Math.PI / 2;
         water.position.y = -5;
-
-        this.addTrees(scene);
-        return [plane, water];
+        return water;
 
     }
 
     private heightAtPoint(x: number, y: number) {
-        const availableRadius = this.availableRadius(new THREE.Vector2(x, y));
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) + 100;
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y)) - 100;
-        const extreme = Math.max(Math.abs(maximumX), Math.abs(minimumX), Math.abs(maximumY), Math.abs(minimumY));
-        return availableRadius < trackRadius / 2 ? 0 : ((this.heightMap[
-            Math.floor((x + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
-        ][
-            Math.floor((y + extreme) * Math.pow(2, this.heightMapSteps) / 2 / extreme)
-        ] - 64) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3));
+        const availableRadius = this.track.distanceToPoint(new THREE.Vector2(x, y), this.lineCalculationService);
+
+        // Converts the absolute scene cordinate to the height table coordinates
+        const heightTableX = Math.floor((x + this.mapWidth / 2) * Math.pow(2, this.heightMapSteps) / this.mapWidth);
+        const heightTableY = Math.floor((y + this.mapWidth / 2) * Math.pow(2, this.heightMapSteps) / this.mapWidth);
+
+        // The sigmoid function assures a smooth transition between the normal terrain height and the track
+        return availableRadius < trackRadius / 2 ? 0 : (
+            (this.heightTable[heightTableX][heightTableY] - trackHeight) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3)
+        );
     }
 
     private sigmoid(L: number, x: number) {
         return L / (1 + Math.pow(Math.E, x));
     }
 
-    private generateSegments(): THREE.Mesh[] {
-        const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
-
+    private generateSegments(textureSky): THREE.Mesh[] {
+        const material = new THREE.MeshStandardMaterial({color: trackColor, roughness: trackRoughness, envMap: textureSky});
         return this.track.trackIntersections.map((intersection, index, array) => {
-            const fromPosition = intersection;
-            const toPosition = array[index + 1 < array.length ? index + 1 : 0];
+            const segment = new THREE.Vector2().subVectors(array[index + 1 < array.length ? index + 1 : 0], intersection);
 
-            const geometry = new THREE.PlaneGeometry(
-                this.scale * this.getDistance(fromPosition, toPosition),
-                this.scale * trackRadius * 2
-            );
+            const geometry = new THREE.PlaneGeometry(this.scale * segment.length(), this.scale * trackRadius * 2);
             geometry.rotateX(Math.PI / -2);
 
             const segmentMesh = new THREE.Mesh(geometry, material);
-
-            segmentMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
-            segmentMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
-            segmentMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-            segmentMesh.position.y = 2;
-            segmentMesh.castShadow = true;
+            segmentMesh.rotateY(- Math.atan((segment.y) / (segment.x)));
+            segmentMesh.position.set(((segment.x / 2) + intersection.x) * this.scale, 2, ((segment.y / 2) + intersection.y) * this.scale);
             segmentMesh.receiveShadow = true;
             return segmentMesh;
         });
     }
 
-    private getDistance(fromPosition: THREE.Vector2, toPosition: THREE.Vector2) {
-        return Math.sqrt(Math.pow(fromPosition.x - toPosition.x, 2) + Math.pow(fromPosition.y - toPosition.y, 2));
-    }
+    private generateIntersections(textureSky): THREE.Mesh[] {
+        const intersectionGeometry = new THREE.CircleGeometry(this.scale * trackRadius, 32); // 32 is the resolution of the circle
+        intersectionGeometry.rotateX(Math.PI / -2);
+        const intersectionMaterial = new THREE.MeshStandardMaterial({color: trackColor, roughness: trackRoughness, envMap: textureSky});
+        const intersection = new THREE.Mesh(intersectionGeometry, intersectionMaterial);
+        intersection.receiveShadow = true;
 
-    private generateIntersections(): THREE.Mesh[] {
-        const geometry = new THREE.CircleGeometry(this.scale * trackRadius, 32);
-        geometry.rotateX(Math.PI / -2);
-        const material = new THREE.MeshStandardMaterial({color: 0x000000, metalness: 0, roughness: 0, envMap: this.textureSky});
-
-        return this.track.trackIntersections.map(intersection => {
-            const intersectionMesh = new THREE.Mesh(geometry, material);
-            intersectionMesh.position.x = intersection.x * this.scale;
-            intersectionMesh.position.z = intersection.y * this.scale;
-            intersectionMesh.position.y = 2;
-            intersectionMesh.castShadow = true;
-            intersectionMesh.receiveShadow = true;
-            return intersectionMesh;
+        return this.track.trackIntersections.map(intersectionPosition => {
+            const intersectionClone = intersection.clone();
+            intersectionClone.position.set(intersectionPosition.x * this.scale, 2, intersectionPosition.y * this.scale);
+            return intersectionClone;
         });
     }
 
     private generateRaceStartPlaid(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry(this.scale * trackRadius * 2 / 20 * 3, this.scale * trackRadius * 2);
-        geometry.rotateX(Math.PI / -2);
-        const texture = THREE.ImageUtils.loadTexture('assets/plaid_start_v2.jpg');
-        const material = new THREE.MeshStandardMaterial({map: texture, metalness: 0, roughness: 0, envMap: this.textureSky});
-        const plaidMesh = new THREE.Mesh(geometry, material);
+        const textureRatio = 20 / 3; // 3 / 20 is the texture ratio if the image
+        const plaidGeometry = new THREE.PlaneGeometry(this.scale * trackRadius * 2 / textureRatio, this.scale * trackRadius * 2);
+        plaidGeometry.rotateX(Math.PI / -2);
 
-        const fromPosition = this.track.trackIntersections[0];
-        const toPosition = this.track.trackIntersections[1];
-        plaidMesh.rotateY(- Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
-        plaidMesh.position.x = (((toPosition.x - fromPosition.x) / 2) + fromPosition.x) * this.scale;
-        plaidMesh.position.z = (((toPosition.y - fromPosition.y) / 2) + fromPosition.y) * this.scale;
-        plaidMesh.position.y = 3;
+        const plaidTexture = this.loadTexture(startPlaidPath);
+        const plaidMaterial = new THREE.MeshStandardMaterial({map: plaidTexture});
+        const plaidMesh = new THREE.Mesh(plaidGeometry, plaidMaterial);
 
+        const centerOfFirstSegment = this.track.centerOfFirstSegment();
+        plaidMesh.rotateY(centerOfFirstSegment.rotation);
+        plaidMesh.position.set(centerOfFirstSegment.position.x * this.scale, 3, centerOfFirstSegment.position.y * this.scale);
         return plaidMesh;
-    }
-
-    private generateCones(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(coneRadius * service.scale, coneRadius * service.scale, coneRadius * service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 10; i++) {
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(coneRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
-                    cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: coneRadius} );
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/cone.json', loadDone);
-        });
-
-        return loaderPromise;
-    }
-
-    private generateMichelElectionPanels(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 15; i++) {
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(votePanelRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
-                    cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/votonsmichel.json', loadDone);
-        });
-
-        return loaderPromise;
-    }
-
-    private generateDylanElectionPanels(): Promise<THREE.Mesh[]> {
-        const service = this;
-        const loaderPromise = new Promise<THREE.Mesh[]>(function(resolve, reject) {
-            function loadDone(cone) {
-                cone.scale.set(votePanelRadius * service.scale, votePanelRadius * service.scale, votePanelRadius * service.scale);
-                const cones: THREE.Mesh[] = [];
-                for (let i = 0; i < 15; i++) {
-                    const newCone = <THREE.Mesh> cone.clone();
-                    newCone.rotateY(Math.random() * Math.PI);
-                    const newPosition = service.getFreePropSpot(votePanelRadius);
-                    newCone.position.set(newPosition.x * service.scale, 0, newPosition.y * service.scale);
-                    cones.push(newCone);
-                    service.decorElements.push( {object: cone, radius: votePanelRadius} );
-                }
-                resolve(cones);
-            }
-
-            new THREE.ObjectLoader().load('/assets/votonsdylan.json', loadDone);
-        });
-
-        return loaderPromise;
-    }
-
-    private getFreePropSpot(requiredRadius: number) {
-        const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x));
-        const maximumY = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        const minimumY = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.y));
-        let point;
-        let x = 100;
-        do {
-            point = new THREE.Vector2(
-                minimumX + (Math.random() * (maximumX - minimumX)),
-                minimumY + (Math.random() * (maximumY - minimumY))
-            );
-            x--;
-        } while (this.availableRadius(point) - trackRadius < requiredRadius && x > 0);
-
-        return point;
-    }
-
-    private availableRadius(point: THREE.Vector2): number {
-        const minimumDistanceToTrack = Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
-            const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return this.distanceFromPointToLine(point, line) - trackRadius;
-        }));
-
-        const minimumDistanceToObject = Math.min.apply(null, this.decorElements.map( element => {
-            return this.distance(
-                new THREE.Vector2(
-                    element.object.position.x / this.scale,
-                    element.object.position.z / this.scale
-                ), point
-            ) - element.radius;
-        }));
-
-        return Math.min(minimumDistanceToObject, minimumDistanceToTrack);
-    }
-
-    private distanceFromPointToLine(point, line): number {
-        const optimalPoint = this.getNearestPointOnLine(point, line);
-
-        if (
-            Math.min(line.point1.x, line.point2.x) <= optimalPoint.x &&
-            Math.max(line.point1.x, line.point2.x) >= optimalPoint.x
-        ) {
-            return this.distance(point, optimalPoint);
-        } else {
-            return Math.min(this.distance(point, line.point1), this.distance(point, line.point2));
-        }
-    }
-
-    public distance(point1: { x: number, y: number }, point2: { x: number, y: number }): number {
-        return Math.sqrt(
-            Math.pow((point1.x - point2.x), 2) +
-            Math.pow((point1.y - point2.y), 2)
-        );
-    }
-
-    private getNearestPointOnLine(point, line) {
-        const lineParameters = this.getLineParameters(line);
-        const permenticularParameters = {
-            a: lineParameters.b,
-            b: -lineParameters.a,
-            c: -((lineParameters.b * point.x) + (-lineParameters.a * point.y))
-        };
-
-        return this.twoLineIntersection(lineParameters, permenticularParameters);
-    }
-
-    private getLineParameters(line): { a: number, b: number, c: number } {
-        const a = line.point1.y - line.point2.y;
-        const b = line.point2.x - line.point1.x;
-        const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);
-        return { a, b, c };
-    }
-
-    private twoLineIntersection(line1, line2): { x: number, y: number } {
-        if (line1.a === 0) {
-            const x = ((line1.c * line2.b) - (line1.b * line2.c)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return { x, y: this.solveLineEquationWithX(x, line1) };
-        } else {
-            const y = ((line1.a * line2.c) - (line1.c * line2.a)) / ((line1.b * line2.a) - (line1.a * line2.b));
-            return { x: this.solveLineEquationWithY(y, line1), y };
-        }
-    }
-
-    private solveLineEquationWithX(x, lineParameters): number {
-        return ((lineParameters.a * x) + lineParameters.c) / -lineParameters.b;
-    }
-
-    private solveLineEquationWithY(y, lineParameters): number {
-        return ((lineParameters.b * y) + lineParameters.c) / -lineParameters.a;
     }
 }
