@@ -87,7 +87,7 @@ export class RenderService {
         this.renderer.render(this.scene, this.camera);
     }
 
-    private newIntersection(position: THREE.Vector2) {
+    private newIntersection(position: THREE.Vector2): THREE.Mesh {
         const geometry = new THREE.CircleGeometry(10, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
         const point = new THREE.Mesh(geometry, material);
@@ -98,7 +98,7 @@ export class RenderService {
         return point;
     }
 
-    private newSegment() {
+    private newSegment(): THREE.Mesh {
         const geometry = new THREE.PlaneGeometry(0, 20);
         const material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
         const segment = new THREE.Mesh(geometry, material);
@@ -148,7 +148,7 @@ export class RenderService {
         });
     }
 
-    private getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3) {
+    private getXYDistance(vector1: THREE.Vector3, vector2: THREE.Vector3): number {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 

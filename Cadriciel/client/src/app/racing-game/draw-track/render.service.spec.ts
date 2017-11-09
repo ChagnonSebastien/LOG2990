@@ -10,7 +10,7 @@ const viewDepth = 10;
 
 let renderService: RenderService;
 
-describe('Draw Track Render', () => {
+fdescribe('Draw Track Render', () => {
 
       beforeEach(() => {
         TestBed.resetTestingModule();
@@ -24,4 +24,10 @@ describe('Draw Track Render', () => {
         expect(renderService).toBeDefined();
     });
 
+    it('Clear intersections, segments', () => {
+        renderService.clear();
+        expect(renderService['intersections']).toEqual([]);
+        expect(renderService['segments']).toEqual([]);
+        expect(renderService.trackClosed).toEqual(false);
+    });
 });
