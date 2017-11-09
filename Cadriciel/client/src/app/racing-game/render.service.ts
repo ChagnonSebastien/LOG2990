@@ -46,27 +46,13 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
-    private createScene() {
+    protected createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
         this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
-        const dirLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
-        dirLight.position.set( 200, 500, 100 );
-        dirLight.rotation.y = Math.PI / 4 ;
-        dirLight.rotation.x = Math.PI / 4 ;
-        dirLight.castShadow = true;
-        dirLight.shadow.camera.near = 1;
-        dirLight.shadow.camera.far = 1000;
-        dirLight.shadow.camera.right = 1000;
-        dirLight.shadow.camera.left = - 1000;
-        dirLight.shadow.camera.top	= 1000;
-        dirLight.shadow.camera.bottom = - 1000;
-        dirLight.shadow.mapSize.width = 2048;
-        dirLight.shadow.mapSize.height = 2048;
-        this.scene.add( dirLight );
     }
 
-    public createSkyBox() {
+    private createSkyBox() {
         const url = '../../assets/images/skybox/';
         const images = [url + 'xpos.png', url + 'xneg.png',
         url + 'ypos.png', url + 'yneg.png',
@@ -117,7 +103,7 @@ export class RenderService {
         this.stats.update();
     }
 
-    private initStats() {
+    protected initStats() {
         this.stats = new Stats();
         this.stats.dom.style.position = 'absolute';
         this.stats.dom.style.top = '64px';

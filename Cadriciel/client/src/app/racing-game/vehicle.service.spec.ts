@@ -13,15 +13,16 @@ const track = new Track('name', 'description', 'type', [
 
 describe('VehicleService', () => {
     beforeEach(() => {
+        TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [VehicleService, CommandsService]
         });
         vehicleService = TestBed.get(VehicleService);
     });
 
-    it('should be created', inject([VehicleService], (service: VehicleService) => {
-        expect(service).toBeTruthy();
-    }));
+    it('should be created', () => {
+        expect(vehicleService).toBeTruthy();
+    });
 
     it('Should initialize main 3D vehicle', (done) => {
         vehicleService.initializeMainVehicle(track, 1).then(function(data) {
