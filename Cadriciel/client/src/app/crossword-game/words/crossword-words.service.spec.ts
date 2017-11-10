@@ -35,13 +35,11 @@ describe('CrosswordWordsService', () => {
         const result = crosswordWordsService.hintExists('pouding');
         expect(result).toEqual(false);
     });
-    /*
-    public hintExists(word: string): boolean {
-        return this.wordMap.get(word) !== undefined;
-    }
 
-    public numberOfWords(): number {
-        return this.wordMap.size;
-    } */
-
+    it('returns the number of words', () => {
+        const word = new Word(0 , 0, 'cat', true);
+        crosswordWordsService.newGame([word]);
+        const number = crosswordWordsService.numberOfWords();
+        expect(number).toEqual(1);
+    });
 });
