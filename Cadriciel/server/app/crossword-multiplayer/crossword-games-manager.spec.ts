@@ -6,7 +6,7 @@ describe('Game Manager', () => {
     let createdGameId: string;
 
     it('Should create a game', (done) => {
-        crosswordGameManager.createGame('easy', 'dynamic', 'testUser', 'testSocketId').then(game =>{
+        crosswordGameManager.createGame('easy', 'dynamic', 'testUser', 'testSocketId').then(game => {
             expect(game.difficulty).to.equal('easy');
             expect(game.mode).to.equal('dynamic');
             expect(game.hostUsername).to.equal('testUser');
@@ -16,10 +16,22 @@ describe('Game Manager', () => {
         });
     });
 
+    it('Should be able to get available games info', () => {
+        expect(crosswordGameManager.getAvailableGames().length).to.equal(1);
+    });
+
     it('Should be able to join a game', () => {
         crosswordGameManager.joinGame(createdGameId, 'testUserOpponent', 'testSocketOpponent');
         expect(crosswordGameManager.getGame(createdGameId).challengerUsername).to.equal('testUserOpponent');
         expect(crosswordGameManager.findGameIdBySocketId('testSocketOpponent')).to.equal(createdGameId);
     });
 
+    it('Should be no available games after player 2 joins the created game', () => {
+        expect(crosswordGameManager.getAvailableGames().length).to.equal(0);
+    });
+
+    it('Should be able to delete a game', () => {
+        crosswordGameManager.deleteGame(createdGameId);
+        expect(crosswordGameManager.getGame(createdGameId)).to.be.undefined;
+    });
 });

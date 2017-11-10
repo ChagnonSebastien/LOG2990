@@ -2,14 +2,14 @@ import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 export class CrosswordGameManager {
-    private games: Array<MultiplayerCrosswordGame>;
+    private availableGames: Array<MultiplayerCrosswordGame>;
     private gamesMap: Map<string, MultiplayerCrosswordGame>;
     private socketsInGames: Map<string, string>;
     private idCounter: number;
     private serverCrosswords: ServerCrosswords;
 
     constructor() {
-        this.games = new Array<MultiplayerCrosswordGame>();
+        this.availableGames = new Array<MultiplayerCrosswordGame>();
         this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
         this.socketsInGames = new Map<string, string>();
         this.idCounter = 0;
@@ -17,8 +17,8 @@ export class CrosswordGameManager {
         this.serverCrosswords.setCollection('crosswords');
     }
 
-    public getGames() {
-        return this.games.map((game) => {
+    public getAvailableGames() {
+        return this.availableGames.map((game) => {
             return {
                 id: game.id,
                 difficulty: game.difficulty,
@@ -36,7 +36,7 @@ export class CrosswordGameManager {
             game = new MultiplayerCrosswordGame(
                 id, difficulty, mode, hostUsername, crossword
             );
-            this.games.push(game);
+            this.availableGames.push(game);
             this.gamesMap.set(game.id, game);
             this.socketsInGames.set(socketId, id);
         });
@@ -51,6 +51,7 @@ export class CrosswordGameManager {
         const game = this.getGame(gameId);
         game.challengerUsername = challengerUsername;
         this.socketsInGames.set(socketId, gameId);
+        this.deleteAvailableGame(game);
     }
 
     public findGameIdBySocketId(id: string): string {
@@ -63,5 +64,14 @@ export class CrosswordGameManager {
 
     private generateGameId(): string {
         return (this.idCounter++).toString();
+    }
+
+    private deleteAvailableGame(game: MultiplayerCrosswordGame): boolean {
+        const index = this.availableGames.indexOf(game);
+        if (index > -1) {
+            this.availableGames.splice(index, 1);
+            return true;
+        }
+        return false;
     }
 }

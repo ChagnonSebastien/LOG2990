@@ -26,7 +26,7 @@ export class SocketManager {
 
             socket.on('get games', () => {
                 console.log('SENT GAMES');
-                socket.emit('sent all games', this.gameManager.getGames());
+                socket.emit('sent all games', this.gameManager.getAvailableGames());
             });
 
             socket.on('join game', (gameId: string, challengerUsername: string) => {
