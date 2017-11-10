@@ -10,7 +10,7 @@
           <th></th>
         </tr>
         <tr *ngFor="let game of lobbyService.games">
-          <template [ngIf]="game.challengerUsername === ''">
+          <ng-template [ngIf]="game.challengerUsername === ''">
             <td> {{game.hostUsername}}</td>
             <td> {{game.difficulty}}</td>
             <td> {{game.mode}}</td>
@@ -20,7 +20,7 @@
                 Play
               </button>
             </td>
-          </template>
+          </ng-template>
         </tr>
       </tbody>
     </table>

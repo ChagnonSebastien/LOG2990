@@ -163,7 +163,6 @@ export class CrosswordMultiplayerService {
     }
 
     private handleOpponentLeft() {
-        console.log('reaching');
         this.opponentLeft.next(true);
     }
 }

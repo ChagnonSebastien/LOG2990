@@ -3,9 +3,14 @@ import * as THREE from 'three';
 
 const acceleration = 0.1;
 const rotationSpeed = Math.PI / 100;
+const maxSpeed = 35;
 
-enum MOVE_STATE { MOVE_FORWARD, BRAKE }
-enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
+const boosterObstacleDuration = 60 * 2;
+const puddleObstacleDuration = 45;
+const potholeObstacleDuration = 30;
+
+export enum MOVE_STATE { MOVE_FORWARD, BRAKE }
+export enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
 
 export abstract class Controller {
     public speed: number;
@@ -19,11 +24,33 @@ export abstract class Controller {
     constructor() {
         this.speed = 0;
         this.obstacleEffect = {type: null, timeLeft: 0};
+        this.moveState = MOVE_STATE.BRAKE;
+        this.turnState = TURN_STATE.DO_NOTHING;
+    }
+
+    public hitObstacle(type: ObstacleType) {
+        switch (type) {
+            case ObstacleType.Booster:
+            this.obstacleEffect = {type, timeLeft: boosterObstacleDuration};
+            break;
+            case ObstacleType.Pothole:
+            this.obstacleEffect = {type, timeLeft: potholeObstacleDuration};
+            break;
+            case ObstacleType.Puddle:
+            this.obstacleEffect = {type, timeLeft: puddleObstacleDuration};
+            break;
+        }
     }
 
     public move(vehicle: THREE.Mesh) {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
-            this.accelerate(vehicle);
+            if (this.obstacleEffect.timeLeft > 0 && (
+                this.obstacleEffect.type === ObstacleType.Puddle || this.obstacleEffect.type === ObstacleType.Pothole
+            )) {
+                this.brake(vehicle);
+            } else {
+                this.accelerate(vehicle);
+            }
         }
 
         if (this.moveState === MOVE_STATE.BRAKE) {
@@ -41,27 +68,49 @@ export abstract class Controller {
         if (this.turnState === TURN_STATE.DO_NOTHING) {
             // nothing
         }
-    }
 
-    public accelerate (object: THREE.Mesh) {
-        this.speed += acceleration;
-        object.translateZ(-this.speed);
-    }
-
-    public brake (object: THREE.Mesh) {
-        if (this.speed > 0) {
-            this.speed -= (acceleration * 1.5);
-            object.translateZ(-this.speed);
-        } else {
-            this.speed = 0;
+        if (this.obstacleEffect.timeLeft > 0) {
+            this.obstacleEffect.timeLeft--;
+            if (this.obstacleEffect.type === ObstacleType.Pothole) {
+                vehicle.position.y = 3 + Math.random() * 25;
+            }
+        } else  {
+            vehicle.position.y = 3;
         }
     }
 
-    public leftRotation(object: THREE.Mesh) {
-        object.rotation.y += rotationSpeed;
+    private accelerate (object: THREE.Mesh) {
+        this.speed = Math.min(maxSpeed, this.speed + acceleration);
+
+        const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
+        object.translateZ(-this.speed * speedModifier);
     }
 
-    public rightRotation(object: THREE.Mesh) {
-        object.rotation.y -= rotationSpeed;
+    private brake (object: THREE.Mesh) {
+        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster) {
+            // Do not change speed
+        } else if (this.speed > 0) {
+            const accelerationModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Pothole ? 5 : 1;
+            this.speed = Math.max(0, this.speed - acceleration * 1.5 * accelerationModifier);
+        }
+
+        const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
+        object.translateZ(-this.speed * speedModifier);
+    }
+
+    private leftRotation(object: THREE.Mesh) {
+        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
+            // Does nothing
+        } else {
+            object.rotation.y += rotationSpeed;
+        }
+    }
+
+    private rightRotation(object: THREE.Mesh) {
+        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
+            // Does nothing
+        } else {
+            object.rotation.y -= rotationSpeed;
+        }
     }
 }
