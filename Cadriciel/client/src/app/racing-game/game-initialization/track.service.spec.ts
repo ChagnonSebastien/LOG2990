@@ -56,4 +56,13 @@ describe('TrackService', () => {
         expect(result.name).toEqual('TokyoCircuit');
     }));
 
+    it('Returns all the names of the tracks stored in the database', fakeAsync(() => {
+        let result: Array<String>;
+        this.trackService.getAll().then((tracksNames: Array<String>) => result = tracksNames);
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            body: JSON.stringify(['TokyoCircuit', 'MontrealCircuit']),
+        })));
+        tick();
+        expect(result.length > 0);
+    }));
 });
