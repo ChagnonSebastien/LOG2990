@@ -31,12 +31,16 @@ export class CrosswordGridService {
         return this.wordFoundSubject.asObservable();
     }
 
-    public deselectWord(): void {
+    public deselectWord(): boolean {
+        if (this.grid === undefined) {
+            return false;
+        }
         for (const row of this.grid) {
             for (const square of row) {
                 square.selected = false;
             }
         }
+        return true;
     }
 
     public unselectWordOpponent(): void {
