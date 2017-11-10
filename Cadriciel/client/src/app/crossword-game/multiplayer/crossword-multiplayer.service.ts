@@ -99,6 +99,7 @@ export class CrosswordMultiplayerService {
     }
 
     public emitLeavingGame(): boolean {
+        this.playerService.isHost = false;
         if (this.socketService.socket.connected) {
             this.socketService.socket.emit('leaveGame');
             return true;
