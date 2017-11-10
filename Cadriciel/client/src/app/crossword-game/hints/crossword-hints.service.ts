@@ -42,7 +42,7 @@ export class CrosswordHintsService {
         return true;
     }
 
-    public unselectHint() {
+    public deselectHint() {
         this.selectedWord = undefined;
     }
 
@@ -52,8 +52,10 @@ export class CrosswordHintsService {
                 return hint.word === word;
             });
             if (foundHint !== undefined) {
-                this.unselectHint();
-                this.opponentSelectedWord = undefined;
+                this.deselectHint();
+                if (this.opponentSelectedWord === foundHint.word) {
+                    this.opponentSelectedWord = undefined;
+                }
                 foundHint.found = true;
                 return true;
             }
@@ -68,7 +70,7 @@ export class CrosswordHintsService {
             });
             if (foundHint !== undefined) {
                 if (this.selectedWord === word) {
-                    this.unselectHint();
+                    this.deselectHint();
                 }
                 this.opponentSelectedWord = undefined;
                 foundHint.opponentFound = true;

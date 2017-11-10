@@ -41,8 +41,9 @@ describe('UpdateTrack', () => {
             expect(newArray[0]).to.equal(2);
             expect(newArray[4]).to.equal(7);
         });
-        it('should insert 6 to index 4 in the array', () => {
+        it('should insert 6 to index 3 in the array', () => {
             const newArray = UpdateTrack.updateBestTimes(arrayBeyondFive, 6);
+            expect(newArray.length).to.equal(5);
             expect(newArray[3]).to.equal(6);
         });
     });

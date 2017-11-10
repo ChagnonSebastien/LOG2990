@@ -16,7 +16,7 @@ export class SocketManager {
             console.log('SOCKET CONNECTED', socket.id);
 
             socket.on('create game', (difficulty, mode, hostUsername) => {
-                this.gameManager.createGame(difficulty, mode, hostUsername)
+                this.gameManager.createGame(difficulty, mode, hostUsername, socket.id)
                     .then((game) => {
                         console.log('GAME CREATED');
                         socket.join(game.id);
@@ -31,16 +31,24 @@ export class SocketManager {
 
             socket.on('join game', (gameId: string, challengerUsername: string) => {
                 console.log(`${challengerUsername} has joined game ${gameId}`);
-                socket.join(gameId);
                 const game = this.gameManager.getGame(gameId);
-                game.challengerUsername = challengerUsername;
-                this.io.sockets.in(gameId).emit('game started', game);
-                if (game.mode === 'dynamic') {
-                    game.countdown.countdownAlerts().subscribe((count: number) => {
-                        this.io.sockets.in(gameId).emit('current countdown', count);
-                    });
-                    game.countdown.startCountdown();
+                if (game !== undefined) {
+                    socket.join(gameId);
+                    game.challengerUsername = challengerUsername;
+                    this.io.sockets.in(gameId).emit('game started', game);
+                    if (game.mode === 'dynamic') {
+                        game.countdown.countdownAlerts().subscribe((count: number) => {
+                            this.io.sockets.in(gameId).emit('current countdown', count);
+                        });
+                        game.countdown.startCountdown();
+                    }
                 }
+            });
+
+
+            socket.on('disconnect', () => {
+                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
+                this.io.sockets.in(room).emit('opponent left');
             });
 
             socket.on('selected hint', (hintSelection) => {

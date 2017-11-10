@@ -115,7 +115,7 @@ describe('#CrosswordHintsService', () => {
     describe('unselectHint()', () => {
         it('should unselect the hint', () => {
             hintsService.selectedWord = 'huh';
-            hintsService.unselectHint();
+            hintsService.deselectHint();
             expect(hintsService.selectedWord).toBeUndefined();
         });
     });
@@ -153,13 +153,24 @@ describe('#CrosswordHintsService', () => {
             expect(hintsService.selectedWord).toBeUndefined();
         });
 
-        it('should unselect the opponent hint when it is marked as found', async () => {
+        it('should unselect the opponent hint when it is marked as found if the opponent was selecting it', async () => {
             await hintsService.newGame(wordsWithIndex);
             hintsService['wordsService'].newGame(wordsWithIndex);
             hintsService.selectedWord = 'huh';
+            hintsService.opponentSelectedWord = 'huh';
             expect(hintsService.markHintAsFound('huh')).toBeTruthy();
             expect(hintsService.hints[0].found).toBeTruthy();
             expect(hintsService.opponentSelectedWord).toBeUndefined();
+        });
+
+        it('should not unselect the opponent hint when it is marked as found if the opponent was not selecting it', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            hintsService.opponentSelectedWord = 'aloud';
+            expect(hintsService.markHintAsFound('huh')).toBeTruthy();
+            expect(hintsService.hints[0].found).toBeTruthy();
+            expect(hintsService.opponentSelectedWord).toEqual('aloud');
         });
     });
 

@@ -9,15 +9,18 @@
           <th>Mode</th>
           <th></th>
         </tr>
-        <tr *ngFor="let game of multiplayerService.games">
-          <td> {{game.hostUsername}}</td>
-          <td> {{game.difficulty}}</td>
-          <td> {{game.mode}}</td>
-          <td>
-            <button (click)="multiplayerService.joinGame(game.id); copyJoinedGameConfiguration(game.difficulty, game.mode)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }" [disabled]="game.challengerUsername !== '' || playerService.username === ''">
-              Play
-            </button>
-          </td>
+        <tr *ngFor="let game of lobbyService.games">
+          <template [ngIf]="game.challengerUsername === ''">
+            <td> {{game.hostUsername}}</td>
+            <td> {{game.difficulty}}</td>
+            <td> {{game.mode}}</td>
+            <td>
+              <button (click)="lobbyService.joinGame(game.id); copyJoinedGameConfiguration(game.difficulty, game.mode)" class="btn" [ngClass]="{ 'btn-success' : game.challengerUsername === '' }"
+                [disabled]="!lobbyService.canJoinGame(game.id)">
+                Play
+              </button>
+            </td>
+          </template>
         </tr>
       </tbody>
     </table>

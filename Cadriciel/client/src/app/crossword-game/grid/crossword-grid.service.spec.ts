@@ -131,7 +131,7 @@ describe('#CrosswordGridService', () => {
             gridService.grid[0][8].selected = true;
             gridService.grid[0][9].selected = true;
 
-            gridService.unselectWord();
+            gridService.deselectWord();
 
             expect(gridService.grid[0][7].selected).toBeFalsy();
             expect(gridService.grid[0][8].selected).toBeFalsy();

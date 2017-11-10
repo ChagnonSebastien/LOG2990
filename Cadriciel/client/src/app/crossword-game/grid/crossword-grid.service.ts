@@ -31,7 +31,7 @@ export class CrosswordGridService {
         return this.wordFoundSubject.asObservable();
     }
 
-    public unselectWord(): void {
+    public deselectWord(): void {
         for (const row of this.grid) {
             for (const square of row) {
                 square.selected = false;
@@ -115,7 +115,7 @@ export class CrosswordGridService {
 
     private markWordAsFound(word: Word): void {
         WordUtilities.forEachLetter(word, this.markSquareAsFound.bind(this));
-        this.unselectWord();
+        this.deselectWord();
     }
 
     private initializeGrid(grid: string[][]): boolean {

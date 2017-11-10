@@ -19,4 +19,8 @@ describe('#CrosswordPlayerService', () => {
     it('should have no username at initialization', () => {
         expect(playerService.username).toEqual('');
     });
+
+    it('should not be a host at initialization', () => {
+        expect(playerService.isHost).toBeFalsy();
+    });
 });
