@@ -45,6 +45,7 @@ export class CrosswordGameManagerService {
         this.listenForCheatModeCountdownChanges();
         this.listenForOpponentDeselectedAll();
         this.listenForGameCompletion();
+        this.listenForOpponentLeft();
         this.listenForServerClock();
     }
 
@@ -189,6 +190,14 @@ export class CrosswordGameManagerService {
                     this.hintsService.opponentSelectedWord = undefined;
                     this.gridService.unselectWordOpponent();
                 }
+            });
+    }
+
+    private listenForOpponentLeft() {
+        this.multiplayerService.opponentLeftAlerts()
+            .subscribe((left) => {
+                alert('Your opponent left the game');
+                this.endGame();
             });
     }
 
