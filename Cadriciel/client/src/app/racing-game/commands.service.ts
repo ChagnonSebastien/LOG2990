@@ -9,7 +9,7 @@ export class CommandsService {
     private subjectEventKeyDown = new Subject();
     private subjectEventKeyUp = new Subject();
 
-    public sendKeyDownEvent(event: any) {
+    public sendKeyDownEvent(event) {
             this.subjectEventKeyDown.next(event);
     }
 
@@ -17,7 +17,7 @@ export class CommandsService {
         return this.subjectEventKeyDown.asObservable();
     }
 
-    public sentKeyUpEvent(event: any) {
+    public sentKeyUpEvent(event) {
         this.subjectEventKeyUp.next(event);
     }
 

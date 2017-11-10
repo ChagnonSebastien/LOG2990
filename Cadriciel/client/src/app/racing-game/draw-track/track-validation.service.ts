@@ -8,9 +8,14 @@ export class TrackValidationService {
         intersectionAngl: number,
         segmentLength: number,
         segmentIntersections: number[]
-    }[] = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
+    }[];
 
-    private trackClosed = false;
+    private trackClosed: boolean;
+
+    constructor() {
+        this.trackElements = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
+        this.trackClosed = false;
+    }
 
     public addIntersection(intersection: THREE.Vector2) {
         this.trackElements.push(
@@ -295,7 +300,7 @@ export class TrackValidationService {
         return (line.point2.x - line.point1.x >= 0) ? rawAngle : rawAngle + Math.PI;
     }
 
-    public isValid(index: number) {
+    public isValid(index: number): boolean {
         return (
             this.isLengthValid(index) &&
             this.isSegmentsIntersectionValid(index) &&
@@ -304,20 +309,20 @@ export class TrackValidationService {
         );
     }
 
-    private isLengthValid(index: number) {
+    private isLengthValid(index: number): boolean {
         return this.trackElements[index].segmentLength >= 40;
     }
 
-    private isSegmentsIntersectionValid(index: number) {
+    private isSegmentsIntersectionValid(index: number): boolean {
         return this.trackElements[index].segmentIntersections.length === 0;
     }
 
-    private isFirstAngleValid(index: number) {
+    private isFirstAngleValid(index: number): boolean {
         return Math.abs(this.trackElements[index].intersectionAngl) <= 3 * Math.PI / 4 ||
             this.trackElements[index].intersectionAngl >= 5 * Math.PI / 4;
     }
 
-    private isSecondAngleValid(index: number) {
+    private isSecondAngleValid(index: number): boolean {
         let nextSegment = index + 1 < this.trackElements.length ? index + 1 : 0;
         if (!this.trackClosed && index === this.trackElements.length - 2) {
             if (this.trackElements[index + 1].segmentLength >= 25) {
@@ -330,7 +335,7 @@ export class TrackValidationService {
             this.trackElements[nextSegment].intersectionAngl >= 5 * Math.PI / 4;
     }
 
-    public isAllValid() {
+    public isAllValid(): boolean {
         let valid = true;
         for ( let i = 0; i < this.trackElements.length; i++ ) {
             valid = valid && this.isValid(i);

@@ -46,7 +46,7 @@ export class Track {
         }));
     }
 
-    public centerOfFirstSegment(): {position: THREE.Vector2, rotation: number} {
+    public centerOfFirstSegment(): { position: THREE.Vector2, rotation: number } {
         const segment = new THREE.Vector2().subVectors(this.trackIntersections[1], this.trackIntersections[0]);
         const position = new THREE.Vector2((segment.x / 2) + this.trackIntersections[0].x, (segment.y / 2) + this.trackIntersections[0].y);
         const rotation = - Math.atan((segment.y) / (segment.x));

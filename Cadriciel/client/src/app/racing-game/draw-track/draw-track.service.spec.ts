@@ -342,11 +342,6 @@ describe('DrawTrackService', function () {
         }));
     });
 
-    it('onResize() should pass call the RenderService', fakeAsync(() => {
-        drawTrackService.onResize();
-        expect(drawTrackService.onResize()).toBeTruthy();
-    }));
-
     describe('clear()', function () {
 
         beforeAll(() => {
