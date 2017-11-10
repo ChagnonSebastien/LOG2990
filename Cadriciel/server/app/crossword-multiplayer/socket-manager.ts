@@ -14,18 +14,15 @@ export class SocketManager {
     public handleSocketRequests(): void {
         this.io.on('connect', (socket) => {
             console.log('SOCKET CONNECTED', socket.id);
-
             socket.on('create game', (difficulty, mode, hostUsername) => {
                 this.gameManager.createGame(difficulty, mode, hostUsername, socket.id)
                     .then((game) => {
-                        console.log('GAME CREATED');
                         socket.join(game.id);
                         this.io.sockets.in(game.id).emit('game created', game.id);
                     });
             });
 
             socket.on('get games', () => {
-                console.log('SENT GAMES');
                 socket.emit('sent all games', this.gameManager.getAvailableGames());
             });
 
