@@ -9,8 +9,8 @@ const boosterObstacleDuration = 60 * 2;
 const puddleObstacleDuration = 45;
 const potholeObstacleDuration = 30;
 
-enum MOVE_STATE { MOVE_FORWARD, BRAKE }
-enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
+export enum MOVE_STATE { MOVE_FORWARD, BRAKE }
+export enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
 
 export abstract class Controller {
     public speed: number;
@@ -24,6 +24,8 @@ export abstract class Controller {
     constructor() {
         this.speed = 0;
         this.obstacleEffect = {type: null, timeLeft: 0};
+        this.moveState = MOVE_STATE.BRAKE;
+        this.turnState = TURN_STATE.DO_NOTHING;
     }
 
     public hitObstacle(type: ObstacleType) {
@@ -77,14 +79,14 @@ export abstract class Controller {
         }
     }
 
-    public accelerate (object: THREE.Mesh) {
+    private accelerate (object: THREE.Mesh) {
         this.speed = Math.min(maxSpeed, this.speed + acceleration);
 
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
         object.translateZ(-this.speed * speedModifier);
     }
 
-    public brake (object: THREE.Mesh) {
+    private brake (object: THREE.Mesh) {
         if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster) {
             // Do not change speed
         } else if (this.speed > 0) {
@@ -96,7 +98,7 @@ export abstract class Controller {
         object.translateZ(-this.speed * speedModifier);
     }
 
-    public leftRotation(object: THREE.Mesh) {
+    private leftRotation(object: THREE.Mesh) {
         if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
             // Does nothing
         } else {
@@ -104,7 +106,7 @@ export abstract class Controller {
         }
     }
 
-    public rightRotation(object: THREE.Mesh) {
+    private rightRotation(object: THREE.Mesh) {
         if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
             // Does nothing
         } else {
