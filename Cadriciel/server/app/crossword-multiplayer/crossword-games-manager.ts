@@ -57,6 +57,10 @@ export class CrosswordGameManager {
         return this.socketsInGames.get(id);
     }
 
+    public deleteGame(id: string) {
+        this.gamesMap.delete(id);
+    }
+
     private generateGameId(): string {
         return (this.idCounter++).toString();
     }
