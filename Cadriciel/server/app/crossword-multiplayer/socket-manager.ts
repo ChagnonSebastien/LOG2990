@@ -16,7 +16,7 @@ export class SocketManager {
             console.log('SOCKET CONNECTED', socket.id);
 
             socket.on('create game', (difficulty, mode, hostUsername) => {
-                this.gameManager.createGame(difficulty, mode, hostUsername)
+                this.gameManager.createGame(difficulty, mode, hostUsername, socket.id)
                     .then((game) => {
                         console.log('GAME CREATED');
                         socket.join(game.id);
@@ -33,7 +33,7 @@ export class SocketManager {
                 console.log(`${challengerUsername} has joined game ${gameId}`);
                 socket.join(gameId);
                 const game = this.gameManager.getGame(gameId);
-                this.gameManager.joinGame(gameId, challengerUsername);
+                this.gameManager.joinGame(gameId, challengerUsername, socket.id);
                 this.io.sockets.in(gameId).emit('game started', game);
                 if (game.mode === 'dynamic') {
                     game.countdown.countdownAlerts().subscribe((count: number) => {
@@ -41,6 +41,12 @@ export class SocketManager {
                     });
                     game.countdown.startCountdown();
                 }
+            });
+
+
+            socket.on('disconnect', () => {
+                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
+                this.io.sockets.in(room).emit('opponent left');
             });
 
             socket.on('selected hint', (hintSelection) => {

@@ -4,12 +4,14 @@ import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 export class CrosswordGameManager {
     private games: Array<MultiplayerCrosswordGame>;
     private gamesMap: Map<string, MultiplayerCrosswordGame>;
+    private socketsInGames: Map<string, string>;
     private idCounter: number;
     private serverCrosswords: ServerCrosswords;
 
     constructor() {
         this.games = new Array<MultiplayerCrosswordGame>();
         this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
+        this.socketsInGames = new Map<string, string>();
         this.idCounter = 0;
         this.serverCrosswords = ServerCrosswords.getInstance();
         this.serverCrosswords.setCollection('crosswords');
@@ -27,14 +29,16 @@ export class CrosswordGameManager {
         });
     }
 
-    public async createGame(difficulty: string, mode: string, hostUsername: string): Promise<MultiplayerCrosswordGame> {
+    public async createGame(difficulty: string, mode: string, hostUsername: string, socketId: string): Promise<MultiplayerCrosswordGame> {
         let game: MultiplayerCrosswordGame;
+        const id: string = this.generateGameId();
         await this.serverCrosswords.getCrossword(difficulty).then((crossword) => {
             game = new MultiplayerCrosswordGame(
-                this.generateGameId(), difficulty, mode, hostUsername, crossword
+                id, difficulty, mode, hostUsername, crossword
             );
             this.games.push(game);
             this.gamesMap.set(game.id, game);
+            this.socketsInGames.set(socketId, id);
         });
         return game;
     }
@@ -43,28 +47,15 @@ export class CrosswordGameManager {
         return this.gamesMap.get(id);
     }
 
-    public joinGame(gameId: string, challengerUsername: string): void {
+    public joinGame(gameId: string, challengerUsername: string, socketId: string): void {
         const game = this.getGame(gameId);
         game.challengerUsername = challengerUsername;
-    }
-
-   /* public findGameById(id: string): MultiplayerCrosswordGame {
-        for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].id === id) {
-                return this.games[i];
-            }
-        }
-        return null;
+        this.socketsInGames.set(socketId, gameId);
     }
 
     public findGameIdBySocketId(id: string): string {
-        for (let i = 0; i < this.games.length; i++) {
-            if (this.games[i].player1.socketID === id || this.games[i].player2.socketID === id) {
-                return this.games[i].id;
-            }
-        }
-        return '-1';
-    }*/
+        return this.socketsInGames.get(id);
+    }
 
     private generateGameId(): string {
         return (this.idCounter++).toString();
