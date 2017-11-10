@@ -164,6 +164,7 @@ export class CrosswordMultiplayerService {
     }
 
     private handleOpponentLeft() {
+        this.playerService.isHost = false;
         this.opponentLeft.next(true);
     }
 }
