@@ -22,4 +22,15 @@ describe('CrosswordWordsService', () => {
         expect(crosswordWordsService['wordMap'].get('cat')).toEqual(word);
     });
 
+    it('Returns the Word object according to word', () => {
+        const word = new Word(0 , 0, 'cat', true);
+        crosswordWordsService.newGame([word]);
+        const wordResult = crosswordWordsService.getWordWithIndex('cat');
+        expect(wordResult).toEqual(word);
+    });
+    /*
+        public getWordWithIndex(word: string): Word {
+        return this.wordMap.get(word);
+    } */
+
 });
