@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import * as path from 'path';
 import * as mongodb from 'mongodb';
 
 const db = require('./db-connection');
