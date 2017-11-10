@@ -34,4 +34,35 @@ describe('TrackService', () => {
         tick();
         expect(result).toBe('connectionError');
     }));
+
+    it('should save track', fakeAsync(() => {
+        track = new Track('name', 'dest', 'easy', [], [], [], [] );
+        let result: String;
+        this.trackService.save(track).then((saved: String) => result = saved);
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            body: JSON.stringify({ data: 'success' }),
+        })));
+        tick();
+        expect(result).toBe('success');
+    }));
+
+    it('Return a track with the specified name', fakeAsync(() => {
+        let result: Track;
+        this.trackService.get('TokyoCircuit').then((returnedTrack: Track) => result = returnedTrack);
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            body: JSON.stringify(new Track('TokyoCircuit', 'desc', 'easy', [], [], [], [])),
+        })));
+        tick();
+        expect(result.name).toEqual('TokyoCircuit');
+    }));
+
+    it('Returns all the names of the tracks stored in the database', fakeAsync(() => {
+        let result: Array<String>;
+        this.trackService.getAll().then((tracksNames: Array<String>) => result = tracksNames);
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            body: JSON.stringify(['TokyoCircuit', 'MontrealCircuit']),
+        })));
+        tick();
+        expect(result.length > 0);
+    }));
 });

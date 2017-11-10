@@ -21,7 +21,7 @@ export class Vehicle {
 
     private scale: number;
 
-    private activeObstacleModifier: {type: ObstacleType, index: number};
+    private lastObstacleHit: {type: ObstacleType, index: number};
 
     constructor(private obstacleService: ObstacleService) {
     }
@@ -57,30 +57,31 @@ export class Vehicle {
         );
     }
 
-        private isColliding(type: ObstacleType, distance: number, index: number) {
-            if (this.activeObstacleModifier !== undefined) {
-                if (this.activeObstacleModifier.type === type && this.activeObstacleModifier.index === index) {
-                    return;
-                }
-            }
-            if (distance < type * this.scale) {
-                this.activeObstacleModifier = {type: type, index: index};
+    private isColliding(type: ObstacleType, distance: number, index: number) {
+        if (this.lastObstacleHit !== undefined) {
+            if (this.lastObstacleHit.type === type && this.lastObstacleHit.index === index) {
+                return;
             }
         }
+        if (distance < type * this.scale) {
+            this.lastObstacleHit = {type: type, index: index};
+            this.controler.hitObstacle(type);
+        }
+    }
 
-        public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
-            this.scale = scale;
-            this.controler = controller;
-            const loader = new THREE.ObjectLoader();
-            const trackCenter = this.getCenterOfTrack(track);
-            const trackAngle = this.getTrackAngle(track);
-            const beta = this.calculateBeta(carPosition, trackAngle);
-            return new Promise<Vehicle>(resolve => {
-                loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
-                    this.vehicle = <THREE.Mesh>object;
-                    this.vehicle.rotateY(trackAngle);
-                    this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
-                    this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
+    public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
+        this.scale = scale;
+        this.controler = controller;
+        const loader = new THREE.ObjectLoader();
+        const trackCenter = this.getCenterOfTrack(track);
+        const trackAngle = this.getTrackAngle(track);
+        const beta = this.calculateBeta(carPosition, trackAngle);
+        return new Promise<Vehicle>(resolve => {
+            loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+                this.vehicle = <THREE.Mesh>object;
+                this.vehicle.rotateY(trackAngle);
+                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
+                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.y = 3;
                 this.vehicle.scale.set(scale, scale, scale);
                 this.vehicle.castShadow = true;

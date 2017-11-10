@@ -18,7 +18,7 @@ export class HumanController extends Controller {
         });
     }
 
-    public moveVehicle(event) {
+    private moveVehicle(event) {
         if (event.keyCode === 87) {
             this.moveState = MOVE_STATE.MOVE_FORWARD;
         }
@@ -30,7 +30,7 @@ export class HumanController extends Controller {
         }
     }
 
-    public stopVehicle(event) {
+    private stopVehicle(event) {
         if (event.keyCode === 87) {
             this.moveState = MOVE_STATE.BRAKE;
         }
