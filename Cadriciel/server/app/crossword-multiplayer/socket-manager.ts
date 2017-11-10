@@ -16,7 +16,7 @@ export class SocketManager {
             console.log('SOCKET CONNECTED', socket.id);
 
             socket.on('create game', (difficulty, mode, hostUsername) => {
-                this.gameManager.createGame(difficulty, mode, hostUsername)
+                this.gameManager.createGame(difficulty, mode, hostUsername, socket.id)
                     .then((game) => {
                         console.log('GAME CREATED');
                         socket.join(game.id);
@@ -43,6 +43,12 @@ export class SocketManager {
                         game.countdown.startCountdown();
                     }
                 }
+            });
+
+
+            socket.on('disconnect', () => {
+                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
+                this.io.sockets.in(room).emit('opponent left');
             });
 
             socket.on('selected hint', (hintSelection) => {
