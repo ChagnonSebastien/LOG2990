@@ -26,6 +26,20 @@ describe('#CrosswordMultiplayerService', () => {
         expect(multiplayerService).toBeDefined();
     });
 
+    describe('createGame()', () => {
+        it('should create a new multiplayer game if you are not already a host of another one', () => {
+            // disable sending to real server
+            multiplayerService['socketService'].socket.disconnect();
+            expect(multiplayerService.createGame('easy', 'classic')).toBeTruthy();
+        });
+
+        it('should not create a new multiplayer game if you are already a host', () => {
+            multiplayerService['socketService'].socket.disconnect();
+            expect(multiplayerService.createGame('easy', 'classic')).toBeTruthy();
+            expect(multiplayerService.createGame('easy', 'classic')).toBeFalsy();
+        });
+    });
+
     describe('gameStartAlerts()', () => {
         it('should provide an observable that alerts when a multiplayer game starts', (done) => {
             multiplayerService.gameStartAlerts()

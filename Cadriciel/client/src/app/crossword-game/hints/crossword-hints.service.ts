@@ -42,8 +42,9 @@ export class CrosswordHintsService {
         return true;
     }
 
-    public deselectHint() {
+    public deselectHint(): boolean {
         this.selectedWord = undefined;
+        return true;
     }
 
     public markHintAsFound(word: string): boolean {
