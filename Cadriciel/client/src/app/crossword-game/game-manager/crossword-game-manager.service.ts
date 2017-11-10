@@ -187,7 +187,7 @@ export class CrosswordGameManagerService {
             });
     }
 
-    private listenForOpponentLeft() {
+    private listenForOpponentLeft(): void {
         this.multiplayerService.opponentLeftAlerts()
             .subscribe((left) => {
                 alert('Your opponent left the game');
