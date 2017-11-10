@@ -72,11 +72,11 @@ export class CrosswordGameManagerService {
         this.countdownService.newGame();
     }
 
-    public unselectAll() {
+    public deselectAll() {
         if (this.gameInProgress) {
-            this.hintsService.unselectHint();
-            this.gridService.unselectWord();
-            this.multiplayerService.emitUnselectAll();
+            this.hintsService.deselectHint();
+            this.gridService.deselectWord();
+            this.multiplayerService.emitDeselectAll();
         }
     }
 
@@ -110,7 +110,7 @@ export class CrosswordGameManagerService {
                     this.multiplayerService.emitSelectHint(hintSelection);
                 }
 
-                this.gridService.unselectWord();
+                this.gridService.deselectWord();
                 this.gridService.selectWord(hintSelection.current);
             });
     }
@@ -183,7 +183,7 @@ export class CrosswordGameManagerService {
     }
 
     private listenForOpponentDeselectedAll() {
-        this.multiplayerService.opponentUnselectedAllAlerts()
+        this.multiplayerService.opponentDeselectedAllAlerts()
             .subscribe((unselect) => {
                 if (this.gameInProgress) {
                     this.hintsService.opponentSelectedWord = undefined;

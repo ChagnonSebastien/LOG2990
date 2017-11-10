@@ -115,7 +115,7 @@ describe('#CrosswordHintsService', () => {
     describe('unselectHint()', () => {
         it('should unselect the hint', () => {
             hintsService.selectedWord = 'huh';
-            hintsService.unselectHint();
+            hintsService.deselectHint();
             expect(hintsService.selectedWord).toBeUndefined();
         });
     });
