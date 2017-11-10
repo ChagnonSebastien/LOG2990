@@ -8,7 +8,7 @@ const collection = 'crosswords';
 export class CrosswordService {
     constructor(private http: Http) { }
 
-    public getCrossword(level: string) {
+    public getCrossword(level: string): Promise<any> {
         return this.http.get(`${apiUrl}/${collection}/${level}`)
             .toPromise()
             .then(crossword => crossword.json());
