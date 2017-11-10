@@ -58,6 +58,7 @@ export class CrosswordGameManagerService {
     public endGame() {
         this.gameInProgress = false;
         this.gameCompleted = false;
+        this.multiplayerService.emitLeavingGame();
     }
 
     public async newMultiplayerGame(level: string, mode: string) {

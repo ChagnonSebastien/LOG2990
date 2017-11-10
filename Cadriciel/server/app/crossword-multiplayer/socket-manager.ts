@@ -47,8 +47,8 @@ export class SocketManager {
 
 
             socket.on('disconnect', () => {
-                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
-                this.io.sockets.in(room).emit('opponent left');
+                const roomId: string = this.gameManager.findGameIdBySocketId(socket.id);
+                this.io.sockets.in(roomId).emit('opponent left');
             });
 
             socket.on('selected hint', (hintSelection) => {
@@ -88,6 +88,13 @@ export class SocketManager {
                 }
             });
 
+            socket.on('leaveGame', () => {
+                const roomId: string = this.gameManager.findGameIdBySocketId(socket.id);
+                socket.leave(roomId);
+                this.io.sockets.in(roomId).emit('opponent left');
+                this.gameManager.deleteGame(roomId);
+            });
+
             socket.on('new countdown', (newCountdown: number) => {
                 for (const roomId in socket.rooms) {
                     if (socket.rooms.hasOwnProperty(roomId)) {
@@ -101,24 +108,6 @@ export class SocketManager {
                     }
                 }
             });
-
-            /*socket.on('joinGame', (gameId: string, player: Player) => {
-                socket.join(gameId);
-                this.io.sockets.in(gameId).emit('player 2 joined', this.gameManager.joinGame(gameId, player));
-            });
-
-            socket.on('disconnect', () => {
-                // socket.broadcast.to(socket.rooms[0]).emit('opponent left');
-                const room: string = this.gameManager.findGameIdBySocketId(socket.id);
-                this.io.sockets.in(room).emit('opponent left');
-            });
-
-            socket.on('found a word', () => {
-                // send found word
-            });
-            socket.on('selected a hint', () => {
-                // send foud hint
-            });*/
 
         });
 

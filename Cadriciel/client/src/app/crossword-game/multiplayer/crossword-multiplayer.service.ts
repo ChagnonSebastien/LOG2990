@@ -98,6 +98,14 @@ export class CrosswordMultiplayerService {
         return false;
     }
 
+    public emitLeavingGame(): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit('leaveGame');
+            return true;
+        }
+        return false;
+    }
+
     public emitSelectHint(
         hintSelection: { 'previous': string, 'current': Word }
     ): boolean {
