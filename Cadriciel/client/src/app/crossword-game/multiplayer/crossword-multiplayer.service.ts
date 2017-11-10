@@ -5,38 +5,62 @@ import { Subject } from 'rxjs/Subject';
 import { CrosswordSocketService } from '../socket/crossword-socket.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
 
-import { CrosswordGameInfo } from '../../../../../commun/crossword/crossword-game-info';
 import { Word } from '../../../../../commun/word';
+import { MultiplayerCrosswordGame } from '../../../../../commun/crossword/multiplayer-crossword-game';
 
 @Injectable()
 export class CrosswordMultiplayerService {
-    public games: Array<CrosswordGameInfo>;
     private gameStartSubject: Subject<any>;
     private opponentHintSelection: Subject<any>;
     private opponentFoundWord: Subject<any>;
-    private opponentUnselection: Subject<any>;
+    private opponentDeselection: Subject<any>;
+    private serverClock: Subject<number>;
     private opponentLeft: Subject<any>;
-    private serverClock: Subject<any>;
+    public listeningOnSockets: boolean;
 
     constructor(
         private socketService: CrosswordSocketService,
         private playerService: CrosswordPlayerService
     ) {
+        this.initializeObservableSubjects();
+        this.listenToSocketRequests();
+    }
+
+    private initializeObservableSubjects(): void {
         this.gameStartSubject = new Subject();
         this.opponentHintSelection = new Subject();
         this.opponentFoundWord = new Subject();
-        this.opponentUnselection = new Subject();
-        this.opponentLeft = new Subject();
+        this.opponentDeselection = new Subject();
         this.serverClock = new Subject();
-        this.getGames();
-        setInterval(this.getGames.bind(this), 1000);
-        this.listenForActiveGames();
-        this.listenForGameStart();
-        this.listenForOpponentHintSelections();
-        this.listenForOpponentFoundWords();
-        this.listenForOpponentUnselectAll();
-        this.listenForOpponentLeft();
-        this.listenForServerCountdown();
+        this.opponentLeft = new Subject();
+    }
+
+    private listenToSocketRequests(): void {
+        this.socketService.socket.on(
+            'game started',
+            this.handleGameStart.bind(this)
+        );
+        this.socketService.socket.on(
+            'opponent selected a hint',
+            this.handleOpponentHintSelection.bind(this)
+        );
+        this.socketService.socket.on(
+            'opponent found a word',
+            this.handleOpponentFoundWord.bind(this)
+        );
+        this.socketService.socket.on(
+            'opponent unselected all',
+            this.handleOpponentDeselectAll.bind(this)
+        );
+        this.socketService.socket.on(
+            'current countdown',
+            this.handleServerCountdown.bind(this)
+        );
+        this.socketService.socket.on(
+            'opponent left',
+            this.handleOpponentLeft.bind(this)
+        );
+        this.listeningOnSockets = true;
     }
 
     public gameStartAlerts(): Observable<any> {
@@ -51,8 +75,8 @@ export class CrosswordMultiplayerService {
         return this.opponentFoundWord.asObservable();
     }
 
-    public opponentUnselectedAllAlerts(): Observable<any> {
-        return this.opponentUnselection.asObservable();
+    public opponentDeselectedAllAlerts(): Observable<any> {
+        return this.opponentDeselection.asObservable();
     }
 
     public opponentLeftAlerts(): Observable<any> {
@@ -63,83 +87,75 @@ export class CrosswordMultiplayerService {
         return this.serverClock.asObservable();
     }
 
-    public createGame(difficulty: string, mode: string) {
-        this.socketService.socket.emit(
-            'create game', difficulty, mode, this.playerService.username
-        );
-    }
-
-    public joinGame(gameId: string) {
-        this.socketService.socket.emit(
-            'join game', gameId, this.playerService.username
-        );
-    }
-
-    public getGames() {
-        this.socketService.socket.emit('get games');
+    public createGame(difficulty: string, mode: string): boolean {
+        if (!this.playerService.isHost) {
+            this.playerService.isHost = true;
+            this.socketService.socket.emit(
+                'create game', difficulty, mode, this.playerService.username
+            );
+            return true;
+        }
+        return false;
     }
 
     public emitSelectHint(
         hintSelection: { 'previous': string, 'current': Word }
-    ) {
-        this.socketService.socket.emit('selected hint', hintSelection);
+    ): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit('selected hint', hintSelection);
+            return true;
+        }
+        return false;
     }
 
-    public emitFoundWord(word: Word) {
-        this.socketService.socket.emit('found word', word);
+    public emitFoundWord(word: Word): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit('found word', word);
+            return true;
+        }
+        return false;
     }
 
-    public emitUnselectAll() {
-        this.socketService.socket.emit('unselect all');
+    public emitDeselectAll(): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit('unselect all');
+            return true;
+        }
+        return false;
     }
 
-    public emitNewCountdown(newCountdown: number) {
-        this.socketService.socket.emit('new countdown', newCountdown);
+    public emitNewCountdown(newCountdown: number): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit('new countdown', newCountdown);
+            return true;
+        }
+        return false;
     }
 
-    private listenForActiveGames() {
-        this.socketService.socket.on('sent all games', (games) => {
-            this.games = games;
-        });
+    private handleGameStart(game: MultiplayerCrosswordGame): void {
+        this.gameStartSubject.next(game);
     }
 
-    private listenForGameStart() {
-        this.socketService.socket.on('game started', (game) => {
-            console.log('GAME STARTED', game);
-            this.gameStartSubject.next(game);
-        });
+    private handleOpponentHintSelection(
+        hintSelection: { 'previous': string, 'current': Word }
+    ): void {
+        this.opponentHintSelection.next(hintSelection);
     }
 
-    private listenForOpponentLeft() {
-        this.socketService.socket.on('opponent left', () => {
-            console.log('opponent left');
-            this.opponentLeft.next(true);
-        });
+    private handleOpponentFoundWord(foundWord: Word): void {
+        this.opponentFoundWord.next(foundWord);
     }
 
-    private listenForOpponentHintSelections() {
-        this.socketService.socket.on('opponent selected a hint', (hintSelection) => {
-            console.log('OPPONENT SELECTED', hintSelection);
-            this.opponentHintSelection.next(hintSelection);
-        });
+    private handleOpponentDeselectAll(): void {
+        this.opponentDeselection.next(true);
     }
 
-    private listenForOpponentFoundWords() {
-        this.socketService.socket.on('opponent found a word', (foundWord) => {
-            console.log('OPPONENT FOUND', foundWord);
-            this.opponentFoundWord.next(foundWord);
-        });
+    private handleServerCountdown(count: number) {
+        this.serverClock.next(count);
     }
 
-    private listenForOpponentUnselectAll() {
-        this.socketService.socket.on('opponent unselected all', () => {
-            this.opponentUnselection.next(true);
-        });
-    }
-
-    private listenForServerCountdown() {
-        this.socketService.socket.on('current countdown', (count: number) => {
-            this.serverClock.next(count);
-        });
+    private handleOpponentLeft() {
+        console.log('reaching');
+        this.opponentLeft.next(true);
     }
 }

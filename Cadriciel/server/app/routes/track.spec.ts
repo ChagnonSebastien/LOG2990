@@ -38,8 +38,6 @@ describe('Track', () => {
             .post('/track/update/testfrsdt')
             .send({ numberOfTimesPlayed: 1, rating: 5, time: 7 })
             .end((err: any, res: any) => {
-                //   const track = JSON.parse(res.text);
-                //  assert(track.value.rating === 2.5);
                 assert(JSON.parse(res.text).data === 'success');
                 done();
             });

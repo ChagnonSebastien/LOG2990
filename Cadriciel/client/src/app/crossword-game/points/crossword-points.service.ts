@@ -15,33 +15,39 @@ export class CrosswordPointsService {
         this.newGame();
     }
 
-    public gameCompletedAlerts(): Observable<any> {
-        return this.gameCompleted.asObservable();
-    }
-
-    public newGame() {
+    public newGame(): void {
         this.foundWords = new Set<string>();
         this.opponentFoundWords = new Set<string>();
     }
 
-    public addToFoundWords(word: string) {
+    public addToFoundWords(word: string): boolean {
         if (this.wordsService.hintExists(word) && !this.opponentFoundWords.has(word)) {
             this.foundWords.add(word);
             this.checkIfGameIsDone();
+            return true;
         }
+        return false;
     }
 
-    public addToOpponentFoundWords(word: string) {
+    public addToOpponentFoundWords(word: string): boolean {
         if (this.wordsService.hintExists(word) && !this.foundWords.has(word)) {
             this.opponentFoundWords.add(word);
             this.checkIfGameIsDone();
+            return true;
         }
+        return false;
     }
 
-    private checkIfGameIsDone() {
+    public gameCompletedAlerts(): Observable<any> {
+        return this.gameCompleted.asObservable();
+    }
+
+    private checkIfGameIsDone(): boolean {
         if (this.gameIsDone()) {
             this.gameCompleted.next(true);
+            return true;
         }
+        return false;
     }
 
     private gameIsDone(): boolean {

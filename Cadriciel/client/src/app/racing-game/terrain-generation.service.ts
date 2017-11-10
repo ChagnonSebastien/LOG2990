@@ -61,6 +61,7 @@ export class TerrainGenerationService {
         this.addObjectsInScene(textureSky);
         this.decorElementsService.placeDecor();
         this.decorElementsService.placeTrees();
+        this.decorElementsService.placeObstacles();
     }
 
     private addObjectsInScene(textureSky: THREE.Texture) {

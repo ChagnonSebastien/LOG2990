@@ -1,3 +1,4 @@
+import { ObstacleService } from './obstacle.service';
 import { CountdownService } from './countdown.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
@@ -21,7 +22,8 @@ export class RacingGameComponent implements AfterViewInit {
         private renderService: RenderService,
         private trackService: TrackService,
         private countdownService: CountdownService,
-        private commandsService: CommandsService
+        private commandsService: CommandsService,
+        private obstacleService: ObstacleService
     ) {
     }
 
@@ -37,14 +39,19 @@ export class RacingGameComponent implements AfterViewInit {
         this.renderService.onResize();
     }
 
-    public eventsListen(event: any): void {
+    public eventsDownListen(event: any): void {
         this.commandsService.sendKeyDownEvent(event);
+    }
+
+    public eventsUpListen(event: any): void {
+        this.commandsService.sentKeyUpEvent(event);
     }
 
     public ngAfterViewInit() {
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
             this.racingGameService.initializeRender(this.container, track);
+            this.obstacleService.initialize(track);
         });
     }
 

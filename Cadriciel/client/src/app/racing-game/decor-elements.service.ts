@@ -1,3 +1,5 @@
+import { ObstacleService } from './obstacle.service';
+import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { LineCalculationService } from './line-calculation.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
@@ -21,6 +23,10 @@ const treeMaximumHeight = 12;
 const treeRarity = 0.1;
 const treePath = 'tree.json';
 
+const boosterPath = 'booster.json';
+const potholePath = 'pothole.json';
+const puddlePath = 'puddle.json';
+
 @Injectable()
 export class DecorElementsService {
 
@@ -32,13 +38,33 @@ export class DecorElementsService {
 
     private treesPositions: THREE.Vector3[] = [];
 
-    constructor(private lineCalculationService: LineCalculationService) {
+    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstacleService) {
     }
 
     public initialize(scene: THREE.Scene, scale: number, track: Track): void {
         this.scene = scene;
         this.track = track;
         this.scale = scale;
+    }
+
+    public placeObstacles(): void {
+        this.placeObstacleType(ObstacleType.Booster, this.track.boosters, boosterPath);
+        this.placeObstacleType(ObstacleType.Pothole, this.track.potholes, potholePath);
+        this.placeObstacleType(ObstacleType.Puddle, this.track.puddles, puddlePath);
+    }
+
+    public placeObstacleType(type: ObstacleType, obstacles: Obstacle[], path: string): void {
+        this.loadMesh(path).then( obstacleMesh => {
+            obstacleMesh.scale.set(this.scale, this.scale, this.scale);
+            this.obstacleService.getObstacles(type).forEach(obstaclePosition => {
+                const obstacleClone = obstacleMesh.clone();
+                obstacleClone.position.set(
+                    (obstaclePosition.x) * this.scale, 2, (obstaclePosition.y) * this.scale);
+
+                obstacleClone.rotateY(Math.PI * 2 * Math.random());
+                this.scene.add(obstacleClone);
+            });
+        });
     }
 
     public placeDecor(): void {
@@ -106,7 +132,8 @@ export class DecorElementsService {
     private availableRadius(point: THREE.Vector2): number {
         return Math.min.apply(null, this.track.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
-            return this.lineCalculationService.getNearestPointOnLineWithClamping(point, line) - trackRadius;
+            const nearestPoint = this.lineCalculationService.getNearestPointOnLineWithClamping(point, line);
+            return this.lineCalculationService.distance(nearestPoint, point) - trackRadius;
         }));
     }
 }

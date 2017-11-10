@@ -9,6 +9,7 @@ module DbConnection {
         return new Promise((resolve, reject) => {
             MongoClient.connect(url, (err, db) => {
                 if (err) {
+                    console.log('connection error');
                     reject(err);
                     return;
                 } else {
@@ -19,7 +20,7 @@ module DbConnection {
         });
     }
 
-    export function get() {
+    export function get(): mongodb.Db {
         if (!connection) {
             throw new Error('connection to database not established yet!');
         }

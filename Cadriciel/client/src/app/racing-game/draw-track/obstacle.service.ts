@@ -4,13 +4,17 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ObstacleService {
 
-    private potholes: Obstacle[] = [];
-    private puddles: Obstacle[] = [];
-    private boosters: Obstacle[] = [];
+    private potholes: Obstacle[];
+    private puddles: Obstacle[];
+    private boosters: Obstacle[];
 
     private track: THREE.Vector2[];
 
-    constructor() { }
+    constructor() {
+        this.potholes = [];
+        this.puddles = [];
+        this.boosters = [];
+     }
 
     public initialize(track: THREE.Vector2[]) {
         this.track = track;
@@ -159,7 +163,7 @@ export class ObstacleService {
         return distanceFromSecondIntersectionToObstacle1 + distanceFromSecondIntersectionToObstacle2 < 10;
     }
 
-    public distance(point1: THREE.Vector2, point2: THREE.Vector2) {
+    public distance(point1: THREE.Vector2, point2: THREE.Vector2): number {
         return Math.sqrt(
             Math.pow((point1.x - point2.x), 2) +
             Math.pow((point1.y - point2.y), 2)

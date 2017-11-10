@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
-import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
-import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
+import { GameConfiguration } from '../game-configuration';
 
 @Injectable()
 export class CrosswordCountdownService {
@@ -13,47 +12,56 @@ export class CrosswordCountdownService {
     private countdownReachedZero: Subject<any>;
 
     constructor(
-        private configurationService: CrosswordConfigurationService,
-        private cheatService: CrosswordCheatService
     ) {
         this.countdownReachedZero = new Subject();
     }
 
-    public newGame() {
-        if (this.configurationService.isDynamic()) {
-            this.initialCount = this.cheatService.initialCountdown;
-            this.resetCountdown();
-            if (this.countdownId === undefined) {
-                this.startCountdown();
-            }
+    public newGame(): boolean {
+        this.initialCount = GameConfiguration.INITIAL_COUNTDOWN_VALUE;
+        return this.resetCountdown() && this.startCountdown();
+    }
+
+    public stopCountdown(): boolean {
+        if (this.countdownStarted()) {
+            clearInterval(this.countdownId);
+            this.countdownId = undefined;
+            return true;
         }
+        return false;
     }
 
     public countdownReachedZeroAlerts(): Observable<any> {
         return this.countdownReachedZero.asObservable();
     }
 
-    public startCountdown() {
-        this.countdownId = setInterval(this.decrementCounter.bind(this), 1000);
-    }
-
-    public stopCountdown() {
-        if (this.countdownId !== undefined) {
-            clearInterval(this.countdownId);
-            this.countdownId = undefined;
-        }
-    }
-
-    public resetCountdown() {
+    public resetCountdown(): boolean {
         this.count = this.initialCount;
+        if (this.count > 0 && this.count <= this.initialCount) {
+            return true;
+        }
+        return false;
     }
 
-    private decrementCounter() {
+    private startCountdown(): boolean {
+        if (!this.countdownStarted()) {
+            this.countdownId = setInterval(this.decrementCounter.bind(this), 1000);
+            return true;
+        }
+        return false;
+    }
+
+    private decrementCounter(): boolean {
         if (this.count > 0) {
             this.count--;
+            return true;
         } else {
             this.countdownReachedZero.next(true);
             this.resetCountdown();
+            return false;
         }
+    }
+
+    private countdownStarted(): boolean {
+        return this.countdownId !== undefined;
     }
 }

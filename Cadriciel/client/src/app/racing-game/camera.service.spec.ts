@@ -1,12 +1,18 @@
+import { TestBed } from '@angular/core/testing';
 import { CameraService } from './camera.service';
 
-describe('test drawTrackService', function () {
-    let cameraService: CameraService;
-    beforeEach(() => {
-        cameraService = new CameraService();
+let cameraService: CameraService;
+
+describe('CameraService', function () {
+    beforeAll(() => {
+        TestBed.resetTestingModule();
+        TestBed.configureTestingModule({
+            providers: [CameraService]
+        });
+        cameraService = TestBed.get(CameraService);
     });
 
-    it('construction test', done => {
+    it('should be created', done => {
         expect(cameraService).toBeTruthy();
         done();
     });

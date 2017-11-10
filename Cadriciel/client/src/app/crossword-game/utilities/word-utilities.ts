@@ -9,7 +9,7 @@ export module WordUtilities {
         }
     }
 
-    export function endOfWord(wordWithIndex: Word, i: number, j: number) {
+    export function endOfWord(wordWithIndex: Word, i: number, j: number): boolean {
         if (wordWithIndex.horizontal) {
             return wordWithIndex.j + wordWithIndex.word.length - 1 === j;
         } else {
@@ -17,7 +17,7 @@ export module WordUtilities {
         }
     }
 
-    export function beginningOfWord(wordWithIndex: Word, i: number, j: number) {
+    export function beginningOfWord(wordWithIndex: Word, i: number, j: number): boolean {
         return wordWithIndex.i === i && wordWithIndex.j === j;
     }
 }

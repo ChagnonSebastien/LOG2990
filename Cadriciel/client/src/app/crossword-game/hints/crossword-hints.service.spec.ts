@@ -60,14 +60,151 @@ describe('#CrosswordHintsService', () => {
 
             // initialize attributes
             expect(hintsService.selectedWord).toBeUndefined();
+            expect(hintsService.opponentSelectedWord).toBeUndefined();
             expect(hintsService.hints).toBeDefined();
+        });
+    });
+
+    describe('selectedWordAlerts()', () => {
+        it('should be subscribable and receive word selection alerts', (done) => {
+            hintsService.selectedWordAlerts().subscribe((hintSelection) => {
+                expect(hintSelection.previous).toBeUndefined();
+                expect(hintSelection.current).toEqual(wordsWithIndex[0]);
+                done();
+            });
+            hintsService['selectedWordSubject'].next({
+                'previous': undefined,
+                'current': wordsWithIndex[0]
+            });
+        });
+    });
+
+    describe('selectWord()', () => {
+        beforeEach(() => {
+            hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+        });
+
+        it('should select a word that exists in the crossword', () => {
+            expect(hintsService.selectWord('huh')).toBeTruthy();
+            expect(hintsService.selectedWord).toEqual('huh');
+        });
+
+        it('should not select a word that does not exist in the crossword', () => {
+            expect(hintsService.selectWord('idontexist')).toBeFalsy();
+            expect(hintsService.selectedWord).toBeUndefined();
+        });
+
+        it('should not select a word that is already being selected', () => {
+            expect(hintsService.selectWord('huh')).toBeTruthy();
+            expect(hintsService.selectWord('huh')).toBeFalsy();
+        });
+
+        it('should alert when a new word is selected', (done) => {
+            hintsService['selectedWordSubject'].asObservable()
+                .subscribe((hint) => {
+                    expect(hint.previous).toBeUndefined();
+                    expect(hint.current).toEqual(wordsWithIndex[0]);
+                    done();
+                });
+            expect(hintsService.selectWord('huh')).toBeTruthy();
+            expect(hintsService.selectWord('huh')).toBeFalsy();
         });
     });
 
     describe('unselectHint()', () => {
         it('should unselect the hint', () => {
-            hintsService.unselectHint();
+            hintsService.selectedWord = 'huh';
+            hintsService.deselectHint();
             expect(hintsService.selectedWord).toBeUndefined();
+        });
+    });
+
+    describe('markHintAsFound()', () => {
+        it('should mark hint as found when selected', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            expect(hintsService.markHintAsFound('huh')).toBeTruthy();
+            expect(hintsService.hints[0].found).toBeTruthy();
+        });
+
+        it('should not mark hint as found when not selected', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = undefined;
+            expect(hintsService.markHintAsFound('huh')).toBeFalsy();
+            expect(hintsService.hints[0].found).toBeFalsy();
+        });
+
+        it('should not mark hint as found when it does not exist', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'idontexist';
+            expect(hintsService.markHintAsFound('idontexist')).toBeFalsy();
+        });
+
+        it('should unselect the hint when it is marked as found', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            expect(hintsService.markHintAsFound('huh')).toBeTruthy();
+            expect(hintsService.hints[0].found).toBeTruthy();
+            expect(hintsService.selectedWord).toBeUndefined();
+        });
+
+        it('should unselect the opponent hint when it is marked as found if the opponent was selecting it', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            hintsService.opponentSelectedWord = 'huh';
+            expect(hintsService.markHintAsFound('huh')).toBeTruthy();
+            expect(hintsService.hints[0].found).toBeTruthy();
+            expect(hintsService.opponentSelectedWord).toBeUndefined();
+        });
+
+        it('should not unselect the opponent hint when it is marked as found if the opponent was not selecting it', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            hintsService.opponentSelectedWord = 'aloud';
+            expect(hintsService.markHintAsFound('huh')).toBeTruthy();
+            expect(hintsService.hints[0].found).toBeTruthy();
+            expect(hintsService.opponentSelectedWord).toEqual('aloud');
+        });
+    });
+
+    describe('markHintAsFoundByOpponent()', () => {
+        it('should mark hint as found by opponent if it exists', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            expect(hintsService.markHintAsFoundByOpponent('huh')).toBeTruthy();
+            expect(hintsService.hints[0].opponentFound).toBeTruthy();
+        });
+
+        it('should not mark hint as found when it does not exist', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            expect(hintsService.markHintAsFoundByOpponent('idontexist')).toBeFalsy();
+        });
+
+        it('should unselect the hint when it is marked as found if you were selecting it', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.selectedWord = 'huh';
+            hintsService.opponentSelectedWord = 'huh';
+            expect(hintsService.markHintAsFoundByOpponent('huh')).toBeTruthy();
+            expect(hintsService.hints[0].opponentFound).toBeTruthy();
+            expect(hintsService.selectedWord).toBeUndefined();
+        });
+
+        it('should unselect the opponent hint when it is marked as found', async () => {
+            await hintsService.newGame(wordsWithIndex);
+            hintsService['wordsService'].newGame(wordsWithIndex);
+            hintsService.opponentSelectedWord = 'huh';
+            expect(hintsService.markHintAsFoundByOpponent('huh')).toBeTruthy();
+            expect(hintsService.hints[0].opponentFound).toBeTruthy();
+            expect(hintsService.opponentSelectedWord).toBeUndefined();
         });
     });
 });

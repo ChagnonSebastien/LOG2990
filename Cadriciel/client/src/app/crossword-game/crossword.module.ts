@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { CrosswordRoutingModule } from './crossword-routing.module';
 
-import { KeyboardService } from './keyboard/keyboard.service';
+import { CrosswordKeyboardService } from './keyboard/crossword-keyboard.service';
 import { LexiconService } from './lexicon/lexicon.service';
 import { CrosswordService } from './crossword/crossword.service';
 import { CrosswordGameManagerService } from './game-manager/crossword-game-manager.service';
@@ -20,6 +20,7 @@ import { CrosswordMultiplayerService } from './multiplayer/crossword-multiplayer
 import { CrosswordCountdownService } from './countdown/crossword-countdown.service';
 import { CrosswordCheatService } from './cheat/crossword-cheat.service';
 import { CrosswordMutationService } from './mutation/crossword-mutation.service';
+import { CrosswordLobbyService } from './lobby/crossword-lobby.service';
 
 import { CrosswordMenuComponent } from './menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
@@ -53,7 +54,7 @@ import { CrosswordCheatComponent } from './cheat/crossword-cheat.component';
 
     ],
     providers: [
-        KeyboardService,
+        CrosswordKeyboardService,
         LexiconService,
         CrosswordService,
         CrosswordGridService,
@@ -67,7 +68,8 @@ import { CrosswordCheatComponent } from './cheat/crossword-cheat.component';
         CrosswordMultiplayerService,
         CrosswordCountdownService,
         CrosswordCheatService,
-        CrosswordMutationService
+        CrosswordMutationService,
+        CrosswordLobbyService
     ]
 })
 export class CrosswordModule { }

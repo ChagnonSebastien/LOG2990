@@ -11,7 +11,6 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as indexRoute from './routes/index';
 import * as authenticationRoute from './routes/authentication';
 import * as lexiconRoute from './routes/lexicon';
 import * as trackRoute from './routes/track';
@@ -79,14 +78,12 @@ export class Application {
         router = express.Router();
 
         // create routes
-        const index: indexRoute.Index = new indexRoute.Index();
         const authentication: authenticationRoute.Authentication = new authenticationRoute.Authentication();
         const lexicon: lexiconRoute.Lexicon = new lexiconRoute.Lexicon();
         const track: trackRoute.Tracks = new trackRoute.Tracks();
         const serverStoredCrosswords: serverCrosswords.ServerCrosswordsRoute = new serverCrosswords.ServerCrosswordsRoute('crosswords');
 
         // home page
-        router.get('/basic', index.index.bind(index.index));
 
         // lexicon service api path
         router.get('/definition/:word', lexicon.wordDefinitions.bind(lexicon.wordDefinitions));

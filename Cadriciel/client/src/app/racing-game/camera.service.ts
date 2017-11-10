@@ -23,7 +23,7 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 export class CameraService {
     private sceneScale: number;
 
-    private currentView = View.PERSPECTIVE;
+    private currentView: View;
 
     private perspectiveCamera: THREE.PerspectiveCamera;
 
@@ -31,7 +31,12 @@ export class CameraService {
 
     private objectToFollow: THREE.Mesh;
 
-    private zoomLevel = initialZoomLevel;
+    private zoomLevel: number;
+
+    constructor() {
+        this.currentView = View.PERSPECTIVE;
+        this.zoomLevel = initialZoomLevel;
+    }
 
     public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
         this.objectToFollow = objectToFollow;
@@ -122,11 +127,11 @@ export class CameraService {
     }
 
     public zoomCamera(event: any): void {
-        // 107 corresponding to '+' in ASCII
-        // 109 corresponding to '-' in ASCII
-        if (event.keyCode === 107) {
+        // 187 corresponding to '+' in ASCII
+        // 189 corresponding to '-' in ASCII
+        if (event.keyCode === 187) {
             this.zoomLevel += zoomChange;
-        } else if (event.keyCode === 109) {
+        } else if (event.keyCode === 189) {
             this.zoomLevel -= zoomChange;
         }
 

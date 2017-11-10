@@ -1,2 +1,6 @@
-<div #container class="container" (window:keydown)='eventsListen($event)'>
+<div #container class="container" 
+    (window:keydown)='eventsDownListen($event)'
+    (window:keyup)='eventsUpListen($event)'
+>
+
 </div>
