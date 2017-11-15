@@ -1,3 +1,4 @@
+import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Track } from './track';
@@ -5,7 +6,8 @@ import * as THREE from 'three';
 
 @Injectable()
 export class CountdownService {
-    private audio: HTMLAudioElement;
+    private audioService: AudioService;
+    //private audio: HTMLAudioElement;
     public countdownMesh: THREE.Mesh;
     private font: THREE.Font;
     private count: number;
@@ -13,8 +15,9 @@ export class CountdownService {
     private timer: Observable<number>;
 
     constructor() {
-        this.audio = new Audio('../../assets/countdown.mp3');
-        this.audio.load();
+        this.audioService = new AudioService();
+        //this.audio = new Audio('../../assets/countdown.mp3');
+        //this.audio.load();
         this.count = 6;
         this.countdownStarted = false;
     }
@@ -30,7 +33,8 @@ export class CountdownService {
     }
 
     private startAudio() {
-        this.audio.play();
+        this.audioService.startCountdown();
+        //this.audio.play();
     }
 
     public async createCountdown(track: Track, scale: number): Promise<void> {
