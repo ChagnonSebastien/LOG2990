@@ -6,7 +6,6 @@ import * as THREE from 'three';
 
 @Injectable()
 export class CountdownService {
-    private audioService: AudioService;
     //private audio: HTMLAudioElement;
     public countdownMesh: THREE.Mesh;
     private font: THREE.Font;
@@ -14,8 +13,7 @@ export class CountdownService {
     public countdownStarted: boolean;
     private timer: Observable<number>;
 
-    constructor() {
-        this.audioService = new AudioService();
+    constructor(private audioService: AudioService) {
         //this.audio = new Audio('../../assets/countdown.mp3');
         //this.audio.load();
         this.count = 6;
