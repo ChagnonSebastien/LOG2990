@@ -20,5 +20,16 @@ export class AudioService {
 
     public startCountdown() {
         this.countdown.play();
+        while (!this.countdown.ended) {}
+        this.startRace();
+    }
+
+    public startRace() {
+        this.race.loop = true;
+        this.race.play();
+    }
+
+    public stopRace() {
+        this.race.pause();
     }
 }
