@@ -1,3 +1,6 @@
+import { RaceService } from './race.service';
+import { AudioService } from './audio.service';
+import { CountdownService } from './countdown.service';
 import { CommandsService } from './commands.service';
 import { HumanController } from './human-controller';
 import { TestBed } from '@angular/core/testing';
@@ -10,10 +13,11 @@ describe('Controller', function () {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
-                CommandsService
+                CommandsService, CountdownService, AudioService, RaceService
             ]
         });
-        humanController = new HumanController(TestBed.get(CommandsService));
+        humanController = new HumanController(TestBed.get(CommandsService), TestBed.get(CountdownService));
+        humanController['raceStarted'] = true;
     });
 
     it('should be created', () => {
