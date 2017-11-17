@@ -1,3 +1,4 @@
+import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { ObstacleService } from './obstacle.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
@@ -49,7 +50,8 @@ import { VehicleService } from './vehicle.service';
         LineCalculationService,
         DiamondSquareAlgorithmService,
         ObstacleService,
-        AudioService
+        AudioService,
+        RaceService
     ]
 })
 export class RacingGameModule { }
