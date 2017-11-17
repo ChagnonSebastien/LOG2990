@@ -22,23 +22,23 @@ export class HumanController extends Controller {
     }
 
     private moveVehicle(event) {
-        if (event.keyCode === 87) {
+        if (event.keyCode === 87 && this.raceStarted) {
             this.moveState = MOVE_STATE.MOVE_FORWARD;
         }
-        if (event.keyCode === 65) {
+        if (event.keyCode === 65 && this.raceStarted) {
             this.turnState = TURN_STATE.TURN_LEFT;
         }
-        if (event.keyCode === 68) {
+        if (event.keyCode === 68 && this.raceStarted) {
             this.turnState = TURN_STATE.TURN_RIGHT;
         }
     }
 
     private stopVehicle(event) {
-        if (event.keyCode === 87) {
+        if (event.keyCode === 87 && this.raceStarted) {
             this.moveState = MOVE_STATE.BRAKE;
         }
 
-        if (event.keyCode === 65 || event.keyCode === 68 ) {
+        if ((event.keyCode === 65 || event.keyCode === 68) && this.raceStarted ) {
             this.turnState = TURN_STATE.DO_NOTHING;
         }
     }
