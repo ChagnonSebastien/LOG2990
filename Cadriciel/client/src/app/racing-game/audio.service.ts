@@ -1,3 +1,4 @@
+import { RaceService } from './race.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -7,7 +8,8 @@ export class AudioService {
     private stinger: HTMLAudioElement;
     private themed: HTMLAudioElement;
 
-    constructor() {
+    constructor(private raceService: RaceService) {
+        this.listenForEndOfRace();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
         this.race = new Audio('../../assets/sounds/race.mp3');
@@ -32,5 +34,11 @@ export class AudioService {
 
     public stopRace() {
         this.race.pause();
+    }
+
+    private listenForEndOfRace() {
+        this.raceService.raceEndedAlerts().subscribe(() => {
+
+        });
     }
 }
