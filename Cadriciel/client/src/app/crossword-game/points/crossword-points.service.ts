@@ -20,6 +20,11 @@ export class CrosswordPointsService {
         this.opponentFoundWords = new Set<string>();
     }
 
+    public endGame() {
+        this.foundWords = undefined;
+        this.opponentFoundWords = undefined;
+    }
+
     public addToFoundWords(word: string): boolean {
         if (this.wordsService.hintExists(word) && !this.opponentFoundWords.has(word)) {
             this.foundWords.add(word);

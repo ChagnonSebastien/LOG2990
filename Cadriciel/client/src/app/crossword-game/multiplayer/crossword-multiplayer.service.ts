@@ -10,12 +10,12 @@ import { MultiplayerCrosswordGame } from '../../../../../commun/crossword/multip
 
 @Injectable()
 export class CrosswordMultiplayerService {
-    private gameStartSubject: Subject<any>;
-    private opponentHintSelection: Subject<any>;
-    private opponentFoundWord: Subject<any>;
-    private opponentDeselection: Subject<any>;
-    private serverClock: Subject<number>;
-    private opponentLeft: Subject<any>;
+    public gameStartSubject: Subject<any>;
+    public opponentHintSelection: Subject<any>;
+    public opponentFoundWord: Subject<any>;
+    public opponentDeselection: Subject<any>;
+    public serverClock: Subject<number>;
+    public opponentLeft: Subject<any>;
     public listeningOnSockets: boolean;
 
     constructor(

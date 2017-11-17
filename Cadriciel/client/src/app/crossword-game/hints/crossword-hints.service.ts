@@ -13,7 +13,7 @@ export class CrosswordHintsService {
     public selectedWord: string;
     public opponentSelectedWord: string;
     public hints: Array<Hint>;
-    private selectedWordSubject: Subject<any>;
+    public selectedWordSubject: Subject<any>;
 
     constructor(
         private lexiconService: LexiconService,
@@ -30,6 +30,12 @@ export class CrosswordHintsService {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
         return this.initializeHints(wordsWithIndex);
+    }
+
+    public endGame() {
+        this.selectedWord = undefined;
+        this.opponentSelectedWord = undefined;
+        this.hints = undefined;
     }
 
     public selectWord(word: string): boolean {

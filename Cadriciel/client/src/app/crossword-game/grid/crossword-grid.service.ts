@@ -27,6 +27,10 @@ export class CrosswordGridService {
         return true;
     }
 
+    public endGame() {
+        this.grid = undefined;
+    }
+
     public wordFoundAlerts(): Observable<any> {
         return this.wordFoundSubject.asObservable();
     }

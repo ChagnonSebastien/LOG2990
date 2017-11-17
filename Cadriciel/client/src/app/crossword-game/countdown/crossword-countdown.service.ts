@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { GameConfiguration } from '../game-configuration';
 
+import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
+
 @Injectable()
 export class CrosswordCountdownService {
     public count: number;
@@ -12,13 +14,23 @@ export class CrosswordCountdownService {
     private countdownReachedZero: Subject<any>;
 
     constructor(
+        private configurationService: CrosswordConfigurationService
     ) {
         this.countdownReachedZero = new Subject();
     }
 
     public newGame(): boolean {
-        this.initialCount = GameConfiguration.INITIAL_COUNTDOWN_VALUE;
-        return this.resetCountdown() && this.startCountdown();
+        this.stopCountdown();
+        if (!this.configurationService.isMultiplayer()) {
+            this.initialCount = GameConfiguration.INITIAL_COUNTDOWN_VALUE;
+            return this.resetCountdown() && this.startCountdown();
+        }
+    }
+
+    public endGame() {
+        console.log('END GAME COUNTDOWN', this.stopCountdown());
+        this.count = undefined;
+        this.initialCount = undefined;
     }
 
     public stopCountdown(): boolean {
