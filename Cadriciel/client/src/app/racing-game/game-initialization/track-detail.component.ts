@@ -9,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./track-detail.component.css']
 })
 export class TrackDetailComponent implements OnInit {
-    public track;
+    public track: Track;
+    public bestTimesDisplayed =  true;
 
     constructor(
         private route: ActivatedRoute,
@@ -27,6 +28,10 @@ export class TrackDetailComponent implements OnInit {
         this.route.params.subscribe(params => {
             this.trackService.get(params.name).then(track => this.track = track);
         });
+    }
+
+    public showBestTimes() {
+        this.bestTimesDisplayed = true;
     }
 
 }

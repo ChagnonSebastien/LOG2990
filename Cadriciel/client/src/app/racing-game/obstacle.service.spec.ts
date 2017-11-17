@@ -28,7 +28,10 @@ describe('ObstacleService', () => {
                 [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
                 [new Obstacle(ObstacleType.Puddle, 0, 0.5, 1)],
                 [],
-                [new Obstacle(ObstacleType.Booster, 2, 0, 0.5), new Obstacle(ObstacleType.Booster, 1, 0.5, 0)]
+                [new Obstacle(ObstacleType.Booster, 2, 0, 0.5), new Obstacle(ObstacleType.Booster, 1, 0.5, 0)],
+                -1,
+                0,
+                []
             ));
         });
 

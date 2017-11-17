@@ -24,7 +24,11 @@ export class Track {
         intersections: THREE.Vector2[],
         puddles: Obstacle[],
         potholes: Obstacle[],
-        boosters: Obstacle[]
+        boosters: Obstacle[],
+        rating: number,
+        numberOfTimesPlayed: number,
+        bestTimes: number[]
+
     ) {
         this.name = name;
         this.description = description;

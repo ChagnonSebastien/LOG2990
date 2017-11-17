@@ -26,7 +26,10 @@ class MockTrackService extends TrackService {
                 new Obstacle(ObstacleType.Booster, 2, 0.3, 0.9),
                 new Obstacle(ObstacleType.Booster, 1, 0.2, 0.7),
                 new Obstacle(ObstacleType.Booster, 2, 0.1, 0.3)
-            ]
+            ],
+            0,
+            0,
+            []
         ));
     }
 }
