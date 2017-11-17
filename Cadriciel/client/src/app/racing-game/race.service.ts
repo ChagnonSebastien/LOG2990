@@ -14,7 +14,7 @@ export class RaceService {
         return this.raceEndedSubject.asObservable();
     }
 
-    private endRace() {
+    public endRace() {
         this.raceEndedSubject.next();
     }
 
