@@ -1,3 +1,4 @@
+import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService } from './commands.service';
 import {Controller} from './controller';
@@ -8,7 +9,7 @@ enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
 export class HumanController extends Controller {
     private raceStarted: boolean;
 
-    constructor(private commandsService: CommandsService, private countdownService: CountdownService) {
+    constructor(private commandsService: CommandsService, private countdownService: CountdownService, private raceService: RaceService) {
         super();
         this.raceStarted = false;
         this.commandsService.getKeyDownEvent().subscribe( event => {
@@ -19,6 +20,7 @@ export class HumanController extends Controller {
             this.stopVehicle(event);
         });
         this.listenForEndOfCountdown();
+        this.listenForEndOfRace();
     }
 
     private moveVehicle(event) {
@@ -46,6 +48,11 @@ export class HumanController extends Controller {
     private listenForEndOfCountdown() {
         this.countdownService.countdownEndedAlerts().subscribe(() => {
             this.raceStarted = true;
+        });
+    }
+    private listenForEndOfRace() {
+        this.raceService.raceEndedAlerts().subscribe(() => {
+            this.raceStarted = false;
         });
     }
 }
