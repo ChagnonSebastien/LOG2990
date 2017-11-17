@@ -37,9 +37,9 @@ export class Track {
         this.puddles = puddles;
         this.potholes = potholes;
         this.boosters = boosters;
-        this.rating = -1;
-        this.numberOfTimesPlayed = 0;
-        this.bestTimes = [];
+        this.rating = rating;
+        this.numberOfTimesPlayed = numberOfTimesPlayed;
+        this.bestTimes = bestTimes;
     }
 
     public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService) {

@@ -42,7 +42,7 @@ export class TrackService {
                     track.potholes,
                     track.boosters,
                     track.rating,
-                    track.numberOfPlayed,
+                    track.numberOfTimesPlayed,
                     track.bestTimes,
 
                 );

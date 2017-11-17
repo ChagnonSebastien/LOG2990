@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrackDetailComponent implements OnInit {
     public track: Track;
-    public bestTimesDisplayed =  true;
+    public bestTimesDisplayed: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -22,8 +22,11 @@ export class TrackDetailComponent implements OnInit {
     }
 
     public ngOnInit() {
+        this.bestTimesDisplayed = false;
         const trackName = this.route.snapshot.params['name'];
-        this.trackService.get(trackName).then(track => this.track = track);
+        this.trackService.get(trackName).then(track => {
+            this.track = track;
+        });
 
         this.route.params.subscribe(params => {
             this.trackService.get(params.name).then(track => this.track = track);
