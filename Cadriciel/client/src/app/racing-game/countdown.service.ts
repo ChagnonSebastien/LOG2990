@@ -28,7 +28,7 @@ export class CountdownService {
         this.timer.subscribe(x => {
             this.updateCountdown(x);
             if (this.count === 0) {
-                console.log('timer over');
+                this.endCountdown();
             }
         });
     }
