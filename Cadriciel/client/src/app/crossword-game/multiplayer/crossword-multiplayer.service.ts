@@ -16,6 +16,7 @@ export class CrosswordMultiplayerService {
     public opponentDeselection: Subject<any>;
     public serverClock: Subject<number>;
     public opponentLeft: Subject<any>;
+    public opponentRestarted: Subject<any>;
     public listeningOnSockets: boolean;
 
     constructor(
@@ -33,6 +34,7 @@ export class CrosswordMultiplayerService {
         this.opponentDeselection = new Subject();
         this.serverClock = new Subject();
         this.opponentLeft = new Subject();
+        this.opponentRestarted = new Subject();
     }
 
     private listenToSocketRequests(): void {
@@ -59,6 +61,10 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.on(
             'opponent left',
             this.handleOpponentLeft.bind(this)
+        );
+        this.socketService.socket.on(
+            'opponent restarted game',
+            this.handleOpponentRestartedGame.bind(this)
         );
         this.listeningOnSockets = true;
     }
@@ -99,9 +105,18 @@ export class CrosswordMultiplayerService {
     }
 
     public emitLeavingGame(): boolean {
-        this.playerService.isHost = false;
         if (this.socketService.socket.connected) {
             this.socketService.socket.emit('leaveGame');
+            return true;
+        }
+        return false;
+    }
+
+    public emitRestartGame(difficulty: string, mode: string): boolean {
+        if (this.socketService.socket.connected) {
+            this.socketService.socket.emit(
+                'restart game', difficulty, mode, this.playerService.username
+            );
             return true;
         }
         return false;
@@ -166,5 +181,12 @@ export class CrosswordMultiplayerService {
     private handleOpponentLeft() {
         this.playerService.isHost = false;
         this.opponentLeft.next(true);
+    }
+
+    private handleOpponentRestartedGame(gameId: string) {
+        this.socketService.socket.emit(
+            'join game', gameId, this.playerService.username
+        );
+        this.opponentRestarted.next(true);
     }
 }

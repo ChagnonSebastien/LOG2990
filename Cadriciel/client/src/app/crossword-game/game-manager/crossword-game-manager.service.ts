@@ -10,6 +10,7 @@ import { CrosswordCountdownService } from '../countdown/crossword-countdown.serv
 import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
+import { CrosswordLobbyService } from '../lobby/crossword-lobby.service';
 
 import { Word } from '../../../../../commun/word';
 
@@ -28,7 +29,8 @@ export class CrosswordGameManagerService {
         private countdownService: CrosswordCountdownService, // Stateful, reset on newGame()
         private cheatService: CrosswordCheatService, // Stateful, no need to reset
         private configurationService: CrosswordConfigurationService, // Stateful, no need to reset
-        private playerService: CrosswordPlayerService // Stateful, reset on isHost = false
+        private playerService: CrosswordPlayerService, // Stateful, reset on isHost = false
+        private lobbySerice: CrosswordLobbyService // Stateful, no need to reset
     ) {
         this.gameInProgress = false;
         this.gameCompleted = false;
@@ -36,7 +38,7 @@ export class CrosswordGameManagerService {
     }
 
     private dispatchGameEvents(): void {
-        this.listenForStartGame();
+        this.listenForCreateGame();
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
         this.listenForMultiplayerGameStart();
@@ -47,6 +49,7 @@ export class CrosswordGameManagerService {
         this.listenForOpponentDeselectedAll();
         this.listenForGameCompletion();
         this.listenForOpponentLeft();
+        this.listenForOpponentRestarted();
         this.synchronizeWithServerClock();
     }
 
@@ -70,6 +73,18 @@ export class CrosswordGameManagerService {
         this.playerService.isHost = false;
     }
 
+    public restartGame() {
+        if (this.configurationService.isMultiplayer()) {
+            this.multiplayerService.emitRestartGame(
+                this.configurationService.level,
+                this.configurationService.mode
+            );
+        } else {
+            this.newSoloGame(this.configurationService.level);
+        }
+        this.gameCompleted = false;
+    }
+
     private newMultiplayerGame(level: string, mode: string): void {
         this.multiplayerService.createGame(level, mode);
     }
@@ -91,7 +106,7 @@ export class CrosswordGameManagerService {
         return false;
     }
 
-    private listenForStartGame(): void {
+    private listenForCreateGame(): void {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
                 if (configuration.type === 'solo') {
@@ -200,6 +215,13 @@ export class CrosswordGameManagerService {
             .subscribe((left) => {
                 alert('Your opponent left the game');
                 this.endGame();
+            });
+    }
+
+    private listenForOpponentRestarted(): void {
+        this.multiplayerService.opponentRestarted.asObservable()
+            .subscribe((restarted) => {
+                this.gameCompleted = false;
             });
     }
 

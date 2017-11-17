@@ -1,6 +1,7 @@
 import { CrosswordGameManager } from './crossword-games-manager';
 import * as io from 'socket.io';
 import * as http from 'http';
+import { hostname } from 'os';
 
 export class SocketManager {
     private io: SocketIO.Server;
@@ -26,6 +27,10 @@ export class SocketManager {
             });
 
             socket.on('join game', (gameId: string, challengerUsername: string) => {
+                const previousRoomId = this.gameManager.findGameIdBySocketId(socket.id);
+                if (previousRoomId) {
+                    socket.leave(previousRoomId);
+                }
                 console.log(`${challengerUsername} has joined game ${gameId}`);
                 const game = this.gameManager.getGame(gameId);
                 if (game !== undefined) {
@@ -39,6 +44,16 @@ export class SocketManager {
                         game.countdown.startCountdown();
                     }
                 }
+            });
+
+            socket.on('restart game', (difficulty, mode, hostUsername) => {
+                const roomId: string = this.gameManager.findGameIdBySocketId(socket.id);
+                socket.leave(roomId);
+                this.gameManager.createGame(difficulty, mode, hostUsername, socket.id)
+                    .then((game) => {
+                        socket.join(game.id);
+                        this.io.sockets.in(roomId).emit('opponent restarted game', game.id);
+                    });
             });
 
 
