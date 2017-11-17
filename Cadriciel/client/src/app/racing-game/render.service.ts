@@ -67,7 +67,7 @@ export class RenderService {
             depthWrite: false,
             side: THREE.BackSide
         });
-        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(10000, 10000, 10000), material);
+        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), material);
         material.needsUpdate = true;
         this.scene.add(skyboxMesh);
     }
