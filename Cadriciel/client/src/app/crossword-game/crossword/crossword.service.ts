@@ -13,4 +13,8 @@ export class CrosswordService {
             .toPromise()
             .then(crossword => crossword.json());
     }
+
+    public getMutatedCrossword() {
+
+    }
 }

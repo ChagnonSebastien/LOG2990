@@ -11,6 +11,7 @@ import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
 import { CrosswordLobbyService } from '../lobby/crossword-lobby.service';
+import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 import { Word } from '../../../../../commun/word';
 
@@ -30,7 +31,8 @@ export class CrosswordGameManagerService {
         private cheatService: CrosswordCheatService, // Stateful, no need to reset
         private configurationService: CrosswordConfigurationService, // Stateful, no need to reset
         private playerService: CrosswordPlayerService, // Stateful, reset on isHost = false
-        private lobbySerice: CrosswordLobbyService // Stateful, no need to reset
+        private lobbySerice: CrosswordLobbyService, // Stateful, no need to reset
+        private mutationService: CrosswordMutationService // Stateful, no need to reset
     ) {
         this.gameInProgress = false;
         this.gameCompleted = false;
@@ -140,13 +142,18 @@ export class CrosswordGameManagerService {
     private listenForWordFoundAlerts(): void {
         this.gridService.wordFoundAlerts()
             .subscribe((foundWord) => {
+                this.hintsService.markHintAsFound(foundWord.word);
+                this.pointsService.addToFoundWords(foundWord.word);
                 if (this.configurationService.isMultiplayer()) {
                     this.multiplayerService.emitFoundWord(foundWord);
                 } else if (this.configurationService.isDynamic()) {
+                    const foundWords = Array.from(this.pointsService.foundWords)
+                        .map((word) => {
+                            return this.wordsService.getWordWithIndex(word);
+                        });
+                    this.mutationService.updateMutation(foundWords);
                     this.countdownService.resetCountdown();
                 }
-                this.hintsService.markHintAsFound(foundWord.word);
-                this.pointsService.addToFoundWords(foundWord.word);
             });
     }
 
