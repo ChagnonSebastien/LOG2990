@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -20,8 +21,9 @@ export class AudioService {
 
     public startCountdown() {
         this.countdown.play();
-        while (!this.countdown.ended) {}
-        this.startRace();
+        this.countdown.addEventListener('ended', () => {
+            this.startRace();
+        });
     }
 
     public startRace() {
