@@ -38,7 +38,20 @@ export class AudioService {
 
     private listenForEndOfRace() {
         this.raceService.raceEndedAlerts().subscribe(() => {
-
+            this.stopRace();
+            this.startStinger();
         });
+    }
+
+    private startStinger() {
+        this.stinger.play();
+        this.stinger.addEventListener('ended', () => {
+            this.startThemed();
+        });
+    }
+
+    private startThemed() {
+        this.themed.loop = true;
+        this.themed.play();
     }
 }
