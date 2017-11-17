@@ -42,7 +42,7 @@ export class RenderService {
             this.event = event;
             this.keyPressed = true;
             if (this.event.keyCode === 78) { // N is pressed
-                this.isNight = true;
+                this.isNight = this.isNight === true ? false : true;
             }
         });
     }
@@ -106,6 +106,12 @@ export class RenderService {
             this.cameraService.swapCamera(this.event);
             this.cameraService.zoomCamera(this.event);
             this.keyPressed = false;
+        }
+
+        if (this.isNight) {
+            this.createSkyBoxNight();
+        } else {
+            this.createSkyBox();
         }
     }
 
