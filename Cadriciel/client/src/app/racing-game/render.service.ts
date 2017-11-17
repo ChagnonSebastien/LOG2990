@@ -29,6 +29,8 @@ export class RenderService {
 
     private keyPressed = false;
 
+    private isNight = false;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
@@ -39,6 +41,9 @@ export class RenderService {
         .subscribe(event => {
             this.event = event;
             this.keyPressed = true;
+            if (this.event.keyCode === 78) { // N is pressed
+                this.isNight = true;
+            }
         });
     }
 
