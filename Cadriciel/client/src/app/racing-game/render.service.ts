@@ -72,6 +72,26 @@ export class RenderService {
         this.scene.add(skyboxMesh);
     }
 
+    private createSkyBoxNight() {
+        const url = '../../assets/images/skybox/';
+        const images = [url + 'bluefreeze_rt.png', url + 'bluefreeze_lt.png',
+        url + 'bluefreeze_up.png', url + 'bluefreeze_dn.png',
+        url + 'bluefreeze_ft.png', url + 'bluefreeze_bk.png'];
+        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
+        const shader = THREE.ShaderLib['cube'];
+        shader.uniforms['tCube'].value = this.textureSky;
+        const material = new THREE.ShaderMaterial({
+            fragmentShader: shader.fragmentShader,
+            vertexShader: shader.vertexShader,
+            uniforms: shader.uniforms,
+            depthWrite: false,
+            side: THREE.BackSide
+        });
+        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(10000, 10000, 10000), material);
+        material.needsUpdate = true;
+        this.scene.add(skyboxMesh);
+    }
+
     public loadTrack(track) {
         this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
     }
