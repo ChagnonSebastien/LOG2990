@@ -6,6 +6,7 @@ import { CrosswordCountdownService } from '../countdown/crossword-countdown.serv
 import { CrosswordWordsService } from '../words/crossword-words.service';
 import { CrosswordService } from '../crossword/crossword.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
+import { CrosswordPointsService } from '../points/crossword-points.service';
 
 import { Utilities } from '../../../../../server/app/utilities';
 
@@ -25,17 +26,28 @@ export class CrosswordMutationService {
         private countdownService: CrosswordCountdownService,
         private wordsService: CrosswordWordsService,
         private crosswordService: CrosswordService,
-        private configurationService: CrosswordConfigurationService
+        private configurationService: CrosswordConfigurationService,
+        private pointsService: CrosswordPointsService
     ) { }
 
     public mutate() {
         this.wordsService.newGame(this.wordsWithIndex);
 
-        this.gridService.grid = Utilities.deepCopy(this.newGrid);
+        this.gridService.grid = this.newGrid.map((row, i) => {
+            return row.map((square, j) => {
+                if (this.gridService.grid[i][j].found) {
+                    square.found = true;
+                    square.input = square.answer;
+                }
+                return square;
+            });
+        });
 
-        this.hintsService.hints = this.newHints.map((hint, i) => {
-            const oldHint = this.hintsService.hints[i];
-            return oldHint.found ? oldHint : hint;
+        this.hintsService.hints = this.newHints.map((hint) => {
+            if (this.pointsService.foundWords.has(hint.word)) {
+                hint.found = true;
+            }
+            return hint;
         });
         this.hintsService.selectedWord = undefined;
         this.hintsService.opponentSelectedWord = undefined;
@@ -55,16 +67,7 @@ export class CrosswordMutationService {
     }
 
     private updateGrid(grid: string[][], wordsWithIndex: Array<Word>): CrosswordSquare[][] {
-        return this.gridService.initializeGrid(grid, wordsWithIndex)
-            .map((row, i) => {
-                return row.map((square, j) => {
-                    if (this.gridService.grid[i][j].letterFound()) {
-                        return Utilities.deepCopy(this.gridService.grid[i][j]);
-                    } else {
-                        return square;
-                    }
-                });
-            });
+        return this.gridService.initializeGrid(grid, wordsWithIndex);
     }
 
     private async updateHints(wordsWithIndex: Array<Word>): Promise<Array<Hint>> {

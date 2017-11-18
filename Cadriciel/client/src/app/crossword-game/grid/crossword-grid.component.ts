@@ -75,7 +75,6 @@ export class CrosswordGridComponent {
         const square = this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
         });
-        console.log(square);
         square.nativeElement.focus();
     }
 
@@ -101,10 +100,12 @@ export class CrosswordGridComponent {
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
 
-        if (wordInfo !== undefined || wordInfo.horizontal) {
-            j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
-        } else {
-            i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
+        if (wordInfo !== undefined) {
+            if (wordInfo.horizontal) {
+                j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
+            } else {
+                i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
+            }
         }
         this.focusOnSquare(i, j);
         return true;
