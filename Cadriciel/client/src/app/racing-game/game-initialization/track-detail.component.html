@@ -23,11 +23,14 @@
     <br>
 
     <div>
-      <button (click)="showBestTimes()">Best times</button>
+      <button (click)="showBestTimes()">Best times</button><br>
       <label *ngIf="bestTimesDisplayed"> 
-        <ul id="ulOneLine">
+        <ul>
           <li *ngFor="let bestTime of track.bestTimes|slice:0:5">
-              {{bestTime}}
+            Player name: <label class="detailColor">{{bestTime.playerName}}</label>
+            Time: <label class="detailColor">{{bestTime.time}}</label>
+            <br>
+
           </li>
         </ul>
       </label>  
