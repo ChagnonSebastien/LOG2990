@@ -117,9 +117,8 @@ export class Vehicle {
     private getTrackAngle(track: Track): number {
         const fromPosition = track.trackIntersections[0];
         const toPosition = track.trackIntersections[1];
-        const angle = Math.PI / 2 - Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x));
-
-        return angle;
+        const rawAngle = -Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x));
+        return ((toPosition.x - fromPosition.x >= 0) ? rawAngle : rawAngle + Math.PI) - Math.PI / 2;
     }
 
     private calculateBeta(vehicleColor: VehicleColor, trackCenterAngle: number): number {
