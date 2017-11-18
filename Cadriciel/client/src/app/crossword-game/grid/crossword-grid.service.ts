@@ -22,8 +22,7 @@ export class CrosswordGridService {
     }
 
     public newGame(grid: string[][], wordsWithIndex: Array<Word>): boolean {
-        this.initializeGrid(grid);
-        this.initializeWordsUsingSquare(wordsWithIndex);
+        this.grid = this.initializeGrid(grid, wordsWithIndex);
         return true;
     }
 
@@ -126,24 +125,23 @@ export class CrosswordGridService {
         this.deselectWord();
     }
 
-    private initializeGrid(grid: string[][]): boolean {
-        this.grid = grid.map((row) => {
+    public initializeGrid(grid: string[][], wordsWithIndex: Array<Word>): CrosswordSquare[][] {
+        return this.initializeWordsUsingSquare(grid.map((row) => {
             return row.map((square) => {
                 return new CrosswordSquare(square);
             });
-        });
-        return true;
+        }), wordsWithIndex);
     }
 
-    private initializeWordsUsingSquare(wordsWithIndex: Array<Word>): boolean {
+    private initializeWordsUsingSquare(grid: CrosswordSquare[][], wordsWithIndex: Array<Word>): CrosswordSquare[][] {
         for (const word of wordsWithIndex) {
             for (let k = 0; k < word.word.length; k++) {
                 const i = word.horizontal ? word.i : word.i + k;
                 const j = word.horizontal ? word.j + k : word.j;
-                this.grid[i][j].words.push(word);
+                grid[i][j].words.push(word);
             }
         }
-        return true;
+        return grid;
     }
 
     private wordFound(word: Word): boolean {

@@ -26,10 +26,12 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public async newGame(wordsWithIndex: Array<Word>): Promise<boolean> {
+    public async newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
-        return this.initializeHints(wordsWithIndex);
+        this.initializeHints(wordsWithIndex).then((hints) => {
+            this.hints = hints;
+        });
     }
 
     public endGame() {
@@ -87,18 +89,16 @@ export class CrosswordHintsService {
         return false;
     }
 
-    private async initializeHints(wordsWithIndex: Array<Word>): Promise<boolean> {
-        this.hints = new Array<Hint>();
-        let result: boolean;
+    public async initializeHints(wordsWithIndex: Array<Word>): Promise<Array<Hint>> {
+        const hints = new Array<Hint>();
         await this.lexiconService.getWordDefinitions(
             wordsWithIndex.map(wordWithIndex => wordWithIndex.word)
         ).subscribe((definitions) => {
             definitions.map((definition, i) => {
-                this.hints.push(new Hint(wordsWithIndex[i].word, definition));
+                hints.push(new Hint(wordsWithIndex[i].word, definition));
             });
-            result = true;
         });
-        return result;
+        return hints;
     }
 
     private alertNewSelectedWord(word: Word) {

@@ -190,6 +190,7 @@ export class CrosswordGameManagerService {
     private listenForCountdownReachedZero(): void {
         this.countdownService.countdownReachedZeroAlerts()
             .subscribe((zero) => {
+                this.mutationService.mutate();
             });
     }
 

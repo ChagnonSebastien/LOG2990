@@ -72,9 +72,11 @@ export class CrosswordGridComponent {
     }
 
     private focusOnSquare(i: number, j: number) {
-        this.squares.toArray().find((e) => {
+        const square = this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
-        }).nativeElement.focus();
+        });
+        console.log(square);
+        square.nativeElement.focus();
     }
 
     private focusOnNextLetter(i: number, j: number): boolean {
