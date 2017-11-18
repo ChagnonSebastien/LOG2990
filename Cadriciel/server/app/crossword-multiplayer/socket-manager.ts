@@ -1,7 +1,6 @@
 import { CrosswordGameManager } from './crossword-games-manager';
 import * as io from 'socket.io';
 import * as http from 'http';
-import { hostname } from 'os';
 
 export class SocketManager {
     private io: SocketIO.Server;

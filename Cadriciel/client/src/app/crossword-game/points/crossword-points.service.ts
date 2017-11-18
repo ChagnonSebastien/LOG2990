@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { CrosswordWordsService } from '../words/crossword-words.service';
 
+import { Word } from '../../../../../commun/word';
+
 @Injectable()
 export class CrosswordPointsService {
     public foundWords: Set<string>;
@@ -23,6 +25,12 @@ export class CrosswordPointsService {
     public endGame() {
         this.foundWords = undefined;
         this.opponentFoundWords = undefined;
+    }
+
+    public getFoundWords(): Array<Word> {
+        return Array.from(this.foundWords).map((word) => {
+            return this.wordsService.getWordWithIndex(word);
+        });
     }
 
     public addToFoundWords(word: string): boolean {

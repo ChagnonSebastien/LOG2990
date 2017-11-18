@@ -31,29 +31,15 @@ export class CrosswordMutationService {
     ) { }
 
     public mutate() {
-        this.wordsService.newGame(this.wordsWithIndex);
+        this.mutateWordsService();
+        this.mutateGridService();
+        this.mutateHintsService();
 
-        this.gridService.grid = this.newGrid.map((row, i) => {
-            return row.map((square, j) => {
-                if (this.gridService.grid[i][j].found) {
-                    square.found = true;
-                    square.input = square.answer;
-                }
-                return square;
-            });
-        });
-
-        this.hintsService.hints = this.newHints.map((hint) => {
-            if (this.pointsService.foundWords.has(hint.word)) {
-                hint.found = true;
-            }
-            return hint;
-        });
-        this.hintsService.selectedWord = undefined;
-        this.hintsService.opponentSelectedWord = undefined;
+        this.updateMutation();
     }
 
-    public updateMutation(foundWords: Array<Word>) {
+    public updateMutation() {
+        const foundWords = this.pointsService.getFoundWords();
         this.crosswordService.getMutatedCrossword(
             this.configurationService.level,
             foundWords
@@ -70,14 +56,30 @@ export class CrosswordMutationService {
         return this.gridService.initializeGrid(grid, wordsWithIndex);
     }
 
-    private async updateHints(wordsWithIndex: Array<Word>): Promise<Array<Hint>> {
-        let newHints: Array<Hint>;
-        await this.hintsService.initializeHints(this.wordsWithIndex).then((hints) => {
-            newHints = hints.map((hint, i) => {
-                const oldHint = this.hintsService.hints[i];
-                return oldHint.found ? oldHint : hint;
+    private mutateWordsService() {
+        this.wordsService.newGame(this.wordsWithIndex);
+    }
+
+    private mutateGridService() {
+        this.gridService.grid = this.newGrid.map((row, i) => {
+            return row.map((square, j) => {
+                if (this.gridService.grid[i][j].found) {
+                    square.found = true;
+                    square.input = square.answer;
+                }
+                return square;
             });
         });
-        return newHints;
+    }
+
+    private mutateHintsService() {
+        this.hintsService.hints = this.newHints.map((hint) => {
+            if (this.pointsService.foundWords.has(hint.word)) {
+                hint.found = true;
+            }
+            return hint;
+        });
+        this.hintsService.selectedWord = undefined;
+        this.hintsService.opponentSelectedWord = undefined;
     }
 }

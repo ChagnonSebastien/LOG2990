@@ -92,11 +92,14 @@ export class CrosswordGameManagerService {
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>): void {
+        this.mutationService.updateMutation();
         this.hintsService.newGame(wordsWithIndex);
         this.gridService.newGame(grid, wordsWithIndex);
         this.pointsService.newGame();
         this.wordsService.newGame(wordsWithIndex);
-        this.countdownService.newGame();
+        if (this.configurationService.isDynamic()) {
+            this.countdownService.newGame();
+        }
     }
 
     public deselectAll(): boolean {
@@ -147,11 +150,7 @@ export class CrosswordGameManagerService {
                 if (this.configurationService.isMultiplayer()) {
                     this.multiplayerService.emitFoundWord(foundWord);
                 } else if (this.configurationService.isDynamic()) {
-                    const foundWords = Array.from(this.pointsService.foundWords)
-                        .map((word) => {
-                            return this.wordsService.getWordWithIndex(word);
-                        });
-                    this.mutationService.updateMutation(foundWords);
+                    this.mutationService.updateMutation();
                     this.countdownService.resetCountdown();
                 }
             });
@@ -190,7 +189,9 @@ export class CrosswordGameManagerService {
     private listenForCountdownReachedZero(): void {
         this.countdownService.countdownReachedZeroAlerts()
             .subscribe((zero) => {
-                this.mutationService.mutate();
+                if (this.configurationService.isDynamic()) {
+                    this.mutationService.mutate();
+                }
             });
     }
 
