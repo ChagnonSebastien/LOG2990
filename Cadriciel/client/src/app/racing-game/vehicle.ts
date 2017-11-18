@@ -79,7 +79,7 @@ export class Vehicle {
         return new Promise<Vehicle>(resolve => {
             loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
-                this.vehicle.rotateY(trackAngle);
+                this.vehicle.rotation.y = trackAngle;
                 this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.y = 3;
