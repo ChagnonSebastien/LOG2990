@@ -11,7 +11,7 @@ export class Track {
     public type: string;
     public trackIntersections: THREE.Vector2[];
     public numberOfTimesPlayed: number;
-    public bestTimes: number[];
+    public bestTimes: { playerName: string, time: number }[];
     public rating: number;
     public puddles: Obstacle[];
     public potholes: Obstacle[];
@@ -27,7 +27,7 @@ export class Track {
         boosters: Obstacle[],
         rating: number,
         numberOfTimesPlayed: number,
-        bestTimes: number[]
+        bestTimes: { playerName: string, time: number }[]
 
     ) {
         this.name = name;
