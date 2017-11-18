@@ -1,3 +1,6 @@
+import { RaceService } from './race.service';
+import { AudioService } from './audio.service';
+import { CountdownService } from './countdown.service';
 import { ObstacleService } from './obstacle.service';
 import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
@@ -17,7 +20,8 @@ describe('Render', () => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [RenderService, CameraService, TerrainGenerationService, CommandsService,
-                        VehicleService, DecorElementsService, LineCalculationService, DiamondSquareAlgorithmService, ObstacleService]
+                        VehicleService, DecorElementsService, LineCalculationService,
+                        DiamondSquareAlgorithmService, ObstacleService, CountdownService, AudioService, RaceService]
         });
         renderService = TestBed.get(RenderService);
     });

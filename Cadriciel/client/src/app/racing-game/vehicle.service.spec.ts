@@ -1,3 +1,6 @@
+import { RaceService } from './race.service';
+import { AudioService } from './audio.service';
+import { CountdownService } from './countdown.service';
 import { ObstacleService } from './obstacle.service';
 import { CommandsService } from './commands.service';
 import { Track } from './track';
@@ -16,7 +19,7 @@ describe('VehicleService', () => {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [VehicleService, CommandsService, ObstacleService]
+            providers: [VehicleService, CommandsService, ObstacleService, CountdownService, AudioService, RaceService]
         });
         vehicleService = TestBed.get(VehicleService);
     });
