@@ -13,6 +13,7 @@ import { Utilities } from '../../../../../server/app/utilities';
 import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
+import { Crossword } from '../../../../../commun/crossword/crossword';
 
 @Injectable()
 export class CrosswordMutationService {
@@ -52,6 +53,22 @@ export class CrosswordMutationService {
         });
     }
 
+    public async updateMultiplayerMutation(crossword: Crossword): Promise<void> {
+        this.wordsWithIndex = crossword.wordsWithIndex;
+        this.newGrid = this.updateGrid(crossword.crossword, this.wordsWithIndex);
+        this.newHints = await this.hintsService
+            .initializeHints(this.wordsWithIndex);
+    }
+
+    public mutateMultiplayer() {
+        console.log(this.wordsWithIndex);
+        this.mutateWordsService();
+        console.log(this.newGrid);
+        this.mutateGridService();
+        console.log(this.newHints);
+        this.mutateHintsService();
+    }
+
     private updateGrid(grid: string[][], wordsWithIndex: Array<Word>): CrosswordSquare[][] {
         return this.gridService.initializeGrid(grid, wordsWithIndex);
     }
@@ -67,6 +84,10 @@ export class CrosswordMutationService {
                     square.found = true;
                     square.input = square.answer;
                 }
+                if (this.gridService.grid[i][j].opponentFound) {
+                    square.opponentFound = true;
+                    square.input = square.answer;
+                }
                 return square;
             });
         });
@@ -74,8 +95,11 @@ export class CrosswordMutationService {
 
     private mutateHintsService() {
         this.hintsService.hints = this.newHints.map((hint) => {
+            console.log(hint);
             if (this.pointsService.foundWords.has(hint.word)) {
                 hint.found = true;
+            } else if (this.pointsService.opponentFoundWords.has(hint.word)) {
+                hint.opponentFound = true;
             }
             return hint;
         });

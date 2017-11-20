@@ -92,7 +92,6 @@ export class CrosswordGridService {
     }
 
     private updateWordFoundStatus(word: Word): boolean {
-        console.log('UPDATE WORD FOUND STATUS', word);
         if (this.wordFound(word)) {
             this.wordFoundSubject.next(word);
             this.markWordAsFound(word);
@@ -149,7 +148,6 @@ export class CrosswordGridService {
         for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;
-            console.log('WORD FOUND', i, j, this.grid[i][j]);
             if (!this.grid[i][j].letterFound()) {
                 return false;
             }

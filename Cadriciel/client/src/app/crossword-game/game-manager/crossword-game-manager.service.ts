@@ -14,6 +14,7 @@ import { CrosswordLobbyService } from '../lobby/crossword-lobby.service';
 import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 import { Word } from '../../../../../commun/word';
+import { Crossword } from '../../../../../commun/crossword/crossword';
 
 @Injectable()
 export class CrosswordGameManagerService {
@@ -52,6 +53,7 @@ export class CrosswordGameManagerService {
         this.listenForGameCompletion();
         this.listenForOpponentLeft();
         this.listenForOpponentRestarted();
+        this.listenForMutation();
         this.synchronizeWithServerClock();
     }
 
@@ -92,12 +94,12 @@ export class CrosswordGameManagerService {
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>): void {
-        this.mutationService.updateMutation();
         this.hintsService.newGame(wordsWithIndex);
         this.gridService.newGame(grid, wordsWithIndex);
         this.pointsService.newGame();
         this.wordsService.newGame(wordsWithIndex);
-        if (this.configurationService.isDynamic()) {
+        if (this.configurationService.isDynamic() && !this.configurationService.isMultiplayer()) {
+            this.mutationService.updateMutation();
             this.countdownService.newGame();
         }
     }
@@ -126,7 +128,8 @@ export class CrosswordGameManagerService {
     private listenForGameCompletion(): void {
         this.pointsService.gameCompletedAlerts()
             .subscribe((end: boolean) => {
-                this.gameCompleted = end;
+                this.countdownService.endGame();
+                this.gameCompleted = true;
             });
     }
 
@@ -189,7 +192,7 @@ export class CrosswordGameManagerService {
     private listenForCountdownReachedZero(): void {
         this.countdownService.countdownReachedZeroAlerts()
             .subscribe((zero) => {
-                if (this.configurationService.isDynamic()) {
+                if (this.configurationService.isDynamic() && !this.configurationService.isMultiplayer()) {
                     this.mutationService.mutate();
                 }
             });
@@ -238,8 +241,21 @@ export class CrosswordGameManagerService {
         this.multiplayerService.serverClock.asObservable()
             .subscribe((count) => {
                 if (this.configurationService.isMultiplayer()) {
+                    if (count === 0) {
+                        this.mutationService.mutateMultiplayer();
+                    }
                     this.countdownService.count = count;
                 }
+            });
+    }
+
+    private listenForMutation(): void {
+        this.multiplayerService.mutation
+            .asObservable()
+            .subscribe(async (crossword: Crossword) => {
+                console.log('GAME MANAGER CALLBACK', crossword);
+                await this.mutationService.updateMultiplayerMutation(crossword);
+                // this.mutationService.mutateMultiplayer();
             });
     }
 }

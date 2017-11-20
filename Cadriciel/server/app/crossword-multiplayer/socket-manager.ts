@@ -1,14 +1,17 @@
 import { CrosswordGameManager } from './crossword-games-manager';
 import * as io from 'socket.io';
 import * as http from 'http';
+import { CrosswordMutationManager } from './crossword-mutation-manager';
 
 export class SocketManager {
     private io: SocketIO.Server;
     private gameManager: CrosswordGameManager;
+    private mutationManager: CrosswordMutationManager;
 
     constructor(server: http.Server) {
         this.io = io.listen(server);
         this.gameManager = new CrosswordGameManager();
+        this.mutationManager = new CrosswordMutationManager();
     }
 
     public handleSocketRequests(): void {
@@ -37,6 +40,7 @@ export class SocketManager {
                     this.gameManager.joinGame(gameId, challengerUsername, socket.id);
                     this.io.sockets.in(gameId).emit('game started', game);
                     if (game.mode === 'dynamic') {
+                        this.mutationManager.newGame(gameId, game.difficulty);
                         game.countdown.countdownAlerts().subscribe((count: number) => {
                             this.io.sockets.in(gameId).emit('current countdown', count);
                         });
@@ -76,12 +80,14 @@ export class SocketManager {
                 for (const roomId in socket.rooms) {
                     if (socket.rooms.hasOwnProperty(roomId)) {
                         if (roomId !== socket.id) {
+                            socket.broadcast.to(roomId)
+                                .emit('opponent found a word', foundWord);
                             const game = this.gameManager.getGame(roomId);
                             if (game.mode === 'dynamic') {
                                 game.countdown.resetCountdown();
+                                this.mutationManager.updateMutation(roomId, foundWord);
+                                this.io.sockets.in(roomId).emit('update mutation', this.mutationManager.getNextMutation(roomId));
                             }
-                            socket.broadcast.to(roomId)
-                                .emit('opponent found a word', foundWord);
                         }
                     }
                 }

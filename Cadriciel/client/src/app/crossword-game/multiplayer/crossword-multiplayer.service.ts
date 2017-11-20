@@ -7,6 +7,7 @@ import { CrosswordPlayerService } from '../player/crossword-player.service';
 
 import { Word } from '../../../../../commun/word';
 import { MultiplayerCrosswordGame } from '../../../../../commun/crossword/multiplayer-crossword-game';
+import { Crossword } from '../../../../../commun/crossword/crossword';
 
 @Injectable()
 export class CrosswordMultiplayerService {
@@ -17,6 +18,7 @@ export class CrosswordMultiplayerService {
     public serverClock: Subject<number>;
     public opponentLeft: Subject<any>;
     public opponentRestarted: Subject<any>;
+    public mutation: Subject<Crossword>;
     public listeningOnSockets: boolean;
 
     constructor(
@@ -35,6 +37,7 @@ export class CrosswordMultiplayerService {
         this.serverClock = new Subject();
         this.opponentLeft = new Subject();
         this.opponentRestarted = new Subject();
+        this.mutation = new Subject();
     }
 
     private listenToSocketRequests(): void {
@@ -65,6 +68,10 @@ export class CrosswordMultiplayerService {
         this.socketService.socket.on(
             'opponent restarted game',
             this.handleOpponentRestartedGame.bind(this)
+        );
+        this.socketService.socket.on(
+            'update mutation',
+            this.handleMutation.bind(this)
         );
         this.listeningOnSockets = true;
     }
@@ -188,5 +195,9 @@ export class CrosswordMultiplayerService {
             'join game', gameId, this.playerService.username
         );
         this.opponentRestarted.next(true);
+    }
+
+    private handleMutation(crossword: Crossword) {
+        this.mutation.next(crossword);
     }
 }

@@ -18,7 +18,6 @@ export class ServerCrosswords {
     public normalCrosswords: Array<Crossword> = [];
     public hardCrosswords: Array<Crossword> = [];
 
-
     private constructor() {
         this.mutatedGrid = new Crossword();
         this.crosswordGenerator = new CrosswordGenerator(crosswordSize);
@@ -170,11 +169,12 @@ export class ServerCrosswords {
         });
     }
 
-    public mutate(crossword: Crossword) {
+    public mutate(crossword: Crossword): Crossword {
         this.mutatedGrid.crossword = this.crosswordGenerator.mutate(crossword.difficulty, crossword.wordsWithIndex);
         this.mutatedGrid.difficulty = crossword.difficulty;
         this.mutatedGrid.listOfWords = Array.from(this.crosswordGenerator.words);
         this.mutatedGrid.wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
+        return this.mutatedGrid;
     }
 
 

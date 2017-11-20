@@ -28,7 +28,7 @@ export class CrosswordCountdownService {
     }
 
     public endGame() {
-        console.log('END GAME COUNTDOWN', this.stopCountdown());
+        this.stopCountdown();
         this.count = undefined;
         this.initialCount = undefined;
     }
