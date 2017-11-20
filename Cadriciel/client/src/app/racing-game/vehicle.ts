@@ -3,7 +3,8 @@ import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
-import {Controller} from './controller';
+import { Controller } from './controller';
+import { CollisionDetectionService } from './collision-detection.service';
 
 const distanceBetweenCars = 5;
 const startOffset = 0.75;
@@ -21,9 +22,9 @@ export class Vehicle {
 
     private scale: number;
 
-    private lastObstacleHit: {type: ObstacleType, index: number};
+    private lastObstacleHit: { type: ObstacleType, index: number };
 
-    constructor(private obstacleService: ObstacleService) {
+    constructor(private obstacleService: ObstacleService, private collisionDetectionService: CollisionDetectionService) {
     }
 
     public getVehicle(): THREE.Mesh {
@@ -64,7 +65,7 @@ export class Vehicle {
             }
         }
         if (distance < type * this.scale) {
-            this.lastObstacleHit = {type: type, index: index};
+            this.lastObstacleHit = { type: type, index: index };
             this.controler.hitObstacle(type);
         }
     }
@@ -85,6 +86,7 @@ export class Vehicle {
                 this.vehicle.position.y = 3;
                 this.vehicle.scale.set(scale, scale, scale);
                 this.vehicle.castShadow = true;
+                this.collisionDetectionService.initializeBoundingBox(this.vehicle);
                 resolve(this);
             });
         });
@@ -93,13 +95,13 @@ export class Vehicle {
     private getCartPath(carPosition: VehicleColor) {
         switch (carPosition) {
             case VehicleColor.red:
-            return redCarPath;
+                return redCarPath;
             case VehicleColor.blue:
-            return blueCarPath;
+                return blueCarPath;
             case VehicleColor.green:
-            return greenCarPath;
+                return greenCarPath;
             case VehicleColor.yellow:
-            return yellowCarPath;
+                return yellowCarPath;
         }
     }
 

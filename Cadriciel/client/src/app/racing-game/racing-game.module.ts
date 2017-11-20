@@ -21,6 +21,7 @@ import { TrackService } from './game-initialization/track.service';
 import { RacingGameService } from './racing-game.service';
 import { CommandsService } from './commands.service';
 import { VehicleService } from './vehicle.service';
+import { CollisionDetectionService } from './collision-detection.service';
 
 @NgModule({
     imports: [
@@ -51,7 +52,8 @@ import { VehicleService } from './vehicle.service';
         DiamondSquareAlgorithmService,
         ObstacleService,
         AudioService,
-        RaceService
+        RaceService,
+        CollisionDetectionService
     ]
 })
 export class RacingGameModule { }
