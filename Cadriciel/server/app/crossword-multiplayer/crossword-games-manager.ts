@@ -1,6 +1,5 @@
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
 import { CrosswordGameInfo } from '../../../commun/crossword/crossword-game-info';
-import { Crossword } from '../../../commun/crossword/crossword';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 import { INITIAL_GAME_ID } from '../config';
@@ -44,17 +43,12 @@ export class CrosswordGamesManager {
     }
 
     public async createGame(difficulty: string, mode: string, hostUsername: string, socketId: string): Promise<MultiplayerCrosswordGame> {
-        let game: MultiplayerCrosswordGame;
         const id: string = this.generateGameId();
-        await this.serverCrosswords.getCrossword(difficulty)
-            .then((crossword: Crossword) => {
-                game = new MultiplayerCrosswordGame(
-                    id, difficulty, mode, hostUsername, crossword
-                );
-                this.availableGames.push(game);
-                this.gamesMap.set(game.id, game);
-                this.socketsInGames.set(socketId, id);
-            });
+        const crossword = await this.serverCrosswords.getCrossword(difficulty);
+        const game = new MultiplayerCrosswordGame(id, difficulty, mode, hostUsername, crossword);
+        this.availableGames.push(game);
+        this.gamesMap.set(game.id, game);
+        this.socketsInGames.set(socketId, id);
         return game;
     }
 
