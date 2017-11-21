@@ -72,6 +72,7 @@ export class CountdownService {
                     color: 0xffff00
                 });
                 this.countdownMesh = new THREE.Mesh(textGeometry, material);
+                this.countdownMesh.name = 'countdown';
                 this.countdownMesh.position.setX(trackCenter.x * scale);
                 this.countdownMesh.position.setY((scale * 20 / 25) + 3);
                 this.countdownMesh.position.setZ(trackCenter.y * scale);
@@ -82,12 +83,8 @@ export class CountdownService {
     }
 
     private updateCountdown(count: number) {
-        let countText: string;
-        if (count === 0) {
-            countText = 'GO!';
-        } else {
-            countText = count.toString();
-        }
+        const countText = count.toString();
+
         const textGeometry = new THREE.TextGeometry(countText, {
                     font: this.font,
                     size: 200,

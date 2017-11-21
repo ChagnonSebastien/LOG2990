@@ -16,7 +16,7 @@ describe('Controller', function () {
                 CommandsService, CountdownService, AudioService, RaceService
             ]
         });
-        humanController = new HumanController(TestBed.get(CommandsService), TestBed.get(CountdownService));
+        humanController = new HumanController(TestBed.get(CommandsService), TestBed.get(CountdownService), TestBed.get(RaceService));
         humanController['raceStarted'] = true;
     });
 

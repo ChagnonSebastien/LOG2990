@@ -14,6 +14,7 @@ export class RacingGameService {
 
     constructor(private renderService: RenderService, private vehicleService: VehicleService,
                 private countdownService: CountdownService, private cameraService: CameraService) {
+        this.listenForEndOfCountdown();
     }
 
     public async initializeRender(container: HTMLElement, track: Track): Promise<void> {
@@ -42,6 +43,17 @@ export class RacingGameService {
     private async createCoundown() {
         await this.countdownService.createCountdown(this.track, scale);
         this.renderService.scene.add(this.countdownService.countdownMesh);
+    }
+
+    private listenForEndOfCountdown() {
+        this.countdownService.countdownEndedAlerts().subscribe(() => {
+            this.removeCountdown();
+        });
+    }
+
+    private removeCountdown() {
+        const selectedObject = this.renderService.scene.getObjectByName(this.countdownService.countdownMesh.name);
+        this.renderService.scene.remove( selectedObject );
     }
 
 }
