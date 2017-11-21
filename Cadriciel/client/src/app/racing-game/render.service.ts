@@ -7,7 +7,7 @@ import { CameraService } from './camera.service';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
-import { HemisphereLight } from 'three';
+import { Light } from './light';
 
 @Injectable()
 export class RenderService {
@@ -34,18 +34,20 @@ export class RenderService {
 
     private dirLight: THREE.DirectionalLight;
 
+    private light: Light;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         private commandsService: CommandsService,
-        private vehiculeService: VehicleService
+        private vehiculeService: VehicleService,
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.event = event;
             this.keyPressed = true;
             if (this.event.keyCode === 78) {
-                this.dirLight.visible = !this.dirLight.visible;
+                this.light.dirLight.visible = !this.light.dirLight.visible;
             }
         });
     }
@@ -54,36 +56,12 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
-    private createHemisphereLight() {
-        this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.2);
-        this.hemiLight.color.setHSL(0.6, 1, 0.6);
-        this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
-        this.hemiLight.position.set(0, 7500, 0);
-        this.scene.add(this.hemiLight);
-    }
-
-    private createDirectionalLight() {
-        this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
-        this.dirLight.color.setHSL(0.1, 1, 0.95);
-        this.dirLight.position.set(-6000, 7500, 6000);
-        this.dirLight.position.multiplyScalar(30);
-        this.scene.add(this.dirLight);
-    }
-
     protected createScene() {
         this.scene = new THREE.Scene();
+        this.light = new Light();
         this.createSkyBox();
-        this.createHemisphereLight();
-        this.createDirectionalLight();
-        this.dirLight.castShadow = true;
-        this.dirLight.shadow.mapSize.width = 2048;
-        this.dirLight.shadow.mapSize.height = 2048;
-        this.dirLight.shadow.camera.left = -50;
-        this.dirLight.shadow.camera.right = 50;
-        this.dirLight.shadow.camera.top = 50;
-        this.dirLight.shadow.camera.bottom = -50;
-        this.dirLight.shadow.camera.far = 3500;
-        this.dirLight.shadow.bias = -0.0001;
+        this.scene.add(this.light.hemiLight);
+        this.scene.add(this.light.dirLight);
     }
 
     private createSkyBox() {
