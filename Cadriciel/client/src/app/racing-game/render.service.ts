@@ -7,7 +7,6 @@ import { CameraService } from './camera.service';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
-import { HemisphereLight } from 'three';
 
 @Injectable()
 export class RenderService {
