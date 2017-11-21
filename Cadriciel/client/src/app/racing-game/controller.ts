@@ -1,6 +1,6 @@
 import { ObstacleType } from './draw-track/obstacle';
 import * as THREE from 'three';
-
+import { CollisionDetectionService } from './collision-detection.service';
 const acceleration = 0.1;
 const rotationSpeed = Math.PI / 100;
 const maxSpeed = 35;
@@ -21,7 +21,7 @@ export abstract class Controller {
 
     private obstacleEffect: {type: ObstacleType, timeLeft: number};
 
-    constructor() {
+    constructor( protected collisionDetectionService: CollisionDetectionService) {
         this.speed = 0;
         this.obstacleEffect = {type: null, timeLeft: 0};
         this.moveState = MOVE_STATE.BRAKE;
@@ -48,6 +48,7 @@ export abstract class Controller {
                 this.obstacleEffect.type === ObstacleType.Puddle || this.obstacleEffect.type === ObstacleType.Pothole
             )) {
                 this.brake(vehicle);
+                this.collisionDetectionService.updateBox(vehicle);
             } else {
                 this.accelerate(vehicle);
             }
@@ -84,6 +85,10 @@ export abstract class Controller {
 
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
         object.translateZ(-this.speed * speedModifier);
+        this.collisionDetectionService.updateBox(object);
+        if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+            console.log('hit a car');
+        }
     }
 
     private brake (object: THREE.Mesh) {
@@ -96,6 +101,7 @@ export abstract class Controller {
 
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
         object.translateZ(-this.speed * speedModifier);
+        this.collisionDetectionService.updateBox(object);
     }
 
     private leftRotation(object: THREE.Mesh) {
@@ -103,6 +109,10 @@ export abstract class Controller {
             // Does nothing
         } else {
             object.rotation.y += rotationSpeed;
+            this.collisionDetectionService.updateBox(object);
+            if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+                console.log('hit a car');
+            }
         }
     }
 
@@ -111,6 +121,10 @@ export abstract class Controller {
             // Does nothing
         } else {
             object.rotation.y -= rotationSpeed;
+            this.collisionDetectionService.updateBox(object);
+            if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+                console.log('hit a car');
+            }
         }
     }
 }

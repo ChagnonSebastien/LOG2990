@@ -28,7 +28,8 @@ export class VehicleService {
     public initializeMainVehicle(track: Track, scale: number): Promise<Vehicle> {
         return new Promise<Vehicle>(resolve => {
             this.mainVehicle.create3DVehicle(
-                track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService, this.raceService)
+                track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService,
+                    this.raceService, this.collisionDetectionService)
             ).then((vehicle) => {
                 resolve(vehicle);
             });
@@ -37,11 +38,11 @@ export class VehicleService {
 
     public async initializeOpponentsVehicles(track: Track, scale: number): Promise<Array<Vehicle>> {
         await this.opponentsVehicles[0].create3DVehicle(track, scale, VehicleColor.blue,
-            new HumanController(this.commandsService, this.countdownService, this.raceService));
+            new HumanController(this.commandsService, this.countdownService, this.raceService, this.collisionDetectionService));
         await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green,
-            new HumanController(this.commandsService, this.countdownService, this.raceService));
+            new HumanController(this.commandsService, this.countdownService, this.raceService, this.collisionDetectionService));
         await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow,
-            new HumanController(this.commandsService, this.countdownService, this.raceService));
+            new HumanController(this.commandsService, this.countdownService, this.raceService, this.collisionDetectionService));
 
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);
