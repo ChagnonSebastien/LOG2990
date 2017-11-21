@@ -41,7 +41,7 @@ export class SocketManager {
                     this.io.sockets.in(gameId).emit('game started', game);
                     if (game.mode === 'dynamic') {
                         this.mutationManager.newGame(gameId, game.difficulty);
-                        game.countdown.countdownAlerts().subscribe((count: number) => {
+                        game.countdown.count.subscribe((count: number) => {
                             this.io.sockets.in(gameId).emit('current countdown', count);
                         });
                         game.countdown.startCountdown();
@@ -117,7 +117,7 @@ export class SocketManager {
                         if (roomId !== socket.id) {
                             const game = this.gameManager.getGame(roomId);
                             if (game.mode === 'dynamic') {
-                                game.countdown.initialCount = newCountdown;
+                                game.countdown.initialCountdownValue = newCountdown;
                                 game.countdown.resetCountdown();
                             }
                         }
