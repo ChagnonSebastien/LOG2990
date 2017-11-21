@@ -8,8 +8,8 @@
 import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
-import { SocketManager } from './crossword-multiplayer/socket-manager';
 import { SocketServer } from './socket-server';
+import { MultiplayerManager } from './multiplayer-manager';
 const db = require('./db-connection');
 
 // start app after database is connected
@@ -38,9 +38,9 @@ db.connect()
                 server.on('error', onError);
                 server.on('listening', onListening);
 
-                const io = SocketServer.getInstance(server);
-                const socketManager = new SocketManager(io);
-                socketManager.handleSocketRequests();
+                SocketServer.setServer(server);
+                const multiplayerManager = MultiplayerManager.getInstance();
+                multiplayerManager.handleCrosswordGameRequests();
 
                 /**
                  * Normalise le port en un nombre, une chaîne de caractères ou la valeur false.

@@ -3,14 +3,25 @@ import { Crossword } from '../../../commun/crossword/crossword';
 import { Word } from '../../../commun/word';
 
 export class CrosswordMutationManager {
+    private static mutationManager: CrosswordMutationManager;
+
     private nextMutations: Map<string, Crossword>;
     private foundWords: Map<string, Array<Word>>;
     private crosswordGenerator: CrosswordGenerator;
 
-    constructor() {
+    // Singleton : use getInstance()
+    private constructor() {
         this.nextMutations = new Map<string, Crossword>();
         this.foundWords = new Map<string, Array<Word>>();
         this.crosswordGenerator = new CrosswordGenerator(10);
+    }
+
+    // returns Singleton
+    public static getInstance(): CrosswordMutationManager {
+        if (this.mutationManager === undefined) {
+            this.mutationManager = new CrosswordMutationManager();
+        }
+        return this.mutationManager;
     }
 
     public newGame(gameId: string, level: string) {

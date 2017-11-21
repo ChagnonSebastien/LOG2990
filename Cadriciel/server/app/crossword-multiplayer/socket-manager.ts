@@ -1,17 +1,16 @@
-import { CrosswordGameManager } from './crossword-games-manager';
+import { CrosswordGamesManager } from './crossword-games-manager';
 import * as io from 'socket.io';
 import * as http from 'http';
 import { CrosswordMutationManager } from './crossword-mutation-manager';
 
 export class SocketManager {
     private io: SocketIO.Server;
-    private gameManager: CrosswordGameManager;
+    private gameManager: CrosswordGamesManager;
     private mutationManager: CrosswordMutationManager;
 
     constructor(server: SocketIO.Server) {
         this.io = server;
-        this.gameManager = CrosswordGameManager.getInstance();
-        this.mutationManager = new CrosswordMutationManager();
+        this.gameManager = CrosswordGamesManager.getInstance();
     }
 
     public handleSocketRequests(): void {
@@ -126,7 +125,6 @@ export class SocketManager {
             });
 
         });
-
     }
 }
 

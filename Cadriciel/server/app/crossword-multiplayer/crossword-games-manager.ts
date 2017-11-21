@@ -3,8 +3,8 @@ import { CrosswordGameInfo } from '../../../commun/crossword/crossword-game-info
 import { Crossword } from '../../../commun/crossword/crossword';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
-export class CrosswordGameManager {
-    private static gameManagerInstance: CrosswordGameManager;
+export class CrosswordGamesManager {
+    private static gameManagerInstance: CrosswordGamesManager;
     private availableGames: Array<MultiplayerCrosswordGame>;
     private gamesMap: Map<string, MultiplayerCrosswordGame>;
     private socketsInGames: Map<string, string>;
@@ -21,9 +21,9 @@ export class CrosswordGameManager {
         this.serverCrosswords.setCollection('crosswords');
     }
 
-    public static getInstance(): CrosswordGameManager {
+    public static getInstance(): CrosswordGamesManager {
         if (this.gameManagerInstance === undefined) {
-            this.gameManagerInstance = new CrosswordGameManager();
+            this.gameManagerInstance = new CrosswordGamesManager();
         }
         return this.gameManagerInstance;
     }
@@ -65,6 +65,10 @@ export class CrosswordGameManager {
         game.challengerUsername = challengerUsername;
         this.socketsInGames.set(socketId, gameId);
         this.deleteAvailableGame(game);
+    }
+
+    public leaveGame(socketId: string): void {
+        this.socketsInGames.delete(socketId);
     }
 
     public findGameIdBySocketId(id: string): string {
