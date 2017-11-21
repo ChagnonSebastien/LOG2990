@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { CrosswordGameManager } from './crossword-games-manager';
 
 describe('Game Manager', () => {
-    const crosswordGameManager: CrosswordGameManager = new CrosswordGameManager;
+    const crosswordGameManager: CrosswordGameManager = CrosswordGameManager.getInstance();
     let createdGameId: string;
 
     it('Should create a game', (done) => {
@@ -31,7 +31,9 @@ describe('Game Manager', () => {
     });
 
     it('Should be able to delete a game', () => {
+        expect(crosswordGameManager.getGame(createdGameId)).to.exist;
         crosswordGameManager.deleteGame(createdGameId);
+        expect(crosswordGameManager.getGame(createdGameId)).to.not.exist;
         expect(crosswordGameManager.getGame(createdGameId)).to.be.undefined;
     });
 });

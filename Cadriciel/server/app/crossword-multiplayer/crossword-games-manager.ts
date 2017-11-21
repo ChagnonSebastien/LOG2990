@@ -1,45 +1,58 @@
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
+import { CrosswordGameInfo } from '../../../commun/crossword/crossword-game-info';
+import { Crossword } from '../../../commun/crossword/crossword';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
 export class CrosswordGameManager {
+    private static gameManagerInstance: CrosswordGameManager;
     private availableGames: Array<MultiplayerCrosswordGame>;
     private gamesMap: Map<string, MultiplayerCrosswordGame>;
     private socketsInGames: Map<string, string>;
-    private idCounter: number;
+    private gameIdCounter: number;
     private serverCrosswords: ServerCrosswords;
 
-    constructor() {
+    // Singleton : use getInstance()
+    private constructor() {
         this.availableGames = new Array<MultiplayerCrosswordGame>();
         this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
         this.socketsInGames = new Map<string, string>();
-        this.idCounter = 0;
+        this.gameIdCounter = 0;
         this.serverCrosswords = ServerCrosswords.getInstance();
         this.serverCrosswords.setCollection('crosswords');
     }
 
-    public getAvailableGames() {
-        return this.availableGames.map((game) => {
-            return {
-                id: game.id,
-                difficulty: game.difficulty,
-                mode: game.mode,
-                hostUsername: game.hostUsername,
-                challengerUsername: game.challengerUsername
-            };
-        });
+    public static getInstance(): CrosswordGameManager {
+        if (this.gameManagerInstance === undefined) {
+            this.gameManagerInstance = new CrosswordGameManager();
+        }
+        return this.gameManagerInstance;
+    }
+
+    public getAvailableGames(): Array<CrosswordGameInfo> {
+        return this.availableGames
+            .map((game: MultiplayerCrosswordGame) => {
+                return new CrosswordGameInfo(
+                    game.id,
+                    game.hostUsername,
+                    game.difficulty,
+                    game.mode,
+                    game.challengerUsername
+                );
+            });
     }
 
     public async createGame(difficulty: string, mode: string, hostUsername: string, socketId: string): Promise<MultiplayerCrosswordGame> {
         let game: MultiplayerCrosswordGame;
         const id: string = this.generateGameId();
-        await this.serverCrosswords.getCrossword(difficulty).then((crossword) => {
-            game = new MultiplayerCrosswordGame(
-                id, difficulty, mode, hostUsername, crossword
-            );
-            this.availableGames.push(game);
-            this.gamesMap.set(game.id, game);
-            this.socketsInGames.set(socketId, id);
-        });
+        await this.serverCrosswords.getCrossword(difficulty)
+            .then((crossword: Crossword) => {
+                game = new MultiplayerCrosswordGame(
+                    id, difficulty, mode, hostUsername, crossword
+                );
+                this.availableGames.push(game);
+                this.gamesMap.set(game.id, game);
+                this.socketsInGames.set(socketId, id);
+            });
         return game;
     }
 
@@ -63,15 +76,13 @@ export class CrosswordGameManager {
     }
 
     private generateGameId(): string {
-        return (this.idCounter++).toString();
+        return (this.gameIdCounter++).toString();
     }
 
-    private deleteAvailableGame(game: MultiplayerCrosswordGame): boolean {
-        const index = this.availableGames.indexOf(game);
-        if (index > -1) {
-            this.availableGames.splice(index, 1);
-            return true;
-        }
-        return false;
+    private deleteAvailableGame(game: MultiplayerCrosswordGame): void {
+        this.availableGames = this.availableGames
+            .filter((availableGame: MultiplayerCrosswordGame) => {
+                return availableGame !== game;
+            });
     }
 }

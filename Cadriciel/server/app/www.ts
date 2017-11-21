@@ -9,6 +9,7 @@ import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
 import { SocketManager } from './crossword-multiplayer/socket-manager';
+import { SocketServer } from './socket-server';
 const db = require('./db-connection');
 
 // start app after database is connected
@@ -37,7 +38,8 @@ db.connect()
                 server.on('error', onError);
                 server.on('listening', onListening);
 
-                const socketManager = new SocketManager(server);
+                const io = SocketServer.getInstance(server);
+                const socketManager = new SocketManager(io);
                 socketManager.handleSocketRequests();
 
                 /**

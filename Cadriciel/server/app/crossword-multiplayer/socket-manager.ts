@@ -8,9 +8,9 @@ export class SocketManager {
     private gameManager: CrosswordGameManager;
     private mutationManager: CrosswordMutationManager;
 
-    constructor(server: http.Server) {
-        this.io = io.listen(server);
-        this.gameManager = new CrosswordGameManager();
+    constructor(server: SocketIO.Server) {
+        this.io = server;
+        this.gameManager = CrosswordGameManager.getInstance();
         this.mutationManager = new CrosswordMutationManager();
     }
 
