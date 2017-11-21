@@ -44,10 +44,9 @@ export class RenderService {
         .subscribe(event => {
             this.event = event;
             this.keyPressed = true;
-            /*
-            if (this.event.keyCode === 78) { // N is pressed
-                this.isNight = this.isNight === true ? false : true;
-            }*/
+            if (this.event.keyCode === 78) {
+                this.hemiLight.visible = !this.hemiLight.visible;
+            }
         });
     }
 
