@@ -3,6 +3,8 @@ import { CrosswordGameInfo } from '../../../commun/crossword/crossword-game-info
 import { Crossword } from '../../../commun/crossword/crossword';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
+import { INITIAL_GAME_ID } from '../config';
+
 export class CrosswordGamesManager {
     private static gameManagerInstance: CrosswordGamesManager;
     private availableGames: Array<MultiplayerCrosswordGame>;
@@ -16,7 +18,7 @@ export class CrosswordGamesManager {
         this.availableGames = new Array<MultiplayerCrosswordGame>();
         this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
         this.socketsInGames = new Map<string, string>();
-        this.gameIdCounter = 0;
+        this.gameIdCounter = INITIAL_GAME_ID;
         this.serverCrosswords = ServerCrosswords.getInstance();
         this.serverCrosswords.setCollection('crosswords');
     }

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { CrosswordGamesManager } from './crossword-games-manager';
 
-describe('Game Manager', () => {
-    const crosswordGameManager: CrosswordGamesManager = CrosswordGamesManager.getInstance();
+describe('#CrosswordGamesManager', () => {
+    const crosswordGameManager = CrosswordGamesManager.getInstance();
     let createdGameId: string;
 
     it('Should create a game', (done) => {

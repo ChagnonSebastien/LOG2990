@@ -12,14 +12,14 @@ export class MultiplayerManager {
     }
 
     // Singleton
-    public static getInstance() {
+    public static getInstance(): MultiplayerManager {
         if (this.multiplayerManager === undefined) {
             this.multiplayerManager = new MultiplayerManager();
         }
         return this.multiplayerManager;
     }
 
-    public handleCrosswordGameRequests() {
+    public handleCrosswordGameRequests(): void{
         this.crosswordLobbyService.listenForLobbyRequests();
         this.crosswordGameplayService.listenForGameplayRequests();
     }
