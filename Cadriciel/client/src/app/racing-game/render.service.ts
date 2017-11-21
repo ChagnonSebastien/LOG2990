@@ -77,6 +77,15 @@ export class RenderService {
         // this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
         this.createHemisphereLight();
         this.createDirectionalLight();
+        this.dirLight.castShadow = true;
+        this.dirLight.shadow.mapSize.width = 2048;
+        this.dirLight.shadow.mapSize.height = 2048;
+        this.dirLight.shadow.camera.left = -50;
+        this.dirLight.shadow.camera.right = 50;
+        this.dirLight.shadow.camera.top = 50;
+        this.dirLight.shadow.camera.bottom = -50;
+        this.dirLight.shadow.camera.far = 3500;
+        this.dirLight.shadow.bias = -0.0001;
     }
 
     private createSkyBox() {
