@@ -1,10 +1,7 @@
 import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService } from './commands.service';
-import {Controller} from './controller';
-
-enum MOVE_STATE { MOVE_FORWARD, BRAKE }
-enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
+import { Controller, MOVE_STATE, TURN_STATE } from './controller';
 
 export class HumanController extends Controller {
     private raceStarted: boolean;

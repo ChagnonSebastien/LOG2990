@@ -29,6 +29,10 @@ export class RenderService {
 
     private keyPressed = false;
 
+    private hemiLight: THREE.HemisphereLight;
+
+    private dirLight: THREE.DirectionalLight;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
@@ -39,6 +43,9 @@ export class RenderService {
         .subscribe(event => {
             this.event = event;
             this.keyPressed = true;
+            if (this.event.keyCode === 78) {
+                this.dirLight.visible = !this.dirLight.visible;
+            }
         });
     }
 
@@ -46,10 +53,36 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
+    private createHemisphereLight() {
+        this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.2);
+        this.hemiLight.color.setHSL(0.6, 1, 0.6);
+        this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+        this.hemiLight.position.set(0, 7500, 0);
+        this.scene.add(this.hemiLight);
+    }
+
+    private createDirectionalLight() {
+        this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+        this.dirLight.color.setHSL(0.1, 1, 0.95);
+        this.dirLight.position.set(-6000, 7500, 6000);
+        this.dirLight.position.multiplyScalar(30);
+        this.scene.add(this.dirLight);
+    }
+
     protected createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        this.createHemisphereLight();
+        this.createDirectionalLight();
+        this.dirLight.castShadow = true;
+        this.dirLight.shadow.mapSize.width = 2048;
+        this.dirLight.shadow.mapSize.height = 2048;
+        this.dirLight.shadow.camera.left = -50;
+        this.dirLight.shadow.camera.right = 50;
+        this.dirLight.shadow.camera.top = 50;
+        this.dirLight.shadow.camera.bottom = -50;
+        this.dirLight.shadow.camera.far = 3500;
+        this.dirLight.shadow.bias = -0.0001;
     }
 
     private createSkyBox() {
