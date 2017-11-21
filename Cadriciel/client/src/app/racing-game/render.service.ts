@@ -7,6 +7,7 @@ import { CameraService } from './camera.service';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
+import { HemisphereLight } from 'three';
 
 @Injectable()
 export class RenderService {
@@ -29,6 +30,8 @@ export class RenderService {
 
     private keyPressed = false;
 
+    private hemiLight: HemisphereLight;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
@@ -50,10 +53,19 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
+    private createLight() {
+        this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.6);
+        this.hemiLight.color.setHSL(0.6, 1, 0.6);
+        this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+        this.hemiLight.position.set(0, 7500, 0);
+        this.scene.add(this.hemiLight);
+    }
+
     protected createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
-        this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        // this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        this.createLight();
     }
 
     private createSkyBox() {
