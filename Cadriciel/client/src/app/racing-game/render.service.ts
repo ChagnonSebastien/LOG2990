@@ -30,7 +30,9 @@ export class RenderService {
 
     private keyPressed = false;
 
-    private hemiLight: HemisphereLight;
+    private hemiLight: THREE.HemisphereLight;
+
+    private dirLight: THREE.DirectionalLight;
 
     constructor(
         private cameraService: CameraService,
@@ -53,7 +55,7 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
-    private createLight() {
+    private createHemisphereLight() {
         this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.6);
         this.hemiLight.color.setHSL(0.6, 1, 0.6);
         this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
@@ -61,11 +63,20 @@ export class RenderService {
         this.scene.add(this.hemiLight);
     }
 
+    private createDirectionalLight() {
+        this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+        this.dirLight.color.setHSL(0.1, 1, 0.95);
+        this.dirLight.position.set(-1, 1.75, 1);
+        this.dirLight.position.multiplyScalar(30);
+        this.scene.add(this.dirLight);
+    }
+
     protected createScene() {
         this.scene = new THREE.Scene();
         this.createSkyBox();
         // this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
-        this.createLight();
+        this.createHemisphereLight();
+        this.createDirectionalLight();
     }
 
     private createSkyBox() {
