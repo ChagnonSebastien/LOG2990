@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class TrackDetailComponent implements OnInit {
     public track: Track;
     public bestTimesDisplayed: boolean;
+    public trackName: string;
 
     constructor(
         private route: ActivatedRoute,

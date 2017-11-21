@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 export class BestTimesComponent implements OnInit {
 
   public track: Track;
-  public bestTimesDisplayed: boolean;
 
   constructor(
       private route: ActivatedRoute,
