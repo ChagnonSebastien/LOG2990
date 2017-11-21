@@ -34,7 +34,7 @@ export class TrackDetailComponent implements OnInit {
     }
 
     public showBestTimes() {
-        this.bestTimesDisplayed = true;
+        this.bestTimesDisplayed = !this.bestTimesDisplayed;
     }
 
 }

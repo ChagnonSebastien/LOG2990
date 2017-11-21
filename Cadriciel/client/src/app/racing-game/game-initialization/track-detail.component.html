@@ -1,4 +1,4 @@
-<div class="track-detail" *ngIf="track !== undefined">
+<div class="track-detail" class="vertical" *ngIf="track !== undefined">
   <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
     <label>Current name: </label>
@@ -24,16 +24,7 @@
 
     <div>
       <button (click)="showBestTimes()">Best times</button><br>
-      <label *ngIf="bestTimesDisplayed"> 
-        <ul>
-          <li *ngFor="let bestTime of track.bestTimes|slice:0:5">
-            Player name: <label class="detailColor">{{bestTime.playerName}}</label>
-            Time: <label class="detailColor">{{bestTime.time}}</label>
-            <br>
-
-          </li>
-        </ul>
-      </label>  
+     
     </div>  
   </div>
   <br>
@@ -43,5 +34,19 @@
       <img class="imag" src="./assets/noir.jpg"> <!-- Vignette temporaire pour les pistes-->
     </div>
   </label>
+</div>
+
+
+<div class="besttimes" class="vertical" *ngIf="track !== undefined">
+  <label *ngIf="bestTimesDisplayed"> 
+    <ul>
+      <li *ngFor="let bestTime of track.bestTimes|slice:0:5">
+        Player name: <label class="detailColor">{{bestTime.playerName}}</label>
+        Time: <label class="detailColor">{{bestTime.time}}</label>
+        <br>
+
+      </li>
+    </ul>
+  </label>  
 </div>
 <br>
