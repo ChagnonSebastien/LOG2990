@@ -1,3 +1,4 @@
+import { CollisionDetectionService } from './collision-detection.service';
 import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
@@ -5,6 +6,7 @@ import { CommandsService } from './commands.service';
 import { HumanController } from './human-controller';
 import { TestBed } from '@angular/core/testing';
 import { TURN_STATE, MOVE_STATE } from './controller';
+import { VehicleMoveEventService } from './vehicle-move-event.service';
 
 let humanController: HumanController;
 
@@ -13,10 +15,16 @@ describe('Controller', function () {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
-                CommandsService, CountdownService, AudioService, RaceService
+                CommandsService, CountdownService, AudioService, RaceService, CollisionDetectionService, VehicleMoveEventService
             ]
         });
-        humanController = new HumanController(TestBed.get(CommandsService), TestBed.get(CountdownService), TestBed.get(RaceService));
+        humanController = new HumanController(
+            TestBed.get(CommandsService),
+            TestBed.get(CountdownService),
+            TestBed.get(RaceService),
+            TestBed.get(CollisionDetectionService),
+            TestBed.get(VehicleMoveEventService)
+        );
         humanController['raceStarted'] = true;
     });
 
