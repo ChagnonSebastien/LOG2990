@@ -1,6 +1,9 @@
+import { VehicleMoveEventService, VehicleMoveEvent } from './vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import * as THREE from 'three';
 import { CollisionDetectionService } from './collision-detection.service';
+import { Vector3 } from 'three';
+import { Vehicle } from './vehicle';
 const acceleration = 0.1;
 const rotationSpeed = Math.PI / 100;
 const maxSpeed = 35;
@@ -21,11 +24,18 @@ export abstract class Controller {
 
     private obstacleEffect: {type: ObstacleType, timeLeft: number};
 
-    constructor( protected collisionDetectionService: CollisionDetectionService) {
+    constructor(
+        protected collisionDetectionService: CollisionDetectionService,
+        protected vehicleMoveEventService: VehicleMoveEventService
+    ) {
         this.speed = 0;
         this.obstacleEffect = {type: null, timeLeft: 0};
         this.moveState = MOVE_STATE.BRAKE;
         this.turnState = TURN_STATE.DO_NOTHING;
+    }
+
+    public hitWall(speedModifier: number) {
+        this.speed = Math.min(maxSpeed * speedModifier, this.speed * 0.98 * speedModifier);
     }
 
     public hitObstacle(type: ObstacleType) {
@@ -42,7 +52,7 @@ export abstract class Controller {
         }
     }
 
-    public move(vehicle: THREE.Mesh) {
+    public move(vehicle: Vehicle) {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
             if (this.obstacleEffect.timeLeft > 0 && (
                 this.obstacleEffect.type === ObstacleType.Puddle || this.obstacleEffect.type === ObstacleType.Pothole
@@ -58,11 +68,11 @@ export abstract class Controller {
         }
 
         if (this.turnState === TURN_STATE.TURN_RIGHT) {
-            this.rightRotation(vehicle);
+            this.rightRotation(vehicle.getVehicle());
         }
 
         if (this.turnState === TURN_STATE.TURN_LEFT) {
-            this.leftRotation(vehicle);
+            this.leftRotation(vehicle.getVehicle());
         }
 
         if (this.turnState === TURN_STATE.DO_NOTHING) {
@@ -72,25 +82,37 @@ export abstract class Controller {
         if (this.obstacleEffect.timeLeft > 0) {
             this.obstacleEffect.timeLeft--;
             if (this.obstacleEffect.type === ObstacleType.Pothole) {
-                vehicle.position.y = 3 + Math.random() * 25;
+                vehicle.getVehicle().position.y = 3 + Math.random() * 25;
             }
         } else  {
-            vehicle.position.y = 3;
+            vehicle.getVehicle().position.y = 3;
         }
     }
 
-    private accelerate (object: THREE.Mesh) {
+    private accelerate (object: Vehicle) {
         this.speed = Math.min(maxSpeed, this.speed + acceleration);
 
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
-        object.translateZ(-this.speed * speedModifier);
-        this.collisionDetectionService.updateBox(object);
-        if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+        const newPosition = new Vector3 (
+            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * speedModifier * this.speed,
+            0,
+            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * speedModifier * this.speed
+        );
+
+        const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
+        this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
+        if (!moveEvent.isCancelled()) {
+            object.getVehicle().position.x = newPosition.x;
+            object.getVehicle().position.z = newPosition.z;
+        }
+
+        this.collisionDetectionService.updateBox(object.getVehicle());
+        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
             console.log('hit a car');
         }
     }
 
-    private brake (object: THREE.Mesh) {
+    private brake (object: Vehicle) {
         if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster) {
             // Do not change speed
         } else if (this.speed > 0) {
@@ -99,9 +121,21 @@ export abstract class Controller {
         }
 
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
-        object.translateZ(-this.speed * speedModifier);
-        this.collisionDetectionService.updateBox(object);
-        if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+        const newPosition = new Vector3 (
+            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * speedModifier * this.speed,
+            0,
+            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * speedModifier * this.speed
+        );
+
+        const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
+        this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
+        if (!moveEvent.isCancelled()) {
+            object.getVehicle().position.x = newPosition.x;
+            object.getVehicle().position.z = newPosition.z;
+        }
+
+        this.collisionDetectionService.updateBox(object.getVehicle());
+        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
             console.log('hit a car');
         }
     }
