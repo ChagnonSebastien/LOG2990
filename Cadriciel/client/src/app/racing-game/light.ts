@@ -5,10 +5,14 @@ export class Light {
 
     public dirLight: THREE.DirectionalLight;
 
+    public spot: THREE.SpotLight;
+
+    public sphere: THREE.Mesh;
+
     constructor() {
         this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.2);
         this.hemiLight.color.setHSL(0.6, 1, 0.6);
-        this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+        // this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
         this.hemiLight.position.set(0, 7500, 0);
 
         this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
@@ -24,14 +28,20 @@ export class Light {
         this.dirLight.shadow.camera.bottom = -50;
         this.dirLight.shadow.camera.far = 3500;
         this.dirLight.shadow.bias = -0.0001;
-    }
 
-    public addSpotLight(object: any) {
-        const spotLight = new THREE.SpotLight( 0xFFFFFF);
-        spotLight.castShadow = true;
-        spotLight.position.x = object.position.x;
-        spotLight.position.y = object.position.y + 10;
-        spotLight.position.z = object.position.z;
-        object.add(spotLight);
+        const geosph = new THREE.SphereGeometry(0.25, 16, 8);
+        const matsph = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+        this.sphere = new THREE.Mesh(geosph, matsph);
+        this.spot = new THREE.SpotLight( 0xFFFFFF);
+        this.spot.add(this.sphere);
+        /*
+        this.spot.castShadow = true;
+        // this.spot.angle = Math.PI / 8;
+        this.spot.penumbra = 0.1;
+        // this.spot.decay = 2;
+        // this.spot.distance = 350;
+        this.spot.shadow.mapSize.width = 512;
+        this.spot.shadow.mapSize.height = 512;
+        */
     }
 }
