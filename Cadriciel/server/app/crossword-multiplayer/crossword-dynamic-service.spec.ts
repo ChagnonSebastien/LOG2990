@@ -1,20 +1,15 @@
 import { expect } from 'chai';
-import * as http from 'http';
-import * as express from 'express';
 import * as io from 'socket.io-client';
 
-import { SocketServer } from '../socket-server';
 import { CrosswordDynamicService } from './crossword-dynamic-service';
 import { CrosswordGamesManager } from './crossword-games-manager';
 import { CrosswordMutationManager } from './crossword-mutation-manager';
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
+
 import { INITIAL_COUNTDOWN_VALUE } from '../config';
+import { TEST_HOST, TEST_PORT, socketServer } from '../../testing/mock-socket-server';
 import { Crossword } from '../../../commun/crossword/crossword';
 
-const TEST_HOST = 'http://localhost';
-const TEST_PORT = 3002;
-let app: express.Application;
-let server: http.Server;
 let dynamicService: CrosswordDynamicService;
 let gamesManager: CrosswordGamesManager;
 let mutationManager: CrosswordMutationManager;
@@ -31,14 +26,10 @@ describe('#CrosswordDynamicService', () => {
     let game: MultiplayerCrosswordGame;
 
     before(() => {
-        app = express();
-        server = http.createServer(app);
-        server.listen(TEST_PORT);
-        SocketServer.setServer(server);
         dynamicService = CrosswordDynamicService.getInstance();
         gamesManager = CrosswordGamesManager.getInstance();
         mutationManager = CrosswordMutationManager.getInstance();
-        SocketServer.getInstance().on('connection',
+        socketServer.on('connection',
             (serverSocket: SocketIO.Socket) => {
                 serverSocket.join(DYNAMIC_GAME_ID);
 
