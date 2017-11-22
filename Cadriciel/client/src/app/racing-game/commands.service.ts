@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-// tslint:disable-next-line:no-unused-variable
-
 @Injectable()
 export class CommandsService {
     private subjectEventKeyDown = new Subject();
