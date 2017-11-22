@@ -70,4 +70,19 @@ describe('#CrosswordMutationManager', () => {
             }).length).to.equal(1);
         });
     });
+
+    describe('getNextMutation()', () => {
+        it('should return the next crossword mutation for an ongoing crossword game', () => {
+            const crossword = mutationManager.getNextMutation('testId');
+            expect(crossword.difficulty).to.equal('easy');
+            expect(crossword.crossword.length).to.equal(CROSSWORD_GRID_SIZE);
+            expect(crossword.listOfWords.length).to.be.at.least(0);
+            expect(crossword.wordsWithIndex.length)
+                .to.equal(crossword.listOfWords.length);
+        });
+
+        it('should return undefined for a crossword game that does not exist', () => {
+            expect(mutationManager.getNextMutation('doesNotExistId')).to.be.undefined;
+        });
+    });
 });
