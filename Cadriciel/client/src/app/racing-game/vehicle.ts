@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import {Controller} from './controller';
 
 const distanceBetweenCars = 5;
-const startOffset = 0.75;
 
 const assetsPath = '/assets';
 const redCarPath = 'red_cart.json';
