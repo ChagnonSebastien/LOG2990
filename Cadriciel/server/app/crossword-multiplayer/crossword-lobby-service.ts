@@ -126,6 +126,7 @@ export class CrosswordLobbyService {
                 const gameId = this.gameManager.findGameIdBySocketId(socket.id);
                 socket.leave(gameId);
                 this.io.sockets.in(gameId).emit('opponent left');
+                this.gameManager.leaveGame(socket.id);
                 this.gameManager.deleteGame(gameId);
             });
         });

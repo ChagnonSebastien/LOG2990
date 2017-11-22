@@ -4,7 +4,6 @@ import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-
 
 describe('#CrosswordGamesManager', () => {
     let gamesManager: CrosswordGamesManager;
-    let gameId: string;
     const difficulty = 'easy';
     const mode = 'dynamic';
     const hostUsername = 'testUser';
@@ -22,9 +21,10 @@ describe('#CrosswordGamesManager', () => {
 
     describe('createGame()', () => {
         let game: MultiplayerCrosswordGame;
+        const socketId = 'createGameId';
         before(async () => {
             game = await gamesManager
-                .createGame(difficulty, mode, hostUsername, 'createGameId');
+                .createGame(difficulty, mode, hostUsername, socketId);
         });
 
         it('should create a new multiplayer game', () => {
@@ -41,6 +41,13 @@ describe('#CrosswordGamesManager', () => {
             expect(gamesManager['availableGames'].filter((availableGame) => {
                 return game.id === availableGame.id;
             }).length).to.equal(1);
+        });
+
+        describe('findGameIdBySocketId()', () => {
+            it('should associate the socketId with the gameId', () => {
+                expect(gamesManager.findGameIdBySocketId(socketId))
+                    .to.equal(game.id);
+            });
         });
     });
 
@@ -110,6 +117,26 @@ describe('#CrosswordGamesManager', () => {
                 .filter((availableGame) => {
                     return availableGame.id === game.id;
                 }).length).to.equal(0);
+        });
+    });
+
+    describe('leaveGame()', () => {
+        let game: MultiplayerCrosswordGame;
+        const socketId = 'leaveGameId';
+
+        before(async () => {
+            game = await gamesManager
+                .createGame(difficulty, mode, hostUsername, socketId);
+        });
+
+        it('should remove the socket-game association', () => {
+            expect(gamesManager.findGameIdBySocketId(socketId))
+                .to.equal(game.id);
+
+            gamesManager.leaveGame(socketId);
+
+            expect(gamesManager.findGameIdBySocketId(socketId))
+                .to.be.undefined;
         });
     });
 
