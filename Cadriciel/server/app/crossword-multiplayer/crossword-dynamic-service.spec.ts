@@ -22,10 +22,12 @@ let mutationManager: CrosswordMutationManager;
 describe('#CrosswordDynamicService', () => {
     let socket: SocketIOClient.Socket;
     const SOCKET_ID = 'testSocketId';
-    const GAME_ID = 'testGameId';
-    const difficulty = 'easy';
-    const mode = 'dynamic';
-    const hostUsername = 'testUser';
+    const DYNAMIC_GAME_ID = 'dynamicGameId';
+    const CLASSIC_GAME_ID = 'classicGameId';
+    const DIFFICULTY = 'easy';
+    const DYNAMIC_MODE = 'dynamic';
+    const CLASSIC_MODE = 'classic';
+    const HOST_USERNAME = 'testUser';
     let game: MultiplayerCrosswordGame;
 
     before(() => {
@@ -38,16 +40,17 @@ describe('#CrosswordDynamicService', () => {
         mutationManager = CrosswordMutationManager.getInstance();
         SocketServer.getInstance().on('connection',
             (serverSocket: SocketIO.Socket) => {
-                serverSocket.join(GAME_ID);
+                serverSocket.join(DYNAMIC_GAME_ID);
 
                 serverSocket.on('disconnect', () => {
-                    serverSocket.leave(GAME_ID);
+                    serverSocket.leave(DYNAMIC_GAME_ID);
                 });
             });
     });
 
     before(async () => {
-        game = await gamesManager.createGame(difficulty, mode, hostUsername, SOCKET_ID);
+        game = await gamesManager
+            .createGame(DIFFICULTY, DYNAMIC_MODE, HOST_USERNAME, SOCKET_ID);
     });
 
     beforeEach((done) => {
@@ -72,10 +75,10 @@ describe('#CrosswordDynamicService', () => {
 
     describe('startDynamicGame()', () => {
 
-        it('should tell the mutation manager to manage a new game', () => {
-            dynamicService.startDynamicGame(GAME_ID, game);
-            expect(mutationManager.getNextMutation(GAME_ID).difficulty)
-                .to.equal(difficulty);
+        it('should tell the mutation manager to manage a new dynamic game', () => {
+            expect(dynamicService.startDynamicGame(DYNAMIC_GAME_ID, game)).to.be.true;
+            expect(mutationManager.getNextMutation(DYNAMIC_GAME_ID).difficulty)
+                .to.equal(DIFFICULTY);
         });
 
         it('should emit the current countdown to players in the game to synchronize their clocks', (done) => {
@@ -97,6 +100,14 @@ describe('#CrosswordDynamicService', () => {
                 capturedCounts++;
             });
         });
+
+        it('should not accept a game that is not dynamic', () => {
+            const classicGame = new MultiplayerCrosswordGame('', DIFFICULTY, CLASSIC_MODE, HOST_USERNAME, new Crossword());
+            expect(
+                dynamicService
+                    .startDynamicGame(CLASSIC_GAME_ID, classicGame)
+            ).to.be.false;
+        });
     });
 
     describe('foundWord()', () => {
@@ -113,7 +124,7 @@ describe('#CrosswordDynamicService', () => {
                     capturedCounts++;
                 });
             const foundWord = game.crossword.wordsWithIndex[0];
-            dynamicService.foundWord(GAME_ID, game, foundWord);
+            dynamicService.foundWord(DYNAMIC_GAME_ID, game, foundWord);
         });
 
         it('should tell the mutation manager that a word was found', () => {
@@ -122,19 +133,19 @@ describe('#CrosswordDynamicService', () => {
             // Word not marked as found in mutation manager
             expect(
                 mutationManager
-                    .getNextMutation(GAME_ID)
+                    .getNextMutation(DYNAMIC_GAME_ID)
                     .wordsWithIndex
                     .filter((word) => {
                         return word.word === foundWord.word;
                     }).length
             ).to.equal(0);
 
-            dynamicService.foundWord(GAME_ID, game, foundWord);
+            dynamicService.foundWord(DYNAMIC_GAME_ID, game, foundWord);
 
             // Word now found in mutation manager
             expect(
                 mutationManager
-                    .getNextMutation(GAME_ID)
+                    .getNextMutation(DYNAMIC_GAME_ID)
                     .wordsWithIndex
                     .filter((word) => {
                         return word.word === foundWord.word;
@@ -147,7 +158,7 @@ describe('#CrosswordDynamicService', () => {
 
             socket.on('update mutation', (mutation: Crossword) => {
                 expect(mutation.difficulty)
-                    .to.equal(difficulty);
+                    .to.equal(DIFFICULTY);
                 expect(
                     mutation.wordsWithIndex
                         .filter((word) => {
@@ -157,7 +168,7 @@ describe('#CrosswordDynamicService', () => {
                 done();
             });
 
-            dynamicService.foundWord(GAME_ID, game, foundWord);
+            dynamicService.foundWord(DYNAMIC_GAME_ID, game, foundWord);
         });
     });
 
@@ -166,9 +177,9 @@ describe('#CrosswordDynamicService', () => {
             dynamicService.listenForNewCountdown();
         });
 
-        it('should listen for new initial countdown values on sockets', (done) => {
+        it('should listen for new initial countdown values on sockets, and set them when the game is dynamic', (done) => {
             gamesManager
-                .createGame(difficulty, mode, hostUsername, socket.id)
+                .createGame(DIFFICULTY, DYNAMIC_MODE, HOST_USERNAME, socket.id)
                 .then((cheatModeGame) => {
                     const newCountdown = 123;
                     expect(cheatModeGame.countdown.initialCountdownValue)

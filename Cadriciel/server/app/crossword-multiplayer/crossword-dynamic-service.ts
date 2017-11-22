@@ -26,12 +26,16 @@ export class CrosswordDynamicService {
         return this.dynamicService;
     }
 
-    public startDynamicGame(gameId: string, game: MultiplayerCrosswordGame): void {
+    public startDynamicGame(gameId: string, game: MultiplayerCrosswordGame): boolean {
+        if (game.mode !== 'dynamic') {
+            return false;
+        }
         this.mutationManager.newGame(gameId, game.difficulty);
         game.countdown.count.subscribe((count: number) => {
             this.io.sockets.in(gameId).emit('current countdown', count);
         });
         game.countdown.startCountdown();
+        return true;
     }
 
     public foundWord(gameId: string, game: MultiplayerCrosswordGame, foundWord: Word): void {
@@ -45,7 +49,6 @@ export class CrosswordDynamicService {
     public listenForNewCountdown(): void {
         this.io.on('connection', (socket: SocketIO.Socket) => {
             socket.on('new countdown', (newCountdown: number) => {
-                console.log('NEW COUNTDOWN', newCountdown);
                 const gameId = this.gamesManager.findGameIdBySocketId(socket.id);
                 const game = this.gamesManager.getGame(gameId);
                 if (game.mode === 'dynamic') {
