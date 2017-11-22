@@ -30,10 +30,6 @@ export class RenderService {
 
     private keyPressed = false;
 
-    private hemiLight: THREE.HemisphereLight;
-
-    private dirLight: THREE.DirectionalLight;
-
     private light: Light;
 
     constructor(
