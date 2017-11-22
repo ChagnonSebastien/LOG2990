@@ -29,15 +29,11 @@ export class VehicleMoveEvent extends Cancellable {
     }
 
     public getPreviousPosition() {
-        return this.previousPosition;
+        return this.previousPosition.clone();
     }
 
     public getNewPosition() {
         return this.newPosition;
-    }
-
-    public setNewPosition(newPosition: Vector3) {
-        this.newPosition = newPosition;
     }
 
     public getVehicle(): Vehicle {

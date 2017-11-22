@@ -106,7 +106,6 @@ export abstract class Controller {
             object.getVehicle().position.z = newPosition.z;
         }
 
-        this.collisionDetectionService.updateBox(object.getVehicle());
         if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
             console.log('hit a car');
         }
@@ -134,7 +133,6 @@ export abstract class Controller {
             object.getVehicle().position.z = newPosition.z;
         }
 
-        this.collisionDetectionService.updateBox(object.getVehicle());
         if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
             console.log('hit a car');
         }
@@ -145,7 +143,6 @@ export abstract class Controller {
             // Does nothing
         } else {
             object.rotation.y += rotationSpeed;
-            this.collisionDetectionService.updateBox(object);
             if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
                 console.log('hit a car');
             }
@@ -157,7 +154,6 @@ export abstract class Controller {
             // Does nothing
         } else {
             object.rotation.y -= rotationSpeed;
-            this.collisionDetectionService.updateBox(object);
             if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
                 console.log('hit a car');
             }
