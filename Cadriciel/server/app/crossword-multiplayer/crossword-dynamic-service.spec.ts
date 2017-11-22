@@ -9,6 +9,7 @@ import { CrosswordGamesManager } from './crossword-games-manager';
 import { CrosswordMutationManager } from './crossword-mutation-manager';
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
 import { INITIAL_COUNTDOWN_VALUE } from '../config';
+import { Crossword } from '../../../commun/crossword/crossword';
 
 const TEST_HOST = 'http://localhost';
 const TEST_PORT = 3002;
@@ -138,6 +139,24 @@ describe('#CrosswordDynamicService', () => {
                         return word.word === foundWord.word;
                     }).length
             ).to.equal(1);
+        });
+
+        it('should emit the next mutated crossword to players in the game', (done) => {
+            const foundWord = game.crossword.wordsWithIndex[2];
+
+            socket.on('update mutation', (mutation: Crossword) => {
+                expect(mutation.difficulty)
+                    .to.equal(difficulty);
+                expect(
+                    mutation.wordsWithIndex
+                        .filter((word) => {
+                            return word.word === foundWord.word;
+                        }).length
+                ).to.equal(1);
+                done();
+            });
+
+            dynamicService.foundWord(GAME_ID, game, foundWord);
         });
     });
 });
