@@ -18,7 +18,7 @@ const panelRadius = 3;
 const dylanPanelAmount = 'votonsdylan.json';
 const michelPanelAmount = 'votonsmichel.json';
 
-const treeMinimumHeight = 0;
+const treeMinimumHeight = 0.1;
 const treeMaximumHeight = 12;
 const treeRarity = 0.1;
 const treePath = 'tree.json';

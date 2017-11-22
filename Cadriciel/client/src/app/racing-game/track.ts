@@ -2,8 +2,6 @@ import { LineCalculationService } from './line-calculation.service';
 import { Obstacle } from './draw-track/obstacle';
 import * as THREE from 'three';
 
-const trackRadius = 10;
-
 export class Track {
 
     public name: string;
@@ -42,8 +40,26 @@ export class Track {
         return Math.min.apply(null, this.trackIntersections.map( (intersection, index, array) => {
             const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
             const nearestPoint = lineCalculationService.getNearestPointOnLineWithClamping(point, line);
-            return lineCalculationService.distance(point, nearestPoint) - trackRadius;
+            return lineCalculationService.distance(point, nearestPoint);
         }));
+    }
+
+    public getNearestPointOnTrack(point: THREE.Vector2, lineCalculationService: LineCalculationService): THREE.Vector2 {
+        let nearestDistance = Infinity;
+        let nearestPoint: THREE.Vector2;
+
+        this.trackIntersections.forEach((intersection, index, array) => {
+            const line = { point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1] };
+            const clampPoint = lineCalculationService.getNearestPointOnLineWithClamping(point, line);
+            const distance = lineCalculationService.distance(point, clampPoint);
+
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestPoint = clampPoint;
+            }
+        });
+
+        return nearestPoint;
     }
 
     public centerOfFirstSegment(): { position: THREE.Vector2, rotation: number } {

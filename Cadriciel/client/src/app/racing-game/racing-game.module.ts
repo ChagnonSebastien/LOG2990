@@ -1,3 +1,4 @@
+import { RoadLimitService } from './road-limit.service';
 import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { ObstacleService } from './obstacle.service';
@@ -22,6 +23,7 @@ import { RacingGameService } from './racing-game.service';
 import { CommandsService } from './commands.service';
 import { VehicleService } from './vehicle.service';
 import { CollisionDetectionService } from './collision-detection.service';
+import { VehicleMoveEventService } from './vehicle-move-event.service';
 
 @NgModule({
     imports: [
@@ -53,7 +55,9 @@ import { CollisionDetectionService } from './collision-detection.service';
         ObstacleService,
         AudioService,
         RaceService,
-        CollisionDetectionService
+        CollisionDetectionService,
+        RoadLimitService,
+        VehicleMoveEventService
     ]
 })
 export class RacingGameModule { }

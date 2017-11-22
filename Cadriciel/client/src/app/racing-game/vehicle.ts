@@ -23,7 +23,15 @@ export class Vehicle {
 
     private lastObstacleHit: { type: ObstacleType, index: number };
 
-    constructor(private obstacleService: ObstacleService, private collisionDetectionService: CollisionDetectionService) {
+    private track: Track;
+
+    constructor(
+        private obstacleService: ObstacleService,
+        private collisionDetectionService: CollisionDetectionService
+    ) {}
+
+    public getTrack(): Track {
+        return this.track;
     }
 
     public getVehicle(): THREE.Mesh {
@@ -32,7 +40,7 @@ export class Vehicle {
 
     public move() {
         this.calculateObstacleCollision();
-        this.controler.move(this.vehicle);
+        this.controler.move(this);
     }
 
     public calculateObstacleCollision() {
@@ -47,6 +55,10 @@ export class Vehicle {
         }).forEach((distance, index) => {
             this.isColliding(type, distance, index);
         });
+    }
+
+    public hitWall(speedModifier: number) {
+        this.controler.hitWall(speedModifier);
     }
 
     private distanceToObstacle(obstaclePosition: THREE.Vector2) {
@@ -71,6 +83,7 @@ export class Vehicle {
 
     public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
         this.scale = scale;
+        this.track = track;
         this.controler = controller;
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);

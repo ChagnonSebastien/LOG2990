@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Vehicle } from './vehicle';
 import * as THREE from 'three';
 @Injectable()
 export class CollisionDetectionService {
