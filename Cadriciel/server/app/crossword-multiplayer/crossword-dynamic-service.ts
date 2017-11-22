@@ -18,6 +18,7 @@ export class CrosswordDynamicService {
         this.gamesManager = CrosswordGamesManager.getInstance();
     }
 
+    // Singleton
     public static getInstance(): CrosswordDynamicService {
         if (this.dynamicService === undefined) {
             this.dynamicService = new CrosswordDynamicService();

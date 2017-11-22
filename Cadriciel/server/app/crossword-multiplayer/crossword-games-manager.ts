@@ -56,11 +56,15 @@ export class CrosswordGamesManager {
         return this.gamesMap.get(id);
     }
 
-    public joinGame(gameId: string, challengerUsername: string, socketId: string): void {
-        const game = this.getGame(gameId);
+    public joinGame(gameId: string, challengerUsername: string, socketId: string): boolean {
+        const game = this.gamesMap.get(gameId);
+        if (game === undefined) {
+            return false;
+        }
         game.challengerUsername = challengerUsername;
         this.socketsInGames.set(socketId, gameId);
         this.deleteAvailableGame(game);
+        return true;
     }
 
     public leaveGame(socketId: string): void {
