@@ -209,7 +209,10 @@ export class DrawTrackService {
             this.intersections.map(intersection => new THREE.Vector2(intersection.x, -intersection.y)),
             this.obstacleService.getObstacles(ObstacleType.Puddle),
             this.obstacleService.getObstacles(ObstacleType.Pothole),
-            this.obstacleService.getObstacles(ObstacleType.Booster)
+            this.obstacleService.getObstacles(ObstacleType.Booster),
+            -1,
+            0,
+            []
         );
 
         return this.trackService.save(trackToSave);

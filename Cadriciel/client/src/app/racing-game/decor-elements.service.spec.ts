@@ -23,6 +23,9 @@ describe('DecorElementsService', function () {
             [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
             [],
             [],
+            [],
+            -1,
+            0,
             []
         ));
     });

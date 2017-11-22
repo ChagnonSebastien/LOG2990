@@ -11,7 +11,7 @@ export class Track {
     public type: string;
     public trackIntersections: THREE.Vector2[];
     public numberOfTimesPlayed: number;
-    public bestTimes: number[];
+    public bestTimes: { playerName: string, time: number }[];
     public rating: number;
     public puddles: Obstacle[];
     public potholes: Obstacle[];
@@ -24,7 +24,11 @@ export class Track {
         intersections: THREE.Vector2[],
         puddles: Obstacle[],
         potholes: Obstacle[],
-        boosters: Obstacle[]
+        boosters: Obstacle[],
+        rating: number,
+        numberOfTimesPlayed: number,
+        bestTimes: { playerName: string, time: number }[]
+
     ) {
         this.name = name;
         this.description = description;
@@ -33,9 +37,9 @@ export class Track {
         this.puddles = puddles;
         this.potholes = potholes;
         this.boosters = boosters;
-        this.rating = -1;
-        this.numberOfTimesPlayed = 0;
-        this.bestTimes = [];
+        this.rating = rating;
+        this.numberOfTimesPlayed = numberOfTimesPlayed;
+        this.bestTimes = bestTimes;
     }
 
     public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService) {
