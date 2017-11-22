@@ -123,10 +123,11 @@ export class TerrainGenerationService {
             snowyTexture:	{ type: 't', value: this.loadTexture(snowyTexturePath) },
         };
 
+
         const terrainMaterial = new THREE.ShaderMaterial({
             uniforms: customUniforms,
             vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-            fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
         });
 
         const terrainGeometry = new THREE.PlaneGeometry(
@@ -134,6 +135,7 @@ export class TerrainGenerationService {
         const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
         terrain.rotation.x = -Math.PI / 2;
         terrain.position.y = -trackHeight * this.scale;
+        terrain.receiveShadow = true;
 
         return terrain;
 
@@ -159,8 +161,9 @@ export class TerrainGenerationService {
         const heightTableY = Math.floor((y + this.mapWidth / 2) * Math.pow(2, this.heightMapSteps) / this.mapWidth);
 
         // The sigmoid function assures a smooth transition between the normal terrain height and the track
-        return availableRadius < trackRadius / 2 ? 0 : (
-            (this.heightTable[heightTableX][heightTableY] - trackHeight) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3)
+        return availableRadius < trackRadius * 1.5 ? 0 : (
+            (this.heightTable[heightTableX][heightTableY] - trackHeight) *
+            this.sigmoid(1, trackRadius - 3 - (availableRadius - trackRadius) / 3)
         );
     }
 

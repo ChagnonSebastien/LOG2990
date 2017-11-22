@@ -2,18 +2,26 @@ import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService } from './commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
+import { CollisionDetectionService } from './collision-detection.service';
+import { VehicleMoveEventService } from './vehicle-move-event.service';
 
 export class HumanController extends Controller {
     private raceStarted: boolean;
 
-    constructor(private commandsService: CommandsService, private countdownService: CountdownService, private raceService: RaceService) {
-        super();
+    constructor(
+        private commandsService: CommandsService,
+        private countdownService: CountdownService,
+        private raceService: RaceService,
+        protected collisionDetectionService: CollisionDetectionService,
+        protected vehicleMoveEventService: VehicleMoveEventService
+    ) {
+        super(collisionDetectionService, vehicleMoveEventService);
         this.raceStarted = false;
-        this.commandsService.getKeyDownEvent().subscribe( event => {
+        this.commandsService.getKeyDownEvent().subscribe(event => {
             this.moveVehicle(event);
         });
 
-        this.commandsService.getKeyUpEvent().subscribe( event => {
+        this.commandsService.getKeyUpEvent().subscribe(event => {
             this.stopVehicle(event);
         });
         this.listenForEndOfCountdown();
@@ -37,7 +45,7 @@ export class HumanController extends Controller {
             this.moveState = MOVE_STATE.BRAKE;
         }
 
-        if ((event.keyCode === 65 || event.keyCode === 68) && this.raceStarted ) {
+        if ((event.keyCode === 65 || event.keyCode === 68) && this.raceStarted) {
             this.turnState = TURN_STATE.DO_NOTHING;
         }
     }
