@@ -48,7 +48,6 @@ export abstract class Controller {
                 this.obstacleEffect.type === ObstacleType.Puddle || this.obstacleEffect.type === ObstacleType.Pothole
             )) {
                 this.brake(vehicle);
-                this.collisionDetectionService.updateBox(vehicle);
             } else {
                 this.accelerate(vehicle);
             }
@@ -102,6 +101,9 @@ export abstract class Controller {
         const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
         object.translateZ(-this.speed * speedModifier);
         this.collisionDetectionService.updateBox(object);
+        if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+            console.log('hit a car');
+        }
     }
 
     private leftRotation(object: THREE.Mesh) {

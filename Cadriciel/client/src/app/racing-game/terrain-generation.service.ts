@@ -126,7 +126,7 @@ export class TerrainGenerationService {
         const terrainMaterial = new THREE.ShaderMaterial({
             uniforms: customUniforms,
             vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-            fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
         });
 
         const terrainGeometry = new THREE.PlaneGeometry(
@@ -134,6 +134,7 @@ export class TerrainGenerationService {
         const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
         terrain.rotation.x = -Math.PI / 2;
         terrain.position.y = -trackHeight * this.scale;
+        terrain.receiveShadow = true;
 
         return terrain;
 

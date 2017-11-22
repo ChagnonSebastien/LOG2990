@@ -15,9 +15,13 @@ export class VehicleService {
     public mainVehicle: Vehicle;
     public opponentsVehicles: Array<Vehicle>;
 
-    constructor(private commandsService: CommandsService, private obstacleService: ObstacleService,
-        private countdownService: CountdownService, private raceService: RaceService,
-        private collisionDetectionService: CollisionDetectionService) {
+    constructor(
+        private commandsService: CommandsService,
+        private obstacleService: ObstacleService,
+        private countdownService: CountdownService,
+        private raceService: RaceService,
+        private collisionDetectionService: CollisionDetectionService
+    ) {
         this.mainVehicle = new Vehicle(this.obstacleService, this.collisionDetectionService);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
