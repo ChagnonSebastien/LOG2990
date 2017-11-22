@@ -1,4 +1,4 @@
-import { VehicleMoveEventService, VehicleMoveEvent } from './vehicle-move-event.service';
+import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import * as THREE from 'three';
 import { CollisionDetectionService } from './collision-detection.service';

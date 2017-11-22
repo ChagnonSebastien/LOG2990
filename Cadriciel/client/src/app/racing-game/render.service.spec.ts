@@ -1,4 +1,4 @@
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
@@ -7,7 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TerrainGenerationService } from './terrain-generation.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
 import { DecorElementsService } from './decor-elements.service';
 import { LineCalculationService } from './line-calculation.service';

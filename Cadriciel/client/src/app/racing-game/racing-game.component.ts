@@ -5,7 +5,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 
 @Component({
     moduleId: module.id,

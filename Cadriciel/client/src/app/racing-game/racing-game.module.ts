@@ -20,10 +20,10 @@ import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
 import { RacingGameService } from './racing-game.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
 import { CollisionDetectionService } from './collision-detection.service';
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 @NgModule({
     imports: [

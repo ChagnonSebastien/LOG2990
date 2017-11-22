@@ -1,11 +1,11 @@
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { LineCalculationService } from './line-calculation.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { ObstacleService } from './obstacle.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
 import { TestBed } from '@angular/core/testing';

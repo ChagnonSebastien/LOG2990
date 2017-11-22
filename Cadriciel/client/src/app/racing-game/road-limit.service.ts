@@ -2,7 +2,7 @@ import { LineCalculationService } from './line-calculation.service';
 import { Injectable } from '@angular/core';
 import { Track } from './track';
 import { Vector2, Vector3 } from 'three';
-import { VehicleMoveEventService, VehicleMoveEvent } from './vehicle-move-event.service';
+import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Vehicle } from './vehicle';
 
 @Injectable()

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
 import { Light } from './light';

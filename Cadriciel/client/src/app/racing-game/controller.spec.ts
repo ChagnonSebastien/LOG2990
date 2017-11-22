@@ -4,7 +4,7 @@ import { ObstacleType } from './draw-track/obstacle';
 import { Controller, TURN_STATE, MOVE_STATE } from './controller';
 import { Vehicle } from './vehicle';
 import * as THREE from 'three';
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 class MockController extends Controller {}
 

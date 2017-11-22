@@ -1,5 +1,5 @@
 import { RoadLimitService } from './road-limit.service';
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { ObstacleService } from './obstacle.service';
@@ -8,7 +8,7 @@ import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { CollisionDetectionService } from './collision-detection.service';
 const numberOfOpponents = 3;
 

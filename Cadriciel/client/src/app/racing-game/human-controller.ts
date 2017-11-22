@@ -1,9 +1,9 @@
 import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
 import { CollisionDetectionService } from './collision-detection.service';
-import { VehicleMoveEventService } from './vehicle-move-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
     private raceStarted: boolean;
