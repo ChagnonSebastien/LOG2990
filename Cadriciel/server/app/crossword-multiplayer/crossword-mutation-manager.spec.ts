@@ -2,6 +2,8 @@ import { CrosswordMutationManager } from './crossword-mutation-manager';
 import { expect } from 'chai';
 
 import { CROSSWORD_GRID_SIZE } from '../config';
+import { Word } from '../../../commun/word';
+import { Crossword } from '../../../commun/crossword/crossword';
 
 let mutationManager: CrosswordMutationManager;
 
@@ -23,7 +25,7 @@ describe('#CrosswordMutationManager', () => {
             expect(crosswordGame.difficulty).to.equal('easy');
             expect(crosswordGame.listOfWords.length)
                 .to.equal(crosswordGame.wordsWithIndex.length);
-            expect(mutationManager['nextMutations'].get(testId))
+            expect(mutationManager.getNextMutation(testId))
                 .to.equal(crosswordGame);
         });
 
@@ -33,21 +35,39 @@ describe('#CrosswordMutationManager', () => {
     });
 
     describe('foundWord()', () => {
-        const testId = 'testId';
 
         it('should add the word found to foundWords', () => {
-            const crossword = mutationManager['nextMutations'].get(testId);
+            const testId = 'testId';
+            const crossword = mutationManager.getNextMutation(testId);
             const foundWord = crossword.wordsWithIndex[0];
+
             mutationManager.foundWord(testId, foundWord);
+
             expect(mutationManager['foundWords'].get(testId).length).to.equal(1);
             expect(
                 mutationManager['foundWords']
                     .get(testId)
                     .filter((word) => {
                         return word === foundWord;
-                    })
-                    .length
+                    }).length
             ).to.equal(1);
+        });
+
+        it('should generate a mutated crossword that contains the words found', () => {
+            const testId = 'testId';
+            const crossword = mutationManager.getNextMutation(testId);
+            const foundWord = crossword.wordsWithIndex[0];
+
+            mutationManager.foundWord(testId, foundWord);
+
+            const mutatedCrossword = mutationManager.getNextMutation(testId);
+            expect(mutatedCrossword.listOfWords.filter((word) => {
+                return foundWord.word === word;
+            }).length).to.equal(1);
+
+            expect(mutatedCrossword.wordsWithIndex.filter((word) => {
+                return foundWord.word === word.word;
+            }).length).to.equal(1);
         });
     });
 });
