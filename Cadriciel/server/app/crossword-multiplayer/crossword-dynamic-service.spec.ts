@@ -113,5 +113,31 @@ describe('#CrosswordDynamicService', () => {
             const foundWord = game.crossword.wordsWithIndex[0];
             dynamicService.foundWord(GAME_ID, game, foundWord);
         });
+
+        it('should tell the mutation manager that a word was found', () => {
+            const foundWord = game.crossword.wordsWithIndex[1];
+
+            // Word not marked as found in mutation manager
+            expect(
+                mutationManager
+                    .getNextMutation(GAME_ID)
+                    .wordsWithIndex
+                    .filter((word) => {
+                        return word.word === foundWord.word;
+                    }).length
+            ).to.equal(0);
+
+            dynamicService.foundWord(GAME_ID, game, foundWord);
+
+            // Word now found in mutation manager
+            expect(
+                mutationManager
+                    .getNextMutation(GAME_ID)
+                    .wordsWithIndex
+                    .filter((word) => {
+                        return word.word === foundWord.word;
+                    }).length
+            ).to.equal(1);
+        });
     });
 });
