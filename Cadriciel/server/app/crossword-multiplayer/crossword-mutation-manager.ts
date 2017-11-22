@@ -2,6 +2,8 @@ import { CrosswordGenerator } from '../crossword-generator';
 import { Crossword } from '../../../commun/crossword/crossword';
 import { Word } from '../../../commun/word';
 
+import { CROSSWORD_GRID_SIZE } from '../config';
+
 export class CrosswordMutationManager {
     private static mutationManager: CrosswordMutationManager;
 
@@ -13,7 +15,7 @@ export class CrosswordMutationManager {
     private constructor() {
         this.nextMutations = new Map<string, Crossword>();
         this.foundWords = new Map<string, Array<Word>>();
-        this.crosswordGenerator = new CrosswordGenerator(10);
+        this.crosswordGenerator = new CrosswordGenerator(CROSSWORD_GRID_SIZE);
     }
 
     // returns Singleton
@@ -24,10 +26,11 @@ export class CrosswordMutationManager {
         return this.mutationManager;
     }
 
-    public newGame(gameId: string, level: string) {
+    public newGame(gameId: string, level: string): Crossword {
         const crossword = this.newCrossword(level);
         this.foundWords.set(gameId, new Array<Word>());
         this.nextMutations.set(gameId, crossword);
+        return crossword;
     }
 
     public updateMutation(gameId: string, foundWord: Word): void {

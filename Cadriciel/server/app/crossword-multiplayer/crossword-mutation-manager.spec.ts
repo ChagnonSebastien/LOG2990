@@ -1,0 +1,34 @@
+import { CrosswordMutationManager } from './crossword-mutation-manager';
+import { expect } from 'chai';
+
+import { CROSSWORD_GRID_SIZE } from '../config';
+
+let mutationManager: CrosswordMutationManager;
+
+describe('#CrosswordMutationManager', () => {
+    before(() => {
+        mutationManager = CrosswordMutationManager.getInstance();
+    });
+
+    it('should be a singleton', () => {
+        expect(mutationManager).to.equal(CrosswordMutationManager.getInstance());
+    });
+
+    describe('newGame()', () => {
+        const testId = 'testId';
+
+        it('should manage a new game', () => {
+            const crosswordGame = mutationManager.newGame(testId, 'easy');
+            expect(crosswordGame.crossword.length).to.equal(CROSSWORD_GRID_SIZE);
+            expect(crosswordGame.difficulty).to.equal('easy');
+            expect(crosswordGame.listOfWords.length)
+                .to.equal(crosswordGame.wordsWithIndex.length);
+            expect(mutationManager['nextMutations'].get(testId))
+                .to.equal(crosswordGame);
+        });
+
+        it('should initialize the found words of the game to be empty', () => {
+            expect(mutationManager['foundWords'].get(testId).length).to.equal(0);
+        });
+    });
+});
