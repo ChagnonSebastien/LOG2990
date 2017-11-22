@@ -35,7 +35,7 @@ export class CrosswordDynamicService {
 
     public foundWord(gameId: string, game: MultiplayerCrosswordGame, foundWord: Word): void {
         game.countdown.resetCountdown();
-        this.mutationManager.updateMutation(gameId, foundWord);
+        this.mutationManager.foundWord(gameId, foundWord);
         this.io.sockets
             .in(gameId)
             .emit('update mutation', this.mutationManager.getNextMutation(gameId));

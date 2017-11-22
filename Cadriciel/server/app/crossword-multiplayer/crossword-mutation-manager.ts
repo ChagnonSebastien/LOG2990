@@ -33,8 +33,8 @@ export class CrosswordMutationManager {
         return crossword;
     }
 
-    public updateMutation(gameId: string, foundWord: Word): void {
-        this.addToFoundWords(gameId, foundWord);
+    public foundWord(gameId: string, word: Word): void {
+        this.addToFoundWords(gameId, word);
 
         const crossword = this.nextMutations.get(gameId);
         crossword.crossword = this.crosswordGenerator

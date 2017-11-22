@@ -31,4 +31,23 @@ describe('#CrosswordMutationManager', () => {
             expect(mutationManager['foundWords'].get(testId).length).to.equal(0);
         });
     });
+
+    describe('foundWord()', () => {
+        const testId = 'testId';
+
+        it('should add the word found to foundWords', () => {
+            const crossword = mutationManager['nextMutations'].get(testId);
+            const foundWord = crossword.wordsWithIndex[0];
+            mutationManager.foundWord(testId, foundWord);
+            expect(mutationManager['foundWords'].get(testId).length).to.equal(1);
+            expect(
+                mutationManager['foundWords']
+                    .get(testId)
+                    .filter((word) => {
+                        return word === foundWord;
+                    })
+                    .length
+            ).to.equal(1);
+        });
+    });
 });
