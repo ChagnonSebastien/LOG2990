@@ -21,6 +21,7 @@ let mutationManager: CrosswordMutationManager;
 
 describe('#CrosswordDynamicService', () => {
     let socket: SocketIOClient.Socket;
+    const SOCKET_ID = 'testSocketId';
     const GAME_ID = 'testGameId';
     const difficulty = 'easy';
     const mode = 'dynamic';
@@ -46,7 +47,7 @@ describe('#CrosswordDynamicService', () => {
     });
 
     before(async () => {
-        game = await gamesManager.createGame(difficulty, mode, hostUsername, 'socketId');
+        game = await gamesManager.createGame(difficulty, mode, hostUsername, SOCKET_ID);
     });
 
     beforeEach((done) => {
@@ -157,6 +158,37 @@ describe('#CrosswordDynamicService', () => {
             });
 
             dynamicService.foundWord(GAME_ID, game, foundWord);
+        });
+    });
+
+    describe('listenForNewCountdown()', () => {
+        before(() => {
+            dynamicService.listenForNewCountdown();
+        });
+
+        it('should listen for new initial countdown values on sockets', (done) => {
+            gamesManager
+                .createGame(difficulty, mode, hostUsername, socket.id)
+                .then((cheatModeGame) => {
+                    const newCountdown = 123;
+                    expect(cheatModeGame.countdown.initialCountdownValue)
+                        .to.equal(INITIAL_COUNTDOWN_VALUE);
+
+                    let capturedCounts = 0;
+                    cheatModeGame.countdown.count
+                        .subscribe((count: number) => {
+                            if (capturedCounts === 1) {
+                                expect(cheatModeGame.countdown.initialCountdownValue)
+                                    .to.equal(newCountdown);
+                                expect(count)
+                                    .to.equal(newCountdown);
+                                done();
+                            }
+                            capturedCounts++;
+                        });
+
+                    socket.emit('new countdown', newCountdown);
+                });
         });
     });
 });

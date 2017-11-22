@@ -45,6 +45,7 @@ export class CrosswordDynamicService {
     public listenForNewCountdown(): void {
         this.io.on('connection', (socket: SocketIO.Socket) => {
             socket.on('new countdown', (newCountdown: number) => {
+                console.log('NEW COUNTDOWN', newCountdown);
                 const gameId = this.gamesManager.findGameIdBySocketId(socket.id);
                 const game = this.gamesManager.getGame(gameId);
                 if (game.mode === 'dynamic') {
