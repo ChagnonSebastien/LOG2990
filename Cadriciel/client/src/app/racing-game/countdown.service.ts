@@ -1,6 +1,7 @@
 import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Track } from './track';
 import * as THREE from 'three';
 
@@ -11,10 +12,12 @@ export class CountdownService {
     private count: number;
     public countdownStarted: boolean;
     private timer: Observable<number>;
+    private countdownEndedSubject: Subject<any>;
 
     constructor(private audioService: AudioService) {
         this.count = 6;
         this.countdownStarted = false;
+        this.countdownEndedSubject = new Subject();
     }
 
     public startCountdown() {
@@ -24,7 +27,18 @@ export class CountdownService {
             .map(() => --this.count);
         this.timer.subscribe(x => {
             this.updateCountdown(x);
+            if (this.count === 0) {
+                this.endCountdown();
+            }
         });
+    }
+
+    public countdownEndedAlerts(): Observable<any> {
+        return this.countdownEndedSubject.asObservable();
+    }
+
+    private endCountdown() {
+        this.countdownEndedSubject.next();
     }
 
     private startAudio() {
@@ -58,6 +72,7 @@ export class CountdownService {
                     color: 0xffff00
                 });
                 this.countdownMesh = new THREE.Mesh(textGeometry, material);
+                this.countdownMesh.name = 'countdown';
                 this.countdownMesh.position.setX(trackCenter.x * scale);
                 this.countdownMesh.position.setY((scale * 20 / 25) + 3);
                 this.countdownMesh.position.setZ(trackCenter.y * scale);
@@ -68,12 +83,8 @@ export class CountdownService {
     }
 
     private updateCountdown(count: number) {
-        let countText: string;
-        if (count === 0) {
-            countText = 'GO!';
-        } else {
-            countText = count.toString();
-        }
+        const countText = count.toString();
+
         const textGeometry = new THREE.TextGeometry(countText, {
                     font: this.font,
                     size: 200,

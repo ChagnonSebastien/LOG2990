@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import {Controller} from './controller';
 
 const distanceBetweenCars = 5;
-const startOffset = 0.75;
 
 const assetsPath = '/assets';
 const redCarPath = 'red_cart.json';
@@ -79,7 +78,7 @@ export class Vehicle {
         return new Promise<Vehicle>(resolve => {
             loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
-                this.vehicle.rotateY(trackAngle);
+                this.vehicle.rotation.y = trackAngle;
                 this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
                 this.vehicle.position.y = 3;
@@ -106,19 +105,19 @@ export class Vehicle {
     private getCenterOfTrack(track: Track): THREE.Vector2 {
         const fromPosition = track.trackIntersections[0];
         const toPosition = track.trackIntersections[1];
-        const xCenter = ((toPosition.x - fromPosition.x) / 2) * startOffset + fromPosition.x;
-        const yCenter = ((toPosition.y - fromPosition.y) / 2) * startOffset + fromPosition.y;
-        const center = new THREE.Vector2(xCenter, yCenter);
+        const segment = new THREE.Vector2().subVectors(toPosition, fromPosition);
+        const segmentCenter = new THREE.Vector2().addVectors(fromPosition, segment.multiplyScalar(0.5));
+        const startCarsOffset = segment.clone().normalize().multiplyScalar(-10);
+        const startPosition = new THREE.Vector2().addVectors(segmentCenter, startCarsOffset);
 
-        return center;
+        return startPosition;
     }
 
     private getTrackAngle(track: Track): number {
         const fromPosition = track.trackIntersections[0];
         const toPosition = track.trackIntersections[1];
-        const angle = Math.PI / 2 - Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x));
-
-        return angle;
+        const rawAngle = -Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x));
+        return ((toPosition.x - fromPosition.x >= 0) ? rawAngle : rawAngle + Math.PI) - Math.PI / 2;
     }
 
     private calculateBeta(vehicleColor: VehicleColor, trackCenterAngle: number): number {

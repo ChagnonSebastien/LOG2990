@@ -7,6 +7,7 @@ import { CameraService } from './camera.service';
 import { CommandsService } from './commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
+import { Light } from './light';
 
 @Injectable()
 export class RenderService {
@@ -29,16 +30,25 @@ export class RenderService {
 
     private keyPressed = false;
 
+    private hemiLight: THREE.HemisphereLight;
+
+    private dirLight: THREE.DirectionalLight;
+
+    private light: Light;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         private commandsService: CommandsService,
-        private vehiculeService: VehicleService
+        private vehiculeService: VehicleService,
     ) {
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.event = event;
             this.keyPressed = true;
+            if (this.event.keyCode === 78) {
+                this.light.dirLight.visible = !this.light.dirLight.visible;
+            }
         });
     }
 
@@ -48,8 +58,10 @@ export class RenderService {
 
     protected createScene() {
         this.scene = new THREE.Scene();
+        this.light = new Light();
         this.createSkyBox();
-        this.scene.add(new THREE.AmbientLight(0xFFFFFF, 0.4));
+        this.scene.add(this.light.hemiLight);
+        this.scene.add(this.light.dirLight);
     }
 
     private createSkyBox() {
