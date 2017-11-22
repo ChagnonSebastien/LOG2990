@@ -1,4 +1,5 @@
 <div id="vertical" class="track-detail" *ngIf="track !== undefined">
+  <div *ngIf="endGame == false">
   <h2 class="detailColor">{{track.name}} track details!</h2>
   <div>
     <label>Current name: </label>
@@ -35,9 +36,10 @@
     </div>
   </label>
 </div>
+</div>
 
 <div id="vertical" class="bestTimes" *ngIf="track !== undefined">
-  <label *ngIf="bestTimesDisplayed"> 
+  <label *ngIf="bestTimesDisplayed || endGame"> 
     <ul>
       <li *ngFor="let bestTime of track.bestTimes|slice:0:5">
         Player name: <label class="detailColor">{{bestTime.playerName}}</label>

@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class TrackDetailComponent implements OnInit {
     public track: Track;
     public bestTimesDisplayed: boolean;
-    public trackName: string;
+    public endGame: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -24,6 +24,7 @@ export class TrackDetailComponent implements OnInit {
 
     public ngOnInit() {
         this.bestTimesDisplayed = false;
+        this.endGame = false;
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
             this.track = track;
@@ -33,7 +34,6 @@ export class TrackDetailComponent implements OnInit {
             this.trackService.get(params.name).then(track => this.track = track);
         });
     }
-
     public showBestTimes() {
         this.bestTimesDisplayed = !this.bestTimesDisplayed;
     }
