@@ -4,9 +4,9 @@ import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-
 
 describe('#CrosswordGamesManager', () => {
     let gamesManager: CrosswordGamesManager;
-    const difficulty = 'easy';
-    const mode = 'dynamic';
-    const hostUsername = 'testUser';
+    const DIFFICULTY = 'easy';
+    const MODE = 'dynamic';
+    const HOST_USERNAME = 'testUser';
 
     before(() => {
         gamesManager = CrosswordGamesManager.getInstance();
@@ -21,16 +21,16 @@ describe('#CrosswordGamesManager', () => {
 
     describe('createGame()', () => {
         let game: MultiplayerCrosswordGame;
-        const socketId = 'createGameId';
+        const SOCKET_ID = 'createGameId';
         before(async () => {
             game = await gamesManager
-                .createGame(difficulty, mode, hostUsername, socketId);
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, SOCKET_ID);
         });
 
         it('should create a new multiplayer game', () => {
-            expect(game.difficulty).to.equal(difficulty);
-            expect(game.mode).to.equal(mode);
-            expect(game.hostUsername).to.equal(hostUsername);
+            expect(game.difficulty).to.equal(DIFFICULTY);
+            expect(game.mode).to.equal(MODE);
+            expect(game.hostUsername).to.equal(HOST_USERNAME);
         });
 
         it('should store a new game for O(1) access by game id', () => {
@@ -45,7 +45,7 @@ describe('#CrosswordGamesManager', () => {
 
         describe('findGameIdBySocketId()', () => {
             it('should associate the socketId with the gameId', () => {
-                expect(gamesManager.findGameIdBySocketId(socketId))
+                expect(gamesManager.findGameIdBySocketId(SOCKET_ID))
                     .to.equal(game.id);
             });
         });
@@ -54,25 +54,25 @@ describe('#CrosswordGamesManager', () => {
     describe('getAvailableGames()', () => {
         it('should return a list of available games', async () => {
             await gamesManager
-                .createGame(difficulty, mode, hostUsername, 'getAvailableGamesId');
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, 'getAvailableGamesId');
 
             expect(gamesManager.getAvailableGames().length).to.be.at.least(0);
             expect(gamesManager.getAvailableGames()[0].difficulty)
-                .to.equal(difficulty);
+                .to.equal(DIFFICULTY);
             expect(gamesManager.getAvailableGames()[0].mode)
-                .to.equal(mode);
+                .to.equal(MODE);
         });
     });
 
     describe('getGame()', () => {
         it('should get a game by id in O(1) time complexity', async () => {
             const game = await gamesManager
-                .createGame(difficulty, mode, hostUsername, 'getGameId');
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, 'getGameId');
 
             const retrievedGame = gamesManager.getGame(game.id);
             expect(retrievedGame.id).to.equal(game.id);
-            expect(retrievedGame.difficulty).to.equal(difficulty);
-            expect(retrievedGame.mode).to.equal(mode);
+            expect(retrievedGame.difficulty).to.equal(DIFFICULTY);
+            expect(retrievedGame.mode).to.equal(MODE);
         });
 
         it('should return undefined if the game does not exist', () => {
@@ -86,7 +86,7 @@ describe('#CrosswordGamesManager', () => {
 
         before(async () => {
             game = await gamesManager
-                .createGame(difficulty, mode, hostUsername, 'joinGameId');
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, 'joinGameId');
         });
 
         it('should join an available game', () => {
@@ -122,28 +122,41 @@ describe('#CrosswordGamesManager', () => {
 
     describe('leaveGame()', () => {
         let game: MultiplayerCrosswordGame;
-        const socketId = 'leaveGameId';
+        const SOCKET_ID = 'leaveGameId';
 
         before(async () => {
             game = await gamesManager
-                .createGame(difficulty, mode, hostUsername, socketId);
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, SOCKET_ID);
         });
 
         it('should remove the socket-game association', () => {
-            expect(gamesManager.findGameIdBySocketId(socketId))
+            expect(gamesManager.findGameIdBySocketId(SOCKET_ID))
                 .to.equal(game.id);
 
-            gamesManager.leaveGame(socketId);
+            gamesManager.leaveGame(SOCKET_ID);
 
-            expect(gamesManager.findGameIdBySocketId(socketId))
+            expect(gamesManager.findGameIdBySocketId(SOCKET_ID))
                 .to.be.undefined;
         });
     });
 
-    /*it('Should be able to delete a game', () => {
-        expect(crosswordGameManager.getGame(createdGameId)).to.exist;
-        crosswordGameManager.deleteGame(createdGameId);
-        expect(crosswordGameManager.getGame(createdGameId)).to.not.exist;
-        expect(crosswordGameManager.getGame(createdGameId)).to.be.undefined;
-    });*/
+    describe('deleteGame()', () => {
+        let game: MultiplayerCrosswordGame;
+        const SOCKET_ID = 'deleteGameId';
+
+        before(async () => {
+            game = await gamesManager
+                .createGame(DIFFICULTY, MODE, HOST_USERNAME, SOCKET_ID);
+        });
+
+        it('should stop tracking the deleted game', () => {
+            expect(gamesManager.getGame(game.id).id)
+                .to.equal(game.id);
+
+            gamesManager.deleteGame(game.id);
+
+            expect(gamesManager.getGame(game.id))
+                .to.be.undefined;
+        });
+    });
 });

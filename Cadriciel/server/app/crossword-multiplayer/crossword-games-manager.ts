@@ -75,7 +75,8 @@ export class CrosswordGamesManager {
         return this.socketsInGames.get(id);
     }
 
-    public deleteGame(id: string) {
+    public deleteGame(id: string): void {
+        this.getGame(id).countdown.count.unsubscribe();
         this.gamesMap.delete(id);
     }
 
