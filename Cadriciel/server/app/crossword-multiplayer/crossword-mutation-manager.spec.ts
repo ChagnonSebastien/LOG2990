@@ -2,8 +2,6 @@ import { CrosswordMutationManager } from './crossword-mutation-manager';
 import { expect } from 'chai';
 
 import { CROSSWORD_GRID_SIZE } from '../config';
-import { Word } from '../../../commun/word';
-import { Crossword } from '../../../commun/crossword/crossword';
 
 let mutationManager: CrosswordMutationManager;
 
