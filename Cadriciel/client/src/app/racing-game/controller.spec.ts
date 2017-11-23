@@ -1,3 +1,4 @@
+import { CommandsService } from './events/commands.service';
 import { TestBed } from '@angular/core/testing';
 import { ObstacleService } from './obstacle.service';
 import { CollisionDetectionService } from './collision-detection.service';
@@ -16,7 +17,7 @@ describe('Controller', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+            providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService, CommandsService]
         });
         controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
     });
@@ -45,7 +46,7 @@ describe('Controller', function () {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+                providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService, CommandsService]
             });
             controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
             vehicle = new Vehicle(new ObstacleService());

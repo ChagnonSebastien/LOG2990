@@ -1,3 +1,4 @@
+import { CommandsService } from './events/commands.service';
 import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
@@ -11,7 +12,7 @@ const track = new Track('name', 'description', 'type', [
 ], [], [], [], -1, 0, []);
 
 describe('test CountdownService', function () {
-    const countdownService = new CountdownService(new AudioService(new RaceService()));
+    const countdownService = new CountdownService(new AudioService(new RaceService()), new CommandsService());
 
     it('construction test', () => {
         expect(countdownService).toBeDefined();
