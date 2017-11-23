@@ -11,8 +11,6 @@ import { Light } from './light';
 @Injectable()
 export class RenderService {
 
-    private scale: number;
-
     public container: HTMLElement;
 
     private stats: Stats;
@@ -71,7 +69,7 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
+        this.terrainGenerationService.generate(this.scene, track, this.textureSky);
     }
 
     public startRenderingLoop() {
@@ -105,8 +103,7 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track, scale: number): Promise<void> {
-        this.scale = scale;
+    public async initialize(container: HTMLElement, track: Track): Promise<void> {
         this.container = container;
         this.createScene();
         this.initStats();

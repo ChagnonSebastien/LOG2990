@@ -1,18 +1,19 @@
 import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
+import * as SETTINGS from './settings';
 
 // standard position of camera
 
-const orthographicHeight = 10;
-const orthographicFieldOfView = 10;
+const orthographicHeight = 256 - 64;
+const orthographicFieldOfView = 80;
 const orthographicNearClippingPane = 0;
-const orthographicFarClippingPane = 2000;
+const orthographicFarClippingPane = 256;
 
-const perspectiveHeight = 2;
-const maximumPerspectiveDistance = 4;
+const perspectiveHeight = 8;
+const maximumPerspectiveDistance = 16;
 const perspectiveFieldOfView = 70;
-const perspectiveNearClippingPane = 0.01;
+const perspectiveNearClippingPane = 1;
 const perspectiveFarClippingPane = 4000;
 
 const initialZoomLevel = 1;
@@ -22,8 +23,6 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
 @Injectable()
 export class CameraService {
-    private sceneScale: number;
-
     private currentView: View;
 
     private perspectiveCamera: THREE.PerspectiveCamera;
@@ -55,9 +54,8 @@ export class CameraService {
         });
     }
 
-    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
+    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh): void {
         this.objectToFollow = objectToFollow;
-        this.sceneScale = sceneScale;
 
         const aspectRatio = container.clientWidth / container.clientHeight;
         this.perspectiveCamera = this.instansiatePerspectiveCamera(aspectRatio);
@@ -70,19 +68,19 @@ export class CameraService {
         return new THREE.PerspectiveCamera(
             perspectiveFieldOfView,
             aspectRatio,
-            perspectiveNearClippingPane * this.sceneScale,
-            perspectiveFarClippingPane * this.sceneScale
+            perspectiveNearClippingPane * SETTINGS.SCENE_SCALE,
+            perspectiveFarClippingPane * SETTINGS.SCENE_SCALE
         );
     }
 
     private instansiateOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
         const orthographicCamera = new THREE.OrthographicCamera(
-            this.sceneScale * orthographicFieldOfView / -2,
-            this.sceneScale * orthographicFieldOfView / 2,
-            this.sceneScale * orthographicFieldOfView / aspectRatio / 2,
-            this.sceneScale * orthographicFieldOfView / aspectRatio / -2,
-            orthographicNearClippingPane * this.sceneScale,
-            orthographicFarClippingPane * this.sceneScale
+            SETTINGS.SCENE_SCALE * orthographicFieldOfView / -2,
+            SETTINGS.SCENE_SCALE * orthographicFieldOfView / 2,
+            SETTINGS.SCENE_SCALE * orthographicFieldOfView / aspectRatio / 2,
+            SETTINGS.SCENE_SCALE * orthographicFieldOfView / aspectRatio / -2,
+            orthographicNearClippingPane * SETTINGS.SCENE_SCALE,
+            orthographicFarClippingPane * SETTINGS.SCENE_SCALE
         );
         orthographicCamera.rotation.x = Math.PI / -2;
         return orthographicCamera;
@@ -90,15 +88,15 @@ export class CameraService {
 
     private initializeCamerasPositions() {
         this.orthographicCamera.position.x = this.objectToFollow.position.x;
-        this.orthographicCamera.position.y = orthographicHeight * this.sceneScale;
+        this.orthographicCamera.position.y = orthographicHeight * SETTINGS.SCENE_SCALE;
         this.orthographicCamera.position.z = this.objectToFollow.position.z;
 
         this.perspectiveCamera.position.x = this.objectToFollow.position.x + (
-            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * SETTINGS.SCENE_SCALE
         );
-        this.perspectiveCamera.position.y = this.objectToFollow.position.y + perspectiveHeight * this.sceneScale;
+        this.perspectiveCamera.position.y = this.objectToFollow.position.y + perspectiveHeight * SETTINGS.SCENE_SCALE;
         this.perspectiveCamera.position.z = this.objectToFollow.position.z + (
-            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * SETTINGS.SCENE_SCALE
         );
     }
 
@@ -117,8 +115,8 @@ export class CameraService {
             this.perspectiveCamera.position.z - this.objectToFollow.position.z
         );
 
-        if ( referencePosition.length() > maximumPerspectiveDistance * this.sceneScale ) {
-            referencePosition.clampLength(0, maximumPerspectiveDistance * this.sceneScale);
+        if ( referencePosition.length() > maximumPerspectiveDistance * SETTINGS.SCENE_SCALE ) {
+            referencePosition.clampLength(0, maximumPerspectiveDistance * SETTINGS.SCENE_SCALE);
 
             this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;
             this.perspectiveCamera.position.z = this.objectToFollow.position.z + referencePosition.y;
@@ -147,10 +145,10 @@ export class CameraService {
         this.perspectiveCamera.aspect = aspectRatio;
         this.perspectiveCamera.updateProjectionMatrix();
 
-        this.orthographicCamera.left = this.sceneScale * orthographicFieldOfView / -2;
-        this.orthographicCamera.right = this.sceneScale * orthographicFieldOfView / 2;
-        this.orthographicCamera.top = this.sceneScale * orthographicFieldOfView / aspectRatio / 2;
-        this.orthographicCamera.bottom = this.sceneScale * orthographicFieldOfView / aspectRatio / -2;
+        this.orthographicCamera.left = SETTINGS.SCENE_SCALE * orthographicFieldOfView / -2;
+        this.orthographicCamera.right = SETTINGS.SCENE_SCALE * orthographicFieldOfView / 2;
+        this.orthographicCamera.top = SETTINGS.SCENE_SCALE * orthographicFieldOfView / aspectRatio / 2;
+        this.orthographicCamera.bottom = SETTINGS.SCENE_SCALE * orthographicFieldOfView / aspectRatio / -2;
         this.orthographicCamera.updateProjectionMatrix();
     }
 }

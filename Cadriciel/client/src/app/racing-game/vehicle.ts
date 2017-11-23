@@ -5,6 +5,7 @@ import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import { Controller } from './controller';
 import { Mesh } from 'three';
+import * as SETTINGS from './settings';
 
 const distanceBetweenCars = 5;
 
@@ -20,8 +21,6 @@ export class Vehicle {
     private boundingBox: THREE.Mesh;
 
     private controler: Controller;
-
-    private scale: number;
 
     private lastObstacleHit: { type: ObstacleType, index: number };
 
@@ -72,7 +71,7 @@ export class Vehicle {
     }
 
     private distanceToObstacle(obstaclePosition: THREE.Vector2) {
-        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(this.scale);
+        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(SETTINGS.SCENE_SCALE);
         return Math.sqrt(
             Math.pow(obstaclePositionClone.x - this.vehicle.position.x, 2) +
             Math.pow(obstaclePositionClone.y - this.vehicle.position.z, 2)
@@ -85,14 +84,13 @@ export class Vehicle {
                 return;
             }
         }
-        if (distance < type * this.scale) {
+        if (distance < type * SETTINGS.SCENE_SCALE) {
             this.lastObstacleHit = { type: type, index: index };
             this.controler.hitObstacle(type);
         }
     }
 
-    public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
-        this.scale = scale;
+    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
         this.track = track;
         this.controler = controller;
         const loader = new THREE.ObjectLoader();
@@ -103,10 +101,10 @@ export class Vehicle {
             loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
                 this.vehicle.rotation.y = trackAngle;
-                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
-                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
+                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
+                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
                 this.vehicle.position.y = 3;
-                this.vehicle.scale.set(scale, scale, scale);
+                this.vehicle.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
                 this.vehicle.castShadow = true;
                 resolve(this);
             });

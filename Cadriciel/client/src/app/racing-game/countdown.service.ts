@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Track } from './track';
 import * as THREE from 'three';
+import * as SETTINGS from './settings';
 import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
 
 @Injectable()
@@ -58,14 +59,14 @@ export class CountdownService {
         this.audioService.startCountdown();
     }
 
-    public async createCountdown(track: Track, scale: number): Promise<void> {
-        await this.create3DCountdown(track, scale);
+    public async createCountdown(track: Track): Promise<void> {
+        await this.create3DCountdown(track);
         return new Promise<void>(resolve => {
             resolve();
         });
     }
 
-    private async create3DCountdown(track: Track, scale): Promise<void> {
+    private async create3DCountdown(track: Track): Promise<void> {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
         const trackCenter = this.getCenterOfTrack(track);
@@ -86,9 +87,9 @@ export class CountdownService {
                 });
                 this.countdownMesh = new THREE.Mesh(textGeometry, material);
                 this.countdownMesh.name = 'countdown';
-                this.countdownMesh.position.setX(trackCenter.x * scale);
-                this.countdownMesh.position.setY((scale * 20 / 25) + 3);
-                this.countdownMesh.position.setZ(trackCenter.y * scale);
+                this.countdownMesh.position.setX(trackCenter.x * SETTINGS.SCENE_SCALE);
+                this.countdownMesh.position.setY((SETTINGS.SCENE_SCALE * 20 / 25) + 3);
+                this.countdownMesh.position.setZ(trackCenter.y * SETTINGS.SCENE_SCALE);
                 this.countdownMesh.geometry.rotateY(Math.PI / 2);
                 resolve();
             }.bind(this));
