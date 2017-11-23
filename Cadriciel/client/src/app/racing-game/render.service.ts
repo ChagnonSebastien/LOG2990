@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
-import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
 import { Light } from './light';
 
@@ -23,8 +22,6 @@ export class RenderService {
     public scene: THREE.Scene;
 
     private textureSky: THREE.Texture;
-
-    private event: any;
 
     private light: Light;
 

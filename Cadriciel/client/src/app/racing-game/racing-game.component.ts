@@ -1,5 +1,4 @@
 import { ObstacleService } from './obstacle.service';
-import { CountdownService } from './countdown.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
@@ -21,7 +20,6 @@ export class RacingGameComponent implements AfterViewInit {
         private racingGameService: RacingGameService,
         private renderService: RenderService,
         private trackService: TrackService,
-        private countdownService: CountdownService,
         private commandsService: CommandsService,
         private obstacleService: ObstacleService
     ) {

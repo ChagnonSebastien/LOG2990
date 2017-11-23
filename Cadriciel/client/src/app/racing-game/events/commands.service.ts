@@ -13,6 +13,16 @@ export enum PlayerCommand {
     START_GAME
 }
 
+export class CommandEvent {
+    constructor(
+        private command: PlayerCommand
+    ) {}
+
+    public getCommand(): PlayerCommand {
+        return this.command;
+    }
+}
+
 @Injectable()
 export class CommandsService {
     private commandKeyDownEvent = new Subject<CommandEvent>();
@@ -55,15 +65,5 @@ export class CommandsService {
             default:
             return null;
         }
-    }
-}
-
-export class CommandEvent {
-    constructor(
-        private command: PlayerCommand
-    ) {}
-
-    public getCommand(): PlayerCommand {
-        return this.command;
     }
 }
