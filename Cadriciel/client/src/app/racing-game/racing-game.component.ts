@@ -40,11 +40,11 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public eventsDownListen(event: any): void {
-        this.commandsService.sendKeyDownEvent(event);
+        this.commandsService.keyDown(event);
     }
 
     public eventsUpListen(event: any): void {
-        this.commandsService.sentKeyUpEvent(event);
+        this.commandsService.keyUp(event);
     }
 
     public ngAfterViewInit() {
@@ -54,17 +54,4 @@ export class RacingGameComponent implements AfterViewInit {
             this.obstacleService.initialize(track);
         });
     }
-
-    private startCountdown(event: any) {
-        if (event.keyCode === 32 && this.countdownService.countdownStarted === false) {
-            this.countdownService.countdownStarted = true;
-            this.countdownService.startCountdown();
-        }
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    public onStartRace() {
-        this.startCountdown(event);
-    }
-
 }

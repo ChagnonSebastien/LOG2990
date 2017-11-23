@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Track } from './track';
 import * as THREE from 'three';
+import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
 
 @Injectable()
 export class CountdownService {
@@ -16,11 +17,17 @@ export class CountdownService {
     private timer: Observable<number>;
     private countdownDecreasedEventListener: Subject<CountdownDecreaseEvent>;
 
-    constructor(private audioService: AudioService) {
+    constructor(private audioService: AudioService, commandService: CommandsService) {
         this.count = 6;
         this.countdownStarted = false;
         this.countdownEnded = false;
         this.countdownDecreasedEventListener = new Subject();
+
+        commandService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            if (event.getCommand() === PlayerCommand.START_GAME && !this.countdownStarted) {
+                this.startCountdown();
+            }
+        });
     }
 
     public startCountdown() {
