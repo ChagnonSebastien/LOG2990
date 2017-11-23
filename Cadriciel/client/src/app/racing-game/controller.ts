@@ -1,7 +1,6 @@
 import { VehicleRotateEventService, VehicleRotateEvent } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
-import * as THREE from 'three';
 import { CollisionDetectionService } from './collision-detection.service';
 import { Vector3 } from 'three';
 import { Vehicle } from './vehicle';

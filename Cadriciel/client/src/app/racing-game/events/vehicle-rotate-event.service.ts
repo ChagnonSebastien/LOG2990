@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs/Subject';
-import { Vector3 } from 'three';
 import { Injectable } from '@angular/core';
 import { Cancellable } from './cancelable';
 import { Observable } from 'rxjs/Observable';
