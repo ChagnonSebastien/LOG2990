@@ -1,5 +1,10 @@
+import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
+import { VehicleService } from './vehicle.service';
+import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
+import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
+import { Mesh, Geometry, Vector3, Object3D, ObjectLoader } from 'three';
+import { Vehicle } from './vehicle';
 
 const assetsPath = '/assets';
 const boundingBoxPath = 'cart_bounding_box.json';
@@ -18,6 +23,9 @@ export class CollisionDetectionService {
             }
         });
 
+        vehicleMoveEventService.getVehicleMoveObservable().subscribe((event: VehicleMoveEvent) => {
+            this.checkForCollisionWithCar(event.getVehicle());
+        });
     }
 
     private generateBoundingBox(vehicle: Vehicle): void {
@@ -26,48 +34,45 @@ export class CollisionDetectionService {
         });
     }
 
+    private checkForCollisionWithCar(vehicle: Vehicle) {
+        const box = vehicle.getBoundingBox();
+        this.vehicleService.getVehicles().forEach((toCheck: Vehicle) => {
+            if (toCheck !== vehicle) {
+                const box2 = toCheck.getBoundingBox();
 
-    public checkForCollisionWithCar(vehicle: THREE.Mesh) {
-        const box = this.boundingBoxes.get(vehicle);
-        for (const key of Array.from(this.boundingBoxes.keys())) {
-            if (key !== vehicle) {
-                const box2 = this.boundingBoxes.get(key);
                 box.updateMatrixWorld(true);
+                const vertices1 = this.extractWorldVertices(box);
                 box2.updateMatrixWorld(true);
+                const vertices2 = this.extractWorldVertices(box2);
 
-                const vertices1 = (<THREE.Geometry> box.geometry).vertices.map(vertice => {
-                    const vector = vertice.clone();
-                    vector.applyMatrix4(box.matrixWorld);
-                    return vector;
-                });
-
-                const vertices2 = (<THREE.Geometry> box2.geometry).vertices.map(vertice => {
-                    const vector = vertice.clone();
-                    vector.applyMatrix4(box2.matrixWorld);
-                    return vector;
-                });
-
-
-                if (this.checkForIntersection(vertices1, vertices2)) {
-                    return true;
+                const intersectingPoint = this.checkForIntersection(vertices1, vertices2);
+                if (intersectingPoint !== null) {
+                    this.collisionEventService.sendCollisionEvent(new CollisionEvent(vehicle, toCheck, intersectingPoint));
                 }
             }
-        }
-        return false;
+        });
     }
 
-    private checkForIntersection(box1: THREE.Vector3[], box2: THREE.Vector3[]): boolean {
-        let foundIntersection = false;
-        box1.forEach(vertice => {
+    private extractWorldVertices(object: Mesh): Vector3[] {
+        return (<Geometry> object.geometry).vertices.map(vertice => {
+            const vector = vertice.clone();
+            vector.applyMatrix4(object.matrixWorld);
+            return vector;
+        });
+    }
+
+    private checkForIntersection(box1: Vector3[], box2: Vector3[]): Vector3 {
+        let intersectingPoint = null;
+        box1.forEach((vertice: Vector3) => {
             if (this.isVerticeInsideRectangle(vertice, box2)) {
-                foundIntersection = true;
+                intersectingPoint = vertice;
             }
         });
 
-        return foundIntersection;
+        return intersectingPoint;
     }
 
-    private isVerticeInsideRectangle(vertice: THREE.Vector3, box2: THREE.Vector3[]): boolean {
+    private isVerticeInsideRectangle(vertice: Vector3, box2: Vector3[]): boolean {
         const rectangleArea = this.getRectangleArea(box2[0], box2[1], box2[2], box2[3]);
         const triangleSumArea = this.getTriangleArea(box2[0], box2[1], vertice) +
                                 this.getTriangleArea(box2[1], box2[2], vertice) +
@@ -76,11 +81,11 @@ export class CollisionDetectionService {
         return rectangleArea >= triangleSumArea;
     }
 
-    private getRectangleArea(point1: THREE.Vector3, point2: THREE.Vector3, point3: THREE.Vector3, point4: THREE.Vector3): number {
+    private getRectangleArea(point1: Vector3, point2: Vector3, point3: Vector3, point4: Vector3): number {
         return this.getTriangleArea(point1, point2, point3) + this.getTriangleArea(point2, point3, point4);
     }
 
-    private getTriangleArea(point1: THREE.Vector3, point2: THREE.Vector3, point3: THREE.Vector3): number {
+    private getTriangleArea(point1: Vector3, point2: Vector3, point3: Vector3): number {
         return Math.abs((point1.x * (point2.z - point3.z)) + (point2.x * (point3.z - point1.z)) + (point3.x * (point1.z - point2.z))) / 2;
     }
 }
