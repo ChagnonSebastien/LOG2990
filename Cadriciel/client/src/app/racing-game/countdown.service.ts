@@ -1,3 +1,4 @@
+import { CountdownDecreaseEvent } from './events/countdown-decrease-event';
 import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -11,34 +12,39 @@ export class CountdownService {
     private font: THREE.Font;
     private count: number;
     public countdownStarted: boolean;
+    public countdownEnded: boolean;
     private timer: Observable<number>;
-    private countdownEndedSubject: Subject<any>;
+    private countdownDecreasedEventListener: Subject<CountdownDecreaseEvent>;
 
     constructor(private audioService: AudioService) {
         this.count = 6;
         this.countdownStarted = false;
-        this.countdownEndedSubject = new Subject();
+        this.countdownEnded = false;
+        this.countdownDecreasedEventListener = new Subject();
     }
 
     public startCountdown() {
+        this.countdownStarted = true;
         this.startAudio();
         this.timer = Observable.timer(0, 1000)
             .take(this.count)
             .map(() => --this.count);
-        this.timer.subscribe(x => {
-            this.updateCountdown(x);
-            if (this.count === 0) {
-                this.endCountdown();
+
+        this.timer.subscribe(time => {
+            const countdownDecreaseEvent = new CountdownDecreaseEvent(time);
+            this.countdownDecreasedEventListener.next(countdownDecreaseEvent);
+        });
+
+        this.countdownDecreasedEventListener.subscribe(countdownDecreaseEvent => {
+            this.updateCountdown(countdownDecreaseEvent.getNewAmount());
+            if (countdownDecreaseEvent.getNewAmount() === 0) {
+                this.countdownEnded = true;
             }
         });
     }
 
-    public countdownEndedAlerts(): Observable<any> {
-        return this.countdownEndedSubject.asObservable();
-    }
-
-    private endCountdown() {
-        this.countdownEndedSubject.next();
+    public getCountdownDecreaseEvents(): Observable<CountdownDecreaseEvent> {
+        return this.countdownDecreasedEventListener.asObservable();
     }
 
     private startAudio() {
