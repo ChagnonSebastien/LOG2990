@@ -1,3 +1,4 @@
+import { VehicleRotateEventService, VehicleRotateEvent } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import * as THREE from 'three';
@@ -26,7 +27,8 @@ export abstract class Controller {
 
     constructor(
         protected collisionDetectionService: CollisionDetectionService,
-        protected vehicleMoveEventService: VehicleMoveEventService
+        protected vehicleMoveEventService: VehicleMoveEventService,
+        protected vehicleRotateEventService: VehicleRotateEventService
     ) {
         this.speed = 0;
         this.obstacleEffect = {type: null, timeLeft: 0};
@@ -68,11 +70,11 @@ export abstract class Controller {
         }
 
         if (this.turnState === TURN_STATE.TURN_RIGHT) {
-            this.rightRotation(vehicle.getVehicle());
+            this.rightRotation(vehicle);
         }
 
         if (this.turnState === TURN_STATE.TURN_LEFT) {
-            this.leftRotation(vehicle.getVehicle());
+            this.leftRotation(vehicle);
         }
 
         if (this.turnState === TURN_STATE.DO_NOTHING) {
@@ -138,23 +140,31 @@ export abstract class Controller {
         }
     }
 
-    private leftRotation(object: THREE.Mesh) {
-        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
-            // Does nothing
-        } else {
-            object.rotation.y += rotationSpeed;
-            if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+    private leftRotation(object: Vehicle) {
+        if (this.obstacleEffect.timeLeft <= 0 || this.obstacleEffect.type !== ObstacleType.Puddle) {
+            const newRotation =  object.getVehicle().rotation.y + rotationSpeed;
+            const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
+            this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
+            if (!rotateEvent.isCancelled()) {
+                object.getVehicle().rotation.y = newRotation;
+            }
+
+            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
                 console.log('hit a car');
             }
         }
     }
 
-    private rightRotation(object: THREE.Mesh) {
-        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Puddle) {
-            // Does nothing
-        } else {
-            object.rotation.y -= rotationSpeed;
-            if (this.collisionDetectionService.checkForCollisionWithCar(object)) {
+    private rightRotation(object: Vehicle) {
+        if (this.obstacleEffect.timeLeft <= 0 || this.obstacleEffect.type !== ObstacleType.Puddle) {
+            const newRotation =  object.getVehicle().rotation.y - rotationSpeed;
+            const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
+            this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
+            if (!rotateEvent.isCancelled()) {
+                object.getVehicle().rotation.y = newRotation;
+            }
+
+            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
                 console.log('hit a car');
             }
         }
