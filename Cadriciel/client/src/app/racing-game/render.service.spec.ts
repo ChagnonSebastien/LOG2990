@@ -14,6 +14,8 @@ import { LineCalculationService } from './line-calculation.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { RoadLimitService } from './road-limit.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 
 let renderService: RenderService;
 
@@ -22,10 +24,25 @@ describe('Render', () => {
       beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [RenderService, CameraService, TerrainGenerationService, CommandsService,
-                        VehicleService, DecorElementsService, LineCalculationService,
-                        DiamondSquareAlgorithmService, ObstacleService, CountdownService, AudioService, RaceService,
-                        CollisionDetectionService, VehicleMoveEventService, RoadLimitService]
+            providers: [
+                RenderService,
+                CameraService,
+                TerrainGenerationService,
+                CommandsService,
+                VehicleService,
+                DecorElementsService,
+                LineCalculationService,
+                DiamondSquareAlgorithmService,
+                ObstacleService,
+                CountdownService,
+                AudioService,
+                RaceService,
+                CollisionDetectionService,
+                VehicleMoveEventService,
+                RoadLimitService,
+                VehicleMovementController,
+                VehicleRotateEventService
+            ]
         });
         renderService = TestBed.get(RenderService);
     });

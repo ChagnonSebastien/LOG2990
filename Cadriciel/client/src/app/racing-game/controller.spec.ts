@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { ObstacleService } from './obstacle.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { ObstacleType } from './draw-track/obstacle';
@@ -5,6 +6,7 @@ import { Controller, TURN_STATE, MOVE_STATE } from './controller';
 import { Vehicle } from './vehicle';
 import * as THREE from 'three';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 
 class MockController extends Controller {}
 
@@ -12,7 +14,12 @@ let controller: Controller;
 
 describe('Controller', function () {
     beforeAll(() => {
-        controller = new MockController(new CollisionDetectionService, new VehicleMoveEventService);
+        TestBed.resetTestingModule();
+        TestBed.configureTestingModule({
+            providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+        });
+        controller = new MockController(
+            TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
     });
 
     it('should be created', () => {
@@ -37,7 +44,12 @@ describe('Controller', function () {
 
         let vehicle: Vehicle;
         beforeEach(() => {
-            controller = new MockController(new CollisionDetectionService, new VehicleMoveEventService);
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+            });
+            controller = new MockController(
+                TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
             vehicle = new Vehicle(new ObstacleService(), new CollisionDetectionService());
             vehicle['vehicle'] = new THREE.Mesh();
             vehicle.getVehicle().position.set(0, 0, 0);

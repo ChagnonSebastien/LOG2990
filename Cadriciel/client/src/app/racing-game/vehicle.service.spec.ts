@@ -1,3 +1,5 @@
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { LineCalculationService } from './line-calculation.service';
 import { CollisionDetectionService } from './collision-detection.service';
@@ -23,8 +25,20 @@ describe('VehicleService', () => {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [VehicleService, CommandsService, ObstacleService, CountdownService, AudioService, RaceService,
-            CollisionDetectionService, RoadLimitService, LineCalculationService, VehicleMoveEventService]
+            providers: [
+                VehicleService,
+                CommandsService,
+                ObstacleService,
+                CountdownService,
+                AudioService,
+                RaceService,
+                CollisionDetectionService,
+                RoadLimitService,
+                LineCalculationService,
+                VehicleMoveEventService,
+                VehicleMovementController,
+                VehicleRotateEventService
+            ]
         });
         vehicleService = TestBed.get(VehicleService);
     });
