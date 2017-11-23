@@ -1,3 +1,4 @@
+import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
@@ -33,9 +34,25 @@ export class CameraService {
 
     private zoomLevel: number;
 
-    constructor() {
+    constructor(commandService: CommandsService) {
         this.currentView = View.PERSPECTIVE;
         this.zoomLevel = initialZoomLevel;
+
+        commandService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
+            switch (event.getCommand()) {
+                case PlayerCommand.ZOOM_IN:
+                    this.zoomLevel += zoomChange;
+                    this.updateZoom();
+                break;
+                case PlayerCommand.ZOOM_OUT:
+                    this.zoomLevel -= zoomChange;
+                    this.updateZoom();
+                break;
+                case PlayerCommand.TOOGLE_CAMERA_VIEW:
+                this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
+                break;
+            }
+        });
     }
 
     public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
@@ -118,23 +135,7 @@ export class CameraService {
         this.perspectiveCamera.lookAt(this.objectToFollow.position);
     }
 
-    public swapCamera(event: any): void {
-        if (event.keyCode !== 67) { // 67 corresponding to 'C' in ASCII
-            return;
-        }
-
-        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
-    }
-
-    public zoomCamera(event: any): void {
-        // 187 corresponding to '+' in ASCII
-        // 189 corresponding to '-' in ASCII
-        if (event.keyCode === 187) {
-            this.zoomLevel += zoomChange;
-        } else if (event.keyCode === 189) {
-            this.zoomLevel -= zoomChange;
-        }
-
+    public updateZoom(): void {
         this.perspectiveCamera.zoom = this.zoomLevel;
         this.perspectiveCamera.updateProjectionMatrix();
 
