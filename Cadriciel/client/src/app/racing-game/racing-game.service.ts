@@ -1,3 +1,4 @@
+import { CountdownDecreaseEvent } from './events/countdown-decrease-event';
 import { CameraService } from './camera.service';
 import { Track } from './track';
 import { CountdownService } from './countdown.service';
@@ -48,8 +49,10 @@ export class RacingGameService {
     }
 
     private listenForEndOfCountdown() {
-        this.countdownService.countdownEndedAlerts().subscribe(() => {
-            this.removeCountdown();
+        this.countdownService.getCountdownDecreaseEvents().subscribe((countDownDecreaseEvent: CountdownDecreaseEvent) => {
+            if (countDownDecreaseEvent.getNewAmount() === 0) {
+                this.removeCountdown();
+            }
         });
     }
 

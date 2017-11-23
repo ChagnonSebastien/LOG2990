@@ -1,3 +1,5 @@
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { CountdownDecreaseEvent } from './events/countdown-decrease-event';
 import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService } from './events/commands.service';
@@ -6,17 +8,16 @@ import { CollisionDetectionService } from './collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
-    private raceStarted: boolean;
 
     constructor(
         private commandsService: CommandsService,
         private countdownService: CountdownService,
         private raceService: RaceService,
-        protected collisionDetectionService: CollisionDetectionService,
-        protected vehicleMoveEventService: VehicleMoveEventService
+        collisionDetectionService: CollisionDetectionService,
+        vehicleMoveEventService: VehicleMoveEventService,
+        vehicleRotateEventService: VehicleRotateEventService
     ) {
-        super(collisionDetectionService, vehicleMoveEventService);
-        this.raceStarted = false;
+        super(collisionDetectionService, vehicleMoveEventService, vehicleRotateEventService);
         this.commandsService.getKeyDownEvent().subscribe(event => {
             this.moveVehicle(event);
         });
@@ -24,40 +25,27 @@ export class HumanController extends Controller {
         this.commandsService.getKeyUpEvent().subscribe(event => {
             this.stopVehicle(event);
         });
-        this.listenForEndOfCountdown();
-        this.listenForEndOfRace();
     }
 
     private moveVehicle(event) {
-        if (event.keyCode === 87 && this.raceStarted) {
+        if (event.keyCode === 87) {
             this.moveState = MOVE_STATE.MOVE_FORWARD;
         }
-        if (event.keyCode === 65 && this.raceStarted) {
+        if (event.keyCode === 65) {
             this.turnState = TURN_STATE.TURN_LEFT;
         }
-        if (event.keyCode === 68 && this.raceStarted) {
+        if (event.keyCode === 68) {
             this.turnState = TURN_STATE.TURN_RIGHT;
         }
     }
 
     private stopVehicle(event) {
-        if (event.keyCode === 87 && this.raceStarted) {
+        if (event.keyCode === 87) {
             this.moveState = MOVE_STATE.BRAKE;
         }
 
-        if ((event.keyCode === 65 || event.keyCode === 68) && this.raceStarted) {
+        if (event.keyCode === 65 || event.keyCode === 68) {
             this.turnState = TURN_STATE.DO_NOTHING;
         }
-    }
-
-    private listenForEndOfCountdown() {
-        this.countdownService.countdownEndedAlerts().subscribe(() => {
-            this.raceStarted = true;
-        });
-    }
-    private listenForEndOfRace() {
-        this.raceService.raceEndedAlerts().subscribe(() => {
-            this.raceStarted = false;
-        });
     }
 }

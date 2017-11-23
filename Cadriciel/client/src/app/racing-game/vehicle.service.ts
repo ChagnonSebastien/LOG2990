@@ -1,3 +1,5 @@
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { RaceService } from './race.service';
@@ -25,7 +27,9 @@ export class VehicleService {
         private collisionDetectionService: CollisionDetectionService,
         private vehicleMoveEventService: VehicleMoveEventService,
         // tslint:disable-next-line:no-unused-variable
-        private roadLimitService: RoadLimitService
+        private roadLimitService: RoadLimitService,
+        // tslint:disable-next-line:no-unused-variable
+        private vehicleRotateEventService: VehicleRotateEventService
     ) {
         this.mainVehicle = new Vehicle(this.obstacleService, this.collisionDetectionService);
         this.opponentsVehicles = [];
@@ -38,7 +42,7 @@ export class VehicleService {
         return new Promise<Vehicle>(resolve => {
             this.mainVehicle.create3DVehicle(
                 track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService,
-                    this.raceService, this.collisionDetectionService, this.vehicleMoveEventService)
+                    this.raceService, this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService)
             ).then((vehicle) => {
                 resolve(vehicle);
             });
@@ -52,16 +56,16 @@ export class VehicleService {
                 this.countdownService,
                 this.raceService,
                 this.collisionDetectionService,
-                this.vehicleMoveEventService
+                this.vehicleMoveEventService, this.vehicleRotateEventService
             ));
         await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green,
             new HumanController(
                 this.commandsService, this.countdownService, this.raceService,
-                this.collisionDetectionService, this.vehicleMoveEventService));
+                this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService));
         await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow,
             new HumanController(
                 this.commandsService, this.countdownService, this.raceService,
-                this.collisionDetectionService, this.vehicleMoveEventService));
+                this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService));
 
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);
