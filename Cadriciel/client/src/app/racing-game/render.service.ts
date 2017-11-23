@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { CommandsService } from './events/commands.service';
+import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { Subscription } from 'rxjs/Subscription';
 import { VehicleService } from './vehicle.service';
 import { Light } from './light';
@@ -24,25 +24,18 @@ export class RenderService {
 
     private textureSky: THREE.Texture;
 
-    private subscription: Subscription;
-
     private event: any;
-
-    private keyPressed = false;
 
     private light: Light;
 
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private commandsService: CommandsService,
+        commandsService: CommandsService,
         private vehiculeService: VehicleService,
     ) {
-        this.subscription = this.commandsService.getKeyDownEvent()
-        .subscribe(event => {
-            this.event = event;
-            this.keyPressed = true;
-            if (this.event.keyCode === 78) {
+        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
                 this.light.dirLight.visible = !this.light.dirLight.visible;
             }
         });
@@ -84,14 +77,6 @@ export class RenderService {
         this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
     }
 
-    public eventsList(): void {
-        if (this.keyPressed) {
-            this.cameraService.swapCamera(this.event);
-            this.cameraService.zoomCamera(this.event);
-            this.keyPressed = false;
-        }
-    }
-
     public startRenderingLoop() {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.shadowMap.enabled = true;
@@ -106,7 +91,6 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
-        this.eventsList();
         this.animateVehicule();
         this.stats.update();
     }
@@ -131,5 +115,4 @@ export class RenderService {
         this.initStats();
         this.loadTrack(track);
     }
-
 }
