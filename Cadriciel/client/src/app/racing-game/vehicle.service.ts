@@ -29,6 +29,8 @@ export class VehicleService {
         // tslint:disable-next-line:no-unused-variable
         private roadLimitService: RoadLimitService,
         // tslint:disable-next-line:no-unused-variable
+        private vehicleMovementController: VehicleMovementController,
+        // tslint:disable-next-line:no-unused-variable
         private vehicleRotateEventService: VehicleRotateEventService
     ) {
         this.mainVehicle = new Vehicle(this.obstacleService, this.collisionDetectionService);
