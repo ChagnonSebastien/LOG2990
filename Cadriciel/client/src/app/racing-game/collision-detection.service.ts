@@ -6,24 +6,26 @@ const boundingBoxPath = 'cart_bounding_box.json';
 
 @Injectable()
 export class CollisionDetectionService {
-    private boundingBoxes: Map<THREE.Mesh, THREE.Mesh>;
+    constructor(
+        vehicleMoveEventService: VehicleMoveEventService,
+        private collisionEventService: CollisionEventService,
+        private vehicleService: VehicleService,
+        loadingProgressEventService: LoadingProgressEventService
+    ) {
+        loadingProgressEventService.getLoadingObservable().subscribe((event: LoadingProgressEvent) => {
+            if (event.getProgress() === 'Vehicle created') {
+                this.generateBoundingBox(<Vehicle> event.getObject());
+            }
+        });
 
-    constructor() {
-        this.boundingBoxes = new Map<THREE.Mesh, THREE.Mesh>();
     }
 
-    public initializeBoundingBox(vehicle: THREE.Mesh) {
-        const loader = new THREE.ObjectLoader();
-        loader.load(`${assetsPath}/${boundingBoxPath}`, (object: THREE.Object3D) => {
-            const box = <THREE.Mesh> object;
-            vehicle.add(box);
-            this.boundingBoxes.set(vehicle, box);
+    private generateBoundingBox(vehicle: Vehicle): void {
+        new ObjectLoader().load(`${assetsPath}/${boundingBoxPath}`, (box: Object3D) => {
+            vehicle.setBoundingBox(<Mesh> box);
         });
     }
 
-    public getBox(vehicle: THREE.Mesh) {
-        return this.boundingBoxes.get(vehicle);
-    }
 
     public checkForCollisionWithCar(vehicle: THREE.Mesh) {
         const box = this.boundingBoxes.get(vehicle);
