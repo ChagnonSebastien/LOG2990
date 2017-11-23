@@ -1,7 +1,6 @@
 import { VehicleRotateEventService, VehicleRotateEvent } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
-import { CollisionDetectionService } from './collision-detection.service';
 import { Vector3 } from 'three';
 import { Vehicle } from './vehicle';
 const acceleration = 0.1;
@@ -25,7 +24,6 @@ export abstract class Controller {
     private obstacleEffect: {type: ObstacleType, timeLeft: number};
 
     constructor(
-        protected collisionDetectionService: CollisionDetectionService,
         protected vehicleMoveEventService: VehicleMoveEventService,
         protected vehicleRotateEventService: VehicleRotateEventService
     ) {
@@ -106,10 +104,6 @@ export abstract class Controller {
             object.getVehicle().position.x = newPosition.x;
             object.getVehicle().position.z = newPosition.z;
         }
-
-        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-            console.log('hit a car');
-        }
     }
 
     private brake (object: Vehicle) {
@@ -133,10 +127,6 @@ export abstract class Controller {
             object.getVehicle().position.x = newPosition.x;
             object.getVehicle().position.z = newPosition.z;
         }
-
-        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-            console.log('hit a car');
-        }
     }
 
     private leftRotation(object: Vehicle) {
@@ -146,10 +136,6 @@ export abstract class Controller {
             this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
             if (!rotateEvent.isCancelled()) {
                 object.getVehicle().rotation.y = newRotation;
-            }
-
-            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-                console.log('hit a car');
             }
         }
     }
@@ -161,10 +147,6 @@ export abstract class Controller {
             this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
             if (!rotateEvent.isCancelled()) {
                 object.getVehicle().rotation.y = newRotation;
-            }
-
-            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-                console.log('hit a car');
             }
         }
     }

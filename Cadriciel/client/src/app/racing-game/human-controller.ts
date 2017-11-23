@@ -3,7 +3,6 @@ import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
-import { CollisionDetectionService } from './collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
@@ -12,11 +11,10 @@ export class HumanController extends Controller {
         commandsService: CommandsService,
         countdownService: CountdownService,
         raceService: RaceService,
-        collisionDetectionService: CollisionDetectionService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService
     ) {
-        super(collisionDetectionService, vehicleMoveEventService, vehicleRotateEventService);
+        super(vehicleMoveEventService, vehicleRotateEventService);
         commandsService.getKeyDownEvent().subscribe(event => {
             this.moveVehicle(event);
         });

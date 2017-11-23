@@ -1,3 +1,4 @@
+import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
 import { RaceService } from './race.service';
@@ -26,6 +27,7 @@ import { VehicleService } from './vehicle.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
 
 @NgModule({
     imports: [
@@ -61,7 +63,13 @@ import { VehicleRotateEventService } from './events/vehicle-rotate-event.service
         RoadLimitService,
         VehicleMoveEventService,
         VehicleMovementController,
-        VehicleRotateEventService
+        VehicleRotateEventService,
+        LoadingProgressEventService,
+        CollisionEventService
     ]
 })
-export class RacingGameModule { }
+export class RacingGameModule {
+    constructor(collisionDetectionService: CollisionDetectionService) {
+
+    }
+}

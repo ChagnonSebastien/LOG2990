@@ -1,3 +1,4 @@
+import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
@@ -11,7 +12,6 @@ import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import { CommandsService } from './events/commands.service';
-import { CollisionDetectionService } from './collision-detection.service';
 const numberOfOpponents = 3;
 
 @Injectable()
@@ -24,19 +24,18 @@ export class VehicleService {
         private obstacleService: ObstacleService,
         private countdownService: CountdownService,
         private raceService: RaceService,
-        private collisionDetectionService: CollisionDetectionService,
         private vehicleMoveEventService: VehicleMoveEventService,
         // tslint:disable-next-line:no-unused-variable
         private roadLimitService: RoadLimitService,
         // tslint:disable-next-line:no-unused-variable
         private vehicleMovementController: VehicleMovementController,
-        // tslint:disable-next-line:no-unused-variable
-        private vehicleRotateEventService: VehicleRotateEventService
+        private vehicleRotateEventService: VehicleRotateEventService,
+        private loadingProgressEventService: LoadingProgressEventService
     ) {
-        this.mainVehicle = new Vehicle(this.obstacleService, this.collisionDetectionService);
+        this.mainVehicle = new Vehicle(this.obstacleService);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle(this.obstacleService, this.collisionDetectionService);
+            this.opponentsVehicles[i] = new Vehicle(this.obstacleService);
         }
     }
 
@@ -44,8 +43,9 @@ export class VehicleService {
         return new Promise<Vehicle>(resolve => {
             this.mainVehicle.create3DVehicle(
                 track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService,
-                    this.raceService, this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService)
+                    this.raceService, this.vehicleMoveEventService, this.vehicleRotateEventService)
             ).then((vehicle) => {
+                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', vehicle));
                 resolve(vehicle);
             });
         });
@@ -57,17 +57,19 @@ export class VehicleService {
                 this.commandsService,
                 this.countdownService,
                 this.raceService,
-                this.collisionDetectionService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService
             ));
+            this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[0]));
         await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green,
             new HumanController(
                 this.commandsService, this.countdownService, this.raceService,
-                this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService));
+                this.vehicleMoveEventService, this.vehicleRotateEventService));
+                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[1]));
         await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow,
             new HumanController(
                 this.commandsService, this.countdownService, this.raceService,
-                this.collisionDetectionService, this.vehicleMoveEventService, this.vehicleRotateEventService));
+                this.vehicleMoveEventService, this.vehicleRotateEventService));
+                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[2]));
 
         return new Promise<Array<Vehicle>>(resolve => {
             resolve(this.opponentsVehicles);
@@ -76,5 +78,9 @@ export class VehicleService {
 
     public moveVehicle() {
         this.mainVehicle.move();
+    }
+
+    public getVehicles() {
+        return this.opponentsVehicles.concat(this.mainVehicle);
     }
 }

@@ -1,4 +1,3 @@
-import { CollisionDetectionService } from './collision-detection.service';
 import { ObstacleService } from './obstacle.service';
 import { Track } from './track';
 import { Vehicle } from './vehicle';
@@ -11,7 +10,7 @@ const track = new Track('name', 'description', 'type', [
 ], [], [], [], -1, 0, []);
 
 describe('Vehicle', () => {
-    const vehicle = new Vehicle(new ObstacleService(), new CollisionDetectionService());
+    const vehicle = new Vehicle(new ObstacleService());
 
     it('should be created', () => {
         expect(vehicle).toBeDefined();

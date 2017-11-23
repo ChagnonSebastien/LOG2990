@@ -16,6 +16,7 @@ import { CollisionDetectionService } from './collision-detection.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
 
 let renderService: RenderService;
 
@@ -41,7 +42,8 @@ describe('Render', () => {
                 VehicleMoveEventService,
                 RoadLimitService,
                 VehicleMovementController,
-                VehicleRotateEventService
+                VehicleRotateEventService,
+                LoadingProgressEventService
             ]
         });
         renderService = TestBed.get(RenderService);

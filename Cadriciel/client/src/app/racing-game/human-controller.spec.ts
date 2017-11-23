@@ -29,7 +29,6 @@ describe('Controller', function () {
             TestBed.get(CommandsService),
             TestBed.get(CountdownService),
             TestBed.get(RaceService),
-            TestBed.get(CollisionDetectionService),
             TestBed.get(VehicleMoveEventService),
             TestBed.get(VehicleRotateEventService)
         );

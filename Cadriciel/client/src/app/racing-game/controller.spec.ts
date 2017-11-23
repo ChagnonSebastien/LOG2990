@@ -18,8 +18,7 @@ describe('Controller', function () {
         TestBed.configureTestingModule({
             providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
         });
-        controller = new MockController(
-            TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
+        controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
     });
 
     it('should be created', () => {
@@ -48,9 +47,8 @@ describe('Controller', function () {
             TestBed.configureTestingModule({
                 providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
             });
-            controller = new MockController(
-                TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
-            vehicle = new Vehicle(new ObstacleService(), new CollisionDetectionService());
+            controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
+            vehicle = new Vehicle(new ObstacleService());
             vehicle['vehicle'] = new THREE.Mesh();
             vehicle.getVehicle().position.set(0, 0, 0);
         });

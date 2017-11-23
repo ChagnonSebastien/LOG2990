@@ -4,7 +4,7 @@ import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import { Controller } from './controller';
-import { CollisionDetectionService } from './collision-detection.service';
+import { Mesh } from 'three';
 
 const distanceBetweenCars = 5;
 
@@ -17,6 +17,8 @@ const yellowCarPath = 'yellow_cart.json';
 export class Vehicle {
     private vehicle: THREE.Mesh;
 
+    private boundingBox: THREE.Mesh;
+
     private controler: Controller;
 
     private scale: number;
@@ -26,8 +28,7 @@ export class Vehicle {
     private track: Track;
 
     constructor(
-        private obstacleService: ObstacleService,
-        private collisionDetectionService: CollisionDetectionService
+        private obstacleService: ObstacleService
     ) {}
 
     public getTrack(): Track {
@@ -36,6 +37,15 @@ export class Vehicle {
 
     public getVehicle(): THREE.Mesh {
         return this.vehicle;
+    }
+
+    public setBoundingBox(boundingBox: Mesh) {
+        this.vehicle.add(boundingBox);
+        this.boundingBox = boundingBox;
+    }
+
+    public getBoundingBox(): THREE.Mesh {
+        return this.boundingBox;
     }
 
     public move() {
@@ -98,7 +108,6 @@ export class Vehicle {
                 this.vehicle.position.y = 3;
                 this.vehicle.scale.set(scale, scale, scale);
                 this.vehicle.castShadow = true;
-                this.collisionDetectionService.initializeBoundingBox(this.vehicle);
                 resolve(this);
             });
         });

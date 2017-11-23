@@ -1,3 +1,4 @@
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
@@ -37,7 +38,8 @@ describe('VehicleService', () => {
                 LineCalculationService,
                 VehicleMoveEventService,
                 VehicleMovementController,
-                VehicleRotateEventService
+                VehicleRotateEventService,
+                LoadingProgressEventService
             ]
         });
         vehicleService = TestBed.get(VehicleService);
