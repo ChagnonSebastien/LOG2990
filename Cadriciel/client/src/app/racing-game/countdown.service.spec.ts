@@ -8,7 +8,7 @@ const track = new Track('name', 'description', 'type', [
     new THREE.Vector2(0, 0),
     new THREE.Vector2(100, 0),
     new THREE.Vector2(100, 100)
-], [], [], []);
+], [], [], [], -1, 0, []);
 
 describe('test CountdownService', function () {
     const countdownService = new CountdownService(new AudioService(new RaceService()));

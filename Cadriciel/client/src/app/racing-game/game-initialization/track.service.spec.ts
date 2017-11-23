@@ -25,7 +25,7 @@ describe('TrackService', () => {
     }));
 
     it('should not deleted track', fakeAsync(() => {
-        track = new Track('name', 'dest', 'easy', [], [], [], [] );
+        track = new Track('name', 'dest', 'easy', [], [], [], [], 1, 0, [] );
         let result: String;
         this.trackService.delete(track).then((forDelete: String) => result = forDelete);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
@@ -36,7 +36,7 @@ describe('TrackService', () => {
     }));
 
     it('should save track', fakeAsync(() => {
-        track = new Track('name', 'dest', 'easy', [], [], [], [] );
+        track = new Track('name', 'dest', 'easy', [], [], [], [], -1, 1, [] );
         let result: String;
         this.trackService.save(track).then((saved: String) => result = saved);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
@@ -50,7 +50,7 @@ describe('TrackService', () => {
         let result: Track;
         this.trackService.get('TokyoCircuit').then((returnedTrack: Track) => result = returnedTrack);
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
-            body: JSON.stringify(new Track('TokyoCircuit', 'desc', 'easy', [], [], [], [])),
+            body: JSON.stringify(new Track('TokyoCircuit', 'desc', 'easy', [], [], [], [], 4, 2, [])),
         })));
         tick();
         expect(result.name).toEqual('TokyoCircuit');

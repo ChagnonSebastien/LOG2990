@@ -65,8 +65,8 @@ module Route {
                         potholes: req.body.potholes,
                         boosters: req.body.boosters,
                         rating: req.body.rating,
-                        bestTimes: req.body.bestTimes,
-                        numberOfTimesPlayed: req.body.numberOfTimesPlayed
+                        numberOfTimesPlayed: req.body.numberOfTimesPlayed,
+                        bestTimes: req.body.bestTimes
                     });
 
                     db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert : true });
