@@ -34,7 +34,7 @@ const trackSchema = new mongoose.Schema({
         type: Number
     },
     bestTimes: {
-        type: [Number]
+        type: [{ playerName: String, time: Number }]
     },
     numberOfTimesPlayed: {
         type: Number

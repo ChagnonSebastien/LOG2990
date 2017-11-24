@@ -1,53 +1,63 @@
-import { RaceService } from './race.service';
-import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
+import { RoadLimitService } from './road-limit.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleColor } from './vehicle-color';
-import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CommandsService } from './commands.service';
-
+import { CommandsService } from './events/commands.service';
 const numberOfOpponents = 3;
 
 @Injectable()
 export class VehicleService {
-    public mainVehicle: Vehicle;
-    public opponentsVehicles: Array<Vehicle>;
+    public players: Array<Vehicle>;
 
-    constructor(private commandsService: CommandsService, private obstacleService: ObstacleService,
-                 private countdownService: CountdownService, private raceService: RaceService) {
-        this.mainVehicle = new Vehicle(this.obstacleService);
-        this.opponentsVehicles = [];
-        for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle(this.obstacleService);
+    private nbr = 0;
+
+    constructor(
+        private commandsService: CommandsService,
+        private vehicleMoveEventService: VehicleMoveEventService,
+        // tslint:disable-next-line:no-unused-variable
+        private roadLimitService: RoadLimitService,
+        // tslint:disable-next-line:no-unused-variable
+        private vehicleMovementController: VehicleMovementController,
+        // tslint:disable-next-line:no-unused-variable
+        private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
+        private obstacleCollisionEventService: ObstacleCollisionEventService,
+        private vehicleRotateEventService: VehicleRotateEventService,
+        private loadingProgressEventService: LoadingProgressEventService
+    ) {
+        loadingProgressEventService.getLoadingObservable().subscribe((event: LoadingProgressEvent) => {
+            if (event.getProgress() === 'Vehicle created') {
+                if (++this.nbr === 4) {
+                    loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
+                }
+            }
+        });
+    }
+
+    public getMainVehicle() {
+        return this.players[0];
+    }
+
+    public createVehicles(track: Track) {
+        this.players = [];
+        for (let color = 1; color <= numberOfOpponents + 1; color++) {
+            console.log(VehicleColor[color]);
+            this.players.push(new Vehicle(color, track, this.obstacleCollisionEventService, this.commandsService,
+                this.vehicleMoveEventService, this.vehicleRotateEventService, this.loadingProgressEventService));
         }
     }
 
-    public initializeMainVehicle(track: Track, scale: number): Promise<Vehicle> {
-        return new Promise<Vehicle>(resolve => {
-            this.mainVehicle.create3DVehicle(
-                track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService, this.raceService)
-            ).then((vehicle) => {
-                resolve(vehicle);
-            });
-        });
-    }
-
-    public async initializeOpponentsVehicles(track: Track, scale: number): Promise<Array<Vehicle>> {
-        await this.opponentsVehicles[0].create3DVehicle(track, scale, VehicleColor.blue,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-        await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-        await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-
-        return new Promise<Array<Vehicle>>(resolve => {
-            resolve(this.opponentsVehicles);
-        });
-    }
-
     public moveVehicle() {
-        this.mainVehicle.move();
+        this.players[0].move();
+    }
+
+    public getVehicles() {
+        return this.players;
     }
 }

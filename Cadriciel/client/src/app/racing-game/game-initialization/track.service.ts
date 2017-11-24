@@ -40,7 +40,11 @@ export class TrackService {
                     track.trackIntersections,
                     track.puddles,
                     track.potholes,
-                    track.boosters
+                    track.boosters,
+                    track.rating,
+                    track.numberOfTimesPlayed,
+                    track.bestTimes,
+
                 );
             })
             .catch(this.handleError);

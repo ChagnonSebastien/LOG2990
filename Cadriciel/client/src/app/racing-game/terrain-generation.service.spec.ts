@@ -1,4 +1,4 @@
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { Track } from './track';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
@@ -23,7 +23,7 @@ describe('TerrainGenerationService', function () {
                 DecorElementsService,
                 LineCalculationService,
                 DiamondSquareAlgorithmService,
-                ObstacleService
+                ObstaclePositionService
             ]
         });
         terrainGenerationService = TestBed.get(TerrainGenerationService);
@@ -40,13 +40,16 @@ describe('TerrainGenerationService', function () {
     describe('generate()', function () {
 
         beforeAll(async(done) => {
-            terrainGenerationService.generate(new THREE.Scene, 1, new Track(
+            terrainGenerationService.generate(new THREE.Scene, new Track(
                 'name',
                 'desc',
                 'diff',
                 [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
                 [],
                 [],
+                [],
+                -1,
+                0,
                 []
             ), new THREE.Texture());
 

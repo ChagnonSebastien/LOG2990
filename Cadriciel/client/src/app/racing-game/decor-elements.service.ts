@@ -1,9 +1,10 @@
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { LineCalculationService } from './line-calculation.service';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
+import * as SETTINGS from './settings';
 
 const trackRadius = 10;
 
@@ -18,7 +19,7 @@ const panelRadius = 3;
 const dylanPanelAmount = 'votonsdylan.json';
 const michelPanelAmount = 'votonsmichel.json';
 
-const treeMinimumHeight = 0;
+const treeMinimumHeight = 0.1;
 const treeMaximumHeight = 12;
 const treeRarity = 0.1;
 const treePath = 'tree.json';
@@ -34,17 +35,14 @@ export class DecorElementsService {
 
     private track: Track;
 
-    private scale: number;
-
     private treesPositions: THREE.Vector3[] = [];
 
-    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstacleService) {
+    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstaclePositionService) {
     }
 
-    public initialize(scene: THREE.Scene, scale: number, track: Track): void {
+    public initialize(scene: THREE.Scene, track: Track): void {
         this.scene = scene;
         this.track = track;
-        this.scale = scale;
     }
 
     public placeObstacles(): void {
@@ -55,11 +53,11 @@ export class DecorElementsService {
 
     public placeObstacleType(type: ObstacleType, obstacles: Obstacle[], path: string): void {
         this.loadMesh(path).then( obstacleMesh => {
-            obstacleMesh.scale.set(this.scale, this.scale, this.scale);
+            obstacleMesh.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
             this.obstacleService.getObstacles(type).forEach(obstaclePosition => {
                 const obstacleClone = obstacleMesh.clone();
                 obstacleClone.position.set(
-                    (obstaclePosition.x) * this.scale, 2, (obstaclePosition.y) * this.scale);
+                    (obstaclePosition.x) * SETTINGS.SCENE_SCALE, 2, (obstaclePosition.y) * SETTINGS.SCENE_SCALE);
 
                 obstacleClone.rotateY(Math.PI * 2 * Math.random());
                 this.scene.add(obstacleClone);
@@ -81,10 +79,11 @@ export class DecorElementsService {
 
     public placeTrees(): void {
         this.loadMesh(treePath).then( tree => {
-            tree.scale.set(this.scale, this.scale, this.scale);
+            tree.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
             this.treesPositions.forEach(position => {
                 const treeClone = tree.clone();
-                treeClone.position.set(position.x * this.scale, position.y * this.scale, position.z * this.scale);
+                treeClone.position.set(
+                    position.x * SETTINGS.SCENE_SCALE, position.y * SETTINGS.SCENE_SCALE, position.z * SETTINGS.SCENE_SCALE);
                 treeClone.rotateY(Math.PI * 2 * Math.random());
                 this.scene.add(treeClone);
             });
@@ -101,7 +100,7 @@ export class DecorElementsService {
 
     private placeDecorElement(amount: number, distanceFromTrack: number, path: string): void {
         this.loadMesh(path).then(mesh => {
-            mesh.scale.set(this.scale, this.scale, this.scale);
+            mesh.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
 
             for (let i = 0; i < amount; i++) {
                 let availablePlacement: { position: THREE.Vector2, rotation: number };
@@ -110,7 +109,8 @@ export class DecorElementsService {
                 } while (this.availableRadius(availablePlacement.position) < 1);
 
                 const meshClone = <THREE.Mesh> mesh.clone();
-                meshClone.position.set(availablePlacement.position.x * this.scale, 0, availablePlacement.position.y * this.scale);
+                meshClone.position.set(
+                    availablePlacement.position.x * SETTINGS.SCENE_SCALE, 0, availablePlacement.position.y * SETTINGS.SCENE_SCALE);
                 meshClone.rotateY(availablePlacement.rotation);
                 this.scene.add(meshClone);
             }

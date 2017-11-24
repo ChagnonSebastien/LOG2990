@@ -1,18 +1,18 @@
 import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';
 
-let obstacleService: ObstacleService;
+let obstacleService: ObstaclePositionService;
 
 describe('ObstacleService', () => {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [ObstacleService]
+            providers: [ObstaclePositionService]
         });
-        obstacleService = TestBed.get(ObstacleService);
+        obstacleService = TestBed.get(ObstaclePositionService);
     });
 
     it('should be created', () => {
@@ -28,7 +28,10 @@ describe('ObstacleService', () => {
                 [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
                 [new Obstacle(ObstacleType.Puddle, 0, 0.5, 1)],
                 [],
-                [new Obstacle(ObstacleType.Booster, 2, 0, 0.5), new Obstacle(ObstacleType.Booster, 1, 0.5, 0)]
+                [new Obstacle(ObstacleType.Booster, 2, 0, 0.5), new Obstacle(ObstacleType.Booster, 1, 0.5, 0)],
+                -1,
+                0,
+                []
             ));
         });
 
