@@ -66,9 +66,13 @@ export class RenderService {
 
     private createSkyBox() {
         const url = '../../assets/images/skybox/';
+        /*
         const images = [url + 'xpos.png', url + 'xneg.png',
         url + 'ypos.png', url + 'yneg.png',
-        url + 'zpos.png', url + 'zneg.png'];
+        url + 'zpos.png', url + 'zneg.png'];*/
+        const images = [url + 'bluefreeze_rt.png', url + 'bluefreeze_lf.png',
+        url + 'bluefreeze_up.png', url + 'bluefreeze_dn.png',
+        url + 'bluefreeze_bk.png', url + 'bluefreeze_ft.png'];
         this.textureSky = THREE.ImageUtils.loadTextureCube(images);
         const shader = THREE.ShaderLib['cube'];
         shader.uniforms['tCube'].value = this.textureSky;

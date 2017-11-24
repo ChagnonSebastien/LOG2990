@@ -35,20 +35,20 @@ export class RacingGameService {
         await this.vehicleService.initializeMainVehicle(this.track, scale);
         await this.vehicleService.initializeOpponentsVehicles(this.track, scale);
         this.light = new Light();
-        // this.light.sphere.position.setX(0);
-        // this.light.sphere.position.setY(1.1);
-        // this.light.sphere.position.setZ(-3.2);
         const target = new THREE.Object3D();
         this.vehicleService.mainVehicle.getVehicle().add(target);
         target.position.set(0, 0, -4);
-        this.vehicleService.mainVehicle.getVehicle().add(this.light.spot);
-        this.light.spot.position.setX(0);
-        this.light.spot.position.setY(1.1);
-        this.light.spot.position.setZ(-3.2);
-        this.light.spot.target = target;
+        this.vehicleService.mainVehicle.getVehicle().add(this.light.spotRight);
+        this.vehicleService.mainVehicle.getVehicle().add(this.light.spotLeft);
+        this.light.spotRight.position.setX(0.6);
+        this.light.spotRight.position.setY(1.1);
+        this.light.spotRight.position.setZ(-3.2);
+        this.light.spotRight.target = target;
+        this.light.spotLeft.position.setX(-0.6);
+        this.light.spotLeft.position.setY(1.1);
+        this.light.spotLeft.position.setZ(-3.2);
+        this.light.spotLeft.target = target;
         this.renderService.scene.add(this.vehicleService.mainVehicle.getVehicle());
-        console.log(this.light.spot);
-        console.log(this.vehicleService.mainVehicle);
 
         for (let i = 0; i < numberOfOpponents; i++) {
             this.renderService.scene.add(this.vehicleService.opponentsVehicles[i].getVehicle());
