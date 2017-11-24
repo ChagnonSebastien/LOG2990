@@ -1,4 +1,4 @@
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { TestBed } from '@angular/core/testing';
 

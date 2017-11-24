@@ -1,9 +1,7 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
-import { CommandsService } from './events/commands.service';
+import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
-import { CollisionDetectionService } from './collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
@@ -11,40 +9,42 @@ export class HumanController extends Controller {
     constructor(
         commandsService: CommandsService,
         countdownService: CountdownService,
-        raceService: RaceService,
-        collisionDetectionService: CollisionDetectionService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService
     ) {
-        super(collisionDetectionService, vehicleMoveEventService, vehicleRotateEventService);
-        commandsService.getKeyDownEvent().subscribe(event => {
-            this.moveVehicle(event);
+        super(vehicleMoveEventService, vehicleRotateEventService);
+        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            this.startDirective(event.getCommand());
         });
 
-        commandsService.getKeyUpEvent().subscribe(event => {
-            this.stopVehicle(event);
+        commandsService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
+            this.endDirective(event.getCommand());
         });
     }
 
-    private moveVehicle(event) {
-        if (event.keyCode === 87) {
+    private startDirective(command: PlayerCommand) {
+        switch (command) {
+            case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.MOVE_FORWARD;
-        }
-        if (event.keyCode === 65) {
+            break;
+            case PlayerCommand.ROTATE_LEFT:
             this.turnState = TURN_STATE.TURN_LEFT;
-        }
-        if (event.keyCode === 68) {
+            break;
+            case PlayerCommand.ROTATE_RIGHT:
             this.turnState = TURN_STATE.TURN_RIGHT;
+            break;
         }
     }
 
-    private stopVehicle(event) {
-        if (event.keyCode === 87) {
+    private endDirective(command: PlayerCommand) {
+        switch (command) {
+            case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.BRAKE;
-        }
-
-        if (event.keyCode === 65 || event.keyCode === 68) {
+            break;
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
             this.turnState = TURN_STATE.DO_NOTHING;
+            break;
         }
     }
 }

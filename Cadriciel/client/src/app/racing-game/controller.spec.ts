@@ -1,5 +1,6 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { CommandsService } from './events/commands.service';
 import { TestBed } from '@angular/core/testing';
-import { ObstacleService } from './obstacle.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Controller, TURN_STATE, MOVE_STATE } from './controller';
@@ -16,10 +17,10 @@ describe('Controller', function () {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+            providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService, CommandsService,
+                ObstacleCollisionEventService]
         });
-        controller = new MockController(
-            TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
+        controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
     });
 
     it('should be created', () => {
@@ -29,14 +30,12 @@ describe('Controller', function () {
     describe('hitObstacle()', () => {
         it('should set it\'s active effect to the right type and amount of time', () => {
             controller.hitObstacle(ObstacleType.Booster);
-            expect(controller['obstacleEffect'].type).toBe(ObstacleType.Booster);
-            expect(controller['obstacleEffect'].timeLeft).toEqual(120);
+            expect(controller['driveModifier'].constructor.name).toMatch('BoosterModifier');
         });
 
         it('should overwrite the last activeEffect', () => {
             controller.hitObstacle(ObstacleType.Pothole);
-            expect(controller['obstacleEffect'].type).toBe(ObstacleType.Pothole);
-            expect(controller['obstacleEffect'].timeLeft).toEqual(30);
+            expect(controller['driveModifier'].constructor.name).toMatch('PotholeModifier');
         });
     });
 
@@ -46,11 +45,16 @@ describe('Controller', function () {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                providers: [CollisionDetectionService, VehicleMoveEventService, VehicleRotateEventService]
+                providers: [
+                    CollisionDetectionService,
+                    VehicleMoveEventService,
+                    VehicleRotateEventService,
+                    CommandsService,
+                    ObstacleCollisionEventService
+                ]
             });
-            controller = new MockController(
-                TestBed.get(CollisionDetectionService), TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
-            vehicle = new Vehicle(new ObstacleService(), new CollisionDetectionService());
+            controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
+            vehicle = new Vehicle(TestBed.get(ObstacleCollisionEventService));
             vehicle['vehicle'] = new THREE.Mesh();
             vehicle.getVehicle().position.set(0, 0, 0);
         });

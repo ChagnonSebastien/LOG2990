@@ -1,4 +1,5 @@
-import { RaceService } from './race.service';
+import { CommandsService } from './events/commands.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { Track } from './track';
@@ -10,8 +11,8 @@ const track = new Track('name', 'description', 'type', [
     new THREE.Vector2(100, 100)
 ], [], [], [], -1, 0, []);
 
-describe('test CountdownService', function () {
-    const countdownService = new CountdownService(new AudioService(new RaceService()));
+describe('CountdownService', function () {
+    const countdownService = new CountdownService(new AudioService(new RaceService()), new CommandsService());
 
     it('construction test', () => {
         expect(countdownService).toBeDefined();
@@ -19,10 +20,8 @@ describe('test CountdownService', function () {
     });
 
     it('create 3D countdown', (done) => {
-        countdownService.createCountdown(track, 1).then(result => {
+        countdownService.createCountdown(track).then(result => {
             expect(countdownService.countdownMesh).toBeDefined();
-            expect(countdownService.countdownMesh.position.x).toEqual(50);
-            expect(countdownService.countdownMesh.position.y).toEqual(3.8);
             done();
         });
     });

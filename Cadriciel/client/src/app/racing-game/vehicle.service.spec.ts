@@ -1,12 +1,15 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { RaceService } from './events/race.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { LineCalculationService } from './line-calculation.service';
 import { CollisionDetectionService } from './collision-detection.service';
-import { RaceService } from './race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { CommandsService } from './events/commands.service';
 import { Track } from './track';
 import { VehicleService } from './vehicle.service';
@@ -28,16 +31,19 @@ describe('VehicleService', () => {
             providers: [
                 VehicleService,
                 CommandsService,
-                ObstacleService,
+                ObstaclePositionService,
                 CountdownService,
                 AudioService,
-                RaceService,
                 CollisionDetectionService,
                 RoadLimitService,
                 LineCalculationService,
                 VehicleMoveEventService,
                 VehicleMovementController,
-                VehicleRotateEventService
+                VehicleRotateEventService,
+                LoadingProgressEventService,
+                RaceService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService
             ]
         });
         vehicleService = TestBed.get(VehicleService);
@@ -48,14 +54,14 @@ describe('VehicleService', () => {
     });
 
     it('Should initialize main 3D vehicle', (done) => {
-        vehicleService.initializeMainVehicle(track, 1).then(function(data) {
+        vehicleService.initializeMainVehicle(track).then(function(data) {
             expect(data).toBeDefined();
             done();
         });
     });
 
     it('Should initialize opponents 3D vehicles(3)', (done) => {
-        vehicleService.initializeOpponentsVehicles(track, 1).then(function(data) {
+        vehicleService.initializeOpponentsVehicles(track).then(function(data) {
             expect(data).toBeDefined();
             done();
         });

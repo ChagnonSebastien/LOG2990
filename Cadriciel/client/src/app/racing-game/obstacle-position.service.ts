@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
 @Injectable()
-export class ObstacleService {
+export class ObstaclePositionService {
 
     private boosters: THREE.Vector2[];
 

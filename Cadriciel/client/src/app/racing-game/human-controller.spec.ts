@@ -1,9 +1,9 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { CollisionDetectionService } from './collision-detection.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
-import { CommandsService } from './events/commands.service';
+import { CommandsService, PlayerCommand } from './events/commands.service';
 import { HumanController } from './human-controller';
 import { TestBed } from '@angular/core/testing';
 import { TURN_STATE, MOVE_STATE } from './controller';
@@ -28,8 +28,6 @@ describe('Controller', function () {
         humanController = new HumanController(
             TestBed.get(CommandsService),
             TestBed.get(CountdownService),
-            TestBed.get(RaceService),
-            TestBed.get(CollisionDetectionService),
             TestBed.get(VehicleMoveEventService),
             TestBed.get(VehicleRotateEventService)
         );
@@ -40,30 +38,24 @@ describe('Controller', function () {
         expect(humanController).toBeTruthy();
     });
 
-    describe('moveVehicle()', () => {
+    describe('startDirective()', () => {
         it('should set the moveState to Forward when \'w\' is pressed', () => {
-            (humanController as any).moveVehicle({keyCode: 87});
+            (humanController as any).startDirective(PlayerCommand.MOVE_FORWARD);
             expect(humanController['moveState']).toBe(MOVE_STATE.MOVE_FORWARD);
         });
 
         it('should set the rotateState to Forward when \'a\' is pressed', () => {
-            (humanController as any).moveVehicle({keyCode: 65});
+            (humanController as any).startDirective(PlayerCommand.ROTATE_LEFT);
             expect(humanController['turnState']).toBe(TURN_STATE.TURN_LEFT);
         });
 
         it('should set the rotateState to Forward when \'d\' is pressed', () => {
-            (humanController as any).moveVehicle({keyCode: 68});
+            (humanController as any).startDirective(PlayerCommand.ROTATE_RIGHT);
             expect(humanController['turnState']).toBe(TURN_STATE.TURN_RIGHT);
-        });
-
-        it('should not update the moveState nor the rotateState when any other key is pressed', () => {
-            (humanController as any).moveVehicle({keyCode: 23});
-            expect(humanController['moveState']).toBe(MOVE_STATE.BRAKE);
-            expect(humanController['turnState']).toBe(TURN_STATE.DO_NOTHING);
         });
     });
 
-    describe('stopVehicle()', () => {
+    describe('endDirective()', () => {
 
         beforeEach(() => {
             humanController['moveState'] = MOVE_STATE.MOVE_FORWARD;
@@ -71,24 +63,18 @@ describe('Controller', function () {
         });
 
         it('should set the moveState to Brake when \'w\' is released', () => {
-            (humanController as any).stopVehicle({keyCode: 87});
+            (humanController as any).endDirective(PlayerCommand.MOVE_FORWARD);
             expect(humanController['moveState']).toBe(MOVE_STATE.BRAKE);
         });
 
         it('should set the rotateState to do-nothing when \'a\' is released', () => {
-            (humanController as any).stopVehicle({keyCode: 65});
+            (humanController as any).endDirective(PlayerCommand.ROTATE_LEFT);
             expect(humanController['turnState']).toBe(TURN_STATE.DO_NOTHING);
         });
 
-        it('should set the rotateState to Forward when \'d\' is released', () => {
-            (humanController as any).stopVehicle({keyCode: 68});
+        it('should set the rotateState to do-nothing when \'d\' is released', () => {
+            (humanController as any).endDirective(PlayerCommand.ROTATE_RIGHT);
             expect(humanController['turnState']).toBe(TURN_STATE.DO_NOTHING);
-        });
-
-        it('should not update the moveState nor the rotateState when any other key is released', () => {
-            (humanController as any).stopVehicle({keyCode: 23});
-            expect(humanController['moveState']).toBe(MOVE_STATE.MOVE_FORWARD);
-            expect(humanController['turnState']).toBe(TURN_STATE.TURN_LEFT);
         });
     });
 });

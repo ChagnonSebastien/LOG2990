@@ -1,8 +1,10 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
@@ -16,6 +18,7 @@ import { CollisionDetectionService } from './collision-detection.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
 
 let renderService: RenderService;
 
@@ -33,7 +36,7 @@ describe('Render', () => {
                 DecorElementsService,
                 LineCalculationService,
                 DiamondSquareAlgorithmService,
-                ObstacleService,
+                ObstaclePositionService,
                 CountdownService,
                 AudioService,
                 RaceService,
@@ -41,7 +44,10 @@ describe('Render', () => {
                 VehicleMoveEventService,
                 RoadLimitService,
                 VehicleMovementController,
-                VehicleRotateEventService
+                VehicleRotateEventService,
+                LoadingProgressEventService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService
             ]
         });
         renderService = TestBed.get(RenderService);

@@ -1,16 +1,16 @@
+import { NoModifier } from './drive-modifiers/no-modifier';
 import { VehicleRotateEventService, VehicleRotateEvent } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
-import { CollisionDetectionService } from './collision-detection.service';
 import { Vector3 } from 'three';
 import { Vehicle } from './vehicle';
+import { DriveModifier } from './drive-modifiers/drive-modifier';
+import { BoosterModifier } from './drive-modifiers/booster-modifier';
+import { PotholeModifier } from './drive-modifiers/pothole-modifier';
+import { PuddleModifier } from './drive-modifiers/puddle-modifier';
 const acceleration = 0.1;
 const rotationSpeed = Math.PI / 100;
 const maxSpeed = 35;
-
-const boosterObstacleDuration = 60 * 2;
-const puddleObstacleDuration = 45;
-const potholeObstacleDuration = 30;
 
 export enum MOVE_STATE { MOVE_FORWARD, BRAKE }
 export enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
@@ -22,15 +22,14 @@ export abstract class Controller {
 
     protected turnState: TURN_STATE;
 
-    private obstacleEffect: {type: ObstacleType, timeLeft: number};
+    private driveModifier: DriveModifier;
 
     constructor(
-        protected collisionDetectionService: CollisionDetectionService,
         protected vehicleMoveEventService: VehicleMoveEventService,
         protected vehicleRotateEventService: VehicleRotateEventService
     ) {
         this.speed = 0;
-        this.obstacleEffect = {type: null, timeLeft: 0};
+        this.driveModifier = new NoModifier();
         this.moveState = MOVE_STATE.BRAKE;
         this.turnState = TURN_STATE.DO_NOTHING;
     }
@@ -42,31 +41,20 @@ export abstract class Controller {
     public hitObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
-            this.obstacleEffect = {type, timeLeft: boosterObstacleDuration};
+            this.driveModifier = new BoosterModifier();
             break;
             case ObstacleType.Pothole:
-            this.obstacleEffect = {type, timeLeft: potholeObstacleDuration};
+            this.driveModifier = new PotholeModifier();
             break;
             case ObstacleType.Puddle:
-            this.obstacleEffect = {type, timeLeft: puddleObstacleDuration};
+            this.driveModifier = new PuddleModifier();
             break;
         }
     }
 
     public move(vehicle: Vehicle) {
-        if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
-            if (this.obstacleEffect.timeLeft > 0 && (
-                this.obstacleEffect.type === ObstacleType.Puddle || this.obstacleEffect.type === ObstacleType.Pothole
-            )) {
-                this.brake(vehicle);
-            } else {
-                this.accelerate(vehicle);
-            }
-        }
-
-        if (this.moveState === MOVE_STATE.BRAKE) {
-            this.brake(vehicle);
-        }
+        this.modifySpeed();
+        this.moveVehicle(vehicle);
 
         if (this.turnState === TURN_STATE.TURN_RIGHT) {
             this.rightRotation(vehicle);
@@ -76,96 +64,52 @@ export abstract class Controller {
             this.leftRotation(vehicle);
         }
 
-        if (this.turnState === TURN_STATE.DO_NOTHING) {
-            // nothing
+        if (this.driveModifier.isOver()) {
+            this.driveModifier = new NoModifier();
         }
+    }
 
-        if (this.obstacleEffect.timeLeft > 0) {
-            this.obstacleEffect.timeLeft--;
-            if (this.obstacleEffect.type === ObstacleType.Pothole) {
-                vehicle.getVehicle().position.y = 3 + Math.random() * 25;
+    private modifySpeed () {
+        if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
+            this.speed = Math.min(maxSpeed, Math.max(0, this.speed + acceleration * this.driveModifier.getAccelerationMultiplier()));
+        } else {
+            if (this.speed > 0) {
+                this.speed = Math.max(0, this.speed - acceleration * 1.5 * this.driveModifier.getDecelerationMultiplier());
             }
-        } else  {
-            vehicle.getVehicle().position.y = 3;
         }
     }
 
-    private accelerate (object: Vehicle) {
-        this.speed = Math.min(maxSpeed, this.speed + acceleration);
-
-        const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
+    private moveVehicle(object: Vehicle) {
         const newPosition = new Vector3 (
-            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * speedModifier * this.speed,
+            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed),
             0,
-            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * speedModifier * this.speed
+            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed)
         );
 
         const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
         this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
         if (!moveEvent.isCancelled()) {
-            object.getVehicle().position.x = newPosition.x;
-            object.getVehicle().position.z = newPosition.z;
-        }
-
-        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-            console.log('hit a car');
-        }
-    }
-
-    private brake (object: Vehicle) {
-        if (this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster) {
-            // Do not change speed
-        } else if (this.speed > 0) {
-            const accelerationModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Pothole ? 5 : 1;
-            this.speed = Math.max(0, this.speed - acceleration * 1.5 * accelerationModifier);
-        }
-
-        const speedModifier = this.obstacleEffect.timeLeft > 0 && this.obstacleEffect.type === ObstacleType.Booster ? 1.5 : 1;
-        const newPosition = new Vector3 (
-            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * speedModifier * this.speed,
-            0,
-            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * speedModifier * this.speed
-        );
-
-        const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
-        this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
-        if (!moveEvent.isCancelled()) {
-            object.getVehicle().position.x = newPosition.x;
-            object.getVehicle().position.z = newPosition.z;
-        }
-
-        if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-            console.log('hit a car');
+            object.getVehicle().position.x = moveEvent.getNewPosition().x;
+            object.getVehicle().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
+            object.getVehicle().position.z = moveEvent.getNewPosition().z;
         }
     }
 
     private leftRotation(object: Vehicle) {
-        if (this.obstacleEffect.timeLeft <= 0 || this.obstacleEffect.type !== ObstacleType.Puddle) {
-            const newRotation =  object.getVehicle().rotation.y + rotationSpeed;
-            const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
-            this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
-            if (!rotateEvent.isCancelled()) {
-                object.getVehicle().rotation.y = newRotation;
-            }
-
-            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-                console.log('hit a car');
-            }
+        const newRotation =  object.getVehicle().rotation.y + rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
+        this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
+        if (!rotateEvent.isCancelled()) {
+            object.getVehicle().rotation.y = newRotation;
         }
     }
 
     private rightRotation(object: Vehicle) {
-        if (this.obstacleEffect.timeLeft <= 0 || this.obstacleEffect.type !== ObstacleType.Puddle) {
-            const newRotation =  object.getVehicle().rotation.y - rotationSpeed;
-            const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
-            this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
-            if (!rotateEvent.isCancelled()) {
-                object.getVehicle().rotation.y = newRotation;
-            }
-
-            if (this.collisionDetectionService.checkForCollisionWithCar(object.getVehicle())) {
-                console.log('hit a car');
-            }
+        const newRotation =  object.getVehicle().rotation.y - rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
+        this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
+        if (!rotateEvent.isCancelled()) {
+            object.getVehicle().rotation.y = newRotation;
         }
     }
 }

@@ -6,16 +6,13 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { CommandsService } from './events/commands.service';
-import { Subscription } from 'rxjs/Subscription';
+import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
 import { Light } from './light';
 
 @Injectable()
 export class RenderService {
     public frame: BehaviorSubject<number>;
-
-    private scale: number;
 
     public container: HTMLElement;
 
@@ -27,26 +24,17 @@ export class RenderService {
 
     private textureSky: THREE.Texture;
 
-    private subscription: Subscription;
-
-    private event: any;
-
-    private keyPressed = false;
-
     private light: Light;
 
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private commandsService: CommandsService,
+        commandsService: CommandsService,
         private vehiculeService: VehicleService,
     ) {
         this.frame = new BehaviorSubject(0);
-        this.subscription = this.commandsService.getKeyDownEvent()
-        .subscribe(event => {
-            this.event = event;
-            this.keyPressed = true;
-            if (this.event.keyCode === 78) {
+        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
                 this.light.dirLight.visible = !this.light.dirLight.visible;
             }
         });
@@ -85,15 +73,7 @@ export class RenderService {
     }
 
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
-    }
-
-    public eventsList(): void {
-        if (this.keyPressed) {
-            this.cameraService.swapCamera(this.event);
-            this.cameraService.zoomCamera(this.event);
-            this.keyPressed = false;
-        }
+        this.terrainGenerationService.generate(this.scene, track, this.textureSky);
     }
 
     public startRenderingLoop() {
@@ -111,7 +91,6 @@ export class RenderService {
         this.frame.next(this.frame.value + 1);
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
-        this.eventsList();
         this.animateVehicule();
         this.stats.update();
     }
@@ -129,12 +108,10 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track, scale: number): Promise<void> {
-        this.scale = scale;
+    public async initialize(container: HTMLElement, track: Track): Promise<void> {
         this.container = container;
         this.createScene();
         this.initStats();
         this.loadTrack(track);
     }
-
 }

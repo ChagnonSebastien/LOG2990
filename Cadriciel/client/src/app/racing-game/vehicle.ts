@@ -1,10 +1,11 @@
-import { ObstacleService } from './obstacle.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import { Controller } from './controller';
-import { CollisionDetectionService } from './collision-detection.service';
+import { Mesh, Vector2 } from 'three';
+import * as SETTINGS from './settings';
+import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 
 const distanceBetweenCars = 5;
 
@@ -17,18 +18,19 @@ const yellowCarPath = 'yellow_cart.json';
 export class Vehicle {
     private vehicle: THREE.Mesh;
 
+    private boundingBox: THREE.Mesh;
+
     private controler: Controller;
-
-    private scale: number;
-
-    private lastObstacleHit: { type: ObstacleType, index: number };
 
     private track: Track;
 
-    constructor(
-        private obstacleService: ObstacleService,
-        private collisionDetectionService: CollisionDetectionService
-    ) {}
+    constructor(obstacleCollisionEventService: ObstacleCollisionEventService) {
+        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event: ObstacleCollisionEvent) => {
+            if (event.getVehicle() === this) {
+                this.hitObstacle(event.getObstacle());
+            }
+        });
+    }
 
     public getTrack(): Track {
         return this.track;
@@ -38,51 +40,28 @@ export class Vehicle {
         return this.vehicle;
     }
 
+    public setBoundingBox(boundingBox: Mesh) {
+        this.vehicle.add(boundingBox);
+        this.boundingBox = boundingBox;
+    }
+
+    public getBoundingBox(): THREE.Mesh {
+        return this.boundingBox;
+    }
+
     public move() {
-        this.calculateObstacleCollision();
         this.controler.move(this);
-    }
-
-    public calculateObstacleCollision() {
-        this.checkTypeObstacleCollision(ObstacleType.Pothole);
-        this.checkTypeObstacleCollision(ObstacleType.Puddle);
-        this.checkTypeObstacleCollision(ObstacleType.Booster);
-    }
-
-    private checkTypeObstacleCollision(type: ObstacleType) {
-        this.obstacleService.getObstacles(type).map(puddle => {
-            return this.distanceToObstacle(puddle);
-        }).forEach((distance, index) => {
-            this.isColliding(type, distance, index);
-        });
     }
 
     public hitWall(speedModifier: number) {
         this.controler.hitWall(speedModifier);
     }
 
-    private distanceToObstacle(obstaclePosition: THREE.Vector2) {
-        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(this.scale);
-        return Math.sqrt(
-            Math.pow(obstaclePositionClone.x - this.vehicle.position.x, 2) +
-            Math.pow(obstaclePositionClone.y - this.vehicle.position.z, 2)
-        );
+    public hitObstacle(type: ObstacleType) {
+        this.controler.hitObstacle(type);
     }
 
-    private isColliding(type: ObstacleType, distance: number, index: number) {
-        if (this.lastObstacleHit !== undefined) {
-            if (this.lastObstacleHit.type === type && this.lastObstacleHit.index === index) {
-                return;
-            }
-        }
-        if (distance < type * this.scale) {
-            this.lastObstacleHit = { type: type, index: index };
-            this.controler.hitObstacle(type);
-        }
-    }
-
-    public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
-        this.scale = scale;
+    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
         this.track = track;
         this.controler = controller;
         const loader = new THREE.ObjectLoader();
@@ -93,12 +72,11 @@ export class Vehicle {
             loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
                 this.vehicle = <THREE.Mesh>object;
                 this.vehicle.rotation.y = trackAngle;
-                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
-                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
+                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
+                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
                 this.vehicle.position.y = 3;
-                this.vehicle.scale.set(scale, scale, scale);
+                this.vehicle.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
                 this.vehicle.castShadow = true;
-                this.collisionDetectionService.initializeBoundingBox(this.vehicle);
                 resolve(this);
             });
         });
