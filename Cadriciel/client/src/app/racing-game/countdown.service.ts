@@ -22,12 +22,6 @@ export class CountdownService {
         this.count = 6;
         this.countdownStarted = false;
         this.countdownEnded = false;
-
-        commandService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
-            if (event.getCommand() === PlayerCommand.START_GAME && !this.countdownStarted) {
-                this.startCountdown();
-            }
-        });
     }
 
     public startGame() {
@@ -35,9 +29,11 @@ export class CountdownService {
     }
 
     public startCountdown() {
-        this.countdownStarted = true;
-        this.startAudio();
-        this.countdownDecreaseEventService.startCountDown(this.count);
+        if (!this.countdownStarted) {
+            this.countdownStarted = true;
+            this.startAudio();
+            this.countdownDecreaseEventService.startCountDown(this.count);
+        }
     }
 
     private startAudio() {

@@ -5,21 +5,6 @@ import { Injectable } from '@angular/core';
 import { Cancellable } from './cancelable';
 import { Observable } from 'rxjs/Observable';
 
-@Injectable()
-export class CollisionEventService {
-
-    private eventListener = new Subject<CollisionEvent>();
-
-    public sendCollisionEvent(event) {
-        console.log('BANG');
-        this.eventListener.next(event);
-    }
-
-    public getCollisionObservable(): Observable<CollisionEvent> {
-        return this.eventListener.asObservable();
-    }
-}
-
 export class CollisionEvent extends Cancellable {
     constructor(
         private firstVehicle: Vehicle,
@@ -39,5 +24,20 @@ export class CollisionEvent extends Cancellable {
 
     public getCollisionPoint(): Vector3 {
         return this.collisionPoint;
+    }
+}
+
+@Injectable()
+export class CollisionEventService {
+
+    private eventListener = new Subject<CollisionEvent>();
+
+    public sendCollisionEvent(event) {
+        console.log('BANG');
+        this.eventListener.next(event);
+    }
+
+    public getCollisionObservable(): Observable<CollisionEvent> {
+        return this.eventListener.asObservable();
     }
 }
