@@ -1,5 +1,5 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
+import { CommandsService, PlayerCommand } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 

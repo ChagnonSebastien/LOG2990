@@ -1,3 +1,4 @@
+import { CollisionEvent } from './events/collision-event.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { Vector3, Vector2 } from 'three';
 import { ObstacleType } from './draw-track/obstacle';
@@ -12,19 +13,14 @@ import * as SETTINGS from './settings';
 export class ObstacleCollisionDetectionService {
 
     constructor(
-        vehicleMoveEventService: VehicleMoveEventService,
         private obstacleCollisionEventService: ObstacleCollisionEventService,
         private obstacleService: ObstaclePositionService
-    ) {
-        vehicleMoveEventService.getVehicleMoveObservable().subscribe((event: VehicleMoveEvent) => {
-            this.detectCollision(event.getVehicle(), event.getNewPosition());
-        });
-    }
+    ) {}
 
-    public detectCollision(vehicle: Vehicle, toPosition: Vector3) {
-        this.checkTypeObstacleCollision(vehicle, ObstacleType.Pothole);
-        this.checkTypeObstacleCollision(vehicle, ObstacleType.Puddle);
-        this.checkTypeObstacleCollision(vehicle, ObstacleType.Booster);
+    public detectCollision(event: VehicleMoveEvent) {
+        this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Pothole);
+        this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Puddle);
+        this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Booster);
     }
 
     private checkTypeObstacleCollision(vehicle: Vehicle, type: ObstacleType) {

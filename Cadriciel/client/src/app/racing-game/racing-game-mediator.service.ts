@@ -1,3 +1,7 @@
+import { VehicleMovementController } from './vehicle-movement-controller.service';
+import { RoadLimitService } from './road-limit.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { HumanController } from './human-controller';
 import { VehicleService } from './vehicle.service';
 import { SceneService } from './scene.service';
@@ -20,13 +24,17 @@ export class RaceMediator {
         private racingGGameService: RacingGameService,
         private countdownService: CountdownService,
         private collisionDetectionService: CollisionDetectionService,
+        private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
         private cameraService: CameraService,
         private renderService: RenderService,
         private sceneService: SceneService,
         private vehicleService: VehicleService,
+        private roadLimitService: RoadLimitService,
+        private vehicleMovementController: VehicleMovementController,
         commandsService: CommandsService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
-        loadingProgressEventService: LoadingProgressEventService
+        loadingProgressEventService: LoadingProgressEventService,
+        vehicleMoveEventService: VehicleMoveEventService
     ) {
         countdownDecreaseEventService.getCountdownDecreaseObservable().subscribe(
             (event: CountdownDecreaseEvent) => this.handleCountdownDecreaseEvent(event)
@@ -41,7 +49,11 @@ export class RaceMediator {
         );
 
         loadingProgressEventService.getLoadingObservable().subscribe(
-            (event: LoadingProgressEvent) => this.hangleProgressEvent(event)
+            (event: LoadingProgressEvent) => this.handleProgressEvent(event)
+        );
+
+        vehicleMoveEventService.getVehicleMoveObservable().subscribe(
+            (event: VehicleMoveEvent) => this.handleMoveEvent(event)
         );
     }
 
@@ -95,7 +107,7 @@ export class RaceMediator {
         }
     }
 
-    private hangleProgressEvent(event: LoadingProgressEvent) {
+    private handleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
             const vehicle = <Vehicle> event.getObject();
             this.sceneService.addToScene(vehicle.getVehicle());
@@ -109,5 +121,12 @@ export class RaceMediator {
         if (event.getProgress() === 'All carts loaded') {
             this.renderService.startRenderingLoop();
         }
+    }
+
+    private handleMoveEvent(event: VehicleMoveEvent) {
+        this.obstacleCollisionDetectionService.detectCollision(event);
+        this.roadLimitService.validateMovement(event);
+        this.vehicleMovementController.validateMovement(event);
+        this.collisionDetectionService.checkForCollisionWithCar(event);
     }
 }
