@@ -2,12 +2,16 @@
     margin-left:20%;
     margin-top: 10%;
     width: 40rem;
+    border-width: 2pt;
+    border-color:limegreen;
 }
 
 #crossword-game {
     margin-left: 10%;
     margin-top: 10%;
     width: 40rem;
+    border-width: 2pt;
+    border-color: blue;
 }
 
 #home-page {
