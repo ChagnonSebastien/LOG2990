@@ -1,5 +1,4 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { RaceService } from './race.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
@@ -10,7 +9,6 @@ export class HumanController extends Controller {
     constructor(
         commandsService: CommandsService,
         countdownService: CountdownService,
-        raceService: RaceService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService
     ) {

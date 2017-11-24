@@ -11,7 +11,7 @@ const track = new Track('name', 'description', 'type', [
     new THREE.Vector2(100, 100)
 ], [], [], [], -1, 0, []);
 
-describe('test CountdownService', function () {
+describe('CountdownService', function () {
     const countdownService = new CountdownService(new AudioService(new RaceService()), new CommandsService());
 
     it('construction test', () => {
@@ -20,10 +20,8 @@ describe('test CountdownService', function () {
     });
 
     it('create 3D countdown', (done) => {
-        countdownService.createCountdown(track, 1).then(result => {
+        countdownService.createCountdown(track).then(result => {
             expect(countdownService.countdownMesh).toBeDefined();
-            expect(countdownService.countdownMesh.position.x).toEqual(50);
-            expect(countdownService.countdownMesh.position.y).toEqual(3.8);
             done();
         });
     });

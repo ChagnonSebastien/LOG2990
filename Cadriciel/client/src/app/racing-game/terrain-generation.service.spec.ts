@@ -40,7 +40,7 @@ describe('TerrainGenerationService', function () {
     describe('generate()', function () {
 
         beforeAll(async(done) => {
-            terrainGenerationService.generate(new THREE.Scene, 1, new Track(
+            terrainGenerationService.generate(new THREE.Scene, new Track(
                 'name',
                 'desc',
                 'diff',

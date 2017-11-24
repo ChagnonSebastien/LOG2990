@@ -16,7 +16,7 @@ describe('DecorElementsService', function () {
             providers: [DecorElementsService, LineCalculationService, ObstaclePositionService]
         });
         decorElementsService = TestBed.get(DecorElementsService);
-        decorElementsService.initialize(new THREE.Scene, 1, new Track(
+        decorElementsService.initialize(new THREE.Scene, new Track(
             'name',
             'desc',
             'diff',
