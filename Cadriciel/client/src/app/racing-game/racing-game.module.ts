@@ -1,3 +1,4 @@
+import { SceneService } from './scene.service';
 import { RaceMediator } from './racing-game-mediator.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { CollisionEventService } from './events/collision-event.service';
@@ -73,7 +74,8 @@ import { CountdownDecreaseEventService } from './events/countdown-decrease-event
         ObstacleCollisionEventService,
         ObstacleCollisionDetectionService,
         CountdownDecreaseEventService,
-        RaceMediator
+        RaceMediator,
+        SceneService
     ]
 })
 export class RacingGameModule {

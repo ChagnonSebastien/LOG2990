@@ -1,5 +1,5 @@
+import { SceneService } from './scene.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
@@ -8,7 +8,6 @@ import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
-import { Light } from './light';
 
 @Injectable()
 export class RenderService {
@@ -20,22 +19,17 @@ export class RenderService {
 
     private renderer: THREE.WebGLRenderer;
 
-    public scene: THREE.Scene;
-
-    private textureSky: THREE.Texture;
-
-    private light: Light;
-
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         commandsService: CommandsService,
         private vehiculeService: VehicleService,
+        private sceneService: SceneService
     ) {
         this.frame = new BehaviorSubject(0);
         commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
             if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
-                this.light.dirLight.visible = !this.light.dirLight.visible;
+                //this.light.dirLight.visible = !this.light.dirLight.visible;
             }
         });
     }
@@ -44,36 +38,8 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
-    protected createScene() {
-        this.scene = new THREE.Scene();
-        this.light = new Light();
-        this.createSkyBox();
-        this.scene.add(this.light.hemiLight);
-        this.scene.add(this.light.dirLight);
-    }
-
-    private createSkyBox() {
-        const url = '../../assets/images/skybox/';
-        const images = [url + 'xpos.png', url + 'xneg.png',
-        url + 'ypos.png', url + 'yneg.png',
-        url + 'zpos.png', url + 'zneg.png'];
-        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
-        const shader = THREE.ShaderLib['cube'];
-        shader.uniforms['tCube'].value = this.textureSky;
-        const material = new THREE.ShaderMaterial({
-            fragmentShader: shader.fragmentShader,
-            vertexShader: shader.vertexShader,
-            uniforms: shader.uniforms,
-            depthWrite: false,
-            side: THREE.BackSide
-        });
-        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), material);
-        material.needsUpdate = true;
-        this.scene.add(skyboxMesh);
-    }
-
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, track, this.textureSky);
+        this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
     }
 
     public startRenderingLoop() {
@@ -90,7 +56,7 @@ export class RenderService {
         requestAnimationFrame(() => this.render());
         this.frame.next(this.frame.value + 1);
         this.cameraService.cameraOnMoveWithObject();
-        this.renderer.render(this.scene, this.cameraService.getCamera());
+        this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
         this.animateVehicule();
         this.stats.update();
     }
@@ -110,7 +76,6 @@ export class RenderService {
 
     public async initialize(container: HTMLElement, track: Track): Promise<void> {
         this.container = container;
-        this.createScene();
         this.initStats();
         this.loadTrack(track);
     }
