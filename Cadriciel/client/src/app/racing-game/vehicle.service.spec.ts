@@ -16,6 +16,7 @@ import { VehicleService } from './vehicle.service';
 import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';
 import { RoadLimitService } from './road-limit.service';
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
 let vehicleService: VehicleService;
 const track = new Track('name', 'description', 'type', [
@@ -43,7 +44,8 @@ describe('VehicleService', () => {
                 LoadingProgressEventService,
                 RaceService,
                 ObstacleCollisionDetectionService,
-                ObstacleCollisionEventService
+                ObstacleCollisionEventService,
+                CountdownDecreaseEventService
             ]
         });
         vehicleService = TestBed.get(VehicleService);

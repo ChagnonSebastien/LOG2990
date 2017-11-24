@@ -1,3 +1,4 @@
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { CommandsService } from './events/commands.service';
 import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
@@ -12,7 +13,8 @@ const track = new Track('name', 'description', 'type', [
 ], [], [], [], -1, 0, []);
 
 describe('CountdownService', function () {
-    const countdownService = new CountdownService(new AudioService(new RaceService()), new CommandsService());
+    const countdownService = new CountdownService(
+        new AudioService(new RaceService()), new CommandsService(), new CountdownDecreaseEventService());
 
     it('construction test', () => {
         expect(countdownService).toBeDefined();
@@ -28,7 +30,6 @@ describe('CountdownService', function () {
 
     it('starts countdown', () => {
         countdownService.startCountdown();
-        expect(countdownService['timer']).toBeDefined();
         expect(countdownService['count'] !== 6);
     });
 });

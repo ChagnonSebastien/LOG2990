@@ -1,4 +1,3 @@
-import { CountdownDecreaseEvent } from './events/countdown-decrease-event';
 import { CameraService } from './camera.service';
 import { Track } from './track';
 import { CountdownService } from './countdown.service';
@@ -14,7 +13,6 @@ export class RacingGameService {
 
     constructor(private renderService: RenderService, private vehicleService: VehicleService,
         private countdownService: CountdownService, private cameraService: CameraService) {
-        this.listenForEndOfCountdown();
     }
 
     public async initializeRender(container: HTMLElement, track: Track): Promise<void> {
@@ -48,12 +46,8 @@ export class RacingGameService {
         this.renderService.scene.add(this.countdownService.countdownMesh);
     }
 
-    private listenForEndOfCountdown() {
-        this.countdownService.getCountdownDecreaseEvents().subscribe((countDownDecreaseEvent: CountdownDecreaseEvent) => {
-            if (countDownDecreaseEvent.getNewAmount() === 0) {
-                this.removeCountdown();
-            }
-        });
+    public startGame() {
+        this.removeCountdown();
     }
 
     private removeCountdown() {

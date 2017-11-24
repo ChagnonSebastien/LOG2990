@@ -5,7 +5,6 @@ import { VehicleRotateEventService } from './events/vehicle-rotate-event.service
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { CountdownService } from './countdown.service';
 import { VehicleColor } from './vehicle-color';
 import { HumanController } from './human-controller';
 import { Track } from './track';
@@ -21,7 +20,6 @@ export class VehicleService {
 
     constructor(
         private commandsService: CommandsService,
-        private countdownService: CountdownService,
         private vehicleMoveEventService: VehicleMoveEventService,
         // tslint:disable-next-line:no-unused-variable
         private roadLimitService: RoadLimitService,
@@ -43,7 +41,7 @@ export class VehicleService {
     public initializeMainVehicle(track: Track): Promise<Vehicle> {
         return new Promise<Vehicle>(resolve => {
             this.mainVehicle.create3DVehicle(
-                track, VehicleColor.red, new HumanController(this.commandsService, this.countdownService,
+                track, VehicleColor.red, new HumanController(this.commandsService,
                     this.vehicleMoveEventService, this.vehicleRotateEventService)
             ).then((vehicle) => {
                 this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', vehicle));
@@ -56,18 +54,17 @@ export class VehicleService {
         await this.opponentsVehicles[0].create3DVehicle(track, VehicleColor.blue,
             new HumanController(
                 this.commandsService,
-                this.countdownService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService
             ));
             this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[0]));
         await this.opponentsVehicles[1].create3DVehicle(track, VehicleColor.green,
             new HumanController(
-                this.commandsService, this.countdownService,
+                this.commandsService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService));
                 this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[1]));
         await this.opponentsVehicles[2].create3DVehicle(track, VehicleColor.yellow,
             new HumanController(
-                this.commandsService, this.countdownService,
+                this.commandsService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService));
                 this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[2]));
 
