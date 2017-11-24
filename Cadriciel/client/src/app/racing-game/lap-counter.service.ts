@@ -8,9 +8,7 @@ import * as THREE from 'three';
 const TRACK_RADIUS = 5;
 @Injectable()
 export class LapCounterService {
-    private lastIntersection: THREE.Vector2;
     private lastIntersectionNumber: number;
-    private currentIntersectionNumber: number;
     private passedCounter: Array<number>;
     private laps: BehaviorSubject<number>;
 
@@ -67,12 +65,6 @@ export class LapCounterService {
 
     private getVehiclePosition(): THREE.Vector3 {
         return this.vehicleService.mainVehicle.getVehicle().position;
-    }
-
-    private getFinishLinePosition(): THREE.Vector2 {
-        const firstIntersection = this.getIntersections()[0];
-        const secondIntersection = this.getIntersections()[1];
-        return this.midPoint(firstIntersection, secondIntersection);
     }
 
     private midPoint(firstPosition: THREE.Vector2, secondPosition: THREE.Vector2): THREE.Vector2 {
