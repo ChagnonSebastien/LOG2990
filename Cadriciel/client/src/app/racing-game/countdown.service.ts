@@ -1,8 +1,6 @@
-import { CountdownDecreaseEvent } from './events/countdown-decrease-event';
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { Track } from './track';
 import * as THREE from 'three';
 import * as SETTINGS from './settings';
@@ -15,14 +13,15 @@ export class CountdownService {
     private count: number;
     public countdownStarted: boolean;
     public countdownEnded: boolean;
-    private timer: Observable<number>;
-    private countdownDecreasedEventListener: Subject<CountdownDecreaseEvent>;
 
-    constructor(private audioService: AudioService, commandService: CommandsService) {
+    constructor(
+        private audioService: AudioService,
+        commandService: CommandsService,
+        private countdownDecreaseEventService: CountdownDecreaseEventService
+    ) {
         this.count = 6;
         this.countdownStarted = false;
         this.countdownEnded = false;
-        this.countdownDecreasedEventListener = new Subject();
 
         commandService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
             if (event.getCommand() === PlayerCommand.START_GAME && !this.countdownStarted) {
@@ -31,28 +30,14 @@ export class CountdownService {
         });
     }
 
+    public startGame() {
+        this.countdownEnded = true;
+    }
+
     public startCountdown() {
         this.countdownStarted = true;
         this.startAudio();
-        this.timer = Observable.timer(0, 1000)
-            .take(this.count)
-            .map(() => --this.count);
-
-        this.timer.subscribe(time => {
-            const countdownDecreaseEvent = new CountdownDecreaseEvent(time);
-            this.countdownDecreasedEventListener.next(countdownDecreaseEvent);
-        });
-
-        this.countdownDecreasedEventListener.subscribe(countdownDecreaseEvent => {
-            this.updateCountdown(countdownDecreaseEvent.getNewAmount());
-            if (countdownDecreaseEvent.getNewAmount() === 0) {
-                this.countdownEnded = true;
-            }
-        });
-    }
-
-    public getCountdownDecreaseEvents(): Observable<CountdownDecreaseEvent> {
-        return this.countdownDecreasedEventListener.asObservable();
+        this.countdownDecreaseEventService.startCountDown(this.count);
     }
 
     private startAudio() {
@@ -96,7 +81,7 @@ export class CountdownService {
         });
     }
 
-    private updateCountdown(count: number) {
+    public updateCountdown(count: number) {
         const countText = count.toString();
 
         const textGeometry = new THREE.TextGeometry(countText, {

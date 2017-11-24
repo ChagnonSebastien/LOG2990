@@ -1,3 +1,4 @@
+import { RaceMediator } from './racing-game-mediator.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -30,6 +31,7 @@ import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
 @NgModule({
     imports: [
@@ -69,7 +71,9 @@ import { ObstacleCollisionDetectionService } from './obstacle-collision-detectio
         LoadingProgressEventService,
         CollisionEventService,
         ObstacleCollisionEventService,
-        ObstacleCollisionDetectionService
+        ObstacleCollisionDetectionService,
+        CountdownDecreaseEventService,
+        RaceMediator
     ]
 })
 export class RacingGameModule {

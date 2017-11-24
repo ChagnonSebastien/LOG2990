@@ -1,3 +1,4 @@
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { TerrainGenerationService } from './terrain-generation.service';
@@ -46,7 +47,8 @@ describe('CollisionDetectionService', () => {
         LoadingProgressEventService,
         CollisionEventService,
         ObstacleCollisionDetectionService,
-        ObstacleCollisionEventService
+        ObstacleCollisionEventService,
+        CountdownDecreaseEventService
       ]
     });
   });

@@ -19,6 +19,7 @@ import { RoadLimitService } from './road-limit.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
 let renderService: RenderService;
 
@@ -47,7 +48,8 @@ describe('Render', () => {
                 VehicleRotateEventService,
                 LoadingProgressEventService,
                 ObstacleCollisionDetectionService,
-                ObstacleCollisionEventService
+                ObstacleCollisionEventService,
+                CountdownDecreaseEventService
             ]
         });
         renderService = TestBed.get(RenderService);

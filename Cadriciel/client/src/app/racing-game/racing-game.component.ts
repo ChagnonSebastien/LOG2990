@@ -1,3 +1,4 @@
+import { RaceMediator } from './racing-game-mediator.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
@@ -21,7 +22,9 @@ export class RacingGameComponent implements AfterViewInit {
         private renderService: RenderService,
         private trackService: TrackService,
         private commandsService: CommandsService,
-        private obstacleService: ObstaclePositionService
+        private obstacleService: ObstaclePositionService,
+        // tslint:disable-next-line:no-unused-variable
+        private raceMediator: RaceMediator
     ) {
     }
 
