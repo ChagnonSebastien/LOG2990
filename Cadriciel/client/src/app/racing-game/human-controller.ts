@@ -11,16 +11,9 @@ export class HumanController extends Controller {
         vehicleRotateEventService: VehicleRotateEventService
     ) {
         super(vehicleMoveEventService, vehicleRotateEventService);
-        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
-            this.startDirective(event.getCommand());
-        });
-
-        commandsService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
-            this.endDirective(event.getCommand());
-        });
     }
 
-    private startDirective(command: PlayerCommand) {
+    public startDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.MOVE_FORWARD;
@@ -34,7 +27,7 @@ export class HumanController extends Controller {
         }
     }
 
-    private endDirective(command: PlayerCommand) {
+    public endDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.BRAKE;

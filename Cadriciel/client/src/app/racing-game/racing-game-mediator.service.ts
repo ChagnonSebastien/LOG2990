@@ -1,3 +1,5 @@
+import { HumanController } from './human-controller';
+import { VehicleService } from './vehicle.service';
 import { SceneService } from './scene.service';
 import { RenderService } from './render.service';
 import { VehicleColor } from './vehicle-color';
@@ -21,6 +23,7 @@ export class RaceMediator {
         private cameraService: CameraService,
         private renderService: RenderService,
         private sceneService: SceneService,
+        private vehicleService: VehicleService,
         commandsService: CommandsService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
         loadingProgressEventService: LoadingProgressEventService
@@ -43,11 +46,43 @@ export class RaceMediator {
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
+        switch (event.getCommand()) {
+            case PlayerCommand.MOVE_FORWARD:
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
+            (<HumanController> this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+            break;
+        }
     }
 
     private handleKeyDownEvent(event: CommandEvent) {
-        if (event.getCommand() === PlayerCommand.START_GAME) {
+
+        switch (event.getCommand()) {
+            case PlayerCommand.MOVE_FORWARD:
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
+            (<HumanController> this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+            break;
+
+            case PlayerCommand.START_GAME:
             this.countdownService.startCountdown();
+            break;
+
+            case PlayerCommand.ZOOM_IN:
+            this.cameraService.zoomIn();
+            break;
+
+            case PlayerCommand.ZOOM_OUT:
+            this.cameraService.zoomOut();
+            break;
+
+            case PlayerCommand.TOOGLE_CAMERA_VIEW:
+            this.cameraService.toggleCamera();
+            break;
+
+            case PlayerCommand.TOGGLE_NIGHT_MODE:
+            this.sceneService.toggleNightMode();
+            break;
         }
     }
 

@@ -1,4 +1,4 @@
-import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
+import { CommandsService } from './events/commands.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import * as SETTINGS from './settings';
@@ -36,22 +36,20 @@ export class CameraService {
     constructor(commandService: CommandsService) {
         this.currentView = View.PERSPECTIVE;
         this.zoomLevel = initialZoomLevel;
+    }
 
-        commandService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
-            switch (event.getCommand()) {
-                case PlayerCommand.ZOOM_IN:
-                    this.zoomLevel += zoomChange;
-                    this.updateZoom();
-                break;
-                case PlayerCommand.ZOOM_OUT:
-                    this.zoomLevel -= zoomChange;
-                    this.updateZoom();
-                break;
-                case PlayerCommand.TOOGLE_CAMERA_VIEW:
-                this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
-                break;
-            }
-        });
+    public zoomIn() {
+        this.zoomLevel += zoomChange;
+        this.updateZoom();
+    }
+
+    public zoomOut() {
+        this.zoomLevel -= zoomChange;
+        this.updateZoom();
+    }
+
+    public toggleCamera() {
+        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
     }
 
     public initialize(container: HTMLElement): void {

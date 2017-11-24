@@ -25,7 +25,7 @@ export class Vehicle {
 
     private boundingBox: THREE.Mesh;
 
-    private controler: Controller;
+    private controller: Controller;
 
     private track: Track;
 
@@ -46,6 +46,10 @@ export class Vehicle {
         return this.track;
     }
 
+    public getController(): Controller {
+        return this.controller;
+    }
+
     public getColor(): VehicleColor {
         return this.color;
     }
@@ -64,21 +68,21 @@ export class Vehicle {
     }
 
     public move() {
-        this.controler.move(this);
+        this.controller.move(this);
     }
 
     public hitWall(speedModifier: number) {
-        this.controler.hitWall(speedModifier);
+        this.controller.hitWall(speedModifier);
     }
 
     public hitObstacle(type: ObstacleType) {
-        this.controler.hitObstacle(type);
+        this.controller.hitObstacle(type);
     }
 
     public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller) {
         const service = this;
         this.track = track;
-        this.controler = controller;
+        this.controller = controller;
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);

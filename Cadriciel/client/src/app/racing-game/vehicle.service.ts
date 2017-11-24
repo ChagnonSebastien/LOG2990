@@ -16,7 +16,7 @@ const numberOfOpponents = 3;
 export class VehicleService {
     public players: Array<Vehicle>;
 
-    private nbr = 0;
+    private amountVehicleMeshCreated;
 
     constructor(
         private commandsService: CommandsService,
@@ -31,33 +31,38 @@ export class VehicleService {
         private vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
+        this.amountVehicleMeshCreated = 0;
+
         loadingProgressEventService.getLoadingObservable().subscribe((event: LoadingProgressEvent) => {
             if (event.getProgress() === 'Vehicle created') {
-                if (++this.nbr === 4) {
+                if (++this.amountVehicleMeshCreated === 4) {
                     loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
                 }
             }
         });
     }
 
-    public getMainVehicle() {
-        return this.players[0];
-    }
-
-    public createVehicles(track: Track) {
+    public createVehicles(track: Track): void {
         this.players = [];
-        for (let color = 1; color <= numberOfOpponents + 1; color++) {
-            console.log(VehicleColor[color]);
+        for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
             this.players.push(new Vehicle(color, track, this.obstacleCollisionEventService, this.commandsService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService, this.loadingProgressEventService));
         }
     }
 
-    public moveVehicle() {
+    public moveVehicle(): void {
         this.players[0].move();
     }
 
-    public getVehicles() {
+    public getVehicle(color: VehicleColor): Vehicle {
+        return this.players.filter((vehicle: Vehicle) => vehicle.getColor() === color)[0];
+    }
+
+    public getMainVehicle(): Vehicle {
+        return this.getVehicle(VehicleColor.red);
+    }
+
+    public getVehicles(): Vehicle[] {
         return this.players;
     }
 }

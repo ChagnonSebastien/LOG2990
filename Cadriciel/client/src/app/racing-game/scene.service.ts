@@ -51,4 +51,8 @@ export class SceneService {
         this.addToScene(this.light.hemiLight);
         this.addToScene(this.light.dirLight);
     }
+
+    public toggleNightMode() {
+        this.light.dirLight.visible = !this.light.dirLight.visible;
+    }
 }
