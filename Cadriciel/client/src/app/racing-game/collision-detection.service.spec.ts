@@ -1,3 +1,5 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { LineCalculationService } from './line-calculation.service';
 import { AudioService } from './audio.service';
@@ -42,7 +44,9 @@ describe('CollisionDetectionService', () => {
         VehicleMovementController,
         VehicleRotateEventService,
         LoadingProgressEventService,
-        CollisionEventService
+        CollisionEventService,
+        ObstacleCollisionDetectionService,
+        ObstacleCollisionEventService
       ]
     });
   });
