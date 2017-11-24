@@ -1,9 +1,78 @@
-import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { VehicleService } from './vehicle.service';
+import { RenderService } from './render.service';
+import { Injectable } from '@angular/core';
+import * as THREE from 'three';
+
+const trackDiameter = 5;
 @Injectable()
 export class LapCounterService {
+    private lastIntersection: THREE.Vector2;
+    private lastIntersectionNumber: number;
+    private currentIntersectionNumber: number;
+    private passedCounter: Array<number>;
+    private laps: BehaviorSubject<number>;
 
-    constructor() {}
 
+    constructor(
+        private renderService: RenderService,
+        private vehicleService: VehicleService
+    ) {
+        this.laps = new BehaviorSubject(0);
+        this.lastIntersectionNumber = 0;
+        this.passedCounter = new Array<number>(this.numberOfIntersections()).fill(0);
+        this.renderService.frame.subscribe(() => {
+            this.updatePassedCounter();
+            this.updateLap();
+        });
+    }
+
+    public calculateDistanceFromIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): number {
+        const distanceY = Math.abs(carPosition.y - intersection.y);
+        const distanceX = Math.abs(carPosition.x - intersection.x);
+        const distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+
+        return distance;
+    }
+
+    public isAtIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): boolean {
+        const distanceFromIntersection = this.calculateDistanceFromIntersection(carPosition, intersection);
+
+        return distanceFromIntersection <= trackDiameter;
+    }
+
+    private numberOfIntersections(): number {
+        return this.vehicleService.mainVehicle.getTrack().trackIntersections.length;
+    }
+
+    private updatePassedCounter() {
+        const position = this.vehicleService.mainVehicle.getVehicle().position;
+        const intersections = this.vehicleService.mainVehicle.getTrack().trackIntersections;
+        const nextIntersectionNumber = (this.lastIntersectionNumber + 1) % this.numberOfIntersections();
+        const previousIntersectionNumber = (this.lastIntersectionNumber - 1) % this.numberOfIntersections();
+        const nextIntersection = intersections[nextIntersectionNumber];
+        const previousIntersection = intersections[previousIntersectionNumber];
+        if (this.isAtIntersection(position, nextIntersection)) {
+            this.passedCounter[nextIntersectionNumber]++;
+            this.lastIntersectionNumber = nextIntersectionNumber;
+        } else if (this.isAtIntersection(position, previousIntersection)) {
+            this.passedCounter[previousIntersectionNumber]--;
+            this.lastIntersectionNumber = previousIntersectionNumber;
+        }
+    }
+
+    private passedFinishLine(): boolean {
+        return true;
+    }
+
+    private updateLap() {
+        const minPassed = this.passedCounter.reduce((prev, next) => {
+            return prev < next ? prev : next;
+        });
+        if (minPassed > this.laps.value && this.passedFinishLine()) {
+            this.laps.next(minPassed);
+        }
+    }
 
 }

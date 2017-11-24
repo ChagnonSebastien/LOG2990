@@ -1,3 +1,5 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
@@ -11,6 +13,7 @@ import { Light } from './light';
 
 @Injectable()
 export class RenderService {
+    public frame: BehaviorSubject<number>;
 
     private scale: number;
 
@@ -38,6 +41,7 @@ export class RenderService {
         private commandsService: CommandsService,
         private vehiculeService: VehicleService,
     ) {
+        this.frame = new BehaviorSubject(0);
         this.subscription = this.commandsService.getKeyDownEvent()
         .subscribe(event => {
             this.event = event;
@@ -104,6 +108,7 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
+        this.frame.next(this.frame.value + 1);
         this.cameraService.cameraOnMoveWithObject();
         this.renderer.render(this.scene, this.cameraService.getCamera());
         this.eventsList();
@@ -111,7 +116,7 @@ export class RenderService {
         this.stats.update();
     }
 
-    protected initStats() {
+    private initStats() {
         this.stats = new Stats();
         this.stats.dom.style.position = 'absolute';
         this.stats.dom.style.top = '64px';
