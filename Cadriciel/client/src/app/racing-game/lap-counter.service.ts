@@ -67,12 +67,6 @@ export class LapCounterService {
         return this.vehicleService.mainVehicle.getVehicle().position;
     }
 
-    private midPoint(firstPosition: THREE.Vector2, secondPosition: THREE.Vector2): THREE.Vector2 {
-        const xMidPoint = this.absoluteAverage(firstPosition.x, secondPosition.x);
-        const yMidPoint = this.absoluteAverage(firstPosition.y, secondPosition.y);
-        return new THREE.Vector2(xMidPoint, yMidPoint);
-    }
-
     private absoluteAverage(a: number, b: number): number {
         return Math.abs((a - b) / 2);
     }
