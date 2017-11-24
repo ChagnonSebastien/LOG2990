@@ -1,11 +1,9 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { VehicleService } from './vehicle.service';
 import { RenderService } from './render.service';
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
 import { TrackUtilities } from './track-utilities';
 
-const TRACK_RADIUS = 5;
+
 @Injectable()
 export class LapCounterService {
     private lastIntersectionNumber: number;
@@ -14,7 +12,6 @@ export class LapCounterService {
 
     constructor(
         private renderService: RenderService,
-        private vehicleService: VehicleService
     ) {
         this.laps = new BehaviorSubject(0);
         this.lastIntersectionNumber = 0;
