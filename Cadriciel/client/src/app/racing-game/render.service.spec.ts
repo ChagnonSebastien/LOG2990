@@ -1,3 +1,5 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
@@ -43,7 +45,9 @@ describe('Render', () => {
                 RoadLimitService,
                 VehicleMovementController,
                 VehicleRotateEventService,
-                LoadingProgressEventService
+                LoadingProgressEventService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService
             ]
         });
         renderService = TestBed.get(RenderService);

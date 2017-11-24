@@ -1,10 +1,11 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
 import { VehicleColor } from './vehicle-color';
 import { HumanController } from './human-controller';
 import { Track } from './track';
@@ -20,20 +21,22 @@ export class VehicleService {
 
     constructor(
         private commandsService: CommandsService,
-        private obstacleService: ObstacleService,
         private countdownService: CountdownService,
         private vehicleMoveEventService: VehicleMoveEventService,
         // tslint:disable-next-line:no-unused-variable
         private roadLimitService: RoadLimitService,
         // tslint:disable-next-line:no-unused-variable
         private vehicleMovementController: VehicleMovementController,
+        // tslint:disable-next-line:no-unused-variable
+        private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
+        obstacleCollisionEventService: ObstacleCollisionEventService,
         private vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
-        this.mainVehicle = new Vehicle(this.obstacleService);
+        this.mainVehicle = new Vehicle(obstacleCollisionEventService);
         this.opponentsVehicles = [];
         for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle(this.obstacleService);
+            this.opponentsVehicles[i] = new Vehicle(obstacleCollisionEventService);
         }
     }
 

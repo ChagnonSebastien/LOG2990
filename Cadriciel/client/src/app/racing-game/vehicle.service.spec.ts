@@ -1,3 +1,5 @@
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { RaceService } from './events/race.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
@@ -38,8 +40,10 @@ describe('VehicleService', () => {
                 VehicleMoveEventService,
                 VehicleMovementController,
                 VehicleRotateEventService,
-                LoadingProgressEventService
+                LoadingProgressEventService,
                 RaceService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService
             ]
         });
         vehicleService = TestBed.get(VehicleService);
@@ -50,14 +54,14 @@ describe('VehicleService', () => {
     });
 
     it('Should initialize main 3D vehicle', (done) => {
-        vehicleService.initializeMainVehicle(track, 1).then(function(data) {
+        vehicleService.initializeMainVehicle(track).then(function(data) {
             expect(data).toBeDefined();
             done();
         });
     });
 
     it('Should initialize opponents 3D vehicles(3)', (done) => {
-        vehicleService.initializeOpponentsVehicles(track, 1).then(function(data) {
+        vehicleService.initializeOpponentsVehicles(track).then(function(data) {
             expect(data).toBeDefined();
             done();
         });

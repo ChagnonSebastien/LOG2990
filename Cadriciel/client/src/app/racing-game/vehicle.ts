@@ -1,11 +1,11 @@
-import { ObstacleService } from './obstacle.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import { Controller } from './controller';
-import { Mesh } from 'three';
+import { Mesh, Vector2 } from 'three';
 import * as SETTINGS from './settings';
+import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 
 const distanceBetweenCars = 5;
 
@@ -22,13 +22,15 @@ export class Vehicle {
 
     private controler: Controller;
 
-    private lastObstacleHit: { type: ObstacleType, index: number };
-
     private track: Track;
 
-    constructor(
-        private obstacleService: ObstacleService
-    ) {}
+    constructor(obstacleCollisionEventService: ObstacleCollisionEventService) {
+        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event: ObstacleCollisionEvent) => {
+            if (event.getVehicle() === this) {
+                this.hitObstacle(event.getObstacle());
+            }
+        });
+    }
 
     public getTrack(): Track {
         return this.track;
@@ -48,46 +50,15 @@ export class Vehicle {
     }
 
     public move() {
-        this.calculateObstacleCollision();
         this.controler.move(this);
-    }
-
-    public calculateObstacleCollision() {
-        this.checkTypeObstacleCollision(ObstacleType.Pothole);
-        this.checkTypeObstacleCollision(ObstacleType.Puddle);
-        this.checkTypeObstacleCollision(ObstacleType.Booster);
-    }
-
-    private checkTypeObstacleCollision(type: ObstacleType) {
-        this.obstacleService.getObstacles(type).map(puddle => {
-            return this.distanceToObstacle(puddle);
-        }).forEach((distance, index) => {
-            this.isColliding(type, distance, index);
-        });
     }
 
     public hitWall(speedModifier: number) {
         this.controler.hitWall(speedModifier);
     }
 
-    private distanceToObstacle(obstaclePosition: THREE.Vector2) {
-        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(SETTINGS.SCENE_SCALE);
-        return Math.sqrt(
-            Math.pow(obstaclePositionClone.x - this.vehicle.position.x, 2) +
-            Math.pow(obstaclePositionClone.y - this.vehicle.position.z, 2)
-        );
-    }
-
-    private isColliding(type: ObstacleType, distance: number, index: number) {
-        if (this.lastObstacleHit !== undefined) {
-            if (this.lastObstacleHit.type === type && this.lastObstacleHit.index === index) {
-                return;
-            }
-        }
-        if (distance < type * SETTINGS.SCENE_SCALE) {
-            this.lastObstacleHit = { type: type, index: index };
-            this.controler.hitObstacle(type);
-        }
+    public hitObstacle(type: ObstacleType) {
+        this.controler.hitObstacle(type);
     }
 
     public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
