@@ -14,4 +14,7 @@ fdescribe('TrackUtilities Module', () => {
 
         expect(TrackUtilities.isAtIntersection(carPosition, intersection)).toBeTruthy();
     });
+
+    // --- TODO AFTER REFACTORING: test getIntersections(), numberOfIntersecionts and getVehiclePosition --- //
+
 });
