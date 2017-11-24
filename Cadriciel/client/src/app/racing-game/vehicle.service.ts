@@ -6,7 +6,6 @@ import { VehicleMovementController } from './vehicle-movement-controller.service
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleColor } from './vehicle-color';
-import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';

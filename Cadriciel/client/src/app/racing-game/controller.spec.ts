@@ -1,3 +1,4 @@
+import { VehicleColor } from './vehicle-color';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { CommandsService } from './events/commands.service';
 import { TestBed } from '@angular/core/testing';
@@ -8,6 +9,8 @@ import { Vehicle } from './vehicle';
 import * as THREE from 'three';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
+import { Track } from './track';
 
 class MockController extends Controller {}
 
@@ -41,6 +44,11 @@ describe('Controller', function () {
 
     describe('move()', () => {
 
+        const track = new Track('name', 'description', 'type', [
+            new THREE.Vector2(0, 0),
+            new THREE.Vector2(100, 0),
+            new THREE.Vector2(100, 100)
+        ], [], [], [], -1, 0, []);
         let vehicle: Vehicle;
         beforeEach(() => {
             TestBed.resetTestingModule();
@@ -50,11 +58,20 @@ describe('Controller', function () {
                     VehicleMoveEventService,
                     VehicleRotateEventService,
                     CommandsService,
-                    ObstacleCollisionEventService
+                    ObstacleCollisionEventService,
+                    LoadingProgressEventService
                 ]
             });
             controller = new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService));
-            vehicle = new Vehicle(TestBed.get(ObstacleCollisionEventService));
+            vehicle = new Vehicle(
+                VehicleColor.blue,
+                track,
+                TestBed.get(ObstacleCollisionEventService),
+                TestBed.get(CommandsService),
+                TestBed.get(VehicleMoveEventService),
+                TestBed.get(VehicleRotateEventService),
+                TestBed.get(LoadingProgressEventService)
+            );
             vehicle['vehicle'] = new THREE.Mesh();
             vehicle.getVehicle().position.set(0, 0, 0);
         });

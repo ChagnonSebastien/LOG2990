@@ -19,11 +19,6 @@ import { RoadLimitService } from './road-limit.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
 let vehicleService: VehicleService;
-const track = new Track('name', 'description', 'type', [
-    new THREE.Vector2(0, 0),
-    new THREE.Vector2(100, 0),
-    new THREE.Vector2(100, 100)
-], [], [], [], -1, 0, []);
 
 describe('VehicleService', () => {
     beforeEach(() => {
@@ -53,20 +48,6 @@ describe('VehicleService', () => {
 
     it('should be created', () => {
         expect(vehicleService).toBeTruthy();
-    });
-
-    it('Should initialize main 3D vehicle', (done) => {
-        vehicleService.initializeMainVehicle(track).then(function(data) {
-            expect(data).toBeDefined();
-            done();
-        });
-    });
-
-    it('Should initialize opponents 3D vehicles(3)', (done) => {
-        vehicleService.initializeOpponentsVehicles(track).then(function(data) {
-            expect(data).toBeDefined();
-            done();
-        });
     });
 
 });

@@ -6,8 +6,6 @@ import { Injectable } from '@angular/core';
 import { RenderService } from './render.service';
 import { VehicleService } from './vehicle.service';
 
-const numberOfOpponents = 3;
-
 @Injectable()
 export class RacingGameService {
     private track: Track;

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Track } from './track';
 import * as THREE from 'three';
 import * as SETTINGS from './settings';
-import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
+import { CommandsService } from './events/commands.service';
 
 @Injectable()
 export class CountdownService {
