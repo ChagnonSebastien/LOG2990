@@ -67,10 +67,6 @@ export class LapCounterService {
         return this.vehicleService.mainVehicle.getVehicle().position;
     }
 
-    private absoluteAverage(a: number, b: number): number {
-        return Math.abs((a - b) / 2);
-    }
-
     private passedFinishLine(): boolean {
         const distanceToIntersectionZero = this.calculateDistanceFromIntersection(this.getVehiclePosition(), this.getIntersections()[0]);
         const distanceToIntersectionOne = this.calculateDistanceFromIntersection(this.getVehiclePosition(), this.getIntersections()[1]);
