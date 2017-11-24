@@ -5,7 +5,7 @@ import { RenderService } from './render.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
-const trackDiameter = 5;
+const TRACK_RADIUS = 5;
 @Injectable()
 export class LapCounterService {
     private lastIntersection: THREE.Vector2;
@@ -39,20 +39,23 @@ export class LapCounterService {
     public isAtIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): boolean {
         const distanceFromIntersection = this.calculateDistanceFromIntersection(carPosition, intersection);
 
-        return distanceFromIntersection <= trackDiameter;
+        return distanceFromIntersection <= TRACK_RADIUS;
+    }
+
+    private getIntersections(): Array<THREE.Vector2> {
+        return this.vehicleService.mainVehicle.getTrack().trackIntersections;
     }
 
     private numberOfIntersections(): number {
-        return this.vehicleService.mainVehicle.getTrack().trackIntersections.length;
+        return this.getIntersections().length;
     }
 
     private updatePassedCounter() {
         const position = this.vehicleService.mainVehicle.getVehicle().position;
-        const intersections = this.vehicleService.mainVehicle.getTrack().trackIntersections;
         const nextIntersectionNumber = (this.lastIntersectionNumber + 1) % this.numberOfIntersections();
         const previousIntersectionNumber = (this.lastIntersectionNumber - 1) % this.numberOfIntersections();
-        const nextIntersection = intersections[nextIntersectionNumber];
-        const previousIntersection = intersections[previousIntersectionNumber];
+        const nextIntersection = this.getIntersections()[nextIntersectionNumber];
+        const previousIntersection = this.getIntersections()[previousIntersectionNumber];
         if (this.isAtIntersection(position, nextIntersection)) {
             this.passedCounter[nextIntersectionNumber]++;
             this.lastIntersectionNumber = nextIntersectionNumber;
@@ -62,7 +65,70 @@ export class LapCounterService {
         }
     }
 
+    private getFinishLinePosition(): THREE.Vector2 {
+        const firstIntersection = this.getIntersections()[0];
+        const secondIntersection = this.getIntersections()[1];
+        return this.midPoint(firstIntersection, secondIntersection);
+    }
+
+    private midPoint(firstPosition: THREE.Vector2, secondPosition: THREE.Vector2): THREE.Vector2 {
+        const xMidPoint = this.absoluteAverage(firstPosition.x, secondPosition.x);
+        const yMidPoint = this.absoluteAverage(firstPosition.y, secondPosition.y);
+        return new THREE.Vector2(xMidPoint, yMidPoint);
+    }
+
+    private absoluteAverage(a: number, b: number): number {
+        return Math.abs((a - b) / 2);
+    }
+
+    private vector(intersectionOne: THREE.Vector2, intersectionTwo: THREE.Vector2): THREE.Vector2 {
+        return new THREE.Vector2(intersectionTwo.x - intersectionOne.x, intersectionTwo.y - intersectionOne.y);
+    }
+
+    private orthogonalVector(segment: THREE.Vector2): THREE.Vector2 {
+        return new THREE.Vector2(segment.y, -segment.x);
+    }
+
+    private unitVector(vector: THREE.Vector2): THREE.Vector2 {
+        const length = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+        return new THREE.Vector2(vector.x / length, vector.y / length);
+    }
+
+    private unitVectorOfFinishLine(): THREE.Vector2 {
+        return this.unitVector(
+            this.orthogonalVector(
+                this.vector(
+                    this.getIntersections()[0],
+                    this.getIntersections()[1]
+                )
+            )
+        );
+    }
+
+    private beginningSegmentOfFinishLine(): THREE.Vector2 {
+        const finishLinePosition = this.getFinishLinePosition();
+        const xOffset = TRACK_RADIUS * this.unitVectorOfFinishLine().x;
+        const yOffset = TRACK_RADIUS * this.unitVectorOfFinishLine().y;
+        return new THREE.Vector2(finishLinePosition.x - xOffset, finishLinePosition.y - yOffset);
+    }
+
+    private endSegmentOfFinishLine(): THREE.Vector2 {
+        const finishLinePosition = this.getFinishLinePosition();
+        const xOffset = TRACK_RADIUS * this.unitVectorOfFinishLine().x;
+        const yOffset = TRACK_RADIUS * this.unitVectorOfFinishLine().y;
+        return new THREE.Vector2(finishLinePosition.x + xOffset, finishLinePosition.y + yOffset);
+    }
+
+    private finishLineSegment(): { beginning: THREE.Vector2, end: THREE.Vector2 } {
+        const finishLinePosition = this.getFinishLinePosition();
+        return {
+            beginning: this.beginningSegmentOfFinishLine(),
+            end: this.endSegmentOfFinishLine()
+        };
+    }
+
     private passedFinishLine(): boolean {
+
         return true;
     }
 
