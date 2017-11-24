@@ -54,13 +54,14 @@ export class CameraService {
         });
     }
 
-    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh): void {
-        this.objectToFollow = objectToFollow;
-
+    public initialize(container: HTMLElement): void {
         const aspectRatio = container.clientWidth / container.clientHeight;
         this.perspectiveCamera = this.instansiatePerspectiveCamera(aspectRatio);
         this.orthographicCamera = this.instansiateOrthographicCamera(aspectRatio);
+    }
 
+    public initializeCameras(objectToFollow: THREE.Mesh): void {
+        this.objectToFollow = objectToFollow;
         this.initializeCamerasPositions();
     }
 

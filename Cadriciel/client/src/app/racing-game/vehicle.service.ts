@@ -15,8 +15,9 @@ const numberOfOpponents = 3;
 
 @Injectable()
 export class VehicleService {
-    public mainVehicle: Vehicle;
-    public opponentsVehicles: Array<Vehicle>;
+    public players: Array<Vehicle>;
+
+    private nbr = 0;
 
     constructor(
         private commandsService: CommandsService,
@@ -27,57 +28,37 @@ export class VehicleService {
         private vehicleMovementController: VehicleMovementController,
         // tslint:disable-next-line:no-unused-variable
         private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
-        obstacleCollisionEventService: ObstacleCollisionEventService,
+        private obstacleCollisionEventService: ObstacleCollisionEventService,
         private vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
-        this.mainVehicle = new Vehicle(obstacleCollisionEventService);
-        this.opponentsVehicles = [];
-        for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle(obstacleCollisionEventService);
+        loadingProgressEventService.getLoadingObservable().subscribe((event: LoadingProgressEvent) => {
+            if (event.getProgress() === 'Vehicle created') {
+                if (++this.nbr === 4) {
+                    loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
+                }
+            }
+        });
+    }
+
+    public getMainVehicle() {
+        return this.players[0];
+    }
+
+    public createVehicles(track: Track) {
+        this.players = [];
+        for (let color = 1; color <= numberOfOpponents + 1; color++) {
+            console.log(VehicleColor[color]);
+            this.players.push(new Vehicle(color, track, this.obstacleCollisionEventService, this.commandsService,
+                this.vehicleMoveEventService, this.vehicleRotateEventService, this.loadingProgressEventService));
         }
     }
 
-    public initializeMainVehicle(track: Track): Promise<Vehicle> {
-        return new Promise<Vehicle>(resolve => {
-            this.mainVehicle.create3DVehicle(
-                track, VehicleColor.red, new HumanController(this.commandsService,
-                    this.vehicleMoveEventService, this.vehicleRotateEventService)
-            ).then((vehicle) => {
-                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', vehicle));
-                resolve(vehicle);
-            });
-        });
-    }
-
-    public async initializeOpponentsVehicles(track: Track): Promise<Array<Vehicle>> {
-        await this.opponentsVehicles[0].create3DVehicle(track, VehicleColor.blue,
-            new HumanController(
-                this.commandsService,
-                this.vehicleMoveEventService, this.vehicleRotateEventService
-            ));
-            this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[0]));
-        await this.opponentsVehicles[1].create3DVehicle(track, VehicleColor.green,
-            new HumanController(
-                this.commandsService,
-                this.vehicleMoveEventService, this.vehicleRotateEventService));
-                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[1]));
-        await this.opponentsVehicles[2].create3DVehicle(track, VehicleColor.yellow,
-            new HumanController(
-                this.commandsService,
-                this.vehicleMoveEventService, this.vehicleRotateEventService));
-                this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', this.opponentsVehicles[2]));
-
-        return new Promise<Array<Vehicle>>(resolve => {
-            resolve(this.opponentsVehicles);
-        });
-    }
-
     public moveVehicle() {
-        this.mainVehicle.move();
+        this.players[0].move();
     }
 
     public getVehicles() {
-        return this.opponentsVehicles.concat(this.mainVehicle);
+        return this.players;
     }
 }

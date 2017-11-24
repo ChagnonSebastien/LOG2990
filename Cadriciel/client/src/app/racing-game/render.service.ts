@@ -114,4 +114,8 @@ export class RenderService {
         this.initStats();
         this.loadTrack(track);
     }
+
+    public add(o) {
+        this.scene.add(o);
+    }
 }

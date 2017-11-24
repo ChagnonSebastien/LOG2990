@@ -16,8 +16,8 @@ const rockyTexturePath = 'rock-512.jpg';
 const snowyTexturePath = 'snow-512.jpg';
 const waterTexturePath = 'water512.jpg';
 
-const trackColor = 0x000000;
-const trackRoughness = 0;
+const trackColor = 0x101010;
+const trackRoughness = 0.5;
 const trackHeight = 64;
 const heightMapPixelWidth = 256;
 const heightMapStrength = 255;

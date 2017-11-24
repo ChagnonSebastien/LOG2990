@@ -2,21 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 
-@Injectable()
-export class LoadingProgressEventService {
-
-    private eventListener = new Subject<LoadingProgressEvent>();
-
-    public sentLoadingEvent(event: LoadingProgressEvent) {
-        console.log(event.getProgress());
-        this.eventListener.next(event);
-    }
-
-    public getLoadingObservable(): Observable<LoadingProgressEvent> {
-        return this.eventListener.asObservable();
-    }
-}
-
 export class LoadingProgressEvent {
     constructor(
         private progress: string,
@@ -29,5 +14,20 @@ export class LoadingProgressEvent {
 
     public getObject(): any {
         return this.object;
+    }
+}
+
+@Injectable()
+export class LoadingProgressEventService {
+
+    private eventListener = new Subject<LoadingProgressEvent>();
+
+    public sentLoadingEvent(event: LoadingProgressEvent) {
+        console.log(event.getProgress(), event.getObject());
+        this.eventListener.next(event);
+    }
+
+    public getLoadingObservable(): Observable<LoadingProgressEvent> {
+        return this.eventListener.asObservable();
     }
 }

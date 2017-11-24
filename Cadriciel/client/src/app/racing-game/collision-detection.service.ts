@@ -1,4 +1,3 @@
-import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
 import { VehicleService } from './vehicle.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
@@ -11,30 +10,32 @@ const boundingBoxPath = 'cart_bounding_box.json';
 
 @Injectable()
 export class CollisionDetectionService {
+
+    private amountBBC = 0;
+
     constructor(
         vehicleMoveEventService: VehicleMoveEventService,
         private collisionEventService: CollisionEventService,
-        private vehicleService: VehicleService,
-        loadingProgressEventService: LoadingProgressEventService
+        private vehicleService: VehicleService
     ) {
-        loadingProgressEventService.getLoadingObservable().subscribe((event: LoadingProgressEvent) => {
-            if (event.getProgress() === 'Vehicle created') {
-                this.generateBoundingBox(<Vehicle> event.getObject());
-            }
-        });
 
         vehicleMoveEventService.getVehicleMoveObservable().subscribe((event: VehicleMoveEvent) => {
             this.checkForCollisionWithCar(event.getVehicle());
         });
     }
 
-    private generateBoundingBox(vehicle: Vehicle): void {
+    public generateBoundingBox(vehicle: Vehicle): void {
         new ObjectLoader().load(`${assetsPath}/${boundingBoxPath}`, (box: Object3D) => {
             vehicle.setBoundingBox(<Mesh> box);
+            this.amountBBC++;
         });
     }
 
     private checkForCollisionWithCar(vehicle: Vehicle) {
+        if (this.amountBBC !== 4) {
+            return;
+        }
+
         const box = vehicle.getBoundingBox();
         this.vehicleService.getVehicles().forEach((toCheck: Vehicle) => {
             if (toCheck !== vehicle) {

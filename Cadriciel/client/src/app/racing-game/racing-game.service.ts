@@ -17,28 +17,14 @@ export class RacingGameService {
 
     public async initializeRender(container: HTMLElement, track: Track): Promise<void> {
         this.track = track;
+        this.cameraService.initialize(container);
         this.renderService.initialize(container, track);
-        await this.addVehicles();
-        this.cameraService.initializeCameras(
-            this.renderService.container, this.vehicleService.mainVehicle.getVehicle());
+        this.addVehicles();
         await this.createCoundown();
-        this.renderService.startRenderingLoop();
     }
 
-    private async addVehicles(): Promise<void> {
-        await this.vehicleService.initializeMainVehicle(this.track);
-        await this.vehicleService.initializeOpponentsVehicles(this.track);
-        this.renderService.scene.add(this.vehicleService.mainVehicle.getVehicle());
-      //  this.renderService.scene.add(this.collisionDetectionService.getBox(this.vehicleService.mainVehicle.getVehicle()));
-
-        for (let i = 0; i < numberOfOpponents; i++) {
-            this.renderService.scene.add(this.vehicleService.opponentsVehicles[i].getVehicle());
-          //  this.renderService.scene.add(this.collisionDetectionService.getBox(this.vehicleService.mainVehicle.getVehicle()));
-        }
-
-        return new Promise<void>(resolve => {
-            resolve();
-        });
+    private async addVehicles() {
+        this.vehicleService.createVehicles(this.track);
     }
 
     private async createCoundown() {

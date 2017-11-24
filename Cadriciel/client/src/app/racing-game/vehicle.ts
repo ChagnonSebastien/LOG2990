@@ -1,3 +1,8 @@
+import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
+import { HumanController } from './human-controller';
+import { CommandsService } from './events/commands.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
@@ -24,7 +29,12 @@ export class Vehicle {
 
     private track: Track;
 
-    constructor(obstacleCollisionEventService: ObstacleCollisionEventService) {
+    constructor(private color: VehicleColor, track: Track,
+        obstacleCollisionEventService: ObstacleCollisionEventService, commandsService: CommandsService,
+        vehicleMoveEventService: VehicleMoveEventService, vehicleRotateEventService: VehicleRotateEventService,
+        private loadingProgressEventService: LoadingProgressEventService
+    ) {
+        this.create3DVehicle(track, color, new HumanController(commandsService, vehicleMoveEventService, vehicleRotateEventService));
         obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event: ObstacleCollisionEvent) => {
             if (event.getVehicle() === this) {
                 this.hitObstacle(event.getObstacle());
@@ -34,6 +44,10 @@ export class Vehicle {
 
     public getTrack(): Track {
         return this.track;
+    }
+
+    public getColor(): VehicleColor {
+        return this.color;
     }
 
     public getVehicle(): THREE.Mesh {
@@ -61,24 +75,23 @@ export class Vehicle {
         this.controler.hitObstacle(type);
     }
 
-    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
+    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller) {
+        const service = this;
         this.track = track;
         this.controler = controller;
         const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
-        return new Promise<Vehicle>(resolve => {
-            loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
-                this.vehicle = <THREE.Mesh>object;
-                this.vehicle.rotation.y = trackAngle;
-                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
-                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
-                this.vehicle.position.y = 3;
-                this.vehicle.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
-                this.vehicle.castShadow = true;
-                resolve(this);
-            });
+        loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+            this.vehicle = <THREE.Mesh>object;
+            this.vehicle.rotation.y = trackAngle;
+            this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
+            this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
+            this.vehicle.position.y = 3;
+            this.vehicle.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
+            this.vehicle.castShadow = true;
+            service.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', service));
         });
     }
 
