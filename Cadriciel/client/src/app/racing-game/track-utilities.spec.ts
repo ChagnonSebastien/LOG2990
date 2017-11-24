@@ -1,7 +1,7 @@
 import { TrackUtilities } from './track-utilities';
 import * as THREE from 'three';
 
-fdescribe('TrackUtilities Module', () => {
+describe('TrackUtilities Module', () => {
     it('should calculate distance between (0,0) and (1,1)', () => {
         const vectorFrom = new THREE.Vector3(0 , 0, 0);
         const vectorTo = new THREE.Vector2(0, 1);

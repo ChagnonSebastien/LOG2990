@@ -1,3 +1,4 @@
+import { SceneService } from './scene.service';
 import { CameraService } from './camera.service';
 import { Track } from './track';
 import { CountdownService } from './countdown.service';
@@ -12,7 +13,7 @@ export class RacingGameService {
     private track: Track;
 
     constructor(private renderService: RenderService, private vehicleService: VehicleService,
-        private countdownService: CountdownService, private cameraService: CameraService) {
+        private countdownService: CountdownService, private cameraService: CameraService, private sceneService: SceneService) {
     }
 
     public async initializeRender(container: HTMLElement, track: Track): Promise<void> {
@@ -29,7 +30,7 @@ export class RacingGameService {
 
     private async createCoundown() {
         await this.countdownService.createCountdown(this.track);
-        this.renderService.scene.add(this.countdownService.countdownMesh);
+        this.sceneService.addToScene(this.countdownService.countdownMesh);
     }
 
     public startGame() {
@@ -37,8 +38,8 @@ export class RacingGameService {
     }
 
     private removeCountdown() {
-        const selectedObject = this.renderService.scene.getObjectByName(this.countdownService.countdownMesh.name);
-        this.renderService.scene.remove(selectedObject);
+        const selectedObject = this.sceneService.scene.getObjectByName(this.countdownService.countdownMesh.name);
+        this.sceneService.removeFromScene(selectedObject);
     }
 
 }

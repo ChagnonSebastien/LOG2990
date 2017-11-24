@@ -23,7 +23,7 @@ export class LoadingProgressEventService {
     private eventListener = new Subject<LoadingProgressEvent>();
 
     public sentLoadingEvent(event: LoadingProgressEvent) {
-        console.log(event.getProgress(), event.getObject());
+        console.log(event.getProgress());
         this.eventListener.next(event);
     }
 

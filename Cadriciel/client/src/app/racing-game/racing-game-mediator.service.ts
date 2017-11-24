@@ -1,3 +1,4 @@
+import { SceneService } from './scene.service';
 import { RenderService } from './render.service';
 import { VehicleColor } from './vehicle-color';
 import { CameraService } from './camera.service';
@@ -19,6 +20,7 @@ export class RaceMediator {
         private collisionDetectionService: CollisionDetectionService,
         private cameraService: CameraService,
         private renderService: RenderService,
+        private sceneService: SceneService,
         commandsService: CommandsService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
         loadingProgressEventService: LoadingProgressEventService
@@ -61,7 +63,7 @@ export class RaceMediator {
     private hangleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
             const vehicle = <Vehicle> event.getObject();
-            this.renderService.add(vehicle.getVehicle());
+            this.sceneService.addToScene(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {
