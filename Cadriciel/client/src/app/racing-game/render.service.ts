@@ -108,11 +108,22 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
+        this.renderer.enableScissorTest(false);
         this.cameraService.cameraOnMoveWithObject();
+
+        this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight);
+
         this.renderer.render(this.scene, this.cameraService.getCamera());
         this.eventsList();
         this.animateVehicule();
         this.stats.update();
+
+
+        this.renderer.setScissor(100, 0, 200, 150);
+        this.renderer.enableScissorTest(true);
+        this.renderer.setViewport(100, 0, 200, 150);
+        this.renderer.render(this.scene, this.cameraService.rearViewCamera());
+
     }
 
     protected initStats() {

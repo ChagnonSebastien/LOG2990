@@ -89,6 +89,13 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
+    public rearViewCamera(): THREE.Camera {
+       let rearViewCamera: THREE.Camera;
+       rearViewCamera = this.perspectiveCamera;
+        // this.perspectiveCamera.lookAt( this.objectToFollow.position);
+        return rearViewCamera;
+    }
+
     public cameraOnMoveWithObject() {
         this.updatePerspectiveCameraPosition();
         this.updateOrthographicCameraPosition();
