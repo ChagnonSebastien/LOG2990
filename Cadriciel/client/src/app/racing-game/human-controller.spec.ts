@@ -1,6 +1,6 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { CollisionDetectionService } from './collision-detection.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService, PlayerCommand } from './events/commands.service';

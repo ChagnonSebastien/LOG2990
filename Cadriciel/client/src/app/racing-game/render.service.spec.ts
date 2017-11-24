@@ -1,8 +1,8 @@
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
@@ -34,7 +34,7 @@ describe('Render', () => {
                 DecorElementsService,
                 LineCalculationService,
                 DiamondSquareAlgorithmService,
-                ObstacleService,
+                ObstaclePositionService,
                 CountdownService,
                 AudioService,
                 RaceService,

@@ -1,9 +1,9 @@
 import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
@@ -56,7 +56,7 @@ import { LoadingProgressEventService } from './events/loading-progress-event.ser
         DecorElementsService,
         LineCalculationService,
         DiamondSquareAlgorithmService,
-        ObstacleService,
+        ObstaclePositionService,
         AudioService,
         RaceService,
         CollisionDetectionService,

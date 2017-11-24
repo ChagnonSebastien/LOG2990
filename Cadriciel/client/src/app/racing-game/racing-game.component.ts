@@ -1,4 +1,4 @@
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
@@ -21,7 +21,7 @@ export class RacingGameComponent implements AfterViewInit {
         private renderService: RenderService,
         private trackService: TrackService,
         private commandsService: CommandsService,
-        private obstacleService: ObstacleService
+        private obstacleService: ObstaclePositionService
     ) {
     }
 

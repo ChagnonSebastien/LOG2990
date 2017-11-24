@@ -1,18 +1,18 @@
 import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';
 
-let obstacleService: ObstacleService;
+let obstacleService: ObstaclePositionService;
 
 describe('ObstacleService', () => {
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [ObstacleService]
+            providers: [ObstaclePositionService]
         });
-        obstacleService = TestBed.get(ObstacleService);
+        obstacleService = TestBed.get(ObstaclePositionService);
     });
 
     it('should be created', () => {

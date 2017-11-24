@@ -1,5 +1,5 @@
 import { CommandsService } from './events/commands.service';
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { Track } from './track';

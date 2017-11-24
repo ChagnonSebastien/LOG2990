@@ -1,4 +1,4 @@
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { Obstacle, ObstacleType } from './draw-track/obstacle';
 import { LineCalculationService } from './line-calculation.service';
 import { Track } from './track';
@@ -37,7 +37,7 @@ export class DecorElementsService {
 
     private treesPositions: THREE.Vector3[] = [];
 
-    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstacleService) {
+    constructor(private lineCalculationService: LineCalculationService, private obstacleService: ObstaclePositionService) {
     }
 
     public initialize(scene: THREE.Scene, track: Track): void {
