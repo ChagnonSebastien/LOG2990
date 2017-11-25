@@ -10,7 +10,6 @@ import * as THREE from 'three';
 import { Controller } from './controller';
 import { Mesh, Vector2 } from 'three';
 import * as SETTINGS from './settings';
-import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 
 const distanceBetweenCars = 5;
 
@@ -30,16 +29,11 @@ export class Vehicle {
     private track: Track;
 
     constructor(private color: VehicleColor, track: Track,
-        obstacleCollisionEventService: ObstacleCollisionEventService, commandsService: CommandsService,
+        commandsService: CommandsService,
         vehicleMoveEventService: VehicleMoveEventService, vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
         this.create3DVehicle(track, color, new HumanController(commandsService, vehicleMoveEventService, vehicleRotateEventService));
-        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event: ObstacleCollisionEvent) => {
-            if (event.getVehicle() === this) {
-                this.hitObstacle(event.getObstacle());
-            }
-        });
     }
 
     public getTrack(): Track {
@@ -73,10 +67,6 @@ export class Vehicle {
 
     public hitWall(speedModifier: number) {
         this.controller.hitWall(speedModifier);
-    }
-
-    public hitObstacle(type: ObstacleType) {
-        this.controller.hitObstacle(type);
     }
 
     public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller) {

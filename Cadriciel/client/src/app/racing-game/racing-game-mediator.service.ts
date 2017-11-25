@@ -1,3 +1,4 @@
+import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
 import { VehicleRotateEvent, VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -38,6 +39,7 @@ export class RaceMediator {
         loadingProgressEventService: LoadingProgressEventService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService,
+        obstacleCollisionEventService: ObstacleCollisionEventService,
         collisionEventService: CollisionEventService
     ) {
         countdownDecreaseEventService.getCountdownDecreaseObservable().subscribe(
@@ -62,6 +64,10 @@ export class RaceMediator {
 
         vehicleRotateEventService.getVehicleRotateObservable().subscribe(
             (event: VehicleRotateEvent) => this.handleRotateEvent(event)
+        );
+
+        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe(
+            (event: ObstacleCollisionEvent) => this.handleObstacleCollisionEvent(event)
         );
 
         collisionEventService.getCollisionObservable().subscribe(
@@ -144,6 +150,10 @@ export class RaceMediator {
 
     private handleRotateEvent(event: VehicleRotateEvent) {
         this.vehicleMovementController.validateRotation(event);
+    }
+
+    private handleObstacleCollisionEvent(event: ObstacleCollisionEvent) {
+        event.getVehicle().getController().hitObstacle(event.getObstacle());
     }
 
     private handleCollisionEvent(event: CollisionEvent) {
