@@ -1,18 +1,17 @@
+import { SceneService } from './scene.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { CommandsService } from './commands.service';
-import { Subscription } from 'rxjs/Subscription';
+import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
-import { Light } from './light';
 
 @Injectable()
 export class RenderService {
-
-    private scale: number;
+    public frame: BehaviorSubject<number>;
 
     public container: HTMLElement;
 
@@ -20,34 +19,17 @@ export class RenderService {
 
     private renderer: THREE.WebGLRenderer;
 
-    public scene: THREE.Scene;
-
-    private textureSky: THREE.Texture;
-
-    private subscription: Subscription;
-
-    private event: any;
-
-    private keyPressed = false;
-
-    private hemiLight: THREE.HemisphereLight;
-
-    private dirLight: THREE.DirectionalLight;
-
-    private light: Light;
-
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private commandsService: CommandsService,
+        commandsService: CommandsService,
         private vehiculeService: VehicleService,
+        private sceneService: SceneService
     ) {
-        this.subscription = this.commandsService.getKeyDownEvent()
-        .subscribe(event => {
-            this.event = event;
-            this.keyPressed = true;
-            if (this.event.keyCode === 78) {
-                this.light.dirLight.visible = !this.light.dirLight.visible;
+        this.frame = new BehaviorSubject(0);
+        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
+                // this.light.dirLight.visible = !this.light.dirLight.visible;
             }
         });
     }
@@ -56,44 +38,8 @@ export class RenderService {
         this.vehiculeService.moveVehicle();
     }
 
-    protected createScene() {
-        this.scene = new THREE.Scene();
-        this.light = new Light();
-        this.createSkyBox();
-        this.scene.add(this.light.hemiLight);
-        this.scene.add(this.light.dirLight);
-    }
-
-    private createSkyBox() {
-        const url = '../../assets/images/skybox/';
-        const images = [url + 'xpos.png', url + 'xneg.png',
-        url + 'ypos.png', url + 'yneg.png',
-        url + 'zpos.png', url + 'zneg.png'];
-        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
-        const shader = THREE.ShaderLib['cube'];
-        shader.uniforms['tCube'].value = this.textureSky;
-        const material = new THREE.ShaderMaterial({
-            fragmentShader: shader.fragmentShader,
-            vertexShader: shader.vertexShader,
-            uniforms: shader.uniforms,
-            depthWrite: false,
-            side: THREE.BackSide
-        });
-        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(10000, 10000, 10000), material);
-        material.needsUpdate = true;
-        this.scene.add(skyboxMesh);
-    }
-
     public loadTrack(track) {
-        this.terrainGenerationService.generate(this.scene, this.scale, track, this.textureSky);
-    }
-
-    public eventsList(): void {
-        if (this.keyPressed) {
-            this.cameraService.swapCamera(this.event);
-            this.cameraService.zoomCamera(this.event);
-            this.keyPressed = false;
-        }
+        this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
     }
 
     public startRenderingLoop() {
@@ -113,8 +59,8 @@ export class RenderService {
 
         this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight);
 
-        this.renderer.render(this.scene, this.cameraService.getCamera());
-        this.eventsList();
+        this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
+        this.frame.next(this.frame.value + 1);
         this.animateVehicule();
         this.stats.update();
 
@@ -122,11 +68,11 @@ export class RenderService {
         this.renderer.setScissor(100, 0, 200, 150);
         this.renderer.enableScissorTest(true);
         this.renderer.setViewport(100, 0, 200, 150);
-        this.renderer.render(this.scene, this.cameraService.rearViewCamera());
+        this.renderer.render(this.sceneService.scene, this.cameraService.rearViewCamera());
 
     }
 
-    protected initStats() {
+    private initStats() {
         this.stats = new Stats();
         this.stats.dom.style.position = 'absolute';
         this.stats.dom.style.top = '64px';
@@ -139,12 +85,9 @@ export class RenderService {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     }
 
-    public async initialize(container: HTMLElement, track: Track, scale: number): Promise<void> {
-        this.scale = scale;
+    public async initialize(container: HTMLElement, track: Track): Promise<void> {
         this.container = container;
-        this.createScene();
         this.initStats();
         this.loadTrack(track);
     }
-
 }

@@ -1,55 +1,48 @@
-import { RaceService } from './race.service';
-import { CountdownService } from './countdown.service';
-import { CommandsService } from './commands.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
-    private raceStarted: boolean;
 
-    constructor(private commandsService: CommandsService, private countdownService: CountdownService, private raceService: RaceService) {
-        super();
-        this.raceStarted = false;
-        this.commandsService.getKeyDownEvent().subscribe( event => {
-            this.moveVehicle(event);
+    constructor(
+        commandsService: CommandsService,
+        vehicleMoveEventService: VehicleMoveEventService,
+        vehicleRotateEventService: VehicleRotateEventService
+    ) {
+        super(vehicleMoveEventService, vehicleRotateEventService);
+        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
+            this.startDirective(event.getCommand());
         });
 
-        this.commandsService.getKeyUpEvent().subscribe( event => {
-            this.stopVehicle(event);
+        commandsService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
+            this.endDirective(event.getCommand());
         });
-        this.listenForEndOfCountdown();
-        this.listenForEndOfRace();
     }
 
-    private moveVehicle(event) {
-        if (event.keyCode === 87 && this.raceStarted) {
+    private startDirective(command: PlayerCommand) {
+        switch (command) {
+            case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.MOVE_FORWARD;
-        }
-        if (event.keyCode === 65 && this.raceStarted) {
+            break;
+            case PlayerCommand.ROTATE_LEFT:
             this.turnState = TURN_STATE.TURN_LEFT;
-        }
-        if (event.keyCode === 68 && this.raceStarted) {
+            break;
+            case PlayerCommand.ROTATE_RIGHT:
             this.turnState = TURN_STATE.TURN_RIGHT;
+            break;
         }
     }
 
-    private stopVehicle(event) {
-        if (event.keyCode === 87 && this.raceStarted) {
+    private endDirective(command: PlayerCommand) {
+        switch (command) {
+            case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.BRAKE;
-        }
-
-        if ((event.keyCode === 65 || event.keyCode === 68) && this.raceStarted ) {
+            break;
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
             this.turnState = TURN_STATE.DO_NOTHING;
+            break;
         }
-    }
-
-    private listenForEndOfCountdown() {
-        this.countdownService.countdownEndedAlerts().subscribe(() => {
-            this.raceStarted = true;
-        });
-    }
-    private listenForEndOfRace() {
-        this.raceService.raceEndedAlerts().subscribe(() => {
-            this.raceStarted = false;
-        });
     }
 }

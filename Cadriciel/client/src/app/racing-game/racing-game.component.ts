@@ -1,11 +1,11 @@
-import { ObstacleService } from './obstacle.service';
-import { CountdownService } from './countdown.service';
+import { RaceMediator } from './racing-game-mediator.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 
 @Component({
     moduleId: module.id,
@@ -21,9 +21,10 @@ export class RacingGameComponent implements AfterViewInit {
         private racingGameService: RacingGameService,
         private renderService: RenderService,
         private trackService: TrackService,
-        private countdownService: CountdownService,
         private commandsService: CommandsService,
-        private obstacleService: ObstacleService
+        private obstacleService: ObstaclePositionService,
+        // tslint:disable-next-line:no-unused-variable
+        private raceMediator: RaceMediator
     ) {
     }
 
@@ -40,11 +41,11 @@ export class RacingGameComponent implements AfterViewInit {
     }
 
     public eventsDownListen(event: any): void {
-        this.commandsService.sendKeyDownEvent(event);
+        this.commandsService.keyDown(event);
     }
 
     public eventsUpListen(event: any): void {
-        this.commandsService.sentKeyUpEvent(event);
+        this.commandsService.keyUp(event);
     }
 
     public ngAfterViewInit() {
@@ -54,17 +55,4 @@ export class RacingGameComponent implements AfterViewInit {
             this.obstacleService.initialize(track);
         });
     }
-
-    private startCountdown(event: any) {
-        if (event.keyCode === 32 && this.countdownService.countdownStarted === false) {
-            this.countdownService.countdownStarted = true;
-            this.countdownService.startCountdown();
-        }
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    public onStartRace() {
-        this.startCountdown(event);
-    }
-
 }

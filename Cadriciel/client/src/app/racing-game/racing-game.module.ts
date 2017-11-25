@@ -1,6 +1,12 @@
-import { RaceService } from './race.service';
+import { SceneService } from './scene.service';
+import { RaceMediator } from './racing-game-mediator.service';
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
+import { CollisionEventService } from './events/collision-event.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
+import { RoadLimitService } from './road-limit.service';
+import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
-import { ObstacleService } from './obstacle.service';
+import { ObstaclePositionService } from './obstacle-position.service';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
@@ -19,8 +25,14 @@ import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
 import { TrackService } from './game-initialization/track.service';
 import { RacingGameService } from './racing-game.service';
-import { CommandsService } from './commands.service';
+import { CommandsService } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
+import { CollisionDetectionService } from './collision-detection.service';
+import { VehicleMoveEventService } from './events/vehicle-move-event.service';
+import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { LoadingProgressEventService } from './events/loading-progress-event.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
 @NgModule({
     imports: [
@@ -49,9 +61,25 @@ import { VehicleService } from './vehicle.service';
         DecorElementsService,
         LineCalculationService,
         DiamondSquareAlgorithmService,
-        ObstacleService,
+        ObstaclePositionService,
         AudioService,
-        RaceService
+        RaceService,
+        CollisionDetectionService,
+        RoadLimitService,
+        VehicleMoveEventService,
+        VehicleMovementController,
+        VehicleRotateEventService,
+        LoadingProgressEventService,
+        CollisionEventService,
+        ObstacleCollisionEventService,
+        ObstacleCollisionDetectionService,
+        CountdownDecreaseEventService,
+        RaceMediator,
+        SceneService
     ]
 })
-export class RacingGameModule { }
+export class RacingGameModule {
+    constructor(collisionDetectionService: CollisionDetectionService) {
+
+    }
+}
