@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import * as THREE from 'three';
+import { Vector2 } from 'three';
 @Injectable()
 export class CollisionResolveService {
 
@@ -15,9 +16,16 @@ export class CollisionResolveService {
   public resolveCollision(vehicleA: Vehicle, vehicleB: Vehicle, xCollisionPoint: number,
     zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint) {
 
+    // calculate the normal
     const normal = this.calculateNormal(xCollisionPoint, zCollisionPoint, xCollisionPlanePoint, zCollisionPlanePoint);
     this.setCorrectNormalDirection(normal, vehicleA.getVehicle().position.x, vehicleA.getVehicle().position.z,
       vehicleB.getVehicle().position.x, vehicleB.getVehicle().position.z);
+
+    // calculate the distance vectors from center of mass of vehicle A to point of collision and vice verca for Vehicle B
+    const distanceA = this.calculateDistanceVector(vehicleA.getVehicle().position.x,
+      vehicleA.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
+    const distanceB = this.calculateDistanceVector(vehicleB.getVehicle().position.x,
+      vehicleB.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
   }
 
   public calculateNormal(xCollisionPoint: number, zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint): THREE.Vector3 {
@@ -70,5 +78,15 @@ export class CollisionResolveService {
       return true;
     }
     return false;
+  }
+
+  public calculateImpulse(elasticity: number, normal: THREE.Vector3, distanceA: THREE.Vector3,
+    distanceB: THREE.Vector3, inertiaA: number, inertiaB: number, initialRelativeVelocityA: THREE.Vector3): number {
+    const distanceACrossNormal = distanceA.cross(normal);
+    const distanceBCrossNormal = distanceB.cross(normal);
+    const numerator = -1 * (1 + elasticity) * initialRelativeVelocityA.dot(normal);
+    const denominator = 2 / this.vehicleMass + distanceACrossNormal.dot(distanceACrossNormal) / inertiaA
+    + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
+    return numerator / denominator;
   }
 }
