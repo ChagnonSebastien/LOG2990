@@ -4,7 +4,13 @@ import * as THREE from 'three';
 @Injectable()
 export class CollisionResolveService {
 
-  constructor() { }
+  private vehicleMass: number;
+  private elasticity: number;
+
+  constructor() {
+    this.vehicleMass = 5;
+    this.elasticity = 1;
+  }
 
   public resolveCollision(vehicleA: Vehicle, vehicleB: Vehicle, xCollisionPoint: number,
     zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint) {
@@ -35,5 +41,9 @@ export class CollisionResolveService {
       normal.z = normal.z * -1;
     }
     normal.normalize();
+  }
+
+  public calculateMomentOfInertia(boxLength: number, boxWidth: number): number {
+    return ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
   }
 }
