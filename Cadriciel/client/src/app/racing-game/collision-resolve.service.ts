@@ -43,7 +43,8 @@ export class CollisionResolveService {
     normal.normalize();
   }
 
-  public calculateMomentOfInertia(boxLength: number, boxWidth: number): number {
+  public calculateMomentOfInertia(boxLength: number, boxWidth: number, xVehicle: number, zVehicle: number): number {
+    // use the parallel axis theorem to get the moment of inertiua around the vehicle center of mass
     return ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
   }
 }
