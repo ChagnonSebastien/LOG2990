@@ -1,3 +1,4 @@
+import { RacingSceneService } from './racing-scene.service';
 import { FrameEvent, FrameEventService } from './events/frame-event.service';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
@@ -8,7 +9,6 @@ import { ObstacleCollisionDetectionService } from './obstacle-collision-detectio
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { HumanController } from './human-controller';
 import { VehicleService } from './vehicle.service';
-import { SceneService } from './scene.service';
 import { RenderService } from './render.service';
 import { VehicleColor } from './vehicle-color';
 import { CameraService } from './camera.service';
@@ -31,7 +31,7 @@ export class RaceMediator {
         private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
         private cameraService: CameraService,
         private renderService: RenderService,
-        private sceneService: SceneService,
+        private racingSceneService: RacingSceneService,
         private vehicleService: VehicleService,
         private roadLimitService: RoadLimitService,
         private vehicleMovementController: VehicleMovementController,
@@ -124,7 +124,7 @@ export class RaceMediator {
             break;
 
             case PlayerCommand.TOGGLE_NIGHT_MODE:
-            this.sceneService.toggleNightMode();
+            this.racingSceneService.toggleNightMode();
             break;
         }
     }
@@ -142,7 +142,7 @@ export class RaceMediator {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle> event.getObject();
-            this.sceneService.addToScene(vehicle.getVehicle());
+            this.racingSceneService.addObject(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {

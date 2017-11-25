@@ -1,11 +1,11 @@
 import { FrameEventService, FrameEvent } from './events/frame-event.service';
-import { SceneService } from './scene.service';
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
+import { RacingSceneService } from './racing-scene.service';
 
 @Injectable()
 export class RenderService {
@@ -18,7 +18,7 @@ export class RenderService {
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        private sceneService: SceneService,
+        private sceneService: RacingSceneService,
         private frameEventService: FrameEventService
     ) {}
 

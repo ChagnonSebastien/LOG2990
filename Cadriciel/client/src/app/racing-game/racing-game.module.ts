@@ -35,6 +35,7 @@ import { LoadingProgressEventService } from './events/loading-progress-event.ser
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { LapCounterService } from './lap-counter.service';
+import { RacingSceneService } from './racing-scene.service';
 
 @NgModule({
     imports: [
@@ -78,6 +79,7 @@ import { LapCounterService } from './lap-counter.service';
         CountdownDecreaseEventService,
         RaceMediator,
         SceneService,
+        RacingSceneService,
         FrameEventService,
         LapCounterService
     ]
