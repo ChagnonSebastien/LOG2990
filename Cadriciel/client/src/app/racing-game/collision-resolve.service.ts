@@ -14,6 +14,10 @@ export class CollisionResolveService {
 
   public resolveCollision(vehicleA: Vehicle, vehicleB: Vehicle, xCollisionPoint: number,
     zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint) {
+
+    const normal = this.calculateNormal(xCollisionPoint, zCollisionPoint, xCollisionPlanePoint, zCollisionPlanePoint);
+    this.setCorrectNormalDirection(normal, vehicleA.getVehicle().position.x, vehicleA.getVehicle().position.z,
+      vehicleB.getVehicle().position.x, vehicleB.getVehicle().position.z);
   }
 
   public calculateNormal(xCollisionPoint: number, zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint): THREE.Vector3 {
@@ -30,7 +34,7 @@ export class CollisionResolveService {
     return vector;
   }
 
-  public getCorrectNormalDirection(normal: THREE.Vector3, xVehicleA: number, zvehicleA: number,
+  public setCorrectNormalDirection(normal: THREE.Vector3, xVehicleA: number, zvehicleA: number,
     xVehicleB: number, zvehicleB: number): void {
     const distanceVector = this.calculateDistanceVector(xVehicleB, zvehicleB, xVehicleA, zvehicleA);
 
@@ -43,8 +47,28 @@ export class CollisionResolveService {
     normal.normalize();
   }
 
-  public calculateMomentOfInertia(boxLength: number, boxWidth: number, xVehicle: number, zVehicle: number): number {
+  public calculateMomentOfInertia(vehicle: Vehicle, clockwise: boolean): number {
     // use the parallel axis theorem to get the moment of inertiua around the vehicle center of mass
-    return ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
+    const boxLength = 0;
+    const boxWidth = 0;
+    const xVehicle = vehicle.getVehicle().position.x;
+    const zVehicle = vehicle.getVehicle().position.z;
+    const xBox = vehicle.getBoundingBox().position.x;
+    const zBox = vehicle.getBoundingBox().position.z;
+    const distance = Math.sqrt(Math.pow((xVehicle - xBox), 2) + Math.pow((zVehicle - zBox), 2));
+    let inertia = ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) +
+      Math.pow(boxWidth, 2)) + (this.vehicleMass * (Math.pow(distance, 2))));
+    // right hand rule
+    if (clockwise) {
+      inertia = inertia * -1;
+    }
+    return inertia;
+  }
+
+  public checkIfClockwise(angularVelocity: number) {
+    if (angularVelocity < 0) {
+      return true;
+    }
+    return false;
   }
 }

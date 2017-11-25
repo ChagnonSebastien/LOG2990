@@ -27,7 +27,7 @@ describe('CollisionResolveService', () => {
   it('should calculate normal in the correct direction', inject([CollisionResolveService], (service: CollisionResolveService) => {
     const normalExpected = new THREE.Vector3(-3 / 5, 0, -4 / 5);
     const normal = new THREE.Vector3(3, 0, 4);
-    service.getCorrectNormalDirection(normal, 3, 2, 11, 3);
+    service.setCorrectNormalDirection(normal, 3, 2, 11, 3);
     expect(normal.x).toBeCloseTo(normalExpected.x);
     expect(normal.y).toBeCloseTo(normalExpected.y);
     expect(normal.z).toBeCloseTo(normalExpected.z);
