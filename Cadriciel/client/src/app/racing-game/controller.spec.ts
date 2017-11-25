@@ -66,7 +66,6 @@ describe('Controller', function () {
             vehicle = new Vehicle(
                 VehicleColor.blue,
                 track,
-                TestBed.get(ObstacleCollisionEventService),
                 TestBed.get(CommandsService),
                 TestBed.get(VehicleMoveEventService),
                 TestBed.get(VehicleRotateEventService),

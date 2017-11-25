@@ -1,16 +1,11 @@
-import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
-import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { VehicleMovementController } from './vehicle-movement-controller.service';
-import { RoadLimitService } from './road-limit.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleColor } from './vehicle-color';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import { CommandsService } from './events/commands.service';
-const numberOfOpponents = 3;
 
 @Injectable()
 export class VehicleService {
@@ -21,13 +16,6 @@ export class VehicleService {
     constructor(
         private commandsService: CommandsService,
         private vehicleMoveEventService: VehicleMoveEventService,
-        // tslint:disable-next-line:no-unused-variable
-        private roadLimitService: RoadLimitService,
-        // tslint:disable-next-line:no-unused-variable
-        private vehicleMovementController: VehicleMovementController,
-        // tslint:disable-next-line:no-unused-variable
-        private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
-        private obstacleCollisionEventService: ObstacleCollisionEventService,
         private vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
@@ -45,7 +33,7 @@ export class VehicleService {
     public createVehicles(track: Track): void {
         this.players = [];
         for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
-            this.players.push(new Vehicle(color, track, this.obstacleCollisionEventService, this.commandsService,
+            this.players.push(new Vehicle(color, track, this.commandsService,
                 this.vehicleMoveEventService, this.vehicleRotateEventService, this.loadingProgressEventService));
         }
     }

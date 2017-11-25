@@ -3,7 +3,6 @@ import { HumanController } from './human-controller';
 import { CommandsService } from './events/commands.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';

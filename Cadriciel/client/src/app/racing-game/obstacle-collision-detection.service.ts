@@ -1,10 +1,9 @@
-import { CollisionEvent } from './events/collision-event.service';
 import { ObstaclePositionService } from './obstacle-position.service';
-import { Vector3, Vector2 } from 'three';
+import { Vector2 } from 'three';
 import { ObstacleType } from './draw-track/obstacle';
 import { Vehicle } from './vehicle';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
-import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
+import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
 import * as SETTINGS from './settings';
 
