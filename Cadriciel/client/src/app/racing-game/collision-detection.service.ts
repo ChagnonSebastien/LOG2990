@@ -1,6 +1,6 @@
 import { VehicleService } from './vehicle.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
-import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
+import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
 import { Mesh, Geometry, Vector3, Object3D, ObjectLoader } from 'three';
 import { Vehicle } from './vehicle';
@@ -14,15 +14,9 @@ export class CollisionDetectionService {
     private amountBBC = 0;
 
     constructor(
-        vehicleMoveEventService: VehicleMoveEventService,
         private collisionEventService: CollisionEventService,
         private vehicleService: VehicleService
-    ) {
-
-        vehicleMoveEventService.getVehicleMoveObservable().subscribe((event: VehicleMoveEvent) => {
-            this.checkForCollisionWithCar(event.getVehicle());
-        });
-    }
+    ) {}
 
     public generateBoundingBox(vehicle: Vehicle): void {
         new ObjectLoader().load(`${assetsPath}/${boundingBoxPath}`, (box: Object3D) => {
@@ -31,14 +25,14 @@ export class CollisionDetectionService {
         });
     }
 
-    private checkForCollisionWithCar(vehicle: Vehicle) {
+    public checkForCollisionWithCar(event: VehicleMoveEvent) {
         if (this.amountBBC !== 4) {
             return;
         }
 
-        const box = vehicle.getBoundingBox();
+        const box = event.getVehicle().getBoundingBox();
         this.vehicleService.getVehicles().forEach((toCheck: Vehicle) => {
-            if (toCheck !== vehicle) {
+            if (toCheck !== event.getVehicle()) {
                 const box2 = toCheck.getBoundingBox();
 
                 box.updateMatrixWorld(true);
@@ -48,7 +42,7 @@ export class CollisionDetectionService {
 
                 const intersectingPoint = this.checkForIntersection(vertices1, vertices2);
                 if (intersectingPoint !== null) {
-                    this.collisionEventService.sendCollisionEvent(new CollisionEvent(vehicle, toCheck, intersectingPoint));
+                    this.collisionEventService.sendCollisionEvent(new CollisionEvent(event.getVehicle(), toCheck, intersectingPoint));
                 }
             }
         });

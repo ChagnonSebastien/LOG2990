@@ -1,5 +1,5 @@
 import { DriveModifier } from './drive-modifier';
-import * as SETTINGS from '../settings';
+import { Settings } from '../settings';
 
 export class PotholeModifier extends DriveModifier {
     public getModifiedSpeed(speed: number) {
@@ -7,7 +7,7 @@ export class PotholeModifier extends DriveModifier {
     }
 
     public getVerticalPositionModifier() {
-        return Math.random() * SETTINGS.SCENE_SCALE;
+        return Math.random() * Settings.SCENE_SCALE;
     }
 
     public getAccelerationMultiplier() {

@@ -1,5 +1,4 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { RenderService } from './render.service';
 import { Injectable } from '@angular/core';
 import { TrackUtilities } from './track-utilities';
 
@@ -10,23 +9,13 @@ export class LapCounterService {
     private passedCounter: Array<number>;
     private laps: BehaviorSubject<number>;
 
-    constructor(
-        private renderService: RenderService,
-    ) {
+    constructor() {
         this.laps = new BehaviorSubject(0);
         this.lastIntersectionNumber = 0;
         this.passedCounter = new Array<number>(TrackUtilities.numberOfIntersections()).fill(0);
-        this.subscribeToRenderFrame();
     }
 
-    private subscribeToRenderFrame(): void {
-        this.renderService.frame.subscribe(() => {
-            this.updatePassedCounter();
-            this.updateLap();
-        });
-    }
-
-    private updatePassedCounter(): void {
+    public updatePassedCounter(): void {
         const position = TrackUtilities.getVehiclePosition();
         const nextIntersectionNumber = (this.lastIntersectionNumber + 1) % TrackUtilities.numberOfIntersections();
         const previousIntersectionNumber = (this.lastIntersectionNumber - 1) % TrackUtilities.numberOfIntersections();
@@ -49,7 +38,7 @@ export class LapCounterService {
         return distanceToIntersectionOne < distanceToIntersectionZero;
     }
 
-    private updateLap(): void {
+    public updateLap(): void {
         const minPassed = this.passedCounter.reduce((prev, next) => {
             return prev < next ? prev : next;
         });

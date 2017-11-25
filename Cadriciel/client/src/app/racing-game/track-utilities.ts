@@ -1,5 +1,5 @@
-import * as SETTINGS from './settings';
 import * as THREE from 'three';
+import { Settings } from './settings';
 
 export module TrackUtilities {
 
@@ -14,7 +14,7 @@ export module TrackUtilities {
     export function isAtIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): boolean {
         const distanceFromIntersection = this.calculateDistanceFromIntersection(carPosition, intersection);
 
-        return distanceFromIntersection <= SETTINGS.TRACK_RADIUS;
+        return distanceFromIntersection <= Settings.TRACK_RADIUS;
     }
 
     export function getIntersections(): Array<THREE.Vector2> {

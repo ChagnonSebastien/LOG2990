@@ -1,18 +1,14 @@
-import { SceneService } from './scene.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { FrameEventService, FrameEvent } from './events/frame-event.service';
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
-import { CommandsService, CommandEvent, PlayerCommand } from './events/commands.service';
-import { VehicleService } from './vehicle.service';
+import { RacingSceneService } from './racing-scene.service';
 
 @Injectable()
 export class RenderService {
-    public frame: BehaviorSubject<number>;
-
     public container: HTMLElement;
 
     private stats: Stats;
@@ -22,21 +18,9 @@ export class RenderService {
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
-        commandsService: CommandsService,
-        private vehiculeService: VehicleService,
-        private sceneService: SceneService
-    ) {
-        this.frame = new BehaviorSubject(0);
-        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
-            if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
-                // this.light.dirLight.visible = !this.light.dirLight.visible;
-            }
-        });
-    }
-
-    public animateVehicule() {
-        this.vehiculeService.moveVehicle();
-    }
+        private sceneService: RacingSceneService,
+        private frameEventService: FrameEventService
+    ) {}
 
     public loadTrack(track) {
         this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
@@ -54,10 +38,8 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
-        this.frame.next(this.frame.value + 1);
-        this.cameraService.cameraOnMoveWithObject();
+        this.frameEventService.sendFrameEvent(new FrameEvent());
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
-        this.animateVehicule();
         this.stats.update();
     }
 

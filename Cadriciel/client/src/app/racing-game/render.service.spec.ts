@@ -1,3 +1,5 @@
+import { RacingSceneService } from './racing-scene.service';
+import { FrameEventService } from './events/frame-event.service';
 import { SceneService } from './scene.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
@@ -51,7 +53,9 @@ describe('Render', () => {
                 ObstacleCollisionDetectionService,
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,
-                SceneService
+                SceneService,
+                FrameEventService,
+                RacingSceneService
             ]
         });
         renderService = TestBed.get(RenderService);
