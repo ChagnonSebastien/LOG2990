@@ -5,7 +5,7 @@ import { Vehicle } from './vehicle';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
-import * as SETTINGS from './settings';
+import { Settings } from './settings';
 
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ObstacleCollisionDetectionService {
     }
 
     private distanceToObstacle(vehicle: Vehicle, obstaclePosition: THREE.Vector2) {
-        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(SETTINGS.SCENE_SCALE);
+        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(Settings.SCENE_SCALE);
         return Math.sqrt(
             Math.pow(obstaclePositionClone.x - vehicle.getVehicle().position.x, 2) +
             Math.pow(obstaclePositionClone.y - vehicle.getVehicle().position.z, 2)
@@ -38,7 +38,7 @@ export class ObstacleCollisionDetectionService {
     }
 
     private isColliding(vehicle: Vehicle, type: ObstacleType, distance: number, index: number) {
-        if (distance < type * SETTINGS.SCENE_SCALE) {
+        if (distance < type * Settings.SCENE_SCALE) {
             this.obstacleCollisionEventService.sendObstacleCollisionEvent(new ObstacleCollisionEvent(vehicle, type));
         }
     }

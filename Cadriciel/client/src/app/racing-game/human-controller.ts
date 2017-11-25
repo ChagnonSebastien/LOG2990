@@ -1,12 +1,11 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { CommandsService, PlayerCommand } from './events/commands.service';
+import { PlayerCommand } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
 
     constructor(
-        commandsService: CommandsService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService
     ) {

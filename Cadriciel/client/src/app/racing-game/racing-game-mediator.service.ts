@@ -1,3 +1,4 @@
+import { FrameEvent, FrameEventService } from './events/frame-event.service';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
 import { VehicleRotateEvent, VehicleRotateEventService } from './events/vehicle-rotate-event.service';
@@ -35,6 +36,7 @@ export class RaceMediator {
         private roadLimitService: RoadLimitService,
         private vehicleMovementController: VehicleMovementController,
         commandsService: CommandsService,
+        frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
         loadingProgressEventService: LoadingProgressEventService,
         vehicleMoveEventService: VehicleMoveEventService,
@@ -42,6 +44,10 @@ export class RaceMediator {
         obstacleCollisionEventService: ObstacleCollisionEventService,
         collisionEventService: CollisionEventService
     ) {
+        frameEventService.getFrameObservable().subscribe(
+            (event: FrameEvent) => this.handleFrameEvent(event)
+        );
+
         countdownDecreaseEventService.getCountdownDecreaseObservable().subscribe(
             (event: CountdownDecreaseEvent) => this.handleCountdownDecreaseEvent(event)
         );
@@ -73,6 +79,13 @@ export class RaceMediator {
         collisionEventService.getCollisionObservable().subscribe(
             (event: CollisionEvent) => this.handleCollisionEvent(event)
         );
+    }
+
+    private handleFrameEvent(event: FrameEvent) {
+        this.cameraService.cameraOnMoveWithObject();
+        this.vehicleService.getVehicles().forEach((vehicle: Vehicle) => {
+            vehicle.getController().nextFrame(vehicle);
+        });
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -127,6 +140,7 @@ export class RaceMediator {
 
     private handleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
+            this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle> event.getObject();
             this.sceneService.addToScene(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);

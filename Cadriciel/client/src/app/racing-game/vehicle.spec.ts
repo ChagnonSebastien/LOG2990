@@ -32,7 +32,6 @@ describe('Vehicle', () => {
         vehicle = new Vehicle(
             VehicleColor.blue,
             track,
-            TestBed.get(CommandsService),
             TestBed.get(VehicleMoveEventService),
             TestBed.get(VehicleRotateEventService),
             TestBed.get(LoadingProgressEventService)

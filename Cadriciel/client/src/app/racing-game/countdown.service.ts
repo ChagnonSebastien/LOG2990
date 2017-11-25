@@ -3,8 +3,8 @@ import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
 import { Track } from './track';
 import * as THREE from 'three';
-import * as SETTINGS from './settings';
 import { CommandsService } from './events/commands.service';
+import { Settings } from './settings';
 
 @Injectable()
 export class CountdownService {
@@ -68,9 +68,9 @@ export class CountdownService {
                 });
                 this.countdownMesh = new THREE.Mesh(textGeometry, material);
                 this.countdownMesh.name = 'countdown';
-                this.countdownMesh.position.setX(trackCenter.x * SETTINGS.SCENE_SCALE);
-                this.countdownMesh.position.setY((SETTINGS.SCENE_SCALE * 20 / 25) + 3);
-                this.countdownMesh.position.setZ(trackCenter.y * SETTINGS.SCENE_SCALE);
+                this.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
+                this.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
+                this.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
                 this.countdownMesh.geometry.rotateY(Math.PI / 2);
                 resolve();
             }.bind(this));
