@@ -28,7 +28,9 @@ export class Light {
         this.dirLight.shadow.camera.bottom = -5000;
         this.dirLight.shadow.camera.far = 10000;
         this.dirLight.shadow.bias = -0.0001;
+    }
 
+    public addLightsToVehicle(vehicule: any) {
         const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
         const matSphereRight = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
@@ -42,5 +44,17 @@ export class Light {
 
         this.spotLeft = new THREE.SpotLight( 0xFFFFFF);
         this.spotLeft.add(headlightLeft);
+
+        const target = new THREE.Object3D();
+        vehicule.add(target);
+        target.position.set(0, 0, 4);
+
+        vehicule.add(this.spotRight);
+        vehicule.add(this.spotLeft);
+
+        this.spotRight.position.set(0.6, 1.1, -3.2);
+        this.spotRight.target = target;
+        this.spotLeft.position.set(-0.6, 1.1, -3.2);
+        this.spotLeft.target = target;
     }
 }
