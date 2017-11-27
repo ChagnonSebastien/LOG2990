@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
 import { Vehicle } from './vehicle';
+import { Light } from './light';
 
 @Injectable()
 export class RaceMediator {
@@ -61,8 +62,10 @@ export class RaceMediator {
     }
 
     private hangleProgressEvent(event: LoadingProgressEvent) {
+        const light = new Light();
         if (event.getProgress() === 'Vehicle created') {
             const vehicle = <Vehicle> event.getObject();
+            light.addLightsToVehicle(vehicle.getVehicle());
             this.sceneService.addToScene(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 

@@ -47,7 +47,7 @@ export class Light {
 
         const target = new THREE.Object3D();
         vehicule.add(target);
-        target.position.set(0, 0, 4);
+        target.position.set(0, 0, -4);
 
         vehicule.add(this.spotRight);
         vehicule.add(this.spotLeft);
