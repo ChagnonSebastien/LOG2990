@@ -29,7 +29,7 @@ export class RenderService {
         this.frame = new BehaviorSubject(0);
         commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
             if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
-                // this.light.dirLight.visible = !this.light.dirLight.visible;
+                this.sceneService.toggleNightMode();
             }
         });
     }
