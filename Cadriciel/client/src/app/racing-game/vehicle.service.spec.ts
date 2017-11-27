@@ -11,10 +11,8 @@ import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { CommandsService } from './events/commands.service';
-import { Track } from './track';
 import { VehicleService } from './vehicle.service';
 import { TestBed } from '@angular/core/testing';
-import * as THREE from 'three';
 import { RoadLimitService } from './road-limit.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 

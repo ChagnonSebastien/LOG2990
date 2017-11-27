@@ -2,18 +2,19 @@ import { LineCalculationService } from './line-calculation.service';
 import { Injectable } from '@angular/core';
 import { Track } from './track';
 import { Vector2, Vector3 } from 'three';
-import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Vehicle } from './vehicle';
 
 @Injectable()
 export class RoadLimitService {
 
-    constructor(private lineCalculationService: LineCalculationService, private vehicleMoveEventService: VehicleMoveEventService) {
-        this.vehicleMoveEventService.getVehicleMoveObservable().subscribe((vehicleMoveEvent: VehicleMoveEvent) => {
-            if (!this.isMovementValid(vehicleMoveEvent.getVehicle().getTrack(), vehicleMoveEvent.getNewPosition())) {
-                this.snapToTrack(vehicleMoveEvent.getVehicle(), vehicleMoveEvent.getNewPosition());
-            }
-        });
+    constructor(
+        private lineCalculationService: LineCalculationService
+    ) {}
+
+    public validateMovement(vehicleMoveEvent) {
+        if (!this.isMovementValid(vehicleMoveEvent.getVehicle().getTrack(), vehicleMoveEvent.getNewPosition())) {
+            this.snapToTrack(vehicleMoveEvent.getVehicle(), vehicleMoveEvent.getNewPosition());
+        }
     }
 
     private isMovementValid(track: Track, newPosition: Vector3): boolean {

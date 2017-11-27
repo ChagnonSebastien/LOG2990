@@ -16,7 +16,7 @@ export enum MOVE_STATE { MOVE_FORWARD, BRAKE }
 export enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
 
 export abstract class Controller {
-    public speed: number;
+    protected speed: number;
 
     protected moveState: MOVE_STATE;
 
@@ -52,7 +52,7 @@ export abstract class Controller {
         }
     }
 
-    public move(vehicle: Vehicle) {
+    public nextFrame(vehicle: Vehicle) {
         this.modifySpeed();
         this.moveVehicle(vehicle);
 
@@ -97,15 +97,15 @@ export abstract class Controller {
 
     private leftRotation(object: Vehicle) {
         const newRotation =  object.getVehicle().rotation.y + rotationSpeed * this.driveModifier.getRotationMultiplier();
-        const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
-        this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
-        if (!rotateEvent.isCancelled()) {
-            object.getVehicle().rotation.y = newRotation;
-        }
+        this.rotateVehicle(object, newRotation);
     }
 
     private rightRotation(object: Vehicle) {
         const newRotation =  object.getVehicle().rotation.y - rotationSpeed * this.driveModifier.getRotationMultiplier();
+        this.rotateVehicle(object, newRotation);
+    }
+
+    private rotateVehicle(object: Vehicle, newRotation: number) {
         const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
         this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
         if (!rotateEvent.isCancelled()) {

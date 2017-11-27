@@ -66,8 +66,6 @@ describe('Controller', function () {
             vehicle = new Vehicle(
                 VehicleColor.blue,
                 track,
-                TestBed.get(ObstacleCollisionEventService),
-                TestBed.get(CommandsService),
                 TestBed.get(VehicleMoveEventService),
                 TestBed.get(VehicleRotateEventService),
                 TestBed.get(LoadingProgressEventService)
@@ -77,7 +75,7 @@ describe('Controller', function () {
         });
 
         it('should not move the cart if MOVE_STATE = BRAKE and speed = 0', () => {
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().position.x).toEqual(0);
             expect(vehicle.getVehicle().position.y).toEqual(3);
             expect(vehicle.getVehicle().position.z).toEqual(0);
@@ -85,19 +83,19 @@ describe('Controller', function () {
 
         it('should rotate the cart when turning left', () => {
             controller['turnState'] = TURN_STATE.TURN_LEFT;
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().rotation.y).toBeGreaterThan(0);
         });
 
         it('should rotate the cart when turning right', () => {
             controller['turnState'] = TURN_STATE.TURN_RIGHT;
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().rotation.y).toBeLessThan(0);
         });
 
         it('should move the cartForward and increase speed when MOVE_STATE = FORWARD when the cart rotation is 0', () => {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().position.x).toBeCloseTo(0);
             expect(vehicle.getVehicle().position.y).toEqual(3);
             expect(Math.abs(vehicle.getVehicle().position.z)).toBeGreaterThan(0);
@@ -107,7 +105,7 @@ describe('Controller', function () {
         it('should move the cartForward and increase speed when MOVE_STATE = FORWARD when the cart rotation is not 0', () => {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
             vehicle.getVehicle().rotation.y = - Math.PI / 2;
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(Math.abs(vehicle.getVehicle().position.x)).toBeGreaterThan(0);
             expect(vehicle.getVehicle().position.y).toEqual(3);
             expect(vehicle.getVehicle().position.z).toBeCloseTo(0);
@@ -117,7 +115,7 @@ describe('Controller', function () {
         it('should slow the cart down when moveState is brake', () => {
             controller['moveState'] = MOVE_STATE.BRAKE;
             controller['speed'] = 10;
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(Math.abs(vehicle.getVehicle().position.x)).toBeLessThan(100);
         });
 
@@ -125,7 +123,7 @@ describe('Controller', function () {
             controller['moveState'] = MOVE_STATE.BRAKE;
             controller['speed'] = 10;
             controller.hitObstacle(ObstacleType.Booster);
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(controller['speed']).toEqual(10);
         });
 
@@ -133,7 +131,7 @@ describe('Controller', function () {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
             controller['speed'] = 10;
             controller.hitObstacle(ObstacleType.Pothole);
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(controller['speed']).toBeLessThan(10);
         });
 
@@ -141,21 +139,21 @@ describe('Controller', function () {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
             controller['speed'] = 10;
             controller.hitObstacle(ObstacleType.Puddle);
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(controller['speed']).toBeLessThan(10);
         });
 
         it('should not be able to rotate right when the puddle modifier is active', () => {
             controller['turnState'] = TURN_STATE.TURN_RIGHT;
             controller.hitObstacle(ObstacleType.Puddle);
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().rotation.y).toEqual(0);
         });
 
         it('should not be able to rotate left when the puddle modifier is active', () => {
             controller['turnState'] = TURN_STATE.TURN_LEFT;
             controller.hitObstacle(ObstacleType.Puddle);
-            controller.move(vehicle);
+            controller.nextFrame(vehicle);
             expect(vehicle.getVehicle().rotation.y).toEqual(0);
         });
     });

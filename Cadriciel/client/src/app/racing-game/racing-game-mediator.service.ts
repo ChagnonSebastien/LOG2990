@@ -1,4 +1,14 @@
-import { SceneService } from './scene.service';
+import { RacingSceneService } from './racing-scene.service';
+import { FrameEvent, FrameEventService } from './events/frame-event.service';
+import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
+import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
+import { VehicleRotateEvent, VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { VehicleMovementController } from './vehicle-movement-controller.service';
+import { RoadLimitService } from './road-limit.service';
+import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
+import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
+import { HumanController } from './human-controller';
+import { VehicleService } from './vehicle.service';
 import { RenderService } from './render.service';
 import { VehicleColor } from './vehicle-color';
 import { CameraService } from './camera.service';
@@ -18,13 +28,26 @@ export class RaceMediator {
         private racingGGameService: RacingGameService,
         private countdownService: CountdownService,
         private collisionDetectionService: CollisionDetectionService,
+        private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
         private cameraService: CameraService,
         private renderService: RenderService,
-        private sceneService: SceneService,
+        private racingSceneService: RacingSceneService,
+        private vehicleService: VehicleService,
+        private roadLimitService: RoadLimitService,
+        private vehicleMovementController: VehicleMovementController,
         commandsService: CommandsService,
+        frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
-        loadingProgressEventService: LoadingProgressEventService
+        loadingProgressEventService: LoadingProgressEventService,
+        vehicleMoveEventService: VehicleMoveEventService,
+        vehicleRotateEventService: VehicleRotateEventService,
+        obstacleCollisionEventService: ObstacleCollisionEventService,
+        collisionEventService: CollisionEventService
     ) {
+        frameEventService.getFrameObservable().subscribe(
+            (event: FrameEvent) => this.handleFrameEvent(event)
+        );
+
         countdownDecreaseEventService.getCountdownDecreaseObservable().subscribe(
             (event: CountdownDecreaseEvent) => this.handleCountdownDecreaseEvent(event)
         );
@@ -38,16 +61,71 @@ export class RaceMediator {
         );
 
         loadingProgressEventService.getLoadingObservable().subscribe(
-            (event: LoadingProgressEvent) => this.hangleProgressEvent(event)
+            (event: LoadingProgressEvent) => this.handleProgressEvent(event)
+        );
+
+        vehicleMoveEventService.getVehicleMoveObservable().subscribe(
+            (event: VehicleMoveEvent) => this.handleMoveEvent(event)
+        );
+
+        vehicleRotateEventService.getVehicleRotateObservable().subscribe(
+            (event: VehicleRotateEvent) => this.handleRotateEvent(event)
+        );
+
+        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe(
+            (event: ObstacleCollisionEvent) => this.handleObstacleCollisionEvent(event)
+        );
+
+        collisionEventService.getCollisionObservable().subscribe(
+            (event: CollisionEvent) => this.handleCollisionEvent(event)
         );
     }
 
+    private handleFrameEvent(event: FrameEvent) {
+        this.cameraService.cameraOnMoveWithObject();
+        this.vehicleService.getVehicles().forEach((vehicle: Vehicle) => {
+            vehicle.getController().nextFrame(vehicle);
+        });
+    }
+
     private handleKeyUpEvent(event: CommandEvent) {
+        switch (event.getCommand()) {
+            case PlayerCommand.MOVE_FORWARD:
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
+            (<HumanController> this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+            break;
+        }
     }
 
     private handleKeyDownEvent(event: CommandEvent) {
-        if (event.getCommand() === PlayerCommand.START_GAME) {
+
+        switch (event.getCommand()) {
+            case PlayerCommand.MOVE_FORWARD:
+            case PlayerCommand.ROTATE_LEFT:
+            case PlayerCommand.ROTATE_RIGHT:
+            (<HumanController> this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+            break;
+
+            case PlayerCommand.START_GAME:
             this.countdownService.startCountdown();
+            break;
+
+            case PlayerCommand.ZOOM_IN:
+            this.cameraService.zoomIn();
+            break;
+
+            case PlayerCommand.ZOOM_OUT:
+            this.cameraService.zoomOut();
+            break;
+
+            case PlayerCommand.TOOGLE_CAMERA_VIEW:
+            this.cameraService.toggleCamera();
+            break;
+
+            case PlayerCommand.TOGGLE_NIGHT_MODE:
+            this.racingSceneService.toggleNightMode();
+            break;
         }
     }
 
@@ -60,10 +138,11 @@ export class RaceMediator {
         }
     }
 
-    private hangleProgressEvent(event: LoadingProgressEvent) {
+    private handleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
+            this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle> event.getObject();
-            this.sceneService.addToScene(vehicle.getVehicle());
+            this.racingSceneService.addObject(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {
@@ -74,5 +153,24 @@ export class RaceMediator {
         if (event.getProgress() === 'All carts loaded') {
             this.renderService.startRenderingLoop();
         }
+    }
+
+    private handleMoveEvent(event: VehicleMoveEvent) {
+        this.obstacleCollisionDetectionService.detectCollision(event);
+        this.roadLimitService.validateMovement(event);
+        this.vehicleMovementController.validateMovement(event);
+        this.collisionDetectionService.checkForCollisionWithCar(event);
+    }
+
+    private handleRotateEvent(event: VehicleRotateEvent) {
+        this.vehicleMovementController.validateRotation(event);
+    }
+
+    private handleObstacleCollisionEvent(event: ObstacleCollisionEvent) {
+        event.getVehicle().getController().hitObstacle(event.getObstacle());
+    }
+
+    private handleCollisionEvent(event: CollisionEvent) {
+
     }
 }

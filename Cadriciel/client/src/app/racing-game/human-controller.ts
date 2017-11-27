@@ -1,26 +1,18 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { CommandsService, PlayerCommand, CommandEvent } from './events/commands.service';
+import { PlayerCommand } from './events/commands.service';
 import { Controller, MOVE_STATE, TURN_STATE } from './controller';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 
 export class HumanController extends Controller {
 
     constructor(
-        commandsService: CommandsService,
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService
     ) {
         super(vehicleMoveEventService, vehicleRotateEventService);
-        commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
-            this.startDirective(event.getCommand());
-        });
-
-        commandsService.getCommandKeyUpObservable().subscribe((event: CommandEvent) => {
-            this.endDirective(event.getCommand());
-        });
     }
 
-    private startDirective(command: PlayerCommand) {
+    public startDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.MOVE_FORWARD;
@@ -34,7 +26,7 @@ export class HumanController extends Controller {
         }
     }
 
-    private endDirective(command: PlayerCommand) {
+    public endDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
             this.moveState = MOVE_STATE.BRAKE;

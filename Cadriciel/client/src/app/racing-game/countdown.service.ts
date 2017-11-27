@@ -3,8 +3,9 @@ import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
 import { Track } from './track';
 import * as THREE from 'three';
-import * as SETTINGS from './settings';
 import { CommandsService } from './events/commands.service';
+import { Settings } from './settings';
+import { RacingSceneService } from './racing-scene.service';
 
 @Injectable()
 export class CountdownService {
@@ -17,7 +18,8 @@ export class CountdownService {
     constructor(
         private audioService: AudioService,
         commandService: CommandsService,
-        private countdownDecreaseEventService: CountdownDecreaseEventService
+        private countdownDecreaseEventService: CountdownDecreaseEventService,
+        private sceneService: RacingSceneService
     ) {
         this.count = 6;
         this.countdownStarted = false;
@@ -40,40 +42,31 @@ export class CountdownService {
         this.audioService.startCountdown();
     }
 
-    public async createCountdown(track: Track): Promise<void> {
-        await this.create3DCountdown(track);
-        return new Promise<void>(resolve => {
-            resolve();
-        });
-    }
-
-    private async create3DCountdown(track: Track): Promise<void> {
+    public createCountdown(track: Track): void {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
         const trackCenter = this.getCenterOfTrack(track);
-        return new Promise<void>(resolve => {
-            loader.load('../../assets/font_samuel_regular.json', function(font) {
-                this.font = font;
-                textGeometry = new THREE.TextGeometry((this.count - 1).toString(), {
-                    font: font,
-                    size: 200,
-                    height: 0,
-                    curveSegments: 5,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 1
-                });
-                const material = new THREE.MeshPhongMaterial({
-                    color: 0xffff00
-                });
-                this.countdownMesh = new THREE.Mesh(textGeometry, material);
-                this.countdownMesh.name = 'countdown';
-                this.countdownMesh.position.setX(trackCenter.x * SETTINGS.SCENE_SCALE);
-                this.countdownMesh.position.setY((SETTINGS.SCENE_SCALE * 20 / 25) + 3);
-                this.countdownMesh.position.setZ(trackCenter.y * SETTINGS.SCENE_SCALE);
-                this.countdownMesh.geometry.rotateY(Math.PI / 2);
-                resolve();
-            }.bind(this));
+        const service = this;
+        loader.load('../../assets/font_samuel_regular.json', function(font) {
+            service.font = font;
+            textGeometry = new THREE.TextGeometry((service.count - 1).toString(), {
+                font: font,
+                size: 200,
+                height: 0,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 10,
+                bevelSize: 1
+            });
+            const material = new THREE.MeshPhongMaterial({
+                color: 0xffff00
+            });
+            service.countdownMesh = new THREE.Mesh(textGeometry, material);
+            service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
+            service.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
+            service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
+            service.countdownMesh.geometry.rotateY(Math.PI / 2);
+            service.sceneService.addObjectWithName(service.countdownMesh, 'countdown');
         });
     }
 
