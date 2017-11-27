@@ -55,4 +55,16 @@ export class SceneService {
     public toggleNightMode() {
         this.light.dirLight.visible = !this.light.dirLight.visible;
     }
+
+    public lightWay() {
+        this.scene.traverse ( function (children) {
+            if (children.name === 'vehicle') {
+                children.traverse( function (child) {
+                    if (child instanceof THREE.SpotLight) {
+                        child.visible = !child.visible;
+                    }
+                });
+            }
+        });
+    }
 }
