@@ -7,6 +7,9 @@ export class SceneService {
     public scene: THREE.Scene;
     public textureSky: THREE.Texture;
     public light: Light;
+    private materialSkybox: THREE.ShaderMaterial;
+    private isNight: boolean;
+    private shader: THREE.Shader;
 
     constructor() {
         this.createScene();
@@ -26,23 +29,38 @@ export class SceneService {
         this.createSkyBox();
     }
 
-     private createSkyBox() {
+    private createTexture() {
         const url = '../../assets/images/skybox/';
-        const images = [url + 'xpos.png', url + 'xneg.png',
-        url + 'ypos.png', url + 'yneg.png',
-        url + 'zpos.png', url + 'zneg.png'];
-        this.textureSky = THREE.ImageUtils.loadTextureCube(images);
-        const shader = THREE.ShaderLib['cube'];
-        shader.uniforms['tCube'].value = this.textureSky;
-        const material = new THREE.ShaderMaterial({
-            fragmentShader: shader.fragmentShader,
-            vertexShader: shader.vertexShader,
-            uniforms: shader.uniforms,
+        if (this.isNight) {
+            const images = [url + 'bluefreeze_rt.png', url + 'bluefreeze_lf.png',
+            url + 'bluefreeze_up.png', url + 'bluefreeze_dn.png',
+            url + 'bluefreeze_ft.png', url + 'bluefreeze_bk.png'];
+            this.textureSky = THREE.ImageUtils.loadTextureCube(images);
+            this.shader = THREE.ShaderLib['cube'];
+            this.shader.uniforms['tCube'].value = this.textureSky;
+        } else {
+            const images = [url + 'xpos.png', url + 'xneg.png',
+            url + 'ypos.png', url + 'yneg.png',
+            url + 'zpos.png', url + 'zneg.png'];
+            this.textureSky = THREE.ImageUtils.loadTextureCube(images);
+            this.shader = THREE.ShaderLib['cube'];
+            this.shader.uniforms['tCube'].value = this.textureSky;
+        }
+
+        this.materialSkybox = new THREE.ShaderMaterial({
+            fragmentShader: this.shader.fragmentShader,
+            vertexShader: this.shader.vertexShader,
+            uniforms: this.shader.uniforms,
             depthWrite: false,
-            side: THREE.BackSide
+            side: THREE.BackSide,
         });
-        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), material);
-        material.needsUpdate = true;
+
+        this.materialSkybox.needsUpdate = true;
+    }
+
+     private createSkyBox() {
+        this.createTexture();
+        const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), this.materialSkybox);
         this.addToScene(skyboxMesh);
     }
 

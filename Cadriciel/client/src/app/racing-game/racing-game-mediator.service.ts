@@ -66,7 +66,6 @@ export class RaceMediator {
         if (event.getProgress() === 'Vehicle created') {
             const vehicle = <Vehicle> event.getObject();
             light.addLightsToVehicle(vehicle.getVehicle());
-
             light.hideLightsVehicle();
             this.sceneService.addToScene(vehicle.getVehicle());
             vehicle.getVehicle().name = 'vehicle';
