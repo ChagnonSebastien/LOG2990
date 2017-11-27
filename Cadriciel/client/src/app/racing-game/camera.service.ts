@@ -106,10 +106,13 @@ export class CameraService {
     }
 
     public rearViewCamera(): THREE.Camera {
-       let rearViewCamera: THREE.Camera;
-       rearViewCamera = this.perspectiveCamera;
-        // this.perspectiveCamera.lookAt( this.objectToFollow.position);
-        return rearViewCamera;
+        // let rearViewCamera: THREE.Camera;
+        // rearViewCamera = this.perspectiveCamera;
+        this.perspectiveCamera.rotation.z =  Math. PI;
+      // this.perspectiveCamera.lookAt(this.objectToFollow.position);
+        // return rearViewCamera;
+
+        return this.perspectiveCamera;
     }
 
     public cameraOnMoveWithObject() {

@@ -58,16 +58,18 @@ export class RenderService {
         this.cameraService.cameraOnMoveWithObject();
 
         this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setScissor(0, 0, this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setScissorTest(true);
 
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
         this.frame.next(this.frame.value + 1);
         this.animateVehicule();
         this.stats.update();
 
-
-        this.renderer.setScissor(100, 0, 200, 150);
-        this.renderer.enableScissorTest(true);
-        this.renderer.setViewport(100, 0, 200, 150);
+        this.renderer.setViewport(400, 500, 500, 150);
+        this.renderer.setScissor(400, 500, 500, 150);
+        this.renderer.setScissorTest(true);
+    //    this.renderer.enableScissorTest(true);
         this.renderer.render(this.sceneService.scene, this.cameraService.rearViewCamera());
 
     }
