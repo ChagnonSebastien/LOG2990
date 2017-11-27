@@ -30,7 +30,7 @@ export class Light {
         this.dirLight.shadow.bias = -0.0001;
     }
 
-    public addLightsToVehicle(vehicule: any) {
+    public addLightsToVehicle(vehicle: any) {
         const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
         const matSphereRight = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
@@ -46,15 +46,20 @@ export class Light {
         this.spotLeft.add(headlightLeft);
 
         const target = new THREE.Object3D();
-        vehicule.add(target);
+        vehicle.add(target);
         target.position.set(0, 0, -4);
 
-        vehicule.add(this.spotRight);
-        vehicule.add(this.spotLeft);
+        vehicle.add(this.spotRight);
+        vehicle.add(this.spotLeft);
 
         this.spotRight.position.set(0.6, 1.1, -3.2);
         this.spotRight.target = target;
         this.spotLeft.position.set(-0.6, 1.1, -3.2);
         this.spotLeft.target = target;
+    }
+
+    public hideLightsVehicle() {
+        this.spotRight.visible = !this.spotRight.visible;
+        this.spotLeft.visible = !this.spotLeft.visible;
     }
 }
