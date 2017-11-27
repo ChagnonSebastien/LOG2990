@@ -30,6 +30,7 @@ export class RenderService {
         commandsService.getCommandKeyDownObservable().subscribe((event: CommandEvent) => {
             if (event.getCommand() === PlayerCommand.TOGGLE_NIGHT_MODE) {
                 this.sceneService.toggleNightMode();
+                this.sceneService.lightWay();
             }
         });
     }
