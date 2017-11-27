@@ -64,6 +64,12 @@ export class SceneService {
         this.addToScene(skyboxMesh);
     }
 
+    private swapTexture() {
+        this.isNight = !this.isNight;
+        this.createTexture();
+    }
+
+
     private createLight() {
         this.light = new Light();
         this.addToScene(this.light.hemiLight);
@@ -84,5 +90,6 @@ export class SceneService {
                 });
             }
         });
+        this.swapTexture();
     }
 }
