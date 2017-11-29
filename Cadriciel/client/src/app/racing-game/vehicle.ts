@@ -55,11 +55,10 @@ export class Vehicle {
 
     public create3DVehicle(track: Track, carPosition: VehicleColor) {
         const service = this;
-        const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
-        loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+        new THREE.ObjectLoader().load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
             this.vehicle = <THREE.Mesh>object;
             this.vehicle.rotation.y = trackAngle;
             this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
