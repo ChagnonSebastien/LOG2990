@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PerspectiveCamera, OrthographicCamera, Mesh, Vector2, Camera } from 'three';
 import { Settings } from './settings';
+import { RearView } from './rear-view';
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
@@ -15,6 +16,7 @@ export class CameraService {
     private objectToFollow: Mesh;
 
     private zoomLevel: number;
+    public rearCamera: RearView;
 
     constructor() {
         this.currentView = View.PERSPECTIVE;
@@ -86,14 +88,8 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    public rearViewCamera(): THREE.Camera {
-        // let rearViewCamera: THREE.Camera;
-        // rearViewCamera = this.perspectiveCamera;
-        this.perspectiveCamera.rotation.z =  Math. PI;
-      // this.perspectiveCamera.lookAt(this.objectToFollow.position);
-        // return rearViewCamera;
-
-        return this.perspectiveCamera;
+    public rearViewCam() {
+        this.rearCamera.addRearView(this.objectToFollow);
     }
 
     public cameraOnMoveWithObject(): void {

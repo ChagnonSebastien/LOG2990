@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingSceneService } from './racing-scene.service';
+import { RearView } from './rear-view';
 
 @Injectable()
 export class RenderService {
@@ -38,7 +39,6 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
-<<<<<<< HEAD
         this.renderer.enableScissorTest(false);
         this.cameraService.cameraOnMoveWithObject();
 
@@ -47,19 +47,13 @@ export class RenderService {
         this.renderer.setScissorTest(true);
 
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
-        this.frame.next(this.frame.value + 1);
-        this.animateVehicule();
-=======
+
         this.frameEventService.sendFrameEvent(new FrameEvent());
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
->>>>>>> refactor/racing/cart_controller
         this.stats.update();
 
-        this.renderer.setViewport(400, 500, 500, 150);
-        this.renderer.setScissor(400, 500, 500, 150);
-        this.renderer.setScissorTest(true);
-    //    this.renderer.enableScissorTest(true);
-        this.renderer.render(this.sceneService.scene, this.cameraService.rearViewCamera());
+        this.cameraService.rearCamera = new RearView(this.sceneService.scene, this.renderer);
+        this.cameraService.rearViewCam();
 
     }
 
