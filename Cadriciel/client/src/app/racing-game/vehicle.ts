@@ -26,6 +26,8 @@ export class Vehicle {
 
     private track: Track;
 
+    private size: { width: number, length: number };
+
     constructor(private color: VehicleColor, track: Track,
         vehicleMoveEventService: VehicleMoveEventService, vehicleRotateEventService: VehicleRotateEventService,
         private loadingProgressEventService: LoadingProgressEventService
@@ -47,6 +49,19 @@ export class Vehicle {
 
     public getVehicle(): THREE.Mesh {
         return this.vehicle;
+    }
+
+    public getLength(): number {
+        return this.size.length;
+    }
+
+    public getWidth(): number {
+        return this.size.width;
+    }
+
+    public setSize(size: { width: number, length: number }) {
+        console.log(size);
+        this.size = size;
     }
 
     public setBoundingBox(boundingBox: Mesh) {

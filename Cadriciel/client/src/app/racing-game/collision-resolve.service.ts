@@ -26,6 +26,7 @@ export class CollisionResolveService {
       vehicleA.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
     const distanceB = this.calculateDistanceVector(vehicleB.getVehicle().position.x,
       vehicleB.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
+
   }
 
   public calculateNormal(xCollisionPoint: number, zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint): THREE.Vector3 {
@@ -56,16 +57,15 @@ export class CollisionResolveService {
   }
 
   public calculateMomentOfInertia(vehicle: Vehicle, clockwise: boolean): number {
-    // use the parallel axis theorem to get the moment of inertiua around the vehicle center of mass
-    const boxLength = 0;
-    const boxWidth = 0;
+    // use the parallel axis theorem to get the moment of inertia around the vehicle center of mass
+    const boxLength = vehicle.getLength();
+    const boxWidth = vehicle.getWidth();
     const xVehicle = vehicle.getVehicle().position.x;
     const zVehicle = vehicle.getVehicle().position.z;
     const xBox = vehicle.getBoundingBox().position.x;
     const zBox = vehicle.getBoundingBox().position.z;
     const distance = Math.sqrt(Math.pow((xVehicle - xBox), 2) + Math.pow((zVehicle - zBox), 2));
-    let inertia = ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) +
-      Math.pow(boxWidth, 2)) + (this.vehicleMass * (Math.pow(distance, 2))));
+    let inertia = ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
     // right hand rule
     if (clockwise) {
       inertia = inertia * -1;
@@ -88,5 +88,15 @@ export class CollisionResolveService {
     const denominator = 2 / this.vehicleMass + distanceACrossNormal.dot(distanceACrossNormal) / inertiaA
     + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
     return numerator / denominator;
+  }
+
+
+
+  public calculateFinalVelocityVehicleA() {
+
+  }
+
+  public calculateFinalVelocityVehicleB() {
+    
   }
 }
