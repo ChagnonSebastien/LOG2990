@@ -1,14 +1,12 @@
-import * as THREE from 'three';
-import { Vehicle } from './vehicle';
 import { Scene, PerspectiveCamera, Object3D } from 'three';
 
 export class RearView {
 
-    private scene: THREE.Scene;
-    private rearCamera: THREE.PerspectiveCamera;
+    private scene: Scene;
+    private rearCamera: PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
 
-    constructor(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
+    constructor(scene: Scene, renderer: THREE.WebGLRenderer) {
         this.scene = scene;
         this.rearCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 3000);
         this.renderer = renderer;
