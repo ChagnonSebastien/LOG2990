@@ -86,17 +86,15 @@ export class CollisionResolveService {
     const distanceBCrossNormal = distanceB.cross(normal);
     const numerator = -1 * (1 + elasticity) * initialRelativeVelocityA.dot(normal);
     const denominator = 2 / this.vehicleMass + distanceACrossNormal.dot(distanceACrossNormal) / inertiaA
-    + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
+      + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
     return numerator / denominator;
   }
 
-
-
-  public calculateFinalVelocityVehicleA() {
-
+  public calculateFinalVelocityVehicleA(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
+    return iniVelocity.add(normal.multiplyScalar(impulse / this.vehicleMass));
   }
 
-  public calculateFinalVelocityVehicleB() {
-    
+  public calculateFinalVelocityVehicleB(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
+    return iniVelocity.add(normal.multiplyScalar(impulse / this.vehicleMass));
   }
 }

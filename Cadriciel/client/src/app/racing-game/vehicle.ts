@@ -33,6 +33,7 @@ export class Vehicle {
         private loadingProgressEventService: LoadingProgressEventService
     ) {
         this.create3DVehicle(track, color, new HumanController(vehicleMoveEventService, vehicleRotateEventService));
+        this.size = { width: 0, length: 0 };
     }
 
     public getTrack(): Track {
@@ -60,8 +61,9 @@ export class Vehicle {
     }
 
     public setSize(size: { width: number, length: number }) {
-        console.log(size);
-        this.size = size;
+        this.size.length = Settings.SCENE_SCALE * size.length;
+        this.size.width = Settings.SCENE_SCALE * size.width;
+        console.log(this.size);
     }
 
     public setBoundingBox(boundingBox: Mesh) {
