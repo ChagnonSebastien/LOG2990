@@ -4,7 +4,7 @@ import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
 import { Mesh, Geometry, Vector3, Object3D, ObjectLoader } from 'three';
 import { Vehicle } from './vehicle';
-import * as THREE from 'three';
+
 
 const assetsPath = '/assets';
 const boundingBoxPath = 'cart_bounding_box.json';

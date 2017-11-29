@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import * as THREE from 'three';
-import { Vector2 } from 'three';
+
 @Injectable()
 export class CollisionResolveService {
 
@@ -38,6 +38,24 @@ export class CollisionResolveService {
     return this.results;
   }
 
+  public calculateFinalVelocityA(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
+    return iniVelocity.add(normal.multiplyScalar(impulse / this.vehicleMass));
+  }
+
+  public calculateFinalVelocityB(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
+    return iniVelocity.sub(normal.multiplyScalar(impulse / this.vehicleMass));
+  }
+
+  public calculateFinalAngularVelocityA(iniAngularVelocity: THREE.Vector3, distanceVector: THREE.Vector3,
+    normal: THREE.Vector3, momentOfInertia: number, impulse: number): THREE.Vector3 {
+    return iniAngularVelocity.add(distanceVector.cross(normal.multiplyScalar(impulse)).divideScalar(momentOfInertia));
+  }
+
+  public calculateFinalAngularVelocityB(iniAngularVelocity: THREE.Vector3, distanceVector: THREE.Vector3,
+    normal: THREE.Vector3, momentOfInertia: number, impulse: number): THREE.Vector3 {
+    return iniAngularVelocity.sub(distanceVector.cross(normal.multiplyScalar(impulse)).divideScalar(momentOfInertia));
+  }
+
   public calculateNormal(xCollisionPoint: number, zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint): THREE.Vector3 {
     const dx = xCollisionPlanePoint - xCollisionPoint;
     const dz = zCollisionPlanePoint - zCollisionPoint;
@@ -69,10 +87,6 @@ export class CollisionResolveService {
     // use the parallel axis theorem to get the moment of inertia around the vehicle center of mass
     const boxLength = vehicle.getLength();
     const boxWidth = vehicle.getWidth();
-    const xVehicle = vehicle.getVehicle().position.x;
-    const zVehicle = vehicle.getVehicle().position.z;
-    const xBox = vehicle.getBoundingBox().position.x;
-    const zBox = vehicle.getBoundingBox().position.z;
     let inertia = ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
     // right hand rule
     if (clockwise) {
@@ -96,23 +110,5 @@ export class CollisionResolveService {
     const denominator = 2 / this.vehicleMass + distanceACrossNormal.dot(distanceACrossNormal) / inertiaA
       + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
     return numerator / denominator;
-  }
-
-  public calculateFinalVelocityA(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
-    return iniVelocity.add(normal.multiplyScalar(impulse / this.vehicleMass));
-  }
-
-  public calculateFinalVelocityB(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
-    return iniVelocity.sub(normal.multiplyScalar(impulse / this.vehicleMass));
-  }
-
-  public calculateFinalAngularVelocityA(iniAngularVelocity: THREE.Vector3, distanceVector: THREE.Vector3,
-    normal: THREE.Vector3, momentOfInertia: number, impulse: number): THREE.Vector3 {
-    return iniAngularVelocity.add(distanceVector.cross(normal.multiplyScalar(impulse)).divideScalar(momentOfInertia));
-  }
-
-  public calculateFinalAngularVelocityB(iniAngularVelocity: THREE.Vector3, distanceVector: THREE.Vector3,
-    normal: THREE.Vector3, momentOfInertia: number, impulse: number): THREE.Vector3 {
-    return iniAngularVelocity.sub(distanceVector.cross(normal.multiplyScalar(impulse)).divideScalar(momentOfInertia));
   }
 }
