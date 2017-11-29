@@ -1,3 +1,4 @@
+import { ControllerFactory } from './controller-factory.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
@@ -48,7 +49,8 @@ describe('CollisionDetectionService', () => {
         CollisionEventService,
         ObstacleCollisionDetectionService,
         ObstacleCollisionEventService,
-        CountdownDecreaseEventService
+        CountdownDecreaseEventService,
+        ControllerFactory
       ]
     });
   });

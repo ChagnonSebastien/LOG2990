@@ -1,6 +1,7 @@
+import { ControllerFactory } from './controller-factory.service';
 import { FrameEventService } from './events/frame-event.service';
 import { SceneService } from './scene.service';
-import { RaceMediator } from './racing-game-mediator.service';
+import { RaceMediator } from './mediator.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -81,7 +82,8 @@ import { RacingSceneService } from './racing-scene.service';
         SceneService,
         RacingSceneService,
         FrameEventService,
-        LapCounterService
+        LapCounterService,
+        ControllerFactory
     ]
 })
 export class RacingGameModule {

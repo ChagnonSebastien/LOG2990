@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { Scene } from 'three';
 
-@Injectable()
 export class SceneService {
     public scene: THREE.Scene;
 
