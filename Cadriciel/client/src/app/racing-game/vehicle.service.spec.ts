@@ -1,3 +1,4 @@
+import { ControllerFactory } from './controller-factory.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { RaceService } from './events/race.service';
@@ -38,7 +39,8 @@ describe('VehicleService', () => {
                 RaceService,
                 ObstacleCollisionDetectionService,
                 ObstacleCollisionEventService,
-                CountdownDecreaseEventService
+                CountdownDecreaseEventService,
+                ControllerFactory
             ]
         });
         vehicleService = TestBed.get(VehicleService);

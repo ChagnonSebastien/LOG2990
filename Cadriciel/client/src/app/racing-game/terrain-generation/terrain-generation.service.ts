@@ -1,10 +1,10 @@
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
-import { LineCalculationService } from './line-calculation.service';
+import { LineCalculationService } from '../line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
-import { Track } from './track';
+import { Track } from '../track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import { Settings } from './settings';
+import { Settings } from '../settings';
 
 const assetsPath = '/assets';
 

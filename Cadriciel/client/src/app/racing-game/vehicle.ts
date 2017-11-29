@@ -1,7 +1,4 @@
 import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
-import { HumanController } from './human-controller';
-import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
@@ -19,25 +16,17 @@ const yellowCarPath = 'yellow_cart.json';
 
 export class Vehicle {
     private vehicle: THREE.Mesh;
-
     private boundingBox: THREE.Mesh;
-
-    private controller: Controller;
-
-    private track: Track;
-
     private size: { width: number, length: number };
 
-    constructor(private color: VehicleColor, track: Track,
-        vehicleMoveEventService: VehicleMoveEventService, vehicleRotateEventService: VehicleRotateEventService,
+    constructor(
+        private color: VehicleColor,
+        track: Track,
+        private controller: Controller,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
-        this.create3DVehicle(track, color, new HumanController(vehicleMoveEventService, vehicleRotateEventService));
+        this.create3DVehicle(track, color);
         this.size = { width: 0, length: 0 };
-    }
-
-    public getTrack(): Track {
-        return this.track;
     }
 
     public getController(): Controller {
@@ -79,15 +68,12 @@ export class Vehicle {
         this.controller.hitWall(speedModifier);
     }
 
-    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller) {
+    public create3DVehicle(track: Track, carPosition: VehicleColor) {
         const service = this;
-        this.track = track;
-        this.controller = controller;
-        const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
-        loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+        new THREE.ObjectLoader().load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
             this.vehicle = <THREE.Mesh>object;
             this.vehicle.rotation.y = trackAngle;
             this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;

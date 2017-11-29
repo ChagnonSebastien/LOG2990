@@ -1,10 +1,10 @@
+import { ControllerFactory } from './controller-factory.service';
 import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
-import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleColor } from './vehicle-color';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
+import { Controller } from './controller';
 
 @Injectable()
 export class VehicleService {
@@ -13,9 +13,8 @@ export class VehicleService {
     private amountVehicleMeshCreated;
 
     constructor(
-        private vehicleMoveEventService: VehicleMoveEventService,
-        private vehicleRotateEventService: VehicleRotateEventService,
-        private loadingProgressEventService: LoadingProgressEventService
+        private loadingProgressEventService: LoadingProgressEventService,
+        private controllerFactory: ControllerFactory
     ) {
         this.amountVehicleMeshCreated = 0;
     }
@@ -29,8 +28,17 @@ export class VehicleService {
     public createVehicles(track: Track): void {
         this.players = [];
         for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
-            this.players.push(new Vehicle(color, track,
-                this.vehicleMoveEventService, this.vehicleRotateEventService, this.loadingProgressEventService));
+            this.players.push(new Vehicle(color, track, this.createController(track, color), this.loadingProgressEventService));
+        }
+    }
+
+    private createController(track: Track, color: VehicleColor): Controller {
+        if (color === VehicleColor.red) {
+            return this.controllerFactory.newHumanController();
+        } else if (track.type === '') {
+            return this.controllerFactory.newHumanController();
+        } else {
+            return this.controllerFactory.newHumanController();
         }
     }
 

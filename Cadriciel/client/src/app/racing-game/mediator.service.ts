@@ -1,3 +1,5 @@
+import { ObstaclePositionService } from './obstacle-position.service';
+import { Track } from './track';
 import { RacingSceneService } from './racing-scene.service';
 import { FrameEvent, FrameEventService } from './events/frame-event.service';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
@@ -25,7 +27,7 @@ import { Vehicle } from './vehicle';
 export class RaceMediator {
 
     constructor(
-        private racingGGameService: RacingGameService,
+        private racingGameService: RacingGameService,
         private countdownService: CountdownService,
         private collisionDetectionService: CollisionDetectionService,
         private obstacleCollisionDetectionService: ObstacleCollisionDetectionService,
@@ -35,6 +37,7 @@ export class RaceMediator {
         private vehicleService: VehicleService,
         private roadLimitService: RoadLimitService,
         private vehicleMovementController: VehicleMovementController,
+        private obstaclePositionService: ObstaclePositionService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -79,6 +82,15 @@ export class RaceMediator {
         collisionEventService.getCollisionObservable().subscribe(
             (event: CollisionEvent) => this.handleCollisionEvent(event)
         );
+    }
+
+    public startProgram(container: HTMLElement, track: Track) {
+        this.racingGameService.initialize(track);
+        this.cameraService.initialize(container);
+        this.renderService.initialize(container, track);
+        this.vehicleService.createVehicles(track);
+        this.countdownService.createCountdown(track);
+        this.obstaclePositionService.initialize(track);
     }
 
     private handleFrameEvent(event: FrameEvent) {
@@ -133,7 +145,7 @@ export class RaceMediator {
         this.countdownService.updateCountdown(event.getNewAmount());
 
         if (event.getNewAmount() === 0) {
-            this.racingGGameService.startGame();
+            this.racingSceneService.removeObjectByName('countdown');
             this.countdownService.startGame();
         }
     }

@@ -1,6 +1,6 @@
 import { FrameEventService, FrameEvent } from './events/frame-event.service';
 import { Track } from './track';
-import { TerrainGenerationService } from './terrain-generation.service';
+import { TerrainGenerationService } from './terrain-generation/terrain-generation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import Stats = require('stats.js');
