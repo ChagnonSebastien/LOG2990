@@ -1,5 +1,6 @@
 import { RaceService } from './events/race.service';
 import { Injectable } from '@angular/core';
+import { CollisionEventService } from './events/collision-event.service';
 
 @Injectable()
 export class AudioService {
@@ -9,8 +10,9 @@ export class AudioService {
     private themed: HTMLAudioElement;
     private carCarCollision: HTMLAudioElement;
 
-    constructor(private raceService: RaceService) {
+    constructor(private raceService: RaceService, private collisionEventService: CollisionEventService) {
         this.listenForEndOfRace();
+        this.listenForCarCarCollision();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
         this.race = new Audio('../../assets/sounds/race.mp3');
@@ -47,6 +49,12 @@ export class AudioService {
         this.raceService.raceEndedAlerts().subscribe(() => {
             this.stopRace();
             this.startStinger();
+        });
+    }
+
+    private listenForCarCarCollision() {
+        this.collisionEventService.getCollisionObservable().subscribe(() => {
+            this.startCarCarCollision();
         });
     }
 
