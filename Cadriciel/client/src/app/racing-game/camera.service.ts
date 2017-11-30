@@ -1,107 +1,104 @@
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
-
-// standard position of camera
-
-const orthographicHeight = 10;
-const orthographicFieldOfView = 10;
-const orthographicNearClippingPane = 0;
-const orthographicFarClippingPane = 2000;
-
-const perspectiveHeight = 2;
-const maximumPerspectiveDistance = 4;
-const perspectiveFieldOfView = 70;
-const perspectiveNearClippingPane = 0.01;
-const perspectiveFarClippingPane = 4000;
-
-const initialZoomLevel = 1;
-const zoomChange = 0.05;
+import { PerspectiveCamera, OrthographicCamera, Mesh, Vector2, Camera } from 'three';
+import { Settings } from './settings';
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
 @Injectable()
 export class CameraService {
-    private sceneScale: number;
-
     private currentView: View;
 
-    private perspectiveCamera: THREE.PerspectiveCamera;
+    private perspectiveCamera: PerspectiveCamera;
 
-    private orthographicCamera: THREE.OrthographicCamera;
+    private orthographicCamera: OrthographicCamera;
 
-    private objectToFollow: THREE.Mesh;
+    private objectToFollow: Mesh;
 
     private zoomLevel: number;
 
     constructor() {
         this.currentView = View.PERSPECTIVE;
-        this.zoomLevel = initialZoomLevel;
+        this.zoomLevel = Settings.CAMERA_INITIAL_ZOOM;
     }
 
-    public initializeCameras(container: HTMLElement, objectToFollow: THREE.Mesh, sceneScale: number): void {
-        this.objectToFollow = objectToFollow;
-        this.sceneScale = sceneScale;
+    public zoomIn(): void {
+        this.zoomLevel += Settings.CAMERA_ZOOM_CHANGE;
+        this.updateZoom();
+    }
 
+    public zoomOut(): void {
+        this.zoomLevel -= Settings.CAMERA_ZOOM_CHANGE;
+        this.updateZoom();
+    }
+
+    public toggleCamera(): void {
+        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
+    }
+
+    public initialize(container: HTMLElement): void {
         const aspectRatio = container.clientWidth / container.clientHeight;
         this.perspectiveCamera = this.instansiatePerspectiveCamera(aspectRatio);
         this.orthographicCamera = this.instansiateOrthographicCamera(aspectRatio);
+    }
 
+    public initializeCameras(objectToFollow: Mesh): void {
+        this.objectToFollow = objectToFollow;
         this.initializeCamerasPositions();
     }
 
-    private instansiatePerspectiveCamera(aspectRatio: number): THREE.PerspectiveCamera {
-        return new THREE.PerspectiveCamera(
-            perspectiveFieldOfView,
+    private instansiatePerspectiveCamera(aspectRatio: number): PerspectiveCamera {
+        return new PerspectiveCamera(
+            Settings.CAMERA_PERSPECTIVE_FIELD_OF_VIEW,
             aspectRatio,
-            perspectiveNearClippingPane * this.sceneScale,
-            perspectiveFarClippingPane * this.sceneScale
+            Settings.CAMERA_PERSPECTIVE_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
+            Settings.CAMERA_PERSPECTIVE_FAR_CLIPPING_PANE * Settings.SCENE_SCALE
         );
     }
 
-    private instansiateOrthographicCamera(aspectRatio: number): THREE.OrthographicCamera {
-        const orthographicCamera = new THREE.OrthographicCamera(
-            this.sceneScale * orthographicFieldOfView / -2,
-            this.sceneScale * orthographicFieldOfView / 2,
-            this.sceneScale * orthographicFieldOfView / aspectRatio / 2,
-            this.sceneScale * orthographicFieldOfView / aspectRatio / -2,
-            orthographicNearClippingPane * this.sceneScale,
-            orthographicFarClippingPane * this.sceneScale
+    private instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
+        const orthographicCamera = new OrthographicCamera(
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / 2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / -2,
+            Settings.CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
+            Settings.CAMERA_ORTHOGRAPHIC_FAR_CLIPPING_PANE * Settings.SCENE_SCALE
         );
         orthographicCamera.rotation.x = Math.PI / -2;
         return orthographicCamera;
     }
 
-    private initializeCamerasPositions() {
+    private initializeCamerasPositions(): void {
         this.orthographicCamera.position.x = this.objectToFollow.position.x;
-        this.orthographicCamera.position.y = orthographicHeight * this.sceneScale;
+        this.orthographicCamera.position.y = Settings.CAMERA_ORTHOGRAPHIC_HEIGHT * Settings.SCENE_SCALE;
         this.orthographicCamera.position.z = this.objectToFollow.position.z;
 
         this.perspectiveCamera.position.x = this.objectToFollow.position.x + (
-            Math.sin(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.sin(this.objectToFollow.rotation.y) * Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE
         );
-        this.perspectiveCamera.position.y = this.objectToFollow.position.y + perspectiveHeight * this.sceneScale;
+        this.perspectiveCamera.position.y = this.objectToFollow.position.y + Settings.CAMERA_PERSPECTIVE_HEIGHT * Settings.SCENE_SCALE;
         this.perspectiveCamera.position.z = this.objectToFollow.position.z + (
-            Math.cos(this.objectToFollow.rotation.y) * maximumPerspectiveDistance * this.sceneScale
+            Math.cos(this.objectToFollow.rotation.y) * Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE
         );
     }
 
-    public getCamera(): THREE.Camera {
+    public getCamera(): Camera {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    public cameraOnMoveWithObject() {
+    public cameraOnMoveWithObject(): void {
         this.updatePerspectiveCameraPosition();
         this.updateOrthographicCameraPosition();
     }
 
-    private updatePerspectiveCameraPosition() {
-        const referencePosition = new THREE.Vector2(
+    private updatePerspectiveCameraPosition(): void {
+        const referencePosition = new Vector2(
             this.perspectiveCamera.position.x - this.objectToFollow.position.x,
             this.perspectiveCamera.position.z - this.objectToFollow.position.z
         );
 
-        if ( referencePosition.length() > maximumPerspectiveDistance * this.sceneScale ) {
-            referencePosition.clampLength(0, maximumPerspectiveDistance * this.sceneScale);
+        if ( referencePosition.length() > Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE ) {
+            referencePosition.clampLength(0, Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE);
 
             this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;
             this.perspectiveCamera.position.z = this.objectToFollow.position.z + referencePosition.y;
@@ -110,7 +107,7 @@ export class CameraService {
         this.perspectiveCamera.lookAt(this.objectToFollow.position);
     }
 
-    private updateOrthographicCameraPosition() {
+    private updateOrthographicCameraPosition(): void {
         this.orthographicCamera.position.x = this.objectToFollow.position.x;
         this.orthographicCamera.position.z = this.objectToFollow.position.z;
 
@@ -118,23 +115,7 @@ export class CameraService {
         this.perspectiveCamera.lookAt(this.objectToFollow.position);
     }
 
-    public swapCamera(event: any): void {
-        if (event.keyCode !== 67) { // 67 corresponding to 'C' in ASCII
-            return;
-        }
-
-        this.currentView = this.currentView === View.PERSPECTIVE ? View.ORTHOGRAPHIC : View.PERSPECTIVE;
-    }
-
-    public zoomCamera(event: any): void {
-        // 187 corresponding to '+' in ASCII
-        // 189 corresponding to '-' in ASCII
-        if (event.keyCode === 187) {
-            this.zoomLevel += zoomChange;
-        } else if (event.keyCode === 189) {
-            this.zoomLevel -= zoomChange;
-        }
-
+    public updateZoom(): void {
         this.perspectiveCamera.zoom = this.zoomLevel;
         this.perspectiveCamera.updateProjectionMatrix();
 
@@ -142,14 +123,14 @@ export class CameraService {
         this.orthographicCamera.updateProjectionMatrix();
     }
 
-    public onResize(aspectRatio: number) {
+    public onResize(aspectRatio: number): void {
         this.perspectiveCamera.aspect = aspectRatio;
         this.perspectiveCamera.updateProjectionMatrix();
 
-        this.orthographicCamera.left = this.sceneScale * orthographicFieldOfView / -2;
-        this.orthographicCamera.right = this.sceneScale * orthographicFieldOfView / 2;
-        this.orthographicCamera.top = this.sceneScale * orthographicFieldOfView / aspectRatio / 2;
-        this.orthographicCamera.bottom = this.sceneScale * orthographicFieldOfView / aspectRatio / -2;
+        this.orthographicCamera.left = Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2;
+        this.orthographicCamera.right = Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2;
+        this.orthographicCamera.top = Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / 2;
+        this.orthographicCamera.bottom = Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / -2;
         this.orthographicCamera.updateProjectionMatrix();
     }
 }

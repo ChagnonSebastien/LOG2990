@@ -1,9 +1,10 @@
-import { ObstacleService } from './obstacle.service';
-import { ObstacleType } from './draw-track/obstacle';
+import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
-import {Controller} from './controller';
+import { Controller } from './controller';
+import { Mesh, Vector2 } from 'three';
+import { Settings } from './settings';
 
 const distanceBetweenCars = 5;
 
@@ -16,89 +17,69 @@ const yellowCarPath = 'yellow_cart.json';
 export class Vehicle {
     private vehicle: THREE.Mesh;
 
-    private controler: Controller;
+    private boundingBox: THREE.Mesh;
 
-    private scale: number;
+    constructor(
+        private color: VehicleColor,
+        track: Track,
+        private controller: Controller,
+        private loadingProgressEventService: LoadingProgressEventService
+    ) {
+        this.create3DVehicle(track, color);
+    }
 
-    private lastObstacleHit: {type: ObstacleType, index: number};
+    public getController(): Controller {
+        return this.controller;
+    }
 
-    constructor(private obstacleService: ObstacleService) {
+    public getColor(): VehicleColor {
+        return this.color;
     }
 
     public getVehicle(): THREE.Mesh {
         return this.vehicle;
     }
 
-    public move() {
-        this.calculateObstacleCollision();
-        this.controler.move(this.vehicle);
+    public setBoundingBox(boundingBox: Mesh) {
+        this.vehicle.add(boundingBox);
+        this.boundingBox = boundingBox;
     }
 
-    public calculateObstacleCollision() {
-        this.checkTypeObstacleCollision(ObstacleType.Pothole);
-        this.checkTypeObstacleCollision(ObstacleType.Puddle);
-        this.checkTypeObstacleCollision(ObstacleType.Booster);
+    public getBoundingBox(): THREE.Mesh {
+        return this.boundingBox;
     }
 
-    private checkTypeObstacleCollision(type: ObstacleType) {
-        this.obstacleService.getObstacles(type).map(puddle => {
-            return this.distanceToObstacle(puddle);
-        }).forEach((distance, index) => {
-            this.isColliding(type, distance, index);
-        });
+    public hitWall(speedModifier: number) {
+        this.controller.hitWall(speedModifier);
     }
 
-    private distanceToObstacle(obstaclePosition: THREE.Vector2) {
-        const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(this.scale);
-        return Math.sqrt(
-            Math.pow(obstaclePositionClone.x - this.vehicle.position.x, 2) +
-            Math.pow(obstaclePositionClone.y - this.vehicle.position.z, 2)
-        );
-    }
-
-    private isColliding(type: ObstacleType, distance: number, index: number) {
-        if (this.lastObstacleHit !== undefined) {
-            if (this.lastObstacleHit.type === type && this.lastObstacleHit.index === index) {
-                return;
-            }
-        }
-        if (distance < type * this.scale) {
-            this.lastObstacleHit = {type: type, index: index};
-            this.controler.hitObstacle(type);
-        }
-    }
-
-    public create3DVehicle(track: Track, scale: number, carPosition: VehicleColor, controller: Controller): Promise<Vehicle> {
-        this.scale = scale;
-        this.controler = controller;
-        const loader = new THREE.ObjectLoader();
+    public create3DVehicle(track: Track, carPosition: VehicleColor) {
+        const service = this;
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
-        return new Promise<Vehicle>(resolve => {
-            loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
-                this.vehicle = <THREE.Mesh>object;
-                this.vehicle.rotation.y = trackAngle;
-                this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * scale;
-                this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * scale;
-                this.vehicle.position.y = 3;
-                this.vehicle.scale.set(scale, scale, scale);
-                this.vehicle.castShadow = true;
-                resolve(this);
-            });
+        new THREE.ObjectLoader().load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+            this.vehicle = <THREE.Mesh>object;
+            this.vehicle.rotation.y = trackAngle;
+            this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
+            this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
+            this.vehicle.position.y = 3;
+            this.vehicle.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
+            this.vehicle.castShadow = true;
+            service.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', service));
         });
     }
 
     private getCartPath(carPosition: VehicleColor) {
         switch (carPosition) {
             case VehicleColor.red:
-            return redCarPath;
+                return redCarPath;
             case VehicleColor.blue:
-            return blueCarPath;
+                return blueCarPath;
             case VehicleColor.green:
-            return greenCarPath;
+                return greenCarPath;
             case VehicleColor.yellow:
-            return yellowCarPath;
+                return yellowCarPath;
         }
     }
 

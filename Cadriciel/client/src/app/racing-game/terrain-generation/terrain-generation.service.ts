@@ -1,9 +1,10 @@
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
-import { LineCalculationService } from './line-calculation.service';
+import { LineCalculationService } from '../line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
-import { Track } from './track';
+import { Track } from '../track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
+import { Settings } from '../settings';
 
 const assetsPath = '/assets';
 
@@ -15,8 +16,8 @@ const rockyTexturePath = 'rock-512.jpg';
 const snowyTexturePath = 'snow-512.jpg';
 const waterTexturePath = 'water512.jpg';
 
-const trackColor = 0x000000;
-const trackRoughness = 0;
+const trackColor = 0x101010;
+const trackRoughness = 0.5;
 const trackHeight = 64;
 const heightMapPixelWidth = 256;
 const heightMapStrength = 255;
@@ -31,8 +32,6 @@ export class TerrainGenerationService {
 
     private mapWidth: number;
 
-    private scale: number;
-
     private heightTable: number[][];
 
     private heightMapSteps = 10;
@@ -45,12 +44,11 @@ export class TerrainGenerationService {
         this.heightTable = this.diamondSquareAlgorithmService.generate(this.heightMapSteps);
     }
 
-    public generate(scene: THREE.Scene, scale: number, track: Track, textureSky: THREE.Texture): void {
+    public generate(scene: THREE.Scene, track: Track, textureSky: THREE.Texture): void {
         this.scene = scene;
         this.track = track;
-        this.scale = scale;
 
-        this.decorElementsService.initialize(scene, scale, track);
+        this.decorElementsService.initialize(scene, track);
 
         const maximumX = Math.max.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) + 100;
         const minimumX = Math.min.apply(null, this.track.trackIntersections.map(intersection => intersection.x)) - 100;
@@ -115,7 +113,7 @@ export class TerrainGenerationService {
 
         const customUniforms = {
             bumpTexture:	{ type: 't', value: heightMap },
-            bumpScale:	    { type: 'f', value: heightMapStrength * this.scale },
+            bumpScale:	    { type: 'f', value: heightMapStrength * Settings.SCENE_SCALE },
             oceanTexture:	{ type: 't', value: this.loadTexture(oceanTexturePath) },
             sandyTexture:	{ type: 't', value: this.loadTexture(sandyTexturePath) },
             grassTexture:	{ type: 't', value: this.loadTexture(grassyTexturePath) },
@@ -123,24 +121,26 @@ export class TerrainGenerationService {
             snowyTexture:	{ type: 't', value: this.loadTexture(snowyTexturePath) },
         };
 
+
         const terrainMaterial = new THREE.ShaderMaterial({
             uniforms: customUniforms,
             vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-            fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
         });
 
         const terrainGeometry = new THREE.PlaneGeometry(
-            this.mapWidth * this.scale, this.mapWidth * this.scale, heightMapPixelWidth, heightMapPixelWidth);
+            this.mapWidth * Settings.SCENE_SCALE, this.mapWidth * Settings.SCENE_SCALE, heightMapPixelWidth, heightMapPixelWidth);
         const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
         terrain.rotation.x = -Math.PI / 2;
-        terrain.position.y = -trackHeight * this.scale;
+        terrain.position.y = -trackHeight * Settings.SCENE_SCALE;
+        terrain.receiveShadow = true;
 
         return terrain;
 
     }
 
     private generateWater(): THREE.Mesh {
-        const waterGeometry = new THREE.PlaneGeometry(this.mapWidth * this.scale, this.mapWidth * this.scale, 1, 1);
+        const waterGeometry = new THREE.PlaneGeometry(this.mapWidth * Settings.SCENE_SCALE, this.mapWidth * Settings.SCENE_SCALE, 1, 1);
         const waterTexture = this.loadTexture(waterTexturePath);
         waterTexture.repeat.set( 20 , 20 );
         const waterMat = new THREE.MeshBasicMaterial({map: waterTexture, transparent: true, opacity: 0.40});
@@ -159,8 +159,9 @@ export class TerrainGenerationService {
         const heightTableY = Math.floor((y + this.mapWidth / 2) * Math.pow(2, this.heightMapSteps) / this.mapWidth);
 
         // The sigmoid function assures a smooth transition between the normal terrain height and the track
-        return availableRadius < trackRadius / 2 ? 0 : (
-            (this.heightTable[heightTableX][heightTableY] - trackHeight) * this.sigmoid(1, trackRadius - 3 - availableRadius / 3)
+        return availableRadius < trackRadius * 1.5 ? 0 : (
+            (this.heightTable[heightTableX][heightTableY] - trackHeight) *
+            this.sigmoid(1, trackRadius - 3 - (availableRadius - trackRadius) / 3)
         );
     }
 
@@ -173,19 +174,20 @@ export class TerrainGenerationService {
         return this.track.trackIntersections.map((intersection, index, array) => {
             const segment = new THREE.Vector2().subVectors(array[index + 1 < array.length ? index + 1 : 0], intersection);
 
-            const geometry = new THREE.PlaneGeometry(this.scale * segment.length(), this.scale * trackRadius * 2);
+            const geometry = new THREE.PlaneGeometry(Settings.SCENE_SCALE * segment.length(), Settings.SCENE_SCALE * trackRadius * 2);
             geometry.rotateX(Math.PI / -2);
 
             const segmentMesh = new THREE.Mesh(geometry, material);
             segmentMesh.rotateY(- Math.atan((segment.y) / (segment.x)));
-            segmentMesh.position.set(((segment.x / 2) + intersection.x) * this.scale, 2, ((segment.y / 2) + intersection.y) * this.scale);
+            segmentMesh.position.set(
+                ((segment.x / 2) + intersection.x) * Settings.SCENE_SCALE, 2, ((segment.y / 2) + intersection.y) * Settings.SCENE_SCALE);
             segmentMesh.receiveShadow = true;
             return segmentMesh;
         });
     }
 
     private generateIntersections(textureSky): THREE.Mesh[] {
-        const intersectionGeometry = new THREE.CircleGeometry(this.scale * trackRadius, 32); // 32 is the resolution of the circle
+        const intersectionGeometry = new THREE.CircleGeometry(Settings.SCENE_SCALE * trackRadius, 32); // 32 is the resolution of the circle
         intersectionGeometry.rotateX(Math.PI / -2);
         const intersectionMaterial = new THREE.MeshStandardMaterial({color: trackColor, roughness: trackRoughness, envMap: textureSky});
         const intersection = new THREE.Mesh(intersectionGeometry, intersectionMaterial);
@@ -193,14 +195,15 @@ export class TerrainGenerationService {
 
         return this.track.trackIntersections.map(intersectionPosition => {
             const intersectionClone = intersection.clone();
-            intersectionClone.position.set(intersectionPosition.x * this.scale, 2, intersectionPosition.y * this.scale);
+            intersectionClone.position.set(intersectionPosition.x * Settings.SCENE_SCALE, 2, intersectionPosition.y * Settings.SCENE_SCALE);
             return intersectionClone;
         });
     }
 
     private generateRaceStartPlaid(): THREE.Mesh {
         const textureRatio = 20 / 3; // 3 / 20 is the texture ratio if the image
-        const plaidGeometry = new THREE.PlaneGeometry(this.scale * trackRadius * 2 / textureRatio, this.scale * trackRadius * 2);
+        const plaidGeometry = new THREE.PlaneGeometry(
+            Settings.SCENE_SCALE * trackRadius * 2 / textureRatio, Settings.SCENE_SCALE * trackRadius * 2);
         plaidGeometry.rotateX(Math.PI / -2);
 
         const plaidTexture = this.loadTexture(startPlaidPath);
@@ -209,7 +212,8 @@ export class TerrainGenerationService {
 
         const centerOfFirstSegment = this.track.centerOfFirstSegment();
         plaidMesh.rotateY(centerOfFirstSegment.rotation);
-        plaidMesh.position.set(centerOfFirstSegment.position.x * this.scale, 3, centerOfFirstSegment.position.y * this.scale);
+        plaidMesh.position.set(
+            centerOfFirstSegment.position.x * Settings.SCENE_SCALE, 3, centerOfFirstSegment.position.y * Settings.SCENE_SCALE);
         return plaidMesh;
     }
 }

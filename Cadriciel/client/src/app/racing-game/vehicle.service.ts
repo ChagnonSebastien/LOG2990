@@ -1,53 +1,56 @@
-import { RaceService } from './race.service';
-import { CountdownService } from './countdown.service';
-import { ObstacleService } from './obstacle.service';
+import { ControllerFactory } from './controller-factory.service';
+import { LoadingProgressEventService, LoadingProgressEvent } from './events/loading-progress-event.service';
 import { VehicleColor } from './vehicle-color';
-import { HumanController } from './human-controller';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CommandsService } from './commands.service';
-
-const numberOfOpponents = 3;
+import { Controller } from './controller';
 
 @Injectable()
 export class VehicleService {
-    public mainVehicle: Vehicle;
-    public opponentsVehicles: Array<Vehicle>;
+    public players: Array<Vehicle>;
 
-    constructor(private commandsService: CommandsService, private obstacleService: ObstacleService,
-                 private countdownService: CountdownService, private raceService: RaceService) {
-        this.mainVehicle = new Vehicle(this.obstacleService);
-        this.opponentsVehicles = [];
-        for (let i = 0; i < numberOfOpponents; i++) {
-            this.opponentsVehicles[i] = new Vehicle(this.obstacleService);
+    private amountVehicleMeshCreated;
+
+    constructor(
+        private loadingProgressEventService: LoadingProgressEventService,
+        private controllerFactory: ControllerFactory
+    ) {
+        this.amountVehicleMeshCreated = 0;
+    }
+
+    public vehicleCreated() {
+        if (++this.amountVehicleMeshCreated === 4) {
+            this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
         }
     }
 
-    public initializeMainVehicle(track: Track, scale: number): Promise<Vehicle> {
-        return new Promise<Vehicle>(resolve => {
-            this.mainVehicle.create3DVehicle(
-                track, scale, VehicleColor.red, new HumanController(this.commandsService, this.countdownService, this.raceService)
-            ).then((vehicle) => {
-                resolve(vehicle);
-            });
-        });
+    public createVehicles(track: Track): void {
+        this.players = [];
+        for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
+            this.players.push(new Vehicle(color, track, this.createController(track, color), this.loadingProgressEventService));
+        }
     }
 
-    public async initializeOpponentsVehicles(track: Track, scale: number): Promise<Array<Vehicle>> {
-        await this.opponentsVehicles[0].create3DVehicle(track, scale, VehicleColor.blue,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-        await this.opponentsVehicles[1].create3DVehicle(track, scale, VehicleColor.green,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-        await this.opponentsVehicles[2].create3DVehicle(track, scale, VehicleColor.yellow,
-                                                        new HumanController(this.commandsService, this.countdownService, this.raceService));
-
-        return new Promise<Array<Vehicle>>(resolve => {
-            resolve(this.opponentsVehicles);
-        });
+    private createController(track: Track, color: VehicleColor): Controller {
+        if (color === VehicleColor.red) {
+            return this.controllerFactory.newHumanController();
+        } else if (track.type === '') {
+            return this.controllerFactory.newHumanController();
+        } else {
+            return this.controllerFactory.newHumanController();
+        }
     }
 
-    public moveVehicle() {
-        this.mainVehicle.move();
+    public getVehicle(color: VehicleColor): Vehicle {
+        return this.players.filter((vehicle: Vehicle) => vehicle.getColor() === color)[0];
+    }
+
+    public getMainVehicle(): Vehicle {
+        return this.getVehicle(VehicleColor.red);
+    }
+
+    public getVehicles(): Vehicle[] {
+        return this.players;
     }
 }

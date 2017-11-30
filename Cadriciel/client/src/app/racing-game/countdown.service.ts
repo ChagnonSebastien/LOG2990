@@ -1,9 +1,11 @@
+import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { AudioService } from './audio.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { Track } from './track';
 import * as THREE from 'three';
+import { CommandsService } from './events/commands.service';
+import { Settings } from './settings';
+import { RacingSceneService } from './racing-scene.service';
 
 @Injectable()
 export class CountdownService {
@@ -11,78 +13,64 @@ export class CountdownService {
     private font: THREE.Font;
     private count: number;
     public countdownStarted: boolean;
-    private timer: Observable<number>;
-    private countdownEndedSubject: Subject<any>;
+    public countdownEnded: boolean;
 
-    constructor(private audioService: AudioService) {
+    constructor(
+        private audioService: AudioService,
+        commandService: CommandsService,
+        private countdownDecreaseEventService: CountdownDecreaseEventService,
+        private sceneService: RacingSceneService
+    ) {
         this.count = 6;
         this.countdownStarted = false;
-        this.countdownEndedSubject = new Subject();
+        this.countdownEnded = false;
+    }
+
+    public startGame() {
+        this.countdownEnded = true;
     }
 
     public startCountdown() {
-        this.startAudio();
-        this.timer = Observable.timer(0, 1000)
-            .take(this.count)
-            .map(() => --this.count);
-        this.timer.subscribe(x => {
-            this.updateCountdown(x);
-            if (this.count === 0) {
-                this.endCountdown();
-            }
-        });
-    }
-
-    public countdownEndedAlerts(): Observable<any> {
-        return this.countdownEndedSubject.asObservable();
-    }
-
-    private endCountdown() {
-        this.countdownEndedSubject.next();
+        if (!this.countdownStarted) {
+            this.countdownStarted = true;
+            this.startAudio();
+            this.countdownDecreaseEventService.startCountDown(this.count);
+        }
     }
 
     private startAudio() {
         this.audioService.startCountdown();
     }
 
-    public async createCountdown(track: Track, scale: number): Promise<void> {
-        await this.create3DCountdown(track, scale);
-        return new Promise<void>(resolve => {
-            resolve();
-        });
-    }
-
-    private async create3DCountdown(track: Track, scale): Promise<void> {
+    public createCountdown(track: Track): void {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
         const trackCenter = this.getCenterOfTrack(track);
-        return new Promise<void>(resolve => {
-            loader.load('../../assets/font_samuel_regular.json', function(font) {
-                this.font = font;
-                textGeometry = new THREE.TextGeometry((this.count - 1).toString(), {
-                    font: font,
-                    size: 200,
-                    height: 0,
-                    curveSegments: 5,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 1
-                });
-                const material = new THREE.MeshPhongMaterial({
-                    color: 0xffff00
-                });
-                this.countdownMesh = new THREE.Mesh(textGeometry, material);
-                this.countdownMesh.name = 'countdown';
-                this.countdownMesh.position.setX(trackCenter.x * scale);
-                this.countdownMesh.position.setY((scale * 20 / 25) + 3);
-                this.countdownMesh.position.setZ(trackCenter.y * scale);
-                this.countdownMesh.geometry.rotateY(Math.PI / 2);
-                resolve();
-            }.bind(this));
+        const service = this;
+        loader.load('../../assets/font_samuel_regular.json', function(font) {
+            service.font = font;
+            textGeometry = new THREE.TextGeometry((service.count - 1).toString(), {
+                font: font,
+                size: 200,
+                height: 0,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 10,
+                bevelSize: 1
+            });
+            const material = new THREE.MeshPhongMaterial({
+                color: 0xffff00
+            });
+            service.countdownMesh = new THREE.Mesh(textGeometry, material);
+            service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
+            service.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
+            service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
+            service.countdownMesh.geometry.rotateY(Math.PI / 2);
+            service.sceneService.addObjectWithName(service.countdownMesh, 'countdown');
         });
     }
 
-    private updateCountdown(count: number) {
+    public updateCountdown(count: number) {
         const countText = count.toString();
 
         const textGeometry = new THREE.TextGeometry(countText, {

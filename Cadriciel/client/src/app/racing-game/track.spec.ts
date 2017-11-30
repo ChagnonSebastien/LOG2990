@@ -22,11 +22,11 @@ describe('Track', () => {
 
     describe('distanceToPoint()', function () {
         it ('should return the right distance if the point is aligned with it\'s closest segment', () => {
-            expect(track.distanceToPoint(new THREE.Vector2(50, -50), new LineCalculationService())).toEqual(40);
+            expect(track.distanceToPoint(new THREE.Vector2(50, -50), new LineCalculationService())).toEqual(50);
         });
 
         it ('should return the right distance if the point is not aligned with it\'s closest segment', () => {
-            expect(track.distanceToPoint(new THREE.Vector2(-8, -6), new LineCalculationService())).toEqual(0);
+            expect(track.distanceToPoint(new THREE.Vector2(-8, -6), new LineCalculationService())).toEqual(10);
         });
     });
 

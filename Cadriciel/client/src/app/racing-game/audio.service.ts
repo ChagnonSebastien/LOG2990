@@ -1,4 +1,4 @@
-import { RaceService } from './race.service';
+import { RaceService } from './events/race.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
