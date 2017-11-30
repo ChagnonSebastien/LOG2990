@@ -20,6 +20,7 @@ export class AudioService {
         this.themed = new Audio('../../assets/sounds/themed.mp3');
         this.themed.load();
         this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
+        this.carCarCollision.load();
     }
 
     public startCountdown() {
@@ -36,6 +37,10 @@ export class AudioService {
 
     public stopRace() {
         this.race.pause();
+    }
+
+    public startCarCarCollision() {
+        this.carCarCollision.play();
     }
 
     private listenForEndOfRace() {
