@@ -17,6 +17,7 @@ export class AudioService {
         private commandsService: CommandsService) {
         this.listenForEndOfRace();
         this.listenForCarCarCollision();
+        this.listenForMoveForward();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
         this.race = new Audio('../../assets/sounds/race.mp3');
