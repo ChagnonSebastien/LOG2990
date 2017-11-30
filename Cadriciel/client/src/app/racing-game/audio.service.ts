@@ -7,6 +7,7 @@ export class AudioService {
     private race: HTMLAudioElement;
     private stinger: HTMLAudioElement;
     private themed: HTMLAudioElement;
+    private carCarCollision: HTMLAudioElement;
 
     constructor(private raceService: RaceService) {
         this.listenForEndOfRace();
@@ -18,6 +19,7 @@ export class AudioService {
         this.stinger.load();
         this.themed = new Audio('../../assets/sounds/themed.mp3');
         this.themed.load();
+        this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
     }
 
     public startCountdown() {
