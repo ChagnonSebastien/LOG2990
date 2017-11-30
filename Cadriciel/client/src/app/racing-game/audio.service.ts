@@ -1,6 +1,8 @@
 import { RaceService } from './events/race.service';
-import { Injectable } from '@angular/core';
 import { CollisionEventService } from './events/collision-event.service';
+import { CommandsService } from './events/commands.service';
+import { Injectable } from '@angular/core';
+
 
 @Injectable()
 export class AudioService {
@@ -9,8 +11,10 @@ export class AudioService {
     private stinger: HTMLAudioElement;
     private themed: HTMLAudioElement;
     private carCarCollision: HTMLAudioElement;
+    private engine: HTMLAudioElement;
 
-    constructor(private raceService: RaceService, private collisionEventService: CollisionEventService) {
+    constructor(private raceService: RaceService, private collisionEventService: CollisionEventService,
+        private commandsService: CommandsService) {
         this.listenForEndOfRace();
         this.listenForCarCarCollision();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
@@ -23,6 +27,8 @@ export class AudioService {
         this.themed.load();
         this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
         this.carCarCollision.load();
+        this.engine = new Audio('../../assets/sounds/vrombissement.mp3');
+        this.engine.load();
     }
 
     public startCountdown() {
@@ -45,6 +51,10 @@ export class AudioService {
         this.carCarCollision.play();
     }
 
+    public startEngine() {
+        this.engine.play();
+    }
+
     private listenForEndOfRace() {
         this.raceService.raceEndedAlerts().subscribe(() => {
             this.stopRace();
@@ -55,6 +65,12 @@ export class AudioService {
     private listenForCarCarCollision() {
         this.collisionEventService.getCollisionObservable().subscribe(() => {
             this.startCarCarCollision();
+        });
+    }
+
+    private listenForMoveForward() {
+        this.commandsService.getCommandKeyUpObservable().subscribe(() => {
+            this.startEngine();
         });
     }
 

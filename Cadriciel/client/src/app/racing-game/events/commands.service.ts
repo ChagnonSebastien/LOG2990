@@ -36,11 +36,11 @@ export class CommandsService {
         this.commandKeyUpEvent.next(new CommandEvent(this.getCommand(event.keyCode)));
     }
 
-    public getCommandKeyDownObservable(): Observable<any> {
+    public getCommandKeyDownObservable(): Observable<CommandEvent> {
         return this.commandKeyDownEvent.asObservable();
     }
 
-    public getCommandKeyUpObservable(): Observable<any> {
+    public getCommandKeyUpObservable(): Observable<CommandEvent> {
         return this.commandKeyUpEvent.asObservable();
     }
 
