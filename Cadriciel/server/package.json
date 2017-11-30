@@ -9,6 +9,7 @@
     "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "cover": "nyc mocha -r source-map-support/register -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
+    "test-lobby": "mocha -r ts-node/register 'app/**/crossword-lobby-service.spec.ts'",
     "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts' 'app/**/crossword.service.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
     "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
