@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { TrackUtilities } from './track-utilities';
+import { LapEventService, LapEvent } from './events/lap-event.service';
 
 
 @Injectable()
@@ -9,7 +10,7 @@ export class LapCounterService {
     private passedCounter: Array<number>;
     private laps: BehaviorSubject<number>;
 
-    constructor() {
+    constructor(private lapEventService: LapEventService) {
         this.laps = new BehaviorSubject(0);
         this.lastIntersectionNumber = 0;
         this.passedCounter = new Array<number>(TrackUtilities.numberOfIntersections()).fill(0);
@@ -44,6 +45,7 @@ export class LapCounterService {
         });
         if (minPassed > this.laps.value && this.passedFinishLine()) {
             this.laps.next(minPassed);
+            this.lapEventService.sendLapEvent(new LapEvent(minPassed));
         }
     }
 
