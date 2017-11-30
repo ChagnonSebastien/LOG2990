@@ -21,7 +21,7 @@ export class CollisionResolveService {
       finalVelocityA: THREE.Vector3, finalVelocityB: THREE.Vector3,
       finalAngularVelocityA: THREE.Vector3, finalAngularVelocityB: THREE.Vector3
     } {
-    // calculate the normal
+   /* // calculate the normal
     const normal = this.calculateNormal(xCollisionPoint, zCollisionPoint, xCollisionPlanePoint, zCollisionPlanePoint);
     this.setCorrectNormalDirection(normal, vehicleA.getVehicle().position.x, vehicleA.getVehicle().position.z,
       vehicleB.getVehicle().position.x, vehicleB.getVehicle().position.z);
@@ -34,7 +34,7 @@ export class CollisionResolveService {
 
     // calculate the moments of inertia
     const momentOfInertiaA = this.calculateMomentOfInertia(vehicleA.getLength(), vehicleB.getWidth(), true);
-    const momentOfInertiaB = this.calculateMomentOfInertia(vehicleB.getLength(), vehicleB.getWidth(), true);
+    const momentOfInertiaB = this.calculateMomentOfInertia(vehicleB.getLength(), vehicleB.getWidth(), true);*/
     return this.results;
   }
 
