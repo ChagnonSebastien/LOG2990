@@ -33,8 +33,8 @@ export class CollisionResolveService {
       vehicleB.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
 
     // calculate the moments of inertia
-    const momentOfInertiaA = this.calculateMomentOfInertia(vehicleA, true);
-    const momentOfInertiaB = this.calculateMomentOfInertia(vehicleB, true);
+    const momentOfInertiaA = this.calculateMomentOfInertia(vehicleA.getLength(), vehicleB.getWidth(), true);
+    const momentOfInertiaB = this.calculateMomentOfInertia(vehicleB.getLength(), vehicleB.getWidth(), true);
     return this.results;
   }
 
@@ -83,11 +83,9 @@ export class CollisionResolveService {
     normal.normalize();
   }
 
-  public calculateMomentOfInertia(vehicle: Vehicle, clockwise: boolean): number {
+  public calculateMomentOfInertia(length: number, width: number, clockwise: boolean): number {
     // use the parallel axis theorem to get the moment of inertia around the vehicle center of mass
-    const boxLength = vehicle.getLength();
-    const boxWidth = vehicle.getWidth();
-    let inertia = ((this.vehicleMass / 12) * (Math.pow(boxLength, 2) + Math.pow(boxWidth, 2)));
+    let inertia = ((this.vehicleMass / 12) * (Math.pow(length, 2) + Math.pow(width, 2)));
     // right hand rule
     if (clockwise) {
       inertia = inertia * -1;

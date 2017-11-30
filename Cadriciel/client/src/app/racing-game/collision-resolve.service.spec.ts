@@ -32,4 +32,22 @@ describe('CollisionResolveService', () => {
     expect(normal.y).toBeCloseTo(normalExpected.y);
     expect(normal.z).toBeCloseTo(normalExpected.z);
   }));
+
+  it('should calculate the moment of inertia of a 2d plane', inject([CollisionResolveService], (service: CollisionResolveService) => {
+    const inertia = service.calculateMomentOfInertia(4, 3, true);
+    const expected = -10.416;
+    expect(inertia).toBeCloseTo(expected);
+  }));
+
+  it('should calculate impulse factor', inject([CollisionResolveService], (service: CollisionResolveService) => {
+    const normal = new THREE.Vector3(-2 / Math.sqrt(5), 0, -1 / Math.sqrt(5));
+    const distanceA = new THREE.Vector3(3, 0, -1);
+    const distanceB = new THREE.Vector3(-2, 0, -4);
+    const inertiaA = 56.67;
+    const inertiaB = -56.67;
+    const relativeVelocity = new THREE.Vector3(5, 0, -5);
+    const impulse = service.calculateImpulse(1, normal, distanceA, distanceB, inertiaA, inertiaB, relativeVelocity);
+    const expected = 12.38;
+    expect(impulse).toBeCloseTo(expected);
+  }));
 });
