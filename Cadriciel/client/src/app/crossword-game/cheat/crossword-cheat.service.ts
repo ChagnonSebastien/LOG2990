@@ -8,16 +8,12 @@ import { GameConfiguration } from '../game-configuration';
 export class CrosswordCheatService {
     public cheatMode: boolean;
     public initialCountdown: number;
-    private initialCountdownChanges: Subject<any>;
+    public initialCountdownChanges: Subject<any>;
 
     constructor() {
         this.initialCountdownChanges = new Subject();
         this.cheatMode = false;
         this.initialCountdown = GameConfiguration.INITIAL_COUNTDOWN_VALUE;
-    }
-
-    public initialCountdownChangedAlerts(): Observable<any> {
-        return this.initialCountdownChanges.asObservable();
     }
 
     public toggleCheatMode(): boolean {
