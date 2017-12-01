@@ -44,10 +44,27 @@ export class CollisionDetectionService {
 
                 const intersectingPoint = this.checkForIntersection(vertices1, vertices2);
                 if (intersectingPoint !== null) {
-                    this.collisionEventService.sendCollisionEvent(new CollisionEvent(event.getVehicle(), toCheck, intersectingPoint));
+                    event.cancel();
+                    this.collisionEventService.sendCollisionEvent(
+                        new CollisionEvent(
+                            event.getVehicle(), toCheck, intersectingPoint, this.closestVertexToPoint(intersectingPoint, vertices2))
+                    );
                 }
             }
         });
+    }
+
+    private closestVertexToPoint (collisionPoint: Vector3, points: Vector3[]): Vector3 {
+        let closestPoint = null;
+        let closestDistance = Infinity;
+        points.forEach((point: Vector3) => {
+            const distance = point.distanceTo(collisionPoint);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestPoint = point;
+            }
+        });
+        return closestPoint;
     }
 
     private extractWorldVertices(object: Mesh): Vector3[] {

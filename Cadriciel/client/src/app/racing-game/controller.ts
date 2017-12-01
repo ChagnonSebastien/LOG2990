@@ -40,6 +40,23 @@ export abstract class Controller {
         this.turnState = TURN_STATE.DO_NOTHING;
     }
 
+    public getSpeed(): Vector3 {
+        return this.linearVelocity;
+    }
+
+    public getAngularVelocity(): Vector3 {
+        return this.angulareVelocity;
+    }
+
+    public setLinearVelocity(velocity: Vector3): void {
+        console.log(this.linearVelocity.clone(), velocity.clone());
+        this.linearVelocity = velocity;
+    }
+
+    public setAngularVelocity(velocity: Vector3): void {
+        this.angulareVelocity = velocity;
+    }
+
     public hitWall(speedModifier: number) {
         this.linearVelocity.clampLength(0, Math.min(maxSpeed * speedModifier, this.linearVelocity.length() * 0.98 * speedModifier));
     }

@@ -1,3 +1,4 @@
+import { CollisionResolveService } from './collision-resolve.service';
 import { RaceService, RaceEndedEvent } from './events/race.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
@@ -43,6 +44,7 @@ export class RaceMediator {
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
         private raceService: RaceService,
+        private collisionResolveService: CollisionResolveService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -201,7 +203,7 @@ export class RaceMediator {
     }
 
     private handleCollisionEvent(event: CollisionEvent) {
-
+        this.collisionResolveService.resolveCollision(event);
     }
 
     private handleLapEvent(event: LapEvent) {

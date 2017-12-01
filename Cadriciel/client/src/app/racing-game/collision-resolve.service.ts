@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CollisionEventService } from './events/collision-event.service';
+import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
 import * as THREE from 'three';
 
 @Injectable()
@@ -13,17 +13,19 @@ export class CollisionResolveService {
     finalAngularVelocityB: THREE.Vector3
   };
   constructor(private collisionEventService: CollisionEventService) {
-    this.vehicleMass = 5;
+    this.vehicleMass = 50;
     this.elasticity = 1;
-    this.listenForCollision();
   }
 
-  public resolveCollision(vehicleA: Vehicle, vehicleB: Vehicle, xCollisionPoint: number,
-    zCollisionPoint: number, xCollisionPlanePoint, zCollisionPlanePoint): {
-      finalVelocityA: THREE.Vector3, finalVelocityB: THREE.Vector3,
-      finalAngularVelocityA: THREE.Vector3, finalAngularVelocityB: THREE.Vector3
-    } {
-   /* // calculate the normal
+  public resolveCollision(event: CollisionEvent): void {
+      const xCollisionPoint = event.getCollisionPoint().x;
+      const zCollisionPoint = event.getCollisionPoint().z;
+      const xCollisionPlanePoint = event.getPointOnCollisionPlane().x;
+      const zCollisionPlanePoint = event.getPointOnCollisionPlane().z;
+      const vehicleA = event.getFirstVehicle();
+      const vehicleB = event.getSecondVehicle();
+
+    // calculate the normal
     const normal = this.calculateNormal(xCollisionPoint, zCollisionPoint, xCollisionPlanePoint, zCollisionPlanePoint);
     this.setCorrectNormalDirection(normal, vehicleA.getVehicle().position.x, vehicleA.getVehicle().position.z,
       vehicleB.getVehicle().position.x, vehicleB.getVehicle().position.z);
@@ -35,9 +37,23 @@ export class CollisionResolveService {
       vehicleB.getVehicle().position.z, xCollisionPlanePoint, zCollisionPlanePoint);
 
     // calculate the moments of inertia
-    const momentOfInertiaA = this.calculateMomentOfInertia(vehicleA.getLength(), vehicleB.getWidth(), true);
-    const momentOfInertiaB = this.calculateMomentOfInertia(vehicleB.getLength(), vehicleB.getWidth(), true);*/
-    return this.results;
+    const momentOfInertiaA = this.calculateMomentOfInertia(
+      vehicleA.getLength(), vehicleB.getWidth(), vehicleA.getController().getAngularVelocity().y < 0);
+    const momentOfInertiaB = this.calculateMomentOfInertia(
+      vehicleB.getLength(), vehicleB.getWidth(), vehicleA.getController().getAngularVelocity().y < 0);
+
+    // calculate the impulse factor
+    const impulse = this.calculateImpulse(this.elasticity, normal, distanceA, distanceB, momentOfInertiaA, momentOfInertiaB,
+      vehicleA.getController().getSpeed().clone().sub(vehicleB.getController().getSpeed().clone()));
+
+
+      console.log(momentOfInertiaA, momentOfInertiaB, impulse);
+    vehicleA.getController().setLinearVelocity(this.calculateFinalVelocityA(vehicleA.getController().getSpeed().clone(), impulse, normal));
+    vehicleA.getController().setAngularVelocity(this.calculateFinalAngularVelocityA(
+      vehicleA.getController().getAngularVelocity(), distanceA, normal, momentOfInertiaA, impulse));
+    vehicleB.getController().setLinearVelocity(this.calculateFinalVelocityB(vehicleB.getController().getSpeed().clone(), impulse, normal));
+    vehicleB.getController().setAngularVelocity(this.calculateFinalAngularVelocityB(
+      vehicleB.getController().getAngularVelocity(), distanceB, normal, momentOfInertiaB, impulse));
   }
 
   public calculateFinalVelocityA(iniVelocity: THREE.Vector3, impulse: number, normal: THREE.Vector3): THREE.Vector3 {
@@ -110,10 +126,5 @@ export class CollisionResolveService {
     const denominator = 2 / this.vehicleMass + distanceACrossNormal.dot(distanceACrossNormal) / inertiaA
       + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
     return numerator / denominator;
-  }
-  private listenForCollision() {
-    this.collisionEventService.getCollisionObservable().subscribe((event) => {
-        // call resolve collision with correct arguments
-    });
   }
 }
