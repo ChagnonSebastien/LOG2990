@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CollisionEventService } from './events/collision-event.service';
 import * as THREE from 'three';
 
 @Injectable()
@@ -12,10 +11,9 @@ export class CollisionResolveService {
     finalVelocityA: THREE.Vector3, finalVelocityB: THREE.Vector3, finalAngularVelocityA: THREE.Vector3,
     finalAngularVelocityB: THREE.Vector3
   };
-  constructor(private collisionEventService: CollisionEventService) {
+  constructor() {
     this.vehicleMass = 5;
     this.elasticity = 1;
-    this.listenForCollision();
   }
 
   public resolveCollision(vehicleA: Vehicle, vehicleB: Vehicle, xCollisionPoint: number,
@@ -111,9 +109,5 @@ export class CollisionResolveService {
       + distanceBCrossNormal.dot(distanceBCrossNormal) / inertiaB;
     return numerator / denominator;
   }
-  private listenForCollision() {
-    this.collisionEventService.getCollisionObservable().subscribe((event) => {
-        // call resolve collision with correct arguments
-    });
-  }
+
 }
