@@ -1,6 +1,7 @@
 import { RaceService } from './events/race.service';
 import { CollisionEventService } from './events/collision-event.service';
 import { CommandsService } from './events/commands.service';
+import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { PlayerCommand } from './events/commands.service';
 import { Injectable } from '@angular/core';
 
@@ -21,7 +22,7 @@ export class AudioService {
     private acceleratorBonusEnd: HTMLAudioElement;
 
     constructor(private raceService: RaceService, private collisionEventService: CollisionEventService,
-        private commandsService: CommandsService) {
+        private commandsService: CommandsService, private obstacleCollisionEventService: ObstacleCollisionEventService) {
         this.listenForEndOfRace();
         this.listenForCarCarCollision();
         this.listenForMoveVehicle();
@@ -42,6 +43,10 @@ export class AudioService {
         this.idleEngine = new Audio('../../assets/sounds/idleEngine.mp3');
         this.idleEngine.load();
         this.accelerate = new Audio('../../assets/sounds/carAcceleration.mp3');
+        this.accelerate.load();
+        this.hitPothole = new Audio('../../assets/sounds/pothole.mp3');
+        this.acceleratorBonusStart = new Audio('../../assets/sounds/acceleratorBonusStart.mp3');
+        this.acceleratorBonusStart.load();
     }
 
     public startCountdown(): void {
@@ -63,6 +68,14 @@ export class AudioService {
 
     public stopRace(): void {
         this.race.pause();
+    }
+
+    private startBooster(): void {
+        this.acceleratorBonusStart.play();
+    }
+
+    private startHitPothole(): void {
+        this.hitPothole.play();
     }
 
     private startCarCarCollision(): void {
@@ -101,6 +114,7 @@ export class AudioService {
             }
         });
     }
+
     private listenForStopMoveVehicle(): void {
         this.commandsService.getCommandKeyUpObservable().subscribe((event) => {
             if (event.getCommand() === PlayerCommand.MOVE_FORWARD) {
@@ -108,6 +122,17 @@ export class AudioService {
             }
         });
     }
+
+    private listenForPothole(): void {
+        this.obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event) => {
+            if (event.getObstacle() === 1.75) {
+                this.startHitPothole();
+            } else if (event.getObstacle() === 2.75) {
+                this.startBooster();
+            }
+        });
+    }
+
     private startStinger(): void {
         this.stinger.play();
         this.stinger.addEventListener('ended', () => {
