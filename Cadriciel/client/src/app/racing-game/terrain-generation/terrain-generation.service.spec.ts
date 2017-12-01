@@ -1,7 +1,7 @@
-import { ObstaclePositionService } from './obstacle-position.service';
-import { Track } from './track';
+import { ObstaclePositionService } from '../obstacle-position.service';
+import { Track } from '../track';
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
-import { LineCalculationService } from './line-calculation.service';
+import { LineCalculationService } from '../line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
 import { TerrainGenerationService } from './terrain-generation.service';
 import { TestBed } from '@angular/core/testing';

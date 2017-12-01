@@ -1,8 +1,6 @@
-import { RaceMediator } from './racing-game-mediator.service';
-import { ObstaclePositionService } from './obstacle-position.service';
+import { RaceMediator } from './mediator.service';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { RacingGameService } from './racing-game.service';
 import { RenderService } from './render.service';
 import { TrackService } from './game-initialization/track.service';
 import { CommandsService } from './events/commands.service';
@@ -18,12 +16,9 @@ export class RacingGameComponent implements AfterViewInit {
 
     constructor(
         private route: ActivatedRoute,
-        private racingGameService: RacingGameService,
         private renderService: RenderService,
         private trackService: TrackService,
         private commandsService: CommandsService,
-        private obstacleService: ObstaclePositionService,
-        // tslint:disable-next-line:no-unused-variable
         private raceMediator: RaceMediator
     ) {
     }
@@ -51,8 +46,7 @@ export class RacingGameComponent implements AfterViewInit {
     public ngAfterViewInit() {
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
-            this.racingGameService.initializeRender(this.container, track);
-            this.obstacleService.initialize(track);
+            this.raceMediator.startProgram(this.container, track);
         });
     }
 }

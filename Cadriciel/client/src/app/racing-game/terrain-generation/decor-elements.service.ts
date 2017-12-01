@@ -1,10 +1,10 @@
-import { ObstaclePositionService } from './obstacle-position.service';
-import { Obstacle, ObstacleType } from './draw-track/obstacle';
-import { LineCalculationService } from './line-calculation.service';
-import { Track } from './track';
+import { ObstaclePositionService } from '../obstacle-position.service';
+import { Obstacle, ObstacleType } from '../draw-track/obstacle';
+import { LineCalculationService } from '../line-calculation.service';
+import { Track } from '../track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import { Settings } from './settings';
+import { Settings } from '../settings';
 
 const trackRadius = 10;
 

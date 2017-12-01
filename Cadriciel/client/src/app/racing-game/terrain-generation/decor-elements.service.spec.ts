@@ -1,6 +1,6 @@
-import { ObstaclePositionService } from './obstacle-position.service';
-import { Track } from './track';
-import { LineCalculationService } from './line-calculation.service';
+import { ObstaclePositionService } from '../obstacle-position.service';
+import { Track } from '../track';
+import { LineCalculationService } from '../line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
 import { TestBed } from '@angular/core/testing';
 import * as THREE from 'three';

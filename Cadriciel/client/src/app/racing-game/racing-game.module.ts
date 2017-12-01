@@ -1,6 +1,7 @@
+import { ControllerFactory } from './controller-factory.service';
 import { FrameEventService } from './events/frame-event.service';
 import { SceneService } from './scene.service';
-import { RaceMediator } from './racing-game-mediator.service';
+import { RaceMediator } from './mediator.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -8,11 +9,11 @@ import { RoadLimitService } from './road-limit.service';
 import { RaceService } from './events/race.service';
 import { AudioService } from './audio.service';
 import { ObstaclePositionService } from './obstacle-position.service';
-import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
+import { DiamondSquareAlgorithmService } from './terrain-generation/diamond-square-algorithm.service';
 import { LineCalculationService } from './line-calculation.service';
-import { DecorElementsService } from './decor-elements.service';
+import { DecorElementsService } from './terrain-generation/decor-elements.service';
 import { CountdownService } from './countdown.service';
-import { TerrainGenerationService } from './terrain-generation.service';
+import { TerrainGenerationService } from './terrain-generation/terrain-generation.service';
 import { RacingGameRoutingModule } from './racing-game-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -81,7 +82,8 @@ import { RacingSceneService } from './racing-scene.service';
         SceneService,
         RacingSceneService,
         FrameEventService,
-        LapCounterService
+        LapCounterService,
+        ControllerFactory
     ]
 })
 export class RacingGameModule {

@@ -66,8 +66,7 @@ describe('Controller', function () {
             vehicle = new Vehicle(
                 VehicleColor.blue,
                 track,
-                TestBed.get(VehicleMoveEventService),
-                TestBed.get(VehicleRotateEventService),
+                controller,
                 TestBed.get(LoadingProgressEventService)
             );
             vehicle['vehicle'] = new THREE.Mesh();
