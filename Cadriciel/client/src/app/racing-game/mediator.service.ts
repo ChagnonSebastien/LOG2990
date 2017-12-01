@@ -1,3 +1,5 @@
+import { LapEventService, LapEvent } from './events/lap-event.service';
+import { LapCounterService } from './lap-counter.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { Track } from './track';
 import { RacingSceneService } from './racing-scene.service';
@@ -38,6 +40,7 @@ export class RaceMediator {
         private roadLimitService: RoadLimitService,
         private vehicleMovementController: VehicleMovementController,
         private obstaclePositionService: ObstaclePositionService,
+        private lapcounterService: LapCounterService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -45,7 +48,8 @@ export class RaceMediator {
         vehicleMoveEventService: VehicleMoveEventService,
         vehicleRotateEventService: VehicleRotateEventService,
         obstacleCollisionEventService: ObstacleCollisionEventService,
-        collisionEventService: CollisionEventService
+        collisionEventService: CollisionEventService,
+        lapEventService: LapEventService
     ) {
         frameEventService.getFrameObservable().subscribe(
             (event: FrameEvent) => this.handleFrameEvent(event)
@@ -82,6 +86,10 @@ export class RaceMediator {
         collisionEventService.getCollisionObservable().subscribe(
             (event: CollisionEvent) => this.handleCollisionEvent(event)
         );
+
+        lapEventService.getLapObservable().subscribe(
+            (event: LapEvent) => this.handleLapEvent(event)
+        );
     }
 
     public startProgram(container: HTMLElement, track: Track) {
@@ -91,6 +99,7 @@ export class RaceMediator {
         this.vehicleService.createVehicles(track);
         this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
+        this.lapcounterService.initializePassedCounter();
     }
 
     private handleFrameEvent(event: FrameEvent) {
@@ -98,6 +107,9 @@ export class RaceMediator {
         this.vehicleService.getVehicles().forEach((vehicle: Vehicle) => {
             vehicle.getController().nextFrame(vehicle);
         });
+        if (this.vehicleService.getVehicles() !== undefined) {
+            this.lapcounterService.updateLapCounter();
+        }
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -184,5 +196,9 @@ export class RaceMediator {
 
     private handleCollisionEvent(event: CollisionEvent) {
 
+    }
+
+    private handleLapEvent(event: LapEvent) {
+        console.log('LAP');
     }
 }

@@ -1,3 +1,4 @@
+import { LapEventService } from './events/lap-event.service';
 import { ControllerFactory } from './controller-factory.service';
 import { FrameEventService } from './events/frame-event.service';
 import { SceneService } from './scene.service';
@@ -83,7 +84,8 @@ import { RacingSceneService } from './racing-scene.service';
         RacingSceneService,
         FrameEventService,
         LapCounterService,
-        ControllerFactory
+        ControllerFactory,
+        LapEventService
     ]
 })
 export class RacingGameModule {
