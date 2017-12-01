@@ -7,7 +7,7 @@ import { ObstacleCollisionEventService } from './events/obstacle-collision-event
 import { CollisionEventService } from './events/collision-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { DiamondSquareAlgorithmService } from './terrain-generation/diamond-square-algorithm.service';
@@ -69,7 +69,7 @@ import {CollisionResolveService} from './collision-resolve.service';
         DiamondSquareAlgorithmService,
         ObstaclePositionService,
         AudioService,
-        RaceService,
+        RaceEventService,
         CollisionDetectionService,
         RoadLimitService,
         VehicleMoveEventService,

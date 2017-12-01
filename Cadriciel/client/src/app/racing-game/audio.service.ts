@@ -1,4 +1,4 @@
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class AudioService {
     private stinger: HTMLAudioElement;
     private themed: HTMLAudioElement;
 
-    constructor(private raceService: RaceService) {
+    constructor(private raceService: RaceEventService) {
         this.listenForEndOfRace();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
