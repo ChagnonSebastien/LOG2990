@@ -17,6 +17,7 @@ export class RearView {
         vehicle.add(target);
         target.position.set(0, 0, 3000);
         vehicle.add(this.rearCamera);
+
         this.rearCamera.position.set(0, 1, 2);
         this.rearCamera.lookAt(target.position);
 

@@ -20,6 +20,8 @@ import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
 import { Vehicle } from './vehicle';
+import { RearView } from './rear-view';
+
 
 @Injectable()
 export class RaceMediator {
@@ -125,6 +127,10 @@ export class RaceMediator {
 
             case PlayerCommand.TOGGLE_NIGHT_MODE:
             this.racingSceneService.toggleNightMode();
+            break;
+
+            case PlayerCommand.REAR_VISIBLE:
+            this.renderService.swapRearWiew();
             break;
         }
     }

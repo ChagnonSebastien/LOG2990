@@ -7,6 +7,7 @@ import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingSceneService } from './racing-scene.service';
 import { RearView } from './rear-view';
+import { VehicleService } from './vehicle.service';
 
 @Injectable()
 export class RenderService {
@@ -16,15 +17,21 @@ export class RenderService {
 
     private renderer: THREE.WebGLRenderer;
 
+    public activeRearView: boolean;
+
     constructor(
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         private sceneService: RacingSceneService,
-        private frameEventService: FrameEventService
-    ) {}
+        private frameEventService: FrameEventService,
+    ) { }
 
     public loadTrack(track) {
         this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
+    }
+
+    public swapRearWiew() {
+        this.activeRearView = !this.activeRearView;
     }
 
     public startRenderingLoop() {
@@ -34,6 +41,7 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
+
         this.render();
     }
 
@@ -52,9 +60,15 @@ export class RenderService {
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
         this.stats.update();
 
+        if (this.activeRearView === true) {
+            this.rearViewRender();
+        }
+
+    }
+
+    public rearViewRender() {
         this.cameraService.rearCamera = new RearView(this.sceneService.scene, this.renderer);
         this.cameraService.rearViewCam();
-
     }
 
     private initStats() {
