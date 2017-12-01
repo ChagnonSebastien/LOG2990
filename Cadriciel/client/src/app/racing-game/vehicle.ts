@@ -81,6 +81,7 @@ export class Vehicle {
             this.vehicle.position.y = 3;
             this.vehicle.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
             this.vehicle.castShadow = true;
+            this.vehicle.name = Settings.VEHICLE_NAME;
             service.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', service));
         });
     }

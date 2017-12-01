@@ -16,4 +16,6 @@ export module Settings {
 
     export const CAMERA_INITIAL_ZOOM = 1;
     export const CAMERA_ZOOM_CHANGE = 0.05;
+
+    export const VEHICLE_NAME = 'vehicle';
 }

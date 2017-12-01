@@ -24,21 +24,4 @@ export class SceneService {
     public removeObjectByName(name: string) {
         this.scene.remove(this.scene.getObjectByName(name));
     }
-
-    public toggleNightMode() {
-        this.light.dirLight.visible = !this.light.dirLight.visible;
-    }
-
-    public lightWay() {
-        this.scene.traverse ( function (children) {
-            if (children.name === 'vehicle') {
-                children.traverse( function (child) {
-                    if (child instanceof THREE.SpotLight) {
-                        child.visible = !child.visible;
-                    }
-                });
-            }
-        });
-        this.swapTexture();
-    }
 }
