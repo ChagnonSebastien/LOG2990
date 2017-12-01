@@ -13,7 +13,6 @@ export class LapEventService {
     private eventListener = new Subject<LapEvent>();
 
     public sendLapEvent(event) {
-        console.log('LAP');
         this.eventListener.next(event);
     }
 

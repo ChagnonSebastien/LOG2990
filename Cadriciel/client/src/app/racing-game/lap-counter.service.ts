@@ -1,6 +1,5 @@
 import { VehicleService } from './vehicle.service';
 import { RacingGameService } from './racing-game.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { TrackUtilities } from './track-utilities';
 import { MathUtilities } from './math.utilities';
@@ -11,11 +10,11 @@ import { LapEventService, LapEvent } from './events/lap-event.service';
 export class LapCounterService {
     private lastVisitedIntersectionNumber: number;
     private passedCounter: Array<number>;
-    private laps: BehaviorSubject<number>;
+    private laps: number;
 
     constructor(private lapEventService: LapEventService, private racingGameService: RacingGameService,
         private vehicleService: VehicleService) {
-        this.laps = new BehaviorSubject(0);
+        this.laps = 0;
         this.lastVisitedIntersectionNumber = 0;
     }
 
@@ -53,8 +52,8 @@ export class LapCounterService {
         const minPassed = this.passedCounter.reduce((prev, next) => {
             return prev < next ? prev : next;
         });
-        if (minPassed > this.laps.value && this.passedFinishLine()) {
-            this.laps.next(minPassed);
+        if (minPassed > this.laps && this.passedFinishLine()) {
+            this.laps++;
             this.lapEventService.sendLapEvent(new LapEvent(minPassed));
         }
     }
