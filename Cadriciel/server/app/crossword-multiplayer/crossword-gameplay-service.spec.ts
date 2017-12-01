@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as io from 'socket.io-client';
 
 import { CrosswordGameplayService } from './crossword-gameplay-service';
 

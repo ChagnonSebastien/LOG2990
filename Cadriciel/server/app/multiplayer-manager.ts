@@ -19,7 +19,7 @@ export class MultiplayerManager {
         return this.multiplayerManager;
     }
 
-    public handleCrosswordGameRequests(): void{
+    public handleCrosswordGameRequests(): void {
         this.crosswordLobbyService.listenForLobbyRequests();
         this.crosswordGameplayService.listenForGameplayRequests();
     }
