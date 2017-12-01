@@ -20,7 +20,6 @@ export class LapCounterService {
     }
 
     public initializePassedCounter(): void {
-        console.log('initialized passed counter');
         const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
         this.passedCounter = new Array<number>(numberOfIntersections).fill(0);
     }
@@ -33,8 +32,6 @@ export class LapCounterService {
             .negativeSafeModulo((this.lastVisitedIntersectionNumber - 1), numberOfIntersections);
         const nextIntersection = this.racingGameService.getTrack().trackIntersections[nextIntersectionNumber];
         const previousIntersection = this.racingGameService.getTrack().trackIntersections[previousIntersectionNumber];
-        //console.log('NEXT INTERSECTION', nextIntersection);
-        //console.log('CURRENT POSITION', position);
         if (TrackUtilities.isAtIntersection(position, nextIntersection)) {
             this.passedCounter[nextIntersectionNumber]++;
             this.lastVisitedIntersectionNumber = nextIntersectionNumber;
@@ -53,13 +50,10 @@ export class LapCounterService {
     }
 
     private updateLap(): void {
-        // console.log('update lap');
-        //console.log(this.passedCounter);
         const minPassed = this.passedCounter.reduce((prev, next) => {
             return prev < next ? prev : next;
         });
         if (minPassed > this.laps.value && this.passedFinishLine()) {
-            //console.log('passed finish line');
             this.laps.next(minPassed);
             this.lapEventService.sendLapEvent(new LapEvent(minPassed));
         }
