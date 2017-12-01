@@ -1,3 +1,4 @@
+import { RaceService } from './race.service';
 import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
@@ -42,7 +43,8 @@ export class RaceMediator {
         private vehicleMovementController: VehicleMovementController,
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
-        private raceService: RaceEventService,
+        private raceEventService: RaceEventService,
+        private raceService: RaceService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -93,7 +95,7 @@ export class RaceMediator {
             (event: LapEvent) => this.handleLapEvent(event)
         );
 
-        raceService.raceEndedAlerts().subscribe(
+        raceEventService.raceEndedAlerts().subscribe(
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
         );
     }
@@ -106,6 +108,8 @@ export class RaceMediator {
         this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
         this.lapcounterService.initializePassedCounter();
+        this.racingSceneService.addObject(this.raceService.planeHub);
+        this.cameraService.getCamera().add(this.raceService.planeHub);
     }
 
     private handleFrameEvent(event: FrameEvent) {
@@ -207,7 +211,7 @@ export class RaceMediator {
     private handleLapEvent(event: LapEvent) {
         if (event.lap === 3) {
             console.log('Race ends');
-            this.raceService.endRace();
+            this.raceEventService.endRace();
         }
         console.log('LAP: ', event.lap);
     }
