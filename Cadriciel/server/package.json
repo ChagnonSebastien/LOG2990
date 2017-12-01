@@ -9,6 +9,7 @@
     "test": "mocha -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "cover": "nyc mocha -r source-map-support/register -r ts-node/register app/**/*.spec.ts app/*.spec.ts",
     "test-unix": "mocha -r ts-node/register 'app/**/*.spec.ts'",
+    "test-lobby": "mocha -r ts-node/register 'app/**/crossword-lobby-service.spec.ts'",
     "test-grid": "mocha -r ts-node/register 'app/**/crossword.spec.ts' 'app/**/crossword.service.spec.ts'",
     "test-utilities": "mocha -r ts-node/register 'app/**/utilities.spec.ts'",
     "test-lexicon": "mocha -r ts-node/register 'app/lexicon.spec.ts'",
@@ -27,6 +28,7 @@
     "prepush": "npm run lint"
   },
   "dependencies": {
+    "@types/socket.io-client": "^1.4.32",
     "async": "^2.5.0",
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.0",
@@ -43,6 +45,7 @@
     "rxjs": "^5.5.2",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.7.4",
+    "socket.io-client": "^2.0.4",
     "systemjs": "0.19.39"
   },
   "devDependencies": {

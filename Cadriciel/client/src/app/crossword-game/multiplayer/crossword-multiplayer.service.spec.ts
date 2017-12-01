@@ -97,17 +97,6 @@ describe('#CrosswordMultiplayerService', () => {
         });
     });
 
-    describe('serverClockAlerts()', () => {
-        it('should provide an observable that alerts when the server clock updates', (done) => {
-            multiplayerService.serverClockAlerts()
-                .subscribe((count: number) => {
-                    expect(count).toBeGreaterThanOrEqual(0);
-                    done();
-                });
-            multiplayerService['serverClock'].next(10);
-        });
-    });
-
     describe('emitSelectedHint', () => {
         it('should emit the selected hint to the opponent', () => {
             if (!multiplayerService['socketService'].socket.connected) {
