@@ -154,6 +154,8 @@ export class RaceMediator {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle> event.getObject();
+            this.racingSceneService.light.addLightsToVehicle(vehicle.getVehicle());
+            this.racingSceneService.light.hideLightsVehicle();
             this.racingSceneService.addObject(vehicle.getVehicle());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 

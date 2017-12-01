@@ -46,6 +46,7 @@ export class RacingSceneService extends SceneService {
 
     public toggleNightMode() {
         this.light.dirLight.visible = !this.light.dirLight.visible;
+        this.lightWay();
     }
 
     public lightWay() {
