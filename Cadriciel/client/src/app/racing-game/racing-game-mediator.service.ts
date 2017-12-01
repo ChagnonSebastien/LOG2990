@@ -20,7 +20,6 @@ import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
 import { Vehicle } from './vehicle';
-import { RearView } from './rear-view';
 
 
 @Injectable()
