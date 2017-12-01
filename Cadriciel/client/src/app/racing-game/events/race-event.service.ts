@@ -10,7 +10,7 @@ export class RaceEndedEvent {
 
 
 @Injectable()
-export class RaceService {
+export class RaceEventService {
     private raceEndedSubject: Subject<RaceEndedEvent>;
 
     constructor() {
