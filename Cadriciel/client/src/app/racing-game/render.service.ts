@@ -7,7 +7,6 @@ import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingSceneService } from './racing-scene.service';
 import { RearView } from './rear-view';
-import { VehicleService } from './vehicle.service';
 
 @Injectable()
 export class RenderService {
