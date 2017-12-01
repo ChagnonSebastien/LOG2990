@@ -26,7 +26,6 @@ describe('Controller', function () {
             ]
         });
         humanController = new HumanController(
-            TestBed.get(CommandsService),
             TestBed.get(VehicleMoveEventService),
             TestBed.get(VehicleRotateEventService)
         );

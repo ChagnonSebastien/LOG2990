@@ -1,3 +1,4 @@
+import { ControllerFactory } from './controller-factory.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { RaceService } from './events/race.service';
@@ -11,10 +12,8 @@ import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { CommandsService } from './events/commands.service';
-import { Track } from './track';
 import { VehicleService } from './vehicle.service';
 import { TestBed } from '@angular/core/testing';
-import * as THREE from 'three';
 import { RoadLimitService } from './road-limit.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 
@@ -40,7 +39,8 @@ describe('VehicleService', () => {
                 RaceService,
                 ObstacleCollisionDetectionService,
                 ObstacleCollisionEventService,
-                CountdownDecreaseEventService
+                CountdownDecreaseEventService,
+                ControllerFactory
             ]
         });
         vehicleService = TestBed.get(VehicleService);

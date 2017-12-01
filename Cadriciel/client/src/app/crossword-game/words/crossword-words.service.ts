@@ -12,6 +12,10 @@ export class CrosswordWordsService {
         this.wordMap = this.constructWordMap(wordsWithIndex);
     }
 
+    public endGame() {
+        this.wordMap = undefined;
+    }
+
     public getWordWithIndex(word: string): Word {
         return this.wordMap.get(word);
     }

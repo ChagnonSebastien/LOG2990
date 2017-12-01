@@ -1,3 +1,5 @@
+import { RacingSceneService } from './racing-scene.service';
+import { FrameEventService } from './events/frame-event.service';
 import { SceneService } from './scene.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
@@ -9,12 +11,12 @@ import { ObstaclePositionService } from './obstacle-position.service';
 import { TestBed } from '@angular/core/testing';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
-import { TerrainGenerationService } from './terrain-generation.service';
+import { TerrainGenerationService } from './terrain-generation/terrain-generation.service';
 import { CommandsService } from './events/commands.service';
 import { VehicleService } from './vehicle.service';
-import { DecorElementsService } from './decor-elements.service';
+import { DecorElementsService } from './terrain-generation/decor-elements.service';
 import { LineCalculationService } from './line-calculation.service';
-import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
+import { DiamondSquareAlgorithmService } from './terrain-generation/diamond-square-algorithm.service';
 import { CollisionDetectionService } from './collision-detection.service';
 import { RoadLimitService } from './road-limit.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -51,7 +53,9 @@ describe('Render', () => {
                 ObstacleCollisionDetectionService,
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,
-                SceneService
+                SceneService,
+                FrameEventService,
+                RacingSceneService
             ]
         });
         renderService = TestBed.get(RenderService);

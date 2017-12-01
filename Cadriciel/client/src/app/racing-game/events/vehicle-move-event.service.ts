@@ -5,20 +5,6 @@ import { Cancellable } from './cancelable';
 import { Observable } from 'rxjs/Observable';
 import { Vehicle } from '../vehicle';
 
-@Injectable()
-export class VehicleMoveEventService {
-
-    private eventListener = new Subject<VehicleMoveEvent>();
-
-    public sendVehicleMoveEvent(event) {
-        this.eventListener.next(event);
-    }
-
-    public getVehicleMoveObservable(): Observable<VehicleMoveEvent> {
-        return this.eventListener.asObservable();
-    }
-}
-
 export class VehicleMoveEvent extends Cancellable {
     constructor(
         private previousPosition: Vector3,
@@ -38,5 +24,19 @@ export class VehicleMoveEvent extends Cancellable {
 
     public getVehicle(): Vehicle {
         return this.vehicle;
+    }
+}
+
+@Injectable()
+export class VehicleMoveEventService {
+
+    private eventListener = new Subject<VehicleMoveEvent>();
+
+    public sendVehicleMoveEvent(event) {
+        this.eventListener.next(event);
+    }
+
+    public getVehicleMoveObservable(): Observable<VehicleMoveEvent> {
+        return this.eventListener.asObservable();
     }
 }

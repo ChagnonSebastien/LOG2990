@@ -5,20 +5,6 @@ import { Vehicle } from './../vehicle';
 import { ObstacleType } from '../draw-track/obstacle';
 import { Cancellable } from './cancelable';
 
-@Injectable()
-export class ObstacleCollisionEventService {
-
-    private eventListener = new Subject<ObstacleCollisionEvent>();
-
-    public sendObstacleCollisionEvent(event) {
-        this.eventListener.next(event);
-    }
-
-    public getObstacleCollisionObservable(): Observable<ObstacleCollisionEvent> {
-        return this.eventListener.asObservable();
-    }
-}
-
 export class ObstacleCollisionEvent extends Cancellable {
     constructor(
         private vehicle: Vehicle,
@@ -33,5 +19,19 @@ export class ObstacleCollisionEvent extends Cancellable {
 
     public getObstacle(): ObstacleType {
         return this.obstacleType;
+    }
+}
+
+@Injectable()
+export class ObstacleCollisionEventService {
+
+    private eventListener = new Subject<ObstacleCollisionEvent>();
+
+    public sendObstacleCollisionEvent(event) {
+        this.eventListener.next(event);
+    }
+
+    public getObstacleCollisionObservable(): Observable<ObstacleCollisionEvent> {
+        return this.eventListener.asObservable();
     }
 }

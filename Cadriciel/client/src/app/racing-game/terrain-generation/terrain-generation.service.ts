@@ -1,10 +1,10 @@
 import { DiamondSquareAlgorithmService } from './diamond-square-algorithm.service';
-import { LineCalculationService } from './line-calculation.service';
+import { LineCalculationService } from '../line-calculation.service';
 import { DecorElementsService } from './decor-elements.service';
-import { Track } from './track';
+import { Track } from '../track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import * as SETTINGS from './settings';
+import { Settings } from '../settings';
 
 const assetsPath = '/assets';
 
@@ -113,7 +113,7 @@ export class TerrainGenerationService {
 
         const customUniforms = {
             bumpTexture:	{ type: 't', value: heightMap },
-            bumpScale:	    { type: 'f', value: heightMapStrength * SETTINGS.SCENE_SCALE },
+            bumpScale:	    { type: 'f', value: heightMapStrength * Settings.SCENE_SCALE },
             oceanTexture:	{ type: 't', value: this.loadTexture(oceanTexturePath) },
             sandyTexture:	{ type: 't', value: this.loadTexture(sandyTexturePath) },
             grassTexture:	{ type: 't', value: this.loadTexture(grassyTexturePath) },
@@ -129,10 +129,10 @@ export class TerrainGenerationService {
         });
 
         const terrainGeometry = new THREE.PlaneGeometry(
-            this.mapWidth * SETTINGS.SCENE_SCALE, this.mapWidth * SETTINGS.SCENE_SCALE, heightMapPixelWidth, heightMapPixelWidth);
+            this.mapWidth * Settings.SCENE_SCALE, this.mapWidth * Settings.SCENE_SCALE, heightMapPixelWidth, heightMapPixelWidth);
         const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
         terrain.rotation.x = -Math.PI / 2;
-        terrain.position.y = -trackHeight * SETTINGS.SCENE_SCALE;
+        terrain.position.y = -trackHeight * Settings.SCENE_SCALE;
         terrain.receiveShadow = true;
 
         return terrain;
@@ -140,7 +140,7 @@ export class TerrainGenerationService {
     }
 
     private generateWater(): THREE.Mesh {
-        const waterGeometry = new THREE.PlaneGeometry(this.mapWidth * SETTINGS.SCENE_SCALE, this.mapWidth * SETTINGS.SCENE_SCALE, 1, 1);
+        const waterGeometry = new THREE.PlaneGeometry(this.mapWidth * Settings.SCENE_SCALE, this.mapWidth * Settings.SCENE_SCALE, 1, 1);
         const waterTexture = this.loadTexture(waterTexturePath);
         waterTexture.repeat.set( 20 , 20 );
         const waterMat = new THREE.MeshBasicMaterial({map: waterTexture, transparent: true, opacity: 0.40});
@@ -174,20 +174,20 @@ export class TerrainGenerationService {
         return this.track.trackIntersections.map((intersection, index, array) => {
             const segment = new THREE.Vector2().subVectors(array[index + 1 < array.length ? index + 1 : 0], intersection);
 
-            const geometry = new THREE.PlaneGeometry(SETTINGS.SCENE_SCALE * segment.length(), SETTINGS.SCENE_SCALE * trackRadius * 2);
+            const geometry = new THREE.PlaneGeometry(Settings.SCENE_SCALE * segment.length(), Settings.SCENE_SCALE * trackRadius * 2);
             geometry.rotateX(Math.PI / -2);
 
             const segmentMesh = new THREE.Mesh(geometry, material);
             segmentMesh.rotateY(- Math.atan((segment.y) / (segment.x)));
             segmentMesh.position.set(
-                ((segment.x / 2) + intersection.x) * SETTINGS.SCENE_SCALE, 2, ((segment.y / 2) + intersection.y) * SETTINGS.SCENE_SCALE);
+                ((segment.x / 2) + intersection.x) * Settings.SCENE_SCALE, 2, ((segment.y / 2) + intersection.y) * Settings.SCENE_SCALE);
             segmentMesh.receiveShadow = true;
             return segmentMesh;
         });
     }
 
     private generateIntersections(textureSky): THREE.Mesh[] {
-        const intersectionGeometry = new THREE.CircleGeometry(SETTINGS.SCENE_SCALE * trackRadius, 32); // 32 is the resolution of the circle
+        const intersectionGeometry = new THREE.CircleGeometry(Settings.SCENE_SCALE * trackRadius, 32); // 32 is the resolution of the circle
         intersectionGeometry.rotateX(Math.PI / -2);
         const intersectionMaterial = new THREE.MeshStandardMaterial({color: trackColor, roughness: trackRoughness, envMap: textureSky});
         const intersection = new THREE.Mesh(intersectionGeometry, intersectionMaterial);
@@ -195,7 +195,7 @@ export class TerrainGenerationService {
 
         return this.track.trackIntersections.map(intersectionPosition => {
             const intersectionClone = intersection.clone();
-            intersectionClone.position.set(intersectionPosition.x * SETTINGS.SCENE_SCALE, 2, intersectionPosition.y * SETTINGS.SCENE_SCALE);
+            intersectionClone.position.set(intersectionPosition.x * Settings.SCENE_SCALE, 2, intersectionPosition.y * Settings.SCENE_SCALE);
             return intersectionClone;
         });
     }
@@ -203,7 +203,7 @@ export class TerrainGenerationService {
     private generateRaceStartPlaid(): THREE.Mesh {
         const textureRatio = 20 / 3; // 3 / 20 is the texture ratio if the image
         const plaidGeometry = new THREE.PlaneGeometry(
-            SETTINGS.SCENE_SCALE * trackRadius * 2 / textureRatio, SETTINGS.SCENE_SCALE * trackRadius * 2);
+            Settings.SCENE_SCALE * trackRadius * 2 / textureRatio, Settings.SCENE_SCALE * trackRadius * 2);
         plaidGeometry.rotateX(Math.PI / -2);
 
         const plaidTexture = this.loadTexture(startPlaidPath);
@@ -213,7 +213,7 @@ export class TerrainGenerationService {
         const centerOfFirstSegment = this.track.centerOfFirstSegment();
         plaidMesh.rotateY(centerOfFirstSegment.rotation);
         plaidMesh.position.set(
-            centerOfFirstSegment.position.x * SETTINGS.SCENE_SCALE, 3, centerOfFirstSegment.position.y * SETTINGS.SCENE_SCALE);
+            centerOfFirstSegment.position.x * Settings.SCENE_SCALE, 3, centerOfFirstSegment.position.y * Settings.SCENE_SCALE);
         return plaidMesh;
     }
 }

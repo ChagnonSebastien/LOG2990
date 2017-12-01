@@ -1,19 +1,23 @@
+import { VehicleMoveEvent } from './events/vehicle-move-event.service';
+import { RacingGameService } from './racing-game.service';
 import { LineCalculationService } from './line-calculation.service';
 import { Injectable } from '@angular/core';
 import { Track } from './track';
 import { Vector2, Vector3 } from 'three';
-import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Vehicle } from './vehicle';
 
 @Injectable()
 export class RoadLimitService {
 
-    constructor(private lineCalculationService: LineCalculationService, private vehicleMoveEventService: VehicleMoveEventService) {
-        this.vehicleMoveEventService.getVehicleMoveObservable().subscribe((vehicleMoveEvent: VehicleMoveEvent) => {
-            if (!this.isMovementValid(vehicleMoveEvent.getVehicle().getTrack(), vehicleMoveEvent.getNewPosition())) {
-                this.snapToTrack(vehicleMoveEvent.getVehicle(), vehicleMoveEvent.getNewPosition());
-            }
-        });
+    constructor(
+        private lineCalculationService: LineCalculationService,
+        private racingGameService: RacingGameService
+    ) {}
+
+    public validateMovement(vehicleMoveEvent: VehicleMoveEvent) {
+        if (!this.isMovementValid(this.racingGameService.getTrack(), vehicleMoveEvent.getNewPosition())) {
+            this.snapToTrack(vehicleMoveEvent.getVehicle(), vehicleMoveEvent.getNewPosition());
+        }
     }
 
     private isMovementValid(track: Track, newPosition: Vector3): boolean {
@@ -21,7 +25,7 @@ export class RoadLimitService {
     }
 
     private snapToTrack(vehicle: Vehicle, newPosition: Vector3) {
-        const track = vehicle.getTrack();
+        const track = this.racingGameService.getTrack();
         const newPositionRaw = new Vector2(newPosition.x / 25, newPosition.z / 25);
         const nearestPoint = track.getNearestPointOnTrack(newPositionRaw, this.lineCalculationService);
         const nearestPointOffset = new Vector2().subVectors(newPositionRaw, nearestPoint);

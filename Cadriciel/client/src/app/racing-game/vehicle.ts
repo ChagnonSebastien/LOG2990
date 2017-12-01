@@ -1,16 +1,10 @@
 import { LoadingProgressEvent, LoadingProgressEventService } from './events/loading-progress-event.service';
-import { HumanController } from './human-controller';
-import { CommandsService } from './events/commands.service';
-import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
-import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { ObstacleType } from './draw-track/obstacle';
 import { Track } from './track';
 import { VehicleColor } from './vehicle-color';
 import * as THREE from 'three';
 import { Controller } from './controller';
 import { Mesh, Vector2 } from 'three';
-import * as SETTINGS from './settings';
-import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
+import { Settings } from './settings';
 
 const distanceBetweenCars = 5;
 
@@ -22,28 +16,21 @@ const yellowCarPath = 'yellow_cart.json';
 
 export class Vehicle {
     private vehicle: THREE.Mesh;
-
     private boundingBox: THREE.Mesh;
+    private size: { width: number, length: number };
 
-    private controler: Controller;
-
-    private track: Track;
-
-    constructor(private color: VehicleColor, track: Track,
-        obstacleCollisionEventService: ObstacleCollisionEventService, commandsService: CommandsService,
-        vehicleMoveEventService: VehicleMoveEventService, vehicleRotateEventService: VehicleRotateEventService,
+    constructor(
+        private color: VehicleColor,
+        track: Track,
+        private controller: Controller,
         private loadingProgressEventService: LoadingProgressEventService
     ) {
-        this.create3DVehicle(track, color, new HumanController(commandsService, vehicleMoveEventService, vehicleRotateEventService));
-        obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event: ObstacleCollisionEvent) => {
-            if (event.getVehicle() === this) {
-                this.hitObstacle(event.getObstacle());
-            }
-        });
+        this.create3DVehicle(track, color);
+        this.size = { width: 0, length: 0 };
     }
 
-    public getTrack(): Track {
-        return this.track;
+    public getController(): Controller {
+        return this.controller;
     }
 
     public getColor(): VehicleColor {
@@ -52,6 +39,20 @@ export class Vehicle {
 
     public getVehicle(): THREE.Mesh {
         return this.vehicle;
+    }
+
+    public getLength(): number {
+        return this.size.length;
+    }
+
+    public getWidth(): number {
+        return this.size.width;
+    }
+
+    public setSize(size: { width: number, length: number }) {
+        this.size.length = Settings.SCENE_SCALE * size.length;
+        this.size.width = Settings.SCENE_SCALE * size.width;
+        console.log(this.size);
     }
 
     public setBoundingBox(boundingBox: Mesh) {
@@ -63,33 +64,22 @@ export class Vehicle {
         return this.boundingBox;
     }
 
-    public move() {
-        this.controler.move(this);
-    }
-
     public hitWall(speedModifier: number) {
-        this.controler.hitWall(speedModifier);
+        this.controller.hitWall(speedModifier);
     }
 
-    public hitObstacle(type: ObstacleType) {
-        this.controler.hitObstacle(type);
-    }
-
-    public create3DVehicle(track: Track, carPosition: VehicleColor, controller: Controller) {
+    public create3DVehicle(track: Track, carPosition: VehicleColor) {
         const service = this;
-        this.track = track;
-        this.controler = controller;
-        const loader = new THREE.ObjectLoader();
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
-        loader.load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
+        new THREE.ObjectLoader().load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
             this.vehicle = <THREE.Mesh>object;
             this.vehicle.rotation.y = trackAngle;
-            this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
-            this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * SETTINGS.SCENE_SCALE;
+            this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
+            this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
             this.vehicle.position.y = 3;
-            this.vehicle.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
+            this.vehicle.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
             this.vehicle.castShadow = true;
             service.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', service));
         });

@@ -1,12 +1,12 @@
 import { CommandsService } from './commands.service';
 
-describe('test drawTrackService', function () {
+describe('CommandService', function () {
     let commandService: CommandsService;
     beforeEach(() => {
         commandService = new CommandsService();
     });
 
-    it('construction test', done => {
+    it('should be created', done => {
         expect(commandService).toBeTruthy();
         done();
     });

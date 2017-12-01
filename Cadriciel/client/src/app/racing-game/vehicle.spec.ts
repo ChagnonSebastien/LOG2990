@@ -8,12 +8,19 @@ import { ObstacleCollisionEventService } from './events/obstacle-collision-event
 import { CommandsService } from './events/commands.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
+import { Controller } from './controller';
 
 const track = new Track('name', 'description', 'type', [
     new THREE.Vector2(0, 0),
     new THREE.Vector2(100, 0),
     new THREE.Vector2(100, 100)
 ], [], [], [], -1, 0, []);
+
+class MockController extends Controller {
+    constructor(moveEventService: VehicleMoveEventService, rotateEventService: VehicleRotateEventService) {
+        super(moveEventService, rotateEventService);
+    }
+}
 
 let vehicle: Vehicle;
 
@@ -32,10 +39,7 @@ describe('Vehicle', () => {
         vehicle = new Vehicle(
             VehicleColor.blue,
             track,
-            TestBed.get(ObstacleCollisionEventService),
-            TestBed.get(CommandsService),
-            TestBed.get(VehicleMoveEventService),
-            TestBed.get(VehicleRotateEventService),
+            new MockController(TestBed.get(VehicleMoveEventService), TestBed.get(VehicleRotateEventService)),
             TestBed.get(LoadingProgressEventService)
         );
     });

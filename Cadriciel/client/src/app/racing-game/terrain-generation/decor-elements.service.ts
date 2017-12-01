@@ -1,10 +1,10 @@
-import { ObstaclePositionService } from './obstacle-position.service';
-import { Obstacle, ObstacleType } from './draw-track/obstacle';
-import { LineCalculationService } from './line-calculation.service';
-import { Track } from './track';
+import { ObstaclePositionService } from '../obstacle-position.service';
+import { Obstacle, ObstacleType } from '../draw-track/obstacle';
+import { LineCalculationService } from '../line-calculation.service';
+import { Track } from '../track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import * as SETTINGS from './settings';
+import { Settings } from '../settings';
 
 const trackRadius = 10;
 
@@ -53,11 +53,11 @@ export class DecorElementsService {
 
     public placeObstacleType(type: ObstacleType, obstacles: Obstacle[], path: string): void {
         this.loadMesh(path).then( obstacleMesh => {
-            obstacleMesh.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
+            obstacleMesh.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
             this.obstacleService.getObstacles(type).forEach(obstaclePosition => {
                 const obstacleClone = obstacleMesh.clone();
                 obstacleClone.position.set(
-                    (obstaclePosition.x) * SETTINGS.SCENE_SCALE, 2, (obstaclePosition.y) * SETTINGS.SCENE_SCALE);
+                    (obstaclePosition.x) * Settings.SCENE_SCALE, 2, (obstaclePosition.y) * Settings.SCENE_SCALE);
 
                 obstacleClone.rotateY(Math.PI * 2 * Math.random());
                 this.scene.add(obstacleClone);
@@ -79,11 +79,11 @@ export class DecorElementsService {
 
     public placeTrees(): void {
         this.loadMesh(treePath).then( tree => {
-            tree.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
+            tree.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
             this.treesPositions.forEach(position => {
                 const treeClone = tree.clone();
                 treeClone.position.set(
-                    position.x * SETTINGS.SCENE_SCALE, position.y * SETTINGS.SCENE_SCALE, position.z * SETTINGS.SCENE_SCALE);
+                    position.x * Settings.SCENE_SCALE, position.y * Settings.SCENE_SCALE, position.z * Settings.SCENE_SCALE);
                 treeClone.rotateY(Math.PI * 2 * Math.random());
                 this.scene.add(treeClone);
             });
@@ -100,7 +100,7 @@ export class DecorElementsService {
 
     private placeDecorElement(amount: number, distanceFromTrack: number, path: string): void {
         this.loadMesh(path).then(mesh => {
-            mesh.scale.set(SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE, SETTINGS.SCENE_SCALE);
+            mesh.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
 
             for (let i = 0; i < amount; i++) {
                 let availablePlacement: { position: THREE.Vector2, rotation: number };
@@ -110,7 +110,7 @@ export class DecorElementsService {
 
                 const meshClone = <THREE.Mesh> mesh.clone();
                 meshClone.position.set(
-                    availablePlacement.position.x * SETTINGS.SCENE_SCALE, 0, availablePlacement.position.y * SETTINGS.SCENE_SCALE);
+                    availablePlacement.position.x * Settings.SCENE_SCALE, 0, availablePlacement.position.y * Settings.SCENE_SCALE);
                 meshClone.rotateY(availablePlacement.rotation);
                 this.scene.add(meshClone);
             }
