@@ -1,6 +1,6 @@
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { CollisionDetectionService } from './collision-detection.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { CommandsService, PlayerCommand } from './events/commands.service';
@@ -19,7 +19,7 @@ describe('Controller', function () {
                 CommandsService,
                 CountdownService,
                 AudioService,
-                RaceService,
+                RaceEventService,
                 CollisionDetectionService,
                 VehicleMoveEventService,
                 VehicleRotateEventService

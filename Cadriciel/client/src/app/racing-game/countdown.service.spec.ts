@@ -1,13 +1,13 @@
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { CommandsService } from './events/commands.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { RacingSceneService } from './racing-scene.service';
 
 describe('CountdownService', function () {
     const countdownService = new CountdownService(
-        new AudioService(new RaceService()), new CommandsService(), new CountdownDecreaseEventService(),
+        new AudioService(new RaceEventService()), new CommandsService(), new CountdownDecreaseEventService(),
         new RacingSceneService());
 
     it('construction test', () => {
