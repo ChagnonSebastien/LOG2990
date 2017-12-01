@@ -4,7 +4,7 @@ import { SceneService } from './scene.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { ObstaclePositionService } from './obstacle-position.service';
@@ -43,7 +43,7 @@ describe('Render', () => {
                 ObstaclePositionService,
                 CountdownService,
                 AudioService,
-                RaceService,
+                RaceEventService,
                 CollisionDetectionService,
                 VehicleMoveEventService,
                 RoadLimitService,

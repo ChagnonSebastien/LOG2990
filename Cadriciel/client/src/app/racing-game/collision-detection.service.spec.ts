@@ -14,7 +14,7 @@ import { CollisionEventService } from './events/collision-event.service';
 import { CommandsService } from './events/commands.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { CountdownService } from './countdown.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { RoadLimitService } from './road-limit.service';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
@@ -33,7 +33,7 @@ describe('CollisionDetectionService', () => {
         ObstaclePositionService,
         CountdownService,
         AudioService,
-        RaceService,
+        RaceEventService,
         CollisionDetectionService,
         VehicleMoveEventService,
         RoadLimitService,
