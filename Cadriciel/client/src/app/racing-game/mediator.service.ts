@@ -108,8 +108,6 @@ export class RaceMediator {
         this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
         this.lapcounterService.initializePassedCounter();
-        this.racingSceneService.addObject(this.raceService.planeHub);
-        this.cameraService.getCamera().add(this.raceService.planeHub);
     }
 
     private handleFrameEvent(event: FrameEvent) {
@@ -120,6 +118,16 @@ export class RaceMediator {
         if (this.vehicleService.getVehicles() !== undefined) {
             this.lapcounterService.updateLapCounter();
         }
+
+        //this.raceService.planeHud.position.x = this.vehicleService.players[0].getVehicle().position.x;
+        //this.raceService.planeHud.position.y = this.vehicleService.players[0].getVehicle().position.y + 160;
+        //this.raceService.planeHud.position.z = this.vehicleService.players[0].getVehicle().position.z;
+        this.raceService.planeHud.position.x = this.cameraService.objectToFollow.position.x;
+        this.raceService.planeHud.position.y = this.cameraService.objectToFollow.position.y + 210;
+        this.raceService.planeHud.position.z = this.cameraService.objectToFollow.position.z;
+        this.raceService.planeHud.rotation.y = this.cameraService.getCamera().rotation.y;
+        this.raceService.planeHud.rotation.x = this.cameraService.getCamera().rotation.x;
+        this.raceService.planeHud.rotation.z = this.cameraService.getCamera().rotation.z;
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -187,6 +195,11 @@ export class RaceMediator {
         }
 
         if (event.getProgress() === 'All carts loaded') {
+            this.raceService.planeHud.position.x = this.vehicleService.players[0].getVehicle().position.x;
+            this.raceService.planeHud.position.y = this.vehicleService.players[0].getVehicle().position.y;
+            this.raceService.planeHud.position.z = this.vehicleService.players[0].getVehicle().position.z;
+            this.raceService.planeHud.rotateY(this.vehicleService.players[0].getVehicle().rotation.y);
+            this.racingSceneService.addObject(this.raceService.planeHud);
             this.renderService.startRenderingLoop();
         }
     }

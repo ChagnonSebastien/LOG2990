@@ -8,11 +8,11 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 export class CameraService {
     private currentView: View;
 
-    private perspectiveCamera: PerspectiveCamera;
+    public perspectiveCamera: PerspectiveCamera;
 
     private orthographicCamera: OrthographicCamera;
 
-    private objectToFollow: Mesh;
+    public objectToFollow: Mesh;
 
     private zoomLevel: number;
 
