@@ -68,6 +68,11 @@ export class RacingSceneService extends SceneService {
         this.lightWay();
     }
 
+    private swapTexture() {
+        this.isNight = !this.isNight;
+        this.createTexture();
+    }
+
     public lightWay() {
         this.scene.traverse ( function (children) {
             if (children.name === 'vehicle') {
@@ -78,6 +83,6 @@ export class RacingSceneService extends SceneService {
                 });
             }
         });
-        // this.swapTexture();
+        this.swapTexture();
     }
 }
