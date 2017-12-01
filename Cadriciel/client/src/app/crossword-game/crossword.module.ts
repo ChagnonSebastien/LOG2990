@@ -20,6 +20,7 @@ import { CrosswordMultiplayerService } from './multiplayer/crossword-multiplayer
 import { CrosswordCountdownService } from './countdown/crossword-countdown.service';
 import { CrosswordCheatService } from './cheat/crossword-cheat.service';
 import { CrosswordLobbyService } from './lobby/crossword-lobby.service';
+import { CrosswordMutationService } from './mutation/crossword-mutation.service';
 
 import { CrosswordMenuComponent } from './menu/crossword-menu.component';
 import { CrosswordGameComponent } from './crossword-game.component';
@@ -67,7 +68,8 @@ import { CrosswordCheatComponent } from './cheat/crossword-cheat.component';
         CrosswordMultiplayerService,
         CrosswordCountdownService,
         CrosswordCheatService,
-        CrosswordLobbyService
+        CrosswordLobbyService,
+        CrosswordMutationService
     ]
 })
 export class CrosswordModule { }

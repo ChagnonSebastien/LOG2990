@@ -72,9 +72,10 @@ export class CrosswordGridComponent {
     }
 
     private focusOnSquare(i: number, j: number) {
-        this.squares.toArray().find((e) => {
+        const square = this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
-        }).nativeElement.focus();
+        });
+        square.nativeElement.focus();
     }
 
     private focusOnNextLetter(i: number, j: number): boolean {
@@ -99,10 +100,12 @@ export class CrosswordGridComponent {
         const wordInfo = this.wordsService
             .getWordWithIndex(this.hintsService.selectedWord);
 
-        if (wordInfo !== undefined || wordInfo.horizontal) {
-            j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
-        } else {
-            i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
+        if (wordInfo !== undefined) {
+            if (wordInfo.horizontal) {
+                j = WordUtilities.beginningOfWord(wordInfo, i, j) ? j : j - 1;
+            } else {
+                i = WordUtilities.beginningOfWord(wordInfo, i, j) ? i : i - 1;
+            }
         }
         this.focusOnSquare(i, j);
         return true;

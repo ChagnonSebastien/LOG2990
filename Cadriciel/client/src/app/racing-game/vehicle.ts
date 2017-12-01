@@ -16,8 +16,8 @@ const yellowCarPath = 'yellow_cart.json';
 
 export class Vehicle {
     private vehicle: THREE.Mesh;
-
     private boundingBox: THREE.Mesh;
+    private size: { width: number, length: number };
 
     constructor(
         private color: VehicleColor,
@@ -26,6 +26,7 @@ export class Vehicle {
         private loadingProgressEventService: LoadingProgressEventService
     ) {
         this.create3DVehicle(track, color);
+        this.size = { width: 0, length: 0 };
     }
 
     public getController(): Controller {
@@ -38,6 +39,20 @@ export class Vehicle {
 
     public getVehicle(): THREE.Mesh {
         return this.vehicle;
+    }
+
+    public getLength(): number {
+        return this.size.length;
+    }
+
+    public getWidth(): number {
+        return this.size.width;
+    }
+
+    public setSize(size: { width: number, length: number }) {
+        this.size.length = Settings.SCENE_SCALE * size.length;
+        this.size.width = Settings.SCENE_SCALE * size.width;
+        console.log(this.size);
     }
 
     public setBoundingBox(boundingBox: Mesh) {
