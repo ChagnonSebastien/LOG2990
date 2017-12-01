@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, Object3D, Vector3 } from 'three';
+import { Scene, PerspectiveCamera, Object3D } from 'three';
 
 const WEIGHT = 300;
 const HEIGHT = 150;
