@@ -1,9 +1,10 @@
+import { Vector3 } from 'three';
 import { DriveModifier } from './drive-modifier';
 import { Settings } from '../settings';
 
 export class PotholeModifier extends DriveModifier {
-    public getModifiedSpeed(speed: number) {
-        return Math.max(0.5, speed);
+    public getModifiedSpeed(speed: Vector3): Vector3 {
+        return speed.clone().clampLength(0, Math.max(0.5, speed.length()));
     }
 
     public getVerticalPositionModifier() {

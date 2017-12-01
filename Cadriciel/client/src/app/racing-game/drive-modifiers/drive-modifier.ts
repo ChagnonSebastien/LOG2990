@@ -1,3 +1,5 @@
+import { Vector3 } from 'three';
+
 export abstract class DriveModifier {
     private activeTime: number;
 
@@ -5,7 +7,7 @@ export abstract class DriveModifier {
         this.activeTime = 0;
     }
 
-    public abstract getModifiedSpeed(speed: number);
+    public abstract getModifiedSpeed(speed: Vector3): Vector3;
 
     public abstract getVerticalPositionModifier();
 

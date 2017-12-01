@@ -1,7 +1,8 @@
 import { DriveModifier } from './drive-modifier';
+import { Vector3 } from 'three';
 
 export class NoModifier extends DriveModifier {
-    public getModifiedSpeed(speed: number) {
+    public getModifiedSpeed(speed: Vector3): Vector3 {
         return speed;
     }
 
