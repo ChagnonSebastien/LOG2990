@@ -10,7 +10,7 @@ export class CameraService {
 
     public perspectiveCamera: PerspectiveCamera;
 
-    private orthographicCamera: OrthographicCamera;
+    public orthographicCamera: OrthographicCamera;
 
     public objectToFollow: Mesh;
 

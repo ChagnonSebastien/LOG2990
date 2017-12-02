@@ -1,3 +1,4 @@
+import { RaceService } from './race.service';
 import { FrameEventService, FrameEvent } from './events/frame-event.service';
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation/terrain-generation.service';
@@ -19,7 +20,8 @@ export class RenderService {
         private cameraService: CameraService,
         private terrainGenerationService: TerrainGenerationService,
         private sceneService: RacingSceneService,
-        private frameEventService: FrameEventService
+        private frameEventService: FrameEventService,
+        private raceService: RaceService
     ) {}
 
     public loadTrack(track) {
@@ -33,13 +35,21 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
+        this.renderer.autoClear = false; // to render second scene
         this.render();
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.frameEventService.sendFrameEvent(new FrameEvent());
+
+        this.renderer.clear();
+        this.renderer.setViewport(0, 0, 1866, 1186);
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
+
+        this.renderer.clearDepth();
+        this.renderer.setViewport(10, 10, 500, 500);
+        this.renderer.render(this.raceService.sceneHud, this.raceService.cameraHud);
         this.stats.update();
     }
 
