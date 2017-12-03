@@ -12,7 +12,7 @@ import { VehicleRotateEventService } from './events/vehicle-rotate-event.service
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { Track } from './track';
 
-class MockController extends Controller {}
+class MockController extends Controller { }
 
 let controller: Controller;
 
