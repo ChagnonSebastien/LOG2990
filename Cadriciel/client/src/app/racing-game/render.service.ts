@@ -44,11 +44,11 @@ export class RenderService {
         this.frameEventService.sendFrameEvent(new FrameEvent());
 
         this.renderer.clear();
-        this.renderer.setViewport(0, 0, 1866, 1186);
+        this.renderer.setViewport(0, 0, 1866, 1186 / 2);
         this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
 
         this.renderer.clearDepth();
-        this.renderer.setViewport(10, 10, 500, 500);
+        this.renderer.setViewport(0, 1186 / 2, 1866, 1186 / 2);
         this.renderer.render(this.raceService.sceneHud, this.raceService.cameraHud);
         this.stats.update();
     }
