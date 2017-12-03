@@ -77,7 +77,7 @@ module Route {
 
         public endGameUpdate(req: express.Request, res: express.Response, next: express.NextFunction) {
             let tempRating: number;
-            let tempBestTimes: number[];
+            let tempBestTimes: { playerName: string, time: number }[];
             let tempNbOfTimesPlayed: number;
             MongoClient.connect(url, (err, db) => {
                 if (err) {

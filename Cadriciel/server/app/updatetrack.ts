@@ -4,28 +4,37 @@ export module UpdateTrack {
         return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);
     }
 
-   export function updateBestTimes (arrayBestTimes: number[], newtime: number ): number[] {
+   export function updateBestTimes (arrayBestTimes: { playerName: string, time: number }[],
+                                    newData: { playerName: string, time: number } ):
+                                    { playerName: string, time: number }[] {
         const fifthBestTimes = 5;
 
         if (arrayBestTimes.length < fifthBestTimes ) {
-            arrayBestTimes.push(newtime);
-            arrayBestTimes.sort((a, b) => {
-                return a - b;
-            });
-           return arrayBestTimes;
+            arrayBestTimes.push(newData);
+            sort(arrayBestTimes);
 
        } else {
-            arrayBestTimes.sort((a, b) => {
-                    return a - b;
-            });
+            sort(arrayBestTimes);
             arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
-            if (newtime < arrayBestTimes[arrayBestTimes.length - 1]) {
-                arrayBestTimes[arrayBestTimes.length - 1] = newtime;
+            if (newData.time < arrayBestTimes[arrayBestTimes.length - 1].time) {
+                arrayBestTimes[arrayBestTimes.length - 1] = newData;
             }
-            arrayBestTimes.sort((a, b) => {
-                return a - b;
-            });
-            return arrayBestTimes;
+            sort(arrayBestTimes);
         }
+        return arrayBestTimes;
    }
+
+    function sort(array: { playerName: string, time: number }[]) {
+        let tempElement: { playerName: string, time: number };
+
+        for (let i = 0; i < array.length - 1; i++) {
+            for (let j = 0; j < array.length - 1; j++) {
+                if (array[j].time > array[j + 1].time) {
+                    tempElement = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = tempElement;
+                }
+            }
+        }
+    }
 }
