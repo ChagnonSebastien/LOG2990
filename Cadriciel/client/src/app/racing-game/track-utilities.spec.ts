@@ -8,13 +8,6 @@ describe('TrackUtilities Module', () => {
         expect(TrackUtilities.calculateDistanceFromIntersection(vectorFrom, vectorTo)).toEqual(1);
     });
 
-    it('When car is at (0,0,0) and intersection at (0,3), should detect car is at intersection', () => {
-        const intersection = new THREE.Vector2(0, 3);
-        const carPosition = new THREE.Vector3(0, 0, 0);
-
-        expect(TrackUtilities.isAtIntersection(carPosition, intersection)).toBeTruthy();
-    });
-
     // --- TODO AFTER REFACTORING: test getIntersections(), numberOfIntersecionts and getVehiclePosition --- //
 
 });

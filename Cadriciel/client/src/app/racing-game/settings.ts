@@ -18,7 +18,6 @@ export module Settings {
     export const CAMERA_ZOOM_CHANGE = 0.05;
 
     export const VEHICLE_NAME = 'vehicle';
-    export const MAX_CORNER_LENGTH_FROM_INTERSECTION = 26; // 10*sqrt(1+(1/sqrt(2))
 
     export const HUD_HEIGHT_RATIO = 0.8;
     export const HUD_INVERSE_HEIGHT_RATIO = 0.2;
