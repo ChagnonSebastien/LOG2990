@@ -60,8 +60,36 @@ export class RaceService {
         const plane = new THREE.Mesh( planeGeometry, material );
         this.sceneHud.add( plane );
       
+        // laps to go
+        const lapGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
+        const lapMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+        const lapMesh = new THREE.Mesh(lapGeometry, lapMaterial);
+        lapMesh.position.x = -width * 0.4;
+
+        this.sceneHud.add(lapMesh);
         
-        
-        
+        // current position
+        const positionGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
+        const positionMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+        const positionMesh = new THREE.Mesh(positionGeometry, positionMaterial);
+        positionMesh.position.x = -width * 0.15;
+
+        this.sceneHud.add(positionMesh);
+
+        // lap time
+        const lapTimeGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
+        const lapTimeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+        const lapTimeMesh = new THREE.Mesh(lapTimeGeometry, lapTimeMaterial);
+        lapTimeMesh.position.x = width * 0.15;
+
+        this.sceneHud.add(lapTimeMesh);
+
+        // race time
+        const raceTimeGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
+        const raceTimeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+        const raceTimeMesh = new THREE.Mesh(raceTimeGeometry, raceTimeMaterial);
+        raceTimeMesh.position.x = width * 0.4;
+
+        this.sceneHud.add(raceTimeMesh);
     }
 }
