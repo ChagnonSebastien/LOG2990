@@ -182,13 +182,13 @@ export class RaceMediator {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle> event.getObject();
-            this.racingSceneService.light.addLightsToVehicle(vehicle.getVehicle());
+            this.racingSceneService.light.addLightsToVehicle(vehicle.getMesh());
             this.racingSceneService.light.hideLightsVehicle();
-            this.racingSceneService.addObject(vehicle.getVehicle());
+            this.racingSceneService.addObject(vehicle.getMesh());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {
-                this.cameraService.initializeCameras(vehicle.getVehicle());
+                this.cameraService.initializeCameras(vehicle.getMesh());
             }
         }
 
