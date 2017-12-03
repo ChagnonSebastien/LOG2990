@@ -103,7 +103,7 @@ export class CameraService {
             this.perspectiveCamera.position.z - this.objectToFollow.position.z
         );
 
-        if ( referencePosition.length() > Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE ) {
+        if (referencePosition.length() > Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE) {
             referencePosition.clampLength(0, Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE);
 
             this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;

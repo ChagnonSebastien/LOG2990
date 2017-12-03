@@ -14,7 +14,7 @@ export class ObstacleCollisionDetectionService {
     constructor(
         private obstacleCollisionEventService: ObstacleCollisionEventService,
         private obstacleService: ObstaclePositionService
-    ) {}
+    ) { }
 
     public detectCollision(event: VehicleMoveEvent) {
         this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Pothole);

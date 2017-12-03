@@ -9,7 +9,7 @@ describe('test AudioService', function () {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [ RaceEventService ]
+            providers: [RaceEventService]
         });
         audioService = new AudioService(TestBed.get(RaceEventService));
     });

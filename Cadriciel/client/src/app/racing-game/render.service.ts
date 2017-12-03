@@ -24,7 +24,7 @@ export class RenderService {
         private sceneService: RacingSceneService,
         private frameEventService: FrameEventService,
         private raceService: RaceHudService
-    ) {}
+    ) { }
 
     public loadTrack(track) {
         this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
