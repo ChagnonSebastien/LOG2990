@@ -9,11 +9,11 @@ enum View { PERSPECTIVE, ORTHOGRAPHIC }
 export class CameraService {
     private currentView: View;
 
-    private perspectiveCamera: PerspectiveCamera;
+    public perspectiveCamera: PerspectiveCamera;
 
-    private orthographicCamera: OrthographicCamera;
+    public orthographicCamera: OrthographicCamera;
 
-    private objectToFollow: Mesh;
+    public objectToFollow: Mesh;
 
     private zoomLevel: number;
     public rearCamera: RearView;
@@ -57,7 +57,7 @@ export class CameraService {
         );
     }
 
-    private instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
+    public instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
         const orthographicCamera = new OrthographicCamera(
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,
