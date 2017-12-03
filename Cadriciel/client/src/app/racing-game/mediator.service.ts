@@ -1,5 +1,4 @@
 import { Settings } from './settings';
-import { OrthographicCamera } from 'three';
 import { RaceService } from './race.service';
 import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
