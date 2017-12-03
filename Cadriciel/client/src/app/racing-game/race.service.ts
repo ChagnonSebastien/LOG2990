@@ -33,10 +33,16 @@ export class RaceService {
           hudBitmap.font = 'Normal 40px Arial';
         hudBitmap.textAlign = 'center';
         hudBitmap.fillStyle = 'rgba(245,245,245,0.75)';
-        hudBitmap.fillText('Initializing...', width / 2, height / 2);
+        hudBitmap.fillText('Initializing...', width / 2, height * 0.75);
 
+        const aspectRatio = width / height;
         // Create the camera and set the viewport to match the screen dimensions.
-        this.cameraHud = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0, 30 );
+        this.cameraHud = new THREE.OrthographicCamera(Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / 2,
+            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / -2,
+            Settings.CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
+            Settings.CAMERA_ORTHOGRAPHIC_FAR_CLIPPING_PANE * Settings.SCENE_SCALE);
       
         // Create also a custom scene for HUD.
         this.sceneHud = new THREE.Scene();
