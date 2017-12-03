@@ -30,10 +30,10 @@ export class RaceService {
 
         // Get 2D context and draw something supercool.
         const hudBitmap = hudCanvas.getContext('2d');
-          hudBitmap.font = 'Normal 40px Arial';
+          hudBitmap.font = 'Normal 100px Arial';
         hudBitmap.textAlign = 'center';
         hudBitmap.fillStyle = 'rgba(245,245,245,0.75)';
-        hudBitmap.fillText('Initializing...', width / 2, height * 0.75);
+        hudBitmap.fillText('Initializing...', width / 2, height * 0.5);
 
         const aspectRatio = width / height;
         // Create the camera and set the viewport to match the screen dimensions.
