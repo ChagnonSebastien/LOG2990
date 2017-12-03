@@ -1,4 +1,4 @@
-import { RaceService } from './race.service';
+import { RaceHudService } from './race-hud.service';
 import { FrameEventService, FrameEvent } from './events/frame-event.service';
 import { Track } from './track';
 import { TerrainGenerationService } from './terrain-generation/terrain-generation.service';
@@ -20,7 +20,7 @@ export class RenderService {
         private terrainGenerationService: TerrainGenerationService,
         private sceneService: RacingSceneService,
         private frameEventService: FrameEventService,
-        private raceService: RaceService
+        private raceService: RaceHudService
     ) {}
 
     public loadTrack(track) {

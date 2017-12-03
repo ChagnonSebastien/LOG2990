@@ -1,5 +1,5 @@
 import { Settings } from './settings';
-import { RaceService } from './race.service';
+import { RaceHudService } from './race-hud.service';
 import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
@@ -45,7 +45,7 @@ export class RaceMediator {
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
         private raceEventService: RaceEventService,
-        private raceService: RaceService,
+        private raceService: RaceHudService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -213,19 +213,11 @@ export class RaceMediator {
         if (event.lap === Settings.TOTAL_LAPS) {
             this.raceEventService.endRace();
         }
-        this.updateHud(event);
+        this.raceService.updateHud(event.lap);
     }
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         console.log('race ended');
     }
 
-    private updateHud(event: LapEvent) {
-        this.raceService.hudBitmap.clearRect(0, 0, this.raceService.hudCanvas.width, this.raceService.hudCanvas.height);
-        this.raceService.hudBitmap.fillText(event.lap.toString() + '/' + Settings.TOTAL_LAPS.toString(),
-            this.raceService.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET,
-            this.raceService.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
-        );
-        this.raceService.hudTexture.needsUpdate = true;
-    }
 }

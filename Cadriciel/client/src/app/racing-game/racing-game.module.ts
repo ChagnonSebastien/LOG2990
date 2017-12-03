@@ -1,4 +1,4 @@
-import { RaceService } from './race.service';
+import { RaceHudService } from './race-hud.service';
 import { LapEventService } from './events/lap-event.service';
 import { ControllerFactory } from './controller-factory.service';
 import { FrameEventService } from './events/frame-event.service';
@@ -90,7 +90,7 @@ import {CollisionResolveService} from './collision-resolve.service';
         LapEventService,
         CollisionResolveService,
         ControllerFactory,
-        RaceService
+        RaceHudService
     ]
 })
 export class RacingGameModule {
