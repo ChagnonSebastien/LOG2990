@@ -7,13 +7,12 @@ import * as THREE from 'three';
 import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingSceneService } from './racing-scene.service';
+import { Settings } from './settings';
 
 @Injectable()
 export class RenderService {
     public container: HTMLElement;
-
     private stats: Stats;
-
     private renderer: THREE.WebGLRenderer;
 
     constructor(
@@ -35,21 +34,28 @@ export class RenderService {
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
         this.container.appendChild(this.renderer.domElement);
-        this.renderer.autoClear = false; // to render second scene
+        this.renderer.autoClear = false;
         this.render();
+    }
+
+    private renderGame(): void {
+        this.renderer.clear();
+        this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight * Settings.HUD_HEIGHT_RATIO);
+        this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
+    }
+
+    private renderHud(): void {
+        this.renderer.clearDepth();
+        this.renderer.setViewport(0, this.container.clientHeight * Settings.HUD_HEIGHT_RATIO,
+            this.container.clientWidth, this.container.clientHeight * Settings.HUD_INVERSE_HEIGHT_RATIO);
+        this.renderer.render(this.raceService.sceneHud, this.raceService.cameraHud);
     }
 
     private render() {
         requestAnimationFrame(() => this.render());
         this.frameEventService.sendFrameEvent(new FrameEvent());
-
-        this.renderer.clear();
-        this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight * 0.80);
-        this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
-
-        this.renderer.clearDepth();
-        this.renderer.setViewport(0, this.container.clientHeight * 0.80, this.container.clientWidth, this.container.clientHeight * 0.20);
-        this.renderer.render(this.raceService.sceneHud, this.raceService.cameraHud);
+        this.renderGame();
+        this.renderHud();
         this.stats.update();
     }
 

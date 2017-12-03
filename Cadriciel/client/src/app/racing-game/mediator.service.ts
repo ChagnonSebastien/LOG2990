@@ -1,3 +1,4 @@
+import { Settings } from './settings';
 import { OrthographicCamera } from 'three';
 import { RaceService } from './race.service';
 import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
@@ -210,17 +211,22 @@ export class RaceMediator {
     }
 
     private handleLapEvent(event: LapEvent) {
-        if (event.lap === 3) {
-            console.log('Race ends');
+        if (event.lap === Settings.TOTAL_LAPS) {
             this.raceEventService.endRace();
         }
-        this.raceService.hudBitmap.clearRect(0, 0, this.raceService.hudCanvas.width, this.raceService.hudCanvas.height);
-        this.raceService.hudBitmap.fillText(event.lap.toString() + '/3',  this.raceService.hudCanvas.width * 0.1, this.raceService.hudCanvas.height * 0.55);
-        this.raceService.hudTexture.needsUpdate = true;
-        console.log('LAP: ', event.lap);
+        this.updateHud(event);
     }
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         console.log('race ended');
+    }
+
+    private updateHud(event: LapEvent) {
+        this.raceService.hudBitmap.clearRect(0, 0, this.raceService.hudCanvas.width, this.raceService.hudCanvas.height);
+        this.raceService.hudBitmap.fillText(event.lap.toString() + '/' + Settings.TOTAL_LAPS.toString(),
+            this.raceService.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET,
+            this.raceService.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+        );
+        this.raceService.hudTexture.needsUpdate = true;
     }
 }

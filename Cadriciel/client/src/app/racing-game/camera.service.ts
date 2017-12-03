@@ -55,7 +55,7 @@ export class CameraService {
         );
     }
 
-    private instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
+    public instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
         const orthographicCamera = new OrthographicCamera(
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,

@@ -1,103 +1,85 @@
+import { CameraService } from './camera.service';
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
 import * as THREE from 'three';
 
-const HUB = 'hub';
 @Injectable()
 export class RaceService {
-    public planeHud: THREE.Mesh;
     public sceneHud: THREE.Scene;
     public cameraHud: THREE.OrthographicCamera;
     public hudCanvas: HTMLCanvasElement;
     public hudBitmap: CanvasRenderingContext2D;
     public hudTexture: THREE.Texture;
 
-    constructor() {
-        this.initializeHub();
+    constructor(private cameraService: CameraService) {
+        this.initializeHud();
     }
 
-    private initializeHub() {
-        /*const geometry = new THREE.PlaneGeometry(10 * Settings.SCENE_SCALE, 5 * Settings.SCENE_SCALE, 32 * Settings.SCENE_SCALE);
-        const material = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide});
-        this.planeHud = new THREE.Mesh(geometry, material);
-        this.planeHud.name = HUB;*/
-        
-        this.hudCanvas = document.createElement('canvas');
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        console.log('window inner width: ', width);
-        console.log('window inner height: ', height);
-        // Again, set dimensions to fit the screen.
-        this.hudCanvas.width = width;
-        this.hudCanvas.height = height;
-
-        // Get 2D context and draw something supercool.
-        this.hudBitmap = this.hudCanvas.getContext('2d');
-        this.hudBitmap.font = 'Bold 200px Arial';
-        this.hudBitmap.textAlign = 'center';
-        this.hudBitmap.fillStyle = 'rgba(245,245,245,0.75)';
-        this.hudBitmap.fillText('0/3', width * 0.1, height * 0.55);
-    
-        //this.hudBitmap.clearRect(0,0,width, height);
-
-        const aspectRatio = width / height;
-        // Create the camera and set the viewport to match the screen dimensions.
-        this.cameraHud = new THREE.OrthographicCamera(Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
-            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,
-            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / 2,
-            Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / aspectRatio / -2,
-            Settings.CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
-            Settings.CAMERA_ORTHOGRAPHIC_FAR_CLIPPING_PANE * Settings.SCENE_SCALE);
-      
-        // Create also a custom scene for HUD.
+    private initializeHud() {
+        this.initializeCanva();
+        this.initializeBitmap();
         this.sceneHud = new THREE.Scene();
-       
-          // Create texture from rendered graphics.
-          this.hudTexture = new THREE.Texture(this.hudCanvas) ;
-          this.hudTexture.needsUpdate = true;
-        
-        // Create HUD material.
+        this.initializeCamera();
+        this.initializePlane();
+        this.initializeRaceInformations();
+    }
+
+    private initializeCanva(): void {
+        this.hudCanvas = document.createElement('canvas');
+        this.hudCanvas.width = window.innerWidth;
+        this.hudCanvas.height = window.innerHeight;
+    }
+
+    private initializeBitmap(): void {
+        this.hudBitmap = this.hudCanvas.getContext('2d');
+        this.hudBitmap.font = Settings.HUD_BITMAP_FONT;
+        this.hudBitmap.textAlign = Settings.HUD_BITMAP_TEXT_ALIGN;
+        this.hudBitmap.fillStyle = Settings.HUD_BITMAP_FILLSTYLE;
+        this.hudBitmap.fillText(Settings.HUD_START_LAP_COUNTDOWN,
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+    }
+
+    private initializeCamera(): void {
+        const aspectRatio = this.hudCanvas.width / this.hudCanvas.height;
+        this.cameraHud = this.cameraService.instansiateOrthographicCamera(aspectRatio);
+        this.cameraHud.rotation.x = 0;
+    }
+
+    private initializePlane(): void {
+        this.hudTexture = new THREE.Texture(this.hudCanvas) ;
+        this.hudTexture.needsUpdate = true;
         const material = new THREE.MeshBasicMaterial( {map: this.hudTexture} );
         material.transparent = true;
-      
-        // Create plane to render the HUD. This plane fill the whole screen.
-        const planeGeometry = new THREE.PlaneGeometry( width, height );
+        const planeGeometry = new THREE.PlaneGeometry( this.hudCanvas.width, this.hudCanvas.height);
         const plane = new THREE.Mesh( planeGeometry, material );
         this.sceneHud.add( plane );
-      
+    }
+
+    private initializeRaceInformations(): void {
+        const raceInformationsGeometry = new THREE.PlaneGeometry(this.hudCanvas.width * Settings.HUD_RACE_INFO_GEOMETRY_WIDTH_RATIO,
+            this.hudCanvas.width * Settings.HUD_RACE_INFO_GEOMETRY_HEIGHT_RATIO);
+        const raceInformationsMaterial = new THREE.MeshBasicMaterial({color: Settings.RED, side: THREE.DoubleSide});
+
         // laps to go
-        const lapGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
-        const lapMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
-        const lapMesh = new THREE.Mesh(lapGeometry, lapMaterial);
-        lapMesh.position.x = -width * 0.4;
-
+        const lapMesh = new THREE.Mesh(raceInformationsGeometry, raceInformationsMaterial);
+        lapMesh.position.x = -this.hudCanvas.width * Settings.HUD_RACE_INFO_BOX_LEFT_OFFSET;
         this.sceneHud.add(lapMesh);
-        
-        // current position
-        const positionGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
-        const positionMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
-        const positionMesh = new THREE.Mesh(positionGeometry, positionMaterial);
-        positionMesh.position.x = -width * 0.15;
 
+        // current position
+        const positionMesh = new THREE.Mesh(raceInformationsGeometry, raceInformationsMaterial);
+        positionMesh.position.x = -this.hudCanvas.width * Settings.HUD_RACE_INFO_BOX_RIGHT_OFFSET;
         this.sceneHud.add(positionMesh);
 
         // lap time
-        const lapTimeGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
-        const lapTimeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
-        const lapTimeMesh = new THREE.Mesh(lapTimeGeometry, lapTimeMaterial);
-        lapTimeMesh.position.x = width * 0.15;
-
+        const lapTimeMesh = new THREE.Mesh(raceInformationsGeometry, raceInformationsMaterial);
+        lapTimeMesh.position.x = this.hudCanvas.width * Settings.HUD_RACE_INFO_BOX_RIGHT_OFFSET;
         this.sceneHud.add(lapTimeMesh);
 
         // race time
-        const raceTimeGeometry = new THREE.PlaneGeometry(width / 5, height * 0.75);
-        const raceTimeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
-        const raceTimeMesh = new THREE.Mesh(raceTimeGeometry, raceTimeMaterial);
-        raceTimeMesh.position.x = width * 0.4;
-
+        const raceTimeMesh = new THREE.Mesh(raceInformationsGeometry, raceInformationsMaterial);
+        raceTimeMesh.position.x = this.hudCanvas.width * Settings.HUD_RACE_INFO_BOX_LEFT_OFFSET;
         this.sceneHud.add(raceTimeMesh);
     }
 
 
-    
 }
