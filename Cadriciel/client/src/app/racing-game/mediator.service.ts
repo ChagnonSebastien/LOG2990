@@ -214,6 +214,9 @@ export class RaceMediator {
             console.log('Race ends');
             this.raceEventService.endRace();
         }
+        this.raceService.hudBitmap.clearRect(0, 0, this.raceService.hudCanvas.width, this.raceService.hudCanvas.height);
+        this.raceService.hudBitmap.fillText(event.lap.toString() + '/3',  this.raceService.hudCanvas.width * 0.1, this.raceService.hudCanvas.height * 0.55);
+        this.raceService.hudTexture.needsUpdate = true;
         console.log('LAP: ', event.lap);
     }
 

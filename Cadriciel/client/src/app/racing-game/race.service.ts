@@ -8,6 +8,9 @@ export class RaceService {
     public planeHud: THREE.Mesh;
     public sceneHud: THREE.Scene;
     public cameraHud: THREE.OrthographicCamera;
+    public hudCanvas: HTMLCanvasElement;
+    public hudBitmap: CanvasRenderingContext2D;
+    public hudTexture: THREE.Texture;
 
     constructor() {
         this.initializeHub();
@@ -19,21 +22,23 @@ export class RaceService {
         this.planeHud = new THREE.Mesh(geometry, material);
         this.planeHud.name = HUB;*/
         
-        const hudCanvas = document.createElement('canvas');
+        this.hudCanvas = document.createElement('canvas');
         const width = window.innerWidth;
         const height = window.innerHeight;
         console.log('window inner width: ', width);
         console.log('window inner height: ', height);
         // Again, set dimensions to fit the screen.
-        hudCanvas.width = width;
-        hudCanvas.height = height;
+        this.hudCanvas.width = width;
+        this.hudCanvas.height = height;
 
         // Get 2D context and draw something supercool.
-        const hudBitmap = hudCanvas.getContext('2d');
-          hudBitmap.font = 'Normal 100px Arial';
-        hudBitmap.textAlign = 'center';
-        hudBitmap.fillStyle = 'rgba(245,245,245,0.75)';
-        hudBitmap.fillText('Initializing...', width / 2, height * 0.5);
+        this.hudBitmap = this.hudCanvas.getContext('2d');
+        this.hudBitmap.font = 'Bold 200px Arial';
+        this.hudBitmap.textAlign = 'center';
+        this.hudBitmap.fillStyle = 'rgba(245,245,245,0.75)';
+        this.hudBitmap.fillText('0/3', width * 0.1, height * 0.55);
+    
+        //this.hudBitmap.clearRect(0,0,width, height);
 
         const aspectRatio = width / height;
         // Create the camera and set the viewport to match the screen dimensions.
@@ -48,11 +53,11 @@ export class RaceService {
         this.sceneHud = new THREE.Scene();
        
           // Create texture from rendered graphics.
-          const hudTexture = new THREE.Texture(hudCanvas) ;
-          hudTexture.needsUpdate = true;
+          this.hudTexture = new THREE.Texture(this.hudCanvas) ;
+          this.hudTexture.needsUpdate = true;
         
         // Create HUD material.
-        const material = new THREE.MeshBasicMaterial( {map: hudTexture} );
+        const material = new THREE.MeshBasicMaterial( {map: this.hudTexture} );
         material.transparent = true;
       
         // Create plane to render the HUD. This plane fill the whole screen.
@@ -92,4 +97,7 @@ export class RaceService {
 
         this.sceneHud.add(raceTimeMesh);
     }
+
+
+    
 }
