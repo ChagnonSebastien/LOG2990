@@ -121,7 +121,6 @@ export class RaceMediator {
             this.lapcounterService.updateLapCounter();
         }
 
-        this.raceService.updateHud(this.raceService.currentLap);
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -145,7 +144,6 @@ export class RaceMediator {
 
             case PlayerCommand.START_GAME:
             this.countdownService.startCountdown();
-            this.raceService.startTimer();
             break;
 
             case PlayerCommand.ZOOM_IN:
@@ -176,6 +174,7 @@ export class RaceMediator {
         if (event.getNewAmount() === 0) {
             this.racingSceneService.removeObjectByName('countdown');
             this.countdownService.startGame();
+            this.raceService.startTimer();
         }
     }
 
@@ -221,6 +220,7 @@ export class RaceMediator {
         if (event.lap === Settings.TOTAL_LAPS) {
             this.raceEventService.endRace();
         }
+        this.raceService.resetLapTimer();
         this.raceService.updateHud(event.lap);
     }
 
