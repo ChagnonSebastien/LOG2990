@@ -120,6 +120,7 @@ export class RaceMediator {
         if (this.vehicleService.getVehicles() !== undefined) {
             this.lapcounterService.updateLapCounter();
         }
+
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -173,6 +174,7 @@ export class RaceMediator {
         if (event.getNewAmount() === 0) {
             this.racingSceneService.removeObjectByName('countdown');
             this.countdownService.startGame();
+            this.raceService.startTimer();
         }
     }
 
@@ -218,6 +220,7 @@ export class RaceMediator {
         if (event.lap === Settings.TOTAL_LAPS) {
             this.raceEventService.endRace();
         }
+        this.raceService.resetLapTimer();
         this.raceService.updateHud(event.lap);
     }
 

@@ -1,6 +1,7 @@
 import { CameraService } from './camera.service';
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
+import { Observable } from 'rxjs/Rx';
 import * as THREE from 'three';
 
 @Injectable()
@@ -10,8 +11,14 @@ export class RaceHudService {
     public hudCanvas: HTMLCanvasElement;
     public hudBitmap: CanvasRenderingContext2D;
     public hudTexture: THREE.Texture;
+    public timer: number;
+    public currentLap: number;
+    public lapTimer: number;
 
     constructor(private cameraService: CameraService) {
+        this.timer = 0.0;
+        this.currentLap = 0;
+        this.lapTimer = 0.0;
         this.initializeHud();
     }
 
@@ -37,6 +44,10 @@ export class RaceHudService {
         this.hudBitmap.fillStyle = Settings.HUD_BITMAP_FILLSTYLE;
         this.hudBitmap.fillText(Settings.HUD_START_LAP_COUNTDOWN,
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+        this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+        this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
     }
 
     private initializeCamera(): void {
@@ -97,6 +108,27 @@ export class RaceHudService {
             this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
         this.hudTexture.needsUpdate = true;
+        this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+        );
+        this.hudTexture.needsUpdate = true;
+        this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
+        this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+        );
+        this.hudTexture.needsUpdate = true;
+        this.currentLap = lap;
+    }
+
+    public startTimer(): void {
+        const timer = Observable.timer(0, 10).map(() => this.timer = this.timer + 0.01);
+        timer.subscribe((time: number) => {
+            this.lapTimer = this.lapTimer + 0.01;
+            this.updateHud(this.currentLap);
+        });
+    }
+
+    public resetLapTimer(): void {
+        this.lapTimer = 0;
     }
 
 }
