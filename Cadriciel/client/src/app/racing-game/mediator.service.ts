@@ -120,6 +120,8 @@ export class RaceMediator {
         if (this.vehicleService.getVehicles() !== undefined) {
             this.lapcounterService.updateLapCounter();
         }
+
+        this.raceService.updateHud(this.raceService.currentLap);
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -143,6 +145,7 @@ export class RaceMediator {
 
             case PlayerCommand.START_GAME:
             this.countdownService.startCountdown();
+            this.raceService.startTimer();
             break;
 
             case PlayerCommand.ZOOM_IN:

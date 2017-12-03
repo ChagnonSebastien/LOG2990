@@ -10,8 +10,13 @@ export class RaceHudService {
     public hudCanvas: HTMLCanvasElement;
     public hudBitmap: CanvasRenderingContext2D;
     public hudTexture: THREE.Texture;
+    public timer: THREE.Clock;
+    public currentLap: number;
 
     constructor(private cameraService: CameraService) {
+        this.timer = new THREE.Clock();
+        this.timer.autoStart = false;
+        this.currentLap = 0;
         this.initializeHud();
     }
 
@@ -37,6 +42,8 @@ export class RaceHudService {
         this.hudBitmap.fillStyle = Settings.HUD_BITMAP_FILLSTYLE;
         this.hudBitmap.fillText(Settings.HUD_START_LAP_COUNTDOWN,
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+        this.hudBitmap.fillText(this.timer.elapsedTime.toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
     }
 
     private initializeCamera(): void {
@@ -97,6 +104,18 @@ export class RaceHudService {
             this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
         this.hudTexture.needsUpdate = true;
+        this.hudBitmap.fillText(this.timer.elapsedTime.toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+        this.hudTexture.needsUpdate = true;
+        this.currentLap = lap;
+    }
+
+    public startTimer(): void {
+        this.timer.start();
+    }
+
+    public updateTimer(): void {
+
     }
 
 }

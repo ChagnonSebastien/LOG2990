@@ -60,7 +60,7 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
-        this.renderer.enableScissorTest(false);
+        this.renderer.setScissorTest(false);
         this.cameraService.cameraOnMoveWithObject();
 
         this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight);
