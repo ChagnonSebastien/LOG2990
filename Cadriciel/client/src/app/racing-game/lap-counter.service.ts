@@ -29,25 +29,7 @@ export class LapCounterService {
         this.passedCounter = new Array<number>(numberOfIntersections).fill(0);
     }
 
-    /*private updatePassedCounter(): void {
-        const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
-        const position = this.vehicleService.getMainVehicle().getVehicle().position;
-        const nextIntersectionNumber = (this.lastVisitedIntersectionNumber + 1) % numberOfIntersections;
-        const previousIntersectionNumber = MathUtilities
-            .negativeSafeModulo((this.lastVisitedIntersectionNumber - 1), numberOfIntersections);
-        const nextIntersection = this.racingGameService.getTrack().trackIntersections[nextIntersectionNumber];
-        const previousIntersection = this.racingGameService.getTrack().trackIntersections[previousIntersectionNumber];
-        if (TrackUtilities.isAtIntersection(position, nextIntersection)) {
-            this.passedCounter[nextIntersectionNumber]++;
-            this.lastVisitedIntersectionNumber = nextIntersectionNumber;
-        } else if (TrackUtilities.isAtIntersection(position, previousIntersection)) {
-            this.passedCounter[previousIntersectionNumber]--;
-            this.lastVisitedIntersectionNumber = previousIntersectionNumber;
-        }
-    }*/
-
     private updatePassedCounter(): void {
-        const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
         switch (this.currentZone()) {
             case Zone.NEXT:
                 this.passedCounter[this.nextIntersectionNumber()]++;
