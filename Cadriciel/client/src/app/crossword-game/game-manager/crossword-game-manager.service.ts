@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { CrosswordService } from '../crossword/crossword.service';
 import { CrosswordHintsService } from '../hints/crossword-hints.service';
@@ -32,7 +32,6 @@ export class CrosswordGameManagerService {
         private cheatService: CrosswordCheatService, // Stateful, no need to reset
         private configurationService: CrosswordConfigurationService, // Stateful, no need to reset
         private playerService: CrosswordPlayerService, // Stateful, reset on isHost = false
-        private lobbySerice: CrosswordLobbyService, // Stateful, no need to reset
         private mutationService: CrosswordMutationService // Stateful, no need to reset
     ) {
         this.gameInProgress = false;

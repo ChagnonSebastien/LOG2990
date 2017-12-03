@@ -8,12 +8,15 @@ import Stats = require('stats.js');
 import { CameraService } from './camera.service';
 import { RacingSceneService } from './racing-scene.service';
 import { Settings } from './settings';
+import { RearView } from './rear-view';
 
 @Injectable()
 export class RenderService {
     public container: HTMLElement;
     private stats: Stats;
     private renderer: THREE.WebGLRenderer;
+
+    public activeRearView: boolean;
 
     constructor(
         private cameraService: CameraService,
@@ -25,6 +28,10 @@ export class RenderService {
 
     public loadTrack(track) {
         this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
+    }
+
+    public swapRearWiew() {
+        this.activeRearView = !this.activeRearView;
     }
 
     public startRenderingLoop() {
@@ -53,10 +60,29 @@ export class RenderService {
 
     private render() {
         requestAnimationFrame(() => this.render());
+        this.renderer.enableScissorTest(false);
+        this.cameraService.cameraOnMoveWithObject();
+
+        this.renderer.setViewport(0, 0, this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setScissor(0, 0, this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setScissorTest(true);
+
+        this.renderer.render(this.sceneService.scene, this.cameraService.getCamera());
+
         this.frameEventService.sendFrameEvent(new FrameEvent());
         this.renderGame();
         this.renderHud();
         this.stats.update();
+
+        if (this.activeRearView === true) {
+            this.rearViewRender();
+        }
+
+    }
+
+    public rearViewRender() {
+        this.cameraService.rearCamera = new RearView(this.sceneService.scene, this.renderer);
+        this.cameraService.rearViewCam();
     }
 
     private initStats() {

@@ -28,6 +28,7 @@ import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
 import { Vehicle } from './vehicle';
 
+
 @Injectable()
 export class RaceMediator {
 
@@ -158,6 +159,10 @@ export class RaceMediator {
 
             case PlayerCommand.TOGGLE_NIGHT_MODE:
             this.racingSceneService.toggleNightMode();
+            break;
+
+            case PlayerCommand.REAR_VISIBLE:
+            this.renderService.swapRearWiew();
             break;
         }
     }
