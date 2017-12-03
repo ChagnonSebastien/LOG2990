@@ -26,7 +26,10 @@ export class LineCalculationService {
         }
     }
 
-    public getNearestPointOnLineWithoutClamping(point: THREE.Vector2, line: { point1: THREE.Vector2, point2: THREE.Vector2 }): THREE.Vector2 {
+    public getNearestPointOnLineWithoutClamping(
+        point: THREE.Vector2,
+        line: { point1: THREE.Vector2, point2: THREE.Vector2 }
+    ): THREE.Vector2 {
         const lineParameters = this.getLineParameters(line);
         const permenticularParameters = {
             a: lineParameters.b,
