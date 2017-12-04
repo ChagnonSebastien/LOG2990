@@ -41,7 +41,7 @@ export class CountdownService {
         }
     }
 
-    private startAudio(): void{
+    private startAudio(): void {
         this.audioService.startCountdown();
     }
 
