@@ -24,7 +24,7 @@ import * as THREE from 'three';
 
 let lapCounterService: LapCounterService;
 
-describe ('LapCounterService', function () {
+describe('LapCounterService', function () {
     const track = new Track(
         'name',
         'desc',
@@ -62,8 +62,7 @@ describe ('LapCounterService', function () {
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,
                 ControllerFactory
-            ]
-        });
+            ]});
         lapCounterService = TestBed.get(LapCounterService);
     });
 
