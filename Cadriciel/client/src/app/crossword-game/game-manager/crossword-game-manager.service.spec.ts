@@ -21,6 +21,7 @@ import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { MockCrosswordService } from './mocks/mock-crossword.service';
 import { MockLexiconService } from './mocks/mock-lexicon.service';
 import { MockSocketService } from './mocks/mock-socket.service';
+import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 let gameManagerService: CrosswordGameManagerService;
 
@@ -42,7 +43,8 @@ describe('#CrosswordGameManagerService', () => {
                 CrosswordKeyboardService,
                 { provide: CrosswordSocketService, useClass: MockSocketService },
                 CrosswordPlayerService,
-                { provide: LexiconService, useClass: MockLexiconService }
+                { provide: LexiconService, useClass: MockLexiconService },
+                CrosswordMutationService
             ]
         });
         gameManagerService = TestBed.get(CrosswordGameManagerService);

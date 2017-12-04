@@ -1,7 +1,21 @@
+import { VehicleColor } from './vehicle-color';
+
 export module Settings {
 
     export const SCENE_SCALE = 25;
+    export const TRACK_HEIGHT = 3;
     export const TRACK_RADIUS = 5;
+    export const HUMAN_COLOR = VehicleColor.red;
+
+    export const ASSETS_FOLDER = '/assets';
+    export const SOUND_COUNTDOWN = 'sounds/countdown.mp3';
+    export const SOUND_RACE = 'sounds/race.mp3';
+    export const SOUND_STIGNER = 'sounds/stinger.mp3';
+    export const SOUND_THEMED = 'sounds/themed.mp3';
+    export const PATH_BOUNDING_BOX = 'cart_bounding_box.json';
+    export const PATH_FONT_SAMUEL_REGULAR = 'font_samuel_regular.json';
+
+    export const MUSIC_ENDED_EVENT = 'ended';
 
     export const CAMERA_ORTHOGRAPHIC_HEIGHT = 256 - 64;
     export const CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW = 80;
@@ -35,16 +49,44 @@ export module Settings {
     export const YELLOW = 0xffff00;
     export const TOTAL_LAPS = 3;
 
-    export const COUNTDOWN_FONT = '../../assets/font_samuel_regular.json';
-    export const COUNTDOWN_INITIAL_VALUE = 6;
-    export const COUNTDOWN_Y_POSITION = 23;
+    export const COUNTDOWN_TIME = 6;
+    export const COUNTDOWN_TEXT_SIZE = 200;
+    export const COUNTDOWN_TEXT_HEIGHT = 0;
+    export const COUNTDOWN_TEXT_CURVE_SEGMENTS = 5;
+    export const COUNTDOWN_TEXT_BEVEL_ENABLES = true;
+    export const COUNTDOWN_TEXT_BEVEL_THICKNESS = 10;
+    export const COUNTDOWN_TEXT_BEVEL_SIZE = 1;
+    export const COUNTDOWN_TEXT_COLOR = 0xffff00;
     export const COUNTDOWN_NAME = 'countdown';
-    export const COUNTDOWN_SIZE = 200;
-    export const COUNTDOWN_HEIGHT = 0;
-    export const COUNTDOWN_CURVESEGMENTS = 5;
-    export const COUNTDOWN_BEVEL_ENABLED = true;
-    export const COUNTDOWN_BEVEL_THICKNESS = 10;
-    export const COUNTDOWN_BEVEL_SIZE = 1;
+
+    export const LIGHT_COLOR = 0xffffff;
+
+    export const DRIVE_MODIFIER_NONE_POSITION = 0;
+    export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;
+    export const DRIVE_MODIFIER_NONE_DECELERATION = 1;
+    export const DRIVE_MODIFIER_NONE_ROTATION = 1;
+    export const DRIVE_MODIFIER_NONE_TIME = -1;
+
+    export const DRIVE_MODIFIER_BOOSTER_SPEED_MULTIPLIER = 1.5;
+    export const DRIVE_MODIFIER_BOOSTER_POSITION = 0;
+    export const DRIVE_MODIFIER_BOOSTER_ACCELERATION = 1;
+    export const DRIVE_MODIFIER_BOOSTER_DECELERATION = 0;
+    export const DRIVE_MODIFIER_BOOSTER_ROTATION = 1;
+    export const DRIVE_MODIFIER_BOOSTER_TIME = 60 * 2;
+
+    export const DRIVE_MODIFIER_POTHOLE_MINIMUM_SPEED = 0.5;
+    export const DRIVE_MODIFIER_POTHOLE_DECELERATION = 5;
+    export const DRIVE_MODIFIER_POTHOLE_ACCELERATION = -7.5;
+    export const DRIVE_MODIFIER_POTHOLE_ROTATION = 1;
+    export const DRIVE_MODIFIER_POTHOLE_TIME = 30;
+
+    export const DRIVE_MODIFIER_PUDDLE_MINIMUM_SPEED = 0.5;
+    export const DRIVE_MODIFIER_PUDDLE_POSITION = 0;
+    export const DRIVE_MODIFIER_PUDDLE_ACCELERATION = -1;
+    export const DRIVE_MODIFIER_PUDDLE_DECELERATION = 1;
+    export const DRIVE_MODIFIER_PUDDLE_ROTATION = 0;
+    export const DRIVE_MODIFIER_PUDDLE_TIME = 45;
+
     export const FIRST_INTERSECTION = 0;
     export const SECOND_INTERSECTION = 1;
 }

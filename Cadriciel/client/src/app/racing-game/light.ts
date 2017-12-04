@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Settings } from './settings';
 
 export class Light {
     public hemiLight: THREE.HemisphereLight;
@@ -10,39 +11,30 @@ export class Light {
     public spotLeft: THREE.SpotLight;
 
     constructor() {
-        this.hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.2);
+        this.hemiLight = new THREE.HemisphereLight(Settings.LIGHT_COLOR, Settings.LIGHT_COLOR, 0.2);
         this.hemiLight.color.setHSL(0.6, 1, 0.6);
         this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
         this.hemiLight.position.set(0, 10000, 0);
 
-        this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+        this.dirLight = new THREE.DirectionalLight(Settings.LIGHT_COLOR, 1);
         this.dirLight.color.setHSL(0.1, 1, 0.95);
         this.dirLight.position.set(0, 10000, 0);
         this.dirLight.position.multiplyScalar(30);
-        this.dirLight.castShadow = true;
-        this.dirLight.shadow.mapSize.width = 2048;
-        this.dirLight.shadow.mapSize.height = 2048;
-        this.dirLight.shadow.camera.left = -5000;
-        this.dirLight.shadow.camera.right = 5000;
-        this.dirLight.shadow.camera.top = 5000;
-        this.dirLight.shadow.camera.bottom = -5000;
-        this.dirLight.shadow.camera.far = 10000;
-        this.dirLight.shadow.bias = -0.0001;
     }
 
     public addLightsToVehicle(vehicle: any) {
         const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
-        const matSphereRight = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+        const matSphereRight = new THREE.MeshBasicMaterial({ color: Settings.LIGHT_COLOR });
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
 
         const sphereLeft = new THREE.SphereGeometry(0.15, 16, 8);
-        const matSphereLeft = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+        const matSphereLeft = new THREE.MeshBasicMaterial({ color: Settings.LIGHT_COLOR });
         const headlightLeft = new THREE.Mesh(sphereLeft, matSphereLeft);
 
-        this.spotRight = new THREE.SpotLight(0xFFFFFF);
+        this.spotRight = new THREE.SpotLight(Settings.LIGHT_COLOR);
         this.spotRight.add(headlightRight);
 
-        this.spotLeft = new THREE.SpotLight(0xFFFFFF);
+        this.spotLeft = new THREE.SpotLight(Settings.LIGHT_COLOR);
         this.spotLeft.add(headlightLeft);
 
         const target = new THREE.Object3D();

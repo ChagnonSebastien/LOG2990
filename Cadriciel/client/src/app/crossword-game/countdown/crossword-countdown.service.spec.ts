@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CrosswordCountdownService } from './crossword-countdown.service';
 
 import { GameConfiguration } from '../game-configuration';
+import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 let countdownService: CrosswordCountdownService;
 
@@ -10,7 +11,8 @@ describe('#CrosswordCountdownService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                CrosswordCountdownService
+                CrosswordCountdownService,
+                CrosswordConfigurationService
             ]
         });
         countdownService = TestBed.get(CrosswordCountdownService);

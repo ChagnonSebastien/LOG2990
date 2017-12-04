@@ -3,7 +3,7 @@ import { Settings } from '../settings';
 
 export class PotholeModifier extends DriveModifier {
     public getModifiedSpeed(speed: number) {
-        return Math.max(0.5, speed);
+        return Math.max(Settings.DRIVE_MODIFIER_POTHOLE_MINIMUM_SPEED, speed);
     }
 
     public getVerticalPositionModifier() {
@@ -11,18 +11,18 @@ export class PotholeModifier extends DriveModifier {
     }
 
     public getAccelerationMultiplier() {
-        return -5 * 1.5;
+        return Settings.DRIVE_MODIFIER_POTHOLE_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 5;
+        return Settings.DRIVE_MODIFIER_POTHOLE_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_POTHOLE_ROTATION;
     }
 
     protected getTotalTime() {
-        return 30;
+        return Settings.DRIVE_MODIFIER_POTHOLE_TIME;
     }
 }

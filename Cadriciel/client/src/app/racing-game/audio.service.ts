@@ -1,6 +1,7 @@
 import { RaceEventService } from './events/race-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Injectable } from '@angular/core';
+import { Settings } from './settings';
 
 @Injectable()
 export class AudioService {
@@ -18,13 +19,13 @@ export class AudioService {
     private acceleratorBonusEnd: HTMLAudioElement;
 
     constructor(private raceService: RaceEventService) {
-        this.countdown = new Audio('../../assets/sounds/countdown.mp3');
+        this.countdown = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_COUNTDOWN}`);
         this.countdown.load();
-        this.race = new Audio('../../assets/sounds/race.mp3');
+        this.race = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_RACE}`);
         this.race.load();
-        this.stinger = new Audio('../../assets/sounds/stinger.mp3');
+        this.stinger = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_STIGNER}`);
         this.stinger.load();
-        this.themed = new Audio('../../assets/sounds/themed.mp3');
+        this.themed = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_THEMED}`);
         this.themed.load();
         this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
         this.carCarCollision.load();
@@ -46,7 +47,7 @@ export class AudioService {
     public startCountdown(): void {
         this.countdown.play();
         this.engineStart.play();
-        this.countdown.addEventListener('ended', () => {
+        this.countdown.addEventListener(Settings.MUSIC_ENDED_EVENT, () => {
             this.startRace();
         });
     }
@@ -112,7 +113,7 @@ export class AudioService {
 
     public startStinger(): void {
         this.stinger.play();
-        this.stinger.addEventListener('ended', () => {
+        this.stinger.addEventListener(Settings.MUSIC_ENDED_EVENT, () => {
             this.startThemed();
         });
     }
