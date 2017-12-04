@@ -33,4 +33,11 @@ export module Settings {
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
     export const RED = 0xff0000;
     export const TOTAL_LAPS = 3;
+
+    export const DRIVE_MODIFIER_BOOSTER_SPEED_MULTIPLIER = 1.5;
+    export const DRIVE_MODIFIER_BOOSTER_POSITION = 0;
+    export const DRIVE_MODIFIER_BOOSTER_ACCELERATION = 1;
+    export const DRIVE_MODIFIER_BOOSTER_DECELERATION = 0;
+    export const DRIVE_MODIFIER_BOOSTER_ROTATION = 1;
+    export const DRIVE_MODIFIER_BOOSTER_TIME = 60 * 2;
 }

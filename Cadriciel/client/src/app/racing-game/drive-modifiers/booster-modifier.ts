@@ -1,27 +1,28 @@
 import { DriveModifier } from './drive-modifier';
+import { Settings } from '../settings';
 
 export class BoosterModifier extends DriveModifier {
     public getModifiedSpeed(speed: number) {
-        return speed * 1.5;
+        return speed * Settings.DRIVE_MODIFIER_BOOSTER_SPEED_MULTIPLIER;
     }
 
     public getVerticalPositionModifier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_BOOSTER_POSITION;
     }
 
     public getAccelerationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_BOOSTER_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_BOOSTER_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_BOOSTER_ROTATION;
     }
 
     protected getTotalTime() {
-        return 120;
+        return Settings.DRIVE_MODIFIER_BOOSTER_TIME;
     }
 }
