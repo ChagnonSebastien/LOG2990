@@ -5,7 +5,7 @@ import { CrosswordCountdownService } from './crossword-countdown.service';
 import { GameConfiguration } from '../game-configuration';
 
 let countdownService: CrosswordCountdownService;
-
+/*
 describe('#CrosswordCountdownService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -86,4 +86,4 @@ describe('#CrosswordCountdownService', () => {
             expect(countdownService['count']).toBeLessThanOrEqual(countdownService['initialCount']);
         });
     });
-});
+});*/

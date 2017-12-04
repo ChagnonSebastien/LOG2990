@@ -12,12 +12,12 @@ const boundingBoxPath = 'cart_bounding_box.json';
 @Injectable()
 export class CollisionDetectionService {
 
-    private amountBBC = 0;
-
-    constructor(
-        private collisionEventService: CollisionEventService,
-        private vehicleService: VehicleService
-    ) { }
+    private amountBBC: number;
+    private collisionResolved: boolean;
+    constructor(private collisionEventService: CollisionEventService, private vehicleService: VehicleService) {
+        this.collisionResolved = true;
+        this.amountBBC = 0;
+    }
 
     public generateBoundingBox(vehicle: Vehicle): void {
         new ObjectLoader().load(`${assetsPath}/${boundingBoxPath}`, (box: Object3D) => {
@@ -28,7 +28,7 @@ export class CollisionDetectionService {
     }
 
     public checkForCollisionWithCar(event: VehicleMoveEvent) {
-        if (this.amountBBC !== 4) {
+        if (this.amountBBC !== 4 ) {
             return;
         }
 
@@ -45,6 +45,7 @@ export class CollisionDetectionService {
                 const intersectingPoint = this.checkForIntersection(vertices1, vertices2);
                 if (intersectingPoint !== null) {
                     event.cancel();
+                    this.collisionResolved = false;
                     this.collisionEventService.sendCollisionEvent(
                         new CollisionEvent(
                             event.getVehicle(), toCheck, intersectingPoint, this.closestVertexToPoint(intersectingPoint, vertices2))
@@ -54,7 +55,11 @@ export class CollisionDetectionService {
         });
     }
 
-    private closestVertexToPoint (collisionPoint: Vector3, points: Vector3[]): Vector3 {
+    public setCollisionAsResolved(): void {
+        this.collisionResolved = true;
+    }
+
+    private closestVertexToPoint(collisionPoint: Vector3, points: Vector3[]): Vector3 {
         let closestPoint = null;
         let closestDistance = Infinity;
         points.forEach((point: Vector3) => {

@@ -29,7 +29,7 @@ export class AudioService {
 
     public startRace() {
         this.race.loop = true;
-        this.race.play();
+      //  this.race.play();
     }
 
     public stopRace() {

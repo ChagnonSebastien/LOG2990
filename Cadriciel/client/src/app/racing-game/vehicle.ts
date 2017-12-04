@@ -52,7 +52,6 @@ export class Vehicle {
     public setSize(size: { width: number, length: number }) {
         this.size.length = Settings.SCENE_SCALE * size.length;
         this.size.width = Settings.SCENE_SCALE * size.width;
-        console.log(this.size);
     }
 
     public setBoundingBox(boundingBox: Mesh) {

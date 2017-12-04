@@ -49,7 +49,6 @@ export abstract class Controller {
     }
 
     public setLinearVelocity(velocity: Vector3): void {
-        console.log(this.linearVelocity.clone(), velocity.clone());
         this.linearVelocity = velocity;
     }
 

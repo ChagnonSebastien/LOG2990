@@ -8,6 +8,7 @@ import { RacingSceneService } from './racing-scene.service';
 import { FrameEvent, FrameEventService } from './events/frame-event.service';
 import { ObstacleCollisionEventService, ObstacleCollisionEvent } from './events/obstacle-collision-event.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
+import { CollisionResolvedEventService, CollisionResolvedEvent } from './events/collision-resolved-event.service';
 import { VehicleRotateEvent, VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
 import { RoadLimitService } from './road-limit.service';
@@ -53,6 +54,7 @@ export class RaceMediator {
         vehicleRotateEventService: VehicleRotateEventService,
         obstacleCollisionEventService: ObstacleCollisionEventService,
         collisionEventService: CollisionEventService,
+        collisionResolvedEventService: CollisionResolvedEventService,
         lapEventService: LapEventService,
     ) {
         frameEventService.getFrameObservable().subscribe(
@@ -97,6 +99,10 @@ export class RaceMediator {
 
         raceService.raceEndedAlerts().subscribe(
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
+        );
+
+        collisionResolvedEventService.getCollisionResolvedObservable().subscribe(
+            (event: CollisionEvent) => this.handleCollisionResolvedEvent(event)
         );
     }
 
@@ -216,5 +222,9 @@ export class RaceMediator {
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         console.log('race ended');
+    }
+
+    private handleCollisionResolvedEvent(event: CollisionResolvedEvent) {
+        this.collisionDetectionService.setCollisionAsResolved();
     }
 }

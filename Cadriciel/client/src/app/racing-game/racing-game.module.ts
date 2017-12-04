@@ -38,7 +38,8 @@ import { ObstacleCollisionDetectionService } from './obstacle-collision-detectio
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { LapCounterService } from './lap-counter.service';
 import { RacingSceneService } from './racing-scene.service';
-import {CollisionResolveService} from './collision-resolve.service';
+import { CollisionResolveService } from './collision-resolve.service';
+import { CollisionResolvedEventService } from './events/collision-resolved-event.service';
 
 @NgModule({
     imports: [
@@ -88,7 +89,8 @@ import {CollisionResolveService} from './collision-resolve.service';
         ControllerFactory,
         LapEventService,
         CollisionResolveService,
-        ControllerFactory
+        ControllerFactory,
+        CollisionResolvedEventService,
     ]
 })
 export class RacingGameModule {
