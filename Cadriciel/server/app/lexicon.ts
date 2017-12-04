@@ -11,7 +11,7 @@ export class Lexicon {
         this.parseLexiconByLength(file);
     }
 
-    public wordsForPattern(pattern: string, common: boolean) {
+    public wordsForPattern(pattern: string, common: boolean): string[] {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
             return this.wordsOfLengthUpTo(pattern.length, common);
@@ -20,7 +20,7 @@ export class Lexicon {
         }
     }
 
-    public allWordsForPattern(pattern: string) {
+    public allWordsForPattern(pattern: string): string[] {
         return this.wordsForPattern(pattern, true)
             .concat(this.wordsForPattern(pattern, false));
     }
@@ -29,7 +29,7 @@ export class Lexicon {
         return words[Math.floor(Math.random() * words.length)];
     }
 
-    private parseLexiconByLength(file: string) {
+    private parseLexiconByLength(file: string): void {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 

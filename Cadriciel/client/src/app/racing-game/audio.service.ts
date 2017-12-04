@@ -104,14 +104,13 @@ export class AudioService {
 
     public handleObstacleCollision(obstacleType: ObstacleType) {
         switch (obstacleType) {
-
-            case 1.75:
+            case ObstacleType.Pothole:
                 this.startHitPothole();
                 this.engineStopAccelerate();
                 this.acceleratorBonusStart.pause();
                 this.acceleratorBonusStart.currentTime = 0;
                 break;
-            case 2.75:
+            case ObstacleType.Booster:
                 this.startBooster();
                 break;
         }
