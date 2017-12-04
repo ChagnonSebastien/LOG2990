@@ -4,6 +4,7 @@ import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
 import { LEXICON_PATH, BLANK_SQUARE, BLACK_SQUARE } from './config';
+import { Level } from '../../client/src/app/crossword-game/configuration/level';
 
 export class CrosswordGenerator {
     public grid: string[][];
@@ -161,13 +162,13 @@ export class CrosswordGenerator {
 
         let wordsForPattern: string[];
         switch (difficulty) {
-            case ('easy'):
+            case (Level.EASY):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, true);
                 break;
-            case ('normal'):
+            case (Level.NORMAL):
                 wordsForPattern = this.lexicon.allWordsForPattern(pattern);
                 break;
-            case ('hard'):
+            case (Level.HARD):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, false);
         }
 

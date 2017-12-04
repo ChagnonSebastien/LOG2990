@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as async from 'async';
 
-import { WORD_API, DEFINITIONS_OPTIONS, FREQUENCY_OPTIONS } from './config';
+import { WORD_API, DEFINITIONS_OPTIONS, FREQUENCY_OPTIONS, WORDS_PER_BATCH } from './config';
 
 export class LexiconReader {
 
@@ -48,10 +48,11 @@ export class LexiconReader {
     }
 
     public async getUncommonWords(lexicon: string[]): Promise<any> {
-        const randomWords = Array(40).fill(null).map((value) => {
-            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
-            return randomWord;
-        });
+        const randomWords = Array(WORDS_PER_BATCH)
+            .map((value) => {
+                const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+                return randomWord;
+            });
         return new Promise(
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {
@@ -65,10 +66,11 @@ export class LexiconReader {
     }
 
     public async getCommonWords(lexicon: string[]): Promise<any> {
-        const randomWords = Array(40).fill(null).map((value) => {
-            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
-            return randomWord;
-        });
+        const randomWords = Array(WORDS_PER_BATCH)
+            .map((value) => {
+                const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+                return randomWord;
+            });
         return new Promise(
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {

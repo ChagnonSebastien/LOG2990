@@ -5,6 +5,8 @@ import { HintSelection } from '../../../commun/crossword/hint-selection';
 import { Word } from '../../../commun/word';
 import { CrosswordDynamicService } from './crossword-dynamic-service';
 
+import { Mode } from '../../../client/src/app/crossword-game/configuration/mode';
+
 export class CrosswordGameplayService {
     private static gameplayService: CrosswordGameplayService;
     private dynamicService: CrosswordDynamicService;
@@ -48,7 +50,7 @@ export class CrosswordGameplayService {
                 socket.broadcast.to(gameId)
                     .emit('opponent found a word', foundWord);
                 const game = this.gameManager.getGame(gameId);
-                if (game.mode === 'dynamic') {
+                if (game.mode === Mode.DYNAMIC) {
                     this.dynamicService.foundWord(gameId, game, foundWord);
                 }
             });

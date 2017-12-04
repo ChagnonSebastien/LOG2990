@@ -1,10 +1,3 @@
-/**
- * www.ts - Configure le serveur Node en vue d'accueillir l'application Express.
- *
- * @authors Nicolas Richard, Emilio Riviera
- * @date 2017/01/09
- */
-
 import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
@@ -14,7 +7,7 @@ import { Database } from './database';
 
 import { SERVER_PORT, CROSSWORD_COLLECTION } from './config';
 
-// start app after database is connected
+// start app once database connection is established
 Database
     .getInstance()
     .then((database) => {

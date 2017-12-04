@@ -1,6 +1,9 @@
 import * as fs from 'fs';
 import { MIN_WORD_LENGTH } from './config';
 
+const COMMON_WORDS = 'common';
+const UNCOMMON_WORDS = 'uncommon';
+
 export class Lexicon {
     private lexiconByLength: any;
 
@@ -30,7 +33,6 @@ export class Lexicon {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 
-    // methods used to find words that match a pattern and commonality
     private patternToRegex(pattern: string): RegExp {
         const regex = /\s/g;
         const toMatch = pattern.replace(regex, '[a-z]');
@@ -38,7 +40,7 @@ export class Lexicon {
     }
 
     private words(common: boolean): any {
-        return this.lexiconByLength[common ? 'common' : 'uncommon'];
+        return this.lexiconByLength[common ? COMMON_WORDS : UNCOMMON_WORDS];
     }
 
     private wordsOfLength(length: number, common: boolean): Array<string> {
