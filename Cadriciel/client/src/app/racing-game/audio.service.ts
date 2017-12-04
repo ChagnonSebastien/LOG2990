@@ -26,20 +26,20 @@ export class AudioService {
         this.stinger.load();
         this.themed = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_THEMED}`);
         this.themed.load();
-        this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
+        this.carCarCollision = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_CAR_CAR_COLLISION}`);
         this.carCarCollision.load();
-        this.engineStart = new Audio('../../assets/sounds/carStart.mp3');
+        this.engineStart = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_ENGINE_START}`);
         this.engineStart.load();
-        this.idleEngine = new Audio('../../assets/sounds/idleEngine.mp3');
+        this.idleEngine = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_IDLE_ENGINE}`);
         this.idleEngine.load();
-        this.accelerate = new Audio('../../assets/sounds/carAcceleration.mp3');
+        this.accelerate = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_CAR_ACCELERATION}`);
         this.accelerate.load();
-        this.hitPothole = new Audio('../../assets/sounds/pothole.mp3');
-        this.acceleratorBonusStart = new Audio('../../assets/sounds/acceleratorBonusStart.mp3');
+        this.hitPothole = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_HIT_POTHOLE}`);
+        this.acceleratorBonusStart = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_ACCELERATOR_BONUS_START}`);
         this.acceleratorBonusStart.load();
-        this.acceleratorBonusEnd = new Audio('../../assets/sounds/acceleratorBonusEnd.mp3');
+        this.acceleratorBonusEnd = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_ACCELERATOR_BONUS_END}`);
         this.acceleratorBonusEnd.load();
-        this.hitWall = new Audio('../../assets/sounds/hitWall.mp3');
+        this.hitWall = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_HIT_WALL}`);
         this.hitWall.load();
     }
 
@@ -55,6 +55,8 @@ export class AudioService {
         this.race.loop = true;
         this.idleEngine.loop = true;
         this.idleEngine.play();
+        this.race.volume = 0.5;
+        this.idleEngine.volume = 0.7;
         this.race.play();
     }
 
@@ -67,6 +69,7 @@ export class AudioService {
     }
 
     public startHitPothole(): void {
+        this.hitPothole.volume = 1;
         this.hitPothole.play();
     }
 
