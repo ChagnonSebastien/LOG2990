@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-// import { Observable } from 'rxjs/Observable';
 
 import { GameConfiguration } from '../game-configuration';
+import { MathUtilities } from '../../math.utilities';
 
 @Injectable()
 export class CrosswordCheatService {
@@ -22,15 +22,11 @@ export class CrosswordCheatService {
     }
 
     public setInitialCountdown(initialCountdown: number): boolean {
-        if (initialCountdown > 0 && !this.isDecimal(initialCountdown)) {
+        if (initialCountdown > 0 && !MathUtilities.isDecimal(initialCountdown)) {
             this.initialCountdown = initialCountdown;
             this.initialCountdownChanges.next(initialCountdown);
             return true;
         }
         return false;
-    }
-
-    private isDecimal(n: number) {
-        return n % 1 !== 0;
     }
 }

@@ -28,7 +28,7 @@ describe('#CrosswordLobbyService', () => {
         setTimeout(() => {
             expect(lobbyService.games).toBeDefined();
             done();
-        }, 50);
+        }, 100);
     }));
 
     describe('canJoinGame()', () => {

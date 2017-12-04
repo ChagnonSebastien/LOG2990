@@ -26,7 +26,6 @@ describe('AuthenticationService', () => {
         this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
     }));
 
-    // authenticate()
     it('authenticate() should query current service url', () => {
         this.authenticationService.authenticate(password);
         expect(this.lastConnection).toBeDefined('no http service connection at all?');
