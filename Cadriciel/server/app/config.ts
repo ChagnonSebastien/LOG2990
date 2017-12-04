@@ -20,3 +20,9 @@ export const API_URL = 'http://localhost:3000/api';
 
 // lexicon
 export const LEXICON_PATH = './app/words.json';
+export const WORD_API = 'http://api.wordnik.com:80/v4/word.json';
+export const DEFINITIONS_OPTIONS = 'definitions?limit=200&includeRelated=true&useCanonical=false' +
+    '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+export const FREQUENCY_OPTIONS = 'frequency?useCanonical=false&startYear=2012&endYear=' +
+'2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+
