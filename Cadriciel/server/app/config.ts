@@ -10,3 +10,5 @@ export const DATABASE_URL = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23
 export const API_URL = 'http://localhost:3000/api';
 
 export const CROSSWORD_COLLECTION = 'crosswords';
+
+export const LEXICON_PATH = './app/words.json';

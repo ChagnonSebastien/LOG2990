@@ -1,16 +1,17 @@
 import { expect } from 'chai';
 import { CrosswordGenerator } from './crossword-generator';
 
-const size = 10;
+import { CROSSWORD_GRID_SIZE } from './config';
+
 function randomIndex(): number {
-    return Math.floor(Math.random() * size);
+    return Math.floor(Math.random() * CROSSWORD_GRID_SIZE);
 }
 
 describe('CrosswordGenerator', () => {
     let crossword: CrosswordGenerator;
 
     beforeEach(() => {
-        crossword = new CrosswordGenerator(size);
+        crossword = new CrosswordGenerator(CROSSWORD_GRID_SIZE);
     });
 
     describe('constructor()', () => {
@@ -26,11 +27,11 @@ describe('CrosswordGenerator', () => {
 
     describe('patternForLine()', () => {
         it('should return the pattern "          " if horizontal on a blank grid', () => {
-            expect(crossword.patternForLine(0, true)).to.equal(' '.repeat(size));
+            expect(crossword.patternForLine(0, true)).to.equal(' '.repeat(CROSSWORD_GRID_SIZE));
         });
 
         it('should return the pattern "          " if vertical on a blank grid', () => {
-            expect(crossword.patternForLine(0, false)).to.equal(' '.repeat(size));
+            expect(crossword.patternForLine(0, false)).to.equal(' '.repeat(CROSSWORD_GRID_SIZE));
         });
     });
 

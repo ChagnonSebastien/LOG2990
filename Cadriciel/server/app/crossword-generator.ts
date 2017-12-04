@@ -3,7 +3,7 @@ import { Lexicon } from './lexicon';
 import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
-const LEXICON_PATH = './app/words.json';
+import { LEXICON_PATH } from './config';
 
 export class CrosswordGenerator {
     public grid: string[][];
