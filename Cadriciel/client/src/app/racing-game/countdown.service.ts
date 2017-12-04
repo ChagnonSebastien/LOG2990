@@ -29,11 +29,11 @@ export class CountdownService {
         this.countdownEnded = false;
     }
 
-    public startGame() {
+    public startGame(): void {
         this.countdownEnded = true;
     }
 
-    public startCountdown() {
+    public startCountdown(): void {
         if (!this.countdownStarted) {
             this.countdownStarted = true;
             this.startAudio();
@@ -41,7 +41,7 @@ export class CountdownService {
         }
     }
 
-    private startAudio() {
+    private startAudio(): void{
         this.audioService.startCountdown();
     }
 
@@ -73,7 +73,7 @@ export class CountdownService {
         });
     }
 
-    public updateCountdown(count: number) {
+    public updateCountdown(count: number): void {
         const countText = count.toString();
 
         const textGeometry = new THREE.TextGeometry(countText, {
