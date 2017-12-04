@@ -9,7 +9,7 @@ const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 const crosswordSize = 10;
 const maxCrosswordPerLevel = 5;
 
-import { Database } from '../database':
+import { Database } from '../database';
 
 export class ServerCrosswords {
     private static instance: ServerCrosswords;

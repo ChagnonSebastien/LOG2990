@@ -43,6 +43,21 @@ export class AudioService {
         this.hitWall.load();
     }
 
+    public stopAllAudio(): void {
+        this.countdown.pause();
+        this.race.pause();
+        this.stinger.pause();
+        this.themed.pause();
+        this.carCarCollision.pause();
+        this.engineStart.pause();
+        this.idleEngine.pause();
+        this.accelerate.pause();
+        this.hitWall.pause();
+        this.hitPothole.pause();
+        this.acceleratorBonusStart.pause();
+        this.acceleratorBonusEnd.pause();
+
+    }
     public startCountdown(): void {
         this.countdown.play();
         this.engineStart.play();
