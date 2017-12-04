@@ -1,26 +1,20 @@
 import * as mongoose from 'mongoose';
+import { DATABASE_URL, CROSSWORD_COLLECTION } from '../config';
 
-/* mongoose.connect(
-    'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db',
-    { useMongoClient: true }
-); */
 mongoose.connect(
-    'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy',
+    DATABASE_URL,
     { useMongoClient: true }
 );
 
-// Get the default connection
 const db = mongoose.connection;
-
-// Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const crosswordSchema = new mongoose.Schema({
 
     crossword:
-    {
-        type: [[String]]
-    },
+        {
+            type: [[String]]
+        },
     difficulty: {
         type: String
     },
@@ -28,9 +22,9 @@ const crosswordSchema = new mongoose.Schema({
         type: [String]
     },
     wordsWithIndex: {
-        type: [{i: Number, j: Number, word: String, horizontal: Boolean}]
+        type: [{ i: Number, j: Number, word: String, horizontal: Boolean }]
     }
 });
 
 
-module.exports = mongoose.model('crosswords', crosswordSchema);
+module.exports = mongoose.model(CROSSWORD_COLLECTION, crosswordSchema);
