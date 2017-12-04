@@ -7,5 +7,6 @@ export const CROSSWORD_GRID_SIZE = 10;
 export const MAX_CROSSWORDS_PER_LEVEL = 5;
 
 export const DATABASE_URL = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
+export const API_URL = 'http://localhost:3000/api';
 
 export const CROSSWORD_COLLECTION = 'crosswords';

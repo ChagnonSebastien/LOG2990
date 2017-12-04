@@ -1,21 +1,19 @@
 
-const trackSchema = require('./trackSchema');
 import * as express from 'express';
-
 import * as mongodb from 'mongodb';
 
+import { DATABASE_URL } from '../config';
 import { UpdateTrack } from '../updatetrack';
 
+const trackSchema = require('./trackSchema');
 const MongoClient = mongodb.MongoClient;
-// const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
-const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 
 module Route {
 
     export class Tracks {
 
         public getTracks(req: express.Request, res: express.Response, next: express.NextFunction) {
-            MongoClient.connect(url, (err, db) => {
+            MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
@@ -27,7 +25,7 @@ module Route {
         }
 
         public getTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
-            MongoClient.connect(url, (err, db) => {
+            MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
@@ -39,7 +37,7 @@ module Route {
         }
 
         public deleteTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
-            MongoClient.connect(url, (err, db) => {
+            MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
@@ -52,7 +50,7 @@ module Route {
         }
 
         public addTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
-            MongoClient.connect(url, (err, db) => {
+            MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
@@ -69,7 +67,7 @@ module Route {
                         bestTimes: req.body.bestTimes
                     });
 
-                    db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert : true });
+                    db.collection('tracks').update({ _id: req.body.name }, newTrack, { upsert: true });
                     res.send({ 'data': 'success' });
                 }
             });
@@ -79,26 +77,31 @@ module Route {
             let tempRating: number;
             let tempBestTimes: number[];
             let tempNbOfTimesPlayed: number;
-            MongoClient.connect(url, (err, db) => {
+            MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
                 } else {
                     db.collection('tracks').findOne({ _id: req.params.id })
                         .then((trackDB) => {
                             tempRating = UpdateTrack.updateRating(req.body.numberOfTimesPlayed,
-                                                                  trackDB.rating,
-                                                                  req.body.rating
+                                trackDB.rating,
+                                req.body.rating
                             );
                             tempBestTimes = UpdateTrack.updateBestTimes(trackDB.bestTimes, req.body.time);
                             tempNbOfTimesPlayed = trackDB.numberOfTimesPlayed++;
 
                             db.collection('tracks').update(
-                                        { _id: req.params.id },
-                                        { $set: { rating: tempRating,
+                                { _id: req.params.id },
+                                {
+                                    $set: {
+                                        rating: tempRating,
                                         bestTimes: tempBestTimes,
-                                        numberOfTimesPlayed: tempNbOfTimesPlayed} },
-                                        { upsert: false
-                            });
+                                        numberOfTimesPlayed: tempNbOfTimesPlayed
+                                    }
+                                },
+                                {
+                                    upsert: false
+                                });
                             res.send({ 'data': 'success' });
                         });
                 }

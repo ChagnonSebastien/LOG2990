@@ -1,7 +1,7 @@
 import { assert } from 'chai';
+import { API_URL } from '../config';
 
 describe('Authentication', () => {
-    const API_URL = 'http://localhost:3000/api';
     const chai = require('chai');
     const chaiHttp = require('chai-http');
     chai.use(chaiHttp);

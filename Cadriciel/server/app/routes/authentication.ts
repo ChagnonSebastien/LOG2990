@@ -5,7 +5,7 @@ module Route {
 
     export class Authentication {
 
-        public login(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public login(req: express.Request, res: express.Response, next: express.NextFunction): void {
             Database.getInstance().then((database) => {
                 database.connection.collection('login').find().toArray().then((credentials) => {
                     if (req.body.password === credentials[0].password) {
@@ -17,7 +17,7 @@ module Route {
             });
         }
 
-        public changePassword(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public changePassword(req: express.Request, res: express.Response, next: express.NextFunction): void {
             Database.getInstance().then((database) => {
                 database.connection.collection('login').find().toArray().then((credentials) => {
                     if (req.body.oldPassword === credentials[0].password) {
