@@ -241,6 +241,7 @@ export class RaceMediator {
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         this.audioService.stopRace();
         this.audioService.startStinger();
+        this.raceService.stopTimers();
         console.log('race ended');
     }
 
