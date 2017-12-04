@@ -27,7 +27,7 @@ let raceHudService: RaceHudService;
 
 fdescribe('LapCounterService', function () {
 
-    beforeEach(() => {
+    beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
@@ -60,6 +60,25 @@ fdescribe('LapCounterService', function () {
 
     it('should be created', () => {
         expect(raceHudService).toBeTruthy();
+        expect(raceHudService.timer).toEqual(0.0);
+        expect(raceHudService.sceneHud).toBeDefined();
+    });
+
+    it('should start timer', () => {
+        raceHudService.startTimer();
+        expect(raceHudService.lapTimer !== 0);
+    });
+
+    it('should reset timer', () => {
+        raceHudService['lapCounterService'].racePositions = [0, 0, 0, 0];
+        raceHudService.resetLapTimer();
+        expect(raceHudService.lapTimer === 0);
+    });
+
+    it('should update HUD', () => {
+        raceHudService['lapCounterService'].racePositions = [0, 0, 0, 0];
+        raceHudService.updateHud(5);
+        expect(raceHudService.currentLap === 5);
     });
 
 });
