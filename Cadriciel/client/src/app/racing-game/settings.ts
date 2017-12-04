@@ -32,5 +32,19 @@ export module Settings {
     export const HUD_START_LAP_COUNTDOWN = '0/3';
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
     export const RED = 0xff0000;
+    export const YELLOW = 0xffff00;
     export const TOTAL_LAPS = 3;
+
+    export const COUNTDOWN_FONT = '../../assets/font_samuel_regular.json';
+    export const COUNTDOWN_INITIAL_VALUE = 6;
+    export const COUNTDOWN_Y_POSITION = 23;
+    export const COUNTDOWN_NAME = 'countdown';
+    export const COUNTDOWN_SIZE = 200;
+    export const COUNTDOWN_HEIGHT = 0;
+    export const COUNTDOWN_CURVESEGMENTS = 5;
+    export const COUNTDOWN_BEVEL_ENABLED = true;
+    export const COUNTDOWN_BEVEL_THICKNESS = 10;
+    export const COUNTDOWN_BEVEL_SIZE = 1;
+    export const FIRST_INTERSECTION = 0;
+    export const SECOND_INTERSECTION = 1;
 }

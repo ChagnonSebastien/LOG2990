@@ -7,6 +7,7 @@ import { CommandsService } from './events/commands.service';
 import { Settings } from './settings';
 import { RacingSceneService } from './racing-scene.service';
 import { VehicleService } from './vehicle.service';
+import { TrackUtilities } from './track-utilities';
 
 @Injectable()
 export class CountdownService {
@@ -23,7 +24,7 @@ export class CountdownService {
         private sceneService: RacingSceneService,
         private vehicleService: VehicleService
     ) {
-        this.count = 6;
+        this.count = Settings.COUNTDOWN_INITIAL_VALUE;
         this.countdownStarted = false;
         this.countdownEnded = false;
     }
@@ -47,28 +48,28 @@ export class CountdownService {
     public createCountdown(track: Track): void {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
-        const trackCenter = this.getCenterOfTrack(track);
+        const trackCenter = TrackUtilities.getCenterOfTrack(track);
         const service = this;
-        loader.load('../../assets/font_samuel_regular.json', function (font) {
+        loader.load(Settings.COUNTDOWN_FONT, function (font) {
             service.font = font;
             textGeometry = new THREE.TextGeometry((service.count - 1).toString(), {
                 font: font,
-                size: 200,
-                height: 0,
-                curveSegments: 5,
-                bevelEnabled: true,
-                bevelThickness: 10,
-                bevelSize: 1
+                size: Settings.COUNTDOWN_SIZE,
+                height: Settings.COUNTDOWN_HEIGHT,
+                curveSegments: Settings.COUNTDOWN_CURVESEGMENTS,
+                bevelEnabled: Settings.COUNTDOWN_BEVEL_ENABLED,
+                bevelThickness: Settings.COUNTDOWN_BEVEL_THICKNESS,
+                bevelSize: Settings.COUNTDOWN_BEVEL_SIZE
             });
             const material = new THREE.MeshPhongMaterial({
-                color: 0xffff00
+                color: Settings.YELLOW
             });
             service.countdownMesh = new THREE.Mesh(textGeometry, material);
             service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
-            service.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
+            service.countdownMesh.position.setY(Settings.COUNTDOWN_Y_POSITION);
             service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
             service.countdownMesh.geometry.rotateY(service.vehicleService.getMainVehicle().getMesh().rotation.y);
-            service.sceneService.addObjectWithName(service.countdownMesh, 'countdown');
+            service.sceneService.addObjectWithName(service.countdownMesh, Settings.COUNTDOWN_NAME);
         });
     }
 
@@ -77,24 +78,14 @@ export class CountdownService {
 
         const textGeometry = new THREE.TextGeometry(countText, {
             font: this.font,
-            size: 200,
-            height: 0,
-            curveSegments: 5,
-            bevelEnabled: true,
-            bevelThickness: 10,
-            bevelSize: 1
+            size: Settings.COUNTDOWN_SIZE,
+            height: Settings.COUNTDOWN_HEIGHT,
+            curveSegments: Settings.COUNTDOWN_CURVESEGMENTS,
+            bevelEnabled: Settings.COUNTDOWN_BEVEL_ENABLED,
+            bevelThickness: Settings.COUNTDOWN_BEVEL_THICKNESS,
+            bevelSize: Settings.COUNTDOWN_BEVEL_SIZE
         });
         this.countdownMesh.geometry = textGeometry;
-        this.countdownMesh.geometry.rotateY(Math.PI / 2);
-    }
-
-    private getCenterOfTrack(track: Track): THREE.Vector2 {
-        const fromPosition = track.trackIntersections[0];
-        const toPosition = track.trackIntersections[1];
-        const xCenter = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
-        const yCenter = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
-        const center = new THREE.Vector2(xCenter, yCenter);
-
-        return center;
+        this.countdownMesh.geometry.rotateY(this.vehicleService.getMainVehicle().getMesh().rotation.y);
     }
 }
