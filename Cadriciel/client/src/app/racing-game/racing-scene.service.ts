@@ -21,7 +21,7 @@ export class RacingSceneService extends SceneService {
         this.createSkyBox();
     }
 
-    private createTexture() {
+    private createTexture(): void {
         const url = '../../assets/images/skybox/';
         if (this.isNight) {
             const images = [url + 'bluefreeze_rt.png', url + 'bluefreeze_lf.png',
@@ -50,30 +50,30 @@ export class RacingSceneService extends SceneService {
         this.materialSkybox.needsUpdate = true;
     }
 
-    private createSkyBox() {
+    private createSkyBox(): void {
         this.createTexture();
         const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), this.materialSkybox);
         this.materialSkybox.needsUpdate = true;
         this.addObject(skyboxMesh);
     }
 
-    private createLight() {
+    private createLight(): void {
         this.light = new Light();
         this.addObject(this.light.hemiLight);
         this.addObject(this.light.dirLight);
     }
 
-    public toggleNightMode() {
+    public toggleNightMode(): void {
         this.light.dirLight.visible = !this.light.dirLight.visible;
         this.lightWay();
     }
 
-    private swapTexture() {
+    private swapTexture(): void {
         this.isNight = !this.isNight;
         this.createTexture();
     }
 
-    public lightWay() {
+    public lightWay(): void {
         this.scene.traverse(function (children) {
             if (children.name === 'vehicle') {
                 children.traverse(function (child) {

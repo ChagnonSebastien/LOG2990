@@ -49,12 +49,12 @@ export class Vehicle {
         return this.size.width;
     }
 
-    public setSize(size: { width: number, length: number }) {
+    public setSize(size: { width: number, length: number }): void {
         this.size.length = Settings.SCENE_SCALE * size.length;
         this.size.width = Settings.SCENE_SCALE * size.width;
     }
 
-    public setBoundingBox(boundingBox: Mesh) {
+    public setBoundingBox(boundingBox: Mesh): void {
         this.vehicleMesh.add(boundingBox);
         this.boundingBoxMesh = boundingBox;
     }
@@ -63,11 +63,11 @@ export class Vehicle {
         return this.boundingBoxMesh;
     }
 
-    public hitWall(speedModifier: number) {
+    public hitWall(speedModifier: number): void {
         this.controller.hitWall(speedModifier);
     }
 
-    public create3DVehicle(track: Track, carPosition: VehicleColor) {
+    public create3DVehicle(track: Track, carPosition: VehicleColor): void {
         const service = this;
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
@@ -85,7 +85,7 @@ export class Vehicle {
         });
     }
 
-    private getCartPath(carPosition: VehicleColor) {
+    private getCartPath(carPosition: VehicleColor): string {
         switch (carPosition) {
             case VehicleColor.red:
                 return redCarPath;

@@ -8,20 +8,20 @@ export class SceneService {
         this.scene = new Scene();
     }
 
-    public addObject(object: THREE.Object3D) {
+    public addObject(object: THREE.Object3D): void {
         this.scene.add(object);
     }
 
-    public addObjectWithName(object: THREE.Object3D, name: string) {
+    public addObjectWithName(object: THREE.Object3D, name: string): void {
         object.name = name;
         this.scene.add(object);
     }
 
-    public removeObject(object: THREE.Object3D) {
+    public removeObject(object: THREE.Object3D): void {
         this.scene.remove(object);
     }
 
-    public removeObjectByName(name: string) {
+    public removeObjectByName(name: string): void {
         this.scene.remove(this.scene.getObjectByName(name));
     }
 }

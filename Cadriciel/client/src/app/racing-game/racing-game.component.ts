@@ -43,7 +43,7 @@ export class RacingGameComponent implements AfterViewInit {
         this.commandsService.keyUp(event);
     }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         const trackName = this.route.snapshot.params['name'];
         this.trackService.get(trackName).then(track => {
             this.raceMediator.startProgram(this.container, track);
