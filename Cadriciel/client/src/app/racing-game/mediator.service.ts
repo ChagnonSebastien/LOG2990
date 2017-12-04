@@ -26,6 +26,7 @@ import { CountdownDecreaseEventService, CountdownDecreaseEvent } from './events/
 import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
+import { AudioService } from './audio.service';
 import { Vehicle } from './vehicle';
 
 
@@ -47,6 +48,7 @@ export class RaceMediator {
         private lapcounterService: LapCounterService,
         private raceEventService: RaceEventService,
         private raceService: RaceHudService,
+        private audioService: AudioService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -126,6 +128,8 @@ export class RaceMediator {
     private handleKeyUpEvent(event: CommandEvent) {
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
+                this.audioService.engineStopAccelerate();
+            // falls through
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
@@ -137,6 +141,8 @@ export class RaceMediator {
 
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
+                this.audioService.engineAccelerate();
+            // falls through
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
@@ -210,10 +216,12 @@ export class RaceMediator {
 
     private handleObstacleCollisionEvent(event: ObstacleCollisionEvent) {
         event.getVehicle().getController().hitObstacle(event.getObstacle());
+        this.audioService.handleObstacleCollision(event.getObstacle());
     }
 
     private handleCollisionEvent(event: CollisionEvent) {
-
+        this.audioService.startCarCarCollision();
+        this.audioService.engineStopAccelerate();
     }
 
     private handleLapEvent(event: LapEvent) {

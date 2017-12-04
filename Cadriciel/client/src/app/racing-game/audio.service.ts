@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-import { RaceService } from './events/race.service';
-import { CollisionEventService } from './events/collision-event.service';
-import { CommandsService } from './events/commands.service';
-import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
-import { PlayerCommand } from './events/commands.service';
-=======
 import { RaceEventService } from './events/race-event.service';
->>>>>>> master
+import { ObstacleType } from './draw-track/obstacle';
 import { Injectable } from '@angular/core';
-
 
 @Injectable()
 export class AudioService {
@@ -17,7 +9,7 @@ export class AudioService {
     private stinger: HTMLAudioElement;
     private themed: HTMLAudioElement;
     private carCarCollision: HTMLAudioElement;
-    private engineStart: HTMLAudioElement[] = [];
+    private engineStart: HTMLAudioElement;
     private idleEngine: HTMLAudioElement;
     private accelerate: HTMLAudioElement;
     private hitWall: HTMLAudioElement;
@@ -25,15 +17,8 @@ export class AudioService {
     private acceleratorBonusStart: HTMLAudioElement;
     private acceleratorBonusEnd: HTMLAudioElement;
 
-<<<<<<< HEAD
-    constructor(private raceService: RaceService, private collisionEventService: CollisionEventService,
-        private commandsService: CommandsService, private obstacleCollisionEventService: ObstacleCollisionEventService) {
-=======
     constructor(private raceService: RaceEventService) {
->>>>>>> master
         this.listenForEndOfRace();
-        this.listenForCarCarCollision();
-        this.listenForMoveVehicle();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
         this.race = new Audio('../../assets/sounds/race.mp3');
@@ -44,10 +29,8 @@ export class AudioService {
         this.themed.load();
         this.carCarCollision = new Audio('../../assets/sounds/car_car_collision.mp3');
         this.carCarCollision.load();
-        for (let i = 0; i < 4; i++) {
-            this.engineStart[i] = new Audio('../../assets/sounds/carStart.mp3');
-            this.engineStart[i].load();
-        }
+        this.engineStart = new Audio('../../assets/sounds/carStart.mp3');
+        this.engineStart.load();
         this.idleEngine = new Audio('../../assets/sounds/idleEngine.mp3');
         this.idleEngine.load();
         this.accelerate = new Audio('../../assets/sounds/carAcceleration.mp3');
@@ -55,13 +38,13 @@ export class AudioService {
         this.hitPothole = new Audio('../../assets/sounds/pothole.mp3');
         this.acceleratorBonusStart = new Audio('../../assets/sounds/acceleratorBonusStart.mp3');
         this.acceleratorBonusStart.load();
+        this.acceleratorBonusEnd = new Audio('../../assets/sounds/acceleratorBonusEnd.mp3');
+        this.acceleratorBonusEnd.load();
     }
 
     public startCountdown(): void {
         this.countdown.play();
-        for (let i = 0; i < 4; i++) {
-            this.engineStart[i].play();
-        }
+        this.engineStart.play();
         this.countdown.addEventListener('ended', () => {
             this.startRace();
         });
@@ -71,73 +54,59 @@ export class AudioService {
         this.race.loop = true;
         this.idleEngine.loop = true;
         this.idleEngine.play();
-        this.race.play();
+      //  this.race.play();
     }
 
     public stopRace(): void {
         this.race.pause();
     }
 
-    private startBooster(): void {
-        this.acceleratorBonusStart.play();
+    public startBooster(): void {
+        this.acceleratorBonusStart.play().then(() => this.endBooster());
     }
 
-    private startHitPothole(): void {
+    public startHitPothole(): void {
         this.hitPothole.play();
     }
 
-    private startCarCarCollision(): void {
-        this.engineStopAcccelerate();
+    public startCarCarCollision(): void {
+        this.engineStopAccelerate();
         this.carCarCollision.play();
     }
 
-    private engineAccelerate(): void {
+    public engineAccelerate(): void {
         this.accelerate.loop = true;
         this.accelerate.play();
     }
 
-    private engineStopAcccelerate(): void {
-        console.log('stop');
+    public engineStopAccelerate(): void {
         this.accelerate.pause();
         this.accelerate.currentTime = 0;
+    }
+
+    public handleObstacleCollision(obstacleType: ObstacleType) {
+        switch (obstacleType) {
+
+            case 1.75:
+                this.startHitPothole();
+                this.engineStopAccelerate();
+                this.acceleratorBonusStart.pause();
+                this.acceleratorBonusStart.currentTime = 0;
+                break;
+            case 2.75:
+                this.startBooster();
+                break;
+        }
+    }
+
+    public endBooster(): void {
+        this.acceleratorBonusEnd.play();
     }
 
     private listenForEndOfRace(): void {
         this.raceService.raceEndedAlerts().subscribe(() => {
             this.stopRace();
             this.startStinger();
-        });
-    }
-
-    private listenForCarCarCollision(): void {
-        this.collisionEventService.getCollisionObservable().subscribe(() => {
-            this.startCarCarCollision();
-        });
-    }
-
-    private listenForMoveVehicle(): void {
-        this.commandsService.getCommandKeyDownObservable().subscribe((event) => {
-            if (event.getCommand() === PlayerCommand.MOVE_FORWARD) {
-                this.engineAccelerate();
-            }
-        });
-    }
-
-    private listenForStopMoveVehicle(): void {
-        this.commandsService.getCommandKeyUpObservable().subscribe((event) => {
-            if (event.getCommand() === PlayerCommand.MOVE_FORWARD) {
-                this.engineStopAcccelerate();
-            }
-        });
-    }
-
-    private listenForPothole(): void {
-        this.obstacleCollisionEventService.getObstacleCollisionObservable().subscribe((event) => {
-            if (event.getObstacle() === 1.75) {
-                this.startHitPothole();
-            } else if (event.getObstacle() === 2.75) {
-                this.startBooster();
-            }
         });
     }
 
