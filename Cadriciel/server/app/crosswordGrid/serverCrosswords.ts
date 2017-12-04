@@ -4,12 +4,9 @@ import { CrosswordGenerator } from '../crossword-generator';
 const crosswordSchema = require('../routes/crossWordSchema');
 const mongoose = require('mongoose');
 const MongoClient = mongodb.MongoClient;
-// const url = 'mongodb://LOG2990-03:yJ96PW80@parapluie.info.polymtl.ca:27017/LOG2990-03-db';
 const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 const crosswordSize = 10;
 const maxCrosswordPerLevel = 5;
-
-import { Database } from '../database':
 
 export class ServerCrosswords {
     private static instance: ServerCrosswords;
@@ -36,7 +33,6 @@ export class ServerCrosswords {
         this.collection = collection;
     }
 
-    // get all the crosswords from the database
     public getCrosswordsFromDB(): Promise<Array<Crossword>> {
         let crosswordsList: Array<Crossword>;
 
@@ -178,6 +174,4 @@ export class ServerCrosswords {
         this.mutatedGrid.wordsWithIndex = this.crosswordGenerator.wordsWithIndex;
         return this.mutatedGrid;
     }
-
-
 }
