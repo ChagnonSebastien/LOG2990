@@ -8,6 +8,7 @@ export module Settings {
     export const SOUND_RACE = 'sounds/race.mp3';
     export const SOUND_STIGNER = 'sounds/stinger.mp3';
     export const SOUND_THEMED = 'sounds/themed.mp3';
+    export const PATH_BOUNDING_BOX = 'cart_bounding_box.json';
 
     export const MUSIC_ENDED_EVENT = 'ended';
 

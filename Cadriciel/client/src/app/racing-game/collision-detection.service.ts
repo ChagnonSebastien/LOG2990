@@ -1,13 +1,11 @@
+import { VehicleColor } from './vehicle-color';
 import { VehicleService } from './vehicle.service';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
 import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { Injectable } from '@angular/core';
 import { Mesh, Geometry, Vector3, Object3D, ObjectLoader } from 'three';
 import { Vehicle } from './vehicle';
-
-
-const assetsPath = '/assets';
-const boundingBoxPath = 'cart_bounding_box.json';
+import { Settings } from './settings';
 
 @Injectable()
 export class CollisionDetectionService {
@@ -20,7 +18,7 @@ export class CollisionDetectionService {
     ) { }
 
     public generateBoundingBox(vehicle: Vehicle): void {
-        new ObjectLoader().load(`${assetsPath}/${boundingBoxPath}`, (box: Object3D) => {
+        new ObjectLoader().load(`${Settings.ASSETS_FOLDER}/${Settings.PATH_BOUNDING_BOX}`, (box: Object3D) => {
             vehicle.setSize(this.calculateBoxSize(<Mesh>box));
             vehicle.setBoundingBox(<Mesh>box);
             this.amountBBC++;
@@ -28,7 +26,7 @@ export class CollisionDetectionService {
     }
 
     public checkForCollisionWithCar(event: VehicleMoveEvent) {
-        if (this.amountBBC !== 4) {
+        if (this.amountBoundingBoxesCreated !== Object.keys(VehicleColor).length / 2) {
             return;
         }
 
