@@ -1,6 +1,7 @@
 export module Settings {
 
     export const SCENE_SCALE = 25;
+    export const TRACK_HEIGHT = 3;
     export const TRACK_RADIUS = 5;
 
     export const ASSETS_FOLDER = '/assets';
@@ -9,6 +10,8 @@ export module Settings {
     export const SOUND_STIGNER = 'sounds/stinger.mp3';
     export const SOUND_THEMED = 'sounds/themed.mp3';
     export const PATH_BOUNDING_BOX = 'cart_bounding_box.json';
+    export const PATH_FONT_SAMUEL_REGULAR = 'font_samuel_regular.json';
+    export const ASSETS_INITIAL_Y_ROTATION = Math.PI / 2;
 
     export const MUSIC_ENDED_EVENT = 'ended';
 
@@ -42,6 +45,16 @@ export module Settings {
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
     export const RED = 0xff0000;
     export const TOTAL_LAPS = 3;
+
+    export const COUNTDOWN_TIME = 6;
+    export const COUNTDOWN_TEXT_SIZE = 200;
+    export const COUNTDOWN_TEXT_HEIGHT = 0;
+    export const COUNTDOWN_TEXT_CURVE_SEGMENTS = 5;
+    export const COUNTDOWN_TEXT_BEVEL_ENABLES = true;
+    export const COUNTDOWN_TEXT_BEVEL_THICKNESS = 10;
+    export const COUNTDOWN_TEXT_BEVEL_SIZE = 1;
+    export const COUNTDOWN_TEXT_COLOR = 0xffff00;
+    export const COUNTDOWN_NAME = 'countdown';
 
     export const DRIVE_MODIFIER_NONE_POSITION = 0;
     export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;

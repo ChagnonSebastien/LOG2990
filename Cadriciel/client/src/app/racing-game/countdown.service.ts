@@ -21,7 +21,7 @@ export class CountdownService {
         private countdownDecreaseEventService: CountdownDecreaseEventService,
         private sceneService: RacingSceneService
     ) {
-        this.count = 6;
+        this.count = Settings.COUNTDOWN_TIME;
         this.countdownStarted = false;
         this.countdownEnded = false;
     }
@@ -47,26 +47,26 @@ export class CountdownService {
         let textGeometry: THREE.TextGeometry;
         const trackCenter = this.getCenterOfTrack(track);
         const service = this;
-        loader.load('../../assets/font_samuel_regular.json', function (font) {
+        loader.load(`${Settings.ASSETS_FOLDER}/${Settings.PATH_FONT_SAMUEL_REGULAR}`, function (font) {
             service.font = font;
             textGeometry = new THREE.TextGeometry((service.count - 1).toString(), {
                 font: font,
-                size: 200,
-                height: 0,
-                curveSegments: 5,
-                bevelEnabled: true,
-                bevelThickness: 10,
-                bevelSize: 1
+                size: Settings.COUNTDOWN_TEXT_SIZE,
+                height: Settings.COUNTDOWN_TEXT_HEIGHT,
+                curveSegments: Settings.COUNTDOWN_TEXT_CURVE_SEGMENTS,
+                bevelEnabled: Settings.COUNTDOWN_TEXT_BEVEL_ENABLES,
+                bevelThickness: Settings.COUNTDOWN_TEXT_BEVEL_THICKNESS,
+                bevelSize: Settings.COUNTDOWN_TEXT_BEVEL_SIZE
             });
             const material = new THREE.MeshPhongMaterial({
-                color: 0xffff00
+                color: Settings.COUNTDOWN_TEXT_COLOR
             });
             service.countdownMesh = new THREE.Mesh(textGeometry, material);
             service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
-            service.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
+            service.countdownMesh.position.setY(Settings.TRACK_HEIGHT);
             service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
-            service.countdownMesh.geometry.rotateY(Math.PI / 2);
-            service.sceneService.addObjectWithName(service.countdownMesh, 'countdown');
+            service.countdownMesh.geometry.rotateY(Settings.ASSETS_INITIAL_Y_ROTATION);
+            service.sceneService.addObjectWithName(service.countdownMesh, Settings.COUNTDOWN_NAME);
         });
     }
 
@@ -75,15 +75,15 @@ export class CountdownService {
 
         const textGeometry = new THREE.TextGeometry(countText, {
             font: this.font,
-            size: 200,
-            height: 0,
-            curveSegments: 5,
-            bevelEnabled: true,
-            bevelThickness: 10,
-            bevelSize: 1
+            size: Settings.COUNTDOWN_TEXT_SIZE,
+            height: Settings.COUNTDOWN_TEXT_HEIGHT,
+            curveSegments: Settings.COUNTDOWN_TEXT_CURVE_SEGMENTS,
+            bevelEnabled: Settings.COUNTDOWN_TEXT_BEVEL_ENABLES,
+            bevelThickness: Settings.COUNTDOWN_TEXT_BEVEL_THICKNESS,
+            bevelSize: Settings.COUNTDOWN_TEXT_BEVEL_SIZE
         });
         this.countdownMesh.geometry = textGeometry;
-        this.countdownMesh.geometry.rotateY(Math.PI / 2);
+        this.countdownMesh.geometry.rotateY(Settings.ASSETS_INITIAL_Y_ROTATION);
     }
 
     private getCenterOfTrack(track: Track): THREE.Vector2 {
