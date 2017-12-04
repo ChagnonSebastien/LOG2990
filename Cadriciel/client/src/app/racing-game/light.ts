@@ -32,17 +32,17 @@ export class Light {
 
     public addLightsToVehicle(vehicle: any) {
         const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
-        const matSphereRight = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+        const matSphereRight = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
 
         const sphereLeft = new THREE.SphereGeometry(0.15, 16, 8);
-        const matSphereLeft = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+        const matSphereLeft = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
         const headlightLeft = new THREE.Mesh(sphereLeft, matSphereLeft);
 
-        this.spotRight = new THREE.SpotLight( 0xFFFFFF);
+        this.spotRight = new THREE.SpotLight(0xFFFFFF);
         this.spotRight.add(headlightRight);
 
-        this.spotLeft = new THREE.SpotLight( 0xFFFFFF);
+        this.spotLeft = new THREE.SpotLight(0xFFFFFF);
         this.spotLeft.add(headlightLeft);
 
         const target = new THREE.Object3D();

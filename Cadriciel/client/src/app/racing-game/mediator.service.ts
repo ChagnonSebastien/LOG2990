@@ -128,8 +128,8 @@ export class RaceMediator {
             case PlayerCommand.MOVE_FORWARD:
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
-            (<HumanController> this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
-            break;
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+                break;
         }
     }
 
@@ -139,32 +139,32 @@ export class RaceMediator {
             case PlayerCommand.MOVE_FORWARD:
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
-            (<HumanController> this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
-            break;
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+                break;
 
             case PlayerCommand.START_GAME:
-            this.countdownService.startCountdown();
-            break;
+                this.countdownService.startCountdown();
+                break;
 
             case PlayerCommand.ZOOM_IN:
-            this.cameraService.zoomIn();
-            break;
+                this.cameraService.zoomIn();
+                break;
 
             case PlayerCommand.ZOOM_OUT:
-            this.cameraService.zoomOut();
-            break;
+                this.cameraService.zoomOut();
+                break;
 
             case PlayerCommand.TOOGLE_CAMERA_VIEW:
-            this.cameraService.toggleCamera();
-            break;
+                this.cameraService.toggleCamera();
+                break;
 
             case PlayerCommand.TOGGLE_NIGHT_MODE:
-            this.racingSceneService.toggleNightMode();
-            break;
+                this.racingSceneService.toggleNightMode();
+                break;
 
             case PlayerCommand.REAR_VISIBLE:
-            this.renderService.swapRearWiew();
-            break;
+                this.renderService.swapRearWiew();
+                break;
         }
     }
 
@@ -181,7 +181,7 @@ export class RaceMediator {
     private handleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
-            const vehicle = <Vehicle> event.getObject();
+            const vehicle = <Vehicle>event.getObject();
             this.racingSceneService.light.addLightsToVehicle(vehicle.getMesh());
             this.racingSceneService.light.hideLightsVehicle();
             this.racingSceneService.addObject(vehicle.getMesh());

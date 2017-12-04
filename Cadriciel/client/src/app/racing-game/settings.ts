@@ -18,7 +18,6 @@ export module Settings {
     export const CAMERA_ZOOM_CHANGE = 0.05;
 
     export const VEHICLE_NAME = 'vehicle';
-    export const MAX_CORNER_LENGTH_FROM_INTERSECTION = 26; // 10*sqrt(1+(1/sqrt(2))
 
     export const HUD_HEIGHT_RATIO = 0.8;
     export const HUD_INVERSE_HEIGHT_RATIO = 0.2;
@@ -28,8 +27,8 @@ export module Settings {
     export const HUD_RACE_INFO_BOX_RIGHT_OFFSET = 0.15;
     export const HUD_TEXT_WIDTH_OFFSET = 0.1;
     export const HUD_TEXT_HEIGHT_OFFSET = 0.55;
-    export const HUD_BITMAP_FONT =  'Bold 100px Arial';
-    export const HUD_BITMAP_FILLSTYLE =  'rgba(0,0,0,0.75)';
+    export const HUD_BITMAP_FONT = 'Bold 100px Arial';
+    export const HUD_BITMAP_FILLSTYLE = 'rgba(0,0,0,0.75)';
     export const HUD_START_LAP_COUNTDOWN = '0/3';
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
     export const RED = 0xff0000;

@@ -12,7 +12,7 @@ export class RoadLimitService {
     constructor(
         private lineCalculationService: LineCalculationService,
         private racingGameService: RacingGameService
-    ) {}
+    ) { }
 
     public validateMovement(vehicleMoveEvent: VehicleMoveEvent) {
         if (!this.isMovementValid(this.racingGameService.getTrack(), vehicleMoveEvent.getNewPosition())) {

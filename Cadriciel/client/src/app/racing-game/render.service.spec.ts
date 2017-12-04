@@ -29,7 +29,7 @@ let renderService: RenderService;
 
 describe('Render', () => {
 
-      beforeEach(() => {
+    beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
