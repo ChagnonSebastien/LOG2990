@@ -5,18 +5,21 @@ import { Injectable } from '@angular/core';
 import { Track } from './track';
 import { Vector2, Vector3 } from 'three';
 import { Vehicle } from './vehicle';
+import { HitWallEventService, HitWallEvent } from './events/hit-wall-event.service';
 
 @Injectable()
 export class RoadLimitService {
 
     constructor(
         private lineCalculationService: LineCalculationService,
-        private racingGameService: RacingGameService
+        private racingGameService: RacingGameService,
+        private hitWallEventService: HitWallEventService
     ) { }
 
     public validateMovement(vehicleMoveEvent: VehicleMoveEvent) {
         if (!this.isMovementValid(this.racingGameService.getTrack(), vehicleMoveEvent.getNewPosition())) {
             this.snapToTrack(vehicleMoveEvent.getVehicle(), vehicleMoveEvent.getNewPosition());
+            this.hitWallEventService.sendHitWallEvent(new HitWallEvent());
         }
     }
 
