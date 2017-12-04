@@ -118,7 +118,7 @@ export class RaceMediator {
             vehicle.getController().nextFrame(vehicle);
         });
         if (this.vehicleService.getVehicles() !== undefined) {
-            this.lapcounterService.updateLapCounter();
+            this.lapcounterService.update();
         }
 
     }
