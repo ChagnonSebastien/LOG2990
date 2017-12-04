@@ -37,6 +37,7 @@ describe('#CrosswordGameManagerService', () => {
                 CrosswordGridService,
                 CrosswordHintsService,
                 CrosswordMultiplayerService,
+                CrosswordMutationService,
                 CrosswordPointsService,
                 { provide: CrosswordService, useClass: MockCrosswordService },
                 CrosswordWordsService,

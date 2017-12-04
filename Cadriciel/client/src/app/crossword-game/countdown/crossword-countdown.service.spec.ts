@@ -6,16 +6,18 @@ import { GameConfiguration } from '../game-configuration';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
 let countdownService: CrosswordCountdownService;
+let configurationService: CrosswordConfigurationService;
 
 describe('#CrosswordCountdownService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                CrosswordCountdownService,
-                CrosswordConfigurationService
+                CrosswordConfigurationService,
+                CrosswordCountdownService
             ]
         });
         countdownService = TestBed.get(CrosswordCountdownService);
+        configurationService = TestBed.get(CrosswordConfigurationService);
     });
 
     it('should construct', () => {
@@ -40,13 +42,8 @@ describe('#CrosswordCountdownService', () => {
             expect(countdownService.count).toEqual(countdownService['initialCount']);
         });
 
-        it('should return true when a game is not already started', () => {
+        it('should return true when a game has been started', () => {
             expect(countdownService.newGame()).toBeTruthy();
-        });
-
-        it('should return false when a game is already started', () => {
-            expect(countdownService.newGame()).toBeTruthy();
-            expect(countdownService.newGame()).toBeFalsy();
         });
     });
 

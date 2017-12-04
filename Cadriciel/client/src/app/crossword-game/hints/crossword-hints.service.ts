@@ -26,10 +26,10 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public async newGame(wordsWithIndex: Array<Word>) {
+    public async newGame(wordsWithIndex: Array<Word>): Promise<void> {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
-        this.initializeHints(wordsWithIndex).then((hints) => {
+        await this.initializeHints(wordsWithIndex).then((hints) => {
             this.hints = hints;
         });
     }
