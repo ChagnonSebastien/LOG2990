@@ -21,37 +21,37 @@ export class AudioService {
         this.themed.load();
     }
 
-    public startCountdown() {
+    public startCountdown(): void {
         this.countdown.play();
         this.countdown.addEventListener(Settings.MUSIC_ENDED_EVENT, () => {
             this.startRace();
         });
     }
 
-    public startRace() {
+    public startRace(): void {
         this.race.loop = true;
         this.race.play();
     }
 
-    public stopRace() {
+    public stopRace(): void {
         this.race.pause();
     }
 
-    private listenForEndOfRace() {
+    private listenForEndOfRace(): void {
         this.raceService.raceEndedAlerts().subscribe(() => {
             this.stopRace();
             this.startStinger();
         });
     }
 
-    private startStinger() {
+    private startStinger(): void {
         this.stinger.play();
         this.stinger.addEventListener(Settings.MUSIC_ENDED_EVENT, () => {
             this.startThemed();
         });
     }
 
-    private startThemed() {
+    private startThemed(): void {
         this.themed.loop = true;
         this.themed.play();
     }
