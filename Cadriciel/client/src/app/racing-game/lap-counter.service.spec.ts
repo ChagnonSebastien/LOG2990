@@ -24,7 +24,7 @@ import * as THREE from 'three';
 
 let lapCounterService: LapCounterService;
 
-describe('LapCounterService', function () {
+describe ('LapCounterService', function () {
     const track = new Track(
         'name',
         'desc',

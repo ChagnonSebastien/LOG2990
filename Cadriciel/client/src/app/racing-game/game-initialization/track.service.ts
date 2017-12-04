@@ -2,7 +2,6 @@ import { Track } from './../track';
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Body } from '@angular/http/src/body';
 
 const apiUrl = 'http://localhost:3000/api';
 const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -10,7 +9,6 @@ const getPath = 'track';
 const getAllPath = 'tracks';
 const savePath = 'track';
 const deletePath = 'track';
-const update = 'track/update';
 
 @Injectable()
 export class TrackService {
