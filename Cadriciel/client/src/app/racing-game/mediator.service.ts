@@ -109,7 +109,7 @@ export class RaceMediator {
         this.vehicleService.createVehicles(track);
         this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
-        this.lapcounterService.initializePassedCounter();
+        this.lapcounterService.initialize();
     }
 
     private handleFrameEvent(event: FrameEvent) {
