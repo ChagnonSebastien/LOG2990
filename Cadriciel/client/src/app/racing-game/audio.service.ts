@@ -69,7 +69,6 @@ export class AudioService {
     }
 
     public startHitPothole(): void {
-        this.hitPothole.volume = 1;
         this.hitPothole.play();
     }
 
