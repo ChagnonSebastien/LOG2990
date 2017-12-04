@@ -15,7 +15,7 @@ import * as THREE from 'three';
 
 let countdownService: CountdownService;
 
-fdescribe('CountdownService', function () {
+describe('CountdownService', function () {
     const track = new Track(
         'name',
         'desc',

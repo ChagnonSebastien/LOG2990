@@ -18,7 +18,6 @@ export class AudioService {
     private acceleratorBonusEnd: HTMLAudioElement;
 
     constructor(private raceService: RaceEventService) {
-        this.listenForEndOfRace();
         this.countdown = new Audio('../../assets/sounds/countdown.mp3');
         this.countdown.load();
         this.race = new Audio('../../assets/sounds/race.mp3');
@@ -111,14 +110,7 @@ export class AudioService {
         this.hitWall.play();
     }
 
-    private listenForEndOfRace(): void {
-        this.raceService.raceEndedAlerts().subscribe(() => {
-            this.stopRace();
-            this.startStinger();
-        });
-    }
-
-    private startStinger(): void {
+    public startStinger(): void {
         this.stinger.play();
         this.stinger.addEventListener('ended', () => {
             this.startThemed();
