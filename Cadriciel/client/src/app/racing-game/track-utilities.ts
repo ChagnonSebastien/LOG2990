@@ -9,5 +9,4 @@ export module TrackUtilities {
         const distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
         return distance;
     }
-
 }
