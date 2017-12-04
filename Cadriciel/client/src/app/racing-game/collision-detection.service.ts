@@ -10,22 +10,24 @@ import { Settings } from './settings';
 @Injectable()
 export class CollisionDetectionService {
 
-    private amountBBC = 0;
+    private amountBoundingBoxesCreated;
 
     constructor(
         private collisionEventService: CollisionEventService,
         private vehicleService: VehicleService
-    ) { }
+    ) {
+        this.amountBoundingBoxesCreated = 0;
+    }
 
     public generateBoundingBox(vehicle: Vehicle): void {
         new ObjectLoader().load(`${Settings.ASSETS_FOLDER}/${Settings.PATH_BOUNDING_BOX}`, (box: Object3D) => {
             vehicle.setSize(this.calculateBoxSize(<Mesh>box));
             vehicle.setBoundingBox(<Mesh>box);
-            this.amountBBC++;
+            this.amountBoundingBoxesCreated++;
         });
     }
 
-    public checkForCollisionWithCar(event: VehicleMoveEvent) {
+    public checkForCollisionWithCar(event: VehicleMoveEvent): void {
         if (this.amountBoundingBoxesCreated !== Object.keys(VehicleColor).length / 2) {
             return;
         }
