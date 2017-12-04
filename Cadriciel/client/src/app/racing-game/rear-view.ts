@@ -3,7 +3,7 @@ import { Scene, PerspectiveCamera, Object3D } from 'three';
 const WEIGHT = 300;
 const HEIGHT = 150;
 const ORIGIN_X = 400;
-const ORIGIN_Y = 650;
+const ORIGIN_Y = 0;
 const FAR = 3000;
 
 export class RearView {
