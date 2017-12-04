@@ -1,4 +1,3 @@
-import { RaceEventService } from './events/race-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { AudioService } from './audio.service';
 import { TestBed } from '@angular/core/testing';
@@ -10,9 +9,9 @@ describe('test AudioService', function () {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [RaceEventService]
+            providers: [AudioService]
         });
-        audioService = new AudioService(TestBed.get(RaceEventService));
+        audioService = TestBed.get(AudioService);
     });
 
     it('construction test', () => {
