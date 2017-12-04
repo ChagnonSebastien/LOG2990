@@ -8,11 +8,11 @@ export class RacingGameService {
     constructor() {
     }
 
-    public initialize(track: Track) {
+    public initialize(track: Track): void {
         this.track = track;
     }
 
-    public getTrack() {
+    public getTrack(): Track {
         return this.track;
     }
 
