@@ -15,9 +15,9 @@ describe('CrosswordGenerator', () => {
     });
 
     describe('constructor()', () => {
-        it('should return a grid with size 10 x 10', () => {
-            expect(crossword.grid.length).to.equal(10);
-            expect(crossword.grid[0].length).to.equal(10);
+        it('should return a grid with size CROSSWORD_GRID_SIZE x CROSSWORD_GRID_SIZE', () => {
+            expect(crossword.grid.length).to.equal(CROSSWORD_GRID_SIZE);
+            expect(crossword.grid[0].length).to.equal(CROSSWORD_GRID_SIZE);
         });
 
         it('should return a grid with empty characters', () => {

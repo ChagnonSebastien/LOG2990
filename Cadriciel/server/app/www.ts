@@ -12,6 +12,8 @@ import { SocketServer } from './socket-server';
 import { MultiplayerManager } from './multiplayer-manager';
 import { Database } from './database';
 
+import { SERVER_PORT, CROSSWORD_COLLECTION } from './config';
+
 // start app after database is connected
 Database
     .getInstance()
@@ -24,12 +26,12 @@ Database
 
                 // initialize server crossword with collection crosswords
                 const serverCrosswords = ServerCrosswords.getInstance();
-                serverCrosswords.setCollection('crosswords');
+                serverCrosswords.setCollection(CROSSWORD_COLLECTION);
                 serverCrosswords.initializeServerCrossword()
                     .then(() => console.log('crosswords stored on server'))
                     .then(() => {
                         // Configuration du port d'écoute
-                        const appPort = normalizePort(process.env.PORT || '3000');
+                        const appPort = normalizePort(process.env.PORT || SERVER_PORT);
                         application.app.set('port', appPort);
 
                         // Création du serveur HTTP.

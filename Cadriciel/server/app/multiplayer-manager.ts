@@ -11,7 +11,6 @@ export class MultiplayerManager {
         this.crosswordGameplayService = CrosswordGameplayService.getInstance();
     }
 
-    // Singleton
     public static getInstance(): MultiplayerManager {
         if (this.multiplayerManager === undefined) {
             this.multiplayerManager = new MultiplayerManager();
