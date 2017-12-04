@@ -97,8 +97,8 @@ module Route {
                                         { $set: { rating: tempRating,
                                         bestTimes: tempBestTimes,
                                         numberOfTimesPlayed: tempNbOfTimesPlayed} },
-                                        { upsert: false
-                            });
+                                        { upsert: false }
+                            );
                             res.send({ 'data': 'success' });
                         });
                 }
