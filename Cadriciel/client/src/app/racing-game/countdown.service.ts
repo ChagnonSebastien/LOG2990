@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import { CommandsService } from './events/commands.service';
 import { Settings } from './settings';
 import { RacingSceneService } from './racing-scene.service';
+import { VehicleService } from './vehicle.service';
+import { TrackUtilities } from './track-utilities';
 
 @Injectable()
 export class CountdownService {
@@ -19,7 +21,8 @@ export class CountdownService {
         private audioService: AudioService,
         commandService: CommandsService,
         private countdownDecreaseEventService: CountdownDecreaseEventService,
-        private sceneService: RacingSceneService
+        private sceneService: RacingSceneService,
+        private vehicleService: VehicleService
     ) {
         this.count = Settings.COUNTDOWN_TIME;
         this.countdownStarted = false;
@@ -38,14 +41,14 @@ export class CountdownService {
         }
     }
 
-    private startAudio() {
+    private startAudio(): void {
         this.audioService.startCountdown();
     }
 
     public createCountdown(track: Track): void {
         const loader = new THREE.FontLoader();
         let textGeometry: THREE.TextGeometry;
-        const trackCenter = this.getCenterOfTrack(track);
+        const trackCenter = TrackUtilities.getCenterOfTrack(track);
         const service = this;
         loader.load(`${Settings.ASSETS_FOLDER}/${Settings.PATH_FONT_SAMUEL_REGULAR}`, function (font) {
             service.font = font;
@@ -65,7 +68,7 @@ export class CountdownService {
             service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
             service.countdownMesh.position.setY(Settings.TRACK_HEIGHT);
             service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
-            service.countdownMesh.geometry.rotateY(Settings.ASSETS_INITIAL_Y_ROTATION);
+            service.countdownMesh.geometry.rotateY(service.vehicleService.getMainVehicle().getMesh().rotation.y);
             service.sceneService.addObjectWithName(service.countdownMesh, Settings.COUNTDOWN_NAME);
         });
     }
@@ -83,16 +86,6 @@ export class CountdownService {
             bevelSize: Settings.COUNTDOWN_TEXT_BEVEL_SIZE
         });
         this.countdownMesh.geometry = textGeometry;
-        this.countdownMesh.geometry.rotateY(Settings.ASSETS_INITIAL_Y_ROTATION);
-    }
-
-    private getCenterOfTrack(track: Track): THREE.Vector2 {
-        const fromPosition = track.trackIntersections[0];
-        const toPosition = track.trackIntersections[1];
-        const xCenter = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
-        const yCenter = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
-        const center = new THREE.Vector2(xCenter, yCenter);
-
-        return center;
+        this.countdownMesh.geometry.rotateY(this.vehicleService.getMainVehicle().getMesh().rotation.y);
     }
 }

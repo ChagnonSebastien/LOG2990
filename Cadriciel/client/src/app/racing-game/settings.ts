@@ -14,7 +14,6 @@ export module Settings {
     export const SOUND_THEMED = 'sounds/themed.mp3';
     export const PATH_BOUNDING_BOX = 'cart_bounding_box.json';
     export const PATH_FONT_SAMUEL_REGULAR = 'font_samuel_regular.json';
-    export const ASSETS_INITIAL_Y_ROTATION = Math.PI / 2;
 
     export const MUSIC_ENDED_EVENT = 'ended';
 
@@ -47,6 +46,7 @@ export module Settings {
     export const HUD_START_LAP_COUNTDOWN = '0/3';
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
     export const RED = 0xff0000;
+    export const YELLOW = 0xffff00;
     export const TOTAL_LAPS = 3;
 
     export const COUNTDOWN_TIME = 6;
@@ -86,4 +86,7 @@ export module Settings {
     export const DRIVE_MODIFIER_PUDDLE_DECELERATION = 1;
     export const DRIVE_MODIFIER_PUDDLE_ROTATION = 0;
     export const DRIVE_MODIFIER_PUDDLE_TIME = 45;
+
+    export const FIRST_INTERSECTION = 0;
+    export const SECOND_INTERSECTION = 1;
 }

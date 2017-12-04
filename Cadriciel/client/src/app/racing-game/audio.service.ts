@@ -1,4 +1,3 @@
-import { RaceEventService } from './events/race-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
@@ -18,8 +17,7 @@ export class AudioService {
     private acceleratorBonusStart: HTMLAudioElement;
     private acceleratorBonusEnd: HTMLAudioElement;
 
-    constructor(private raceService: RaceEventService) {
-        this.listenForEndOfRace();
+    constructor() {
         this.countdown = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_COUNTDOWN}`);
         this.countdown.load();
         this.race = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_RACE}`);
@@ -112,14 +110,7 @@ export class AudioService {
         this.hitWall.play();
     }
 
-    private listenForEndOfRace(): void {
-        this.raceService.raceEndedAlerts().subscribe(() => {
-            this.stopRace();
-            this.startStinger();
-        });
-    }
-
-    private startStinger(): void {
+    public startStinger(): void {
         this.stinger.play();
         this.stinger.addEventListener(Settings.MUSIC_ENDED_EVENT, () => {
             this.startThemed();

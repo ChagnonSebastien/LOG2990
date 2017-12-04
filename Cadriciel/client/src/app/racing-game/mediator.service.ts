@@ -115,7 +115,6 @@ export class RaceMediator {
         this.cameraService.initialize(container);
         this.renderService.initialize(container, track);
         this.vehicleService.createVehicles(track);
-        this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
         this.lapcounterService.initialize();
     }
@@ -205,6 +204,7 @@ export class RaceMediator {
         }
 
         if (event.getProgress() === 'All carts loaded') {
+            this.countdownService.createCountdown(this.racingGameService.getTrack());
             this.renderService.startRenderingLoop();
         }
     }
@@ -239,6 +239,9 @@ export class RaceMediator {
     }
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
+        this.audioService.stopRace();
+        this.audioService.startStinger();
+        this.raceService.stopTimers();
         console.log('race ended');
     }
 

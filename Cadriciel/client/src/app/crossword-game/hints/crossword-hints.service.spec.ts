@@ -55,10 +55,8 @@ describe('#CrosswordHintsService', () => {
     });
 
     describe('newGame()', () => {
-        it('should initialize a new game', () => {
-            hintsService.newGame(wordsWithIndex);
-
-            // initialize attributes
+        it('should initialize a new game', async () => {
+            await hintsService.newGame(wordsWithIndex);
             expect(hintsService.selectedWord).toBeUndefined();
             expect(hintsService.opponentSelectedWord).toBeUndefined();
             expect(hintsService.hints).toBeDefined();
