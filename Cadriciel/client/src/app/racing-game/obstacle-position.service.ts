@@ -19,7 +19,7 @@ export class ObstaclePositionService {
         this.puddles = [];
     }
 
-    public initialize(track: Track) {
+    public initialize(track: Track): void {
         this.potholes = this.calculateTypePositions(track.potholes, track.trackIntersections);
         this.puddles = this.calculateTypePositions(track.puddles, track.trackIntersections);
         this.boosters = this.calculateTypePositions(track.boosters, track.trackIntersections);
