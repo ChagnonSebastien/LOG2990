@@ -34,6 +34,12 @@ export module Settings {
     export const RED = 0xff0000;
     export const TOTAL_LAPS = 3;
 
+    export const DRIVE_MODIFIER_NONE_POSITION = 0;
+    export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;
+    export const DRIVE_MODIFIER_NONE_DECELERATION = 1;
+    export const DRIVE_MODIFIER_NONE_ROTATION = 1;
+    export const DRIVE_MODIFIER_NONE_TIME = -1;
+
     export const DRIVE_MODIFIER_BOOSTER_SPEED_MULTIPLIER = 1.5;
     export const DRIVE_MODIFIER_BOOSTER_POSITION = 0;
     export const DRIVE_MODIFIER_BOOSTER_ACCELERATION = 1;
