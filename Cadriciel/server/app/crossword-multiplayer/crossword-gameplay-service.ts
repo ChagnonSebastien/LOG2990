@@ -17,7 +17,6 @@ export class CrosswordGameplayService {
         this.gameManager = CrosswordGamesManager.getInstance();
     }
 
-    // Singleton
     public static getInstance(): CrosswordGameplayService {
         if (this.gameplayService === undefined) {
             this.gameplayService = new CrosswordGameplayService();
