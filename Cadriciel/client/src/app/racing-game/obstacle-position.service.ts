@@ -2,6 +2,7 @@ import { ObstacleType, Obstacle } from './draw-track/obstacle';
 import { Track } from './track';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
+import { Settings } from './settings';
 
 @Injectable()
 export class ObstaclePositionService {
@@ -41,7 +42,8 @@ export class ObstaclePositionService {
         );
 
         const lineAngle = Math.atan(segment.x / segment.y) + Math.PI / 2;
-        const randomOffset = new THREE.Vector2(Math.sin(lineAngle), Math.cos(lineAngle)).multiplyScalar(obstacle.offset * 10);
+        const randomOffset = new THREE.Vector2(
+            Math.sin(lineAngle), Math.cos(lineAngle)).multiplyScalar(obstacle.offset * Settings.TRACK_RADIUS * 2);
 
         return new THREE.Vector2(obstaclePosition.x + randomOffset.x, obstaclePosition.y + randomOffset.y);
     }
