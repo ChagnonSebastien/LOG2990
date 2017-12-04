@@ -1,4 +1,3 @@
-import { Track } from './track';
 import { ControllerFactory } from './controller-factory.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
@@ -20,7 +19,6 @@ import { RacingGameService } from './racing-game.service';
 import { LapEventService } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
 import { TestBed } from '@angular/core/testing';
-import * as THREE from 'three';
 
 let lapCounterService: LapCounterService;
 
