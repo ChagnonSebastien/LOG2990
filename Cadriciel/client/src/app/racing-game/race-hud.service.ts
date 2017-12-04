@@ -46,10 +46,8 @@ export class RaceHudService {
         this.hudBitmap.fillStyle = Settings.HUD_BITMAP_FILLSTYLE;
         this.hudBitmap.fillText(Settings.HUD_START_LAP_COUNTDOWN,
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
-        this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
-        this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET);
+        this.updateTotalTimer();
+        this.updateLapTimer();
     }
 
     private initializeCamera(): void {
@@ -106,18 +104,11 @@ export class RaceHudService {
     public updateHud(lap: number): void {
         if (!this.raceEnded) {
             this.hudBitmap.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
-            this.hudBitmap.fillText(lap.toString() + '/' + Settings.TOTAL_LAPS.toString(),
-                this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET,
-                this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
-            );
+            this.updateLaps();
             this.hudTexture.needsUpdate = true;
-            this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
-                this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
-            );
+            this.updateTotalTimer();
             this.hudTexture.needsUpdate = true;
-            this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
-            );
+            this.updateLapTimer();
             this.hudTexture.needsUpdate = true;
             this.currentLap = lap;
         }
@@ -139,15 +130,27 @@ export class RaceHudService {
         this.raceEnded = true;
         this.currentLap++;
         this.hudBitmap.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
+        this.updateLaps();
+        this.updateTotalTimer();
+        this.updateLapTimer();
+    }
+
+    private updateLaps(): void {
         this.hudBitmap.fillText(this.currentLap.toString() + '/' + Settings.TOTAL_LAPS.toString(),
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET,
             this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
+    }
+
+    private updateTotalTimer(): void {
         this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
+    }
+
+    private updateLapTimer(): void {
         this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
-        this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
     }
 
