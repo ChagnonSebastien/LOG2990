@@ -14,6 +14,14 @@ export module Settings {
     export const SOUND_THEMED = 'sounds/themed.mp3';
     export const PATH_BOUNDING_BOX = 'cart_bounding_box.json';
     export const PATH_FONT_SAMUEL_REGULAR = 'font_samuel_regular.json';
+    export const SOUND_CAR_CAR_COLLISION = 'sounds/car_car_collision.mp3';
+    export const SOUND_ENGINE_START = 'sounds/carStart.mp3';
+    export const SOUND_IDLE_ENGINE = 'sounds/idleEngine.mp3';
+    export const SOUND_CAR_ACCELERATION = 'sounds/carAcceleration.mp3';
+    export const SOUND_HIT_POTHOLE = 'sounds/pothole.mp3';
+    export const SOUND_ACCELERATOR_BONUS_START = 'sounds/acceleratorBonusStart.mp3';
+    export const SOUND_ACCELERATOR_BONUS_END = 'sounds/acceleratorBonusEnd.mp3';
+    export const SOUND_HIT_WALL = 'sounds/hitWall.mp3';
 
     export const MUSIC_ENDED_EVENT = 'ended';
 
