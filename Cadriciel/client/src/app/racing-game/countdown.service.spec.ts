@@ -16,19 +16,6 @@ import * as THREE from 'three';
 let countdownService: CountdownService;
 
 describe('CountdownService', function () {
-    const track = new Track(
-        'name',
-        'desc',
-        'diff',
-        [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
-        [],
-        [],
-        [],
-        -1,
-        0,
-        []
-    );
-
     beforeAll(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({

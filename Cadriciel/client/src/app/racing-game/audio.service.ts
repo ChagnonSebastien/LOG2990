@@ -18,7 +18,7 @@ export class AudioService {
     private acceleratorBonusStart: HTMLAudioElement;
     private acceleratorBonusEnd: HTMLAudioElement;
 
-    constructor(private raceService: RaceEventService) {
+    constructor() {
         this.countdown = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_COUNTDOWN}`);
         this.countdown.load();
         this.race = new Audio(`${Settings.ASSETS_FOLDER}/${Settings.SOUND_RACE}`);

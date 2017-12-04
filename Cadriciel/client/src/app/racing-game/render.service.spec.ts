@@ -24,6 +24,10 @@ import { VehicleRotateEventService } from './events/vehicle-rotate-event.service
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
 import { RaceHudService } from './race-hud.service';
+import { LapCounterService } from './lap-counter.service';
+import { LapEventService } from './events/lap-event.service';
+import { RacingGameService } from './racing-game.service';
+import { ControllerFactory } from './controller-factory.service';
 
 let renderService: RenderService;
 
@@ -57,7 +61,11 @@ describe('Render', () => {
                 SceneService,
                 FrameEventService,
                 RacingSceneService,
-                RaceHudService
+                RaceHudService,
+                LapCounterService,
+                LapEventService,
+                RacingGameService,
+                ControllerFactory
             ]
         });
         renderService = TestBed.get(RenderService);
