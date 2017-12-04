@@ -11,14 +11,12 @@ export class CrosswordMutationManager {
     private foundWords: Map<string, Array<Word>>;
     private crosswordGenerator: CrosswordGenerator;
 
-    // Singleton : use getInstance()
     private constructor() {
         this.nextMutations = new Map<string, Crossword>();
         this.foundWords = new Map<string, Array<Word>>();
         this.crosswordGenerator = new CrosswordGenerator(CROSSWORD_GRID_SIZE);
     }
 
-    // returns Singleton
     public static getInstance(): CrosswordMutationManager {
         if (this.mutationManager === undefined) {
             this.mutationManager = new CrosswordMutationManager();

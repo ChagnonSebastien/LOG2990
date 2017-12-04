@@ -13,7 +13,6 @@ export class CrosswordLobbyService {
         this.gameManager = CrosswordGamesManager.getInstance();
     }
 
-    // Singleton
     public static getInstance(): CrosswordLobbyService {
         if (this.lobbyService === undefined) {
             this.lobbyService = new CrosswordLobbyService();
