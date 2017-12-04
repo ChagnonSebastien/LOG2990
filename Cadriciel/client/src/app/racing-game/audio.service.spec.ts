@@ -1,4 +1,3 @@
-import { RaceEventService } from './events/race-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { AudioService } from './audio.service';
 import { TestBed } from '@angular/core/testing';

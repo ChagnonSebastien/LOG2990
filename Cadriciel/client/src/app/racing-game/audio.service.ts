@@ -1,4 +1,3 @@
-import { RaceEventService } from './events/race-event.service';
 import { ObstacleType } from './draw-track/obstacle';
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
