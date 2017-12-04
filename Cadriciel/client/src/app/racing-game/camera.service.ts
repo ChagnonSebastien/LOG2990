@@ -5,6 +5,8 @@ import { RearView } from './rear-view';
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
 
+const INITIAL_ORTHOGRAPHIC_CAMERA_X_ROTATION = Math.PI / -2;
+
 @Injectable()
 export class CameraService {
     private currentView: View;
@@ -66,7 +68,7 @@ export class CameraService {
             Settings.CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
             Settings.CAMERA_ORTHOGRAPHIC_FAR_CLIPPING_PANE * Settings.SCENE_SCALE
         );
-        orthographicCamera.rotation.x = Math.PI / -2;
+        orthographicCamera.rotation.x = INITIAL_ORTHOGRAPHIC_CAMERA_X_ROTATION;
         return orthographicCamera;
     }
 

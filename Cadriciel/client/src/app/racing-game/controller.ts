@@ -8,9 +8,14 @@ import { DriveModifier } from './drive-modifiers/drive-modifier';
 import { BoosterModifier } from './drive-modifiers/booster-modifier';
 import { PotholeModifier } from './drive-modifiers/pothole-modifier';
 import { PuddleModifier } from './drive-modifiers/puddle-modifier';
-const acceleration = 0.1;
-const rotationSpeed = Math.PI / 100;
-const maxSpeed = 35;
+
+const ACCELERATION = 0.1;
+const ROTATION_SPEED = Math.PI / 100;
+const MAX_SPEED = 35;
+const MIN_SPEED = 0;
+const DECELERATION_RATE = 0.98;
+const INITIAL_SPEED = 0;
+const BRAKE_RATE = 1.5;
 
 export enum MOVE_STATE { MOVE_FORWARD, BRAKE }
 export enum TURN_STATE { TURN_LEFT, TURN_RIGHT, DO_NOTHING }
@@ -28,14 +33,14 @@ export abstract class Controller {
         protected vehicleMoveEventService: VehicleMoveEventService,
         protected vehicleRotateEventService: VehicleRotateEventService
     ) {
-        this.speed = 0;
+        this.speed = INITIAL_SPEED;
         this.driveModifier = new NoModifier();
         this.moveState = MOVE_STATE.BRAKE;
         this.turnState = TURN_STATE.DO_NOTHING;
     }
 
     public hitWall(speedModifier: number) {
-        this.speed = Math.min(maxSpeed * speedModifier, this.speed * 0.98 * speedModifier);
+        this.speed = Math.min(MAX_SPEED * speedModifier, this.speed * DECELERATION_RATE * speedModifier);
     }
 
     public hitObstacle(type: ObstacleType) {
@@ -71,10 +76,16 @@ export abstract class Controller {
 
     private modifySpeed() {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
-            this.speed = Math.min(maxSpeed, Math.max(0, this.speed + acceleration * this.driveModifier.getAccelerationMultiplier()));
+            this.speed = Math.min(
+                MAX_SPEED,
+                Math.max(
+                    MIN_SPEED,
+                    this.speed + ACCELERATION * this.driveModifier.getAccelerationMultiplier()
+                )
+            );
         } else {
-            if (this.speed > 0) {
-                this.speed = Math.max(0, this.speed - acceleration * 1.5 * this.driveModifier.getDecelerationMultiplier());
+            if (this.speed > MIN_SPEED) {
+                this.speed = Math.max(0, this.speed - ACCELERATION * BRAKE_RATE * this.driveModifier.getDecelerationMultiplier());
             }
         }
     }
@@ -96,12 +107,12 @@ export abstract class Controller {
     }
 
     private leftRotation(object: Vehicle) {
-        const newRotation = object.getMesh().rotation.y + rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const newRotation = object.getMesh().rotation.y + ROTATION_SPEED * this.driveModifier.getRotationMultiplier();
         this.rotateVehicle(object, newRotation);
     }
 
     private rightRotation(object: Vehicle) {
-        const newRotation = object.getMesh().rotation.y - rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const newRotation = object.getMesh().rotation.y - ROTATION_SPEED * this.driveModifier.getRotationMultiplier();
         this.rotateVehicle(object, newRotation);
     }
 
