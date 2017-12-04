@@ -1,3 +1,4 @@
+import { Settings } from './settings';
 import { VehicleService } from './vehicle.service';
 import { RacingGameService } from './racing-game.service';
 import { Injectable } from '@angular/core';
@@ -8,8 +9,6 @@ import { LapEventService, LapEvent } from './events/lap-event.service';
 enum Zone {
     PREVIOUS, LAST, NEXT
 }
-
-const MAIN_PLAYER = 0;
 
 @Injectable()
 export class LapCounterService {
@@ -151,7 +150,7 @@ export class LapCounterService {
             }).map((minPassed, i) => {
                 if (this.completedLap(minPassed, i)) {
                     this.laps[i]++;
-                    if (i === MAIN_PLAYER) {
+                    if (i === Settings.HUMAN_COLOR) {
                         this.lapEventService.sendLapEvent(new LapEvent(minPassed));
                     }
                 }

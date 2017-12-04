@@ -1,8 +1,11 @@
+import { VehicleColor } from './vehicle-color';
+
 export module Settings {
 
     export const SCENE_SCALE = 25;
     export const TRACK_HEIGHT = 3;
     export const TRACK_RADIUS = 5;
+    export const HUMAN_COLOR = VehicleColor.red;
 
     export const ASSETS_FOLDER = '/assets';
     export const SOUND_COUNTDOWN = 'sounds/countdown.mp3';
