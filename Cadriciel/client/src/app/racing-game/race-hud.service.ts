@@ -1,3 +1,4 @@
+import { LapCounterService } from './lap-counter.service';
 import { CameraService } from './camera.service';
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
@@ -16,7 +17,7 @@ export class RaceHudService {
     public lapTimer: number;
     private raceEnded: boolean;
 
-    constructor(private cameraService: CameraService) {
+    constructor(private cameraService: CameraService, private lapCounterService: LapCounterService) {
         this.timer = 0.0;
         this.currentLap = 0;
         this.lapTimer = 0.0;
@@ -110,6 +111,8 @@ export class RaceHudService {
             this.hudTexture.needsUpdate = true;
             this.updateLapTimer();
             this.hudTexture.needsUpdate = true;
+            this.updateRacePosition();
+            this.hudTexture.needsUpdate = true;
             this.currentLap = lap;
         }
     }
@@ -133,6 +136,7 @@ export class RaceHudService {
         this.updateLaps();
         this.updateTotalTimer();
         this.updateLapTimer();
+        this.updateRacePosition();
     }
 
     private updateLaps(): void {
@@ -152,6 +156,12 @@ export class RaceHudService {
         this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
             this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
+    }
+
+    private updateRacePosition(): void {
+        this.hudBitmap.fillText(this.lapCounterService.racePositions[0].toString(),
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 3.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+    );
     }
 
 }

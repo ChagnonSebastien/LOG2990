@@ -18,7 +18,7 @@ export class LapCounterService {
     private laps: Array<number>;
     private numberOfVehicles: number;
     private numberOfIntersections: number;
-    private racePositions: Array<number>;
+    public racePositions: Array<number>;
 
     constructor(
         private lapEventService: LapEventService,
