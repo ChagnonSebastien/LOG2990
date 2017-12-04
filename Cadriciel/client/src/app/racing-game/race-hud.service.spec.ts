@@ -24,7 +24,7 @@ import { ControllerFactory } from './controller-factory.service';
 
 let raceHudService: RaceHudService;
 
-fdescribe('LapCounterService', function () {
+describe('RaceHUDService', function () {
 
     beforeAll(() => {
         TestBed.resetTestingModule();
