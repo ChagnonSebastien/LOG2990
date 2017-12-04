@@ -27,6 +27,7 @@ import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
 import { AudioService } from './audio.service';
+import { HitWallEventService, HitWallEvent } from './events/hit-wall-event.service';
 import { Vehicle } from './vehicle';
 
 
@@ -49,6 +50,7 @@ export class RaceMediator {
         private raceEventService: RaceEventService,
         private raceService: RaceHudService,
         private audioService: AudioService,
+        private hitWallEventService: HitWallEventService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -101,6 +103,10 @@ export class RaceMediator {
 
         raceEventService.raceEndedAlerts().subscribe(
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
+        );
+
+        hitWallEventService.getHitWallObservable().subscribe(
+            (event: HitWallEvent) => this.handleHitWallEvent(event)
         );
     }
 
@@ -234,6 +240,11 @@ export class RaceMediator {
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         console.log('race ended');
+    }
+
+    private handleHitWallEvent(event: HitWallEvent) {
+        this.audioService.carHitWall();
+        this.audioService.engineStopAccelerate();
     }
 
 }

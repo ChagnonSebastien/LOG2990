@@ -40,6 +40,8 @@ export class AudioService {
         this.acceleratorBonusStart.load();
         this.acceleratorBonusEnd = new Audio('../../assets/sounds/acceleratorBonusEnd.mp3');
         this.acceleratorBonusEnd.load();
+        this.hitWall = new Audio('../../assets/sounds/hitWall.mp3');
+        this.hitWall.load();
     }
 
     public startCountdown(): void {
@@ -54,7 +56,7 @@ export class AudioService {
         this.race.loop = true;
         this.idleEngine.loop = true;
         this.idleEngine.play();
-      //  this.race.play();
+        //  this.race.play();
     }
 
     public stopRace(): void {
@@ -101,6 +103,12 @@ export class AudioService {
 
     public endBooster(): void {
         this.acceleratorBonusEnd.play();
+    }
+
+    public carHitWall() {
+        this.acceleratorBonusStart.pause();
+        this.acceleratorBonusStart.currentTime = 0;
+        this.hitWall.play();
     }
 
     private listenForEndOfRace(): void {
