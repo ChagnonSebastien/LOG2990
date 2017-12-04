@@ -22,7 +22,7 @@ export class Light {
         this.dirLight.position.multiplyScalar(30);
     }
 
-    public addLightsToVehicle(vehicle: any) {
+    public addLightsToVehicle(vehicle: any): void {
         const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
         const matSphereRight = new THREE.MeshBasicMaterial({ color: Settings.LIGHT_COLOR });
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
@@ -50,7 +50,7 @@ export class Light {
         this.spotLeft.target = target;
     }
 
-    public hideLightsVehicle() {
+    public hideLightsVehicle(): void {
         this.spotRight.visible = !this.spotRight.visible;
         this.spotLeft.visible = !this.spotLeft.visible;
     }
