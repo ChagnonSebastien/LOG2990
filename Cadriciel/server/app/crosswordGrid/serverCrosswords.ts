@@ -9,6 +9,8 @@ const url = 'mongodb://admin:walleandtomato@ds123084.mlab.com:23084/skafy';
 const crosswordSize = 10;
 const maxCrosswordPerLevel = 5;
 
+import { Database } from '../database';
+
 export class ServerCrosswords {
     private static instance: ServerCrosswords;
     public collection: string;
@@ -110,9 +112,9 @@ export class ServerCrosswords {
             if (this.hardCrosswords.length === maxCrosswordPerLevel &&
                 this.normalCrosswords.length === maxCrosswordPerLevel &&
                 this.easyCrosswords.length === maxCrosswordPerLevel) {
-                    resolve(true);
-                } else {
-                    resolve(false);
+                resolve(true);
+            } else {
+                resolve(false);
             }
         });
     }

@@ -17,7 +17,7 @@ export class RearView {
         this.renderer = renderer;
     }
 
-    public addRearView(vehicle: any) {
+    public addRearView(vehicle: any): void {
         const target = new Object3D;
         vehicle.add(target);
         target.position.set(0, 0, FAR);

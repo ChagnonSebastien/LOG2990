@@ -88,7 +88,7 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
-    public rearViewCam() {
+    public rearViewCam(): void {
         this.rearCamera.addRearView(this.objectToFollow);
     }
 

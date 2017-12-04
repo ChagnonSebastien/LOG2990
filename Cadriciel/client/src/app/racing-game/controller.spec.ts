@@ -69,7 +69,7 @@ describe('Controller', function () {
                 controller,
                 TestBed.get(LoadingProgressEventService)
             );
-            vehicle['vehicle'] = new THREE.Mesh();
+            vehicle['vehicleMesh'] = new THREE.Mesh();
             vehicle.getMesh().position.set(0, 0, 0);
         });
 

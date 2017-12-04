@@ -40,7 +40,7 @@ export class Track {
         this.bestTimes = bestTimes;
     }
 
-    public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService) {
+    public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService): number {
         return Math.min.apply(null, this.trackIntersections.map((intersection, index, array) => {
             const line = { point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1] };
             const nearestPoint = lineCalculationService.getNearestPointOnLineWithClamping(point, line);

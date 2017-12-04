@@ -19,8 +19,8 @@ export class VehicleService {
         this.amountVehicleMeshCreated = 0;
     }
 
-    public vehicleCreated() {
-        if (++this.amountVehicleMeshCreated === 4) {
+    public vehicleCreated(): void {
+        if (++this.amountVehicleMeshCreated === Object.keys(VehicleColor).length / 2) {
             this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
         }
     }
