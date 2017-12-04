@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 export class HitWallEvent {
-    constructor() {}
+    constructor() { }
 }
 
 @Injectable()

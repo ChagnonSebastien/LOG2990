@@ -56,7 +56,7 @@ export class AudioService {
         this.race.loop = true;
         this.idleEngine.loop = true;
         this.idleEngine.play();
-        //  this.race.play();
+        this.race.play();
     }
 
     public stopRace(): void {

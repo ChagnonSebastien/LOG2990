@@ -105,7 +105,7 @@ export class RaceMediator {
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
         );
 
-        hitWallEventService.getHitWallObservable().subscribe(
+        this.hitWallEventService.getHitWallObservable().subscribe(
             (event: HitWallEvent) => this.handleHitWallEvent(event)
         );
     }
