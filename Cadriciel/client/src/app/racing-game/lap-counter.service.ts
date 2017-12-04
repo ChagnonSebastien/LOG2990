@@ -9,111 +9,153 @@ enum Zone {
     PREVIOUS, LAST, NEXT
 }
 
+const MAIN_PLAYER = 0;
+
 @Injectable()
 export class LapCounterService {
-    private lastVisitedIntersectionNumber: number;
-    private passedCounter: Array<number>;
-    private laps: number;
+    private lastVisitedIntersectionNumbers: Array<number>;
+    private passedCounters: Array<Array<number>>;
+    private laps: Array<number>;
+    private numberOfVehicles: number;
+    private numberOfIntersections: number;
 
     constructor(
         private lapEventService: LapEventService,
         private racingGameService: RacingGameService,
         private vehicleService: VehicleService
-    ) {
-        this.laps = 0;
-        this.lastVisitedIntersectionNumber = 0;
-    }
+    ) { }
 
-    public initializePassedCounter(): void {
-        const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
-        this.passedCounter = new Array<number>(numberOfIntersections).fill(0);
+    public initialize(): void {
+        this.numberOfVehicles = this.vehicleService.players.length;
+        this.numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
+        this.passedCounters = new Array<Array<number>>(this.numberOfVehicles)
+            .fill(new Array<number>(this.numberOfIntersections).fill(0));
+        this.laps = new Array<number>(this.numberOfVehicles).fill(0);
+        this.lastVisitedIntersectionNumbers = new Array<number>(this.numberOfVehicles).fill(0);
     }
 
     private updatePassedCounter(): void {
-        switch (this.currentZone()) {
-            case Zone.NEXT:
-                this.passedCounter[this.nextIntersectionNumber()]++;
-                this.lastVisitedIntersectionNumber = this.nextIntersectionNumber();
-                break;
-            case Zone.PREVIOUS:
-                this.passedCounter[this.lastVisitedIntersectionNumber]--;
-                this.lastVisitedIntersectionNumber = this.previousIntersectionNumber();
-        }
+        this.currentZones()
+            .forEach((zone, i) => {
+                switch (zone) {
+                    case Zone.NEXT:
+                        this.passedCounters[i][this.nextIntersectionNumbers()[i]]++;
+                        this.lastVisitedIntersectionNumbers[i] = this.nextIntersectionNumbers()[i];
+                        break;
+                    case Zone.PREVIOUS:
+                        this.passedCounters[i][this.lastVisitedIntersectionNumbers[i]]--;
+                        this.lastVisitedIntersectionNumbers[i] = this.previousIntersectionNumbers()[i];
+                }
+            });
     }
 
-    private currentZone(): Zone {
-        const distanceToNext = this.distanceToNextIntersection();
-        const distanceToLastVisited = this.distanceToLastVisitedIntersection();
-        const distanceToPrevious = this.distanceToPreviousIntersection();
+    private currentZones(): Array<Zone> {
+        const distancesToNext = this.distancesToNextIntersection();
+        const distancesToLastVisited = this.distanceToLastVisitedIntersections();
+        const distancesToPrevious = this.distancesToPreviousIntersections();
 
-        if (distanceToNext < distanceToLastVisited && distanceToNext < distanceToPrevious) {
-            return Zone.NEXT;
-        } else if (distanceToPrevious < distanceToLastVisited && distanceToPrevious < distanceToNext) {
-            return Zone.PREVIOUS;
-        } else {
-            return Zone.LAST;
-        }
+        return distancesToLastVisited
+            .map((distanceToLastVisited, i) => {
+                if (this.closerToNextIntersection(distancesToNext[i], distanceToLastVisited, distancesToPrevious[i])) {
+                    return Zone.NEXT;
+                } else if (this.closerToPreviousIntersection(distancesToNext[i], distanceToLastVisited, distancesToPrevious[i])) {
+                    return Zone.PREVIOUS;
+                } else {
+                    return Zone.LAST;
+                }
+            });
     }
 
-    private distanceToLastVisitedIntersection(): number {
-        const currentPosition = this.vehicleService.getMainVehicle().getMesh().position;
-        const lastIntersectionPosition = this.racingGameService
-            .getTrack().trackIntersections[this.lastVisitedIntersectionNumber];
-        return TrackUtilities
-            .calculateDistanceFromIntersection(
-            currentPosition,
-            lastIntersectionPosition
-            );
+    private closerToNextIntersection(
+        distanceToNext: number, distanceToLastVisited: number, distanceToPrevious: number
+    ): boolean {
+        return distanceToNext < distanceToLastVisited && distanceToNext < distanceToPrevious;
     }
 
-    private distanceToPreviousIntersection(): number {
-        const currentPosition = this.vehicleService.getMainVehicle().getMesh().position;
-        const previousIntersectionPosition = this.racingGameService
-            .getTrack().trackIntersections[this.previousIntersectionNumber()];
-        return TrackUtilities
-            .calculateDistanceFromIntersection(
-            currentPosition,
-            previousIntersectionPosition
-            );
+    private closerToPreviousIntersection(
+        distanceToNext: number, distanceToLastVisited: number, distanceToPrevious: number
+    ): boolean {
+        return distanceToPrevious < distanceToLastVisited && distanceToPrevious < distanceToNext;
     }
 
-    private distanceToNextIntersection(): number {
-        const currentPosition = this.vehicleService.getMainVehicle().getMesh().position;
-        const nextIntersectionPosition = this.racingGameService
-            .getTrack().trackIntersections[this.nextIntersectionNumber()];
-        return TrackUtilities
-            .calculateDistanceFromIntersection(
-            currentPosition,
-            nextIntersectionPosition
-            );
+    private currentPositions(): Array<THREE.Vector3> {
+        return this.vehicleService.players
+            .map(player => player.getMesh().position);
     }
 
-    private nextIntersectionNumber(): number {
-        const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
-        return (this.lastVisitedIntersectionNumber + 1) % numberOfIntersections;
+    private intersectionPositions(intersectionNumbers: Array<number>): Array<THREE.Vector2> {
+        return intersectionNumbers.map((intersectionNumber) => {
+            return this.racingGameService.getTrack().trackIntersections[intersectionNumber];
+        });
     }
 
-    private previousIntersectionNumber(): number {
-        const numberOfIntersections = this.racingGameService.getTrack().trackIntersections.length;
-        return MathUtilities.negativeSafeModulo(this.lastVisitedIntersectionNumber - 1, numberOfIntersections);
+    private distanceToIntersections(intersectionNumbers: Array<number>): Array<number> {
+        const positionsOfIntersections = this.intersectionPositions(intersectionNumbers);
+        return this.currentPositions()
+            .map((position, index) => {
+                return TrackUtilities.calculateDistanceFromIntersection(
+                    position,
+                    positionsOfIntersections[index]
+                );
+            });
     }
 
-    private passedFinishLine(): boolean {
-        const distanceToIntersectionZero = TrackUtilities.calculateDistanceFromIntersection(
-            this.vehicleService.getMainVehicle().getMesh().position, this.racingGameService.getTrack().trackIntersections[0]);
-        const distanceToIntersectionOne = TrackUtilities.calculateDistanceFromIntersection(
-            this.vehicleService.getMainVehicle().getMesh().position, this.racingGameService.getTrack().trackIntersections[1]);
+    private distanceToLastVisitedIntersections(): Array<number> {
+        return this.distanceToIntersections(this.lastVisitedIntersectionNumbers);
+    }
+
+    private distancesToPreviousIntersections(): Array<number> {
+        return this.distanceToIntersections(this.previousIntersectionNumbers());
+    }
+
+    private distancesToNextIntersection(): Array<number> {
+        return this.distanceToIntersections(this.nextIntersectionNumbers());
+    }
+
+    private nextIntersectionNumbers(): Array<number> {
+        return this.lastVisitedIntersectionNumbers
+            .map((lastVisitedIntersectionNumber) => {
+                return (lastVisitedIntersectionNumber + 1) % this.numberOfIntersections;
+            });
+    }
+
+    private previousIntersectionNumbers(): Array<number> {
+        return this.lastVisitedIntersectionNumbers
+            .map((lastVisitedIntersectionNumber) => {
+                return MathUtilities
+                    .negativeSafeModulo(lastVisitedIntersectionNumber - 1, this.numberOfIntersections);
+            });
+    }
+
+    private passedFinishLine(playerNumber: number): boolean {
+        const position = this.vehicleService.players[playerNumber].getMesh().position;
+        const distanceToIntersectionZero = TrackUtilities
+            .calculateDistanceFromIntersection(position, this.racingGameService.getTrack().trackIntersections[0]);
+        const distanceToIntersectionOne = TrackUtilities
+            .calculateDistanceFromIntersection(position, this.racingGameService.getTrack().trackIntersections[1]);
+
         return distanceToIntersectionOne < distanceToIntersectionZero;
     }
 
+    private completedLap(minPassed: number, playerNumber: number): boolean {
+        return minPassed > this.laps[playerNumber] && this.passedFinishLine(playerNumber);
+    }
+
     private updateLap(): void {
-        const minPassed = this.passedCounter.reduce((prev, next) => {
-            return prev < next ? prev : next;
-        });
-        if (minPassed > this.laps && this.passedFinishLine()) {
-            this.laps++;
-            this.lapEventService.sendLapEvent(new LapEvent(minPassed));
-        }
+        this.passedCounters
+            .map((passedCounter) => {
+                return passedCounter
+                    .reduce((prev, next) => {
+                        return prev < next ? prev : next;
+                    });
+            }).map((minPassed, i) => {
+                if (this.completedLap(minPassed, i)) {
+                    this.laps[i]++;
+                    if (i === MAIN_PLAYER) {
+                        this.lapEventService.sendLapEvent(new LapEvent(minPassed));
+                    }
+                }
+            });
     }
 
     public updateLapCounter(): void {
