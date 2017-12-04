@@ -33,8 +33,8 @@ export class RaceHudService {
 
     private initializeCanva(): void {
         this.hudCanvas = document.createElement('canvas');
-        this.hudCanvas.width = window.innerWidth;
-        this.hudCanvas.height = window.innerHeight;
+        this.hudCanvas.width = 2048;
+        this.hudCanvas.height = 512;
     }
 
     private initializeBitmap(): void {
