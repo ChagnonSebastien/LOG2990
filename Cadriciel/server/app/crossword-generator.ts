@@ -3,7 +3,7 @@ import { Lexicon } from './lexicon';
 import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
-import { LEXICON_PATH } from './config';
+import { LEXICON_PATH, BLANK_SQUARE, BLACK_SQUARE } from './config';
 
 export class CrosswordGenerator {
     public grid: string[][];
@@ -50,7 +50,7 @@ export class CrosswordGenerator {
     private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
-        this.grid = this.newGrid(this.size, ' ');
+        this.grid = this.newGrid(this.size, BLANK_SQUARE);
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
@@ -71,7 +71,7 @@ export class CrosswordGenerator {
             || CrosswordVerifier.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
-        if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
+        if (this.grid[i][j] !== BLANK_SQUARE && this.grid[i][j] !== letter) {
             return false;
         }
         this.grid[i][j] = letter;
@@ -111,23 +111,23 @@ export class CrosswordGenerator {
     private addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
         if (horizontal) {
             if (j > 0) {
-                if (!this.addLetter(i, j - 1, '#')) {
+                if (!this.addLetter(i, j - 1, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (j + word.length < this.size) {
-                if (!this.addLetter(i, j + word.length, '#')) {
+                if (!this.addLetter(i, j + word.length, BLACK_SQUARE)) {
                     return false;
                 }
             }
         } else {
             if (i > 0) {
-                if (!this.addLetter(i - 1, j, '#')) {
+                if (!this.addLetter(i - 1, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (i + word.length < this.size) {
-                if (!this.addLetter(i + word.length, j, '#')) {
+                if (!this.addLetter(i + word.length, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
