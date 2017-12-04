@@ -8,7 +8,6 @@ import { VehicleService } from './vehicle.service';
 import { RacingGameService } from './racing-game.service';
 import { RaceHudService } from './race-hud.service';
 import { TestBed } from '@angular/core/testing';
-import * as THREE from 'three';
 import { CameraService } from './camera.service';
 import { LapCounterService } from './lap-counter.service';
 import { LapEventService } from './events/lap-event.service';
