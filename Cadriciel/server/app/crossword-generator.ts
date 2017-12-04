@@ -1,17 +1,15 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
-import { CrosswordService } from './crossword.service';
+import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
-const lexiconPath = './app/words.json';
+const LEXICON_PATH = './app/words.json';
 
 export class CrosswordGenerator {
-    // public attributes
     public grid: string[][];
     public words: Set<string>;
     public wordsWithIndex: Array<Word>;
 
-    // private attributes
     private size: number;
     private previousGridState: string[][];
     private gridCounter: number[][];
@@ -23,10 +21,9 @@ export class CrosswordGenerator {
         this.size = size;
         this.reset();
         this.saveState();
-        this.loadLexicon(lexiconPath);
+        this.loadLexicon(LEXICON_PATH);
     }
 
-    // public methods
     public newCrossword(difficulty: string): string[][] {
         this.reset();
         return this.generateCrossword(difficulty);
@@ -50,8 +47,6 @@ export class CrosswordGenerator {
         }
     }
 
-    // private methods
-    // used by constructor
     private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
@@ -68,13 +63,12 @@ export class CrosswordGenerator {
     }
 
     private loadLexicon(file: string) {
-        this.lexicon = new Lexicon(lexiconPath);
+        this.lexicon = new Lexicon(LEXICON_PATH);
     }
 
-    // used to generate crossword
     private addLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1
-            || CrosswordService.indexesOutOfBounds(i, j, this.size)) {
+            || CrosswordVerifier.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
         if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
@@ -106,7 +100,7 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
-        if (CrosswordService.verify(this) === false) {
+        if (CrosswordVerifier.verify(this) === false) {
             this.rollback();
             return false;
         }
@@ -218,7 +212,6 @@ export class CrosswordGenerator {
         return true;
     }
 
-    // used to mutate crossword
     private setGrid(words: Array<Word>) {
         words.map((word) => {
             return this.addWord(word.i, word.j, word.word, word.horizontal);

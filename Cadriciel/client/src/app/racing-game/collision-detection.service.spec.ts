@@ -14,7 +14,7 @@ import { CollisionEventService } from './events/collision-event.service';
 import { CommandsService } from './events/commands.service';
 import { ObstaclePositionService } from './obstacle-position.service';
 import { CountdownService } from './countdown.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { RoadLimitService } from './road-limit.service';
 import { RenderService } from './render.service';
 import { CameraService } from './camera.service';
@@ -22,34 +22,34 @@ import { VehicleMovementController } from './vehicle-movement-controller.service
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 
 describe('CollisionDetectionService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        RenderService,
-        CameraService,
-        CommandsService,
-        VehicleService,
-        LineCalculationService,
-        ObstaclePositionService,
-        CountdownService,
-        AudioService,
-        RaceService,
-        CollisionDetectionService,
-        VehicleMoveEventService,
-        RoadLimitService,
-        VehicleMovementController,
-        VehicleRotateEventService,
-        LoadingProgressEventService,
-        CollisionEventService,
-        ObstacleCollisionDetectionService,
-        ObstacleCollisionEventService,
-        CountdownDecreaseEventService,
-        ControllerFactory
-      ]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                RenderService,
+                CameraService,
+                CommandsService,
+                VehicleService,
+                LineCalculationService,
+                ObstaclePositionService,
+                CountdownService,
+                AudioService,
+                RaceEventService,
+                CollisionDetectionService,
+                VehicleMoveEventService,
+                RoadLimitService,
+                VehicleMovementController,
+                VehicleRotateEventService,
+                LoadingProgressEventService,
+                CollisionEventService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService,
+                CountdownDecreaseEventService,
+                ControllerFactory
+            ]
+        });
     });
-  });
 
-  it('should be created', inject([CollisionDetectionService], (service: CollisionDetectionService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', inject([CollisionDetectionService], (service: CollisionDetectionService) => {
+        expect(service).toBeTruthy();
+    }));
 });

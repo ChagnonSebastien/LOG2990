@@ -13,7 +13,7 @@ export class CrosswordHintsService {
     public selectedWord: string;
     public opponentSelectedWord: string;
     public hints: Array<Hint>;
-    private selectedWordSubject: Subject<any>;
+    public selectedWordSubject: Subject<any>;
 
     constructor(
         private lexiconService: LexiconService,
@@ -26,10 +26,18 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public async newGame(wordsWithIndex: Array<Word>): Promise<boolean> {
+    public async newGame(wordsWithIndex: Array<Word>) {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
-        return this.initializeHints(wordsWithIndex);
+        this.initializeHints(wordsWithIndex).then((hints) => {
+            this.hints = hints;
+        });
+    }
+
+    public endGame() {
+        this.selectedWord = undefined;
+        this.opponentSelectedWord = undefined;
+        this.hints = undefined;
     }
 
     public selectWord(word: string): boolean {
@@ -81,18 +89,16 @@ export class CrosswordHintsService {
         return false;
     }
 
-    private async initializeHints(wordsWithIndex: Array<Word>): Promise<boolean> {
-        this.hints = new Array<Hint>();
-        let result: boolean;
+    public async initializeHints(wordsWithIndex: Array<Word>): Promise<Array<Hint>> {
+        const hints = new Array<Hint>();
         await this.lexiconService.getWordDefinitions(
             wordsWithIndex.map(wordWithIndex => wordWithIndex.word)
         ).subscribe((definitions) => {
             definitions.map((definition, i) => {
-                this.hints.push(new Hint(wordsWithIndex[i].word, definition));
+                hints.push(new Hint(wordsWithIndex[i].word, definition));
             });
-            result = true;
         });
-        return result;
+        return hints;
     }
 
     private alertNewSelectedWord(word: Word) {

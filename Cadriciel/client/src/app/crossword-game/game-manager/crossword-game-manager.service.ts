@@ -9,14 +9,16 @@ import { CrosswordMultiplayerService } from '../multiplayer/crossword-multiplaye
 import { CrosswordCountdownService } from '../countdown/crossword-countdown.service';
 import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
+import { CrosswordPlayerService } from '../player/crossword-player.service';
+import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 import { Word } from '../../../../../commun/word';
+import { Crossword } from '../../../../../commun/crossword/crossword';
 
 @Injectable()
 export class CrosswordGameManagerService {
     public gameInProgress: boolean;
     public gameCompleted: boolean;
-    private multiplayerMode: boolean;
 
     constructor(
         private crosswordService: CrosswordService,
@@ -27,7 +29,9 @@ export class CrosswordGameManagerService {
         private multiplayerService: CrosswordMultiplayerService,
         private countdownService: CrosswordCountdownService,
         private cheatService: CrosswordCheatService,
-        private configurationService: CrosswordConfigurationService
+        private configurationService: CrosswordConfigurationService,
+        private playerService: CrosswordPlayerService,
+        private mutationService: CrosswordMutationService
     ) {
         this.gameInProgress = false;
         this.gameCompleted = false;
@@ -35,7 +39,7 @@ export class CrosswordGameManagerService {
     }
 
     private dispatchGameEvents(): void {
-        this.listenForStartGame();
+        this.listenForCreateGame();
         this.listenForWordSelections();
         this.listenForWordFoundAlerts();
         this.listenForMultiplayerGameStart();
@@ -46,7 +50,9 @@ export class CrosswordGameManagerService {
         this.listenForOpponentDeselectedAll();
         this.listenForGameCompletion();
         this.listenForOpponentLeft();
-        this.listenForServerClock();
+        this.listenForOpponentRestarted();
+        this.listenForMutation();
+        this.synchronizeWithServerClock();
     }
 
     private async newSoloGame(level: string): Promise<void> {
@@ -56,22 +62,44 @@ export class CrosswordGameManagerService {
     }
 
     public endGame(): void {
+        if (this.configurationService.isMultiplayer()) {
+            this.multiplayerService.emitLeavingGame();
+        }
+        this.hintsService.endGame();
+        this.gridService.endGame();
+        this.pointsService.endGame();
+        this.wordsService.endGame();
+        this.countdownService.endGame();
         this.gameInProgress = false;
         this.gameCompleted = false;
-        this.multiplayerService.emitLeavingGame();
+        this.playerService.isHost = false;
+    }
+
+    public restartGame() {
+        if (this.configurationService.isMultiplayer()) {
+            this.multiplayerService.emitRestartGame(
+                this.configurationService.level,
+                this.configurationService.mode
+            );
+        } else {
+            this.newSoloGame(this.configurationService.level);
+        }
+        this.gameCompleted = false;
     }
 
     private newMultiplayerGame(level: string, mode: string): void {
-        this.multiplayerMode = true;
         this.multiplayerService.createGame(level, mode);
     }
 
     private constructGame(grid: string[][], wordsWithIndex: Array<Word>, listOfWords: Array<string>): void {
-        this.wordsService.newGame(wordsWithIndex);
-        this.gridService.newGame(grid, wordsWithIndex);
         this.hintsService.newGame(wordsWithIndex);
+        this.gridService.newGame(grid, wordsWithIndex);
         this.pointsService.newGame();
-        this.countdownService.newGame();
+        this.wordsService.newGame(wordsWithIndex);
+        if (this.configurationService.isDynamic() && !this.configurationService.isMultiplayer()) {
+            this.mutationService.updateMutation();
+            this.countdownService.newGame();
+        }
     }
 
     public deselectAll(): boolean {
@@ -83,7 +111,7 @@ export class CrosswordGameManagerService {
         return false;
     }
 
-    private listenForStartGame(): void {
+    private listenForCreateGame(): void {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
                 if (configuration.type === 'solo') {
@@ -98,14 +126,15 @@ export class CrosswordGameManagerService {
     private listenForGameCompletion(): void {
         this.pointsService.gameCompletedAlerts()
             .subscribe((end: boolean) => {
-                this.gameCompleted = end;
+                this.countdownService.endGame();
+                this.gameCompleted = true;
             });
     }
 
     private listenForWordSelections(): void {
         this.hintsService.selectedWordAlerts()
             .subscribe((hintSelection) => {
-                if (this.multiplayerMode) {
+                if (this.configurationService.isMultiplayer()) {
                     this.multiplayerService.emitSelectHint(hintSelection);
                 }
 
@@ -117,32 +146,31 @@ export class CrosswordGameManagerService {
     private listenForWordFoundAlerts(): void {
         this.gridService.wordFoundAlerts()
             .subscribe((foundWord) => {
-                if (this.multiplayerMode) {
-                    this.multiplayerService.emitFoundWord(foundWord);
-                } else if (this.configurationService.isDynamic()) {
-                    this.countdownService.resetCountdown();
-                }
                 this.hintsService.markHintAsFound(foundWord.word);
                 this.pointsService.addToFoundWords(foundWord.word);
+                if (this.configurationService.isMultiplayer()) {
+                    this.multiplayerService.emitFoundWord(foundWord);
+                } else if (this.configurationService.isDynamic()) {
+                    this.mutationService.updateMutation();
+                    this.countdownService.resetCountdown();
+                }
             });
     }
 
     private listenForMultiplayerGameStart(): void {
-        this.multiplayerService.gameStartAlerts()
+        this.multiplayerService.gameStartSubject.asObservable()
             .subscribe((game) => {
                 this.constructGame(
                     game.crossword.crossword,
                     game.crossword.wordsWithIndex,
                     game.crossword.listOfWords
                 );
-                this.countdownService.stopCountdown();
                 this.gameInProgress = true;
-                this.multiplayerMode = true;
             });
     }
 
     private listenForOpponentWordSelections(): void {
-        this.multiplayerService.opponentHintSelectionAlerts()
+        this.multiplayerService.opponentHintSelection.asObservable()
             .subscribe((hintSelection) => {
                 this.hintsService.opponentSelectedWord = hintSelection.current.word;
                 this.gridService.unselectWordOpponent();
@@ -151,7 +179,7 @@ export class CrosswordGameManagerService {
     }
 
     private listenForOpponentFoundWords(): void {
-        this.multiplayerService.opponentFoundWordAlerts()
+        this.multiplayerService.opponentFoundWord.asObservable()
             .subscribe((foundWord) => {
                 this.hintsService.markHintAsFoundByOpponent(foundWord.word);
                 this.gridService.markWordAsFoundByOpponent(foundWord);
@@ -162,23 +190,28 @@ export class CrosswordGameManagerService {
     private listenForCountdownReachedZero(): void {
         this.countdownService.countdownReachedZeroAlerts()
             .subscribe((zero) => {
+                if (this.configurationService.isDynamic() && !this.configurationService.isMultiplayer()) {
+                    this.mutationService.mutate();
+                }
             });
     }
 
     private listenForCheatModeCountdownChanges(): void {
-        this.cheatService.initialCountdownChangedAlerts()
+        this.cheatService.initialCountdownChanges.asObservable()
             .subscribe((newCountdown) => {
-                if (!this.multiplayerMode) {
-                    this.countdownService.initialCount = newCountdown;
-                    this.countdownService.resetCountdown();
-                } else {
-                    this.multiplayerService.emitNewCountdown(newCountdown);
+                if (this.configurationService.isDynamic()) {
+                    if (this.configurationService.isMultiplayer()) {
+                        this.multiplayerService.emitNewCountdown(newCountdown);
+                    } else {
+                        this.countdownService.initialCount = newCountdown;
+                        this.countdownService.resetCountdown();
+                    }
                 }
             });
     }
 
     private listenForOpponentDeselectedAll(): void {
-        this.multiplayerService.opponentDeselectedAllAlerts()
+        this.multiplayerService.opponentDeselection.asObservable()
             .subscribe((unselect) => {
                 if (this.gameInProgress) {
                     this.hintsService.opponentSelectedWord = undefined;
@@ -188,17 +221,37 @@ export class CrosswordGameManagerService {
     }
 
     private listenForOpponentLeft(): void {
-        this.multiplayerService.opponentLeftAlerts()
+        this.multiplayerService.opponentLeft.asObservable()
             .subscribe((left) => {
                 alert('Your opponent left the game');
                 this.endGame();
             });
     }
 
-    private listenForServerClock(): void {
-        this.multiplayerService.serverClockAlerts()
+    private listenForOpponentRestarted(): void {
+        this.multiplayerService.opponentRestarted.asObservable()
+            .subscribe((restarted) => {
+                this.gameCompleted = false;
+            });
+    }
+
+    private synchronizeWithServerClock(): void {
+        this.multiplayerService.serverClock.asObservable()
             .subscribe((count) => {
-                this.countdownService.count = count;
+                if (this.configurationService.isMultiplayer()) {
+                    if (count === 0) {
+                        this.mutationService.mutateMultiplayer();
+                    }
+                    this.countdownService.count = count;
+                }
+            });
+    }
+
+    private listenForMutation(): void {
+        this.multiplayerService.mutation
+            .asObservable()
+            .subscribe((crossword: Crossword) => {
+                this.mutationService.updateMultiplayerMutation(crossword);
             });
     }
 }

@@ -4,7 +4,7 @@ import { SceneService } from './scene.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
 import { VehicleMoveEventService } from './events/vehicle-move-event.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { CountdownService } from './countdown.service';
 import { ObstaclePositionService } from './obstacle-position.service';
@@ -23,12 +23,13 @@ import { VehicleMovementController } from './vehicle-movement-controller.service
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
+import { RaceHudService } from './race-hud.service';
 
 let renderService: RenderService;
 
 describe('Render', () => {
 
-      beforeEach(() => {
+    beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
@@ -43,7 +44,7 @@ describe('Render', () => {
                 ObstaclePositionService,
                 CountdownService,
                 AudioService,
-                RaceService,
+                RaceEventService,
                 CollisionDetectionService,
                 VehicleMoveEventService,
                 RoadLimitService,
@@ -55,7 +56,8 @@ describe('Render', () => {
                 CountdownDecreaseEventService,
                 SceneService,
                 FrameEventService,
-                RacingSceneService
+                RacingSceneService,
+                RaceHudService
             ]
         });
         renderService = TestBed.get(RenderService);

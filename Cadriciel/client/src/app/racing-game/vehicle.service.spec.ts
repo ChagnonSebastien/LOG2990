@@ -1,7 +1,7 @@
 import { ControllerFactory } from './controller-factory.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { ObstacleCollisionDetectionService } from './obstacle-collision-detection.service';
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { VehicleMovementController } from './vehicle-movement-controller.service';
@@ -36,7 +36,7 @@ describe('VehicleService', () => {
                 VehicleMovementController,
                 VehicleRotateEventService,
                 LoadingProgressEventService,
-                RaceService,
+                RaceEventService,
                 ObstacleCollisionDetectionService,
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,

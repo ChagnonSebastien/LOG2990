@@ -47,7 +47,7 @@ export class CountdownService {
         let textGeometry: THREE.TextGeometry;
         const trackCenter = this.getCenterOfTrack(track);
         const service = this;
-        loader.load('../../assets/font_samuel_regular.json', function(font) {
+        loader.load('../../assets/font_samuel_regular.json', function (font) {
             service.font = font;
             textGeometry = new THREE.TextGeometry((service.count - 1).toString(), {
                 font: font,
@@ -74,13 +74,13 @@ export class CountdownService {
         const countText = count.toString();
 
         const textGeometry = new THREE.TextGeometry(countText, {
-                    font: this.font,
-                    size: 200,
-                    height: 0,
-                    curveSegments: 5,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 1
+            font: this.font,
+            size: 200,
+            height: 0,
+            curveSegments: 5,
+            bevelEnabled: true,
+            bevelThickness: 10,
+            bevelSize: 1
         });
         this.countdownMesh.geometry = textGeometry;
         this.countdownMesh.geometry.rotateY(Math.PI / 2);

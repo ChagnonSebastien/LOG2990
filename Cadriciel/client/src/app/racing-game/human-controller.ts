@@ -15,26 +15,26 @@ export class HumanController extends Controller {
     public startDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
-            this.moveState = MOVE_STATE.MOVE_FORWARD;
-            break;
+                this.moveState = MOVE_STATE.MOVE_FORWARD;
+                break;
             case PlayerCommand.ROTATE_LEFT:
-            this.turnState = TURN_STATE.TURN_LEFT;
-            break;
+                this.turnState = TURN_STATE.TURN_LEFT;
+                break;
             case PlayerCommand.ROTATE_RIGHT:
-            this.turnState = TURN_STATE.TURN_RIGHT;
-            break;
+                this.turnState = TURN_STATE.TURN_RIGHT;
+                break;
         }
     }
 
     public endDirective(command: PlayerCommand) {
         switch (command) {
             case PlayerCommand.MOVE_FORWARD:
-            this.moveState = MOVE_STATE.BRAKE;
-            break;
+                this.moveState = MOVE_STATE.BRAKE;
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
-            this.turnState = TURN_STATE.DO_NOTHING;
-            break;
+                this.turnState = TURN_STATE.DO_NOTHING;
+                break;
         }
     }
 }

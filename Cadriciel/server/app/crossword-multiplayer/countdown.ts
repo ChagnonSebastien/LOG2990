@@ -1,49 +1,44 @@
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { INITIAL_COUNTDOWN_VALUE } from '../config';
+
+const ONE_SECOND = 1000;
 
 export class Countdown {
-    public count: number;
-    public initialCount: number;
+    public initialCountdownValue: number;
+    public count: BehaviorSubject<number>;
     private countdownId: number;
-    private countdownReachedZero: Subject<any>;
-    private countdownSubject: Subject<any>;
 
     constructor() {
-        this.countdownReachedZero = new Subject();
-        this.countdownSubject = new Subject();
-        this.initialCount = 30;
+        this.initialCountdownValue = INITIAL_COUNTDOWN_VALUE;
+        this.count = new BehaviorSubject(this.initialCountdownValue);
         this.resetCountdown();
     }
 
-    public countdownReachedZeroAlerts(): Observable<any> {
-        return this.countdownReachedZero.asObservable();
+    public startCountdown(): boolean {
+        if (this.countdownId === undefined) {
+            this.countdownId = setInterval(this.decrementCount.bind(this), ONE_SECOND);
+            return true;
+        }
+        return false;
     }
 
-    public countdownAlerts(): Observable<any> {
-        return this.countdownSubject.asObservable();
-    }
-
-    public startCountdown() {
-        this.countdownId = setInterval(this.decrementCounter.bind(this), 1000);
-    }
-
-    public stopCountdown() {
+    public stopCountdown(): boolean {
         if (this.countdownId !== undefined) {
             clearInterval(this.countdownId);
+            return true;
         }
+        return false;
     }
 
-    public resetCountdown() {
-        this.count = this.initialCount;
-        this.countdownSubject.next(this.count);
+    public resetCountdown(): void {
+        this.count.next(this.initialCountdownValue);
     }
 
-    private decrementCounter() {
-        if (this.count > 0) {
-            this.count--;
-            this.countdownSubject.next(this.count);
+    private decrementCount(): void {
+        if (this.count.value > 0) {
+            this.count.next(this.count.value - 1);
         } else {
-            this.countdownReachedZero.next(true);
             this.resetCountdown();
         }
     }

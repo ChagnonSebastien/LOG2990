@@ -1,4 +1,4 @@
-import { RaceService } from './events/race.service';
+import { RaceEventService } from './events/race-event.service';
 import { AudioService } from './audio.service';
 import { TestBed } from '@angular/core/testing';
 
@@ -9,9 +9,9 @@ describe('test AudioService', function () {
     beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [ RaceService ]
+            providers: [RaceEventService]
         });
-        audioService = new AudioService(TestBed.get(RaceService));
+        audioService = new AudioService(TestBed.get(RaceEventService));
     });
 
     it('construction test', () => {

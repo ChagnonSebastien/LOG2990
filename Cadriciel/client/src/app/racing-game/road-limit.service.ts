@@ -12,7 +12,7 @@ export class RoadLimitService {
     constructor(
         private lineCalculationService: LineCalculationService,
         private racingGameService: RacingGameService
-    ) {}
+    ) { }
 
     public validateMovement(vehicleMoveEvent: VehicleMoveEvent) {
         if (!this.isMovementValid(this.racingGameService.getTrack(), vehicleMoveEvent.getNewPosition())) {
@@ -33,7 +33,7 @@ export class RoadLimitService {
         newPosition.x = newPositionAjusted.x;
         newPosition.z = newPositionAjusted.y;
         vehicle.hitWall(Math.abs(Math.cos(
-            (Math.atan(nearestPointOffset.y / nearestPointOffset.x)) + ((vehicle.getVehicle().rotation.y % (Math.PI)))
+            (Math.atan(nearestPointOffset.y / nearestPointOffset.x)) + ((vehicle.getMesh().rotation.y % (Math.PI)))
         )));
     }
 }

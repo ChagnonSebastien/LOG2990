@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import { RaceService } from './events/race.service';
 import { CollisionEventService } from './events/collision-event.service';
 import { CommandsService } from './events/commands.service';
 import { ObstacleCollisionEventService } from './events/obstacle-collision-event.service';
 import { PlayerCommand } from './events/commands.service';
+=======
+import { RaceEventService } from './events/race-event.service';
+>>>>>>> master
 import { Injectable } from '@angular/core';
 
 
@@ -21,8 +25,12 @@ export class AudioService {
     private acceleratorBonusStart: HTMLAudioElement;
     private acceleratorBonusEnd: HTMLAudioElement;
 
+<<<<<<< HEAD
     constructor(private raceService: RaceService, private collisionEventService: CollisionEventService,
         private commandsService: CommandsService, private obstacleCollisionEventService: ObstacleCollisionEventService) {
+=======
+    constructor(private raceService: RaceEventService) {
+>>>>>>> master
         this.listenForEndOfRace();
         this.listenForCarCarCollision();
         this.listenForMoveVehicle();
