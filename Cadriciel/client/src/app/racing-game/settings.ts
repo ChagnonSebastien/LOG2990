@@ -59,6 +59,8 @@ export module Settings {
     export const COUNTDOWN_TEXT_COLOR = 0xffff00;
     export const COUNTDOWN_NAME = 'countdown';
 
+    export const LIGHT_COLOR = 0xffffff;
+
     export const DRIVE_MODIFIER_NONE_POSITION = 0;
     export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;
     export const DRIVE_MODIFIER_NONE_DECELERATION = 1;
