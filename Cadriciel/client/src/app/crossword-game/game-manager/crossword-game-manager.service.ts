@@ -15,6 +15,8 @@ import { CrosswordMutationService } from '../mutation/crossword-mutation.service
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
 
+import { Type } from '../configuration/type';
+
 @Injectable()
 export class CrosswordGameManagerService {
     public gameInProgress: boolean;
@@ -114,10 +116,10 @@ export class CrosswordGameManagerService {
     private listenForCreateGame(): void {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
-                if (configuration.type === 'solo') {
+                if (configuration.type === Type.SOLO) {
                     await this.newSoloGame(configuration.level);
                     this.gameInProgress = true;
-                } else if (configuration.type === 'multiplayer') {
+                } else if (configuration.type === Type.MULTIPLAYER) {
                     await this.newMultiplayerGame(configuration.level, configuration.mode);
                 }
             });
