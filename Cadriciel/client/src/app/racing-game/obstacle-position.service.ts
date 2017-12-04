@@ -49,11 +49,11 @@ export class ObstaclePositionService {
     public getObstacles(obstacleType: ObstacleType): THREE.Vector2[] {
         switch (obstacleType) {
             case ObstacleType.Booster:
-            return this.boosters;
+                return this.boosters;
             case ObstacleType.Pothole:
-            return this.potholes;
+                return this.potholes;
             case ObstacleType.Puddle:
-            return this.puddles;
+                return this.puddles;
         }
     }
 

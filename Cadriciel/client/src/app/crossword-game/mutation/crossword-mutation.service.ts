@@ -22,7 +22,6 @@ export class CrosswordMutationService {
     constructor(
         private gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
-        private countdownService: CrosswordCountdownComponent,
         private wordsService: CrosswordWordsService,
         private crosswordService: CrosswordService,
         private configurationService: CrosswordConfigurationService,
@@ -59,11 +58,8 @@ export class CrosswordMutationService {
     }
 
     public mutateMultiplayer() {
-        console.log(this.wordsWithIndex);
         this.mutateWordsService();
-        console.log(this.newGrid);
         this.mutateGridService();
-        console.log(this.newHints);
         this.mutateHintsService();
     }
 
@@ -93,7 +89,6 @@ export class CrosswordMutationService {
 
     private mutateHintsService() {
         this.hintsService.hints = this.newHints.map((hint) => {
-            console.log(hint);
             if (this.pointsService.foundWords.has(hint.word)) {
                 hint.found = true;
             } else if (this.pointsService.opponentFoundWords.has(hint.word)) {

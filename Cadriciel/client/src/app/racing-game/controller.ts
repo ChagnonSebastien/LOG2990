@@ -41,14 +41,14 @@ export abstract class Controller {
     public hitObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
-            this.driveModifier = new BoosterModifier();
-            break;
+                this.driveModifier = new BoosterModifier();
+                break;
             case ObstacleType.Pothole:
-            this.driveModifier = new PotholeModifier();
-            break;
+                this.driveModifier = new PotholeModifier();
+                break;
             case ObstacleType.Puddle:
-            this.driveModifier = new PuddleModifier();
-            break;
+                this.driveModifier = new PuddleModifier();
+                break;
         }
     }
 
@@ -69,7 +69,7 @@ export abstract class Controller {
         }
     }
 
-    private modifySpeed () {
+    private modifySpeed() {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
             this.speed = Math.min(maxSpeed, Math.max(0, this.speed + acceleration * this.driveModifier.getAccelerationMultiplier()));
         } else {
@@ -80,36 +80,36 @@ export abstract class Controller {
     }
 
     private moveVehicle(object: Vehicle) {
-        const newPosition = new Vector3 (
-            object.getVehicle().position.x - Math.sin(object.getVehicle().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed),
+        const newPosition = new Vector3(
+            object.getMesh().position.x - Math.sin(object.getMesh().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed),
             0,
-            object.getVehicle().position.z - Math.cos(object.getVehicle().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed)
+            object.getMesh().position.z - Math.cos(object.getMesh().rotation.y) * this.driveModifier.getModifiedSpeed(this.speed)
         );
 
-        const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
+        const moveEvent = new VehicleMoveEvent(object.getMesh().position, newPosition, object);
         this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
         if (!moveEvent.isCancelled()) {
-            object.getVehicle().position.x = moveEvent.getNewPosition().x;
-            object.getVehicle().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
-            object.getVehicle().position.z = moveEvent.getNewPosition().z;
+            object.getMesh().position.x = moveEvent.getNewPosition().x;
+            object.getMesh().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
+            object.getMesh().position.z = moveEvent.getNewPosition().z;
         }
     }
 
     private leftRotation(object: Vehicle) {
-        const newRotation =  object.getVehicle().rotation.y + rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const newRotation = object.getMesh().rotation.y + rotationSpeed * this.driveModifier.getRotationMultiplier();
         this.rotateVehicle(object, newRotation);
     }
 
     private rightRotation(object: Vehicle) {
-        const newRotation =  object.getVehicle().rotation.y - rotationSpeed * this.driveModifier.getRotationMultiplier();
+        const newRotation = object.getMesh().rotation.y - rotationSpeed * this.driveModifier.getRotationMultiplier();
         this.rotateVehicle(object, newRotation);
     }
 
     private rotateVehicle(object: Vehicle, newRotation: number) {
-        const rotateEvent = new VehicleRotateEvent(object.getVehicle().rotation.y, newRotation, object);
+        const rotateEvent = new VehicleRotateEvent(object.getMesh().rotation.y, newRotation, object);
         this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
         if (!rotateEvent.isCancelled()) {
-            object.getVehicle().rotation.y = newRotation;
+            object.getMesh().rotation.y = newRotation;
         }
     }
 }

@@ -7,7 +7,7 @@ import { VehicleMoveEvent } from './events/vehicle-move-event.service';
 export class VehicleMovementController {
     constructor(
         private countdownService: CountdownService
-    ) {}
+    ) { }
 
     public validateMovement(event: VehicleMoveEvent): void {
         if (!this.countdownService.countdownEnded) {

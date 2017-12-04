@@ -10,9 +10,4 @@ export module TrackUtilities {
         return distance;
     }
 
-    export function isAtIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): boolean {
-        const distanceFromIntersection = this.calculateDistanceFromIntersection(carPosition, intersection);
-        return distanceFromIntersection <= Settings.MAX_CORNER_LENGTH_FROM_INTERSECTION;
-    }
-
 }

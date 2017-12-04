@@ -14,7 +14,7 @@ export class ObstacleCollisionDetectionService {
     constructor(
         private obstacleCollisionEventService: ObstacleCollisionEventService,
         private obstacleService: ObstaclePositionService
-    ) {}
+    ) { }
 
     public detectCollision(event: VehicleMoveEvent) {
         this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Pothole);
@@ -32,8 +32,8 @@ export class ObstacleCollisionDetectionService {
     private distanceToObstacle(vehicle: Vehicle, obstaclePosition: THREE.Vector2) {
         const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(Settings.SCENE_SCALE);
         return Math.sqrt(
-            Math.pow(obstaclePositionClone.x - vehicle.getVehicle().position.x, 2) +
-            Math.pow(obstaclePositionClone.y - vehicle.getVehicle().position.z, 2)
+            Math.pow(obstaclePositionClone.x - vehicle.getMesh().position.x, 2) +
+            Math.pow(obstaclePositionClone.y - vehicle.getMesh().position.z, 2)
         );
     }
 

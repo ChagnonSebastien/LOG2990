@@ -50,7 +50,7 @@ export class RacingSceneService extends SceneService {
         this.materialSkybox.needsUpdate = true;
     }
 
-     private createSkyBox() {
+    private createSkyBox() {
         this.createTexture();
         const skyboxMesh = new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), this.materialSkybox);
         this.materialSkybox.needsUpdate = true;
@@ -74,9 +74,9 @@ export class RacingSceneService extends SceneService {
     }
 
     public lightWay() {
-        this.scene.traverse ( function (children) {
+        this.scene.traverse(function (children) {
             if (children.name === 'vehicle') {
-                children.traverse( function (child) {
+                children.traverse(function (child) {
                     if (child instanceof THREE.SpotLight) {
                         child.visible = !child.visible;
                     }

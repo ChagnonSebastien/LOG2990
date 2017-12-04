@@ -23,12 +23,13 @@ import { VehicleMovementController } from './vehicle-movement-controller.service
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { CountdownDecreaseEventService } from './events/countdown-decrease-event';
+import { RaceHudService } from './race-hud.service';
 
 let renderService: RenderService;
 
 describe('Render', () => {
 
-      beforeEach(() => {
+    beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
@@ -55,7 +56,8 @@ describe('Render', () => {
                 CountdownDecreaseEventService,
                 SceneService,
                 FrameEventService,
-                RacingSceneService
+                RacingSceneService,
+                RaceHudService
             ]
         });
         renderService = TestBed.get(RenderService);

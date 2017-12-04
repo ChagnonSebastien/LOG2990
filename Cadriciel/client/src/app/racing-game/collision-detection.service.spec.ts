@@ -22,34 +22,34 @@ import { VehicleMovementController } from './vehicle-movement-controller.service
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 
 describe('CollisionDetectionService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        RenderService,
-        CameraService,
-        CommandsService,
-        VehicleService,
-        LineCalculationService,
-        ObstaclePositionService,
-        CountdownService,
-        AudioService,
-        RaceEventService,
-        CollisionDetectionService,
-        VehicleMoveEventService,
-        RoadLimitService,
-        VehicleMovementController,
-        VehicleRotateEventService,
-        LoadingProgressEventService,
-        CollisionEventService,
-        ObstacleCollisionDetectionService,
-        ObstacleCollisionEventService,
-        CountdownDecreaseEventService,
-        ControllerFactory
-      ]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                RenderService,
+                CameraService,
+                CommandsService,
+                VehicleService,
+                LineCalculationService,
+                ObstaclePositionService,
+                CountdownService,
+                AudioService,
+                RaceEventService,
+                CollisionDetectionService,
+                VehicleMoveEventService,
+                RoadLimitService,
+                VehicleMovementController,
+                VehicleRotateEventService,
+                LoadingProgressEventService,
+                CollisionEventService,
+                ObstacleCollisionDetectionService,
+                ObstacleCollisionEventService,
+                CountdownDecreaseEventService,
+                ControllerFactory
+            ]
+        });
     });
-  });
 
-  it('should be created', inject([CollisionDetectionService], (service: CollisionDetectionService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', inject([CollisionDetectionService], (service: CollisionDetectionService) => {
+        expect(service).toBeTruthy();
+    }));
 });

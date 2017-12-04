@@ -1,3 +1,5 @@
+import { Settings } from './settings';
+import { RaceHudService } from './race-hud.service';
 import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
@@ -43,7 +45,8 @@ export class RaceMediator {
         private vehicleMovementController: VehicleMovementController,
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
-        private raceService: RaceEventService,
+        private raceEventService: RaceEventService,
+        private raceService: RaceHudService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
@@ -94,7 +97,7 @@ export class RaceMediator {
             (event: LapEvent) => this.handleLapEvent(event)
         );
 
-        raceService.raceEndedAlerts().subscribe(
+        raceEventService.raceEndedAlerts().subscribe(
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
         );
     }
@@ -117,6 +120,7 @@ export class RaceMediator {
         if (this.vehicleService.getVehicles() !== undefined) {
             this.lapcounterService.updateLapCounter();
         }
+
     }
 
     private handleKeyUpEvent(event: CommandEvent) {
@@ -124,8 +128,8 @@ export class RaceMediator {
             case PlayerCommand.MOVE_FORWARD:
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
-            (<HumanController> this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
-            break;
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+                break;
         }
     }
 
@@ -135,32 +139,32 @@ export class RaceMediator {
             case PlayerCommand.MOVE_FORWARD:
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
-            (<HumanController> this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
-            break;
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+                break;
 
             case PlayerCommand.START_GAME:
-            this.countdownService.startCountdown();
-            break;
+                this.countdownService.startCountdown();
+                break;
 
             case PlayerCommand.ZOOM_IN:
-            this.cameraService.zoomIn();
-            break;
+                this.cameraService.zoomIn();
+                break;
 
             case PlayerCommand.ZOOM_OUT:
-            this.cameraService.zoomOut();
-            break;
+                this.cameraService.zoomOut();
+                break;
 
             case PlayerCommand.TOOGLE_CAMERA_VIEW:
-            this.cameraService.toggleCamera();
-            break;
+                this.cameraService.toggleCamera();
+                break;
 
             case PlayerCommand.TOGGLE_NIGHT_MODE:
-            this.racingSceneService.toggleNightMode();
-            break;
+                this.racingSceneService.toggleNightMode();
+                break;
 
             case PlayerCommand.REAR_VISIBLE:
-            this.renderService.swapRearWiew();
-            break;
+                this.renderService.swapRearWiew();
+                break;
         }
     }
 
@@ -170,20 +174,21 @@ export class RaceMediator {
         if (event.getNewAmount() === 0) {
             this.racingSceneService.removeObjectByName('countdown');
             this.countdownService.startGame();
+            this.raceService.startTimer();
         }
     }
 
     private handleProgressEvent(event: LoadingProgressEvent) {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
-            const vehicle = <Vehicle> event.getObject();
-            this.racingSceneService.light.addLightsToVehicle(vehicle.getVehicle());
+            const vehicle = <Vehicle>event.getObject();
+            this.racingSceneService.light.addLightsToVehicle(vehicle.getMesh());
             this.racingSceneService.light.hideLightsVehicle();
-            this.racingSceneService.addObject(vehicle.getVehicle());
+            this.racingSceneService.addObject(vehicle.getMesh());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {
-                this.cameraService.initializeCameras(vehicle.getVehicle());
+                this.cameraService.initializeCameras(vehicle.getMesh());
             }
         }
 
@@ -212,14 +217,15 @@ export class RaceMediator {
     }
 
     private handleLapEvent(event: LapEvent) {
-        if (event.lap === 3) {
-            console.log('Race ends');
-            this.raceService.endRace();
+        if (event.lap === Settings.TOTAL_LAPS) {
+            this.raceEventService.endRace();
         }
-        console.log('LAP: ', event.lap);
+        this.raceService.resetLapTimer();
+        this.raceService.updateHud(event.lap);
     }
 
     private handleRaceEndedEvent(event: RaceEndedEvent) {
         console.log('race ended');
     }
+
 }
