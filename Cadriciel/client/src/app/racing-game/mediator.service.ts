@@ -115,7 +115,6 @@ export class RaceMediator {
         this.cameraService.initialize(container);
         this.renderService.initialize(container, track);
         this.vehicleService.createVehicles(track);
-        this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
         this.lapcounterService.initialize();
     }
@@ -205,6 +204,7 @@ export class RaceMediator {
         }
 
         if (event.getProgress() === 'All carts loaded') {
+            this.countdownService.createCountdown(this.racingGameService.getTrack());
             this.renderService.startRenderingLoop();
         }
     }

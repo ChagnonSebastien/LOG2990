@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { CommandsService } from './events/commands.service';
 import { Settings } from './settings';
 import { RacingSceneService } from './racing-scene.service';
+import { VehicleService } from './vehicle.service';
 
 @Injectable()
 export class CountdownService {
@@ -19,7 +20,8 @@ export class CountdownService {
         private audioService: AudioService,
         commandService: CommandsService,
         private countdownDecreaseEventService: CountdownDecreaseEventService,
-        private sceneService: RacingSceneService
+        private sceneService: RacingSceneService,
+        private vehicleService: VehicleService
     ) {
         this.count = 6;
         this.countdownStarted = false;
@@ -65,7 +67,7 @@ export class CountdownService {
             service.countdownMesh.position.setX(trackCenter.x * Settings.SCENE_SCALE);
             service.countdownMesh.position.setY((Settings.SCENE_SCALE * 20 / 25) + 3);
             service.countdownMesh.position.setZ(trackCenter.y * Settings.SCENE_SCALE);
-            service.countdownMesh.geometry.rotateY(Math.PI / 2);
+            service.countdownMesh.geometry.rotateY(service.vehicleService.getMainVehicle().getMesh().rotation.y);
             service.sceneService.addObjectWithName(service.countdownMesh, 'countdown');
         });
     }
