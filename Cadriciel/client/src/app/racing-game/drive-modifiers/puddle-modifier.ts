@@ -1,27 +1,28 @@
 import { DriveModifier } from './drive-modifier';
+import { Settings } from '../settings';
 
 export class PuddleModifier extends DriveModifier {
     public getModifiedSpeed(speed: number) {
-        return Math.max(0.5, speed);
+        return Math.max(Settings.DRIVE_MODIFIER_PUDDLE_MINIMUM_SPEED, speed);
     }
 
     public getVerticalPositionModifier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_PUDDLE_POSITION;
     }
 
     public getAccelerationMultiplier() {
-        return -1;
+        return Settings.DRIVE_MODIFIER_PUDDLE_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_PUDDLE_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_PUDDLE_ROTATION;
     }
 
     protected getTotalTime() {
-        return 45;
+        return Settings.DRIVE_MODIFIER_PUDDLE_TIME;
     }
 }

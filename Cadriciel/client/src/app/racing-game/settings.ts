@@ -52,4 +52,11 @@ export module Settings {
     export const DRIVE_MODIFIER_POTHOLE_ACCELERATION = -7.5;
     export const DRIVE_MODIFIER_POTHOLE_ROTATION = 1;
     export const DRIVE_MODIFIER_POTHOLE_TIME = 30;
+
+    export const DRIVE_MODIFIER_PUDDLE_MINIMUM_SPEED = 0.5;
+    export const DRIVE_MODIFIER_PUDDLE_POSITION = 0;
+    export const DRIVE_MODIFIER_PUDDLE_ACCELERATION = -1;
+    export const DRIVE_MODIFIER_PUDDLE_DECELERATION = 1;
+    export const DRIVE_MODIFIER_PUDDLE_ROTATION = 0;
+    export const DRIVE_MODIFIER_PUDDLE_TIME = 45;
 }
