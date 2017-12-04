@@ -3,6 +3,14 @@ export module Settings {
     export const SCENE_SCALE = 25;
     export const TRACK_RADIUS = 5;
 
+    export const ASSETS_FOLDER = '/assets';
+    export const SOUND_COUNTDOWN = 'sounds/countdown.mp3';
+    export const SOUND_RACE = 'sounds/race.mp3';
+    export const SOUND_STIGNER = 'sounds/stinger.mp3';
+    export const SOUND_THEMED = 'sounds/themed.mp3';
+
+    export const MUSIC_ENDED_EVENT = 'ended';
+
     export const CAMERA_ORTHOGRAPHIC_HEIGHT = 256 - 64;
     export const CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW = 80;
     export const CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE = 0;
