@@ -26,15 +26,15 @@ export class RenderService {
         private raceService: RaceHudService
     ) { }
 
-    public loadTrack(track) {
+    public loadTrack(track): void {
         this.terrainGenerationService.generate(this.sceneService.scene, track, this.sceneService.textureSky);
     }
 
-    public swapRearWiew() {
+    public swapRearWiew(): void {
         this.activeRearView = !this.activeRearView;
     }
 
-    public startRenderingLoop() {
+    public startRenderingLoop(): void {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -58,7 +58,7 @@ export class RenderService {
         this.renderer.render(this.raceService.sceneHud, this.raceService.cameraHud);
     }
 
-    private render() {
+    private render(): void {
         requestAnimationFrame(() => this.render());
         this.renderer.setScissorTest(false);
         this.cameraService.cameraOnMoveWithObject();
@@ -80,19 +80,19 @@ export class RenderService {
 
     }
 
-    public rearViewRender() {
+    public rearViewRender(): void {
         this.cameraService.rearCamera = new RearView(this.sceneService.scene, this.renderer);
         this.cameraService.rearViewCam();
     }
 
-    private initStats() {
+    private initStats(): void {
         this.stats = new Stats();
         this.stats.dom.style.position = 'absolute';
         this.stats.dom.style.top = '64px';
         this.container.appendChild(this.stats.dom);
     }
 
-    public onResize() {
+    public onResize(): void {
         const aspectRatio = this.container.clientWidth / this.container.clientHeight;
         this.cameraService.onResize(aspectRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
