@@ -46,4 +46,10 @@ export module Settings {
     export const DRIVE_MODIFIER_BOOSTER_DECELERATION = 0;
     export const DRIVE_MODIFIER_BOOSTER_ROTATION = 1;
     export const DRIVE_MODIFIER_BOOSTER_TIME = 60 * 2;
+
+    export const DRIVE_MODIFIER_POTHOLE_MINIMUM_SPEED = 0.5;
+    export const DRIVE_MODIFIER_POTHOLE_DECELERATION = 5;
+    export const DRIVE_MODIFIER_POTHOLE_ACCELERATION = -7.5;
+    export const DRIVE_MODIFIER_POTHOLE_ROTATION = 1;
+    export const DRIVE_MODIFIER_POTHOLE_TIME = 30;
 }
