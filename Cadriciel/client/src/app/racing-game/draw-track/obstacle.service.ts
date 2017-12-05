@@ -1,5 +1,6 @@
 import { Obstacle, ObstacleType } from './obstacle';
 import { Injectable } from '@angular/core';
+import { Settings } from '../settings';
 
 @Injectable()
 export class ObstacleService {
@@ -86,11 +87,11 @@ export class ObstacleService {
     }
 
     public randomDistance(obstacleIsABooster: boolean): number {
-        return Math.random() * (obstacleIsABooster ? 0.5 : 1);
+        return Math.random() * (obstacleIsABooster ? Settings.RANDOM_DISTANCE_INVERSE_OFFSET : Settings.RANDOM_DISTANCE_OFFSET);
     }
 
     public randomOffset(): number {
-        return ((Math.random() * 2) - 1) * (1 / 2);
+        return ((Math.random() * 2) - 1) * Settings.RANDOM_OFFSET_RATIO;
     }
 
     private isTooCloseToAnyOtherObstacle(obstacle: Obstacle): boolean {
@@ -135,7 +136,8 @@ export class ObstacleService {
         const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
         const distanceFromFirstIntersectionToObstacle2 = obstacle2.distance * segmentLength;
 
-        return Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2) < 10;
+        return Math.abs(distanceFromFirstIntersectionToObstacle1 -
+            distanceFromFirstIntersectionToObstacle2) < Settings.MAX_DISTANCE_TO_INTERSECTION;
     }
 
     private isTooCloseOtherObstacleOnAdjacentSegment(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
@@ -160,7 +162,8 @@ export class ObstacleService {
         const distanceFromSecondIntersectionToObstacle1 = (1 - obstacle1.distance) * firstSegmentLength;
         const distanceFromSecondIntersectionToObstacle2 = obstacle2.distance * secondSegmentLength;
 
-        return distanceFromSecondIntersectionToObstacle1 + distanceFromSecondIntersectionToObstacle2 < 10;
+        return distanceFromSecondIntersectionToObstacle1 +
+            distanceFromSecondIntersectionToObstacle2 < Settings.MAX_DISTANCE_TO_INTERSECTION;
     }
 
     public distance(point1: THREE.Vector2, point2: THREE.Vector2): number {

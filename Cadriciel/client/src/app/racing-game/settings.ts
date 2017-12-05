@@ -133,4 +133,8 @@ export module Settings {
     export const MILLISECONDS_VALUE = 0.01;
 
     export const END_RACE_CAR_TRANSPARENCY = 0.4;
+    export const RANDOM_DISTANCE_OFFSET = 1.0;
+    export const RANDOM_DISTANCE_INVERSE_OFFSET = 0.5;
+    export const RANDOM_OFFSET_RATIO = 0.5;
+    export const MAX_DISTANCE_TO_INTERSECTION = 10;
 }
