@@ -1,10 +1,3 @@
-/**
- * www.ts - Configure le serveur Node en vue d'accueillir l'application Express.
- *
- * @authors Nicolas Richard, Emilio Riviera
- * @date 2017/01/09
- */
-
 import { Application } from './app';
 import { ServerCrosswords } from './crosswordGrid/ServerCrosswords';
 import * as http from 'http';
@@ -12,7 +5,9 @@ import { SocketServer } from './socket-server';
 import { MultiplayerManager } from './multiplayer-manager';
 import { Database } from './database';
 
-// start app after database is connected
+import { SERVER_PORT, CROSSWORD_COLLECTION } from './config';
+
+// start app once database connection is established
 Database
     .getInstance()
     .then((database) => {
@@ -24,12 +19,12 @@ Database
 
                 // initialize server crossword with collection crosswords
                 const serverCrosswords = ServerCrosswords.getInstance();
-                serverCrosswords.setCollection('crosswords');
+                serverCrosswords.setCollection(CROSSWORD_COLLECTION);
                 serverCrosswords.initializeServerCrossword()
                     .then(() => console.log('crosswords stored on server'))
                     .then(() => {
                         // Configuration du port d'écoute
-                        const appPort = normalizePort(process.env.PORT || '3000');
+                        const appPort = normalizePort(process.env.PORT || SERVER_PORT);
                         application.app.set('port', appPort);
 
                         // Création du serveur HTTP.

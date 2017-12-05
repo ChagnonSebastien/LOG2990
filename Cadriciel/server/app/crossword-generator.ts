@@ -3,7 +3,8 @@ import { Lexicon } from './lexicon';
 import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
-const LEXICON_PATH = './app/words.json';
+import { LEXICON_PATH, BLANK_SQUARE, BLACK_SQUARE } from './config';
+import { Level } from '../../client/src/app/crossword-game/configuration/level';
 
 export class CrosswordGenerator {
     public grid: string[][];
@@ -50,7 +51,7 @@ export class CrosswordGenerator {
     private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
-        this.grid = this.newGrid(this.size, ' ');
+        this.grid = this.newGrid(this.size, BLANK_SQUARE);
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
@@ -71,7 +72,7 @@ export class CrosswordGenerator {
             || CrosswordVerifier.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
-        if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
+        if (this.grid[i][j] !== BLANK_SQUARE && this.grid[i][j] !== letter) {
             return false;
         }
         this.grid[i][j] = letter;
@@ -111,23 +112,23 @@ export class CrosswordGenerator {
     private addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
         if (horizontal) {
             if (j > 0) {
-                if (!this.addLetter(i, j - 1, '#')) {
+                if (!this.addLetter(i, j - 1, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (j + word.length < this.size) {
-                if (!this.addLetter(i, j + word.length, '#')) {
+                if (!this.addLetter(i, j + word.length, BLACK_SQUARE)) {
                     return false;
                 }
             }
         } else {
             if (i > 0) {
-                if (!this.addLetter(i - 1, j, '#')) {
+                if (!this.addLetter(i - 1, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (i + word.length < this.size) {
-                if (!this.addLetter(i + word.length, j, '#')) {
+                if (!this.addLetter(i + word.length, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
@@ -161,13 +162,13 @@ export class CrosswordGenerator {
 
         let wordsForPattern: string[];
         switch (difficulty) {
-            case ('easy'):
+            case (Level.EASY):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, true);
                 break;
-            case ('normal'):
+            case (Level.NORMAL):
                 wordsForPattern = this.lexicon.allWordsForPattern(pattern);
                 break;
-            case ('hard'):
+            case (Level.HARD):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, false);
         }
 

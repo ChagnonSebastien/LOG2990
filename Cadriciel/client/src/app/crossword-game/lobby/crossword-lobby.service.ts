@@ -5,6 +5,8 @@ import { CrosswordPlayerService } from '../player/crossword-player.service';
 
 import { CrosswordGameInfo } from '../../../../../commun/crossword/crossword-game-info';
 
+import { GameConfiguration } from '../game-configuration';
+
 @Injectable()
 export class CrosswordLobbyService {
     public games: Array<CrosswordGameInfo>;
@@ -16,7 +18,7 @@ export class CrosswordLobbyService {
     ) {
         this.listenForActiveGames();
         this.getGames();
-        setInterval(this.getGames.bind(this), 1000);
+        setInterval(this.getGames.bind(this), GameConfiguration.LOBBY_REFRESH_INTERVAL);
     }
 
     public joinGame(gameId: string): boolean {

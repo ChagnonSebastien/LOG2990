@@ -1,4 +1,5 @@
 import { CrosswordGenerator } from './crossword-generator';
+import { BLANK_SQUARE, BLACK_SQUARE } from './config';
 
 export module CrosswordVerifier {
     export function indexesOutOfBounds(i: number, j: number, size: number): boolean {
@@ -26,10 +27,10 @@ export module CrosswordVerifier {
     }
 
     function getWords(crossword: CrosswordGenerator, horizontal: boolean): Set<string> {
-        const separators = [' ', '#'];
-        // Extracts words from grid by joining the squares, then splitting
+        const separators = [BLANK_SQUARE, BLACK_SQUARE];
         return new Set(crossword.grid.map((line, index) => {
             return crossword.patternForLine(index, horizontal)
+                // split on BLANK_SQUARE or BLACK_SQUARE
                 .split(new RegExp(separators.join('|'), 'g'))
                 .filter((value) => {
                     return value.length > 1;

@@ -1,19 +1,16 @@
 <div class="container align-center">
-    <div class="container" id="authentication">
-        <div *ngIf="!passwordCorrect" class="form-inline">
-        <!-- login form -->
-        <div class="wrapper">
-            <form class="form-signin" id="form">
-            <h4 class="form-signin-heading">Admin Login</h4>
-            <input type="password" class="form-control" id="form-input" placeholder="Password" #passwordInput />
-            <button id="login" (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
-            </form>
-        </div>
-        <!-- login form end -->
-        </div>
-        <div *ngIf="passwordCorrect">
-            <router-outlet></router-outlet>
-        </div>
+  <div class="container" id="authentication">
+    <div *ngIf="!passwordCorrect" class="form-inline">
+      <div class="wrapper">
+        <form class="form-signin" id="form">
+          <h4 class="form-signin-heading">Admin Login</h4>
+          <input type="password" class="form-control" id="form-input" placeholder="Password" #passwordInput />
+          <button id="login" (click)="login(passwordInput.value); passwordInput.value=''" class="btn btn-primary">Login</button>
+        </form>
+      </div>
     </div>
+    <div *ngIf="passwordCorrect">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
-      

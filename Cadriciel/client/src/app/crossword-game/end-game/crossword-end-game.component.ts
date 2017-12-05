@@ -5,8 +5,7 @@ import { CrosswordGameManagerService } from '../game-manager/crossword-game-mana
 
 @Component({
     selector: 'app-crossword-end-game',
-    templateUrl: './crossword-end-game.component.html',
-    styleUrls: ['./crossword-end-game.component.css']
+    templateUrl: './crossword-end-game.component.html'
 })
 export class CrosswordEndGameComponent {
     constructor(

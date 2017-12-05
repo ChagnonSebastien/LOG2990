@@ -4,6 +4,8 @@ import { CrosswordLobbyService } from './crossword-lobby.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 
+import { Type } from '../configuration/type';
+
 @Component({
     selector: 'app-crossword-lobby',
     templateUrl: './crossword-lobby.component.html',
@@ -17,7 +19,7 @@ export class CrosswordLobbyComponent {
     ) { }
 
     public copyJoinedGameConfiguration(level: string, mode: string) {
-        this.configurationService.type = 'multiplayer';
+        this.configurationService.type = Type.MULTIPLAYER;
         this.configurationService.level = level;
         this.configurationService.mode = mode;
     }

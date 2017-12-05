@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as async from 'async';
 
+import { WORD_API, DEFINITIONS_OPTIONS, FREQUENCY_OPTIONS, WORDS_PER_BATCH } from './config';
+
 export class LexiconReader {
 
     public readWords(file: string): string[] {
@@ -46,10 +48,11 @@ export class LexiconReader {
     }
 
     public async getUncommonWords(lexicon: string[]): Promise<any> {
-        const randomWords = Array(40).fill(null).map((value) => {
-            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
-            return randomWord;
-        });
+        const randomWords = Array(WORDS_PER_BATCH)
+            .map((value) => {
+                const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+                return randomWord;
+            });
         return new Promise(
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {
@@ -63,10 +66,11 @@ export class LexiconReader {
     }
 
     public async getCommonWords(lexicon: string[]): Promise<any> {
-        const randomWords = Array(40).fill(null).map((value) => {
-            const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
-            return randomWord;
-        });
+        const randomWords = Array(WORDS_PER_BATCH)
+            .map((value) => {
+                const randomWord = lexicon[Math.floor(Math.random() * lexicon.length)];
+                return randomWord;
+            });
         return new Promise(
             (resolve) => {
                 async.filter(randomWords, (word, callback) => {
@@ -80,12 +84,8 @@ export class LexiconReader {
     }
 
     public getWordFrequency(word: string): Promise<number> {
-        const uri = 'http://api.wordnik.com:80/v4/word.json';
-        const options = 'frequency?useCanonical=false&startYear=2012&endYear=' +
-            '2012&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-
         return new Promise<number>(resolve => {
-            request(`${uri}/${word}/${options}`, (error, response, body) => {
+            request(`${WORD_API}/${word}/${FREQUENCY_OPTIONS}`, (error, response, body) => {
                 body = JSON.parse(body);
                 resolve(body.totalCount);
             });
@@ -93,17 +93,13 @@ export class LexiconReader {
     }
 
     public getWordDefinitions(word: string): Promise<string[]> {
-        const uri = 'http://api.wordnik.com:80/v4/word.json';
-        const options = 'definitions?limit=200&includeRelated=true&useCanonical=false' +
-            '&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
         let definitions: string[] = [];
-
         return new Promise<string[]>(resolve => {
-            request(`${uri}/${word}/${options}`, (error, response, body) => {
-                if (body === '[]') {
+            request(`${WORD_API}/${word}/${DEFINITIONS_OPTIONS}`, (error, response, body) => {
+                body = JSON.parse(body);
+                if (body === []) {
                     definitions = [];
                 } else {
-                    body = JSON.parse(body);
                     for (let i = 0; i < body.length; i++) {
                         definitions.push(body[i].text);
                     }

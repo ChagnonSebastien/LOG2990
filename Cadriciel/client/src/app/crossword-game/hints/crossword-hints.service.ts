@@ -7,6 +7,7 @@ import { CrosswordWordsService } from '../words/crossword-words.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
+import { HintSelection } from '../../../../../commun/crossword/hint-selection';
 
 @Injectable()
 export class CrosswordHintsService {
@@ -102,11 +103,7 @@ export class CrosswordHintsService {
     }
 
     private alertNewSelectedWord(word: Word) {
-        this.selectedWordSubject.next(
-            {
-                'previous': this.selectedWord,
-                'current': word
-            }
-        );
+        this.selectedWordSubject
+            .next(new HintSelection(this.selectedWord, word));
     }
 }

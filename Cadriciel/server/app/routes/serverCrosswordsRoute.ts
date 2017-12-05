@@ -11,7 +11,7 @@ module Route {
             this.serverCrosswords = ServerCrosswords.getInstance();
         }
 
-        public getCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getCrossword(req: express.Request, res: express.Response, next: express.NextFunction): void {
             this.serverCrosswords = ServerCrosswords.getInstance();
             this.serverCrosswords.setCollection(req.params.collection);
             const level = req.params.level;
@@ -20,7 +20,7 @@ module Route {
             });
         }
 
-        public getMutatedCrossword(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getMutatedCrossword(req: express.Request, res: express.Response, next: express.NextFunction): void {
             const level = req.body.level;
             const listOfIndex = req.body.wordsWithIndex;
             let mutatedCrossword = new Crossword();
@@ -29,7 +29,7 @@ module Route {
             this.serverCrosswords = ServerCrosswords.getInstance();
             this.serverCrosswords.mutate(mutatedCrossword);
             mutatedCrossword = this.serverCrosswords.mutatedGrid;
-            res.send(JSON.stringify({ 'crossword': mutatedCrossword}));
+            res.send(JSON.stringify({ 'crossword': mutatedCrossword }));
         }
 
     }

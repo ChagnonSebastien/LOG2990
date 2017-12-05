@@ -56,7 +56,7 @@ export class CrosswordCountdownService {
 
     private startCountdown(): boolean {
         if (!this.countdownStarted()) {
-            this.countdownId = setInterval(this.decrementCounter.bind(this), 1000);
+            this.countdownId = setInterval(this.decrementCounter.bind(this), GameConfiguration.INITIAL_COUNTDOWN_VALUE);
             return true;
         }
         return false;

@@ -1,7 +1,9 @@
+import { MAX_NUMBER_OF_TOP_TIMES } from './config';
+
 export module UpdateTrack {
 
-    export function updateRating (numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
-        return (numberOfTimesPlayed * oldRating + newRating ) / (numberOfTimesPlayed + 1);
+    export function updateRating(numberOfTimesPlayed: number, oldRating: number, newRating: number): number {
+        return (numberOfTimesPlayed * oldRating + newRating) / (numberOfTimesPlayed + 1);
     }
 
    export function updateBestTimes (arrayBestTimes: { playerName: string, time: number }[],

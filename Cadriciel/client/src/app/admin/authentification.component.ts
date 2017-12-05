@@ -16,9 +16,10 @@ export class AuthentificationComponent implements OnInit {
     }
 
     public async login(passwordInput: string): Promise<boolean> {
-        await this.authenticationService.authenticate(passwordInput).then(res => {
-            this.passwordCorrect = (res === 'authenticated');
-        });
+        await this.authenticationService.authenticate(passwordInput)
+            .then(res => {
+                this.passwordCorrect = (res === 'authenticated');
+            });
         return await this.passwordCorrect;
     }
 }
