@@ -24,7 +24,6 @@ let lapCounterService: LapCounterService;
 
 describe('LapCounterService', function () {
     beforeEach(() => {
-        TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             providers: [
                 LapCounterService,
@@ -47,8 +46,7 @@ describe('LapCounterService', function () {
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,
                 ControllerFactory
-            ]
-        });
+            ]});
         lapCounterService = TestBed.get(LapCounterService);
     });
 
