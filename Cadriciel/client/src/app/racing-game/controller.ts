@@ -8,6 +8,8 @@ import { DriveModifier } from './drive-modifiers/drive-modifier';
 import { BoosterModifier } from './drive-modifiers/booster-modifier';
 import { PotholeModifier } from './drive-modifiers/pothole-modifier';
 import { PuddleModifier } from './drive-modifiers/puddle-modifier';
+import { Settings } from './settings';
+
 const acceleration = 0.1;
 const angularAcceleration = Math.PI * 0.002;
 const maxSpeed = 35;
@@ -56,7 +58,9 @@ export abstract class Controller {
     }
 
     public hitWall(speedModifier: number) {
-        this.linearVelocity.clampLength(0, Math.min(maxSpeed * speedModifier, this.linearVelocity.length() * 0.98 * speedModifier));
+        this.linearVelocity.clampLength(
+            0, Math.min(maxSpeed * speedModifier, this.linearVelocity.length() * Settings.WALL_SPEED_DIMINISHER * speedModifier)
+        );
     }
 
     public hitObstacle(type: ObstacleType) {
@@ -85,7 +89,7 @@ export abstract class Controller {
         }
     }
 
-    private modifySpeed (object: Vehicle) {
+    private modifySpeed(object: Vehicle) {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
             this.linearVelocity.add(new Vector3(
                 -acceleration * Math.sin(object.getMesh().rotation.y), 0, -acceleration * Math.cos(object.getMesh().rotation.y)
@@ -93,7 +97,9 @@ export abstract class Controller {
             this.linearVelocity.clampLength(0, maxSpeed);
         } else {
             this.linearVelocity.clampLength(
-                0, this.linearVelocity.length() - acceleration * 1.5 * this.driveModifier.getDecelerationMultiplier());
+                0,
+                this.linearVelocity.length() - acceleration * Settings.BRAKE_MULTIPLIER * this.driveModifier.getDecelerationMultiplier()
+            );
         }
 
         const projectOn = new Vector3(
@@ -108,7 +114,7 @@ export abstract class Controller {
     private moveVehicle(object: Vehicle) {
         const modifiedSpeed = this.driveModifier.getModifiedSpeed(this.linearVelocity);
 
-        const newPosition = new Vector3 (
+        const newPosition = new Vector3(
             object.getMesh().position.x + modifiedSpeed.x,
             0,
             object.getMesh().position.z + modifiedSpeed.z
@@ -118,20 +124,20 @@ export abstract class Controller {
         this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
         if (!moveEvent.isCancelled()) {
             object.getMesh().position.x = moveEvent.getNewPosition().x;
-            object.getMesh().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
+            object.getMesh().position.y = Settings.TRACK_HEIGHT + this.driveModifier.getVerticalPositionModifier();
             object.getMesh().position.z = moveEvent.getNewPosition().z;
         }
     }
 
-    private modifyRotation (object: Vehicle) {
+    private modifyRotation(object: Vehicle) {
         if (this.turnState === TURN_STATE.TURN_LEFT) {
             this.angulareVelocity.y = Math.min(maxAngularSpeed, Math.max(
-                this.angulareVelocity.y + angularAcceleration, this.angulareVelocity.y * 0.90));
+                this.angulareVelocity.y + angularAcceleration, this.angulareVelocity.y * Settings.FRICTION));
         } else if (this.turnState === TURN_STATE.TURN_RIGHT) {
             this.angulareVelocity.y = Math.max(-maxAngularSpeed, Math.min(
-                this.angulareVelocity.y - angularAcceleration, this.angulareVelocity.y * 0.90));
+                this.angulareVelocity.y - angularAcceleration, this.angulareVelocity.y * Settings.FRICTION));
         } else {
-            this.angulareVelocity.y = this.angulareVelocity.y * 0.90;
+            this.angulareVelocity.y = this.angulareVelocity.y * Settings.FRICTION;
         }
     }
 
