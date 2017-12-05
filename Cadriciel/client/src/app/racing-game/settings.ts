@@ -1,12 +1,18 @@
 import { VehicleColor } from './vehicle-color';
 
 export module Settings {
-
+    // scene
     export const SCENE_SCALE = 25;
     export const TRACK_HEIGHT = 3;
     export const TRACK_RADIUS = 5;
     export const HUMAN_COLOR = VehicleColor.red;
 
+    // obstacles
+    export const POTHOLE_COLOR = 0x000000;
+    export const PUDDLE_COLOR = 0x0051a8;
+    export const BOOSTER_COLOR = 0xffbb00;
+
+    // audio
     export const ASSETS_FOLDER = '/assets';
     export const SOUND_COUNTDOWN = 'sounds/countdown.mp3';
     export const SOUND_RACE = 'sounds/race.mp3';
@@ -25,6 +31,7 @@ export module Settings {
 
     export const MUSIC_ENDED_EVENT = 'ended';
 
+    // camera
     export const CAMERA_ORTHOGRAPHIC_HEIGHT = 256 - 64;
     export const CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW = 80;
     export const CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE = 0;
@@ -41,6 +48,7 @@ export module Settings {
 
     export const VEHICLE_NAME = 'vehicle';
 
+    // hud
     export const HUD_HEIGHT_RATIO = 0.8;
     export const HUD_INVERSE_HEIGHT_RATIO = 0.2;
     export const HUD_RACE_INFO_GEOMETRY_WIDTH_RATIO = 0.2;
@@ -62,6 +70,7 @@ export module Settings {
     export const YELLOW = 0xffff00;
     export const TOTAL_LAPS = 3;
 
+    // countdown
     export const COUNTDOWN_TIME = 6;
     export const COUNTDOWN_TEXT_SIZE = 200;
     export const COUNTDOWN_TEXT_HEIGHT = 0;
@@ -72,6 +81,7 @@ export module Settings {
     export const COUNTDOWN_TEXT_COLOR = 0xffff00;
     export const COUNTDOWN_NAME = 'countdown';
 
+    // light
     export const LIGHT_COLOR = 0xffffff;
     export const LIGHT_INTENSITY = 0.2;
     export const HUE_LIGHT = 0.6;
@@ -101,6 +111,7 @@ export module Settings {
     export const LIGHT_SPOT_Y = 1.1;
     export const LIGHT_SPOT_Z = -3.2;
 
+    // drive modifier
     export const DRIVE_MODIFIER_NONE_POSITION = 0;
     export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;
     export const DRIVE_MODIFIER_NONE_DECELERATION = 1;

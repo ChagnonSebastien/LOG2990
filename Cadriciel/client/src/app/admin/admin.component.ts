@@ -21,7 +21,7 @@ export class AdminComponent implements OnInit {
         this.passwordCorrect = false;
     }
 
-    public onActivate(event) {
+    public onActivate(event): void {
         this.selectedTab = event.getRoute().snapshot.url.join('');
     }
 

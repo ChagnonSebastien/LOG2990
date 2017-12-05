@@ -22,7 +22,7 @@ export class CrosswordPointsService {
         this.opponentFoundWords = new Set<string>();
     }
 
-    public endGame() {
+    public endGame(): void {
         this.foundWords = undefined;
         this.opponentFoundWords = undefined;
     }

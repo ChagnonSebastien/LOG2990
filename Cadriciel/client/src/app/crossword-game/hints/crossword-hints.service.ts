@@ -35,7 +35,7 @@ export class CrosswordHintsService {
         });
     }
 
-    public endGame() {
+    public endGame(): void {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
         this.hints = undefined;
@@ -102,7 +102,7 @@ export class CrosswordHintsService {
         return hints;
     }
 
-    private alertNewSelectedWord(word: Word) {
+    private alertNewSelectedWord(word: Word): void {
         this.selectedWordSubject
             .next(new HintSelection(this.selectedWord, word));
     }

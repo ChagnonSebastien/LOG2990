@@ -30,35 +30,35 @@ export class CrosswordGridComponent {
         this.listenForArrowKeys();
     }
 
-    private listenForWordSelections() {
+    private listenForWordSelections(): void {
         this.hintsService.selectedWordAlerts()
             .subscribe((wordSelection) => {
                 this.focusOnWord(wordSelection.current);
             });
     }
 
-    private listenForLetterInputs() {
+    private listenForLetterInputs(): void {
         this.keyboardService.letterInputAlerts()
             .subscribe((input) => {
                 this.focusOnNextLetter(input.i, input.j);
             });
     }
 
-    private listenForBackspaces() {
+    private listenForBackspaces(): void {
         this.keyboardService.backspaceAlerts()
             .subscribe((square) => {
                 this.focusOnPreviousLetter(square.i, square.j);
             });
     }
 
-    private listenForArrowKeys() {
+    private listenForArrowKeys(): void {
         this.keyboardService.arrowAlerts()
             .subscribe((arrowInput) => {
                 this.handleArrows(arrowInput.charCode, arrowInput.i, arrowInput.j);
             });
     }
 
-    private handleArrows(keyCode: number, i: number, j: number) {
+    private handleArrows(keyCode: number, i: number, j: number): void {
         if (this.keyboardService.isLeftArrow(keyCode)
             || this.keyboardService.isUpArrow(keyCode)) {
             this.focusOnPreviousLetter(i, j);
@@ -67,11 +67,11 @@ export class CrosswordGridComponent {
         }
     }
 
-    private focusOnWord(wordWithIndex: Word) {
+    private focusOnWord(wordWithIndex: Word): void {
         this.focusOnSquare(wordWithIndex.i, wordWithIndex.j);
     }
 
-    private focusOnSquare(i: number, j: number) {
+    private focusOnSquare(i: number, j: number): void {
         const square = this.squares.toArray().find((e) => {
             return e.nativeElement.getAttribute('id') === `${i}_${j}`;
         });

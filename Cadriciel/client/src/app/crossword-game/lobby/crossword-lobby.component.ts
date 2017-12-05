@@ -18,7 +18,7 @@ export class CrosswordLobbyComponent {
         private configurationService: CrosswordConfigurationService
     ) { }
 
-    public copyJoinedGameConfiguration(level: string, mode: string) {
+    public copyJoinedGameConfiguration(level: string, mode: string): void {
         this.configurationService.type = Type.MULTIPLAYER;
         this.configurationService.level = level;
         this.configurationService.mode = mode;

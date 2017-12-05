@@ -15,13 +15,13 @@ export class ObstacleService {
         this.potholes = [];
         this.puddles = [];
         this.boosters = [];
-     }
+    }
 
-    public initialize(track: THREE.Vector2[]) {
+    public initialize(track: THREE.Vector2[]): void {
         this.track = track;
     }
 
-    public loadObstacles(type: ObstacleType, obstacles: any[]) {
+    public loadObstacles(type: ObstacleType, obstacles: any[]): void {
         const extractObstacles = (obstacle) => {
             return new Obstacle(type, obstacle.segment, obstacle.distance, obstacle.offset);
         };
@@ -41,7 +41,7 @@ export class ObstacleService {
         }
     }
 
-    public addObstacle(type: ObstacleType) {
+    public addObstacle(type: ObstacleType): void {
         switch (type) {
             case ObstacleType.Booster:
                 this.addObstacleToList(this.boosters, type);
@@ -57,12 +57,13 @@ export class ObstacleService {
         }
     }
 
-    private addObstacleToList(list: Obstacle[], type: ObstacleType) {
+    private addObstacleToList(list: Obstacle[], type: ObstacleType): void {
         switch (list.length) {
             case 1:
             case 3:
                 list.push(this.newObstacle(type));
-            /* falls through */
+                list.push(this.newObstacle(type));
+                break;
             case 0:
                 list.push(this.newObstacle(type));
                 break;
@@ -173,7 +174,7 @@ export class ObstacleService {
         );
     }
 
-    public randomizeAllPositions(type: ObstacleType) {
+    public randomizeAllPositions(type: ObstacleType): void {
         let amountToReAdd = 0;
 
         switch (type) {
@@ -198,7 +199,7 @@ export class ObstacleService {
         }
     }
 
-    public getObstacles(type: ObstacleType) {
+    public getObstacles(type: ObstacleType): Obstacle[] {
         switch (type) {
             case ObstacleType.Booster:
                 return this.boosters;
@@ -214,7 +215,7 @@ export class ObstacleService {
         }
     }
 
-    public removeAllObstacles() {
+    public removeAllObstacles(): void {
         this.boosters = [];
         this.potholes = [];
         this.puddles = [];
