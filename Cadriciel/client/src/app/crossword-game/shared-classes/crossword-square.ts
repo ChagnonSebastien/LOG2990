@@ -1,4 +1,5 @@
 import { Word } from '../../../../../commun/word';
+import { BLANK_SQUARE, BLACK_SQUARE } from '../../../../../server/app/config';
 
 export class CrosswordSquare {
     public black: boolean;
@@ -15,7 +16,7 @@ export class CrosswordSquare {
         if (character.length > 1) {
             character = character.charAt(0);
         }
-        this.black = character === ' ' || character === '#';
+        this.black = character === BLANK_SQUARE || character === BLACK_SQUARE;
         this.empty = !this.black;
         this.found = false;
         this.opponentFound = false;
