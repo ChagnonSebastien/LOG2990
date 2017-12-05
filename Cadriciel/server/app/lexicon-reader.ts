@@ -28,7 +28,7 @@ export class LexiconReader {
         return wordsWithChar;
     }
 
-    public getWordsMatchingPattern(lexicon: string[], pattern: string) {
+    public getWordsMatchingPattern(lexicon: string[], pattern: string): string[] {
         const wordsWithChar: string[] = [];
         const wordsPatternLength: string[] = this.readWordsOfLength(lexicon, pattern.length);
 
