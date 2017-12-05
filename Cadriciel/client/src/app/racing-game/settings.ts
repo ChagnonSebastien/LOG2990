@@ -179,6 +179,7 @@ export module Settings {
     export const MAX_DISTANCE_TO_INTERSECTION = 10;
     export const FRICTION = 0.9;
     export const WALL_SPEED_DIMINISHER = 0.98;
+    export const BRAKE_MULTIPLIER = 1.5;
 
     export const W = 87;
     export const A = 65;
