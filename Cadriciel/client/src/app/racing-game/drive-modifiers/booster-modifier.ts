@@ -7,23 +7,23 @@ export class BoosterModifier extends DriveModifier {
         return speed.clone().multiplyScalar(1.5);
     }
 
-    public getVerticalPositionModifier() {
+    public getVerticalPositionModifier(): number {
         return Settings.DRIVE_MODIFIER_BOOSTER_POSITION;
     }
 
-    public getAccelerationMultiplier() {
+    public getAccelerationMultiplier(): number {
         return Settings.DRIVE_MODIFIER_BOOSTER_ACCELERATION;
     }
 
-    public getDecelerationMultiplier() {
+    public getDecelerationMultiplier(): number {
         return Settings.DRIVE_MODIFIER_BOOSTER_DECELERATION;
     }
 
-    public getRotationMultiplier() {
+    public getRotationMultiplier(): number {
         return Settings.DRIVE_MODIFIER_BOOSTER_ROTATION;
     }
 
-    protected getTotalTime() {
+    protected getTotalTime(): number {
         return Settings.DRIVE_MODIFIER_BOOSTER_TIME;
     }
 }

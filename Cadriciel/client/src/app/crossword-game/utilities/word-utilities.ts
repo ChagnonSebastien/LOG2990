@@ -1,7 +1,7 @@
 import { Word } from '../../../../../commun/word';
 
 export module WordUtilities {
-    export function forEachLetter(word: Word, callback) {
+    export function forEachLetter(word: Word, callback): void {
         for (let k = 0; k < word.word.length; k++) {
             const i = word.horizontal ? word.i : word.i + k;
             const j = word.horizontal ? word.j + k : word.j;

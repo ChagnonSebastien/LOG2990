@@ -77,7 +77,7 @@ export class CrosswordGameManagerService {
         this.playerService.isHost = false;
     }
 
-    public restartGame() {
+    public restartGame(): void {
         if (this.configurationService.isMultiplayer()) {
             this.multiplayerService.emitRestartGame(
                 this.configurationService.level,

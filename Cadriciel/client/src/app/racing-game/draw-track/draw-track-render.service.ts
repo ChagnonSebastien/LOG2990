@@ -4,10 +4,10 @@ import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
-const viewDepth = 10;
+import { Settings } from '../settings';
 
 @Injectable()
-export class RenderService {
+export class DrawTrackRenderService {
 
     private container: HTMLElement;
 
@@ -21,30 +21,30 @@ export class RenderService {
 
     private scene: THREE.Scene;
 
-    private intersections: THREE.Mesh[] = [];
+    private intersections: THREE.Mesh[];
 
     private firstPointHighlight: THREE.Mesh;
 
-    private segments: THREE.Mesh[] = [];
+    private segments: THREE.Mesh[];
 
-    private potholes: THREE.Mesh[] = this.newObstacles(0x000000);
+    private potholes: THREE.Mesh[];
 
-    private puddles: THREE.Mesh[] = this.newObstacles(0x0051a8);
+    private puddles: THREE.Mesh[];
 
-    private boosters: THREE.Mesh[] = this.newObstacles(0xffbb00);
+    private boosters: THREE.Mesh[];
 
     public trackClosed = false;
 
     constructor() {
         this.intersections = [];
         this.segments = [];
-        this.potholes = this.newObstacles(0x000000);
-        this.puddles = this.newObstacles(0x0051a8);
-        this.boosters = this.newObstacles(0xffbb00);
+        this.potholes = this.newObstacles(Settings.POTHOLE_COLOR);
+        this.puddles = this.newObstacles(Settings.PUDDLE_COLOR);
+        this.boosters = this.newObstacles(Settings.BOOSTER_COLOR);
         this.trackClosed = false;
     }
 
-    public initialise(container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService) {
+    public initialise(container: HTMLElement, trackValidationService: TrackValidationService, obstacleService: ObstacleService): void {
         this.container = container;
         this.trackValidationService = trackValidationService;
         this.obstacleService = obstacleService;
@@ -52,13 +52,13 @@ export class RenderService {
         this.startRenderingLoop();
     }
 
-    public clear() {
+    public clear(): void {
         this.intersections = [];
         this.segments = [];
         this.trackClosed = false;
     }
 
-    private createScene() {
+    private createScene(): void {
         this.scene = new THREE.Scene();
 
         this.camera = new THREE.OrthographicCamera(
@@ -66,15 +66,15 @@ export class RenderService {
             this.container.clientWidth / 2,
             this.container.clientHeight / 2,
             this.container.clientHeight / - 2,
-            -viewDepth,
-            viewDepth
+            -Settings.VIEW_DEPTH,
+            Settings.VIEW_DEPTH
         );
 
         this.intersections.push(this.newIntersection(new THREE.Vector2(0, 0)));
         this.segments.push(this.newSegment());
     }
 
-    private startRenderingLoop() {
+    private startRenderingLoop(): void {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
@@ -82,14 +82,14 @@ export class RenderService {
         this.render();
     }
 
-    private render() {
+    private render(): void {
         requestAnimationFrame(() => this.render());
         this.renderer.render(this.scene, this.camera);
     }
 
     private newIntersection(position: THREE.Vector2): THREE.Mesh {
-        const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+        const geometry = new THREE.CircleGeometry(Settings.INTERSECTION_RADIUS, Settings.INTERSECTION_SEGMENTS);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.INTERSECTION_COLOR });
         const point = new THREE.Mesh(geometry, material);
         point.position.setX(position.x);
         point.position.setY(position.y);
@@ -99,22 +99,22 @@ export class RenderService {
     }
 
     private newSegment(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry(0, 20);
-        const material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
+        const geometry = new THREE.PlaneGeometry(Settings.SEGMENT_WIDTH, Settings.SEGMENT_HEIGHT);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.SEGMENT_COLOR });
         const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
         return segment;
     }
 
     private newObstacles(color: number): THREE.Mesh[] {
-        const geometry = new THREE.CircleGeometry(5, 16);
+        const geometry = new THREE.CircleGeometry(Settings.OBSTACLE_RADIUS, Settings.OBSTACLE_SEGMENTS);
         const material = new THREE.MeshBasicMaterial({ color });
         const point = new THREE.Mesh(geometry, material);
         point.position.setZ(1);
         return [point, point.clone(), point.clone(), point.clone(), point.clone()];
     }
 
-    public updateIntersectionPosition(index: number, position: THREE.Vector2) {
+    public updateIntersectionPosition(index: number, position: THREE.Vector2): void {
         if (index >= this.intersections.length) {
             return;
         }
@@ -130,20 +130,20 @@ export class RenderService {
         this.updateSegmentsValidity();
     }
 
-    private updateSegmentPosition(index: number) {
+    private updateSegmentPosition(index: number): void {
         const fromPosition = this.intersections[index].position;
         const toPosition = this.intersections[index + 1 < this.intersections.length ? index + 1 : 0].position;
 
-        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);
+        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), Settings.SEGMENT_HEIGHT);
         this.segments[index].geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         this.segments[index].position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
         this.segments[index].position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
     }
 
-    private updateSegmentsValidity() {
+    private updateSegmentsValidity(): void {
         this.segments.forEach((segment, index) => {
             segment.material = new THREE.MeshBasicMaterial(
-                this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
+                this.trackValidationService.isValid(index) ? { color: Settings.SEGMENT_COLOR_VALID } : { color: Settings.SEGMENT_COLOR }
             );
         });
     }
@@ -152,7 +152,7 @@ export class RenderService {
         return Math.sqrt(Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2));
     }
 
-    public addIntersection(position: THREE.Vector2) {
+    public addIntersection(position: THREE.Vector2): void {
         if (this.intersections.length === 1) {
             this.addHighlight(position);
         }
@@ -163,15 +163,15 @@ export class RenderService {
         this.scene.add(this.segments[this.segments.length - 2]);
     }
 
-    private addHighlight(position: THREE.Vector2) {
-        const geometry = new THREE.CircleGeometry(15, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
+    private addHighlight(position: THREE.Vector2): void {
+        const geometry = new THREE.CircleGeometry(Settings.HIGHLIGHT_RADIUS, Settings.HIGHLIGHT_SEGMENTS);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.HIGHLIGHT_COLOR });
         this.firstPointHighlight = new THREE.Mesh(geometry, material);
         this.firstPointHighlight.position.set(position.x, position.y, -1);
         this.scene.add(this.firstPointHighlight);
     }
 
-    public removeIntersection() {
+    public removeIntersection(): void {
         this.scene.remove(this.intersections[this.intersections.length - 2]);
         this.intersections.splice(this.intersections.length - 2, 1);
         this.scene.remove(this.segments[this.segments.length - 2]);
@@ -186,7 +186,7 @@ export class RenderService {
         this.updateSegmentsValidity();
     }
 
-    public openTrack(position: THREE.Vector2) {
+    public openTrack(position: THREE.Vector2): void {
         this.trackClosed = false;
         this.intersections.push(this.newIntersection(position));
         this.segments.push(this.newSegment());
@@ -194,13 +194,13 @@ export class RenderService {
         this.updateSegmentsValidity();
     }
 
-    public closeTrack() {
+    public closeTrack(): void {
         this.trackClosed = true;
         this.scene.remove(this.intersections.pop());
         this.segments.pop();
     }
 
-    public updateObstaclesPositions(type: ObstacleType, obstacles: Obstacle[]) {
+    public updateObstaclesPositions(type: ObstacleType, obstacles: Obstacle[]): void {
         switch (type) {
             case ObstacleType.Booster:
                 this.updateObstaclesPositionsInList(obstacles, this.boosters);
@@ -219,7 +219,7 @@ export class RenderService {
         }
     }
 
-    private updateObstaclesPositionsInList(obstacles: Obstacle[], meshList: THREE.Mesh[]) {
+    private updateObstaclesPositionsInList(obstacles: Obstacle[], meshList: THREE.Mesh[]): void {
         meshList.forEach((mesh, index) => {
             if (obstacles.length <= index) {
                 this.scene.remove(mesh);
@@ -261,7 +261,7 @@ export class RenderService {
         return angle + (Math.PI / 2 * (offset > 0 ? 1 : -1));
     }
 
-    public onResize() {
+    public onResize(): void {
         this.camera.left = this.container.clientWidth / -2;
         this.camera.right = this.container.clientWidth / 2;
         this.camera.top = this.container.clientHeight / 2;

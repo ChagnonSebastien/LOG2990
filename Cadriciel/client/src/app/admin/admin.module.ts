@@ -2,7 +2,7 @@ import { AuthentificationComponent } from './authentification.component';
 import { AdminTracksComponent } from './admin-tracks.component';
 import { AdminSettingsComponent } from './admin-settings.component';
 import { ObstacleService } from './../racing-game/draw-track/obstacle.service';
-import { RenderService } from './../racing-game/draw-track/render.service';
+import { DrawTrackRenderService } from './../racing-game/draw-track/draw-track-render.service';
 import { TrackValidationService } from './../racing-game/draw-track/track-validation.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -45,7 +45,7 @@ import { AdminRoutingModule } from './admin-routing.module';
         AuthenticationService,
         DrawTrackService,
         ObstacleService,
-        RenderService,
+        DrawTrackRenderService,
         TrackValidationService,
         TrackService
     ]

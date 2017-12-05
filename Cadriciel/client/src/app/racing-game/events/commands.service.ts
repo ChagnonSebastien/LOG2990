@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { Settings } from '../settings';
 
 export enum PlayerCommand {
     MOVE_FORWARD,
@@ -47,23 +48,23 @@ export class CommandsService {
 
     private getCommand(keyNumber: number): PlayerCommand {
         switch (keyNumber) {
-            case 87:
+            case Settings.W:
             return PlayerCommand.MOVE_FORWARD;
-            case 65:
+            case Settings.A:
             return PlayerCommand.ROTATE_LEFT;
-            case 68:
+            case Settings.D:
             return PlayerCommand.ROTATE_RIGHT;
-            case 78:
+            case Settings.N:
             return PlayerCommand.TOGGLE_NIGHT_MODE;
-            case 67:
+            case Settings.C:
             return PlayerCommand.TOOGLE_CAMERA_VIEW;
-            case 107:
+            case Settings.ADD:
             return PlayerCommand.ZOOM_IN;
-            case 109:
+            case Settings.SUBSTRACT:
             return PlayerCommand.ZOOM_OUT;
-            case 32:
+            case Settings.SPACE:
             return PlayerCommand.START_GAME;
-            case 82:
+            case Settings.R:
             return PlayerCommand.REAR_VISIBLE;
             default:
             return null;
