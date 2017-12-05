@@ -12,6 +12,8 @@ import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
 
+import { CROSSWORD_GRID_SIZE, BLANK_SQUARE } from '../../../../../server/app/config';
+
 @Injectable()
 export class CrosswordMutationService {
     public newGrid: CrosswordSquare[][];
@@ -25,7 +27,15 @@ export class CrosswordMutationService {
         private crosswordService: CrosswordService,
         private configurationService: CrosswordConfigurationService,
         private pointsService: CrosswordPointsService
-    ) { }
+    ) {
+        this.newGrid = new Array(CROSSWORD_GRID_SIZE).map(() => {
+            return new Array(CROSSWORD_GRID_SIZE).map(() => {
+                return new CrosswordSquare(BLANK_SQUARE);
+            });
+        });
+        this.newHints = new Array<Hint>();
+        this.wordsWithIndex = new Array<Word>();
+    }
 
     public mutate() {
         this.mutateWordsService();

@@ -19,8 +19,12 @@ import { RacingGameService } from './racing-game.service';
 import { LapEventService } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
 import { TestBed } from '@angular/core/testing';
+import { Track } from './track';
+
+import * as THREE from 'three';
 
 let lapCounterService: LapCounterService;
+let racingGameService: RacingGameService;
 
 describe('LapCounterService', function () {
     beforeEach(() => {
@@ -46,12 +50,63 @@ describe('LapCounterService', function () {
                 ObstacleCollisionEventService,
                 CountdownDecreaseEventService,
                 ControllerFactory
-            ]});
+            ]
+        });
         lapCounterService = TestBed.get(LapCounterService);
+        racingGameService = TestBed.get(RacingGameService);
     });
 
     it('should be created', () => {
         expect(lapCounterService).toBeTruthy();
     });
 
+    describe('initialize()', () => {
+        it('should initialize the lap counter service', () => {
+            const track = new Track(
+                'name',
+                'desc',
+                'diff',
+                [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
+                [],
+                [],
+                [],
+                -1,
+                0,
+                []
+            );
+            spyOn(racingGameService, 'getTrack')
+                .and.returnValue(track);
+            lapCounterService.initialize();
+            expect(lapCounterService.racePositions).toBeDefined();
+            expect(lapCounterService['lastVisitedIntersectionNumbers']).toBeDefined();
+            expect(lapCounterService['passedCounters']).toBeDefined();
+            expect(lapCounterService['laps']).toBeDefined();
+            expect(lapCounterService['numberOfVehicles']).toBeDefined();
+            expect(lapCounterService['numberOfIntersections']).toBeDefined();
+        });
+    });
+
+    describe('update()', () => {
+        it('should update the lap counters', () => {
+            const track = new Track(
+                'name',
+                'desc',
+                'diff',
+                [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
+                [],
+                [],
+                [],
+                -1,
+                0,
+                []
+            );
+            spyOn(racingGameService, 'getTrack')
+                .and.returnValue(track);
+            lapCounterService.initialize();
+            lapCounterService.update();
+            lapCounterService['laps'].forEach((lap) => {
+                expect(lap).toEqual(0);
+            });
+        });
+    });
 });

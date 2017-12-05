@@ -134,7 +134,8 @@ export class RaceMediator {
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
                 this.audioService.engineStopAccelerate();
-            // falls through
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
@@ -147,7 +148,8 @@ export class RaceMediator {
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
                 this.audioService.engineAccelerate();
-            // falls through
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
@@ -183,7 +185,7 @@ export class RaceMediator {
         this.countdownService.updateCountdown(event.getNewAmount());
 
         if (event.getNewAmount() === 0) {
-            this.racingSceneService.removeObjectByName('countdown');
+            this.racingSceneService.removeObjectByName(Settings.COUNTDOWN_NAME);
             this.countdownService.startGame();
             this.raceService.startTimer();
         }
