@@ -36,8 +36,8 @@ export class RaceHudService {
 
     private initializeCanva(): void {
         this.hudCanvas = document.createElement('canvas');
-        this.hudCanvas.width = 2048;
-        this.hudCanvas.height = 512;
+        this.hudCanvas.width = Settings.HUD_CANVA_WIDTH;
+        this.hudCanvas.height = Settings.HUD_CANVA_HEIGHT;
     }
 
     private initializeBitmap(): void {
@@ -118,9 +118,9 @@ export class RaceHudService {
     }
 
     public startTimer(): void {
-        const timer = Observable.timer(0, 10).map(() => this.timer = this.timer + 0.01);
+        const timer = Observable.timer(0, Settings.MILLISECONDS).map(() => this.timer = this.timer + Settings.MILLISECONDS_VALUE);
         timer.subscribe((time: number) => {
-            this.lapTimer = this.lapTimer + 0.01;
+            this.lapTimer = this.lapTimer + Settings.MILLISECONDS_VALUE;
             this.updateHud(this.currentLap);
         });
     }
@@ -148,20 +148,23 @@ export class RaceHudService {
 
     private updateTotalTimer(): void {
         this.hudBitmap.fillText(this.timer.toFixed(2).toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 6.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * Settings.HUD_FIRST_INFO_OFFSET,
+            this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
     }
 
     private updateLapTimer(): void {
         this.hudBitmap.fillText(this.lapTimer.toFixed(2).toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 9.0, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * Settings.HUD_THIRD_INFO_OFFSET,
+            this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
         );
     }
 
     private updateRacePosition(): void {
         this.hudBitmap.fillText(this.lapCounterService.racePositions[0].toString(),
-            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * 3.5, this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
-    );
+            this.hudCanvas.width * Settings.HUD_TEXT_WIDTH_OFFSET * Settings.HUD_SECOND_INFO_OFFSET,
+            this.hudCanvas.height * Settings.HUD_TEXT_HEIGHT_OFFSET
+        );
     }
 
 }
