@@ -30,7 +30,7 @@ export class VehicleMoveEvent extends Cancellable {
 @Injectable()
 export class VehicleMoveEventService {
 
-    private eventListener = new Subject<VehicleMoveEvent>();
+    public eventListener = new Subject<VehicleMoveEvent>();
 
     public sendVehicleMoveEvent(event) {
         this.eventListener.next(event);

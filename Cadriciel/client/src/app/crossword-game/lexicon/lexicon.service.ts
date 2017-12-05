@@ -8,7 +8,7 @@ const APIURL = 'http://localhost:3000/api';
 export class LexiconService {
     constructor(private http: Http) { }
 
-    public getWordDefinitions(words: Array<string>): Observable<any> {
+    public getWordDefinitions(words: Array<string>): Observable<Array<string>> {
         return Observable.forkJoin(
             words.map((word) => {
                 return this.http.get(`${APIURL}/definition/${word}`)

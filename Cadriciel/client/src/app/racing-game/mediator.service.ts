@@ -51,14 +51,14 @@ export class RaceMediator {
         private raceService: RaceHudService,
         private audioService: AudioService,
         private hitWallEventService: HitWallEventService,
+        private vehicleMoveEventService: VehicleMoveEventService,
+        private vehicleRotateEventService: VehicleRotateEventService,
+        private obstacleCollisionEventService: ObstacleCollisionEventService,
+        private collisionEventService: CollisionEventService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
         loadingProgressEventService: LoadingProgressEventService,
-        vehicleMoveEventService: VehicleMoveEventService,
-        vehicleRotateEventService: VehicleRotateEventService,
-        obstacleCollisionEventService: ObstacleCollisionEventService,
-        collisionEventService: CollisionEventService,
         lapEventService: LapEventService,
     ) {
         frameEventService.getFrameObservable().subscribe(
@@ -110,7 +110,7 @@ export class RaceMediator {
         );
     }
 
-    public startProgram(container: HTMLElement, track: Track) {
+    public startProgram(container: HTMLElement, track: Track): void {
         this.racingGameService.initialize(track);
         this.cameraService.initialize(container);
         this.renderService.initialize(container, track);
@@ -119,7 +119,7 @@ export class RaceMediator {
         this.lapcounterService.initialize();
     }
 
-    private handleFrameEvent(event: FrameEvent) {
+    private handleFrameEvent(event: FrameEvent): void {
         this.cameraService.cameraOnMoveWithObject();
         this.vehicleService.getVehicles().forEach((vehicle: Vehicle) => {
             vehicle.getController().nextFrame(vehicle);
@@ -130,11 +130,12 @@ export class RaceMediator {
 
     }
 
-    private handleKeyUpEvent(event: CommandEvent) {
+    private handleKeyUpEvent(event: CommandEvent): void {
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
                 this.audioService.engineStopAccelerate();
-            // falls through
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
@@ -142,12 +143,13 @@ export class RaceMediator {
         }
     }
 
-    private handleKeyDownEvent(event: CommandEvent) {
+    private handleKeyDownEvent(event: CommandEvent): void {
 
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
                 this.audioService.engineAccelerate();
-            // falls through
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
@@ -179,17 +181,17 @@ export class RaceMediator {
         }
     }
 
-    private handleCountdownDecreaseEvent(event: CountdownDecreaseEvent) {
+    private handleCountdownDecreaseEvent(event: CountdownDecreaseEvent): void {
         this.countdownService.updateCountdown(event.getNewAmount());
 
         if (event.getNewAmount() === 0) {
-            this.racingSceneService.removeObjectByName('countdown');
+            this.racingSceneService.removeObjectByName(Settings.COUNTDOWN_NAME);
             this.countdownService.startGame();
             this.raceService.startTimer();
         }
     }
 
-    private handleProgressEvent(event: LoadingProgressEvent) {
+    private handleProgressEvent(event: LoadingProgressEvent): void {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle>event.getObject();
@@ -209,14 +211,14 @@ export class RaceMediator {
         }
     }
 
-    private handleMoveEvent(event: VehicleMoveEvent) {
+    private handleMoveEvent(event: VehicleMoveEvent): void {
         this.obstacleCollisionDetectionService.detectCollision(event);
         this.roadLimitService.validateMovement(event);
         this.vehicleMovementController.validateMovement(event);
         this.collisionDetectionService.checkForCollisionWithCar(event);
     }
 
-    private handleRotateEvent(event: VehicleRotateEvent) {
+    private handleRotateEvent(event: VehicleRotateEvent): void {
         this.vehicleMovementController.validateRotation(event);
     }
 
@@ -225,12 +227,12 @@ export class RaceMediator {
         this.audioService.handleObstacleCollision(event.getObstacle());
     }
 
-    private handleCollisionEvent(event: CollisionEvent) {
+    private handleCollisionEvent(event: CollisionEvent): void {
         this.audioService.startCarCarCollision();
         this.audioService.engineStopAccelerate();
     }
 
-    private handleLapEvent(event: LapEvent) {
+    private handleLapEvent(event: LapEvent): void {
         if (event.lap === Settings.TOTAL_LAPS) {
             this.raceEventService.endRace();
         }
@@ -238,16 +240,25 @@ export class RaceMediator {
         this.raceService.updateHud(event.lap);
     }
 
-    private handleRaceEndedEvent(event: RaceEndedEvent) {
+    private handleRaceEndedEvent(event: RaceEndedEvent): void {
+        this.raceService.stopTimers();
         this.audioService.stopRace();
         this.audioService.startStinger();
-        this.raceService.stopTimers();
-        console.log('race ended');
+        this.ghostMode();
     }
 
-    private handleHitWallEvent(event: HitWallEvent) {
+    private handleHitWallEvent(event: HitWallEvent): void {
         this.audioService.carHitWall();
         this.audioService.engineStopAccelerate();
+    }
+
+    private ghostMode(): void {
+        this.vehicleMoveEventService.eventListener.unsubscribe();
+        this.vehicleRotateEventService.eventListener.unsubscribe();
+        this.obstacleCollisionEventService.eventListener.unsubscribe();
+        this.collisionEventService.eventListener.unsubscribe();
+        this.vehicleService.getMainVehicle().getMesh().material.transparent = true;
+        this.vehicleService.getMainVehicle().getMesh().material.opacity = Settings.END_RACE_CAR_TRANSPARENCY;
     }
 
 }

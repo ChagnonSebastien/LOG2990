@@ -12,6 +12,8 @@ import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
 
+import { CROSSWORD_GRID_SIZE, BLANK_SQUARE } from '../../../../../server/app/config';
+
 @Injectable()
 export class CrosswordMutationService {
     public newGrid: CrosswordSquare[][];
@@ -25,7 +27,15 @@ export class CrosswordMutationService {
         private crosswordService: CrosswordService,
         private configurationService: CrosswordConfigurationService,
         private pointsService: CrosswordPointsService
-    ) { }
+    ) {
+        this.newGrid = new Array(CROSSWORD_GRID_SIZE).map(() => {
+            return new Array(CROSSWORD_GRID_SIZE).map(() => {
+                return new CrosswordSquare(BLANK_SQUARE);
+            });
+        });
+        this.newHints = new Array<Hint>();
+        this.wordsWithIndex = new Array<Word>();
+    }
 
     public mutate() {
         this.mutateWordsService();
@@ -35,7 +45,7 @@ export class CrosswordMutationService {
         this.updateMutation();
     }
 
-    public updateMutation() {
+    public updateMutation(): void {
         const foundWords = this.pointsService.getFoundWords();
         this.crosswordService.getMutatedCrossword(
             this.configurationService.level,
@@ -56,7 +66,7 @@ export class CrosswordMutationService {
             .initializeHints(this.wordsWithIndex);
     }
 
-    public mutateMultiplayer() {
+    public mutateMultiplayer(): void {
         this.mutateWordsService();
         this.mutateGridService();
         this.mutateHintsService();
@@ -66,11 +76,11 @@ export class CrosswordMutationService {
         return this.gridService.initializeGrid(grid, wordsWithIndex);
     }
 
-    private mutateWordsService() {
+    private mutateWordsService(): void {
         this.wordsService.newGame(this.wordsWithIndex);
     }
 
-    private mutateGridService() {
+    private mutateGridService(): void {
         this.gridService.grid = this.newGrid.map((row, i) => {
             return row.map((square, j) => {
                 if (this.gridService.grid[i][j].found) {
@@ -86,7 +96,7 @@ export class CrosswordMutationService {
         });
     }
 
-    private mutateHintsService() {
+    private mutateHintsService(): void {
         this.hintsService.hints = this.newHints.map((hint) => {
             if (this.pointsService.foundWords.has(hint.word)) {
                 hint.found = true;

@@ -16,20 +16,20 @@ export class ObstacleCollisionDetectionService {
         private obstacleService: ObstaclePositionService
     ) { }
 
-    public detectCollision(event: VehicleMoveEvent) {
+    public detectCollision(event: VehicleMoveEvent): void {
         this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Pothole);
         this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Puddle);
         this.checkTypeObstacleCollision(event.getVehicle(), ObstacleType.Booster);
     }
 
-    private checkTypeObstacleCollision(vehicle: Vehicle, type: ObstacleType) {
+    private checkTypeObstacleCollision(vehicle: Vehicle, type: ObstacleType): void {
         this.obstacleService.getObstacles(type).forEach((obstacle: Vector2, index: number) => {
             const distance = this.distanceToObstacle(vehicle, obstacle);
             this.isColliding(vehicle, type, distance, index);
         });
     }
 
-    private distanceToObstacle(vehicle: Vehicle, obstaclePosition: THREE.Vector2) {
+    private distanceToObstacle(vehicle: Vehicle, obstaclePosition: THREE.Vector2): number {
         const obstaclePositionClone = obstaclePosition.clone().multiplyScalar(Settings.SCENE_SCALE);
         return Math.sqrt(
             Math.pow(obstaclePositionClone.x - vehicle.getMesh().position.x, 2) +
@@ -37,7 +37,7 @@ export class ObstacleCollisionDetectionService {
         );
     }
 
-    private isColliding(vehicle: Vehicle, type: ObstacleType, distance: number, index: number) {
+    private isColliding(vehicle: Vehicle, type: ObstacleType, distance: number, index: number): void {
         if (distance < type * Settings.SCENE_SCALE) {
             this.obstacleCollisionEventService.sendObstacleCollisionEvent(new ObstacleCollisionEvent(vehicle, type));
         }
