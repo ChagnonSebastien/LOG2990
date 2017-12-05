@@ -9,15 +9,14 @@ export module UpdateTrack {
    export function updateBestTimes (arrayBestTimes: { playerName: string, time: number }[],
                                     newData: { playerName: string, time: number } ):
                                     { playerName: string, time: number }[] {
-        const fifthBestTimes = 5;
 
-        if (arrayBestTimes.length < fifthBestTimes ) {
+        if (arrayBestTimes.length < MAX_NUMBER_OF_TOP_TIMES ) {
             arrayBestTimes.push(newData);
             sort(arrayBestTimes);
 
        } else {
             sort(arrayBestTimes);
-            arrayBestTimes = arrayBestTimes.slice(0, fifthBestTimes);
+            arrayBestTimes = arrayBestTimes.slice(0, MAX_NUMBER_OF_TOP_TIMES);
             if (newData.time < arrayBestTimes[arrayBestTimes.length - 1].time) {
                 arrayBestTimes[arrayBestTimes.length - 1] = newData;
             }
