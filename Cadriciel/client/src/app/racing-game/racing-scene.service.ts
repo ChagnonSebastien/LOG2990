@@ -1,6 +1,7 @@
 import { SceneService } from './scene.service';
 import { Light } from './light';
 import { Injectable } from '@angular/core';
+import { Settings } from './settings';
 import * as THREE from 'three';
 
 @Injectable()
@@ -22,11 +23,11 @@ export class RacingSceneService extends SceneService {
     }
 
     private createTexture(): void {
-        const url = '../../assets/images/skybox/';
+        const url = `${Settings.ASSETS_FOLDER}/${Settings.SKYBOX_IMAGE_FOLDER}`;
         if (this.isNight) {
-            const images = [url + 'bluefreeze_rt.png', url + 'bluefreeze_lf.png',
-            url + 'bluefreeze_up.png', url + 'bluefreeze_dn.png',
-            url + 'bluefreeze_ft.png', url + 'bluefreeze_bk.png'];
+            const images = [url + `${Settings.SKYBOX_IMAGE_NIGHT_RT}`, url + `${Settings.SKYBOX_IMAGE_NIGHT_LF}`,
+            url + `${Settings.SKYBOX_IMAGE_NIGHT_UP}`, url + `${Settings.SKYBOX_IMAGE_NIGHT_DN}`,
+            url + `${Settings.SKYBOX_IMAGE_NIGHT_FT}`, url + `${Settings.SKYBOX_IMAGE_NIGHT_BK}`];
             this.textureSky = THREE.ImageUtils.loadTextureCube(images);
             this.shader = THREE.ShaderLib['cube'];
             this.shader.uniforms['tCube'].value = this.textureSky;

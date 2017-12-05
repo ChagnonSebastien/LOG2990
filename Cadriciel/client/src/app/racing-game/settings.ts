@@ -42,6 +42,15 @@ export module Settings {
     export const SOUND_ACCELERATOR_BONUS_END = 'sounds/acceleratorBonusEnd.mp3';
     export const SOUND_HIT_WALL = 'sounds/hitWall.mp3';
 
+    // skybox
+    export const SKYBOX_IMAGE_FOLDER = 'images/skybox/';
+    export const SKYBOX_IMAGE_NIGHT_UP = 'bluefreeze_up.png';
+    export const SKYBOX_IMAGE_NIGHT_RT = 'bluefreeze_rt.png';
+    export const SKYBOX_IMAGE_NIGHT_LF = 'bluefreeze_lf.png';
+    export const SKYBOX_IMAGE_NIGHT_DN = 'bluefreeze_dn.png';
+    export const SKYBOX_IMAGE_NIGHT_FT = 'bluefreeze_ft.png';
+    export const SKYBOX_IMAGE_NIGHT_BK = 'bluefreeze_bk.png';
+
     export const MUSIC_ENDED_EVENT = 'ended';
 
     // camera
@@ -159,7 +168,6 @@ export module Settings {
     export const MILLISECONDS_VALUE = 0.01;
 
     export const END_RACE_CAR_TRANSPARENCY = 0.4;
-
     export const RANDOM_DISTANCE_OFFSET = 1.0;
     export const RANDOM_DISTANCE_INVERSE_OFFSET = 0.5;
     export const RANDOM_OFFSET_RATIO = 0.5;

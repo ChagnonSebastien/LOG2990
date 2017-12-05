@@ -36,7 +36,7 @@ export class CrosswordGenerator {
         return this.generateCrossword(difficulty);
     }
 
-    public patternForLine(i: number, horizontal: boolean) {
+    public patternForLine(i: number, horizontal: boolean): string {
         if (horizontal) {
             return this.grid[i].join('');
         } else {
@@ -48,7 +48,7 @@ export class CrosswordGenerator {
         }
     }
 
-    private reset() {
+    private reset(): void {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
         this.grid = this.newGrid(this.size, BLANK_SQUARE);
@@ -63,7 +63,7 @@ export class CrosswordGenerator {
         });
     }
 
-    private loadLexicon(file: string) {
+    private loadLexicon(file: string): void {
         this.lexicon = new Lexicon(LEXICON_PATH);
     }
 
@@ -213,7 +213,7 @@ export class CrosswordGenerator {
         return true;
     }
 
-    private setGrid(words: Array<Word>) {
+    private setGrid(words: Array<Word>): void {
         words.map((word) => {
             return this.addWord(word.i, word.j, word.word, word.horizontal);
         });
