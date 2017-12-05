@@ -3,7 +3,7 @@ import { TrackService } from './../game-initialization/track.service';
 import { Obstacle, ObstacleType } from './obstacle';
 import { fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { ObstacleService } from './obstacle.service';
-import { RenderService } from './render.service';
+import { DrawTrackRenderService } from './draw-track-render.service';
 import { TrackValidationService } from './track-validation.service';
 import { DrawTrackService } from './draw-track.service';
 import { HttpModule } from '@angular/http';
@@ -34,7 +34,7 @@ class MockTrackService extends TrackService {
     }
 }
 
-class MockRenderService extends RenderService {
+class MockRenderService extends DrawTrackRenderService {
     public initialise(container, trackValidationService, obstacleService) {
         this['trackValidationService'] = trackValidationService;
         this['obstacleService'] = obstacleService;
@@ -60,7 +60,7 @@ describe('DrawTrackService', function () {
                 DrawTrackService,
                 TrackValidationService,
                 ObstacleService,
-                { provide: RenderService, useClass: MockRenderService },
+                { provide: DrawTrackRenderService, useClass: MockRenderService },
                 { provide: TrackService, useClass: MockTrackService },
             ]
         });

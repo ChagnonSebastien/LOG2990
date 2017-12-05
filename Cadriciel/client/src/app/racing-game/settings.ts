@@ -6,6 +6,7 @@ export module Settings {
     export const TRACK_HEIGHT = 3;
     export const TRACK_RADIUS = 5;
     export const HUMAN_COLOR = VehicleColor.red;
+    export const VIEW_DEPTH = 10;
 
     // obstacles
     export const POTHOLE_COLOR = 0x000000;

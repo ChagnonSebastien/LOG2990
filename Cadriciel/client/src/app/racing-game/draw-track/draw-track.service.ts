@@ -1,7 +1,7 @@
 import { TrackService } from './../game-initialization/track.service';
 import { ObstacleService } from './obstacle.service';
 import { ObstacleType } from './obstacle';
-import { RenderService } from './render.service';
+import { DrawTrackRenderService } from './draw-track-render.service';
 import { TrackValidationService } from './track-validation.service';
 import { Injectable } from '@angular/core';
 import { Track } from '../track';
@@ -23,7 +23,7 @@ export class DrawTrackService {
     private currentlyDraggedIntersection: number;
 
     constructor(
-        private renderService: RenderService,
+        private renderService: DrawTrackRenderService,
         private trackValidationService: TrackValidationService,
         private obstacleService: ObstacleService,
         private trackService: TrackService

@@ -6,10 +6,8 @@ import * as THREE from 'three';
 
 import { Settings } from '../settings';
 
-const VIEW_DEPTH = 10;
-
 @Injectable()
-export class RenderService {
+export class DrawTrackRenderService {
 
     private container: HTMLElement;
 
@@ -68,8 +66,8 @@ export class RenderService {
             this.container.clientWidth / 2,
             this.container.clientHeight / 2,
             this.container.clientHeight / - 2,
-            -VIEW_DEPTH,
-            VIEW_DEPTH
+            -Settings.VIEW_DEPTH,
+            Settings.VIEW_DEPTH
         );
 
         this.intersections.push(this.newIntersection(new THREE.Vector2(0, 0)));
@@ -90,8 +88,8 @@ export class RenderService {
     }
 
     private newIntersection(position: THREE.Vector2): THREE.Mesh {
-        const geometry = new THREE.CircleGeometry(10, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+        const geometry = new THREE.CircleGeometry(Settings.INTERSECTION_RADIUS, Settings.INTERSECTION_SEGMENTS);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.INTERSECTION_COLOR });
         const point = new THREE.Mesh(geometry, material);
         point.position.setX(position.x);
         point.position.setY(position.y);
@@ -101,15 +99,15 @@ export class RenderService {
     }
 
     private newSegment(): THREE.Mesh {
-        const geometry = new THREE.PlaneGeometry(0, 20);
-        const material = new THREE.MeshBasicMaterial({ color: 0xBB1515 });
+        const geometry = new THREE.PlaneGeometry(Settings.SEGMENT_WIDTH, Settings.SEGMENT_HEIGHT);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.SEGMENT_COLOR });
         const segment = new THREE.Mesh(geometry, material);
         segment.position.z = -4;
         return segment;
     }
 
     private newObstacles(color: number): THREE.Mesh[] {
-        const geometry = new THREE.CircleGeometry(5, 16);
+        const geometry = new THREE.CircleGeometry(Settings.OBSTACLE_RADIUS, Settings.OBSTACLE_SEGMENTS);
         const material = new THREE.MeshBasicMaterial({ color });
         const point = new THREE.Mesh(geometry, material);
         point.position.setZ(1);
@@ -136,7 +134,7 @@ export class RenderService {
         const fromPosition = this.intersections[index].position;
         const toPosition = this.intersections[index + 1 < this.intersections.length ? index + 1 : 0].position;
 
-        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), 20);
+        this.segments[index].geometry = new THREE.PlaneGeometry(this.getXYDistance(fromPosition, toPosition), Settings.SEGMENT_HEIGHT);
         this.segments[index].geometry.rotateZ(Math.atan((toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x)));
         this.segments[index].position.x = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
         this.segments[index].position.y = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
@@ -145,7 +143,7 @@ export class RenderService {
     private updateSegmentsValidity(): void {
         this.segments.forEach((segment, index) => {
             segment.material = new THREE.MeshBasicMaterial(
-                this.trackValidationService.isValid(index) ? { color: 0x15BB15 } : { color: 0xBB1515 }
+                this.trackValidationService.isValid(index) ? { color: Settings.SEGMENT_COLOR_VALID } : { color: Settings.SEGMENT_COLOR }
             );
         });
     }
@@ -166,8 +164,8 @@ export class RenderService {
     }
 
     private addHighlight(position: THREE.Vector2): void {
-        const geometry = new THREE.CircleGeometry(15, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xF5CD30 });
+        const geometry = new THREE.CircleGeometry(Settings.HIGHLIGHT_RADIUS, Settings.HIGHLIGHT_SEGMENTS);
+        const material = new THREE.MeshBasicMaterial({ color: Settings.HIGHLIGHT_COLOR });
         this.firstPointHighlight = new THREE.Mesh(geometry, material);
         this.firstPointHighlight.position.set(position.x, position.y, -1);
         this.scene.add(this.firstPointHighlight);
