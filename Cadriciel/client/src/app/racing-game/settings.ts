@@ -142,4 +142,6 @@ export module Settings {
     export const SECOND_INTERSECTION = 1;
     export const MILLISECONDS = 10;
     export const MILLISECONDS_VALUE = 0.01;
+
+    export const END_RACE_CAR_TRANSPARENCY = 0.4;
 }
