@@ -25,7 +25,7 @@ export class ObstacleCollisionEvent extends Cancellable {
 @Injectable()
 export class ObstacleCollisionEventService {
 
-    private eventListener = new Subject<ObstacleCollisionEvent>();
+    public eventListener = new Subject<ObstacleCollisionEvent>();
 
     public sendObstacleCollisionEvent(event) {
         this.eventListener.next(event);

@@ -33,7 +33,7 @@ export class VehicleRotateEvent extends Cancellable {
 @Injectable()
 export class VehicleRotateEventService {
 
-    private eventListener = new Subject<VehicleRotateEvent>();
+    public eventListener = new Subject<VehicleRotateEvent>();
 
     public sendVehicleRotateEvent(event) {
         this.eventListener.next(event);
