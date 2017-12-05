@@ -132,5 +132,5 @@ export module Settings {
     export const MILLISECONDS = 10;
     export const MILLISECONDS_VALUE = 0.01;
 
-    
+
 }

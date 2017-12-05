@@ -10,7 +10,6 @@ import { CrosswordPointsService } from '../points/crossword-points.service';
 import { CrosswordKeyboardService } from '../keyboard/crossword-keyboard.service';
 import { LexiconService } from '../lexicon/lexicon.service';
 import { CrosswordService } from '../crossword/crossword.service';
-import { CrosswordSquare } from '../shared-classes/crossword-square';
 
 import { CROSSWORD_GRID_SIZE } from '../../../../../server/app/config';
 import { Crossword } from '../../../../../commun/crossword/crossword';
