@@ -1,5 +1,6 @@
 import { Obstacle, ObstacleType } from './obstacle';
 import { Injectable } from '@angular/core';
+import { Settings } from '../settings';
 
 @Injectable()
 export class ObstacleService {
@@ -14,13 +15,13 @@ export class ObstacleService {
         this.potholes = [];
         this.puddles = [];
         this.boosters = [];
-     }
+    }
 
-    public initialize(track: THREE.Vector2[]) {
+    public initialize(track: THREE.Vector2[]): void {
         this.track = track;
     }
 
-    public loadObstacles(type: ObstacleType, obstacles: any[]) {
+    public loadObstacles(type: ObstacleType, obstacles: any[]): void {
         const extractObstacles = (obstacle) => {
             return new Obstacle(type, obstacle.segment, obstacle.distance, obstacle.offset);
         };
@@ -40,7 +41,7 @@ export class ObstacleService {
         }
     }
 
-    public addObstacle(type: ObstacleType) {
+    public addObstacle(type: ObstacleType): void {
         switch (type) {
             case ObstacleType.Booster:
                 this.addObstacleToList(this.boosters, type);
@@ -56,12 +57,13 @@ export class ObstacleService {
         }
     }
 
-    private addObstacleToList(list: Obstacle[], type: ObstacleType) {
+    private addObstacleToList(list: Obstacle[], type: ObstacleType): void {
         switch (list.length) {
             case 1:
             case 3:
                 list.push(this.newObstacle(type));
-            /* falls through */
+                list.push(this.newObstacle(type));
+                break;
             case 0:
                 list.push(this.newObstacle(type));
                 break;
@@ -86,11 +88,11 @@ export class ObstacleService {
     }
 
     public randomDistance(obstacleIsABooster: boolean): number {
-        return Math.random() * (obstacleIsABooster ? 0.5 : 1);
+        return Math.random() * (obstacleIsABooster ? Settings.RANDOM_DISTANCE_INVERSE_OFFSET : Settings.RANDOM_DISTANCE_OFFSET);
     }
 
     public randomOffset(): number {
-        return ((Math.random() * 2) - 1) * (1 / 2);
+        return ((Math.random() * 2) - 1) * Settings.RANDOM_OFFSET_RATIO;
     }
 
     private isTooCloseToAnyOtherObstacle(obstacle: Obstacle): boolean {
@@ -135,7 +137,8 @@ export class ObstacleService {
         const distanceFromFirstIntersectionToObstacle1 = obstacle1.distance * segmentLength;
         const distanceFromFirstIntersectionToObstacle2 = obstacle2.distance * segmentLength;
 
-        return Math.abs(distanceFromFirstIntersectionToObstacle1 - distanceFromFirstIntersectionToObstacle2) < 10;
+        return Math.abs(distanceFromFirstIntersectionToObstacle1 -
+            distanceFromFirstIntersectionToObstacle2) < Settings.MAX_DISTANCE_TO_INTERSECTION;
     }
 
     private isTooCloseOtherObstacleOnAdjacentSegment(obstacle1: Obstacle, obstacle2: Obstacle): boolean {
@@ -160,7 +163,8 @@ export class ObstacleService {
         const distanceFromSecondIntersectionToObstacle1 = (1 - obstacle1.distance) * firstSegmentLength;
         const distanceFromSecondIntersectionToObstacle2 = obstacle2.distance * secondSegmentLength;
 
-        return distanceFromSecondIntersectionToObstacle1 + distanceFromSecondIntersectionToObstacle2 < 10;
+        return distanceFromSecondIntersectionToObstacle1 +
+            distanceFromSecondIntersectionToObstacle2 < Settings.MAX_DISTANCE_TO_INTERSECTION;
     }
 
     public distance(point1: THREE.Vector2, point2: THREE.Vector2): number {
@@ -170,7 +174,7 @@ export class ObstacleService {
         );
     }
 
-    public randomizeAllPositions(type: ObstacleType) {
+    public randomizeAllPositions(type: ObstacleType): void {
         let amountToReAdd = 0;
 
         switch (type) {
@@ -195,7 +199,7 @@ export class ObstacleService {
         }
     }
 
-    public getObstacles(type: ObstacleType) {
+    public getObstacles(type: ObstacleType): Obstacle[] {
         switch (type) {
             case ObstacleType.Booster:
                 return this.boosters;
@@ -211,7 +215,7 @@ export class ObstacleService {
         }
     }
 
-    public removeAllObstacles() {
+    public removeAllObstacles(): void {
         this.boosters = [];
         this.potholes = [];
         this.puddles = [];

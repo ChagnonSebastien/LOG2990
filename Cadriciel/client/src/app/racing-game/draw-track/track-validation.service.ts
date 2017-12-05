@@ -17,7 +17,7 @@ export class TrackValidationService {
         this.trackClosed = false;
     }
 
-    public addIntersection(intersection: THREE.Vector2) {
+    public addIntersection(intersection: THREE.Vector2): void {
         this.trackElements.push(
             { intersection, intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }
         );
@@ -28,24 +28,24 @@ export class TrackValidationService {
         }
     }
 
-    public clear() {
+    public clear(): void {
         this.trackElements = [{ intersection: new THREE.Vector2(), intersectionAngl: 0, segmentLength: 0, segmentIntersections: [] }];
         this.trackClosed = false;
     }
 
-    public closeTrack() {
+    public closeTrack(): void {
         this.trackElements.pop();
         this.trackClosed = true;
         this.checkPointAngle(0, this.trackElements.length - 1);
     }
 
-    public openTrack(position: THREE.Vector2) {
+    public openTrack(position: THREE.Vector2): void {
         this.trackClosed = false;
         this.addIntersection(position);
         this.updatePoint(this.trackElements.length - 1, position);
     }
 
-    public updatePoint(index: number, intersection: THREE.Vector2) {
+    public updatePoint(index: number, intersection: THREE.Vector2): void {
         this.trackElements[index].intersection = intersection;
         this.checkSegmentLength(index);
         this.checkSegmentLength(index - 1 < 0 ? this.trackElements.length - 1 : index - 1);
@@ -76,7 +76,7 @@ export class TrackValidationService {
         }
     }
 
-    public removeIntersection(mousePotition: THREE.Vector2) {
+    public removeIntersection(mousePotition: THREE.Vector2): void {
         this.trackElements.splice(this.trackElements.length - (this.trackClosed ? 1 : 2), 1);
         this.trackElements.forEach((segment, index, segments) => {
             const removedPosition = segment.segmentIntersections.indexOf(segments.length - 1);
@@ -90,7 +90,7 @@ export class TrackValidationService {
         this.updatePoint(this.trackElements.length - 1, mousePotition);
     }
 
-    public checkSegmentLength(index: number) {
+    public checkSegmentLength(index: number): void {
         let line;
         try {
             line = this.getLine(index);
@@ -101,7 +101,7 @@ export class TrackValidationService {
         this.trackElements[index].segmentLength = this.distance(line.point1, line.point2);
     }
 
-    public checkSegmentIntersections(index: number) {
+    public checkSegmentIntersections(index: number): void {
         const service = this;
         this.trackElements.forEach(
             (segment, i, segments) => {
@@ -179,7 +179,10 @@ export class TrackValidationService {
         return distance;
     }
 
-    public getNearestPointOnLine(point, line) {
+    public getNearestPointOnLine(point, line): {
+        x: number;
+        y: number;
+    } {
         const lineParameters = this.getLineParameters(line);
         const permenticularParameters = {
             a: lineParameters.b,
@@ -190,7 +193,7 @@ export class TrackValidationService {
         return this.twoLineIntersection(lineParameters, permenticularParameters);
     }
 
-    public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number) {
+    public updateSegmentsValidity(minimumSegmentsDistance: number, index1: number, index2: number): void {
         if (minimumSegmentsDistance < 25) {
             if (-1 === this.trackElements[index2].segmentIntersections.indexOf(index1)) {
                 this.trackElements[index2].segmentIntersections.push(index1);
@@ -273,7 +276,7 @@ export class TrackValidationService {
         return distances;
     }
 
-    public checkPointAngle(index1: number, index2: number) {
+    public checkPointAngle(index1: number, index2: number): void {
         if (!this.trackClosed && (index2 === this.trackElements.length - 1 || index1 === this.trackElements.length - 1) ||
             index1 < 0 || index2 < 0) {
             return;
@@ -337,7 +340,7 @@ export class TrackValidationService {
 
     public isAllValid(): boolean {
         let valid = true;
-        for ( let i = 0; i < this.trackElements.length; i++ ) {
+        for (let i = 0; i < this.trackElements.length; i++) {
             valid = valid && this.isValid(i);
         }
         return valid;

@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { RenderService } from './render.service';
+import { DrawTrackRenderService } from './draw-track-render.service';
 
-let renderService: RenderService;
+let renderService: DrawTrackRenderService;
 
 describe('Draw Track Render', () => {
 
-      beforeEach(() => {
+    beforeEach(() => {
         TestBed.resetTestingModule();
         TestBed.configureTestingModule({
-            providers: [RenderService]
+            providers: [DrawTrackRenderService]
         });
-        renderService = TestBed.get(RenderService);
+        renderService = TestBed.get(DrawTrackRenderService);
     });
 
     it('Render creation', () => {

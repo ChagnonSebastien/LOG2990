@@ -8,11 +8,11 @@ export class CrosswordWordsService {
 
     constructor() { }
 
-    public newGame(wordsWithIndex: Array<Word>) {
+    public newGame(wordsWithIndex: Array<Word>): void {
         this.wordMap = this.constructWordMap(wordsWithIndex);
     }
 
-    public endGame() {
+    public endGame(): void {
         this.wordMap = undefined;
     }
 

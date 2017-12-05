@@ -26,7 +26,7 @@ export class CrosswordGridService {
         return true;
     }
 
-    public endGame() {
+    public endGame(): void {
         this.grid = undefined;
     }
 

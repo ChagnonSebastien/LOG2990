@@ -32,8 +32,7 @@ export class CollisionEventService {
 
     public eventListener = new Subject<CollisionEvent>();
 
-    public sendCollisionEvent(event) {
-        console.log('BANG');
+    public sendCollisionEvent(event): void {
         this.eventListener.next(event);
     }
 

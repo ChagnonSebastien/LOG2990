@@ -27,17 +27,17 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
     private containerRef: ElementRef;
 
     @HostListener('window:resize', ['$event'])
-    public onResize() {
+    public onResize(): void {
         this.trackService.onResize();
     }
 
     @HostListener('window:keyup', ['$event'])
-    public onKeyUp() {
+    public onKeyUp(): void {
         this.saveEnabled = this.checkForSaveEnabled();
     }
 
     @HostListener('window:click', ['$event'])
-    public onClick() {
+    public onClick(): void {
         this.saveEnabled = this.checkForSaveEnabled();
     }
 
@@ -54,7 +54,7 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
         return !saveDisabled;
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.trackService.clear();
         this.name = this.route.snapshot.params['name'];
         if (this.name !== undefined) {
@@ -88,19 +88,19 @@ export class DrawTrackComponent implements AfterViewInit, OnInit {
         this.trackService.endDrag();
     }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.trackService.initialise(this.container);
     }
 
-    public addObstacle(type: number) {
+    public addObstacle(type: number): void {
         this.trackService.addObstacle(type);
     }
 
-    public randomizePosition(type: number) {
+    public randomizePosition(type: number): void {
         this.trackService.randomizeAllPositions(type);
     }
 
-    public saveTrack() {
+    public saveTrack(): void {
         if (this.saveEnabled) {
             this.trackService.saveTrack(this.name, this.description, this.difficulty);
         }
