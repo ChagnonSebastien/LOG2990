@@ -13,7 +13,10 @@ export class Light {
         this.hemiLight.groundColor.setHSL(Settings.HUE_GROUND, Settings.SATURATION_GROUND, Settings.LIGHTNESS_GROUND);
         this.hemiLight.position.set(Settings.HEMILIGHT_X, Settings.HEMILIGHT_Y, Settings.HEMILIGHT_Z);
 
-        this.dirLight = new THREE.DirectionalLight(Settings.LIGHT_COLOR, 1);
+        this.dirLight = new THREE.DirectionalLight(
+            Settings.LIGHT_COLOR,
+            Settings.DIRECTIONAL_LIGHT_INTENSITY
+        );
         this.dirLight.color
             .setHSL(Settings.HUE_DIRECTIONAL_LIGHT, Settings.SATURATION_DIRECTIONAL_LIGHT, Settings.LIGHTNESS_DIRECTIONAL_LIGHT);
         this.dirLight.position

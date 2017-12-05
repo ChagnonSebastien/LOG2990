@@ -78,6 +78,7 @@ export module Settings {
     export const HEMILIGHT_X = 0;
     export const HEMILIGHT_Y = 10000;
     export const HEMILIGHT_Z = 0;
+    export const DIRECTIONAL_LIGHT_INTENSITY = 1;
     export const HUE_DIRECTIONAL_LIGHT = 0.1;
     export const SATURATION_DIRECTIONAL_LIGHT = 1;
     export const LIGHTNESS_DIRECTIONAL_LIGHT = 0.95;
