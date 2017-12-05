@@ -67,6 +67,8 @@ export module Settings {
     export const CAMERA_INITIAL_ZOOM = 1;
     export const CAMERA_ZOOM_CHANGE = 0.05;
 
+    export const MAX_CORNER_LENGTH_FROM_INTERSECTION = 26; // 10*sqrt(1+(1/sqrt(2))
+    export const VEHICLE_MASS = 5;
     export const VEHICLE_NAME = 'vehicle';
 
     // hud

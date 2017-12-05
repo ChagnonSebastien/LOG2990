@@ -34,7 +34,6 @@ const wordsWithIndex: Array<Word> = [
 ];
 
 let hintsService: CrosswordHintsService;
-
 describe('#CrosswordHintsService', () => {
 
     beforeEach(() => {

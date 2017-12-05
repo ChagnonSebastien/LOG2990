@@ -1,9 +1,10 @@
 import { DriveModifier } from './drive-modifier';
+import { Vector3 } from 'three';
 import { Settings } from '../settings';
 
 export class BoosterModifier extends DriveModifier {
-    public getModifiedSpeed(speed: number): number {
-        return speed * Settings.DRIVE_MODIFIER_BOOSTER_SPEED_MULTIPLIER;
+    public getModifiedSpeed(speed: Vector3): Vector3 {
+        return speed.clone().multiplyScalar(1.5);
     }
 
     public getVerticalPositionModifier(): number {

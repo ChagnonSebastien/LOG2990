@@ -24,7 +24,6 @@ import { MockSocketService } from './mocks/mock-socket.service';
 import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 let gameManagerService: CrosswordGameManagerService;
-
 describe('#CrosswordGameManagerService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({

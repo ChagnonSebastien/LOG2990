@@ -11,6 +11,7 @@ import { VehicleMoveEventService } from './events/vehicle-move-event.service';
 import { VehicleRotateEventService } from './events/vehicle-rotate-event.service';
 import { LoadingProgressEventService } from './events/loading-progress-event.service';
 import { Track } from './track';
+import { Vector3 } from 'three';
 
 class MockController extends Controller { }
 
@@ -98,7 +99,7 @@ describe('Controller', function () {
             expect(vehicle.getMesh().position.x).toBeCloseTo(0);
             expect(vehicle.getMesh().position.y).toEqual(3);
             expect(Math.abs(vehicle.getMesh().position.z)).toBeGreaterThan(0);
-            expect(controller['speed']).toBeGreaterThan(0);
+            expect(controller['linearVelocity'].length()).toBeGreaterThan(0);
         });
 
         it('should move the cartForward and increase speed when MOVE_STATE = FORWARD when the cart rotation is not 0', () => {
@@ -108,38 +109,38 @@ describe('Controller', function () {
             expect(Math.abs(vehicle.getMesh().position.x)).toBeGreaterThan(0);
             expect(vehicle.getMesh().position.y).toEqual(3);
             expect(vehicle.getMesh().position.z).toBeCloseTo(0);
-            expect(controller['speed']).toBeGreaterThan(0);
+            expect(controller['linearVelocity'].length()).toBeGreaterThan(0);
         });
 
         it('should slow the cart down when moveState is brake', () => {
             controller['moveState'] = MOVE_STATE.BRAKE;
-            controller['speed'] = 10;
+            controller['linearVelocity'] = new Vector3(10, 0, 0);
             controller.nextFrame(vehicle);
             expect(Math.abs(vehicle.getMesh().position.x)).toBeLessThan(100);
         });
 
         it('should not brake the cart when the booster modifier is active and moveState is brake', () => {
             controller['moveState'] = MOVE_STATE.BRAKE;
-            controller['speed'] = 10;
+            controller['linearVelocity'] = new Vector3(0, 0, 10);
             controller.hitObstacle(ObstacleType.Booster);
             controller.nextFrame(vehicle);
-            expect(controller['speed']).toEqual(10);
+            expect(controller['linearVelocity'].length()).toEqual(10);
         });
 
         it('should brake the cart even if moveState is forward when Pothole Modifier is active', () => {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
-            controller['speed'] = 10;
+            controller['linearVelocity'] = new Vector3(10, 0, 0);
             controller.hitObstacle(ObstacleType.Pothole);
             controller.nextFrame(vehicle);
-            expect(controller['speed']).toBeLessThan(10);
+            expect(controller['linearVelocity'].length()).toBeLessThan(10);
         });
 
         it('should brake the cart even if moveState is forward when Puddle Modifier is active', () => {
             controller['moveState'] = MOVE_STATE.MOVE_FORWARD;
-            controller['speed'] = 10;
+            controller['linearVelocity'] = new Vector3(10, 0, 0);
             controller.hitObstacle(ObstacleType.Puddle);
             controller.nextFrame(vehicle);
-            expect(controller['speed']).toBeLessThan(10);
+            expect(controller['linearVelocity'].length()).toBeLessThan(10);
         });
 
         it('should not be able to rotate right when the puddle modifier is active', () => {

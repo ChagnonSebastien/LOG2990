@@ -9,7 +9,8 @@ export class CollisionEvent extends Cancellable {
     constructor(
         private firstVehicle: Vehicle,
         private secondVehicle: Vehicle,
-        private collisionPoint: Vector3
+        private collisionPoint: Vector3,
+        private pointOnCollisionPlane: Vector3
     ) {
         super();
     }
@@ -24,6 +25,10 @@ export class CollisionEvent extends Cancellable {
 
     public getCollisionPoint(): Vector3 {
         return this.collisionPoint;
+    }
+
+    public getPointOnCollisionPlane(): Vector3 {
+        return this.pointOnCollisionPlane;
     }
 }
 

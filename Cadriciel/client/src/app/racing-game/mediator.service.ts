@@ -1,6 +1,7 @@
+import { CollisionResolveService } from './collision-resolve.service';
+import { RaceEndedEvent, RaceEventService } from './events/race-event.service';
 import { Settings } from './settings';
 import { RaceHudService } from './race-hud.service';
-import { RaceEventService, RaceEndedEvent } from './events/race-event.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
 import { ObstaclePositionService } from './obstacle-position.service';
@@ -47,6 +48,7 @@ export class RaceMediator {
         private vehicleMovementController: VehicleMovementController,
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
+        private collisionResolveService: CollisionResolveService,
         private raceEventService: RaceEventService,
         private raceService: RaceHudService,
         private audioService: AudioService,
@@ -228,6 +230,7 @@ export class RaceMediator {
     }
 
     private handleCollisionEvent(event: CollisionEvent): void {
+        this.collisionResolveService.resolveCollision(event);
         this.audioService.startCarCarCollision();
         this.audioService.engineStopAccelerate();
     }

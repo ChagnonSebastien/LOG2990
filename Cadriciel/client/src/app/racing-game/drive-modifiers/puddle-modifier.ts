@@ -1,9 +1,10 @@
+import { Vector3 } from 'three';
 import { DriveModifier } from './drive-modifier';
 import { Settings } from '../settings';
 
 export class PuddleModifier extends DriveModifier {
-    public getModifiedSpeed(speed: number) {
-        return Math.max(Settings.DRIVE_MODIFIER_PUDDLE_MINIMUM_SPEED, speed);
+    public getModifiedSpeed(speed: Vector3): Vector3 {
+        return speed.clone().clampLength(0, Math.max(0.5, speed.length()));
     }
 
     public getVerticalPositionModifier() {

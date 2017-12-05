@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { CrosswordCheatService } from './crossword-cheat.service';
 
 let cheatService: CrosswordCheatService;
-
 describe('#CrosswordCheatService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
