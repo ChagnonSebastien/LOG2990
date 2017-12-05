@@ -3,31 +3,40 @@ import { Settings } from './settings';
 
 export class Light {
     public hemiLight: THREE.HemisphereLight;
-
     public dirLight: THREE.DirectionalLight;
-
     public spotRight: THREE.SpotLight;
-
     public spotLeft: THREE.SpotLight;
 
     constructor() {
-        this.hemiLight = new THREE.HemisphereLight(Settings.LIGHT_COLOR, Settings.LIGHT_COLOR, 0.2);
-        this.hemiLight.color.setHSL(0.6, 1, 0.6);
-        this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
-        this.hemiLight.position.set(0, 10000, 0);
+        this.hemiLight = new THREE.HemisphereLight(Settings.LIGHT_COLOR, Settings.LIGHT_COLOR, Settings.LIGHT_INTENSITY);
+        this.hemiLight.color.setHSL(Settings.HUE_LIGHT, Settings.SATURATION_LIGHT, Settings.LIGHTNESS_LIGHT);
+        this.hemiLight.groundColor.setHSL(Settings.HUE_GROUND, Settings.SATURATION_GROUND, Settings.LIGHTNESS_GROUND);
+        this.hemiLight.position.set(Settings.HEMILIGHT_X, Settings.HEMILIGHT_Y, Settings.HEMILIGHT_Z);
 
-        this.dirLight = new THREE.DirectionalLight(Settings.LIGHT_COLOR, 1);
-        this.dirLight.color.setHSL(0.1, 1, 0.95);
-        this.dirLight.position.set(0, 10000, 0);
-        this.dirLight.position.multiplyScalar(30);
+        this.dirLight = new THREE.DirectionalLight(
+            Settings.LIGHT_COLOR,
+            Settings.DIRECTIONAL_LIGHT_INTENSITY
+        );
+        this.dirLight.color
+            .setHSL(Settings.HUE_DIRECTIONAL_LIGHT, Settings.SATURATION_DIRECTIONAL_LIGHT, Settings.LIGHTNESS_DIRECTIONAL_LIGHT);
+        this.dirLight.position
+            .set(Settings.DIRECTIONAL_LIGHT_X, Settings.DIRECTIONAL_LIGHT_Y, Settings.DIRECTIONAL_LIGHT_Z);
     }
 
-    public addLightsToVehicle(vehicle: any): void {
-        const sphereRight = new THREE.SphereGeometry(0.15, 16, 8);
+    public addLightsToVehicle(vehicle: THREE.Mesh): void {
+        const sphereRight = new THREE.SphereGeometry(
+            Settings.CAR_LIGHT_RADIUS,
+            Settings.CAR_LIGHT_WIDTH_SEGMENT,
+            Settings.CAR_LIGHT_PHI_START
+        );
         const matSphereRight = new THREE.MeshBasicMaterial({ color: Settings.LIGHT_COLOR });
         const headlightRight = new THREE.Mesh(sphereRight, matSphereRight);
 
-        const sphereLeft = new THREE.SphereGeometry(0.15, 16, 8);
+        const sphereLeft = new THREE.SphereGeometry(
+            Settings.CAR_LIGHT_RADIUS,
+            Settings.CAR_LIGHT_WIDTH_SEGMENT,
+            Settings.CAR_LIGHT_PHI_START
+        );
         const matSphereLeft = new THREE.MeshBasicMaterial({ color: Settings.LIGHT_COLOR });
         const headlightLeft = new THREE.Mesh(sphereLeft, matSphereLeft);
 
@@ -39,14 +48,26 @@ export class Light {
 
         const target = new THREE.Object3D();
         vehicle.add(target);
-        target.position.set(0, 0, -4);
+        target.position.set(
+            Settings.LIGHT_TARGET_X,
+            Settings.LIGHT_TARGET_Y,
+            Settings.LIGHT_TARGET_Z
+        );
 
         vehicle.add(this.spotRight);
         vehicle.add(this.spotLeft);
 
-        this.spotRight.position.set(0.6, 1.1, -3.2);
+        this.spotRight.position.set(
+            Settings.LIGHT_SPOT_X_RIGHT,
+            Settings.LIGHT_SPOT_Y,
+            Settings.LIGHT_SPOT_Z
+        );
         this.spotRight.target = target;
-        this.spotLeft.position.set(-0.6, 1.1, -3.2);
+        this.spotLeft.position.set(
+            Settings.LIGHT_SPOT_X_LEFT,
+            Settings.LIGHT_SPOT_Y,
+            Settings.LIGHT_SPOT_Z
+        );
         this.spotLeft.target = target;
     }
 

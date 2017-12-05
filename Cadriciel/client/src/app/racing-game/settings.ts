@@ -68,6 +68,33 @@ export module Settings {
     export const COUNTDOWN_NAME = 'countdown';
 
     export const LIGHT_COLOR = 0xffffff;
+    export const LIGHT_INTENSITY = 0.2;
+    export const HUE_LIGHT = 0.6;
+    export const SATURATION_LIGHT = 1;
+    export const LIGHTNESS_LIGHT = 0.6;
+    export const HUE_GROUND = 0.095;
+    export const SATURATION_GROUND = 1;
+    export const LIGHTNESS_GROUND = 0.75;
+    export const HEMILIGHT_X = 0;
+    export const HEMILIGHT_Y = 10000;
+    export const HEMILIGHT_Z = 0;
+    export const DIRECTIONAL_LIGHT_INTENSITY = 1;
+    export const HUE_DIRECTIONAL_LIGHT = 0.1;
+    export const SATURATION_DIRECTIONAL_LIGHT = 1;
+    export const LIGHTNESS_DIRECTIONAL_LIGHT = 0.95;
+    export const DIRECTIONAL_LIGHT_X = 0;
+    export const DIRECTIONAL_LIGHT_Y = 30000;
+    export const DIRECTIONAL_LIGHT_Z = 0;
+    export const CAR_LIGHT_RADIUS = 0.15;
+    export const CAR_LIGHT_WIDTH_SEGMENT = 16;
+    export const CAR_LIGHT_PHI_START = 8;
+    export const LIGHT_TARGET_X = 0;
+    export const LIGHT_TARGET_Y = 0;
+    export const LIGHT_TARGET_Z = -4;
+    export const LIGHT_SPOT_X_RIGHT = 0.6;
+    export const LIGHT_SPOT_X_LEFT = -0.6;
+    export const LIGHT_SPOT_Y = 1.1;
+    export const LIGHT_SPOT_Z = -3.2;
 
     export const DRIVE_MODIFIER_NONE_POSITION = 0;
     export const DRIVE_MODIFIER_NONE_ACCELERATION = 1;
