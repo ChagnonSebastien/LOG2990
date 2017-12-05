@@ -32,9 +32,9 @@ export class RacingSceneService extends SceneService {
             this.shader = THREE.ShaderLib['cube'];
             this.shader.uniforms['tCube'].value = this.textureSky;
         } else {
-            const images = [url + 'xpos.png', url + 'xneg.png',
-            url + 'ypos.png', url + 'yneg.png',
-            url + 'zpos.png', url + 'zneg.png'];
+            const images = [url + `${Settings.SKYBOX_IMAGE_DAY_X_POS}`, url + `${Settings.SKYBOX_IMAGE_DAY_X_NEG}`,
+            url + `${Settings.SKYBOX_IMAGE_DAY_Y_POS}`, url + `${Settings.SKYBOX_IMAGE_DAY_Y_NEG}`,
+            url + `${Settings.SKYBOX_IMAGE_DAY_Z_POS}`, url + `${Settings.SKYBOX_IMAGE_DAY_Z_NEG}`];
             this.textureSky = THREE.ImageUtils.loadTextureCube(images);
             this.shader = THREE.ShaderLib['cube'];
             this.shader.uniforms['tCube'].value = this.textureSky;

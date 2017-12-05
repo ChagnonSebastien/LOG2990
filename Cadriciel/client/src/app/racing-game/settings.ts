@@ -41,6 +41,7 @@ export module Settings {
     export const SOUND_ACCELERATOR_BONUS_START = 'sounds/acceleratorBonusStart.mp3';
     export const SOUND_ACCELERATOR_BONUS_END = 'sounds/acceleratorBonusEnd.mp3';
     export const SOUND_HIT_WALL = 'sounds/hitWall.mp3';
+    export const MUSIC_ENDED_EVENT = 'ended';
 
     // skybox
     export const SKYBOX_IMAGE_FOLDER = 'images/skybox/';
@@ -50,8 +51,12 @@ export module Settings {
     export const SKYBOX_IMAGE_NIGHT_DN = 'bluefreeze_dn.png';
     export const SKYBOX_IMAGE_NIGHT_FT = 'bluefreeze_ft.png';
     export const SKYBOX_IMAGE_NIGHT_BK = 'bluefreeze_bk.png';
-
-    export const MUSIC_ENDED_EVENT = 'ended';
+    export const SKYBOX_IMAGE_DAY_X_POS = 'xpos.png';
+    export const SKYBOX_IMAGE_DAY_X_NEG = 'xneg.png';
+    export const SKYBOX_IMAGE_DAY_Y_POS = 'ypos.png';
+    export const SKYBOX_IMAGE_DAY_Y_NEG = 'yneg.png';
+    export const SKYBOX_IMAGE_DAY_Z_NEG = 'zneg.png';
+    export const SKYBOX_IMAGE_DAY_Z_POS = 'zpos.png';
 
     // camera
     export const CAMERA_ORTHOGRAPHIC_HEIGHT = 256 - 64;
