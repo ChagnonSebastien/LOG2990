@@ -11,7 +11,6 @@ import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
-import { CrosswordCountdownComponent } from '../countdown/crossword-countdown.component';
 
 @Injectable()
 export class CrosswordMutationService {
