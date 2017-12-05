@@ -1,17 +1,16 @@
 import { Utilities } from './utilities';
 import { Lexicon } from './lexicon';
-import { CrosswordService } from './crossword.service';
+import { CrosswordVerifier } from './crossword-verifier';
 import { Word } from '../../commun/word';
 
-const lexiconPath = './app/words.json';
+import { LEXICON_PATH, BLANK_SQUARE, BLACK_SQUARE } from './config';
+import { Level } from '../../client/src/app/crossword-game/configuration/level';
 
 export class CrosswordGenerator {
-    // public attributes
     public grid: string[][];
     public words: Set<string>;
     public wordsWithIndex: Array<Word>;
 
-    // private attributes
     private size: number;
     private previousGridState: string[][];
     private gridCounter: number[][];
@@ -23,10 +22,9 @@ export class CrosswordGenerator {
         this.size = size;
         this.reset();
         this.saveState();
-        this.loadLexicon(lexiconPath);
+        this.loadLexicon(LEXICON_PATH);
     }
 
-    // public methods
     public newCrossword(difficulty: string): string[][] {
         this.reset();
         return this.generateCrossword(difficulty);
@@ -50,12 +48,10 @@ export class CrosswordGenerator {
         }
     }
 
-    // private methods
-    // used by constructor
     private reset() {
         this.words = new Set<string>();
         this.wordsWithIndex = new Array<Word>();
-        this.grid = this.newGrid(this.size, ' ');
+        this.grid = this.newGrid(this.size, BLANK_SQUARE);
         this.gridCounter = this.newGrid(this.size, 0);
     }
 
@@ -68,16 +64,15 @@ export class CrosswordGenerator {
     }
 
     private loadLexicon(file: string) {
-        this.lexicon = new Lexicon(lexiconPath);
+        this.lexicon = new Lexicon(LEXICON_PATH);
     }
 
-    // used to generate crossword
     private addLetter(i: number, j: number, letter: string): boolean {
         if (letter.length !== 1
-            || CrosswordService.indexesOutOfBounds(i, j, this.size)) {
+            || CrosswordVerifier.indexesOutOfBounds(i, j, this.size)) {
             return false;
         }
-        if (this.grid[i][j] !== ' ' && this.grid[i][j] !== letter) {
+        if (this.grid[i][j] !== BLANK_SQUARE && this.grid[i][j] !== letter) {
             return false;
         }
         this.grid[i][j] = letter;
@@ -106,7 +101,7 @@ export class CrosswordGenerator {
             }
         }
         this.words.add(word);
-        if (CrosswordService.verify(this) === false) {
+        if (CrosswordVerifier.verify(this) === false) {
             this.rollback();
             return false;
         }
@@ -117,23 +112,23 @@ export class CrosswordGenerator {
     private addBlackSquares(i: number, j: number, word: string, horizontal: boolean): boolean {
         if (horizontal) {
             if (j > 0) {
-                if (!this.addLetter(i, j - 1, '#')) {
+                if (!this.addLetter(i, j - 1, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (j + word.length < this.size) {
-                if (!this.addLetter(i, j + word.length, '#')) {
+                if (!this.addLetter(i, j + word.length, BLACK_SQUARE)) {
                     return false;
                 }
             }
         } else {
             if (i > 0) {
-                if (!this.addLetter(i - 1, j, '#')) {
+                if (!this.addLetter(i - 1, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
             if (i + word.length < this.size) {
-                if (!this.addLetter(i + word.length, j, '#')) {
+                if (!this.addLetter(i + word.length, j, BLACK_SQUARE)) {
                     return false;
                 }
             }
@@ -167,13 +162,13 @@ export class CrosswordGenerator {
 
         let wordsForPattern: string[];
         switch (difficulty) {
-            case ('easy'):
+            case (Level.EASY):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, true);
                 break;
-            case ('normal'):
+            case (Level.NORMAL):
                 wordsForPattern = this.lexicon.allWordsForPattern(pattern);
                 break;
-            case ('hard'):
+            case (Level.HARD):
                 wordsForPattern = this.lexicon.wordsForPattern(pattern, false);
         }
 
@@ -218,7 +213,6 @@ export class CrosswordGenerator {
         return true;
     }
 
-    // used to mutate crossword
     private setGrid(words: Array<Word>) {
         words.map((word) => {
             return this.addWord(word.i, word.j, word.word, word.horizontal);

@@ -2,17 +2,22 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
+import { Config } from './config';
+import { Type } from './type';
+import { Level } from './level';
+import { Mode } from './mode';
+
 @Injectable()
 export class CrosswordConfigurationService {
     public type: string;
     public mode: string;
     public level: string;
-    private startGameSubject: Subject<any>;
+    public startGameSubject: Subject<Config>;
 
     constructor() {
-        this.type = 'solo';
-        this.mode = 'classic';
-        this.level = 'normal';
+        this.type = Type.SOLO;
+        this.mode = Mode.CLASSIC;
+        this.level = Level.NORMAL;
         this.startGameSubject = new Subject();
     }
 
@@ -21,20 +26,17 @@ export class CrosswordConfigurationService {
     }
 
     public startGame(): boolean {
-        this.startGameSubject.next({
-            type: this.type,
-            mode: this.mode,
-            level: this.level
-        });
+        this.startGameSubject
+            .next(new Config(this.type, this.mode, this.level));
         return true;
     }
 
     public isMultiplayer(): boolean {
-        return this.type === 'multiplayer';
+        return this.type === Type.MULTIPLAYER;
     }
 
     public isDynamic(): boolean {
-        return this.mode === 'dynamic';
+        return this.mode === Mode.DYNAMIC;
     }
 
     public setType(type: string): boolean {

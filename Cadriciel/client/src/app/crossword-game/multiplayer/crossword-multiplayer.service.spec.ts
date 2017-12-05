@@ -28,7 +28,6 @@ describe('#CrosswordMultiplayerService', () => {
 
     describe('createGame()', () => {
         it('should create a new multiplayer game if you are not already a host of another one', () => {
-            // disable sending to real server
             multiplayerService['socketService'].socket.disconnect();
             expect(multiplayerService.createGame('easy', 'classic')).toBeTruthy();
         });

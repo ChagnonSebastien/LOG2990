@@ -15,8 +15,8 @@ const blueCarPath = 'blue_cart.json';
 const yellowCarPath = 'yellow_cart.json';
 
 export class Vehicle {
-    private vehicle: THREE.Mesh;
-    private boundingBox: THREE.Mesh;
+    private vehicleMesh: THREE.Mesh;
+    private boundingBoxMesh: THREE.Mesh;
     private size: { width: number, length: number };
 
     constructor(
@@ -37,8 +37,8 @@ export class Vehicle {
         return this.color;
     }
 
-    public getVehicle(): THREE.Mesh {
-        return this.vehicle;
+    public getMesh(): THREE.Mesh {
+        return this.vehicleMesh;
     }
 
     public getLength(): number {
@@ -49,42 +49,43 @@ export class Vehicle {
         return this.size.width;
     }
 
-    public setSize(size: { width: number, length: number }) {
+    public setSize(size: { width: number, length: number }): void {
         this.size.length = Settings.SCENE_SCALE * size.length;
         this.size.width = Settings.SCENE_SCALE * size.width;
     }
 
-    public setBoundingBox(boundingBox: Mesh) {
-        this.vehicle.add(boundingBox);
-        this.boundingBox = boundingBox;
+    public setBoundingBox(boundingBox: Mesh): void {
+        this.vehicleMesh.add(boundingBox);
+        this.boundingBoxMesh = boundingBox;
     }
 
     public getBoundingBox(): THREE.Mesh {
-        return this.boundingBox;
+        return this.boundingBoxMesh;
     }
 
-    public hitWall(speedModifier: number) {
+    public hitWall(speedModifier: number): void {
         this.controller.hitWall(speedModifier);
     }
 
-    public create3DVehicle(track: Track, carPosition: VehicleColor) {
+    public create3DVehicle(track: Track, carPosition: VehicleColor): void {
         const service = this;
         const trackCenter = this.getCenterOfTrack(track);
         const trackAngle = this.getTrackAngle(track);
         const beta = this.calculateBeta(carPosition, trackAngle);
         new THREE.ObjectLoader().load(`${assetsPath}/${this.getCartPath(carPosition)}`, (object: THREE.Object3D) => {
-            this.vehicle = <THREE.Mesh>object;
-            this.vehicle.rotation.y = trackAngle;
-            this.vehicle.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
-            this.vehicle.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
-            this.vehicle.position.y = 3;
-            this.vehicle.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
-            this.vehicle.castShadow = true;
+            this.vehicleMesh = <THREE.Mesh>object;
+            this.vehicleMesh.rotation.y = trackAngle;
+            this.vehicleMesh.position.x = (trackCenter.x + Math.cos(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
+            this.vehicleMesh.position.z = (trackCenter.y + Math.sin(beta) * distanceBetweenCars) * Settings.SCENE_SCALE;
+            this.vehicleMesh.position.y = 3;
+            this.vehicleMesh.scale.set(Settings.SCENE_SCALE, Settings.SCENE_SCALE, Settings.SCENE_SCALE);
+            this.vehicleMesh.castShadow = true;
+            this.vehicleMesh.name = Settings.VEHICLE_NAME;
             service.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('Vehicle created', service));
         });
     }
 
-    private getCartPath(carPosition: VehicleColor) {
+    private getCartPath(carPosition: VehicleColor): string {
         switch (carPosition) {
             case VehicleColor.red:
                 return redCarPath;

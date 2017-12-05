@@ -1,5 +1,7 @@
 import { CollisionResolveService } from './collision-resolve.service';
-import { RaceService, RaceEndedEvent } from './events/race.service';
+import { RaceEndedEvent, RaceEventService } from './events/race-event.service';
+import { Settings } from './settings';
+import { RaceHudService } from './race-hud.service';
 import { LapEventService, LapEvent } from './events/lap-event.service';
 import { LapCounterService } from './lap-counter.service';
 import { ObstaclePositionService } from './obstacle-position.service';
@@ -25,7 +27,10 @@ import { CountdownDecreaseEventService, CountdownDecreaseEvent } from './events/
 import { Injectable } from '@angular/core';
 import { CountdownService } from './countdown.service';
 import { RacingGameService } from './racing-game.service';
+import { AudioService } from './audio.service';
+import { HitWallEventService, HitWallEvent } from './events/hit-wall-event.service';
 import { Vehicle } from './vehicle';
+
 
 @Injectable()
 export class RaceMediator {
@@ -43,16 +48,19 @@ export class RaceMediator {
         private vehicleMovementController: VehicleMovementController,
         private obstaclePositionService: ObstaclePositionService,
         private lapcounterService: LapCounterService,
-        private raceService: RaceService,
         private collisionResolveService: CollisionResolveService,
+        private raceEventService: RaceEventService,
+        private raceService: RaceHudService,
+        private audioService: AudioService,
+        private hitWallEventService: HitWallEventService,
+        private vehicleMoveEventService: VehicleMoveEventService,
+        private vehicleRotateEventService: VehicleRotateEventService,
+        private obstacleCollisionEventService: ObstacleCollisionEventService,
+        private collisionEventService: CollisionEventService,
         commandsService: CommandsService,
         frameEventService: FrameEventService,
         countdownDecreaseEventService: CountdownDecreaseEventService,
         loadingProgressEventService: LoadingProgressEventService,
-        vehicleMoveEventService: VehicleMoveEventService,
-        vehicleRotateEventService: VehicleRotateEventService,
-        obstacleCollisionEventService: ObstacleCollisionEventService,
-        collisionEventService: CollisionEventService,
         lapEventService: LapEventService,
     ) {
         frameEventService.getFrameObservable().subscribe(
@@ -95,34 +103,41 @@ export class RaceMediator {
             (event: LapEvent) => this.handleLapEvent(event)
         );
 
-        raceService.raceEndedAlerts().subscribe(
+        raceEventService.raceEndedAlerts().subscribe(
             (event: RaceEndedEvent) => this.handleRaceEndedEvent(event)
+        );
+
+        this.hitWallEventService.getHitWallObservable().subscribe(
+            (event: HitWallEvent) => this.handleHitWallEvent(event)
         );
     }
 
-    public startProgram(container: HTMLElement, track: Track) {
+    public startProgram(container: HTMLElement, track: Track): void {
         this.racingGameService.initialize(track);
         this.cameraService.initialize(container);
         this.renderService.initialize(container, track);
         this.vehicleService.createVehicles(track);
-        this.countdownService.createCountdown(track);
         this.obstaclePositionService.initialize(track);
-        this.lapcounterService.initializePassedCounter();
+        this.lapcounterService.initialize();
     }
 
-    private handleFrameEvent(event: FrameEvent) {
+    private handleFrameEvent(event: FrameEvent): void {
         this.cameraService.cameraOnMoveWithObject();
         this.vehicleService.getVehicles().forEach((vehicle: Vehicle) => {
             vehicle.getController().nextFrame(vehicle);
         });
         if (this.vehicleService.getVehicles() !== undefined) {
-            this.lapcounterService.updateLapCounter();
+            this.lapcounterService.update();
         }
+
     }
 
-    private handleKeyUpEvent(event: CommandEvent) {
+    private handleKeyUpEvent(event: CommandEvent): void {
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
+                this.audioService.engineStopAccelerate();
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).endDirective(event.getCommand());
@@ -130,10 +145,13 @@ export class RaceMediator {
         }
     }
 
-    private handleKeyDownEvent(event: CommandEvent) {
+    private handleKeyDownEvent(event: CommandEvent): void {
 
         switch (event.getCommand()) {
             case PlayerCommand.MOVE_FORWARD:
+                this.audioService.engineAccelerate();
+                (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
+                break;
             case PlayerCommand.ROTATE_LEFT:
             case PlayerCommand.ROTATE_RIGHT:
                 (<HumanController>this.vehicleService.getMainVehicle().getController()).startDirective(event.getCommand());
@@ -158,63 +176,92 @@ export class RaceMediator {
             case PlayerCommand.TOGGLE_NIGHT_MODE:
                 this.racingSceneService.toggleNightMode();
                 break;
+
+            case PlayerCommand.REAR_VISIBLE:
+                this.renderService.swapRearWiew();
+                break;
         }
     }
 
-    private handleCountdownDecreaseEvent(event: CountdownDecreaseEvent) {
+    private handleCountdownDecreaseEvent(event: CountdownDecreaseEvent): void {
         this.countdownService.updateCountdown(event.getNewAmount());
 
         if (event.getNewAmount() === 0) {
-            this.racingSceneService.removeObjectByName('countdown');
+            this.racingSceneService.removeObjectByName(Settings.COUNTDOWN_NAME);
             this.countdownService.startGame();
+            this.raceService.startTimer();
         }
     }
 
-    private handleProgressEvent(event: LoadingProgressEvent) {
+    private handleProgressEvent(event: LoadingProgressEvent): void {
         if (event.getProgress() === 'Vehicle created') {
             this.vehicleService.vehicleCreated();
             const vehicle = <Vehicle>event.getObject();
-            this.racingSceneService.addObject(vehicle.getVehicle());
+            this.racingSceneService.light.addLightsToVehicle(vehicle.getMesh());
+            this.racingSceneService.light.hideLightsVehicle();
+            this.racingSceneService.addObject(vehicle.getMesh());
             this.collisionDetectionService.generateBoundingBox(vehicle);
 
             if (vehicle.getColor() === VehicleColor.red) {
-                this.cameraService.initializeCameras(vehicle.getVehicle());
+                this.cameraService.initializeCameras(vehicle.getMesh());
             }
         }
 
         if (event.getProgress() === 'All carts loaded') {
+            this.countdownService.createCountdown(this.racingGameService.getTrack());
             this.renderService.startRenderingLoop();
         }
     }
 
-    private handleMoveEvent(event: VehicleMoveEvent) {
+    private handleMoveEvent(event: VehicleMoveEvent): void {
         this.obstacleCollisionDetectionService.detectCollision(event);
         this.roadLimitService.validateMovement(event);
         this.vehicleMovementController.validateMovement(event);
         this.collisionDetectionService.checkForCollisionWithCar(event);
     }
 
-    private handleRotateEvent(event: VehicleRotateEvent) {
+    private handleRotateEvent(event: VehicleRotateEvent): void {
         this.vehicleMovementController.validateRotation(event);
     }
 
     private handleObstacleCollisionEvent(event: ObstacleCollisionEvent) {
         event.getVehicle().getController().hitObstacle(event.getObstacle());
+        this.audioService.handleObstacleCollision(event.getObstacle());
     }
 
-    private handleCollisionEvent(event: CollisionEvent) {
+    private handleCollisionEvent(event: CollisionEvent): void {
         this.collisionResolveService.resolveCollision(event);
+        this.audioService.startCarCarCollision();
+        this.audioService.engineStopAccelerate();
     }
 
-    private handleLapEvent(event: LapEvent) {
-        if (event.lap === 3) {
-            console.log('Race ends');
-            this.raceService.endRace();
+    private handleLapEvent(event: LapEvent): void {
+        if (event.lap === Settings.TOTAL_LAPS) {
+            this.raceEventService.endRace();
         }
-        console.log('LAP: ', event.lap);
+        this.raceService.resetLapTimer();
+        this.raceService.updateHud(event.lap);
     }
 
-    private handleRaceEndedEvent(event: RaceEndedEvent) {
-        console.log('race ended');
+    private handleRaceEndedEvent(event: RaceEndedEvent): void {
+        this.raceService.stopTimers();
+        this.audioService.stopRace();
+        this.audioService.startStinger();
+        this.ghostMode();
     }
+
+    private handleHitWallEvent(event: HitWallEvent): void {
+        this.audioService.carHitWall();
+        this.audioService.engineStopAccelerate();
+    }
+
+    private ghostMode(): void {
+        this.vehicleMoveEventService.eventListener.unsubscribe();
+        this.vehicleRotateEventService.eventListener.unsubscribe();
+        this.obstacleCollisionEventService.eventListener.unsubscribe();
+        this.collisionEventService.eventListener.unsubscribe();
+        this.vehicleService.getMainVehicle().getMesh().material.transparent = true;
+        this.vehicleService.getMainVehicle().getMesh().material.opacity = Settings.END_RACE_CAR_TRANSPARENCY;
+    }
+
 }

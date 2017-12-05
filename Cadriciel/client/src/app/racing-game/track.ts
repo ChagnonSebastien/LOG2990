@@ -40,9 +40,9 @@ export class Track {
         this.bestTimes = bestTimes;
     }
 
-    public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService) {
-        return Math.min.apply(null, this.trackIntersections.map( (intersection, index, array) => {
-            const line = {point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1]};
+    public distanceToPoint(point: THREE.Vector2, lineCalculationService: LineCalculationService): number {
+        return Math.min.apply(null, this.trackIntersections.map((intersection, index, array) => {
+            const line = { point1: intersection, point2: array[index + 1 === array.length ? 0 : index + 1] };
             const nearestPoint = lineCalculationService.getNearestPointOnLineWithClamping(point, line);
             return lineCalculationService.distance(point, nearestPoint);
         }));
@@ -70,6 +70,6 @@ export class Track {
         const segment = new THREE.Vector2().subVectors(this.trackIntersections[1], this.trackIntersections[0]);
         const position = new THREE.Vector2((segment.x / 2) + this.trackIntersections[0].x, (segment.y / 2) + this.trackIntersections[0].y);
         const rotation = - Math.atan((segment.y) / (segment.x));
-        return {position, rotation};
+        return { position, rotation };
     }
 }

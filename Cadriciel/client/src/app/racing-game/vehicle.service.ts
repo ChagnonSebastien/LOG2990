@@ -17,16 +17,16 @@ export class VehicleService {
         private controllerFactory: ControllerFactory
     ) {
         this.amountVehicleMeshCreated = 0;
+        this.players = [];
     }
 
-    public vehicleCreated() {
-        if (++this.amountVehicleMeshCreated === 4) {
+    public vehicleCreated(): void {
+        if (++this.amountVehicleMeshCreated === Object.keys(VehicleColor).length / 2) {
             this.loadingProgressEventService.sentLoadingEvent(new LoadingProgressEvent('All carts loaded', null));
         }
     }
 
     public createVehicles(track: Track): void {
-        this.players = [];
         for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
             this.players.push(new Vehicle(color, track, this.createController(track, color), this.loadingProgressEventService));
         }

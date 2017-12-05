@@ -6,21 +6,21 @@ module Route {
 
     export class Lexicon {
 
-        public async wordDefinitions(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public async wordDefinitions(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             const word = req.params.word;
             const lexiconReader = new LexiconReader();
             const definitions: string[] = await lexiconReader.getWordDefinitions(word);
             res.send(definitions);
         }
 
-        public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public englishWordLexicon(req: express.Request, res: express.Response, next: express.NextFunction): void {
             const lexiconReader = new LexiconReader();
             let lexicon: string[] = [];
             lexicon = lexiconReader.readWords(lexiconFilePath);
             res.send(lexicon);
         }
 
-        public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getWordsOfLength(req: express.Request, res: express.Response, next: express.NextFunction): void {
             const wordLength: number = +req.params.wordLength;
             const lexiconReader = new LexiconReader();
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
@@ -28,7 +28,7 @@ module Route {
             res.send(wordsOfLength);
         }
 
-        public getWordsWithCharAt(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getWordsWithCharAt(req: express.Request, res: express.Response, next: express.NextFunction): void {
             const charWanted = req.params.char;
             const position = Number(req.params.position);
             const lexiconReader = new LexiconReader();
@@ -37,7 +37,7 @@ module Route {
             res.send(wordsWithChar);
         }
 
-        public getWordsMatchingPattern(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getWordsMatchingPattern(req: express.Request, res: express.Response, next: express.NextFunction): void {
             const pattern = req.params.word;
             const lexiconReader = new LexiconReader();
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
@@ -45,7 +45,7 @@ module Route {
             res.send(wordsWithChar);
         }
 
-        public async getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public async getUncommonWords(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             const lexiconReader = new LexiconReader();
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
@@ -54,7 +54,7 @@ module Route {
             });
         }
 
-        public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public async getCommonWords(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             const lexiconReader = new LexiconReader();
             const words: string[] = lexiconReader.readWords(lexiconFilePath);
 
@@ -63,7 +63,7 @@ module Route {
             });
         }
 
-        public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public async getWordFrequency(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             const word = req.params.word;
             const lexiconReader = new LexiconReader();
             const frequency = await lexiconReader.getWordFrequency(word);

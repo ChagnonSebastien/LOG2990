@@ -7,6 +7,7 @@ import { CrosswordWordsService } from '../words/crossword-words.service';
 
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
+import { HintSelection } from '../../../../../commun/crossword/hint-selection';
 
 @Injectable()
 export class CrosswordHintsService {
@@ -26,10 +27,10 @@ export class CrosswordHintsService {
         return this.selectedWordSubject.asObservable();
     }
 
-    public async newGame(wordsWithIndex: Array<Word>) {
+    public async newGame(wordsWithIndex: Array<Word>): Promise<void> {
         this.selectedWord = undefined;
         this.opponentSelectedWord = undefined;
-        this.initializeHints(wordsWithIndex).then((hints) => {
+        await this.initializeHints(wordsWithIndex).then((hints) => {
             this.hints = hints;
         });
     }
@@ -102,11 +103,7 @@ export class CrosswordHintsService {
     }
 
     private alertNewSelectedWord(word: Word) {
-        this.selectedWordSubject.next(
-            {
-                'previous': this.selectedWord,
-                'current': word
-            }
-        );
+        this.selectedWordSubject
+            .next(new HintSelection(this.selectedWord, word));
     }
 }

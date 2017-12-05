@@ -12,18 +12,18 @@ export class PotholeModifier extends DriveModifier {
     }
 
     public getAccelerationMultiplier() {
-        return -5 * 1.5;
+        return Settings.DRIVE_MODIFIER_POTHOLE_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 5;
+        return Settings.DRIVE_MODIFIER_POTHOLE_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_POTHOLE_ROTATION;
     }
 
     protected getTotalTime() {
-        return 30;
+        return Settings.DRIVE_MODIFIER_POTHOLE_TIME;
     }
 }

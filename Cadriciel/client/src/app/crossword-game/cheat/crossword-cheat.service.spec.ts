@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { CrosswordCheatService } from './crossword-cheat.service';
 
 let cheatService: CrosswordCheatService;
-/*
 describe('#CrosswordCheatService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -14,16 +13,6 @@ describe('#CrosswordCheatService', () => {
 
     it('should construct', () => {
         expect(cheatService).toBeDefined();
-    });
-
-    describe('initialCountdownChangedAlerts()', () => {
-        it('should alert when the initial countdown value changes', (done) => {
-            cheatService.initialCountdownChangedAlerts()
-                .subscribe((newValue) => {
-                    done();
-                });
-            cheatService['initialCountdownChanges'].next(15);
-        });
     });
 
     describe('toggleCheatMode()', () => {
@@ -57,4 +46,4 @@ describe('#CrosswordCheatService', () => {
             expect(cheatService.setInitialCountdown(1)).toBeTruthy();
         });
     });
-});*/
+});

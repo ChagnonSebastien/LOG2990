@@ -2,18 +2,17 @@ import { Injectable } from '@angular/core';
 
 import { CrosswordGridService } from '../grid/crossword-grid.service';
 import { CrosswordHintsService } from '../hints/crossword-hints.service';
-import { CrosswordCountdownService } from '../countdown/crossword-countdown.service';
 import { CrosswordWordsService } from '../words/crossword-words.service';
 import { CrosswordService } from '../crossword/crossword.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 import { CrosswordPointsService } from '../points/crossword-points.service';
 
-import { Utilities } from '../../../../../server/app/utilities';
-
 import { CrosswordSquare } from '../shared-classes/crossword-square';
 import { Hint } from '../shared-classes/hint';
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
+
+import { CROSSWORD_GRID_SIZE, BLANK_SQUARE } from '../../../../../server/app/config';
 
 @Injectable()
 export class CrosswordMutationService {
@@ -24,12 +23,19 @@ export class CrosswordMutationService {
     constructor(
         private gridService: CrosswordGridService,
         private hintsService: CrosswordHintsService,
-        private countdownService: CrosswordCountdownService,
         private wordsService: CrosswordWordsService,
         private crosswordService: CrosswordService,
         private configurationService: CrosswordConfigurationService,
         private pointsService: CrosswordPointsService
-    ) { }
+    ) {
+        this.newGrid = new Array(CROSSWORD_GRID_SIZE).map(() => {
+            return new Array(CROSSWORD_GRID_SIZE).map(() => {
+                return new CrosswordSquare(BLANK_SQUARE);
+            });
+        });
+        this.newHints = new Array<Hint>();
+        this.wordsWithIndex = new Array<Word>();
+    }
 
     public mutate() {
         this.mutateWordsService();
@@ -61,11 +67,8 @@ export class CrosswordMutationService {
     }
 
     public mutateMultiplayer() {
-        console.log(this.wordsWithIndex);
         this.mutateWordsService();
-        console.log(this.newGrid);
         this.mutateGridService();
-        console.log(this.newHints);
         this.mutateHintsService();
     }
 
@@ -95,7 +98,6 @@ export class CrosswordMutationService {
 
     private mutateHintsService() {
         this.hintsService.hints = this.newHints.map((hint) => {
-            console.log(hint);
             if (this.pointsService.foundWords.has(hint.word)) {
                 hint.found = true;
             } else if (this.pointsService.opponentFoundWords.has(hint.word)) {

@@ -1,5 +1,6 @@
 import { Vector3 } from 'three';
 import { DriveModifier } from './drive-modifier';
+import { Settings } from '../settings';
 
 export class PuddleModifier extends DriveModifier {
     public getModifiedSpeed(speed: Vector3): Vector3 {
@@ -7,22 +8,22 @@ export class PuddleModifier extends DriveModifier {
     }
 
     public getVerticalPositionModifier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_PUDDLE_POSITION;
     }
 
     public getAccelerationMultiplier() {
-        return -1;
+        return Settings.DRIVE_MODIFIER_PUDDLE_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_PUDDLE_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_PUDDLE_ROTATION;
     }
 
     protected getTotalTime() {
-        return 45;
+        return Settings.DRIVE_MODIFIER_PUDDLE_TIME;
     }
 }

@@ -1,9 +1,8 @@
-import { VehicleColor } from './vehicle-color';
 import { NoModifier } from './drive-modifiers/no-modifier';
 import { VehicleRotateEventService, VehicleRotateEvent } from './events/vehicle-rotate-event.service';
 import { VehicleMoveEventService, VehicleMoveEvent } from './events/vehicle-move-event.service';
 import { ObstacleType } from './draw-track/obstacle';
-import { Vector3, Vector2 } from 'three';
+import { Vector3 } from 'three';
 import { Vehicle } from './vehicle';
 import { DriveModifier } from './drive-modifiers/drive-modifier';
 import { BoosterModifier } from './drive-modifiers/booster-modifier';
@@ -63,14 +62,14 @@ export abstract class Controller {
     public hitObstacle(type: ObstacleType) {
         switch (type) {
             case ObstacleType.Booster:
-            this.driveModifier = new BoosterModifier();
-            break;
+                this.driveModifier = new BoosterModifier();
+                break;
             case ObstacleType.Pothole:
-            this.driveModifier = new PotholeModifier();
-            break;
+                this.driveModifier = new PotholeModifier();
+                break;
             case ObstacleType.Puddle:
-            this.driveModifier = new PuddleModifier();
-            break;
+                this.driveModifier = new PuddleModifier();
+                break;
         }
     }
 
@@ -89,7 +88,7 @@ export abstract class Controller {
     private modifySpeed (object: Vehicle) {
         if (this.moveState === MOVE_STATE.MOVE_FORWARD) {
             this.linearVelocity.add(new Vector3(
-                -acceleration * Math.sin(object.getVehicle().rotation.y), 0, -acceleration * Math.cos(object.getVehicle().rotation.y)
+                -acceleration * Math.sin(object.getMesh().rotation.y), 0, -acceleration * Math.cos(object.getMesh().rotation.y)
             ).multiplyScalar(this.driveModifier.getAccelerationMultiplier()));
             this.linearVelocity.clampLength(0, maxSpeed);
         } else {
@@ -98,7 +97,7 @@ export abstract class Controller {
         }
 
         const projectOn = new Vector3(
-            Math.sin(object.getVehicle().rotation.y + Math.PI / 2), 0, Math.cos(object.getVehicle().rotation.y + Math.PI / 2));
+            Math.sin(object.getMesh().rotation.y + Math.PI / 2), 0, Math.cos(object.getMesh().rotation.y + Math.PI / 2));
 
         const drift = projectOn.clone().multiplyScalar(this.linearVelocity.dot(projectOn) / Math.pow(projectOn.length(), 2));
 
@@ -110,17 +109,17 @@ export abstract class Controller {
         const modifiedSpeed = this.driveModifier.getModifiedSpeed(this.linearVelocity);
 
         const newPosition = new Vector3 (
-            object.getVehicle().position.x + modifiedSpeed.x,
+            object.getMesh().position.x + modifiedSpeed.x,
             0,
-            object.getVehicle().position.z + modifiedSpeed.z
+            object.getMesh().position.z + modifiedSpeed.z
         );
 
-        const moveEvent = new VehicleMoveEvent(object.getVehicle().position, newPosition, object);
+        const moveEvent = new VehicleMoveEvent(object.getMesh().position, newPosition, object);
         this.vehicleMoveEventService.sendVehicleMoveEvent(moveEvent);
         if (!moveEvent.isCancelled()) {
-            object.getVehicle().position.x = moveEvent.getNewPosition().x;
-            object.getVehicle().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
-            object.getVehicle().position.z = moveEvent.getNewPosition().z;
+            object.getMesh().position.x = moveEvent.getNewPosition().x;
+            object.getMesh().position.y = 3 + this.driveModifier.getVerticalPositionModifier();
+            object.getMesh().position.z = moveEvent.getNewPosition().z;
         }
     }
 
@@ -138,13 +137,13 @@ export abstract class Controller {
 
     private rotateVehicle(object: Vehicle) {
         const rotateEvent = new VehicleRotateEvent(
-            object.getVehicle().rotation.y,
-            object.getVehicle().rotation.y + this.angulareVelocity.y * this.driveModifier.getRotationMultiplier(),
+            object.getMesh().rotation.y,
+            object.getMesh().rotation.y + this.angulareVelocity.y * this.driveModifier.getRotationMultiplier(),
             object
         );
         this.vehicleRotateEventService.sendVehicleRotateEvent(rotateEvent);
         if (!rotateEvent.isCancelled()) {
-            object.getVehicle().rotation.y = rotateEvent.getNewRotatiion();
+            object.getMesh().rotation.y = rotateEvent.getNewRotatiion();
         }
     }
 }

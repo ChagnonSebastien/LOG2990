@@ -1,4 +1,8 @@
 import * as fs from 'fs';
+import { MIN_WORD_LENGTH } from './config';
+
+const COMMON_WORDS = 'common';
+const UNCOMMON_WORDS = 'uncommon';
 
 export class Lexicon {
     private lexiconByLength: any;
@@ -7,8 +11,7 @@ export class Lexicon {
         this.parseLexiconByLength(file);
     }
 
-    // public methods
-    public wordsForPattern(pattern: string, common: boolean) {
+    public wordsForPattern(pattern: string, common: boolean): string[] {
         const isBlankPattern: boolean = pattern.trim().length === 0;
         if (isBlankPattern) {
             return this.wordsOfLengthUpTo(pattern.length, common);
@@ -17,7 +20,7 @@ export class Lexicon {
         }
     }
 
-    public allWordsForPattern(pattern: string) {
+    public allWordsForPattern(pattern: string): string[] {
         return this.wordsForPattern(pattern, true)
             .concat(this.wordsForPattern(pattern, false));
     }
@@ -26,13 +29,10 @@ export class Lexicon {
         return words[Math.floor(Math.random() * words.length)];
     }
 
-    // private methods
-    // methods used by constructor
-    private parseLexiconByLength(file: string) {
+    private parseLexiconByLength(file: string): void {
         this.lexiconByLength = JSON.parse(fs.readFileSync(file, 'utf8'));
     }
 
-    // methods used to find words that match a pattern and commonality
     private patternToRegex(pattern: string): RegExp {
         const regex = /\s/g;
         const toMatch = pattern.replace(regex, '[a-z]');
@@ -40,7 +40,7 @@ export class Lexicon {
     }
 
     private words(common: boolean): any {
-        return this.lexiconByLength[common ? 'common' : 'uncommon'];
+        return this.lexiconByLength[common ? COMMON_WORDS : UNCOMMON_WORDS];
     }
 
     private wordsOfLength(length: number, common: boolean): Array<string> {
@@ -48,9 +48,9 @@ export class Lexicon {
     }
 
     private wordsOfLengthUpTo(length: number, common: boolean): Array<string> {
-        return new Array(length - 2).fill(null)
+        return new Array(length - MIN_WORD_LENGTH - 1).fill(null)
             .map((value, index) => {
-                return this.wordsOfLength(index + 3, common);
+                return this.wordsOfLength(index + MIN_WORD_LENGTH, common);
             }).reduce((previous, current) => {
                 return previous.concat(current);
             });
@@ -64,7 +64,7 @@ export class Lexicon {
 
     private subpatterns(pattern: string): string[] {
         const results: Set<string> = new Set<string>();
-        for (let length = 3; length <= pattern.length; length++) {
+        for (let length = MIN_WORD_LENGTH; length <= pattern.length; length++) {
             for (let index = 0; index <= pattern.length - length; index++) {
                 results.add(pattern.substr(index, length));
             }

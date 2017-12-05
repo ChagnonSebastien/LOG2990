@@ -35,7 +35,7 @@ export class CollisionEvent extends Cancellable {
 @Injectable()
 export class CollisionEventService {
 
-    private eventListener = new Subject<CollisionEvent>();
+    public eventListener = new Subject<CollisionEvent>();
 
     public sendCollisionEvent(event) {
         console.log('BANG');

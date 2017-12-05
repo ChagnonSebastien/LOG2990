@@ -2,7 +2,7 @@ import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-
 import { CrosswordGameInfo } from '../../../commun/crossword/crossword-game-info';
 import { ServerCrosswords } from '../crosswordGrid/serverCrosswords';
 
-import { INITIAL_GAME_ID } from '../config';
+import { INITIAL_GAME_ID, CROSSWORD_COLLECTION } from '../config';
 
 export class CrosswordGamesManager {
     private static gameManagerInstance: CrosswordGamesManager;
@@ -12,14 +12,13 @@ export class CrosswordGamesManager {
     private gameIdCounter: number;
     private serverCrosswords: ServerCrosswords;
 
-    // Singleton : use getInstance()
     private constructor() {
         this.availableGames = new Array<MultiplayerCrosswordGame>();
         this.gamesMap = new Map<string, MultiplayerCrosswordGame>();
         this.socketsInGames = new Map<string, string>();
         this.gameIdCounter = INITIAL_GAME_ID;
         this.serverCrosswords = ServerCrosswords.getInstance();
-        this.serverCrosswords.setCollection('crosswords');
+        this.serverCrosswords.setCollection(CROSSWORD_COLLECTION);
     }
 
     public static getInstance(): CrosswordGamesManager {

@@ -1,8 +1,6 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { INITIAL_COUNTDOWN_VALUE } from '../config';
-
-const ONE_SECOND = 1000;
+import { INITIAL_COUNTDOWN_VALUE, ONE_SECOND } from '../config';
 
 export class Countdown {
     public initialCountdownValue: number;

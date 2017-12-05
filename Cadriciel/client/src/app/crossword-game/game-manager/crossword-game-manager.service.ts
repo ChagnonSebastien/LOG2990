@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { CrosswordService } from '../crossword/crossword.service';
 import { CrosswordHintsService } from '../hints/crossword-hints.service';
@@ -10,11 +10,12 @@ import { CrosswordCountdownService } from '../countdown/crossword-countdown.serv
 import { CrosswordCheatService } from '../cheat/crossword-cheat.service';
 import { CrosswordConfigurationService } from '../configuration/crossword-configuration.service';
 import { CrosswordPlayerService } from '../player/crossword-player.service';
-import { CrosswordLobbyService } from '../lobby/crossword-lobby.service';
 import { CrosswordMutationService } from '../mutation/crossword-mutation.service';
 
 import { Word } from '../../../../../commun/word';
 import { Crossword } from '../../../../../commun/crossword/crossword';
+
+import { Type } from '../configuration/type';
 
 @Injectable()
 export class CrosswordGameManagerService {
@@ -22,18 +23,17 @@ export class CrosswordGameManagerService {
     public gameCompleted: boolean;
 
     constructor(
-        private crosswordService: CrosswordService, // Stateless
-        private hintsService: CrosswordHintsService, // Stateful, reset on newGame()
-        private gridService: CrosswordGridService, // Stateful, reset on newGame()
-        private pointsService: CrosswordPointsService, // Stateful, reset on newGame()
-        private wordsService: CrosswordWordsService, // Stateful, reset on newGame()
-        private multiplayerService: CrosswordMultiplayerService, // Stateful, no need to reset
-        private countdownService: CrosswordCountdownService, // Stateful, reset on newGame()
-        private cheatService: CrosswordCheatService, // Stateful, no need to reset
-        private configurationService: CrosswordConfigurationService, // Stateful, no need to reset
-        private playerService: CrosswordPlayerService, // Stateful, reset on isHost = false
-        private lobbySerice: CrosswordLobbyService, // Stateful, no need to reset
-        private mutationService: CrosswordMutationService // Stateful, no need to reset
+        private crosswordService: CrosswordService,
+        private hintsService: CrosswordHintsService,
+        private gridService: CrosswordGridService,
+        private pointsService: CrosswordPointsService,
+        private wordsService: CrosswordWordsService,
+        private multiplayerService: CrosswordMultiplayerService,
+        private countdownService: CrosswordCountdownService,
+        private cheatService: CrosswordCheatService,
+        private configurationService: CrosswordConfigurationService,
+        private playerService: CrosswordPlayerService,
+        private mutationService: CrosswordMutationService
     ) {
         this.gameInProgress = false;
         this.gameCompleted = false;
@@ -116,10 +116,10 @@ export class CrosswordGameManagerService {
     private listenForCreateGame(): void {
         this.configurationService.startGameAlerts()
             .subscribe(async (configuration) => {
-                if (configuration.type === 'solo') {
+                if (configuration.type === Type.SOLO) {
                     await this.newSoloGame(configuration.level);
                     this.gameInProgress = true;
-                } else if (configuration.type === 'multiplayer') {
+                } else if (configuration.type === Type.MULTIPLAYER) {
                     await this.newMultiplayerGame(configuration.level, configuration.mode);
                 }
             });
@@ -252,10 +252,8 @@ export class CrosswordGameManagerService {
     private listenForMutation(): void {
         this.multiplayerService.mutation
             .asObservable()
-            .subscribe(async (crossword: Crossword) => {
-                console.log('GAME MANAGER CALLBACK', crossword);
-                await this.mutationService.updateMultiplayerMutation(crossword);
-                // this.mutationService.mutateMultiplayer();
+            .subscribe((crossword: Crossword) => {
+                this.mutationService.updateMultiplayerMutation(crossword);
             });
     }
 }

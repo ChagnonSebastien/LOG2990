@@ -1,7 +1,7 @@
-import { RaceService } from './race.service';
+import { RaceEventService } from './race-event.service';
 import { TestBed } from '@angular/core/testing';
 
-let raceService: RaceService;
+let raceEventService: RaceEventService;
 
 describe('test RaceService', function () {
     beforeEach(() => {
@@ -9,9 +9,9 @@ describe('test RaceService', function () {
         TestBed.configureTestingModule({
             providers: []
         });
-        raceService = new RaceService();
+        raceEventService = new RaceEventService();
     });
     it('construction test', () => {
-        expect(raceService).toBeDefined();
+        expect(raceEventService).toBeDefined();
     });
 });

@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
 import { PerspectiveCamera, OrthographicCamera, Mesh, Vector2, Camera } from 'three';
 import { Settings } from './settings';
+import { RearView } from './rear-view';
 
 enum View { PERSPECTIVE, ORTHOGRAPHIC }
+
+const INITIAL_ORTHOGRAPHIC_CAMERA_X_ROTATION = Math.PI / -2;
 
 @Injectable()
 export class CameraService {
     private currentView: View;
 
-    private perspectiveCamera: PerspectiveCamera;
+    public perspectiveCamera: PerspectiveCamera;
 
-    private orthographicCamera: OrthographicCamera;
+    public orthographicCamera: OrthographicCamera;
 
-    private objectToFollow: Mesh;
+    public objectToFollow: Mesh;
 
     private zoomLevel: number;
+    public rearCamera: RearView;
 
     constructor() {
         this.currentView = View.PERSPECTIVE;
@@ -55,7 +59,7 @@ export class CameraService {
         );
     }
 
-    private instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
+    public instansiateOrthographicCamera(aspectRatio: number): OrthographicCamera {
         const orthographicCamera = new OrthographicCamera(
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / -2,
             Settings.SCENE_SCALE * Settings.CAMERA_ORTHOGRAPHIC_FIELD_OF_VIEW / 2,
@@ -64,7 +68,7 @@ export class CameraService {
             Settings.CAMERA_ORTHOGRAPHIC_NEAR_CLIPPING_PANE * Settings.SCENE_SCALE,
             Settings.CAMERA_ORTHOGRAPHIC_FAR_CLIPPING_PANE * Settings.SCENE_SCALE
         );
-        orthographicCamera.rotation.x = Math.PI / -2;
+        orthographicCamera.rotation.x = INITIAL_ORTHOGRAPHIC_CAMERA_X_ROTATION;
         return orthographicCamera;
     }
 
@@ -86,6 +90,10 @@ export class CameraService {
         return this.currentView === View.PERSPECTIVE ? this.perspectiveCamera : this.orthographicCamera;
     }
 
+    public rearViewCam(): void {
+        this.rearCamera.addRearView(this.objectToFollow);
+    }
+
     public cameraOnMoveWithObject(): void {
         this.updatePerspectiveCameraPosition();
         this.updateOrthographicCameraPosition();
@@ -97,7 +105,7 @@ export class CameraService {
             this.perspectiveCamera.position.z - this.objectToFollow.position.z
         );
 
-        if ( referencePosition.length() > Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE ) {
+        if (referencePosition.length() > Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE) {
             referencePosition.clampLength(0, Settings.CAMERA_PERSPECTIVE_MAXIMUM_DISTANCE * Settings.SCENE_SCALE);
 
             this.perspectiveCamera.position.x = this.objectToFollow.position.x + referencePosition.x;

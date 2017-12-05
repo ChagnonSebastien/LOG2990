@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
+import { CollisionEvent } from './events/collision-event.service';
 import {Settings} from './settings';
 import * as THREE from 'three';
 
@@ -13,8 +13,8 @@ export class CollisionResolveService {
         const velocityB = event.getSecondVehicle().getController().getSpeed().clone();
         const vehicleA = event.getFirstVehicle();
         const vehicleB = event.getSecondVehicle();
-        const positionA = vehicleA.getVehicle().position.clone();
-        const positionB = vehicleB.getVehicle().position.clone();
+        const positionA = vehicleA.getMesh().position.clone();
+        const positionB = vehicleB.getMesh().position.clone();
         const distance = positionA.distanceTo(positionB);
 
         const normX = this.computeNorm(positionA.x, positionB.x, distance);
@@ -34,10 +34,6 @@ export class CollisionResolveService {
 
     private setVehicleSpeeds(vehicle: Vehicle, finalVelocity: THREE.Vector3): void {
         vehicle.getController().setLinearVelocity(finalVelocity);
-    }
-
-    private computeDistance(positionA: THREE.Vector3, positionB: THREE.Vector3): number {
-        return positionA.distanceTo(positionB);
     }
 
     private computeNorm(aPosition: number, bPosition: number, distance: number): number {

@@ -3,6 +3,8 @@ import { CrosswordGamesManager } from './crossword-games-manager';
 import { MultiplayerCrosswordGame } from '../../../commun/crossword/multiplayer-crossword-game';
 import { CrosswordDynamicService } from './crossword-dynamic-service';
 
+import { Mode } from '../../../client/src/app/crossword-game/configuration/mode';
+
 export class CrosswordLobbyService {
     private static lobbyService: CrosswordLobbyService;
     private gameManager: CrosswordGamesManager;
@@ -13,7 +15,6 @@ export class CrosswordLobbyService {
         this.gameManager = CrosswordGamesManager.getInstance();
     }
 
-    // Singleton
     public static getInstance(): CrosswordLobbyService {
         if (this.lobbyService === undefined) {
             this.lobbyService = new CrosswordLobbyService();
@@ -91,7 +92,7 @@ export class CrosswordLobbyService {
     private startGame(gameId: string): void {
         const game = this.gameManager.getGame(gameId);
         this.io.sockets.in(gameId).emit('game started', game);
-        if (game.mode === 'dynamic') {
+        if (game.mode === Mode.DYNAMIC) {
             CrosswordDynamicService
                 .getInstance()
                 .startDynamicGame(gameId, game);

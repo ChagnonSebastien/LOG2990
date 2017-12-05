@@ -7,7 +7,7 @@ export class LineCalculationService {
     constructor() {
     }
 
-    public getNearestPointOnLineWithClamping(point: THREE.Vector2, line: {point1: THREE.Vector2, point2: THREE.Vector2}): THREE.Vector2 {
+    public getNearestPointOnLineWithClamping(point: THREE.Vector2, line: { point1: THREE.Vector2, point2: THREE.Vector2 }): THREE.Vector2 {
         const optimalPoint = this.getNearestPointOnLineWithoutClamping(point, line);
 
         if (
@@ -26,7 +26,10 @@ export class LineCalculationService {
         }
     }
 
-    public getNearestPointOnLineWithoutClamping(point: THREE.Vector2, line: {point1: THREE.Vector2, point2: THREE.Vector2}): THREE.Vector2 {
+    public getNearestPointOnLineWithoutClamping(
+        point: THREE.Vector2,
+        line: { point1: THREE.Vector2, point2: THREE.Vector2 }
+    ): THREE.Vector2 {
         const lineParameters = this.getLineParameters(line);
         const permenticularParameters = {
             a: lineParameters.b,
@@ -44,7 +47,7 @@ export class LineCalculationService {
         );
     }
 
-    public getLineParameters(line: {point1: THREE.Vector2, point2: THREE.Vector2}): { a: number, b: number, c: number } {
+    public getLineParameters(line: { point1: THREE.Vector2, point2: THREE.Vector2 }): { a: number, b: number, c: number } {
         const a = line.point1.y - line.point2.y;
         const b = line.point2.x - line.point1.x;
         const c = (line.point1.x * line.point2.y) - (line.point2.x * line.point1.y);

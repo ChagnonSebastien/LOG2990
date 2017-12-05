@@ -4,6 +4,7 @@ import { CrosswordMutationManager } from './crossword-mutation-manager';
 import { CrosswordGamesManager } from './crossword-games-manager';
 
 import { Word } from '../../../commun/word';
+import { Mode } from '../../../client/src/app/crossword-game/configuration/mode';
 
 export class CrosswordDynamicService {
     private static dynamicService: CrosswordDynamicService;
@@ -18,7 +19,6 @@ export class CrosswordDynamicService {
         this.gamesManager = CrosswordGamesManager.getInstance();
     }
 
-    // Singleton
     public static getInstance(): CrosswordDynamicService {
         if (this.dynamicService === undefined) {
             this.dynamicService = new CrosswordDynamicService();
@@ -27,7 +27,7 @@ export class CrosswordDynamicService {
     }
 
     public startDynamicGame(gameId: string, game: MultiplayerCrosswordGame): boolean {
-        if (game.mode !== 'dynamic') {
+        if (game.mode !== Mode.DYNAMIC) {
             return false;
         }
         this.mutationManager.newGame(gameId, game.difficulty);
@@ -51,7 +51,7 @@ export class CrosswordDynamicService {
             socket.on('new countdown', (newCountdown: number) => {
                 const gameId = this.gamesManager.findGameIdBySocketId(socket.id);
                 const game = this.gamesManager.getGame(gameId);
-                if (game.mode === 'dynamic') {
+                if (game.mode === Mode.DYNAMIC) {
                     game.countdown.initialCountdownValue = newCountdown;
                     game.countdown.resetCountdown();
                 }

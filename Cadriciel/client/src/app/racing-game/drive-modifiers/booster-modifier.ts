@@ -1,5 +1,6 @@
 import { DriveModifier } from './drive-modifier';
 import { Vector3 } from 'three';
+import { Settings } from '../settings';
 
 export class BoosterModifier extends DriveModifier {
     public getModifiedSpeed(speed: Vector3): Vector3 {
@@ -7,22 +8,22 @@ export class BoosterModifier extends DriveModifier {
     }
 
     public getVerticalPositionModifier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_BOOSTER_POSITION;
     }
 
     public getAccelerationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_BOOSTER_ACCELERATION;
     }
 
     public getDecelerationMultiplier() {
-        return 0;
+        return Settings.DRIVE_MODIFIER_BOOSTER_DECELERATION;
     }
 
     public getRotationMultiplier() {
-        return 1;
+        return Settings.DRIVE_MODIFIER_BOOSTER_ROTATION;
     }
 
     protected getTotalTime() {
-        return 120;
+        return Settings.DRIVE_MODIFIER_BOOSTER_TIME;
     }
 }

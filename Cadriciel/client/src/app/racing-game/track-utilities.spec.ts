@@ -1,20 +1,31 @@
 import { TrackUtilities } from './track-utilities';
 import * as THREE from 'three';
+import { Track } from './track';
 
 describe('TrackUtilities Module', () => {
+
+    const track = new Track(
+        'name',
+        'desc',
+        'diff',
+        [new THREE.Vector2(0, 100), new THREE.Vector2(0, 0), new THREE.Vector2(100, 0)],
+        [],
+        [],
+        [],
+        -1,
+        0,
+        []
+    );
+
     it('should calculate distance between (0,0) and (1,1)', () => {
-        const vectorFrom = new THREE.Vector3(0 , 0, 0);
+        const vectorFrom = new THREE.Vector3(0, 0, 0);
         const vectorTo = new THREE.Vector2(0, 1);
         expect(TrackUtilities.calculateDistanceFromIntersection(vectorFrom, vectorTo)).toEqual(1);
     });
 
-    it('When car is at (0,0,0) and intersection at (0,3), should detect car is at intersection', () => {
-        const intersection = new THREE.Vector2(0, 3);
-        const carPosition = new THREE.Vector3(0, 0 , 0);
-
-        expect(TrackUtilities.isAtIntersection(carPosition, intersection)).toBeTruthy();
+    it('should get the center of a track', () => {
+        const center = TrackUtilities.getCenterOfTrack(track);
+        expect(center.x).toEqual(0);
+        expect(center.y).toEqual(50);
     });
-
-    // --- TODO AFTER REFACTORING: test getIntersections(), numberOfIntersecionts and getVehiclePosition --- //
-
 });

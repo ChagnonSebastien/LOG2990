@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Settings } from './settings';
+import { Track } from './track';
 
 export module TrackUtilities {
 
@@ -10,9 +11,14 @@ export module TrackUtilities {
         return distance;
     }
 
-    export function isAtIntersection(carPosition: THREE.Vector3, intersection: THREE.Vector2): boolean {
-        const distanceFromIntersection = this.calculateDistanceFromIntersection(carPosition, intersection);
-        return distanceFromIntersection <= Settings.MAX_CORNER_LENGTH_FROM_INTERSECTION;
+    export function getCenterOfTrack(track: Track): THREE.Vector2 {
+        const fromPosition = track.trackIntersections[Settings.FIRST_INTERSECTION];
+        const toPosition = track.trackIntersections[Settings.SECOND_INTERSECTION];
+        const xCenter = ((toPosition.x - fromPosition.x) / 2) + fromPosition.x;
+        const yCenter = ((toPosition.y - fromPosition.y) / 2) + fromPosition.y;
+        const center = new THREE.Vector2(xCenter, yCenter);
+
+        return center;
     }
 
 }

@@ -10,7 +10,8 @@ export enum PlayerCommand {
     TOOGLE_CAMERA_VIEW,
     ZOOM_IN,
     ZOOM_OUT,
-    START_GAME
+    START_GAME,
+    REAR_VISIBLE
 }
 
 export class CommandEvent {
@@ -36,11 +37,11 @@ export class CommandsService {
         this.commandKeyUpEvent.next(new CommandEvent(this.getCommand(event.keyCode)));
     }
 
-    public getCommandKeyDownObservable(): Observable<any> {
+    public getCommandKeyDownObservable(): Observable<CommandEvent> {
         return this.commandKeyDownEvent.asObservable();
     }
 
-    public getCommandKeyUpObservable(): Observable<any> {
+    public getCommandKeyUpObservable(): Observable<CommandEvent> {
         return this.commandKeyUpEvent.asObservable();
     }
 
@@ -62,6 +63,8 @@ export class CommandsService {
             return PlayerCommand.ZOOM_OUT;
             case 32:
             return PlayerCommand.START_GAME;
+            case 82:
+            return PlayerCommand.REAR_VISIBLE;
             default:
             return null;
         }

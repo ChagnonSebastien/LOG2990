@@ -5,8 +5,7 @@ import { CrosswordConfigurationService } from '../configuration/crossword-config
 
 @Component({
     selector: 'app-crossword-cheat',
-    templateUrl: './crossword-cheat.component.html',
-    styleUrls: ['./crossword-cheat.component.css']
+    templateUrl: './crossword-cheat.component.html'
 })
 export class CrosswordCheatComponent {
     constructor(

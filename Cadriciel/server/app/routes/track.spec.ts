@@ -1,13 +1,13 @@
 import { assert } from 'chai';
+import { API_URL } from '../config';
 
 describe('Track', () => {
     const chai = require('chai');
     const chaiHttp = require('chai-http');
     chai.use(chaiHttp);
-    const apiUrl = 'http://localhost:3000/api';
 
     it('Should create a new track in the database', (done) => {
-        chai.request(apiUrl)
+        chai.request(API_URL)
             .post('/track')
             .send({
                 name: 'testfrsdt',
@@ -24,7 +24,7 @@ describe('Track', () => {
     });
 
     it('Should return a list of tracks', (done) => {
-        chai.request(apiUrl)
+        chai.request(API_URL)
             .get('/tracks')
             .end((err: any, res: any) => {
                 const tracks = JSON.parse(res.text);
@@ -34,7 +34,7 @@ describe('Track', () => {
     });
 
     it('Should change track rating, numberOfTimesPlayed and bestTimes', (done) => {
-        chai.request(apiUrl)
+        chai.request(API_URL)
             .post('/track/update/testfrsdt')
             .send({ numberOfTimesPlayed: 1, rating: 5, time: 7 })
             .end((err: any, res: any) => {
@@ -44,7 +44,7 @@ describe('Track', () => {
     });
 
     it('Should delete the previously created track', (done) => {
-        chai.request(apiUrl)
+        chai.request(API_URL)
             .delete('/track/testfrsdt')
             .end((err: any, res: any) => {
                 const track = JSON.parse(res.text);
