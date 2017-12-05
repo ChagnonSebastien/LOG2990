@@ -6,7 +6,7 @@ export class LoadingProgressEvent {
     constructor(
         private progress: string,
         private object: any
-    ) {}
+    ) { }
 
     public getProgress(): string {
         return this.progress;
@@ -22,8 +22,7 @@ export class LoadingProgressEventService {
 
     private eventListener = new Subject<LoadingProgressEvent>();
 
-    public sentLoadingEvent(event: LoadingProgressEvent) {
-        console.log(event.getProgress());
+    public sentLoadingEvent(event: LoadingProgressEvent): void {
         this.eventListener.next(event);
     }
 
