@@ -8,10 +8,22 @@ export module Settings {
     export const HUMAN_COLOR = VehicleColor.red;
     export const VIEW_DEPTH = 10;
 
-    // obstacles
+    // draw track
     export const POTHOLE_COLOR = 0x000000;
     export const PUDDLE_COLOR = 0x0051a8;
     export const BOOSTER_COLOR = 0xffbb00;
+    export const INTERSECTION_RADIUS = 10;
+    export const INTERSECTION_SEGMENTS = 32;
+    export const INTERSECTION_COLOR = 0xFFFFFF;
+    export const SEGMENT_WIDTH = 0;
+    export const SEGMENT_HEIGHT = 20;
+    export const SEGMENT_COLOR = 0xBB1515;
+    export const SEGMENT_COLOR_VALID = 0x15BB15;
+    export const OBSTACLE_RADIUS = 5;
+    export const OBSTACLE_SEGMENTS = 16;
+    export const HIGHLIGHT_RADIUS = 15;
+    export const HIGHLIGHT_SEGMENTS = 32;
+    export const HIGHLIGHT_COLOR = 0xF5CD30;
 
     // audio
     export const ASSETS_FOLDER = '/assets';
@@ -145,18 +157,4 @@ export module Settings {
     export const MILLISECONDS_VALUE = 0.01;
 
     export const END_RACE_CAR_TRANSPARENCY = 0.4;
-    export const RANDOM_DISTANCE_OFFSET = 1.0;
-    export const RANDOM_DISTANCE_INVERSE_OFFSET = 0.5;
-    export const RANDOM_OFFSET_RATIO = 0.5;
-    export const MAX_DISTANCE_TO_INTERSECTION = 10;
-
-    export const W = 87;
-    export const A = 65;
-    export const D = 68;
-    export const SPACE = 32;
-    export const R = 82;
-    export const N = 78;
-    export const C = 67;
-    export const ADD = 107;
-    export const SUBSTRACT = 109;
 }
