@@ -22,7 +22,7 @@ let gridService: CrosswordGridService;
 let pointsService: CrosswordPointsService;
 let crosswordService: CrosswordService;
 
-fdescribe('#CrosswordMutationService', () => {
+describe('#CrosswordMutationService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule],

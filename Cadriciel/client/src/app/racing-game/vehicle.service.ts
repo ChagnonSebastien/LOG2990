@@ -17,6 +17,7 @@ export class VehicleService {
         private controllerFactory: ControllerFactory
     ) {
         this.amountVehicleMeshCreated = 0;
+        this.players = [];
     }
 
     public vehicleCreated(): void {
@@ -26,7 +27,6 @@ export class VehicleService {
     }
 
     public createVehicles(track: Track): void {
-        this.players = [];
         for (let color = 1; color <= Object.keys(VehicleColor).length / 2; color++) {
             this.players.push(new Vehicle(color, track, this.createController(track, color), this.loadingProgressEventService));
         }
