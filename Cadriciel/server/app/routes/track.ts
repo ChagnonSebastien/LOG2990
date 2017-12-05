@@ -12,7 +12,7 @@ module Route {
 
     export class Tracks {
 
-        public getTracks(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getTracks(req: express.Request, res: express.Response, next: express.NextFunction): void {
             MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
@@ -24,7 +24,7 @@ module Route {
             });
         }
 
-        public getTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public getTrack(req: express.Request, res: express.Response, next: express.NextFunction): void {
             MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));
@@ -36,7 +36,7 @@ module Route {
             });
         }
 
-        public deleteTrack(req: express.Request, res: express.Response, next: express.NextFunction) {
+        public deleteTrack(req: express.Request, res: express.Response, next: express.NextFunction): void {
             MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
                     res.send(JSON.stringify({ 'data': 'connectionError' }));

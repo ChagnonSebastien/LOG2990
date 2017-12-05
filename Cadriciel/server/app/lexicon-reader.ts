@@ -16,7 +16,7 @@ export class LexiconReader {
         });
     }
 
-    public getWordsWithChar(lexicon: string[], character: string, position: number) {
+    public getWordsWithChar(lexicon: string[], character: string, position: number): string[] {
         const wordsWithChar: string[] = [];
 
         for (const word of lexicon) {
