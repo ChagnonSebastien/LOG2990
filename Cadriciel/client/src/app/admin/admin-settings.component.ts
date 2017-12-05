@@ -15,7 +15,7 @@ export class AdminSettingsComponent implements OnInit {
         this.passwordChanged = false;
     }
 
-    public getRoute() {
+    public getRoute(): ActivatedRoute {
         return this.route;
     }
 

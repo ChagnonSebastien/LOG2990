@@ -181,23 +181,23 @@ export class CrosswordMultiplayerService {
         this.opponentDeselection.next(true);
     }
 
-    private handleServerCountdown(count: number) {
+    private handleServerCountdown(count: number): void {
         this.serverClock.next(count);
     }
 
-    private handleOpponentLeft() {
+    private handleOpponentLeft(): void {
         this.playerService.isHost = false;
         this.opponentLeft.next(true);
     }
 
-    private handleOpponentRestartedGame(gameId: string) {
+    private handleOpponentRestartedGame(gameId: string): void {
         this.socketService.socket.emit(
             'join game', gameId, this.playerService.username
         );
         this.opponentRestarted.next(true);
     }
 
-    private handleMutation(crossword: Crossword) {
+    private handleMutation(crossword: Crossword): void {
         this.mutation.next(crossword);
     }
 }

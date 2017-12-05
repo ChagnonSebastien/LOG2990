@@ -14,21 +14,21 @@ export class AdminTracksComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private trackService: TrackService) { }
 
-    public getRoute() {
+    public getRoute(): ActivatedRoute {
         return this.route;
     }
 
     public ngOnInit(): void {
     }
 
-    public onActivate(event) {
+    public onActivate(event): void {
         setTimeout(() => { // To respect the unidirectional data flow rule
             this.trackName = event.getRoute().snapshot.params['name'];
-            event.getRoute().params.subscribe( params => this.trackName = params.name );
+            event.getRoute().params.subscribe(params => this.trackName = params.name);
         }, 0);
     }
 
-    public onDeactivate(event) {
+    public onDeactivate(event): void {
         if (!this.trackJustDeleted) {
             this.trackName = undefined;
         }
