@@ -1,60 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
 import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
-import { CollisionResolvedEventService, CollisionResolvedEvent } from './events/collision-resolved-event.service';
+import {Settings} from './settings';
 import * as THREE from 'three';
 
 @Injectable()
 export class CollisionResolveService {
-    constructor(private collisionResolvedEventService: CollisionResolvedEventService) { }
-
+    constructor() {}
     public resolveCollision(event: CollisionEvent): void {
+        // get data from event
         const velocityA = event.getFirstVehicle().getController().getSpeed().clone();
         const velocityB = event.getSecondVehicle().getController().getSpeed().clone();
-        const angularVelocityA = event.getFirstVehicle().getController().getAngularVelocity().clone();
-        const angularVelocityB = event.getSecondVehicle().getController().getAngularVelocity().clone();
         const vehicleA = event.getFirstVehicle();
         const vehicleB = event.getSecondVehicle();
-        this.handleVehicleSpeeds(vehicleA, velocityB, angularVelocityB);
-       this.handleVehicleSpeeds(vehicleB, velocityA, angularVelocityA);
-   //  this.handleVehiclePosition(vehicleA, velocityB, angularVelocityB);
-      //  this.handleVehiclePosition(vehicleB, velocityA, angularVelocityA);
-
-       /* const positionA = vehicleA.getVehicle().position.clone();
+        const positionA = vehicleA.getVehicle().position.clone();
         const positionB = vehicleB.getVehicle().position.clone();
-        const cx1 = positionA.x;
-        const cx2 = positionB.x;
-        const cy1 = positionA.z;
-        const cy2 = positionB.z;
-        const d = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2)); 
-        const nx = (cx2 - cx1) / d;
-        const ny = (cy2 - cy1) / d;
-        const p = 2 * (velocityA.x * nx + velocityA.z * ny - velocityB.x * nx - velocityB.z * ny) / (10);
-        const vx1 = velocityA.x - p * 5 * nx;
-        const vy1 = velocityA.z - p * 5 * ny; 
-        const vx2 = velocityB.x + p * 5 * nx; 
-        const vy2 = velocityB.z + p * 5  * ny;
+        const distance = positionA.distanceTo(positionB);
 
-        const vaf = new THREE.Vector3(vx1, 0 , vy1);
-        const vbf = new THREE.Vector3(vx2, 0 , vy2);
+        const normX = this.computeNorm(positionA.x, positionB.x, distance);
+        const normZ = this.computeNorm(positionA.z, positionB.z, distance);
+        const relationFactor = this.calculateRelationFactor(velocityA, velocityB, normX, normZ);
 
-        this.handleVehicleSpeeds(vehicleA, vaf, angularVelocityB);
-        this.handleVehicleSpeeds(vehicleB, vbf, angularVelocityA);
-    this.handleVehiclePosition(vehicleA, vaf, angularVelocityB);
-      this.handleVehiclePosition(vehicleB, vbf, angularVelocityA); */ 
+        const vx1 = velocityA.x - relationFactor * Settings.VEHICLE_MASS * normX;
+        const vy1 = velocityA.z - relationFactor * Settings.VEHICLE_MASS * normZ;
+        const vx2 = velocityB.x + relationFactor * Settings.VEHICLE_MASS * normX;
+        const vy2 = velocityB.z + relationFactor * Settings.VEHICLE_MASS * normZ;
 
-
-        this.collisionResolvedEventService.sendCollisionResolvedEvent(new CollisionResolvedEvent());
+        const finalVelocityA = new THREE.Vector3(vx1, 0, vy1);
+        const finalVelocityB = new THREE.Vector3(vx2, 0, vy2);
+        this.setVehicleSpeeds(vehicleA, finalVelocityA);
+        this.setVehicleSpeeds(vehicleB, finalVelocityB);
     }
 
-    private handleVehicleSpeeds(vehicle: Vehicle, finalVelocity: THREE.Vector3, finalAngularVelocity: THREE.Vector3): void {
+    private setVehicleSpeeds(vehicle: Vehicle, finalVelocity: THREE.Vector3): void {
         vehicle.getController().setLinearVelocity(finalVelocity);
-      //  vehicle.getController().setAngularVelocity(finalAngularVelocity);
     }
 
-    private handleVehiclePosition(vehicle: Vehicle, velocity: THREE.Vector3, angularVelocity: THREE.Vector3) {
-        vehicle.getVehicle().position.x += velocity.x;
-        vehicle.getVehicle().position.z += velocity.z;
-      //  vehicle.getVehicle().rotation.y += velocity.y;
+    private computeDistance(positionA: THREE.Vector3, positionB: THREE.Vector3): number {
+        return positionA.distanceTo(positionB);
     }
+
+    private computeNorm(aPosition: number, bPosition: number, distance: number): number {
+        return ((bPosition - aPosition) / distance);
+    }
+
+    // derived from conservation of momentum and conversation of energy in a elastic collision
+    private calculateRelationFactor(velocityA: THREE.Vector3, velocityB: THREE.Vector3, normX: number, normZ: number): number {
+        return 2 * (velocityA.x * normX + velocityA.z * normZ - velocityB.x * normX - velocityB.z * normZ) / (2 * Settings.VEHICLE_MASS);
+    }
+
 }

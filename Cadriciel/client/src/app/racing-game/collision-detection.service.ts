@@ -14,8 +14,8 @@ export class CollisionDetectionService {
 
     private amountBBC: number;
     private collisionResolved: boolean;
+    private lastcollisionDetected: Vehicle[];
     constructor(private collisionEventService: CollisionEventService, private vehicleService: VehicleService) {
-        this.collisionResolved = true;
         this.amountBBC = 0;
     }
 
@@ -28,7 +28,7 @@ export class CollisionDetectionService {
     }
 
     public checkForCollisionWithCar(event: VehicleMoveEvent) {
-        if (this.amountBBC !== 4 ) {
+        if (this.amountBBC !== 4) {
             return;
         }
 
@@ -45,18 +45,14 @@ export class CollisionDetectionService {
                 const intersectingPoint = this.checkForIntersection(vertices1, vertices2);
                 if (intersectingPoint !== null) {
                     event.cancel();
-                    this.collisionResolved = false;
                     this.collisionEventService.sendCollisionEvent(
                         new CollisionEvent(
                             event.getVehicle(), toCheck, intersectingPoint, this.closestVertexToPoint(intersectingPoint, vertices2))
                     );
+
                 }
             }
         });
-    }
-
-    public setCollisionAsResolved(): void {
-        this.collisionResolved = true;
     }
 
     private closestVertexToPoint(collisionPoint: Vector3, points: Vector3[]): Vector3 {
