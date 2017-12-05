@@ -51,15 +51,15 @@ export class RaceMediator {
         private raceService: RaceHudService,
         private audioService: AudioService,
         private hitWallEventService: HitWallEventService,
-        private commandsService: CommandsService,
-        private frameEventService: FrameEventService,
-        private countdownDecreaseEventService: CountdownDecreaseEventService,
-        private loadingProgressEventService: LoadingProgressEventService,
         private vehicleMoveEventService: VehicleMoveEventService,
         private vehicleRotateEventService: VehicleRotateEventService,
         private obstacleCollisionEventService: ObstacleCollisionEventService,
         private collisionEventService: CollisionEventService,
-        private lapEventService: LapEventService,
+        commandsService: CommandsService,
+        frameEventService: FrameEventService,
+        countdownDecreaseEventService: CountdownDecreaseEventService,
+        loadingProgressEventService: LoadingProgressEventService,
+        lapEventService: LapEventService,
     ) {
         frameEventService.getFrameObservable().subscribe(
             (event: FrameEvent) => this.handleFrameEvent(event)
