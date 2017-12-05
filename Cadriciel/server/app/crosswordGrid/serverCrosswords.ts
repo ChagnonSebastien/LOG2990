@@ -60,7 +60,6 @@ export class ServerCrosswords {
         return new Promise<boolean>(resolve => {
             MongoClient.connect(DATABASE_URL, (err, db) => {
                 if (err) {
-                    console.log('error');
                     resolve(false);
                 } else {
                     const objId = new mongoose.Types.ObjectId(crossword.id);
