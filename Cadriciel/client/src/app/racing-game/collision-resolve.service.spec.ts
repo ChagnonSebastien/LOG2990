@@ -1,7 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { CollisionResolveService } from './collision-resolve.service';
-import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
-import { Vehicle } from './vehicle';
 import * as THREE from 'three';
 
 describe('CollisionResolveService', () => {
@@ -24,7 +22,7 @@ describe('CollisionResolveService', () => {
         const expectedNormX = 0.7073;
         const expectedNormZ = 0.7073;
         expect(normX).toBeCloseTo(expectedNormX);
-        expect(normX).toBeCloseTo(expectedNormZ);
+        expect(normZ).toBeCloseTo(expectedNormZ);
     }));
 
     it('should correctly calculate the relation factor', inject([CollisionResolveService], (service: CollisionResolveService) => {

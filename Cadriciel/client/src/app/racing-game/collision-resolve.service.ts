@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from './vehicle';
-import { CollisionEventService, CollisionEvent } from './events/collision-event.service';
-import {Settings} from './settings';
+import { CollisionEvent } from './events/collision-event.service';
+import { Settings } from './settings';
 import * as THREE from 'three';
 
 @Injectable()
 export class CollisionResolveService {
-    constructor() {}
+    constructor() { }
     public resolveCollision(event: CollisionEvent): void {
         // get data from event
         const velocityA = event.getFirstVehicle().getController().getSpeed().clone();
