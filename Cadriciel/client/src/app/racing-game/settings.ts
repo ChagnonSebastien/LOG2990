@@ -53,6 +53,11 @@ export module Settings {
     export const HUD_BITMAP_FILLSTYLE = 'rgba(0,0,0,0.75)';
     export const HUD_START_LAP_COUNTDOWN = '0/3';
     export const HUD_BITMAP_TEXT_ALIGN = 'center';
+    export const HUD_SECOND_INFO_OFFSET = 3.5;
+    export const HUD_FIRST_INFO_OFFSET = 6.5;
+    export const HUD_THIRD_INFO_OFFSET = 9.0;
+    export const HUD_CANVA_WIDTH = 2048;
+    export const HUD_CANVA_HEIGHT = 512;
     export const RED = 0xff0000;
     export const YELLOW = 0xffff00;
     export const TOTAL_LAPS = 3;
@@ -124,4 +129,8 @@ export module Settings {
 
     export const FIRST_INTERSECTION = 0;
     export const SECOND_INTERSECTION = 1;
+    export const MILLISECONDS = 10;
+    export const MILLISECONDS_VALUE = 0.01;
+
+    
 }
